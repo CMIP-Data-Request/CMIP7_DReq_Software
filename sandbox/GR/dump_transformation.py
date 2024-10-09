@@ -92,21 +92,21 @@ def correct_DR_dictionary(input_dict):
         for subelt in set(list(input_dict["opportunity"]["records"][elt])) - set(to_keep_entries):
             del input_dict["opportunity"]["records"][elt][subelt]
         for subelt in to_keep_entries:
-            logger.critical(f"Miss entry {subelt} in opportunity {elt}.")
+            logger.debug(f"Miss entry {subelt} in opportunity {elt}.")
         input_dict["opportunity"]["records"][elt]["name"] = input_dict["opportunity"]["records"][elt].pop("title")
     for elt in input_dict["experiment_group"]["records"]:
         to_keep_entries = ["status", "comments", "experiments", "name"]
         for subelt in set(list(input_dict["experiment_group"]["records"][elt])) - set(to_keep_entries):
             del input_dict["experiment_group"]["records"][elt][subelt]
         for subelt in to_keep_entries:
-            logger.critical(f"Miss entry {subelt} in experiment group {elt}.")
+            logger.debug(f"Miss entry {subelt} in experiment group {elt}.")
     for elt in input_dict["variable_group"]["records"]:
         input_dict["variable_group"]["records"][elt]["description"] = input_dict["variable_group"]["records"][elt].get("justification")
         to_keep_entries = ["status", "comments", "variables", "name", "title", "mips", "priority", "description"]
         for subelt in set(list(input_dict["variable_group"]["records"][elt])) - set(to_keep_entries):
             del input_dict["variable_group"]["records"][elt][subelt]
         for subelt in to_keep_entries:
-            logger.critical(f"Miss entry {subelt} in variable group {elt}.")
+            logger.debug(f"Miss entry {subelt} in variable group {elt}.")
     return input_dict
 
 

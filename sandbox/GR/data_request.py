@@ -11,6 +11,8 @@ import copy
 import argparse
 import os
 
+import six
+
 from logger import get_logger, change_log_file, change_log_level
 from dump_transformation import read_json_file, transform_content
 from vocabulary_server import VocabularyServer
@@ -28,10 +30,10 @@ class DRObjects(object):
 		self.name = name
 		self.vs = vs
 		if name is None:
-			logger.critical(f"No name defined for {type(self).__name__} id {id}")
+			logger.debug(f"No name defined for {type(self).__name__} id {id}")
 		self.description = description
 		if description is None:
-			logger.critical(f"No description defined for {type(self).__name__} id {id}")
+			logger.debug(f"No description defined for {type(self).__name__} id {id}")
 		self.status = copy.deepcopy(status)
 		self.notes = notes
 		self.references = references
@@ -65,10 +67,10 @@ class ExperimentsGroup(DRObjects):
 		super().__init__(**kwargs)
 		self.title = title
 		if title is None:
-			logger.critical(f"No title defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No title defined for {type(self).__name__} id {self.id}")
 		self.experiments = experiments
 		if len(experiments) == 0:
-			logger.critical(f"No experiment defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No experiment defined for {type(self).__name__} id {self.id}")
 
 	def count(self):
 		return len(self.experiments)
@@ -97,10 +99,10 @@ class VariablesGroup(DRObjects):
 		super().__init__(**kwargs)
 		self.title = title
 		if title is None:
-			logger.critical(f"No title defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No title defined for {type(self).__name__} id {self.id}")
 		self.variables = variables
 		if len(variables) == 0:
-			logger.critical(f"No variable defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No variable defined for {type(self).__name__} id {self.id}")
 		self.mips = mips
 		self.priority = priority
 
@@ -137,13 +139,13 @@ class Opportunity(DRObjects):
 		self.comments = comments
 		self.experiments_groups = experiments_groups
 		if len(experiments_groups) == 0:
-			logger.critical(f"No experiments group defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No experiments group defined for {type(self).__name__} id {self.id}")
 		self.variables_groups = variables_groups
 		if len(variables_groups) == 0:
-			logger.critical(f"No variables group defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No variables group defined for {type(self).__name__} id {self.id}")
 		self.themes = themes
 		if len(themes) == 0:
-			logger.critical(f"No theme defined for {type(self).__name__} id {self.id}")
+			logger.debug(f"No theme defined for {type(self).__name__} id {self.id}")
 
 	@classmethod
 	def from_input(cls, dr, experiment_groups=list(), variable_groups=list(), **kwargs):
@@ -196,31 +198,40 @@ class DataRequest(object):
 			if not(any([exp_group in opportunity.get_experiments_groups() for opportunity in self.get_opportunities()])):
 				to_delete.append(exp_group.id)
 		for id in to_delete:
-			logger.critical(f"Experiments group with id {id} is not associated with any opportunity - skip it.")
+			logger.debug(f"Experiments group with id {id} is not associated with any opportunity - skip it.")
 			del self.experiments_groups[id]
 		to_delete = list()
 		for var_group in self.get_variables_groups():
 			if not (any([var_group in opportunity.get_variables_groups() for opportunity in self.get_opportunities()])):
 				to_delete.append(var_group.id)
 		for id in to_delete:
-			logger.critical(f"Variables group with id {id} is not associated with any opportunity - skip it.")
+			logger.debug(f"Variables group with id {id} is not associated with any opportunity - skip it.")
 			del self.variables_groups[id]
 
 	@classmethod
-	def from_input(cls, json_input_filename, **kwargs):
-		DR_content, VS_content = cls._split_content_from_input_json_file(json_input_filename)
+	def from_input(cls, json_input, **kwargs):
+		DR_content, VS_content = cls._split_content_from_input_json(json_input)
 		VS = VocabularyServer(VS_content)
 		return cls(input_database=DR_content, VS=VS, **kwargs)
 
 	@classmethod
-	def from_separated_inputs(cls, DR_input_filename, VS_input_filename, **kwargs):
-		DR = read_json_file(DR_input_filename)
-		VS = VocabularyServer.from_input(VS_input_filename)
+	def from_separated_inputs(cls, DR_input, VS_input, **kwargs):
+		if isinstance(DR_input, six.string_types):
+			DR = read_json_file(DR_input)
+		else:
+			DR = DR_input
+		if isinstance(VS_input, six.string_types):
+			VS = VocabularyServer.from_input(VS_input)
+		else:
+			VS = VocabularyServer(VS_input)
 		return cls(input_database=DR, VS=VS, **kwargs)
 
 	@staticmethod
-	def _split_content_from_input_json_file(input_filename):
-		content = read_json_file(input_filename)
+	def _split_content_from_input_json(input_json):
+		if isinstance(input_json, six.string_types):
+			content = read_json_file(input_json)
+		else:
+			content = input_json
 		DR, VS = transform_content(content)
 		return DR, VS
 

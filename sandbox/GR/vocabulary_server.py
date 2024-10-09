@@ -91,7 +91,6 @@ class Variable(VSObject):
 
 	@classmethod
 	def from_input(cls, id, input_dict):
-		print(list(input_dict))
 		input_dict["content_type"] = input_dict.pop("type", "???")
 		input_dict["CF_standard_name"] = input_dict.pop("cf_standard_name_(from_mip_variables)", "???")
 		input_dict["MIP_variable"] = input_dict.pop("mip_variables", "???")
