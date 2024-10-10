@@ -39,12 +39,12 @@ from logger import change_log_file, change_log_level
 
 # Set up log file (default to stdout) and log level
 change_log_file(default=True)
-change_log_level("info")
+change_log_level("debug")
 
 ### Step 1: Get the content of the DR
 # Define content version to be used
-# use_dreq_version = 'v1.0alpha'
-use_dreq_version = "first_export"
+use_dreq_version = 'v1.0alpha'
+# use_dreq_version = "first_export"
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
 # Load content into python dict
@@ -57,11 +57,11 @@ DR = DataRequest.from_input(json_input=content)
 # -> Print DR content
 print(DR)
 # -> Print an experiment group content
-print(DR.experiments_groups["recz5nwuvKpkr1fss"])
+print(DR.get_experiments_groups()[0])
 # -> Get all variables' id associated with an opportunity
-print(DR.find_variables_per_opportunity("recD45ipnmfCTBH7B"))
+print(DR.find_variables_per_opportunity(DR.get_opportunities()[0].id))
 # -> Get all experiments' id associated with an opportunity
-print(DR.find_experiments_per_opportunity("recD45ipnmfCTBH7B"))
+print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0].id))
 # -> Get information about the shapes of the variables of all variables groups
 rep = dict()
 rep_data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))

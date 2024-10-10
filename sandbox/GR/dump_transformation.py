@@ -89,11 +89,15 @@ def correct_DR_dictionary(input_dict):
     for elt in input_dict["opportunity"]["records"]:
         to_keep_entries = ["description", "status", "experiment_groups", "themes", "title",
                            "variable_groups", "lead_theme", "comments"]
-        for subelt in set(list(input_dict["opportunity"]["records"][elt])) - set(to_keep_entries):
-            del input_dict["opportunity"]["records"][elt][subelt]
-        for subelt in to_keep_entries:
-            logger.debug(f"Miss entry {subelt} in opportunity {elt}.")
-        input_dict["opportunity"]["records"][elt]["name"] = input_dict["opportunity"]["records"][elt].pop("title")
+        if len(input_dict["opportunity"]["records"][elt]) > 0:
+            for subelt in set(list(input_dict["opportunity"]["records"][elt])) - set(to_keep_entries):
+                del input_dict["opportunity"]["records"][elt][subelt]
+            for subelt in to_keep_entries:
+                logger.debug(f"Miss entry {subelt} in opportunity {elt}.")
+            input_dict["opportunity"]["records"][elt]["name"] = input_dict["opportunity"]["records"][elt].pop("title", "???")
+        else:
+            logger.debug(f"Remove void opportunity {elt}.")
+            del input_dict["opportunity"]["records"][elt]
     for elt in input_dict["experiment_group"]["records"]:
         to_keep_entries = ["status", "comments", "experiments", "name"]
         for subelt in set(list(input_dict["experiment_group"]["records"][elt])) - set(to_keep_entries):

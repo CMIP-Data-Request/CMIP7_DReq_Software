@@ -17,6 +17,8 @@ from logger import get_logger, change_log_file, change_log_level
 from dump_transformation import read_json_file, transform_content
 from vocabulary_server import VocabularyServer
 
+version = "0.1"
+
 
 class DRObjects(object):
 	"""
@@ -29,14 +31,17 @@ class DRObjects(object):
 		self.id = id
 		self.name = name
 		self.vs = vs
-		if name is None:
-			logger.debug(f"No name defined for {type(self).__name__} id {id}")
 		self.description = description
-		if description is None:
-			logger.debug(f"No description defined for {type(self).__name__} id {id}")
 		self.status = copy.deepcopy(status)
 		self.notes = notes
 		self.references = references
+
+	def check(self):
+		logger = get_logger()
+		if self.name is None:
+			logger.debug(f"No name defined for {type(self).__name__} id {id}")
+		if self.description is None:
+			logger.debug(f"No description defined for {type(self).__name__} id {id}")
 
 	@classmethod
 	def from_input(cls, **kwargs):
@@ -63,14 +68,17 @@ class DRObjects(object):
 
 class ExperimentsGroup(DRObjects):
 	def __init__(self, title=None, experiments=list(), **kwargs):
-		logger = get_logger()
 		super().__init__(**kwargs)
 		self.title = title
-		if title is None:
-			logger.debug(f"No title defined for {type(self).__name__} id {self.id}")
 		self.experiments = experiments
-		if len(experiments) == 0:
-			logger.debug(f"No experiment defined for {type(self).__name__} id {self.id}")
+
+	def check(self):
+		super().check()
+		logger = get_logger()
+		if self.title is None:
+			logger.critical(f"No title defined for {type(self).__name__} id {self.id}")
+		if len(self.experiments) == 0:
+			logger.critical(f"No experiment defined for {type(self).__name__} id {self.id}")
 
 	def count(self):
 		return len(self.experiments)
@@ -98,13 +106,18 @@ class VariablesGroup(DRObjects):
 		logger = get_logger()
 		super().__init__(**kwargs)
 		self.title = title
-		if title is None:
-			logger.debug(f"No title defined for {type(self).__name__} id {self.id}")
 		self.variables = variables
-		if len(variables) == 0:
-			logger.debug(f"No variable defined for {type(self).__name__} id {self.id}")
 		self.mips = mips
 		self.priority = priority
+
+	def check(self):
+		super().check()
+		logger = get_logger()
+		if self.title is None:
+			logger.critical(f"No title defined for {type(self).__name__} id {self.id}")
+		if len(self.variables) == 0:
+			logger.critical(f"No variable defined for {type(self).__name__} id {self.id}")
+
 
 	@classmethod
 	def from_input(cls, vs, variables=list(), **kwargs):
@@ -133,19 +146,23 @@ class VariablesGroup(DRObjects):
 class Opportunity(DRObjects):
 	def __init__(self, experiments_groups=list(), variables_groups=list(), themes=list(), ensemble_size=1,
 	             comments=None, **kwargs):
-		logger = get_logger()
 		super().__init__(**kwargs)
 		self.ensemble_size = ensemble_size
 		self.comments = comments
 		self.experiments_groups = experiments_groups
-		if len(experiments_groups) == 0:
-			logger.debug(f"No experiments group defined for {type(self).__name__} id {self.id}")
 		self.variables_groups = variables_groups
-		if len(variables_groups) == 0:
-			logger.debug(f"No variables group defined for {type(self).__name__} id {self.id}")
 		self.themes = themes
-		if len(themes) == 0:
-			logger.debug(f"No theme defined for {type(self).__name__} id {self.id}")
+
+	def check(self):
+		super().check()
+		logger = get_logger()
+		if len(self.experiments_groups) == 0:
+			logger.critical(f"No experiments group defined for {type(self).__name__} id {self.id}")
+		if len(self.variables_groups) == 0:
+			logger.critical(f"No variables group defined for {type(self).__name__} id {self.id}")
+		if len(self.themes) == 0:
+			logger.critical(f"No theme defined for {type(self).__name__} id {self.id}")
+
 
 	@classmethod
 	def from_input(cls, dr, experiment_groups=list(), variable_groups=list(), **kwargs):
@@ -182,14 +199,44 @@ class Opportunity(DRObjects):
 
 class DataRequest(object):
 	def __init__(self, input_database, VS, **kwargs):
+		logger = get_logger()
 		self.VS = VS
+		logger.debug("Done with VS")
 		self.experiments_groups = {id: ExperimentsGroup.from_input(id=id, vs=self.VS, **input_dict)
 		                           for (id, input_dict) in input_database["experiment_group"]["records"].items()}
+		logger.debug("Done with DR experiments groups")
 		self.variables_groups = {id: VariablesGroup.from_input(id=id, vs=self.VS, **input_dict)
 		                         for (id, input_dict) in input_database["variable_group"]["records"].items()}
+		logger.debug("Done with DR variables groups")
 		self.opportunities = {id: Opportunity.from_input(id=id, dr=self, vs=self.VS, **input_dict)
 		                      for (id, input_dict) in input_database["opportunity"]["records"].items()}
+		logger.debug("Done with DR oportunities")
 		self.clean()
+		logger.debug("Done with DR")
+
+	def check(self):
+		logger = get_logger()
+		logger.info("Check data request metadata")
+		logger.info("... Check experiments groups")
+		for elt in self.get_experiments_groups():
+			elt.check()
+		logger.info("... Check variables groups")
+		for elt in self.get_variables_groups():
+			elt.check()
+		logger.info("... Check opportunities")
+		for elt in self.get_opportunities():
+			elt.check()
+
+	@property
+	def software_version(self):
+		return version
+
+	def content_version(self):
+		return self.VS.version
+
+	@property
+	def version(self):
+		return f"Software {self.software_version} - Content {self.content_version}"
 
 	def clean(self):
 		logger = get_logger()
