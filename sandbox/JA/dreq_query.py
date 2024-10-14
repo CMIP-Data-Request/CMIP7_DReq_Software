@@ -200,6 +200,72 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
             opp_vars[priority_level].add(var_name)
     return opp_vars
 
+def create_dreq_table_objects(content):
+    '''
+    Render raw airtable export content as dreq_table objects.
+
+    Parameters
+    ----------
+    content : dict
+        Raw airtable export, keyed by base name:
+        { base 1 name : {
+            table 1 name : {...}
+            table 2 name : {...}
+            }
+          base 2 name : ...
+        }
+        For further details see "Structure of the exported content" in 
+        scripts/README_airtable_export.md in the content repo:
+            https://github.com/CMIP-Data-Request/CMIP7_DReq_Content/
+        or equivalently for release versions:
+            https://github.com/CMIP-CMIP/CMIP7_DReq_Content/
+    '''
+    if not isinstance(content, dict):
+        raise TypeError('Input should be dict from raw airtable export json file')
+
+    # Content is dict loaded from raw airtable export json file
+    content_type = get_content_type(content)
+    match content_type:
+        case 'working':
+            base_name = 'Data Request Opportunities (Public)'
+        case 'version':
+            base_name = version_base_name()
+    base = content[base_name]
+
+    # Get a mapping from table id to table name
+    table_id2name = {}
+    for table_name, table in base.items():
+        assert table['name'] == table_name
+        assert table['base_name'] == base_name
+        table_id2name.update({
+            table['id'] : table['name']
+        })
+    assert len(table_id2name) == len(base)
+    # Create objects representing data request tables
+    for table_name, table in base.items():
+        # print('Creating table object for table: ' + table_name)
+        base[table_name] = dreq_table(table, table_id2name)
+
+    # Make some adjustments that are specific to the Opportunity table
+    Opps = base['Opportunity']
+    Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+    exclude_opps = set()
+    for opp_id, opp in Opps.records.items():
+        if not hasattr(opp, 'experiment_groups'):
+            print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
+            exclude_opps.add(opp_id)
+        if not hasattr(opp, 'variable_groups'):
+            print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
+            exclude_opps.add(opp_id)
+    if len(exclude_opps) > 0:
+        print('Excluding Opportunities:')
+        for opp_id in exclude_opps:
+            opp = Opps.records[opp_id]
+            print(f'  {opp.title}')
+            Opps.delete_record(opp_id)
+
+    return base
+
 def get_requested_variables(content, use_opps='all', max_priority='Low', verbose=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
@@ -207,7 +273,10 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
     Parameters
     ----------
     content : dict
-        Dict containing data request content exported from airtable.
+        Dict containing either:
+        - data request content as exported from airtable
+        OR
+        - dreq_table objects representing tables (dict keys are table names)
     use_opp : str or list of str/int
         Identifies the opportunities being supported. Options:
             'all' : include all available opportunities
@@ -231,47 +300,18 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
         }
     }
     '''
-
-    content_type = get_content_type(content)
-    match content_type:
-        case 'working':
-            base_name = 'Data Request Opportunities (Public)'
-        case 'version':
-            base_name = version_base_name()
-    base = content[base_name]
-
-    # Get a mapping from table id to table name
-    table_id2name = {}
-    for table_name, table in base.items():
-        assert table['name'] == table_name
-        assert table['base_name'] == base_name
-        table_id2name.update({
-            table['id'] : table['name']
-        })
-    assert len(table_id2name) == len(base)
-    # Create objects representing data request tables
-    for table_name, table in base.items():
-        # print('Creating table object for table: ' + table_name)
-        base[table_name] = dreq_table(table, table_id2name)
+    if isinstance(content, dict):
+        if all([isinstance(table, dreq_table) for table in content.values()]):
+            # tables have already been rendered as dreq_table objects
+            base = content
+        else:
+            # render tables as dreq_table objects
+            base = create_dreq_table_objects(content)
+    else:
+        raise TypeError('Expect dict as input')
 
     Opps = base['Opportunity']
-    # Adjustments specific to Opportunity table
-    Opps.rename_attr('title_of_opportunity', 'title') # for brevity in code below
-    exclude_opps = set()
-    for opp_id, opp in Opps.records.items():
-        if not hasattr(opp, 'experiment_groups'):
-            print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
-            exclude_opps.add(opp_id)
-        if not hasattr(opp, 'variable_groups'):
-            print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
-            exclude_opps.add(opp_id)
-
     opp_ids = get_opp_id(use_opps, Opps, verbose=verbose)
-    if len(exclude_opps) > 0:
-        print('Excluding Opportunities:')
-        for opp_id in exclude_opps:
-            opp = Opps.records[opp_id]
-            print(f'  {opp.title}')
 
     ExptGroups = base['Experiment Group']
     Expts = base['Experiments']
@@ -357,6 +397,9 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
         }
     }
     '''
+
+    if not isinstance(content, dict):
+        raise TypeError('Input should be dict from raw airtable export json file')
 
     content_type = get_content_type(content)
     match content_type:
