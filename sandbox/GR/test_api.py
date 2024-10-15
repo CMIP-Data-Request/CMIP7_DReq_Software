@@ -13,10 +13,15 @@ from collections import defaultdict
 # Import API (for users, only second one will be needed, first is to prepare json database)
 from dump_transformation import read_json_input_file_content, transform_content, write_json_output_file_content
 from data_request import DataRequest
+from logger import change_log_file, change_log_level
+
+
+change_log_file(default=True)
+change_log_level("info")
 
 
 # Json file names
-input_json_file = "../../CMIP7_DReq_Content/airtable_export/dreq_raw_export.json"
+input_json_file = "../../../CMIP7_DReq_Content/airtable_export/dreq_raw_export.json"
 # output_DR_json_file = "DR_request_basic_dump2.json"
 # output_VS_json_file = "VS_request_basic_dump2.json"
 
@@ -30,7 +35,7 @@ input_json_file = "../../CMIP7_DReq_Content/airtable_export/dreq_raw_export.json
 # DR = DataRequest.from_separated_inputs(DR_input_filename=output_DR_json_file, VS_input_filename=output_VS_json_file)
 
 # Or step 1-2:
-DR = DataRequest.from_input(json_input_filename=input_json_file)
+DR = DataRequest.from_input(json_input=input_json_file)
 
 # Step 3: Get information from Data Request
 # -> Print DR content
