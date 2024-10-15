@@ -151,7 +151,7 @@ class dreq_table:
 
         # attributes for the collection of records (table rows)
         self.records = records
-        self.record_ids = list(self.records.keys())
+        self.record_ids = sorted(self.records.keys(), key=str.lower)
         self.nrec = len(self.record_ids)
 
         # attributes describing the attributes (columns) in each individual record
@@ -192,7 +192,17 @@ class dreq_table:
         return s
 
     def get_record(self, m):
-        return self.records[self.record_ids[m]]
+        if isinstance(m, int):
+            # argument is index of the record in the list of record_ids
+            return self.records[self.record_ids[m]]
+        elif isinstance(m, str):
+            # argument is a record id string
+            return self.records[m]
+        elif isinstance(m, dreq_link):
+            # argument is dreq_link instance, which contains a record id
+            return self.records[m.record_id]
+        else:
+            raise TypeError(f'Error specifying record to retrieve from table {self.table_name}')
     
     def delete_record(self, record_id):
         self.records.pop(record_id)

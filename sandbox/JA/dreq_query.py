@@ -86,6 +86,9 @@ def get_var_group_priority(var_group, PriorityLevel=None):
     -------
     str that states the priority level: "High", "Medium", or "Low"
     '''
+    if not hasattr(var_group, 'priority_level'):
+        return 'Undefined'
+
     if isinstance(var_group.priority_level, list):
         assert len(var_group.priority_level) == 1, 'Variable group should have one specified priority level'
         link = var_group.priority_level[0]
@@ -147,6 +150,9 @@ def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
     for link in opp.experiment_groups:
         # expt_group = base[link.table_name].records[link.record_id]
         expt_group = ExptGroups.records[link.record_id]
+
+        if not hasattr(expt_group, 'experiments'):
+            continue
 
         n = len(expt_group.experiments)
         print(f'    {expt_group.name}  ({n} experiments)')
