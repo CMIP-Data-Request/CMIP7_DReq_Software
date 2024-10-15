@@ -59,20 +59,17 @@ print(DR)
 # -> Print an experiment group content
 print(DR.get_experiments_groups()[0])
 # -> Get all variables' id associated with an opportunity
-print(DR.find_variables_per_opportunity(DR.get_opportunities()[0].id))
+print(DR.find_variables_per_opportunity(DR.get_opportunities()[0]))
 # -> Get all experiments' id associated with an opportunity
-print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0].id))
+print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0]))
 # -> Get information about the shapes of the variables of all variables groups
 rep = dict()
-rep_data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 for elt in DR.get_variables_groups():
-    rep[elt.id] = dict(cell_methods=set(), frequency=set(), temporal_shape=set(), variables=set())
+    rep[elt.id] = dict(spatial_shape=set(), frequency=set(), temporal_shape=set(), physical_parameter=set())
     for var in elt.get_variables():
-        rep[elt.id]["cell_methods"].add(var.cell_methods)
-        rep[elt.id]["frequency"].add(var.frequency)
-        rep[elt.id]["temporal_shape"].add(var.temporal_shape)
-        rep[elt.id]["variables"].add(var.MIP_variable)
-        rep_data[elt.id][var.frequency][var.temporal_shape].append(var.MIP_variable)
+        for key in ["spatial_shape", "frequency", "temporal_shape", "physical_parameter"]:
+            rep[elt.id][key] = rep[elt.id][key].union(set([elt.get("name", "???") if isinstance(elt, dict) else elt
+                                                           for elt in var.__getattribute__(key)]))
 
 pprint.pprint(rep)
-pprint.pprint(rep_data)
+# pprint.pprint(rep_data)

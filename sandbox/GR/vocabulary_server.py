@@ -23,10 +23,12 @@ class VSObject(object):
 	def id(self):
 		return self.attributes["id"]
 
-	def get_value_from_vs(self, key, element_type=None):
+	def get_value_from_vs(self, key, element_type=None, target_type=None):
 		if element_type is None:
 			element_type = key
 		value = self.attributes[key]
+		if target_type in ["list", ] and not isinstance(value, list):
+			value = [value, ]
 		if isinstance(value, list):
 			value = [self.vs.get_element(element_type=element_type, element_id=val) for val in value]
 		else:
@@ -107,11 +109,11 @@ class Variable(VSObject):
 
 	@property
 	def cell_measures(self):
-		return self.get_value_from_vs(key="cell_measures")
+		return self.get_value_from_vs(key="cell_measures", target_type="list")
 
 	@property
 	def cell_methods(self):
-		return self.get_value_from_vs(key="cell_methods")
+		return self.get_value_from_vs(key="cell_methods", target_type="list")
 
 	@property
 	def compound_name(self):
@@ -127,19 +129,19 @@ class Variable(VSObject):
 
 	@property
 	def frequency(self):
-		return self.get_value_from_vs(key="frequency")
+		return self.get_value_from_vs(key="frequency", target_type="list")
 
 	@property
 	def modelling_realm(self):
-		return self.get_value_from_vs(key="modelling_realm")
+		return self.get_value_from_vs(key="modelling_realm", target_type="list")
 
 	@property
 	def physical_parameter(self):
-		return self.get_value_from_vs(key="physical_parameter", element_type="physical_parameters")
+		return self.get_value_from_vs(key="physical_parameter", element_type="physical_parameters", target_type="list")
 
 	@property
 	def spatial_shape(self):
-		return self.get_value_from_vs(key="spatial_shape")
+		return self.get_value_from_vs(key="spatial_shape", target_type="list")
 
 	@property
 	def structure_title(self):
@@ -147,11 +149,11 @@ class Variable(VSObject):
 
 	@property
 	def table(self):
-		return self.get_value_from_vs(key="table", element_type="table_identifiers")
+		return self.get_value_from_vs(key="table", element_type="table_identifiers", target_type="list")
 
 	@property
 	def temporal_shape(self):
-		return self.get_value_from_vs(key="temporal_shape")
+		return self.get_value_from_vs(key="temporal_shape", target_type="list")
 
 	@property
 	def title(self):
@@ -159,7 +161,9 @@ class Variable(VSObject):
 
 	def print_content(self, level=0, add_content=True):
 		indent = "    " * level
-		return [f"{indent}variable {self.physical_parameter[0]['name']} at frequency {self.frequency[0]['name']} (id: {self.id}, title: {self.title})", ]
+		physical_parameter = ", ".join([elt["name"] for elt in self.physical_parameter])
+		frequency = ", ".join([elt["name"] for elt in self.frequency])
+		return [f"{indent}variable {physical_parameter} at frequency {frequency} (id: {self.id}, title: {self.title})", ]
 
 	@classmethod
 	def from_input(cls, id, vs, input_dict):
@@ -219,6 +223,9 @@ class VocabularyServer(object):
 						raise ValueError(f"Could not find key {element_key} of id {element_id} of type "
 						                 f"{element_type} in the vocabulary server.")
 				return value
+			elif element_id in ["???", ]:
+				logger.critical(f"Undefined id of type {element_type}")
+				return element_id
 			elif default:
 				logger.critical(f"Could not find id {element_id} of type {element_type}"
 				                f" in the vocabulary server.")

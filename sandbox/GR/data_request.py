@@ -15,7 +15,7 @@ import six
 
 from logger import get_logger, change_log_file, change_log_level
 from dump_transformation import read_json_file, transform_content
-from vocabulary_server import VocabularyServer
+from vocabulary_server import VocabularyServer, Variable, Experiment
 
 version = "0.1"
 
@@ -201,18 +201,13 @@ class DataRequest(object):
 	def __init__(self, input_database, VS, **kwargs):
 		logger = get_logger()
 		self.VS = VS
-		logger.debug("Done with VS")
 		self.experiments_groups = {id: ExperimentsGroup.from_input(id=id, vs=self.VS, **input_dict)
 		                           for (id, input_dict) in input_database["experiment_group"]["records"].items()}
-		logger.debug("Done with DR experiments groups")
 		self.variables_groups = {id: VariablesGroup.from_input(id=id, vs=self.VS, **input_dict)
 		                         for (id, input_dict) in input_database["variable_group"]["records"].items()}
-		logger.debug("Done with DR variables groups")
 		self.opportunities = {id: Opportunity.from_input(id=id, dr=self, vs=self.VS, **input_dict)
 		                      for (id, input_dict) in input_database["opportunity"]["records"].items()}
-		logger.debug("Done with DR oportunities")
 		self.clean()
-		logger.debug("Done with DR")
 
 	def check(self):
 		logger = get_logger()
@@ -323,104 +318,119 @@ class DataRequest(object):
 		else:
 			raise ValueError(f"Could not find opportunity {id}.")
 
-	def find_variables_per_priority(self, priority_id):
+	def find_variables_per_priority(self, priority):
 		rep = set()
 		for var_group in self.get_variables_groups():
-			if var_group.priority in [priority_id, ]:
+			if var_group.priority in [priority, ]:
 				rep = rep.union(set(var_group.get_variables()))
 		return sorted(list(rep))
 
-	def find_opportunity_per_theme(self, theme_id):
+	def find_opportunity_per_theme(self, theme):
 		rep = set()
 		for opportunity in self.get_opportunities():
-			if theme_id in opportunity.get_themes():
+			if theme in opportunity.get_themes():
 				rep.add(opportunity)
 		return sorted(list(rep))
 
-	def find_experiments_per_theme(self, theme_id):
+	def find_experiments_per_theme(self, theme):
 		rep = set()
 		for opportunity in self.get_opportunities():
-			if theme_id in opportunity.get_themes():
+			if theme in opportunity.get_themes():
 				for exp_group in opportunity.get_experiments_groups():
 					rep = rep.union(set(exp_group.get_experiments()))
 		return sorted(list(rep))
 
-	def find_variables_per_theme(self, theme_id):
+	def find_variables_per_theme(self, theme):
 		rep = set()
 		for opportunity in self.get_opportunities():
-			if theme_id in opportunity.get_themes():
+			if theme in opportunity.get_themes():
 				for var_group in opportunity.get_variables_groups():
 					rep = rep.union(set(var_group.get_variables()))
 		return sorted(list(rep))
 
-	def find_mips_per_theme(self, theme_id):
+	def find_mips_per_theme(self, theme):
 		rep = set()
 		for opportunity in self.get_opportunities():
-			if theme_id in opportunity.get_themes():
+			if theme in opportunity.get_themes():
 				for var_group in opportunity.get_variables_groups():
 					rep = rep.union(set(var_group.get_mips()))
 		return sorted(list(rep))
 
-	def find_themes_per_opportunity(self, opportunity_id):
-		return sorted(self.get_opportunity(opportunity_id).get_themes())
+	def find_themes_per_opportunity(self, opportunity):
+		if not isinstance(opportunity, Opportunity):
+			opportunity = self.get_opportunity(opportunity)
+		return sorted(opportunity.get_themes())
 
-	def find_experiments_per_opportunity(self, opportunity_id):
-		opportunity = self.get_opportunity(opportunity_id)
+	def find_experiments_per_opportunity(self, opportunity):
+		if not isinstance(opportunity, Opportunity):
+			opportunity = self.get_opportunity(opportunity)
 		rep = set()
 		for exp_group in opportunity.get_experiments_groups():
 			rep = rep.union(set(exp_group.get_experiments()))
 		return sorted(list(set(rep)))
 
-	def find_variables_per_opportunity(self, opportunity_id):
-		opportunity = self.get_opportunity(opportunity_id)
+	def find_variables_per_opportunity(self, opportunity):
+		if not isinstance(opportunity, Opportunity):
+			opportunity = self.get_opportunity(opportunity)
 		rep = set()
 		for var_group in opportunity.get_variables_groups():
 			rep = rep.union(set(var_group.get_variables()))
 		return sorted(list(rep))
 
-	def find_mips_per_opportunity(self, opportunity_id):
-		opportunity = self.get_opportunity(opportunity_id)
+	def find_mips_per_opportunity(self, opportunity):
+		if not isinstance(opportunity, Opportunity):
+			opportunity = self.get_opportunity(opportunity)
 		rep = set()
 		for var_group in opportunity.get_variables_groups():
 			rep = rep.union(set(var_group.get_mips()))
 		return sorted(list(rep))
 
-	def find_opportunities_per_variable(self, variable_id):
+	def find_opportunities_per_variable(self, variable):
+		if isinstance(variable, Variable):
+			variable = variable.id
 		rep = set()
 		for opportunity in self.get_opportunities():
 			for var_group in opportunity.get_variables_groups():
-				if variable_id in var_group.get_variables():
+				if variable in var_group.get_variables():
 					rep.add(opportunity)
 		return sorted(list(rep))
 
-	def find_themes_per_variable(self, variable_id):
+	def find_themes_per_variable(self, variable):
+		if isinstance(variable, Variable):
+			variable = variable.id
 		rep = set()
 		for opportunity in self.get_opportunities():
 			for var_group in opportunity.get_variables_groups():
-				if variable_id in var_group.get_variables():
+				if variable in var_group.get_variables():
 					rep = rep.union(set(opportunity.get_themes()))
 		return sorted(list(rep))
 
-	def find_mips_per_variable(self, variable_id):
+	def find_mips_per_variable(self, variable):
+		if isinstance(variable, Variable):
+			variable = variable.id
 		rep = set()
 		for var_group in self.get_variables_groups():
-			if variable_id in var_group.get_variables():
+			if variable in var_group.get_variables():
 				rep = rep.union(set(var_group.get_mips()))
 		return sorted(list(rep))
 
-	def find_opportunities_per_experiment(self, experiment_id):
+	def find_opportunities_per_experiment(self, experiment):
+		if isinstance(experiment, Experiment):
+			experiment = experiment.id
 		rep = set()
 		for opportunity in self.get_opportunities():
 			for exp_group in opportunity.get_experiments_groups():
-				if experiment_id in exp_group.get_variables():
+				if experiment in exp_group.get_variables():
 					rep.add(opportunity)
 		return sorted(list(rep))
 
-	def find_themes_per_experiment(self, experiment_id):
+	def find_themes_per_experiment(self, experiment):
+		if isinstance(experiment, Experiment):
+			experiment = experiment.id
 		rep = set()
 		for opportunity in self.get_opportunities():
 			for exp_group in opportunity.get_experiments_groups():
-				if experiment_id in exp_group.get_variables():
+				if experiment in exp_group.get_variables():
 					rep = rep.union(set(opportunity.get_themes()))
 		return sorted(list(rep))
 
