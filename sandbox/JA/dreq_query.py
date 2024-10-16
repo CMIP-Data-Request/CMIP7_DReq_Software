@@ -33,7 +33,7 @@ def get_content_type(content):
 def version_base_name():
     return f'Data Request {DREQ_VERSION}'
 
-def get_opp_id(use_opps, Opps, verbose=False):
+def get_opp_ids(use_opps, Opps, verbose=False):
     '''
     Return list of unique opportunity identifiers.
 
@@ -317,7 +317,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
         raise TypeError('Expect dict as input')
 
     Opps = base['Opportunity']
-    opp_ids = get_opp_id(use_opps, Opps, verbose=verbose)
+    opp_ids = get_opp_ids(use_opps, Opps, verbose=verbose)
 
     ExptGroups = base['Experiment Group']
     Expts = base['Experiments']
