@@ -26,23 +26,25 @@ reload(dq)
 
 # use_dreq_version = 'first_export'
 use_dreq_version = 'v1.0alpha'
+use_dreq_version = 'new_export_15Oct2024'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
 # Load content into python dict
 content = dc.load(use_dreq_version)
 
-# Initialize table objects to represent the various tables in the data request
-dq.DREQ_VERSION = use_dreq_version
-base = dq.create_dreq_table_objects(content)
 
 ###############################################################################
 # Find variables requested for a set of opportunities.
 
+dq.DREQ_VERSION = use_dreq_version
+# Initialize table objects to represent the various tables in the data request
+base = dq.create_dreq_table_objects(content, working_base='Opportunities')
+
 # use subset of opportunities:
-# use_opps = []
-# use_opps.append('Baseline Climate Variables for Earth System Modelling')
-# use_opps.append('Synoptic systems and impacts')
+use_opps = []
+use_opps.append('Baseline Climate Variables for Earth System Modelling')
+use_opps.append('Synoptic systems and impacts')
 
 # use all opportunities:
 Opps = base['Opportunity']
@@ -56,8 +58,11 @@ opp_vars_by_group = {opp_title : OrderedDict() for opp_title in use_opps}
 VarGroups = base['Variable Group']
 Vars = base['Variables']
 
-PriorityLevel = base['Priority Level']
-priority_levels = [rec.name for rec in PriorityLevel.records.values()]
+if 'Priority Level' in base:
+    PriorityLevel = base['Priority Level']
+    priority_levels = [rec.name for rec in PriorityLevel.records.values()]
+else:
+    priority_levels = ['High', 'Medium', 'Low']
 
 # Loop over opportunities to get requested variables for each one.
 # Requested experiments are ignored because here we only want the variables.
@@ -73,15 +78,19 @@ for opp_id in opp_ids:
 
         if not hasattr(var_group, 'variables'):
             continue
-        priority = PriorityLevel.get_record(var_group.priority_level[0])
+        if isinstance(var_group.priority_level, str):
+            priority_level = var_group.priority_level
+        else:
+            priority = PriorityLevel.get_record(var_group.priority_level[0])
+            priority_level = priority.name
 
         assert var_group.name not in opp_vars_by_group[opp.title], 'variable group name is not unique in this opportunity!'
         # opp_vars_by_group[opp.title][var_group.name] = set()
         opp_vars_by_group[opp.title][var_group.name] = []
         
-        if priority.name not in opp_vars_by_priority[opp.title]:
-            # opp_vars_by_priority[opp.title][priority.name] = set()
-            opp_vars_by_priority[opp.title][priority.name] = []
+        if priority_level not in opp_vars_by_priority[opp.title]:
+            # opp_vars_by_priority[opp.title][priority_level] = set()
+            opp_vars_by_priority[opp.title][priority_level] = []
 
         for link in var_group.variables:
             var = Vars.get_record(link)
@@ -90,10 +99,10 @@ for opp_id in opp_ids:
             # opp_vars_by_group[opp.title][var_group.name].add(var_name)
             opp_vars_by_group[opp.title][var_group.name].append(var_name)
 
-            # opp_vars_by_priority[opp.title][priority.name].add(var_name)
-            if var_name not in opp_vars_by_priority[opp.title][priority.name]:
+            # opp_vars_by_priority[opp.title][priority_level].add(var_name)
+            if var_name not in opp_vars_by_priority[opp.title][priority_level]:
                 # If the same variable is requested by >1 variable group at the same priority level, it might already be in the list
-                opp_vars_by_priority[opp.title][priority.name].append(var_name)
+                opp_vars_by_priority[opp.title][priority_level].append(var_name)
 
         if len(opp_vars_by_group[opp.title][var_group.name]) != len(set(opp_vars_by_group[opp.title][var_group.name])):
             raise Exception('overlap between variable groups for opportunity: ' + opp.title)
@@ -104,14 +113,18 @@ for opp_id in opp_ids:
 # Now use the "data" part, i.e. tables that define the variables, to retrieve info
 # about each variable.
 
+base = dq.create_dreq_table_objects(content, working_base='Variables')
+
 Vars = base['Variables']
 SpatialShape = base['Spatial Shape']
 Dimensions = base['Coordinates and Dimensions']
-Frequency = base['Frequency']
 TemporalShape = base['Temporal Shape']
 CellMethods = base['Cell Methods']
 PhysicalParameter = base['Physical Parameters']
-CFStandardName = base['CF Standard Names']
+if 'Frequency' in base:
+    Frequency = base['Frequency']
+if 'CF Standard Names' in base:
+    CFStandardName = base['CF Standard Names']
 
 # Use compound name to look up record id of each variable in the Vars table
 var_name_map = {record.compound_name : record_id for record_id, record in Vars.records.items()}
@@ -154,10 +167,14 @@ for opp_title in opp_titles:
 
             # Follow links starting from the variable record to find out info about the variable
             var_info[var_name] = OrderedDict()
-            
-            link = var.frequency[0]
-            # freq = Frequency.records[link.record_id]
-            freq = Frequency.get_record(link)
+
+            if isinstance(var.frequency[0], str):
+                assert isinstance(var.frequency, list)
+                frequency = var.frequency[0]
+            else:
+                link = var.frequency[0]
+                freq = Frequency.get_record(link)
+                frequency = freq.name
 
             link = var.temporal_shape[0]
             temporal_shape = TemporalShape.get_record(link)
@@ -206,11 +223,16 @@ for opp_title in opp_titles:
             link = var.physical_parameter[0]
             phys_param = PhysicalParameter.get_record(link)
             if hasattr(phys_param, 'cf_standard_name'):
-                link = phys_param.cf_standard_name[0]
-                cfsn = CFStandardName.get_record(link)
-                var_info[var_name].update({
-                    'CF standard name' : cfsn.name,
-                })
+                if isinstance(phys_param.cf_standard_name, str):
+                    var_info[var_name].update({
+                        'CF standard name' : phys_param.cf_standard_name,
+                    })
+                else:
+                    link = phys_param.cf_standard_name[0]
+                    cfsn = CFStandardName.get_record(link)
+                    var_info[var_name].update({
+                        'CF standard name' : cfsn.name,
+                    })
             else:
                 var_info[var_name].update({
                     'CF standard name (proposed)' : phys_param.proposed_cf_standard_name,
@@ -220,7 +242,7 @@ for opp_title in opp_titles:
                 'units' : phys_param.units,
                 'cell_methods' : cell_methods,
                 'dimensions' : ' '.join(var_dims),
-                'frequency' : freq.name,
+                'frequency' : frequency,
                 'spatial_shape' : spatial_shape.name,
                 'temporal_shape' : temporal_shape.name,
                 'vertical_levels' : levels,

@@ -212,7 +212,7 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
             opp_vars[priority_level].add(var_name)
     return opp_vars
 
-def create_dreq_table_objects(content):
+def create_dreq_table_objects(content, working_base='Opportunities'):
     '''
     Render raw airtable export content as dreq_table objects.
 
@@ -243,6 +243,10 @@ def create_dreq_table_objects(content):
         or equivalently for release versions:
             https://github.com/CMIP-CMIP/CMIP7_DReq_Content/
 
+    working_base : str
+        If content dict has more than one base, as for the "working version",
+        this specifies which one to convert and return.
+
     Returns
     -------
     base : dict
@@ -253,13 +257,21 @@ def create_dreq_table_objects(content):
 
     # Content is dict loaded from raw airtable export json file
     content_type = get_content_type(content)
-    match content_type:
-        case 'working':
-            base_name = 'Data Request Opportunities (Public)'
-        case 'version':
-            base_name = version_base_name()
     if content_type == 'UNKNOWN':
         raise Exception(' * ERROR *    Unable to determine type of data request content in the exported json file')
+    match content_type:
+        case 'working':
+            match working_base:
+                case 'Opportunities':
+                    base_name = 'Data Request Opportunities (Public)'
+                case 'Variables':
+                    base_name = 'Data Request Variables (Public)'
+                case _:
+                    raise Exception('Which working base to use? Unknown type: ' + working_base)
+        case 'version':
+            base_name = version_base_name()
+        case _:
+            raise Exception('Unknown content type: ' + content_type)
     base = content[base_name]
 
     # Get a mapping from table id to table name
@@ -276,41 +288,67 @@ def create_dreq_table_objects(content):
         # print('Creating table object for table: ' + table_name)
         base[table_name] = dreq_table(table, table_id2name)
 
-    # Make some adjustments that are specific to the Opportunity table
-    Opps = base['Opportunity']
-    Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
-    if content_type == 'working':
-        if 'variable_groups' not in Opps.attr2field:
-            if 'originally_requested_variable_groups' in Opps.attr2field:
-                Opps.rename_attr('originally_requested_variable_groups', 'variable_groups')
-    exclude_opps = set()
-    for opp_id, opp in Opps.records.items():
-        if not hasattr(opp, 'experiment_groups'):
-            print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
-            exclude_opps.add(opp_id)
-        if not hasattr(opp, 'variable_groups'):
-            print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
-            exclude_opps.add(opp_id)
-    if len(exclude_opps) > 0:
-        print('Excluding Opportunities:')
-        for opp_id in exclude_opps:
-            opp = Opps.records[opp_id]
-            print(f'  {opp.title}')
-            Opps.delete_record(opp_id)
-    if len(Opps.records) == 0:
-        # If there are no opportunities left, there's no point in continuing!
-        # This check is here because if something changes upstream in Airtable, it might cause
-        # the above code to erroneously remove all opportunities.
-        raise Exception(' * ERROR *    All Opportunities were removed!')
+    if 'Opportunity' in base:
+        # Make some adjustments that are specific to the Opportunity table
+        Opps = base['Opportunity']
+        Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+        if content_type == 'working':
+            if 'variable_groups' not in Opps.attr2field:
+                if 'originally_requested_variable_groups' in Opps.attr2field:
+                    Opps.rename_attr('originally_requested_variable_groups', 'variable_groups')
+        exclude_opps = set()
+        for opp_id, opp in Opps.records.items():
+            if not hasattr(opp, 'experiment_groups'):
+                print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
+                exclude_opps.add(opp_id)
+            if not hasattr(opp, 'variable_groups'):
+                print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
+                exclude_opps.add(opp_id)
+        if len(exclude_opps) > 0:
+            print('Excluding Opportunities:')
+            for opp_id in exclude_opps:
+                opp = Opps.records[opp_id]
+                print(f'  {opp.title}')
+                Opps.delete_record(opp_id)
+        if len(Opps.records) == 0:
+            # If there are no opportunities left, there's no point in continuing!
+            # This check is here because if something changes upstream in Airtable, it might cause
+            # the above code to erroneously remove all opportunities.
+            raise Exception(' * ERROR *    All Opportunities were removed!')
 
     # Other adjustments
     if content_type == 'working':
-        if 'Experiments' not in base:
-            # Unfortunately the 'working' bases have a different table name for experiments
-            # than the official releases (as of Oct 2024)
-            base['Experiments'] = base['Experiment']
-            base.pop('Experiment')
-        assert 'Experiment' not in base
+
+        if working_base == 'Opportunities':
+            change_table_names = {
+                # old name : new name
+                'Experiment' : 'Experiments',
+            }
+
+            # if 'Experiments' not in base:
+            #     # Unfortunately the 'working' bases have a different table name for experiments
+            #     # than the official releases (as of Oct 2024)
+            #     base['Experiments'] = base['Experiment']
+            #     base.pop('Experiment')
+            # assert 'Experiment' not in base
+
+        elif working_base == 'Variables':
+            change_table_names = {
+                # old name : new name
+                'Variable' : 'Variables',
+                'Coordinate or Dimension' : 'Coordinates and Dimensions',
+                'Physical Parameter' : 'Physical Parameters',
+            }
+
+            # if 'Variables' not in base:
+            #     base['Variables'] = base['Variable']
+            #     base.pop('Variable')
+            # assert 'Variable' not in base
+
+        for old,new in change_table_names.items():
+            assert new not in base, 'New table name already exists: ' + new
+            base[new] = base[old]
+            base.pop(old)
 
     return base
 
