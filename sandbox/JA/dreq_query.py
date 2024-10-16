@@ -19,15 +19,21 @@ def get_content_type(content):
     Returns
     -------
     str indicating type of content:
+
         'working'   3 bases containing the latest working version of data request content
+                    (or 4 bases if the Schema table has been added to the export)
+
         'version'   1 base containing the content of a tagged data request version
     '''
-    content_type = ''
     match len(content):
         case 3:
             content_type = 'working'
+        case 4:
+            content_type = 'working'
         case 1:
             content_type = 'version'
+        case _:
+            content_type = 'UNKNOWN'
     return content_type
 
 def version_base_name():
@@ -210,6 +216,17 @@ def create_dreq_table_objects(content):
     '''
     Render raw airtable export content as dreq_table objects.
 
+    The exported content (input dict 'content') has a slightly different
+    structure depending on the content type, determined here by:
+        get_content_type(content)
+    If any finicky details need to be adjusted based on the content type,
+    this function handles them. For example, if the experiments table is
+    named "Experiments" in a versioned release but is named "Experiment"
+    in the 'working' content type. Ideally there would be no such differences,
+    but sometimes they happen. They are resolved here, insulating
+    downstream code from having to deal with them. That is, downstream code
+    should be independent of the content type.
+    
     Parameters
     ----------
     content : dict
@@ -225,6 +242,11 @@ def create_dreq_table_objects(content):
             https://github.com/CMIP-Data-Request/CMIP7_DReq_Content/
         or equivalently for release versions:
             https://github.com/CMIP-CMIP/CMIP7_DReq_Content/
+
+    Returns
+    -------
+    base : dict
+        Dict keys are table names, values are dreq_table objects.
     '''
     if not isinstance(content, dict):
         raise TypeError('Input should be dict from raw airtable export json file')
@@ -236,6 +258,8 @@ def create_dreq_table_objects(content):
             base_name = 'Data Request Opportunities (Public)'
         case 'version':
             base_name = version_base_name()
+    if content_type == 'UNKNOWN':
+        raise Exception(' * ERROR *    Unable to determine type of data request content in the exported json file')
     base = content[base_name]
 
     # Get a mapping from table id to table name
@@ -255,6 +279,10 @@ def create_dreq_table_objects(content):
     # Make some adjustments that are specific to the Opportunity table
     Opps = base['Opportunity']
     Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+    if content_type == 'working':
+        if 'variable_groups' not in Opps.attr2field:
+            if 'originally_requested_variable_groups' in Opps.attr2field:
+                Opps.rename_attr('originally_requested_variable_groups', 'variable_groups')
     exclude_opps = set()
     for opp_id, opp in Opps.records.items():
         if not hasattr(opp, 'experiment_groups'):
@@ -269,6 +297,20 @@ def create_dreq_table_objects(content):
             opp = Opps.records[opp_id]
             print(f'  {opp.title}')
             Opps.delete_record(opp_id)
+    if len(Opps.records) == 0:
+        # If there are no opportunities left, there's no point in continuing!
+        # This check is here because if something changes upstream in Airtable, it might cause
+        # the above code to erroneously remove all opportunities.
+        raise Exception(' * ERROR *    All Opportunities were removed!')
+
+    # Other adjustments
+    if content_type == 'working':
+        if 'Experiments' not in base:
+            # Unfortunately the 'working' bases have a different table name for experiments
+            # than the official releases (as of Oct 2024)
+            base['Experiments'] = base['Experiment']
+            base.pop('Experiment')
+        assert 'Experiment' not in base
 
     return base
 

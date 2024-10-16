@@ -161,7 +161,7 @@ class dreq_table:
 
     def rename_attr(self, old, new):
         if old in self.attr2field:
-            assert new not in self.attr2field
+            assert new not in self.attr2field, 'Record attribute already exists: ' + new
 
             field_name = self.attr2field[old]
             self.field_info[field_name]['attribute_name'] = new
