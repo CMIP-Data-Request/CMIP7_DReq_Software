@@ -54,6 +54,7 @@ class dreq_link:
     def __repr__(self):
         # return self.record_id
         return f'link: table={self.table_name}, record={self.record_id}'
+    
 
 class dreq_record:
     '''
@@ -103,6 +104,9 @@ class dreq_record:
                 s = f'{s}{v}'
             l.append(s)
         return '\n' + '\n'.join(l)
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
 
 class dreq_table:
     '''
@@ -208,6 +212,9 @@ class dreq_table:
         self.records.pop(record_id)
         self.record_ids.remove(record_id)
         self.nrec -= 1
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
 
 ###############################################################################
 # Non-generic classes, i.e. they have a specific function in the data request

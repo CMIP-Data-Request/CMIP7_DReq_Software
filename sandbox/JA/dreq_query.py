@@ -1,11 +1,24 @@
 '''
 Functions to extract information from the data request.
 E.g., get variables requested for each experiment.
+
+The module has two basic sections:
+
+1) Functions that take the data request content and convert it to python objects.
+2) Functions that interrogate the data request, usually using output from (1) as their input.
+
 '''
+# from importlib import reload
+# import dreq_classes
+# reload(dreq_classes)
 
 from dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME
 
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
+
+###############################################################################
+# Functions to manage data request content input and use it to create python
+# objects representing the tables.
 
 def get_content_type(content):
     '''
@@ -20,10 +33,10 @@ def get_content_type(content):
     -------
     str indicating type of content:
 
-        'working'   3 bases containing the latest working version of data request content
-                    (or 4 bases if the Schema table has been added to the export)
+        'working' : 3 bases containing the latest working version of data request content,
+                    or 4 bases if the Schema table has been added to the export.
 
-        'version'   1 base containing the content of a tagged data request version
+        'version' : 1 base containing the content of a tagged data request version.
     '''
     match len(content):
         case 3:
@@ -33,11 +46,308 @@ def get_content_type(content):
         case 1:
             content_type = 'version'
         case _:
-            content_type = 'UNKNOWN'
+            raise Exception(' * ERROR *    Unable to determine type of data request content in the exported json file')
     return content_type
 
 def version_base_name():
     return f'Data Request {DREQ_VERSION}'
+
+def get_table_id2name(base, base_name):
+    '''
+    Get a mapping from table id to table name
+    '''
+    table_id2name = {}
+    for table_name, table in base.items():
+        assert table['name'] == table_name
+        assert table['base_name'] == base_name
+        table_id2name.update({
+            table['id'] : table['name']
+        })
+    assert len(table_id2name) == len(base), 'table ids are not unique!'
+    return table_id2name
+
+def create_dreq_tables_for_request(content):
+    '''
+    For the "request" part of the data request content (Opportunities, Variable Groups, etc),
+    render raw airtable export content as dreq_table objects.
+    
+    For the "data" part of the data request, the corresponding function is create_dreq_tables_for_variables().
+
+    Parameters
+    ----------
+    content : dict
+        Raw airtable export. Dict is keyed by base name, for example:
+        {'Data Request Opportunities (Public)' : {
+            'Opportunity' : {...},
+            ...
+            },
+         'Data Request Variables (Public)' : {
+            'Variables' : {...}
+            ...
+            }
+        }
+
+    Returns
+    -------
+    Dict whose keys are table names and values are dreq_table objects.
+    (The base name from the input 'content' dict no longer appears.)
+    '''
+    if not isinstance(content, dict):
+        raise TypeError('Input should be dict from raw airtable export json file')
+
+    # Content is dict loaded from raw airtable export json file
+    content_type = get_content_type(content)
+    match content_type:
+        case 'working':
+            base_name = 'Data Request Opportunities (Public)'
+        case 'version':
+            base_name = version_base_name()
+        case _:
+            raise Exception('Unknown content type: ' + content_type)
+    base = content[base_name]
+
+    # Create objects representing data request tables
+    table_id2name = get_table_id2name(base, base_name)
+    for table_name, table in base.items():
+        # print('Creating table object for table: ' + table_name)
+        base[table_name] = dreq_table(table, table_id2name)
+
+    # Change names of tables if needed 
+    # (insulates downstream code from upstream name changes that don't affect functionality)
+    change_table_names = {}
+    if content_type == 'working':
+        change_table_names = {
+            # old name : new name
+            'Experiment' : 'Experiments',
+        }
+    for old,new in change_table_names.items():
+        assert new not in base, 'New table name already exists: ' + new
+        base[new] = base[old]
+        base.pop(old)
+
+    # Make some adjustments that are specific to the Opportunity table
+    Opps = base['Opportunity']
+    Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+    if content_type == 'working':
+        if 'variable_groups' not in Opps.attr2field:
+            if 'originally_requested_variable_groups' in Opps.attr2field:
+                Opps.rename_attr('originally_requested_variable_groups', 'variable_groups')
+    exclude_opps = set()
+    for opp_id, opp in Opps.records.items():
+        if not hasattr(opp, 'experiment_groups'):
+            print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
+            exclude_opps.add(opp_id)
+        if not hasattr(opp, 'variable_groups'):
+            print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
+            exclude_opps.add(opp_id)
+    if len(exclude_opps) > 0:
+        print('Excluding Opportunities:')
+        for opp_id in exclude_opps:
+            opp = Opps.records[opp_id]
+            print(f'  {opp.title}')
+            Opps.delete_record(opp_id)
+    if len(Opps.records) == 0:
+        # If there are no opportunities left, there's no point in continuing!
+        # This check is here because if something changes upstream in Airtable, it might cause
+        # the above code to erroneously remove all opportunities.
+        raise Exception(' * ERROR *    All Opportunities were removed!')
+
+    return base
+
+def create_dreq_tables_for_variables(content):
+    '''
+    For the "data" part of the data request content (Variables, Cell Methods etc),
+    render raw airtable export content as dreq_table objects.
+
+    For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().
+
+    '''
+    if not isinstance(content, dict):
+        raise TypeError('Input should be dict from raw airtable export json file')
+
+    # Content is dict loaded from raw airtable export json file
+    content_type = get_content_type(content)
+    match content_type:
+        case 'working':
+            base_name = 'Data Request Variables (Public)'
+        case 'version':
+            base_name = version_base_name()
+        case _:
+            raise Exception('Unknown content type: ' + content_type)
+    base = content[base_name]
+
+    # Create objects representing data request tables
+    table_id2name = get_table_id2name(base, base_name)
+    for table_name, table in base.items():
+        # print('Creating table object for table: ' + table_name)
+        base[table_name] = dreq_table(table, table_id2name)
+
+    # Change names of tables if needed 
+    # (insulates downstream code from upstream name changes that don't affect functionality)
+    change_table_names = {}
+    if content_type == 'working':
+        change_table_names = {
+            # old name : new name
+            'Variable' : 'Variables',
+            'Coordinate or Dimension' : 'Coordinates and Dimensions',
+            'Physical Parameter' : 'Physical Parameters',
+        }
+    for old,new in change_table_names.items():
+        assert new not in base, 'New table name already exists: ' + new
+        base[new] = base[old]
+        base.pop(old)
+
+    return base
+
+def _create_dreq_table_objects(content, working_base='Opportunities'):
+    '''
+    ******************
+    *** DEPRECATED ***
+    Replaced by two functions:
+        create_dreq_tables_for_request()
+        create_dreq_tables_for_variables()
+    ******************
+
+    
+    Render raw airtable export content as dreq_table objects.
+
+    The exported content (input dict 'content') has a slightly different
+    structure depending on the content type, determined here by:
+        get_content_type(content)
+    If any finicky details need to be adjusted based on the content type,
+    this function handles them. For example, if the experiments table is
+    named "Experiments" in a versioned release but is named "Experiment"
+    in the 'working' content type. Ideally there would be no such differences,
+    but sometimes they happen. They are resolved here, insulating
+    downstream code from having to deal with them. That is, downstream code
+    should be independent of the content type.
+    
+    Parameters
+    ----------
+    content : dict
+        Raw airtable export, keyed by base name:
+        { base 1 name : {
+            table 1 name : {...}
+            table 2 name : {...}
+            }
+          base 2 name : ...
+        }
+        For further details see "Structure of the exported content" in 
+        scripts/README_airtable_export.md in the content repo:
+            https://github.com/CMIP-Data-Request/CMIP7_DReq_Content/
+        or equivalently for release versions:
+            https://github.com/CMIP-CMIP/CMIP7_DReq_Content/
+
+    working_base : str
+        If content dict has more than one base, as for the "working version",
+        this specifies which one to convert and return.
+
+    Returns
+    -------
+    base : dict
+        Dict keys are table names, values are dreq_table objects.
+    '''
+    if not isinstance(content, dict):
+        raise TypeError('Input should be dict from raw airtable export json file')
+
+    # Content is dict loaded from raw airtable export json file
+    content_type = get_content_type(content)
+    match content_type:
+        case 'working':
+            match working_base:
+                case 'Opportunities':
+                    base_name = 'Data Request Opportunities (Public)'
+                case 'Variables':
+                    base_name = 'Data Request Variables (Public)'
+                case _:
+                    raise Exception('Which working base to use? Unknown type: ' + working_base)
+        case 'version':
+            base_name = version_base_name()
+        case _:
+            raise Exception('Unknown content type: ' + content_type)
+    base = content[base_name]
+
+    # Get a mapping from table id to table name
+    table_id2name = {}
+    for table_name, table in base.items():
+        assert table['name'] == table_name
+        assert table['base_name'] == base_name
+        table_id2name.update({
+            table['id'] : table['name']
+        })
+    assert len(table_id2name) == len(base)
+    # Create objects representing data request tables
+    for table_name, table in base.items():
+        # print('Creating table object for table: ' + table_name)
+        base[table_name] = dreq_table(table, table_id2name)
+
+    if 'Opportunity' in base and working_base == 'Opportunities':
+        # Make some adjustments that are specific to the Opportunity table
+        Opps = base['Opportunity']
+        Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+        if content_type == 'working':
+            if 'variable_groups' not in Opps.attr2field:
+                if 'originally_requested_variable_groups' in Opps.attr2field:
+                    Opps.rename_attr('originally_requested_variable_groups', 'variable_groups')
+        exclude_opps = set()
+        for opp_id, opp in Opps.records.items():
+            if not hasattr(opp, 'experiment_groups'):
+                print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
+                exclude_opps.add(opp_id)
+            if not hasattr(opp, 'variable_groups'):
+                print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
+                exclude_opps.add(opp_id)
+        if len(exclude_opps) > 0:
+            print('Excluding Opportunities:')
+            for opp_id in exclude_opps:
+                opp = Opps.records[opp_id]
+                print(f'  {opp.title}')
+                Opps.delete_record(opp_id)
+        if len(Opps.records) == 0:
+            # If there are no opportunities left, there's no point in continuing!
+            # This check is here because if something changes upstream in Airtable, it might cause
+            # the above code to erroneously remove all opportunities.
+            raise Exception(' * ERROR *    All Opportunities were removed!')
+
+    # Other adjustments
+    if content_type == 'working':
+
+        if working_base == 'Opportunities':
+            change_table_names = {
+                # old name : new name
+                'Experiment' : 'Experiments',
+            }
+
+            # if 'Experiments' not in base:
+            #     # Unfortunately the 'working' bases have a different table name for experiments
+            #     # than the official releases (as of Oct 2024)
+            #     base['Experiments'] = base['Experiment']
+            #     base.pop('Experiment')
+            # assert 'Experiment' not in base
+
+        elif working_base == 'Variables':
+            change_table_names = {
+                # old name : new name
+                'Variable' : 'Variables',
+                'Coordinate or Dimension' : 'Coordinates and Dimensions',
+                'Physical Parameter' : 'Physical Parameters',
+            }
+
+            # if 'Variables' not in base:
+            #     base['Variables'] = base['Variable']
+            #     base.pop('Variable')
+            # assert 'Variable' not in base
+
+        for old,new in change_table_names.items():
+            assert new not in base, 'New table name already exists: ' + new
+            base[new] = base[old]
+            base.pop(old)
+
+    return base
+
+###############################################################################
+# Functions to interrogate the data request, e.g. get variables requested for
+# each experiment.
 
 def get_opp_ids(use_opps, Opps, verbose=False):
     '''
@@ -212,145 +522,7 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
             opp_vars[priority_level].add(var_name)
     return opp_vars
 
-def create_dreq_table_objects(content, working_base='Opportunities'):
-    '''
-    Render raw airtable export content as dreq_table objects.
 
-    The exported content (input dict 'content') has a slightly different
-    structure depending on the content type, determined here by:
-        get_content_type(content)
-    If any finicky details need to be adjusted based on the content type,
-    this function handles them. For example, if the experiments table is
-    named "Experiments" in a versioned release but is named "Experiment"
-    in the 'working' content type. Ideally there would be no such differences,
-    but sometimes they happen. They are resolved here, insulating
-    downstream code from having to deal with them. That is, downstream code
-    should be independent of the content type.
-    
-    Parameters
-    ----------
-    content : dict
-        Raw airtable export, keyed by base name:
-        { base 1 name : {
-            table 1 name : {...}
-            table 2 name : {...}
-            }
-          base 2 name : ...
-        }
-        For further details see "Structure of the exported content" in 
-        scripts/README_airtable_export.md in the content repo:
-            https://github.com/CMIP-Data-Request/CMIP7_DReq_Content/
-        or equivalently for release versions:
-            https://github.com/CMIP-CMIP/CMIP7_DReq_Content/
-
-    working_base : str
-        If content dict has more than one base, as for the "working version",
-        this specifies which one to convert and return.
-
-    Returns
-    -------
-    base : dict
-        Dict keys are table names, values are dreq_table objects.
-    '''
-    if not isinstance(content, dict):
-        raise TypeError('Input should be dict from raw airtable export json file')
-
-    # Content is dict loaded from raw airtable export json file
-    content_type = get_content_type(content)
-    if content_type == 'UNKNOWN':
-        raise Exception(' * ERROR *    Unable to determine type of data request content in the exported json file')
-    match content_type:
-        case 'working':
-            match working_base:
-                case 'Opportunities':
-                    base_name = 'Data Request Opportunities (Public)'
-                case 'Variables':
-                    base_name = 'Data Request Variables (Public)'
-                case _:
-                    raise Exception('Which working base to use? Unknown type: ' + working_base)
-        case 'version':
-            base_name = version_base_name()
-        case _:
-            raise Exception('Unknown content type: ' + content_type)
-    base = content[base_name]
-
-    # Get a mapping from table id to table name
-    table_id2name = {}
-    for table_name, table in base.items():
-        assert table['name'] == table_name
-        assert table['base_name'] == base_name
-        table_id2name.update({
-            table['id'] : table['name']
-        })
-    assert len(table_id2name) == len(base)
-    # Create objects representing data request tables
-    for table_name, table in base.items():
-        # print('Creating table object for table: ' + table_name)
-        base[table_name] = dreq_table(table, table_id2name)
-
-    if 'Opportunity' in base:
-        # Make some adjustments that are specific to the Opportunity table
-        Opps = base['Opportunity']
-        Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
-        if content_type == 'working':
-            if 'variable_groups' not in Opps.attr2field:
-                if 'originally_requested_variable_groups' in Opps.attr2field:
-                    Opps.rename_attr('originally_requested_variable_groups', 'variable_groups')
-        exclude_opps = set()
-        for opp_id, opp in Opps.records.items():
-            if not hasattr(opp, 'experiment_groups'):
-                print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
-                exclude_opps.add(opp_id)
-            if not hasattr(opp, 'variable_groups'):
-                print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
-                exclude_opps.add(opp_id)
-        if len(exclude_opps) > 0:
-            print('Excluding Opportunities:')
-            for opp_id in exclude_opps:
-                opp = Opps.records[opp_id]
-                print(f'  {opp.title}')
-                Opps.delete_record(opp_id)
-        if len(Opps.records) == 0:
-            # If there are no opportunities left, there's no point in continuing!
-            # This check is here because if something changes upstream in Airtable, it might cause
-            # the above code to erroneously remove all opportunities.
-            raise Exception(' * ERROR *    All Opportunities were removed!')
-
-    # Other adjustments
-    if content_type == 'working':
-
-        if working_base == 'Opportunities':
-            change_table_names = {
-                # old name : new name
-                'Experiment' : 'Experiments',
-            }
-
-            # if 'Experiments' not in base:
-            #     # Unfortunately the 'working' bases have a different table name for experiments
-            #     # than the official releases (as of Oct 2024)
-            #     base['Experiments'] = base['Experiment']
-            #     base.pop('Experiment')
-            # assert 'Experiment' not in base
-
-        elif working_base == 'Variables':
-            change_table_names = {
-                # old name : new name
-                'Variable' : 'Variables',
-                'Coordinate or Dimension' : 'Coordinates and Dimensions',
-                'Physical Parameter' : 'Physical Parameters',
-            }
-
-            # if 'Variables' not in base:
-            #     base['Variables'] = base['Variable']
-            #     base.pop('Variable')
-            # assert 'Variable' not in base
-
-        for old,new in change_table_names.items():
-            assert new not in base, 'New table name already exists: ' + new
-            base[new] = base[old]
-            base.pop(old)
-
-    return base
 
 def get_requested_variables(content, use_opps='all', max_priority='Low', verbose=True):
     '''
@@ -392,7 +564,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
             base = content
         else:
             # render tables as dreq_table objects
-            base = create_dreq_table_objects(content)
+            base = create_dreq_tables_for_request(content)
     else:
         raise TypeError('Expect dict as input')
 

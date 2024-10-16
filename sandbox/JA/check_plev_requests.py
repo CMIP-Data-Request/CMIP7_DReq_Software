@@ -39,7 +39,7 @@ content = dc.load(use_dreq_version)
 
 dq.DREQ_VERSION = use_dreq_version
 # Initialize table objects to represent the various tables in the data request
-base = dq.create_dreq_table_objects(content, working_base='Opportunities')
+base = dq.create_dreq_tables_for_request(content)
 
 # use subset of opportunities:
 use_opps = []
@@ -113,7 +113,7 @@ for opp_id in opp_ids:
 # Now use the "data" part, i.e. tables that define the variables, to retrieve info
 # about each variable.
 
-base = dq.create_dreq_table_objects(content, working_base='Variables')
+base = dq.create_dreq_tables_for_variables(content)
 
 Vars = base['Variables']
 SpatialShape = base['Spatial Shape']
