@@ -15,7 +15,7 @@ The following functions are available for use:
 Retrieve the JSON file for the specified version.
 
 * `version`: The version to retrieve. Can be 'latest', 'latest_stable', 'dev', or a specific version, eg. '1.0.0', or even a branch like 'first_export'.
-             'dev' points to the 'main' branch. In case of 'latest' or 'latest_stable', the tags on GitHub will be taken into account.
+             'dev' points to the main development branch (in this case 'main'). In case of 'latest' or 'latest_stable', the tags on GitHub will be taken into account.
              Default is 'latest_stable'.
 * Returns: A dictionary containing the path to the retrieved JSON file.
 
@@ -26,12 +26,16 @@ Load the JSON file for the specified version.
 * `version`: The version to load. Can be 'latest', 'latest_stable', 'dev', or a specific version/branch, eg. '1.0.0'. Default is 'latest_stable'. Will attempt to `retrieve` the version to the local cache if needed.
 * Returns: A dictionary containing the loaded JSON data.
 
-### `get_versions(local=False)`
+### `get_versions(list_branches=False)`
 
-Fetch the list of available versions.
+Fetch the list of available versions (tags and main development branch).
 
-* `local`: If True, lists only locally cached versions. If False, retrieves list of versions remotely. Default is False.
+* `list_branches`: If True, lists branches instead of tags. The main development branch is excluded.
 * Returns: A list of available versions.
+
+### `get_cached()`
+
+* Returns: A list of locally cached versions (tags and branches).
 
 ### `delete(version="all", keep_latest=False)`
 
@@ -49,17 +53,23 @@ Delete one or all cached versions with option to keep latest versions.
 import dreq_content as dc
 
 # Retrieve the latest stable version
-dc.dreq_content.retrieve("first_export")
+dc.retrieve("latest_stable")
+
+# List all available branches
+dc.get_versions(list_branches=True)
+
+# Retrieve a certain branch/tag
+dc.retrieve("v1.0alpha")
 
 # Load the latest stable version
-dreq = dc.load("first_export")
+dreq = dc.load("latest_stable")
 
 # Get the list of available versions
 versions = dc.get_versions()
 print(versions)
 
 # Get list of locally cached versions
-versions = dc.get_versions(local=True)
+versions = dc.get_cached()
 print(versions)
 
 # Delete all cached versions except the latest, latest stable and "dev" versions
