@@ -8,28 +8,45 @@ from shutil import move
 
 import pooch
 import requests
+from bs4 import BeautifulSoup
+
+# Suppress pooch info output
+pooch.get_logger().setLevel("WARNING")
+
+# File names of Airtable exports in JSON format
+_json_export = "dreq_raw_export.json"
+_json_consolidated = "dreq_version.json"
 
 # Base URL template for fetching Dreq content json files from GitHub
-_json_export = "dreq_raw_export.json"
-_dev_branch = "main"
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
 REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+_dev_branch = "main"
 
-# API URL for fetching tags
-REPO_API_URL = f"https://api.github.com/repos/{_github_org}/CMIP7_DReq_content/tags"
+# API URL for fetching tags or branches
+REPO_API_URL = f"https://api.github.com/repos/{_github_org}/CMIP7_DReq_content/"
 
-# List of tags - will be populated by get_versions()
-versions = []
-_versions_retrieved_last = 0
-branches = []
-_branches_retrieved_last = 0
+# Alternative Repo URL for fetching tags
+REPO_PAGE_URL = f"https://github.com/{_github_org}/CMIP7_DReq_content/"
+
+# List of versions (tags, branches) - will be populated by get_versions(target="tags" or "branches")
+versions = {"tags": [], "branches": []}
+_versions_retrieved_last = {"tags": 0, "branches": 0}
+
+# When retrieving versions (tags, branches), fall back to parsing the public GitHub page for
+#  the GitHub API returning the following status codes:
+#   403 Forbidden
+#   429 Too Many Requests
+#   500 Internal Server Error
+#   502 Bad Gateway
+#   503 Service Unavailable
+#   504 Gateway Timeout
+_fallback_status_codes = [403, 429, 500, 502, 503, 504]
 
 # Regex pattern for version parsing (captures major, minor, patch and optional pre-release parts)
 _version_pattern = re.compile(
     r"^v?(\d+)\.(\d+)(?:\.(\d+))?((?:alpha|beta|a|b)?)?(\d*)$", re.IGNORECASE
 )
-
 
 # Directory where to find/store the data request JSON files
 _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
@@ -77,58 +94,153 @@ def get_cached():
     return local_versions
 
 
-def get_versions(list_branches=False):
-    """Fetch list of tags from the GitHub repository using the GitHub API.
+def _send_api_request(api_url, page_url, target="tags"):
+    """
+    Send a request to the GitHub API for a list of tags or branches.
 
     Args:
-        list_branches (bool): If True, lists only branches and not tags.
-                              The main development branch is excluded as it is
-                              included in the list of tags. The default is False.
+        base_url (str): The base URL to send the request to.
+        target (str): The target to send the request for, either 'tags' or 'branches'.
+
     Returns:
         list: A list of tags (or optionally branches).
     """
-    global versions
-    global _versions_retrieved_last
-    global branches
-    global _branches_retrieved_last
-    if list_branches:
-        if not branches or _branches_retrieved_last - time.time() > 60 * 60:
-            # Request the list of branches via the GitHub API
-            response = requests.get(REPO_API_URL.replace("tags", "branches"))
-
-            # Raise an error for bad responses
-            response.raise_for_status()
-
-            # Extract the list of branches from the response
-            branches = [
-                branch["name"]
-                for branch in response.json()
-                if "name" in branch and branch["name"] != _dev_branch
-            ] or []
-
-            # Update the last time the branches were retrieved
-            _branches_retrieved_last = time.time()
-
-        # List branches hosted on GitHub
-        return branches
-
-    # Retrieve list of tags hosted on GitHub
-    if not versions or _versions_retrieved_last - time.time() > 60 * 60:
-        # Request the list of tags via the GitHub API
-        response = requests.get(REPO_API_URL)
-
+    # Request the list of tags or branches via the GitHub API
+    global _fallback_status_codes
+    results = []
+    response = requests.get(api_url + target)
+    try:
         # Raise an error for bad responses
         response.raise_for_status()
 
-        # Extract the list of tags from the response
-        versions = [tag["name"] for tag in response.json() if "name" in tag] or []
-        versions.append("dev")
+        # Extract the list of tags or branches from the response
+        results = [
+            entry["name"]
+            for entry in response.json()
+            if "name" in entry and entry["name"] != _dev_branch
+        ] or []
 
-        # Update the last time the tags were retrieved
-        _versions_retrieved_last = time.time()
+    except requests.exceptions.HTTPError as http_err:
+        if response.status_code in _fallback_status_codes:
+            warnings.warn(
+                f"GitHub API not accessible, falling back to parsing the public GitHub page: {http_err}"
+            )
+            results = _send_html_request(page_url, target)
+        else:
+            warnings.warn(
+                f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}"
+            )
+    except Exception as e:
+        warnings.warn(f"An error occurred when retrieving '{target}': {e}")
+
+    return results
+
+
+def _send_html_request(page_url, target="tags"):
+    """
+    Fallback method: Parse the the public GitHub page to get the list of tags or branches.
+
+    Args:
+        base_url (str): The base URL to send the request to.
+        target (str): The target to send the request for, either 'tags' or 'branches'.
+
+    Returns:
+        list: A list of tags (or optionally branches).
+
+    Notes:
+        Making use of the pagination mechanism of GitHub could only be tested for tags
+        so might not work for branches.
+    """
+    # Request the list of tags or (active) branches via the GitHub Page
+    results = []
+    addon = ""
+    if target == "branches":
+        addon = "/active"
+    current_url = page_url + target + addon
+    current_urls = list()
+    while current_url:
+        response = requests.get(current_url)
+        try:
+            # Raise an error for bad responses
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.content, "html.parser")
+
+            if target == "branches":
+                # Find the branches on the page - GitHub embeds json data under the script tag
+                script_tag = soup.find(
+                    "script", {"data-target": "react-app.embeddedData"}
+                )
+                if not script_tag:
+                    raise ValueError(
+                        "Could not find the 'script' tag in the html response."
+                    )
+                json_response = json.loads(script_tag.string)
+                results_json = json_response["payload"][target]
+                results += [
+                    entry["name"]
+                    for entry in results_json
+                    if "name" in entry and entry["name"] != _dev_branch
+                ] or []
+            else:
+                # Find the tags on the page - GitHub uses "Link--primary" class for tags / branches
+                results += [
+                    entry.text.strip()
+                    for entry in soup.find_all("a", class_="Link--primary")
+                ]
+
+            # Check for pagination links and construct URL for the next page
+            # ToDo: I could not find a repo with more branches than fit on a single page
+            #       so the next_page_links may have to be adapted for branches
+            next_page_links = soup.find_all(
+                "a", {"href": lambda x: x and "after=" in x}
+            )
+            if next_page_links:
+                current_urls.append(current_url)
+                current_url = "https://github.com" + next_page_links[-1]["href"]
+                if current_url in current_urls:
+                    current_url = None
+            else:
+                current_url = None
+        except Exception as e:
+            warnings.warn(f"An error occurred when retrieving '{target}': {e}")
+            current_url = None
+
+    return results
+
+
+def get_versions(target="tags"):
+    """Fetch list of tags from the GitHub repository using the GitHub API.
+
+    Args:
+        target (str): The target to send the request for, either 'tags' or 'branches'.
+                      The default is 'tags'. Please note that the main development branch
+                      is excluded from the list of branches and is included in the list of tags.
+
+    Returns:
+        list: A list of tags or branches.
+
+    Raises:
+        ValueError: If target is not 'tags' or 'branches'.
+    """
+    global versions
+    global _versions_retrieved_last
+
+    if target not in ["tags", "branches"]:
+        raise ValueError("target must be 'tags' or 'branches'.")
+
+    # Retrieve the list of tags or branches from the GitHub API
+    if not versions[target] or _versions_retrieved_last[target] - time.time() > 60 * 60:
+        versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
+
+        # Update the last time the tags/branches were retrieved
+        _versions_retrieved_last[target] = time.time()
+
+    if target == "tags" and "dev" not in versions[target]:
+        versions[target].append("dev")
 
     # List tags hosted on GitHub
-    return versions
+    return versions[target]
 
 
 def _get_latest_version(stable=True):
@@ -206,7 +318,7 @@ def retrieve(version="latest_stable"):
                     fname=_json_export,
                 )
             except Exception as e:
-                print(f"Could not retrieve version {version}: {e}")
+                warnings.warn(f"Could not retrieve version '{version}': {e}")
                 continue
             print(f"Retrieved version '{version}'.")
 
@@ -237,7 +349,7 @@ def retrieve(version="latest_stable"):
                     os.remove(json_path_temp)
                     print(f"Version '{version}' is up to date.")
             except Exception as e:
-                print(f"Potential update for version {version} failed: {e}")
+                warnings.warn(f"Potential update for version '{version}' failed: {e}")
 
         # Store the path to the dreq.json in the json_paths dictionary
         json_paths[version] = json_path

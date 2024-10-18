@@ -1,1 +1,3 @@
 pooch
+requests
+BeautifulSoup4

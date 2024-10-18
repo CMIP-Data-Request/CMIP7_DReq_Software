@@ -26,11 +26,11 @@ Load the JSON file for the specified version.
 * `version`: The version to load. Can be 'latest', 'latest_stable', 'dev', or a specific version/branch, eg. '1.0.0'. Default is 'latest_stable'. Will attempt to `retrieve` the version to the local cache if needed.
 * Returns: A dictionary containing the loaded JSON data.
 
-### `get_versions(list_branches=False)`
+### `get_versions(target="tags")`
 
 Fetch the list of available versions (tags and main development branch).
 
-* `list_branches`: If True, lists branches instead of tags. The main development branch is excluded.
+* `target`: Can be 'tags' or 'branches'. The main development branch is excluded from 'branches' and considered under 'tags'.
 * Returns: A list of available versions.
 
 ### `get_cached()`
@@ -53,13 +53,16 @@ Delete one or all cached versions with option to keep latest versions.
 import dreq_content as dc
 
 # Retrieve the latest stable version
-dc.retrieve("latest_stable")
+version_dict = dc.retrieve("latest_stable")
+print(version_dict)
 
 # List all available branches
-dc.get_versions(list_branches=True)
+branches = dc.get_versions('branches')
+print(branches)
 
 # Retrieve a certain branch/tag
-dc.retrieve("v1.0alpha")
+version_dict = dc.retrieve("v1.0alpha")
+print(version_dict)
 
 # Load the latest stable version
 dreq = dc.load("latest_stable")
