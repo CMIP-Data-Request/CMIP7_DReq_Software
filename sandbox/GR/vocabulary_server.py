@@ -175,22 +175,15 @@ class Variable(VSObject):
 
 class VocabularyServer(object):
 	def __init__(self, input_database, **kwargs):
-		logger = get_logger()
-		first_level = list(input_database)
-		if len(first_level) > 1:
-			logger.error("Found several levels at first rank one one expected.")
-			raise ValueError("Found several levels at first rank one one expected.")
-		first_level = first_level[0]
-		version = first_level.replace("Data Request", "").strip()
-		self.version = version
-		self.vocabulary_server = copy.deepcopy(input_database[first_level])
+		self.version = input_database.pop("version")
+		self.vocabulary_server = copy.deepcopy(input_database)
 		self.transform_content()
 
 	def transform_content(self):
-		for (id, elt) in self.vocabulary_server["variables"]["records"].items():
-			self.vocabulary_server["variables"]["records"][id] = Variable.from_input(id, vs=self, input_dict=elt)
-		for (id, elt) in self.vocabulary_server["experiments"]["records"].items():
-			self.vocabulary_server["experiments"]["records"][id] = Experiment.from_input(id, vs=self, input_dict=elt)
+		for (id, elt) in self.vocabulary_server["variables"].items():
+			self.vocabulary_server["variables"][id] = Variable.from_input(id, vs=self, input_dict=elt)
+		for (id, elt) in self.vocabulary_server["experiments"].items():
+			self.vocabulary_server["experiments"][id] = Experiment.from_input(id, vs=self, input_dict=elt)
 
 	@classmethod
 	def from_input(cls, input_database):
@@ -212,8 +205,8 @@ class VocabularyServer(object):
 	def get_element(self, element_type, element_id, element_key=None, default=False):
 		logger = get_logger()
 		if element_type in self.vocabulary_server:
-			if element_id in self.vocabulary_server[element_type]["records"]:
-				value = self.vocabulary_server[element_type]["records"][element_id]
+			if element_id in self.vocabulary_server[element_type]:
+				value = self.vocabulary_server[element_type][element_id]
 				if element_key is not None:
 					if element_key in value:
 						value = value[element_key]

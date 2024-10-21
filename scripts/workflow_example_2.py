@@ -52,6 +52,8 @@ content = dc.load(use_dreq_version)
 
 ### Step 2: Load it into the software of the DR
 DR = DataRequest.from_input(json_input=content)
+# DR = DataRequest.from_separated_inputs(DR_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/DR_content.json",
+#                                        VS_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/VS_content.json")
 
 ### Step 3: Get information from the DR
 # -> Print DR content

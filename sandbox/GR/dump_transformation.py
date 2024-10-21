@@ -14,6 +14,9 @@ import argparse
 
 from logger import get_logger, change_log_level, change_log_file
 
+default_count = 0
+default_template = "default_{:d}"
+
 
 def read_json_file(filename):
     if os.path.isfile(filename):
@@ -59,72 +62,114 @@ def correct_dictionaries(input_dict):
     return rep
 
 
-def correct_DR_dictionary(input_dict):
-    logger = get_logger()
-    for elt in input_dict:
-        for subelt in set(list(input_dict[elt])) - set(["name", 'description', 'records']):
-            del input_dict[elt][subelt]
-        for subelt in input_dict[elt]["records"]:
-            status = dict()
-            if "Status" in input_dict[elt]["records"][subelt]:
-                status["general"] = input_dict[elt]["records"][subelt]["Status"]
-                del input_dict[elt]["records"][subelt]["Status"]
-            for key in [key for key in input_dict[elt]["records"][subelt] if "review" in key]:
-                new_key = key.replace("author_team_review", "").replace("author_review_status", "").replace("review", "").strip("_").strip()
-                status[new_key] = input_dict[elt]["records"][subelt][key]
-                del input_dict[elt]["records"][subelt][key]
-            for key in [key for key in status if "comments" in key]:
-                new_key = key.replace("comments", "").strip("_")
-                value = status.pop(key)
-                value = value.strip(os.linesep)
-                if new_key in status:
-                    status[new_key] += f" with comments: {value}"
-                else:
-                    status[new_key] = f"New with comments: {value}"
-            input_dict[elt]["records"][subelt]["status"] = copy.deepcopy(status)
-            for subsubelt in [key for key in list(input_dict[elt]["records"][subelt]) if key.startswith("title")]:
-                input_dict[elt]["records"][subelt]["title"] = input_dict[elt]["records"][subelt].pop(subsubelt)
-            for subsubelt in [key for key in list(input_dict[elt]["records"][subelt]) if key.startswith("priority")]:
-                input_dict[elt]["records"][subelt]["priority"] = input_dict[elt]["records"][subelt].pop(subsubelt)
-    for elt in input_dict["opportunity"]["records"]:
-        to_keep_entries = ["description", "status", "experiment_groups", "themes", "title",
-                           "variable_groups", "lead_theme", "comments"]
-        if len(input_dict["opportunity"]["records"][elt]) > 0:
-            for subelt in set(list(input_dict["opportunity"]["records"][elt])) - set(to_keep_entries):
-                del input_dict["opportunity"]["records"][elt][subelt]
-            for subelt in to_keep_entries:
-                logger.debug(f"Miss entry {subelt} in opportunity {elt}.")
-            input_dict["opportunity"]["records"][elt]["name"] = input_dict["opportunity"]["records"][elt].pop("title", "???")
-        else:
-            logger.debug(f"Remove void opportunity {elt}.")
-            del input_dict["opportunity"]["records"][elt]
-    for elt in input_dict["experiment_group"]["records"]:
-        to_keep_entries = ["status", "comments", "experiments", "name"]
-        for subelt in set(list(input_dict["experiment_group"]["records"][elt])) - set(to_keep_entries):
-            del input_dict["experiment_group"]["records"][elt][subelt]
-        for subelt in to_keep_entries:
-            logger.debug(f"Miss entry {subelt} in experiment group {elt}.")
-    for elt in input_dict["variable_group"]["records"]:
-        input_dict["variable_group"]["records"][elt]["description"] = input_dict["variable_group"]["records"][elt].get("justification")
-        to_keep_entries = ["status", "comments", "variables", "name", "title", "mips", "priority", "description"]
-        for subelt in set(list(input_dict["variable_group"]["records"][elt])) - set(to_keep_entries):
-            del input_dict["variable_group"]["records"][elt][subelt]
-        for subelt in to_keep_entries:
-            logger.debug(f"Miss entry {subelt} in variable group {elt}.")
-    return input_dict
-
-
 def transform_content(content):
+    logger = get_logger()
+    global default_count
+    # Tidy the content of the export file
     data_request = dict()
-    for elt in list(content):
-        for subelt in list(content[elt]):
-            if subelt in ["Opportunity", "Variable Group", "Experiment Group"]:
-                data_request[subelt] = copy.deepcopy(content[elt][subelt])
-                del content[elt][subelt]
+    vocabulary_server = dict()
+    to_remove_keys = {
+        "CF Standard Names": ["Physical Parameters", ],
+        "Cell Measures": ["Variables", ],
+        "Cell Methods": ["Structures", "Variables"],
+        "Coordinates and Dimensions": ["Structure", "Variables"],
+        "Experiment Group": ["Opportunity", ],
+        "Experiments": ["Experiment Group", ],
+        "Frequency": ["Table Identifiers", "Variables"],
+        "Glossary": ["Opportunity", ],
+        "MIPs": ["Variable Group", ],
+        "Modelling Realm": ["Variables", ],
+        "Opportunity": list(),
+        "Opportunity/Variable Group Comments": ["Experiment Groups", "Opportunities", "Theme", "Variable Groups"],
+        "Physical Parameters Comments": ["Physical parameters", ],
+        "Physical Parameters": ["Variables", ],
+        "Priority Level": ["Variable Group", ],
+        "Ranking": list(),
+        "Spatial Shape": ["Dimensions", "Structure", "Variables"],
+        "Structure": ["Variables", ],
+        "Table Identifiers": ["Variables", ],
+        "Temporal Shape": ["Dimensions", "Structure", "Variables"],
+        "Variable Comments": ["Variables", ],
+        "Variable Group": ["Opportunity", "Theme"],
+        "Variables": ["CMIP7 Variable Groups", ]
+    }
+    record_to_uid_index = dict()
+    for elt in sorted(list(content)):
+        for subelt in sorted(list(content[elt])):
+            for record_id in sorted(list(content[elt][subelt]["records"])):
+                if subelt in to_remove_keys:
+                    keys_to_remove = copy.deepcopy(to_remove_keys[subelt])
+                else:
+                    keys_to_remove = list()
+                list_keys = list(content[elt][subelt]["records"][record_id])
+                keys_to_remove.extend([key for key in list_keys if "(MJ)" in key or "test" in key.lower() or
+                                       ("last" in key.lower() and "modified" in key.lower()) or "count" in key.lower()])
+                for key in set(keys_to_remove) & set(list_keys):
+                    del content[elt][subelt]["records"][record_id][key]
+                if "UID" in list_keys:
+                    content[elt][subelt]["records"][record_id]["uid"] = content[elt][subelt]["records"][record_id].pop("UID")
+                elif "uid" not in list_keys:
+                    uid = default_template.format(default_count)
+                    content[elt][subelt]["records"][record_id]["uid"] = uid
+                    default_count += 1
+                    logger.debug(f"Undefined uid for element {os.sep.join([elt, subelt, 'records', record_id])}, set {uid}")
+                record_to_uid_index[record_id] = content[elt][subelt]["records"][record_id].pop("uid")
+                if subelt in ["Opportunity", ] and "Title of Opportunity" in list_keys:
+                    content[elt][subelt]["records"][record_id]["name"] = content[elt][subelt]["records"][record_id].pop("Title of Opportunity")
+                elif "name" not in list_keys and "Name" not in list_keys:
+                    content[elt][subelt]["records"][record_id]["name"] = "undef"
+    # Replace record_id by uid
+    logger.debug("Replace record ids by uids")
+    content_string = json.dumps(content)
+    for (record_id, uid) in record_to_uid_index.items():
+        content_string = content_string.replace(f'"{record_id}"', f'"{uid}"')
+    content = json.loads(content_string)
+    # Build the data request
+    logger.debug("Build DR and VS")
+    for elt in sorted(list(content)):
+        for subelt in sorted(list(content[elt])):
+            if subelt in ["Opportunity", ]:
+                new_subelt = "opportunities"
+                data_request[new_subelt] = dict()
+                vocabulary_server[new_subelt] = dict()
+                for uid in content[elt][subelt]["records"]:
+                    value = copy.deepcopy(content[elt][subelt]["records"][uid])
+                    data_request[new_subelt][uid] = dict(
+                        experiments_groups=value.pop("Experiment Groups", list()),
+                        variables_groups=value.pop("Variable Groups", list()),
+                        themes=value.pop("Themes", list())
+                    )
+                    vocabulary_server[new_subelt][uid] = value
+            elif subelt in ["Variable Group", ]:
+                new_subelt = "variables_groups"
+                data_request[new_subelt] = dict()
+                vocabulary_server[new_subelt] = dict()
+                for uid in content[elt][subelt]["records"]:
+                    value = copy.deepcopy(content[elt][subelt]["records"][uid])
+                    data_request[new_subelt][uid] = dict(
+                        variables=value.pop("Variables", list()),
+                        mips=value.pop("MIPs", list()),
+                        priority=value.pop("Priority Level", None)
+                    )
+                    vocabulary_server[new_subelt][uid] = value
+            elif subelt in ["Experiment Group", ]:
+                new_subelt = "experiments_groups"
+                data_request[new_subelt] = dict()
+                vocabulary_server[new_subelt] = dict()
+                for uid in content[elt][subelt]["records"]:
+                    value = copy.deepcopy(content[elt][subelt]["records"][uid])
+                    data_request[new_subelt][uid] = dict(
+                        experiments=value.pop("Experiments", list())
+                    )
+                    vocabulary_server[new_subelt][uid] = value
+            else:
+                vocabulary_server[subelt] = copy.deepcopy(content[elt][subelt]["records"])
+    version = list(content)[0].replace("Data Request", "").strip()
+    data_request["version"] = version
+    vocabulary_server["version"] = version
     data_request = correct_dictionaries(data_request)
-    data_request = correct_DR_dictionary(data_request)
-    content = correct_dictionaries(content)
-    return data_request, content
+    vocabulary_server = correct_dictionaries(vocabulary_server)
+    return data_request, vocabulary_server
 
 
 if __name__ == "__main__":

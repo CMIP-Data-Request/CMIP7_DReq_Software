@@ -25,23 +25,13 @@ class DRObjects(object):
 	Base object to build the ones used within the DR API.
 	Use to define basic information needed.
 	"""
-	def __init__(self, id, vs, name=None, description=None, status=dict(general="New"), notes=None, references=None,
-	             **kwargs):
-		logger = get_logger()
+	def __init__(self, id, vs, **kwargs):
 		self.id = id
-		self.name = name
 		self.vs = vs
-		self.description = description
-		self.status = copy.deepcopy(status)
-		self.notes = notes
-		self.references = references
+		self.DR_type = "undef"
 
 	def check(self):
-		logger = get_logger()
-		if self.name is None:
-			logger.debug(f"No name defined for {type(self).__name__} id {id}")
-		if self.description is None:
-			logger.debug(f"No description defined for {type(self).__name__} id {id}")
+		pass
 
 	@classmethod
 	def from_input(cls, **kwargs):
@@ -57,26 +47,30 @@ class DRObjects(object):
 
 	def print_content(self, level=0, add_content=True):
 		"""
-		Function to return a rintable version of the content of the current class.
+		Function to return a printable version of the content of the current class.
 		:param level: level of indent of the result
 		:param add_content: should inner content be added?
 		:return: a list of strings that can be assembled to print the content.
 		"""
 		indent = "    " * level
-		return [f"{indent}{type(self).__name__}: {self.name} (id: {self.id})", ]
+		return [f"{indent}{type(self).__name__}: {self.vs.get_element(self.DR_type, self.id, 'name')} (id: {self.id})", ]
+
+
+class Theme(DRObjects):
+	def __init__(self, **kwargs):
+		super().__init__(**kwargs)
+		self.DR_type = "data_request_themes"
 
 
 class ExperimentsGroup(DRObjects):
-	def __init__(self, title=None, experiments=list(), **kwargs):
+	def __init__(self, experiments=list(), **kwargs):
 		super().__init__(**kwargs)
-		self.title = title
 		self.experiments = experiments
+		self.DR_type = "experiments_groups"
 
 	def check(self):
 		super().check()
 		logger = get_logger()
-		if self.title is None:
-			logger.critical(f"No title defined for {type(self).__name__} id {self.id}")
 		if len(self.experiments) == 0:
 			logger.critical(f"No experiment defined for {type(self).__name__} id {self.id}")
 
@@ -102,19 +96,17 @@ class ExperimentsGroup(DRObjects):
 
 
 class VariablesGroup(DRObjects):
-	def __init__(self, title=None, variables=list(), mips=list(), priority="Low", **kwargs):
+	def __init__(self, variables=list(), mips=list(), priority="Low", **kwargs):
 		logger = get_logger()
 		super().__init__(**kwargs)
-		self.title = title
 		self.variables = variables
 		self.mips = mips
 		self.priority = priority
+		self.DR_type = "variables_groups"
 
 	def check(self):
 		super().check()
 		logger = get_logger()
-		if self.title is None:
-			logger.critical(f"No title defined for {type(self).__name__} id {self.id}")
 		if len(self.variables) == 0:
 			logger.critical(f"No variable defined for {type(self).__name__} id {self.id}")
 
@@ -144,14 +136,12 @@ class VariablesGroup(DRObjects):
 
 
 class Opportunity(DRObjects):
-	def __init__(self, experiments_groups=list(), variables_groups=list(), themes=list(), ensemble_size=1,
-	             comments=None, **kwargs):
+	def __init__(self, experiments_groups=list(), variables_groups=list(), themes=list(), **kwargs):
 		super().__init__(**kwargs)
-		self.ensemble_size = ensemble_size
-		self.comments = comments
 		self.experiments_groups = experiments_groups
 		self.variables_groups = variables_groups
 		self.themes = themes
+		self.DR_type = "opportunities"
 
 	def check(self):
 		super().check()
@@ -165,10 +155,11 @@ class Opportunity(DRObjects):
 
 
 	@classmethod
-	def from_input(cls, dr, experiment_groups=list(), variable_groups=list(), **kwargs):
+	def from_input(cls, dr, experiments_groups=list(), variables_groups=list(), themes=list(), **kwargs):
 		return super().from_input(
-			experiments_groups=[dr.get_experiments_group(exp_group) for exp_group in experiment_groups],
-			variables_groups=[dr.get_variables_group(var_group) for var_group in variable_groups],
+			experiments_groups=[dr.get_experiments_group(exp_group) for exp_group in experiments_groups],
+			variables_groups=[dr.get_variables_group(var_group) for var_group in variables_groups],
+			themes=[Theme(id=id, vs=kwargs["vs"]) for id in themes],
 			**kwargs)
 
 	def get_experiments_groups(self):
@@ -193,20 +184,20 @@ class Opportunity(DRObjects):
 				rep.extend(variables_group.print_content(level=level + 2, add_content=False))
 			rep.append(f"{indent}Themes included:")
 			for theme in self.get_themes():
-				rep.append(f"{superindent}{theme}")
+				rep.extend(theme.print_content(level=level + 2, add_content=False))
 		return rep
 
 
 class DataRequest(object):
 	def __init__(self, input_database, VS, **kwargs):
-		logger = get_logger()
 		self.VS = VS
+		self.content_version = input_database["version"]
 		self.experiments_groups = {id: ExperimentsGroup.from_input(id=id, vs=self.VS, **input_dict)
-		                           for (id, input_dict) in input_database["experiment_group"]["records"].items()}
+		                           for (id, input_dict) in input_database["experiments_groups"].items()}
 		self.variables_groups = {id: VariablesGroup.from_input(id=id, vs=self.VS, **input_dict)
-		                         for (id, input_dict) in input_database["variable_group"]["records"].items()}
+		                         for (id, input_dict) in input_database["variables_groups"].items()}
 		self.opportunities = {id: Opportunity.from_input(id=id, dr=self, vs=self.VS, **input_dict)
-		                      for (id, input_dict) in input_database["opportunity"]["records"].items()}
+		                      for (id, input_dict) in input_database["opportunities"].items()}
 		self.clean()
 
 	def check(self):
@@ -225,9 +216,6 @@ class DataRequest(object):
 	@property
 	def software_version(self):
 		return version
-
-	def content_version(self):
-		return self.VS.version
 
 	@property
 	def version(self):
@@ -444,18 +432,3 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	DR = DataRequest.from_separated_inputs(args.DR_json, args.VS_json)
 	print(DR)
-	# print(DR.find_variables_per_opportunity("recD45ipnmfCTBH7B"))
-	# print(DR.find_experiments_per_opportunity("recD45ipnmfCTBH7B"))
-	# rep = dict()
-	# rep_data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-	# for elt in DR.get_variables_groups():
-	# 	rep[elt.id] = dict(cell_methods=set(), frequency=set(), temporal_shape=set(), variables=set())
-	# 	for var in elt.get_variables():
-	# 		var_info = elt.vs.get_variable(element_id=var, default="???")
-	# 		rep[elt.id]["cell_methods"].add(var_info.get("cell_methods", "???"))
-	# 		rep[elt.id]["frequency"].add(var_info.get("frequency", "???"))
-	# 		rep[elt.id]["temporal_shape"].add(var_info.get("temporal_shape", "???"))
-	# 		rep[elt.id]["variables"].add(var_info.get("mip_variables", "???"))
-	# 		rep_data[elt.id][var_info.get("frequency", "???")][var_info.get("temporal_shape")].append(var_info.get("mip_variables"))
-	# pprint.pprint(rep)
-	# pprint.pprint(rep_data)
