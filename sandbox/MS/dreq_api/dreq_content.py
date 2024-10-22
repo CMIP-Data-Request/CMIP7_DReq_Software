@@ -6,6 +6,7 @@ import warnings
 from filecmp import cmp
 from shutil import move
 
+import consolidate_export as ce
 import pooch
 import requests
 from bs4 import BeautifulSoup
@@ -14,8 +15,8 @@ from bs4 import BeautifulSoup
 pooch.get_logger().setLevel("WARNING")
 
 # File names of Airtable exports in JSON format
-_json_export = "dreq_raw_export.json"
-_json_consolidated = "dreq_version.json"
+_json_raw = "dreq_raw_export.json"
+_json_release = "dreq_release_export.json"
 
 # Base URL template for fetching Dreq content json files from GitHub
 # _github_org = "WCRP-CMIP"
@@ -55,12 +56,16 @@ _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
 def _parse_version(version):
     """Parse a version tag and return a tuple for sorting.
 
-    Args:
-        version (str): The version tag to parse.
+    Parameters
+    ----------
+    version : str
+        The version tag to parse.
 
-    Returns:
-        tuple: The parsed version tuple:
-               (major, minor, patch, pre_release_type, pre_release_number)
+    Returns
+    -------
+    tuple
+        The parsed version tuple:
+        (major, minor, patch, pre_release_type, pre_release_number)
     """
     match = _version_pattern.match(version)
     if match:
@@ -76,21 +81,55 @@ def _parse_version(version):
     return (0, 0, 0, "", 0)
 
 
-def get_cached():
+def get_cached(**kwargs):
     """Get list of cached versions.
 
-    Returns:
-        list: The list of cached versions.
+    Parameters
+    ----------
+    kwargs : dict, optional
+        Additional parameters to pass to the function.
+
+    Returns
+    -------
+    list
+        The list of cached versions.
+
+    Raises
+    ------
+    Warning
+        If known kwargs have an invalid value.
     """
     local_versions = []
     if os.path.isdir(_dreq_res):
-        # List all subdirectories in the dreq_res directory that include a dreq.json
+        # List all subdirectories in the dreq_res directory that include both dreq.json files
         #   - the subdirectory name is the tag name
-        local_versions = [
-            name
-            for name in os.listdir(_dreq_res)
-            if os.path.isfile(os.path.join(_dreq_res, name, _json_export))
-        ]
+        json_export = False
+        if "export" in kwargs:
+            if kwargs["export"] == "raw":
+                json_export = _json_raw
+            elif kwargs["export"] == "release":
+                json_export = _json_release
+            else:
+                warnings.warn(f"Unknown export type '{kwargs['export']}'.")
+        if json_export:
+            local_versions = [
+                name
+                for name in os.listdir(_dreq_res)
+                if os.path.isfile(os.path.join(_dreq_res, name, json_export))
+            ]
+        else:
+            local_versions = [
+                name
+                for name in os.listdir(_dreq_res)
+                if (
+                    os.path.isfile(os.path.join(_dreq_res, name, _json_raw))
+                    and not _version_pattern.match(name)
+                )
+                or (
+                    os.path.isfile(os.path.join(_dreq_res, name, _json_release))
+                    and _version_pattern.match(name)
+                )
+            ]
     return local_versions
 
 
@@ -98,12 +137,28 @@ def _send_api_request(api_url, page_url, target="tags"):
     """
     Send a request to the GitHub API for a list of tags or branches.
 
-    Args:
-        base_url (str): The base URL to send the request to.
-        target (str): The target to send the request for, either 'tags' or 'branches'.
+    Parameters
+    ----------
+    api_url : str
+        The base URL to send the request to.
+    page_url : str
+        The page URL to send the request to.
+    target : str, optional
+        The target to send the request for, either 'tags' or 'branches' (default is 'tags').
 
-    Returns:
-        list: A list of tags (or optionally branches).
+    Returns
+    -------
+    list
+        A list of tags (or optionally branches).
+
+    Raises
+    ------
+    Warning
+        If the GitHub API is not accessible.
+    Warning
+        If a HTTP error occurs when retrieving the list of tags or branches.
+    Warning
+        If an exception occurs when retrieving the list of tags or branches.
     """
     # Request the list of tags or branches via the GitHub API
     global _fallback_status_codes
@@ -140,14 +195,27 @@ def _send_html_request(page_url, target="tags"):
     """
     Fallback method: Parse the the public GitHub page to get the list of tags or branches.
 
-    Args:
-        base_url (str): The base URL to send the request to.
-        target (str): The target to send the request for, either 'tags' or 'branches'.
+    Parameters
+    ----------
+    page_url : str
+        The base URL to send the request to.
+    target : str, optional
+        The target to send the request for, either 'tags' or 'branches' (default is 'tags').
 
-    Returns:
-        list: A list of tags (or optionally branches).
+    Returns
+    -------
+    list
+        A list of tags (or optionally branches).
 
-    Notes:
+    Raises
+    ------
+    ValueError
+        If the html response cannot be parsed.
+    Warning
+        If a HTTP error occurs when retrieving the list of tags or branches.
+
+    Notes
+    -----
         Making use of the pagination mechanism of GitHub could only be tested for tags
         so might not work for branches.
     """
@@ -214,14 +282,24 @@ def get_versions(target="tags"):
 
     Args:
         target (str): The target to send the request for, either 'tags' or 'branches'.
-                      The default is 'tags'. Please note that the main development branch
-                      is excluded from the list of branches and is included in the list of tags.
+                      The default is 'tags'.
 
-    Returns:
-        list: A list of tags or branches.
+    Parameters
+    ----------
+    target : str, optional
+        The target to send the request for, either 'tags' or 'branches' (default is 'tags').
+        Please note that the main development branch is excluded from the list of branches
+        and is included in the list of tags.
 
-    Raises:
-        ValueError: If target is not 'tags' or 'branches'.
+    Returns
+    -------
+    list
+        A list of tags or branches.
+
+    Raises
+    ------
+    ValueError
+        If target is not 'tags' or 'branches'.
     """
     global versions
     global _versions_retrieved_last
@@ -246,14 +324,16 @@ def get_versions(target="tags"):
 def _get_latest_version(stable=True):
     """Get the latest version
 
-    Args:
-        stable (bool): If True, return the latest stable version.
-                       If False, return the latest version (i.e. incl. alpha/beta versions).
-                       The default is True.
+    Parameters
+    ----------
+    stable : bool, optional
+        If True, return the latest stable version. If False, return the latest version
+        (i.e. incl. alpha/beta versions) (default is True).
 
-
-    Returns:
-        str: The latest version, or None if no versions are found.
+    Returns
+    -------
+    str
+        The latest version, or None if no versions are found.
     """
     versions = get_versions()
     if stable:
@@ -266,23 +346,36 @@ def _get_latest_version(stable=True):
     return max(versions, key=_parse_version)
 
 
-def retrieve(version="latest_stable"):
+def retrieve(version="latest_stable", **kwargs):
     """Retrieve the JSON file for the specified version
 
-    Args:
-        version (str): The version to retrieve.
-                       Can be 'latest', 'latest_stable', 'dev', or 'all'
-                       or a specific version, eg. '1.0.0'.
-                       The default is 'latest_stable'.
+    Parameters
+    ----------
+    version: str, optional
+        The version to retrieve. Can be 'latest', 'latest_stable',
+        'dev', or 'all' or a specific version, eg. '1.0.0'.
+        (default is 'latest_stable').
+    kwargs: dict, optional:
+        Additional parameters to pass to the retrieve function.
 
-    Returns:
-        dict: The path to the retrieved JSON file.
+    Returns
+    -------
+    dict
+        The path to the retrieved JSON file.
 
-    Raises:
-        ValueError: If the specified version is not found.
+    Raises
+    ------
+    ValueError
+        If the specified version is not found.
+    Warning
+        If the specified version does not have the specified export type.
+    Warning
+        If the known kwargs have an invalid value.
+    Warning
+        If the specified version could not be downloaded or (if applicable) updated.
     """
     if version == "latest":
-        versions = [_get_latest_version()]
+        versions = [_get_latest_version(stable=False)]
     elif version == "latest_stable":
         versions = [_get_latest_version(stable=True)]
     elif version == "dev":
@@ -290,17 +383,34 @@ def retrieve(version="latest_stable"):
     elif version == "all":
         versions = get_versions()
     else:
+        if version not in get_versions() + get_versions(target="branches"):
+            if version not in get_cached(**kwargs):
+                raise ValueError(f"Version '{version}' not found.")
         versions = [version]
 
     if versions == [None] or not versions:
         raise ValueError(f"Version '{version}' not found.")
+    elif version in ["v1.0alpha"] and "export" in kwargs and kwargs["export"] == "raw":
+        warnings.warn(f"For version '{version}' no raw export exists.")
 
     json_paths = dict()
     for version in versions:
         # Define the path for storing the dreq.json in the installation directory
-        #  Store it as path_to_dreqapi/dreq_api/dreq_res/version/{_json_export}
+        #  Store it as path_to_dreqapi/dreq_api/dreq_res/version/{_json_raw/release}
         retrieve_to_dir = os.path.join(_dreq_res, version)
-        json_path = os.path.join(retrieve_to_dir, _json_export)
+        # Decide whether to download release or raw json file
+        if "export" in kwargs:
+            if kwargs["export"] == "release" or version == "v1.0alpha":
+                json_export = _json_release
+            elif kwargs["export"] == "raw":
+                json_export = _json_raw
+            else:
+                warnings.warn(f"Unknown export type '{kwargs['export']}'.")
+        elif _version_pattern.match(version):
+            json_export = _json_release
+        else:
+            json_export = _json_raw
+        json_path = os.path.join(retrieve_to_dir, json_export)
         os.makedirs(retrieve_to_dir, exist_ok=True)
 
         # If not already cached download with POOCH
@@ -311,11 +421,11 @@ def retrieve(version="latest_stable"):
                     path=retrieve_to_dir,
                     url=REPO_RAW_URL.format(
                         version=_dev_branch if version == "dev" else version,
-                        _json_export=_json_export,
+                        _json_export=json_export,
                         _github_org=_github_org,
                     ),
                     known_hash=None,
-                    fname=_json_export,
+                    fname=json_export,
                 )
             except Exception as e:
                 warnings.warn(f"Could not retrieve version '{version}': {e}")
@@ -335,11 +445,11 @@ def retrieve(version="latest_stable"):
                     path=retrieve_to_dir,
                     url=REPO_RAW_URL.format(
                         version=_dev_branch if version == "dev" else version,
-                        _json_export=_json_export,
+                        _json_export=json_export,
                         _github_org=_github_org,
                     ),
                     known_hash=None,
-                    fname=_json_export + ".tmp",
+                    fname=json_export + ".tmp",
                 )
                 # Compare files
                 if not cmp(json_path, json_path_temp, shallow=False):
@@ -347,7 +457,6 @@ def retrieve(version="latest_stable"):
                     print(f"Updated version '{version}'.")
                 else:
                     os.remove(json_path_temp)
-                    print(f"Version '{version}' is up to date.")
             except Exception as e:
                 warnings.warn(f"Potential update for version '{version}' failed: {e}")
 
@@ -357,19 +466,33 @@ def retrieve(version="latest_stable"):
     return json_paths
 
 
-def delete(version="all", keep_latest=False):
+def delete(version="all", keep_latest=False, **kwargs):
     """Delete one or all cached versions with option to keep latest versions.
 
-    Args:
-        version (str): The version to delete.
-                       Can be 'all' or a specific version, eg. '1.0.0'.
-                       The default is 'all'.
-        keep_latest (bool): If True, keep the latest stable, prerelease and "dev" versions.
-                            If False, delete all locally cached versions.
-                            The default is False.
+    Parameters
+    ----------
+    version : str, optional
+        The version to delete. Can be 'all' or a specific version,
+        eg. '1.0.0' (default is 'all').
+    keep_latest : bool, optional
+        If True, keep the latest stable, prerelease and "dev" versions.
+        If False, delete all locally cached versions (default is False).
+    kwargs : dict, optional
+        Additional parameters to pass to the function.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        If the known kwargs have an invalid value.
+    Warning
+        If 'keep_latest' option is active when 'version' is not 'all'.
     """
     # Get locally cached versions
-    local_versions = get_cached()
+    local_versions = get_cached(**kwargs)
 
     if version == "all":
         if keep_latest:
@@ -399,26 +522,60 @@ def delete(version="all", keep_latest=False):
         print(local_versions)
     else:
         print("No version(s) found to delete.")
+        return
 
-    cached_files = [os.path.join(_dreq_res, v, _json_export) for v in local_versions]
+    # Compile file paths
+    cached_files = []
+    cached_files_raw = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
+    cached_files_release = [
+        os.path.join(_dreq_res, v, _json_release) for v in local_versions
+    ]
+    if "export" in kwargs:
+        if kwargs["export"] == "raw":
+            cached_files = cached_files_raw
+        elif kwargs["export"] == "release":
+            cached_files = cached_files_release
+        else:
+            raise ValueError(f"Unknown export type '{kwargs['export']}'.")
+    else:
+        cached_files = cached_files_raw + cached_files_release
+
+    # Delete files
     for f in cached_files:
-        os.remove(f)
+        if os.path.isfile(f):
+            if "dryrun" in kwargs and kwargs["dryrun"]:
+                print(f"Dryrun: would delete '{f}'.")
+            else:
+                os.remove(f)
 
 
-def load(version="latest_stable"):
+def load(version="latest_stable", **kwargs):
     """Load the JSON file for the specified version.
 
     Args:
-        version: The version to load.
+        version (str): The version to load.
                  Can be 'latest', 'latest_stable', 'dev',
                  or a specific version, eg. '1.0.0'.
                  The default is 'latest_stable'.
-
+        kwargs (dict): Additional parameters to pass to the retrieve function
     Returns:
         dict: of the loaded JSON file.
     """
     if version == "all":
         raise ValueError("Cannot load 'all' versions.")
-    json_path = retrieve(version)[version]
+
+    version_dict = retrieve(version, **kwargs)
+    if version_dict == {}:
+        print(f"Version '{version}' could not be loaded.")
+        return {}
+    else:
+        json_path = next(iter(version_dict.values()))
+        print(f"Loading version {next(iter(version_dict.keys()))}'.")
     with open(json_path) as f:
-        return json.load(f)
+        if "consolidate" in kwargs:
+            if kwargs["consolidate"]:
+                return ce.map_data(json.load(f), ce.mapping_table)
+            else:
+                return json.load(f)
+        else:
+            return ce.map_data(json.load(f), ce.mapping_table)

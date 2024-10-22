@@ -143,8 +143,7 @@ def map_data(data, mapping_table):
         return mapped_data
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
-        mapped_data["Data Request"] = data[data.keys()[0]]
-        return mapped_data
+        return {"Data Request": next(iter(data.values()))}
     else:
         raise ValueError("The loaded Data Request has an unexpected data structure.")
 
