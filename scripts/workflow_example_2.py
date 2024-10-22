@@ -43,17 +43,18 @@ change_log_level("debug")
 
 ### Step 1: Get the content of the DR
 # Define content version to be used
-use_dreq_version = 'v1.0alpha'
+# use_dreq_version = 'v1.0alpha'
 # use_dreq_version = "first_export"
+use_dreq_version = 'new_export_15Oct2024'
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
 # Load content into python dict
 content = dc.load(use_dreq_version)
 
 ### Step 2: Load it into the software of the DR
-DR = DataRequest.from_input(json_input=content)
-# DR = DataRequest.from_separated_inputs(DR_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/DR_content.json",
-#                                        VS_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/VS_content.json")
+# DR = DataRequest.from_input(json_input=content, version=use_dreq_version)
+DR = DataRequest.from_separated_inputs(DR_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/DR_content.json",
+                                       VS_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/VS_content.json")
 
 ### Step 3: Get information from the DR
 # -> Print DR content

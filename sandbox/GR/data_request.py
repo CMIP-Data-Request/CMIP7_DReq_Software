@@ -239,8 +239,8 @@ class DataRequest(object):
 			del self.variables_groups[id]
 
 	@classmethod
-	def from_input(cls, json_input, **kwargs):
-		DR_content, VS_content = cls._split_content_from_input_json(json_input)
+	def from_input(cls, json_input, version, **kwargs):
+		DR_content, VS_content = cls._split_content_from_input_json(json_input, version=version)
 		VS = VocabularyServer(VS_content)
 		return cls(input_database=DR_content, VS=VS, **kwargs)
 
@@ -257,12 +257,12 @@ class DataRequest(object):
 		return cls(input_database=DR, VS=VS, **kwargs)
 
 	@staticmethod
-	def _split_content_from_input_json(input_json):
+	def _split_content_from_input_json(input_json, version):
 		if isinstance(input_json, six.string_types):
 			content = read_json_file(input_json)
 		else:
 			content = input_json
-		DR, VS = transform_content(content)
+		DR, VS = transform_content(content, version=version)
 		return DR, VS
 
 	def __str__(self):
