@@ -29,8 +29,7 @@ for path in add_paths:
 import dreq_content as dc
 import dreq_query as dq
 
-# use_dreq_version = 'first_export'
-use_dreq_version = 'v1.0alpha'
+use_dreq_version = 'v1.0beta'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
@@ -43,15 +42,15 @@ use_opps = []
 use_opps.append('Baseline Climate Variables for Earth System Modelling')
 use_opps.append('Synoptic systems and impacts')
 # Or to use all opportunities in the data request:
-# use_opps = 'all'
+use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
 dq.DREQ_VERSION = use_dreq_version
 expt_vars = dq.get_requested_variables(content, use_opps, max_priority='Low')
 
 # Show user what we found
-print(f'For data request version {use_dreq_version}, number of requested variables found by experiment:')
-priority_levels = ['High', 'Medium', 'Low']
+print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
+priority_levels = ['Core', 'High', 'Medium', 'Low']
 for expt, req in expt_vars.items():
     d = {p : 0 for p in priority_levels}
     for p in priority_levels:
@@ -68,7 +67,7 @@ for expt, req in expt_vars.items():
         req[p] = sorted(req[p])
 with open(filename, 'w') as f:
     json.dump(expt_vars, f, indent=4, sort_keys=True)
-    print('Wrote requested variables to ' + filename)
+    print('\nWrote requested variables to ' + filename)
 
 # To remove locally cached version:
 # dc.delete(use_dreq_version)

@@ -166,4 +166,6 @@ dreq_res
 
 # assume json files contain dreq content, which we don't want stored in this repo
 *.json
+# except for these:
+!all_var_info.json
 
