@@ -41,15 +41,15 @@ These Airtable bases contain interlinked tables that constitute the primary sour
 
 The Content of each official release of the data request can be explored online using the [Airtable interface](https://bit.ly/CMIP7-DReq-v1_0beta).
 This provides a browseable web view of the Content, allowing users to follow links between different elements of the data request - for example, to view the variables requested by a given Opportunity, or to view the Opportunities that request a given variable.
-This view is complementary to the access to the Content that is provided via the Software, and both access methods (Airtable and Software) are based on the same underlying information Content.
+This view is complementary to the access to the Content that is provided via the Software, and both access methods (Airtable and Software) are based on the same underlying information about the data request.
 
 
 Using the data request **Software** provides a way to interact programmatically with the data request Content, such as to:
 
 - Given a list of supported opportunities and their priorities, produce lists of variables to output for each experiment (see Getting Started section to test this functionality),
-- Output the CF-compliant metadata characterizing each variable, as needed by CMOR (this is available in v1.0beta),
-- Compare the requested output of CMIP7 experiments to a given model's published CMIP6 output (not yest available with v1.0beta, to come in a commit to come soon before v1.0),
-- Estimate output volumes (not yest available with v1.0beta, to come in a commit to come soon before v1.0).
+- Output the CF-compliant metadata characterizing each variable (an example file with some of the metadata for each requested variable is available in v1.0beta),
+- Compare the requested output of CMIP7 experiments to a given model's published CMIP6 output (not yet available with v1.0beta, to come in a commit to come soon before v1.0),
+- Estimate output volumes (not yet available with v1.0beta, to come in a commit to come soon before v1.0).
 
 The Software should facilitate integration of the data request into modelling workflows.
 Suggestions for functionality are welcome in the [github discussion forum](https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/discussions).
@@ -87,19 +87,18 @@ To access the data request Content, the example script first needs to identify t
 This is done by specifying a tag in the Content repo and calling the retrieval function.
 For example:
 ```
-use_dreq_version = 'v1.0beta'
-dc.retrieve(use_dreq_version)
+dc.retrieve('v1.0beta')
 ```
 downloads `v1.0beta` of the Content into local cache, if it is not already there.
 The script can then access it by loading it into a python dict variable:
 ```
-content = dc.load(use_dreq_version)
+content = dc.load('v1.0beta')
 ```
 Currently a single version of the Content `json` file is roughly 20 MB in size.
 The size of local cache can be managed by deleting unused versions.
 For example, to remove a specific version:
 ```
-dc.delete(use_dreq_version)
+dc.delete('v1.0beta')
 ```
 Or to remove all locally cached versions:
 ```
