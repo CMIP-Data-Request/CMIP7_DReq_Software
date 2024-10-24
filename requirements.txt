@@ -1,0 +1,5 @@
+ipython
+pooch
+numpy
+openpyxl
+pandas
