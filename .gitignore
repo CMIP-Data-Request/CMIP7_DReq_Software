@@ -169,3 +169,6 @@ dreq_res
 # except for these:
 !all_var_info.json
 
+# separate software, if cloned into a dir in this repo it shouldn't be tracked by git
+search_esgf
+
