@@ -3,3 +3,5 @@ pooch
 numpy
 openpyxl
 pandas
+requests
+bs4
