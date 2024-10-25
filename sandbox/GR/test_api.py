@@ -11,7 +11,8 @@ import pprint
 from collections import defaultdict
 
 # Import API (for users, only second one will be needed, first is to prepare json database)
-from dump_transformation import read_json_input_file_content, transform_content, write_json_output_file_content
+from dump_transformation import transform_content
+from tools import read_json_input_file_content, write_json_output_file_content
 from data_request import DataRequest
 from logger import change_log_file, change_log_level
 

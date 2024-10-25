@@ -11,7 +11,7 @@ import copy
 import os
 
 from logger import get_logger
-from dump_transformation import read_json_file
+from tools import read_json_file
 
 
 class VSObject(object):

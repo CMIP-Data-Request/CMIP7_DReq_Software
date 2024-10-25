@@ -7,14 +7,14 @@ Data request.
 
 from __future__ import division, print_function, unicode_literals, absolute_import
 
-import copy
 import argparse
 import os
 
 import six
 
 from logger import get_logger, change_log_file, change_log_level
-from dump_transformation import read_json_file, transform_content
+from dump_transformation import transform_content
+from tools import read_json_file
 from vocabulary_server import VocabularyServer, Variable, Experiment
 
 version = "0.1"
@@ -109,7 +109,6 @@ class VariablesGroup(DRObjects):
 		logger = get_logger()
 		if len(self.variables) == 0:
 			logger.critical(f"No variable defined for {type(self).__name__} id {self.id}")
-
 
 	@classmethod
 	def from_input(cls, vs, variables=list(), **kwargs):
