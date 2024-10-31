@@ -705,7 +705,7 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
 
     # Loop over the opportunities
     expt_vars = {}
-    priority_levels = ['High', 'Medium', 'Low']
+    priority_levels = ['Core', 'High', 'Medium', 'Low']
     for opp_id in use_opp:
         opp = all_opps['records'][opp_id] # one record from the Opportunity table
 
@@ -730,10 +730,18 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
                 if expt_key not in expt_vars:
                     expt_vars[expt_key] = {p : set() for p in priority_levels}
 
-        if 'Variable Groups' not in opp:
+        try_vg_fields = []
+        try_vg_fields.append('Variable Groups')
+        try_vg_fields.append('Working/Updated Variable Groups')
+        try_vg_fields.append('Originally Requested Variable Groups')
+        vg_key = None
+        for vg_key in try_vg_fields:
+            if vg_key in opp:
+                break
+        if vg_key not in opp:
             print('No variable groups defined for opportunity: ' + opp['Title of Opportunity'])
             continue
-        for var_group_id in opp['Variable Groups']:  # Loop over variable groups in this opportunity
+        for var_group_id in opp[vg_key]:  # Loop over variable groups in this opportunity
             var_group = tables['Variable Group']['records'][var_group_id]
             priority = var_group['Priority Level']
 
@@ -755,15 +763,23 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
 
     # Remove overlaps between priority levels
     for expt_key, expt_var in expt_vars.items():
-        # remove from Medium priority group any variables already occuring in High priority group
-        expt_var['Medium'] = expt_var['Medium'].difference(expt_var['High'])  
-        # remove from Low priority group any variables already occuring in Medium or High priority groups
-        expt_var['Low'] = expt_var['Low'].difference(expt_var['Medium'])
-        expt_var['Low'] = expt_var['Low'].difference(expt_var['High'])
+        # remove any Core priority variables from other groups
+        for p in ['High', 'Medium', 'Low']:
+            expt_var[p] = expt_var[p].difference(expt_var['Core'])
+        # remove any High priority variables from lower priority groups
+        for p in ['Medium', 'Low']:
+            expt_var[p] = expt_var[p].difference(expt_var['High'])
+        # remove any Medium priority variables from lower priority groups
+        for p in ['Low']:
+            expt_var[p] = expt_var[p].difference(expt_var['Medium'])
 
     # Remove unwanted priority levels
     for expt_key, expt_var in expt_vars.items():
-        if max_priority.lower() == 'high':
+        if max_priority.lower() == 'core':
+            expt_var.pop('High')
+            expt_var.pop('Medium')
+            expt_var.pop('Low')
+        elif max_priority.lower() == 'high':
             expt_var.pop('Medium')
             expt_var.pop('Low')
         elif max_priority.lower() == 'medium':

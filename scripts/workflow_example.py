@@ -32,9 +32,7 @@ import dreq_query as dq
 # reload(dq)
 
 
-# use_dreq_version = 'first_export'
-# use_dreq_version = 'new_export_15Oct2024'
-use_dreq_version = 'v1.0alpha'
+use_dreq_version = 'v1.0beta'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
@@ -47,7 +45,7 @@ use_opps = []
 use_opps.append('Baseline Climate Variables for Earth System Modelling')
 use_opps.append('Synoptic systems and impacts')
 # Or to use all opportunities in the data request:
-# use_opps = 'all'
+use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
 dq.DREQ_VERSION = use_dreq_version
@@ -58,7 +56,7 @@ if len(expt_vars['experiment']) > 0:
 
     # Show user what was found
     print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
-    priority_levels = ['High', 'Medium', 'Low']
+    priority_levels = ['Core', 'High', 'Medium', 'Low']
     for expt, req in expt_vars['experiment'].items():
         d = {p : 0 for p in priority_levels}
         for p in priority_levels:
