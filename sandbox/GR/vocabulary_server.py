@@ -34,6 +34,8 @@ class VSObject(object):
 		else:
 			value = self.vs.get_element(element_type=element_type, element_id=value)
 		value = copy.deepcopy(value)
+		if not target_type in ["list", ] and isinstance(value, list) and len(value) == 1:
+			value = value[0]
 		return value
 
 	def __str__(self):
@@ -90,7 +92,7 @@ class Experiment(VSObject):
 class Variable(VSObject):
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
-		keys = ["uid", "CF_standard_name", "cell_measures", "cell_methods", "description", "frequency",
+		keys = ["cf_standard_name", "cell_measures", "cell_methods", "description", "frequency",
 		        "modelling_realm", "content_type", "title", "spatial_shape", "temporal_shape", "table", "compound_name",
 		        "structure_label", "structure_title", "physical_parameter"]
 		defaults_dict = {key: "???" for key in keys}
@@ -101,11 +103,11 @@ class Variable(VSObject):
 
 	@property
 	def uid(self):
-		return self.attributes["uid"]
+		return self.id
 
 	@property
-	def CF_standard_name(self):
-		return self.get_value_from_vs(key="CF_standard_name", element_type="CF_standard_names")
+	def cf_standard_name(self):
+		return self.get_value_from_vs(key="cf_standard_name", element_type="cf_standard_names")
 
 	@property
 	def cell_measures(self):
@@ -167,9 +169,10 @@ class Variable(VSObject):
 
 	@classmethod
 	def from_input(cls, id, vs, input_dict):
-		input_dict["content_type"] = input_dict.pop("type", "???")
-		input_dict["CF_standard_name"] = input_dict.pop("cf_standard_name_(from_physical_parameter)", "???")
-		input_dict["MIP_variable"] = input_dict.pop("mip_variables", "???")
+		if "content_type" not in input_dict:
+			input_dict["content_type"] = input_dict.pop("type", "???")
+		if "cf_standard_name" not in input_dict:
+			input_dict["cf_standard_name"] = input_dict.pop("cf_standard_name_(from_physical_parameter)", "???")
 		return cls(id=id, vs=vs, **input_dict)
 
 

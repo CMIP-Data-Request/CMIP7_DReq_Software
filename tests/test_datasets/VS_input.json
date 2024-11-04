@@ -23286,5 +23286,6 @@
             "size_(millions_of_data_points)": 22379.796,
             "title": "SurgeMIP variables"
         }
-    }
+    },
+    "version": "test"
 }
