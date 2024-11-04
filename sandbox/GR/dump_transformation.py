@@ -17,9 +17,6 @@ import six
 from logger import get_logger, change_log_level, change_log_file
 from tools import read_json_input_file_content, write_json_output_file_content
 
-default_count = 0
-default_template = "default_{:d}"
-
 
 def correct_key_string(input_string, *to_remove_strings):
     logger = get_logger()
@@ -57,7 +54,8 @@ def correct_dictionaries(input_dict):
 def transform_content_one_base(content):
     logger = get_logger()
     if isinstance(content, dict):
-        global default_count
+        default_count = 0
+        default_template = "default_{:d}"
         # Tidy the content of the export file
         content = content[list(content)[0]]
         data_request = dict()
@@ -234,6 +232,7 @@ def transform_content_three_bases(content):
 
 
 def transform_content(content, version):
+    logger = get_logger()
     if isinstance(content, dict):
         if len(content) == 1:
             data_request, vocabulary_server = transform_content_one_base(content)
