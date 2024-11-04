@@ -164,6 +164,4 @@ cython_debug/
 # dir used by MS dreq_content.py to store locally cached dreq content
 dreq_res
 
-# assume json files contain dreq content, which we don't want stored in this repo
-*.json
-
+.idea

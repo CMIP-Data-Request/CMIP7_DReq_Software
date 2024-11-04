@@ -60,7 +60,7 @@ class VSObject(object):
 
 	def print_content(self, level=0, add_content=True):
 		"""
-		Function to return a rintable version of the content of the current class.
+		Function to return a printable version of the content of the current class.
 		:param level: level of indent of the result
 		:param add_content: should inner content be added?
 		:return: a list of strings that can be assembled to print the content.

@@ -152,7 +152,6 @@ class Opportunity(DRObjects):
 		if len(self.themes) == 0:
 			logger.critical(f"No theme defined for {type(self).__name__} id {self.id}")
 
-
 	@classmethod
 	def from_input(cls, dr, experiments_groups=list(), variables_groups=list(), themes=list(), **kwargs):
 		return super().from_input(

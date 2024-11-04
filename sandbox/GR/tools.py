@@ -9,12 +9,16 @@ from __future__ import division, absolute_import, print_function, unicode_litera
 import json
 import os
 
+from logger import get_logger
+
 
 def read_json_file(filename):
+    logger = get_logger()
     if os.path.isfile(filename):
         with open(filename, "r") as fic:
             content = json.load(fic)
     else:
+        logger.error(f"Filename {filename} is not readable")
         raise OSError(f"Filename {filename} is not readable")
     return content
 
