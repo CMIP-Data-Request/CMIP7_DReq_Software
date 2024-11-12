@@ -58,15 +58,15 @@ def get_table_id2name(base, base_name):
     '''
     table_id2name = {}
     for table_name, table in base.items():
-        assert table['name'] == table_name
-        assert table['base_name'] == base_name
+        # assert table['name'] == table_name
+        # assert table['base_name'] == base_name, table['base_name'] + ', ' + base_name
         table_id2name.update({
             table['id'] : table['name']
         })
     assert len(table_id2name) == len(base), 'table ids are not unique!'
     return table_id2name
 
-def create_dreq_tables_for_request(content):
+def create_dreq_tables_for_request(content, consolidated=True):
     '''
     For the "request" part of the data request content (Opportunities, Variable Groups, etc),
     render raw airtable export content as dreq_table objects.
@@ -96,14 +96,20 @@ def create_dreq_tables_for_request(content):
         raise TypeError('Input should be dict from raw airtable export json file')
 
     # Content is dict loaded from raw airtable export json file
-    content_type = get_content_type(content)
-    match content_type:
-        case 'working':
-            base_name = 'Data Request Opportunities (Public)'
-        case 'version':
-            base_name = version_base_name()
-        case _:
-            raise Exception('Unknown content type: ' + content_type)
+    if consolidated:
+        base_name = 'Data Request'
+        content_type = 'consolidated'
+    else:
+        # for backward compatibility
+        content_type = get_content_type(content)
+        match content_type:
+            case 'working':
+                base_name = 'Data Request Opportunities (Public)'
+            case 'version':
+                base_name = version_base_name()
+            case _:
+                raise Exception('Unknown content type: ' + content_type)
+    # base_name = 'Data Request'
     base = content[base_name]
 
     # Create objects representing data request tables
@@ -154,7 +160,7 @@ def create_dreq_tables_for_request(content):
 
     return base
 
-def create_dreq_tables_for_variables(content):
+def create_dreq_tables_for_variables(content, consolidated=True):
     '''
     For the "data" part of the data request content (Variables, Cell Methods etc),
     render raw airtable export content as dreq_table objects.
@@ -166,14 +172,19 @@ def create_dreq_tables_for_variables(content):
         raise TypeError('Input should be dict from raw airtable export json file')
 
     # Content is dict loaded from raw airtable export json file
-    content_type = get_content_type(content)
-    match content_type:
-        case 'working':
-            base_name = 'Data Request Variables (Public)'
-        case 'version':
-            base_name = version_base_name()
-        case _:
-            raise Exception('Unknown content type: ' + content_type)
+    if consolidated:
+        base_name = 'Data Request'
+        content_type = 'consolidated'
+    else:
+        # for backward compatibility
+        content_type = get_content_type(content)
+        match content_type:
+            case 'working':
+                base_name = 'Data Request Variables (Public)'
+            case 'version':
+                base_name = version_base_name()
+            case _:
+                raise Exception('Unknown content type: ' + content_type)
     base = content[base_name]
 
     # Create objects representing data request tables
