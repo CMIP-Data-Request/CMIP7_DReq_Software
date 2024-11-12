@@ -17,6 +17,7 @@ import dreq_content as dc
 import dreq_query as dq
 
 from collections import OrderedDict, defaultdict
+from copy import deepcopy
 
 from importlib import reload
 reload(dq)
@@ -25,13 +26,21 @@ reload(dq)
 # Load data request content
 
 # use_dreq_version = 'first_export'
-use_dreq_version = 'v1.0alpha'
-use_dreq_version = 'new_export_15Oct2024'
+# use_dreq_version = 'v1.0alpha'
+use_dreq_version = 'v1.0beta'
+
+
+
+# # Download specified version of data request content (if not locally cached)
+# dc.retrieve(use_dreq_version, export='raw')
+# # Load content into python dict
+# content = dc.load(use_dreq_version, consolidate=False, export='raw')
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
 # Load content into python dict
-content = dc.load(use_dreq_version)
+content = dc.load(use_dreq_version, consolidate=False)
+
 
 
 ###############################################################################
@@ -39,7 +48,8 @@ content = dc.load(use_dreq_version)
 
 dq.DREQ_VERSION = use_dreq_version
 # Initialize table objects to represent the various tables in the data request
-base = dq.create_dreq_tables_for_request(content)
+# base = dq.create_dreq_tables_for_request(content)
+base = dq.create_dreq_tables_for_request(deepcopy(content))
 
 # use subset of opportunities:
 use_opps = []
@@ -113,16 +123,28 @@ for opp_id in opp_ids:
 # Now use the "data" part, i.e. tables that define the variables, to retrieve info
 # about each variable.
 
-base = dq.create_dreq_tables_for_variables(content)
+# base = dq.create_dreq_tables_for_variables(content)
+base = dq.create_dreq_tables_for_variables(deepcopy(content))
+
 
 Vars = base['Variables']
+
+if use_dreq_version in ['v1.0beta']:
+    Vars.rename_attr('cmip7_frequency', 'frequency')
+
 SpatialShape = base['Spatial Shape']
 Dimensions = base['Coordinates and Dimensions']
 TemporalShape = base['Temporal Shape']
 CellMethods = base['Cell Methods']
 PhysicalParameter = base['Physical Parameters']
+
+Frequency = None
 if 'Frequency' in base:
     Frequency = base['Frequency']
+if use_dreq_version in ['v1.0beta']:
+    Frequency = base['CMIP7 Frequency']
+
+CFStandardName = None
 if 'CF Standard Names' in base:
     CFStandardName = base['CF Standard Names']
 
@@ -269,6 +291,26 @@ for var_name in sorted(all_var_info.keys(), key=str.lower):
 all_var_info = d
 del d
 
+
+# For each levels set, list all the variables requested on it
+requests = {}
+for var_name, var_info in all_var_info.items():
+    levs = var_info['vertical_levels']
+    if levs == '':
+        continue
+    if levs not in requests:
+        requests[levs] = set()
+    requests[levs].add(var_name)
+d = OrderedDict()
+for levs in sorted(requests.keys(), key=str.lower):
+    d[levs] = sorted(requests[levs], key=str.lower)
+requests = d
+del d
+
+
+
+
+
 ###############################################################################
 # write various kinds json files summarizing the info
 
@@ -320,4 +362,16 @@ if len(opp_vars_at_multiple_priorities) > 0:
     with open(filepath, 'w') as f:
         json.dump(opp_vars_at_multiple_priorities, f, indent=4, sort_keys=True)
         print('wrote ' + filepath)
+
+filepath = 'requested_by_level.json'
+with open(filepath, 'w') as f:
+    json.dump(requests, f, indent=4)
+    print('wrote ' + filepath)
+
+filepath = 'requested_by_plev.json'
+requests2 = {k:v for k,v in requests.items() if k.startswith('plev')}
+with open(filepath, 'w') as f:
+    json.dump(requests2, f, indent=4)
+    print('wrote ' + filepath)
+
 
