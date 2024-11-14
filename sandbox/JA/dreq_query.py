@@ -125,9 +125,13 @@ def create_dreq_tables_for_request(content, consolidated=True):
         change_table_names = {
             # old name : new name
             'Experiment' : 'Experiments',
+            'Priority level' : 'Priority Level'
         }
     for old,new in change_table_names.items():
         assert new not in base, 'New table name already exists: ' + new
+        if old not in base:
+            print(f'Unavailable table {old}, skipping name change')
+            continue
         base[new] = base[old]
         base.pop(old)
 

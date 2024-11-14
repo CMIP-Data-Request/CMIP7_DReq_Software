@@ -7,6 +7,7 @@ This script started life dealing just with plevs, but has evolved to gather othe
 Some of the bits might be useful elsewhere.
 '''
 
+import os
 import sys
 import json
 add_paths = ['../../sandbox/MS/dreq_api/']
@@ -40,12 +41,30 @@ use_dreq_version = 'v1.0beta'
 
 use_consolidated = True
 use_export = 'release'
-# use_export = 'raw'
+use_export = 'raw'
 
-# Download specified version of data request content (if not locally cached)
-dc.retrieve(use_dreq_version, export=use_export)
-# Load content into python dict
-content = dc.load(use_dreq_version, export=use_export, consolidate=use_consolidated)
+load_manually = not True
+
+if load_manually:
+    # just for testing
+    path = '/home/rja001/code/dreq/CMIP7_DReq_Content/airtable_export'
+    filepath = os.path.join(path, 'dreq_working.json')
+    with open(filepath, 'r') as f:
+        content = json.load(f)
+        print('loaded ' + filepath)
+
+    use_consolidated = False
+
+
+else:
+    # this is the usual thing
+
+    # Download specified version of data request content (if not locally cached)
+    dc.retrieve(use_dreq_version, export=use_export)
+    # Load content into python dict
+    content = dc.load(use_dreq_version, export=use_export, consolidate=use_consolidated)
+
+
 
 print(content.keys())
 
@@ -74,14 +93,12 @@ opp_vars_by_group = {opp_title : OrderedDict() for opp_title in use_opps}
 VarGroups = base['Variable Group']
 Vars = base['Variables']
 
-# if 'Priority Level' in base:
-
-PriorityLevel = base['Priority Level']
-priority_levels = [rec.name for rec in PriorityLevel.records.values()]
-
-# else:
-#     # retain this option for non-consolidated raw export?
-#     priority_levels = ['High', 'Medium', 'Low']
+if 'Priority Level' in base:
+    PriorityLevel = base['Priority Level']
+    priority_levels = [rec.name for rec in PriorityLevel.records.values()]
+else:
+    # retain this option for non-consolidated raw export?
+    priority_levels = ['Core', 'High', 'Medium', 'Low']
 
 # Loop over opportunities to get requested variables for each one.
 # Requested experiments are ignored because here we only want the variables.
@@ -98,12 +115,12 @@ for opp_id in opp_ids:
         if not hasattr(var_group, 'variables'):
             continue
 
-        # if isinstance(var_group.priority_level, str):
-        #     # retain this option for non-consolidated raw export?
-        #     priority_level = var_group.priority_level
-        # else:
-        priority = PriorityLevel.get_record(var_group.priority_level[0])
-        priority_level = priority.name
+        if isinstance(var_group.priority_level, str):
+            # retain this option for non-consolidated raw export?
+            priority_level = var_group.priority_level
+        else:
+            priority = PriorityLevel.get_record(var_group.priority_level[0])
+            priority_level = priority.name
 
         assert var_group.name not in opp_vars_by_group[opp.title], 'variable group name is not unique in this opportunity!'
         # opp_vars_by_group[opp.title][var_group.name] = set()
@@ -141,17 +158,27 @@ base = dq.create_dreq_tables_for_variables(deepcopy(content), consolidated=use_c
 Vars = base['Variables']
 
 # Choose which table to use for freqency
+
 # freq_table_name = 'Frequency'  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
-freq_table_name = 'CMIP7 Frequency'
+# freq_table_name = 'CMIP7 Frequency'
 # freq_table_name = 'CMIP6 Frequency (legacy)'
 
-freq_attr_name = dreq_classes.format_attribute_name(freq_table_name)
-assert freq_attr_name in Vars.attr2field, freq_attr_name
-if 'frequency' not in Vars.attr2field:
-    # code below assumes a variable's frequency is given by its "frequency" 
-    Vars.rename_attr(freq_attr_name, 'frequency')
-Frequency = base[freq_table_name]
+try_freq_table_name = []
+try_freq_table_name.append('Frequency')
+try_freq_table_name.append('CMIP7 Frequency')
+try_freq_table_name.append('CMIP6 Frequency (legacy)')
 
+for freq_table_name in try_freq_table_name:
+    freq_attr_name = dreq_classes.format_attribute_name(freq_table_name)
+    # assert freq_attr_name in Vars.attr2field, 'attribute not found: ' + freq_attr_name
+    if freq_attr_name not in Vars.attr2field:
+        continue
+    if 'frequency' not in Vars.attr2field:
+        # code below assumes a variable's frequency is given by its "frequency" 
+        Vars.rename_attr(freq_attr_name, 'frequency')
+    if freq_table_name in base:
+        Frequency = base[freq_table_name]
+    break
 
 SpatialShape = base['Spatial Shape']
 Dimensions = base['Coordinates and Dimensions']
@@ -159,9 +186,9 @@ TemporalShape = base['Temporal Shape']
 CellMethods = base['Cell Methods']
 PhysicalParameter = base['Physical Parameters']
 
-# CFStandardName = None
-# if 'CF Standard Names' in base:
-CFStandardName = base['CF Standard Names']
+CFStandardName = None
+if 'CF Standard Names' in base:
+    CFStandardName = base['CF Standard Names']
 
 # Use compound name to look up record id of each variable in the Vars table
 var_name_map = {record.compound_name : record_id for record_id, record in Vars.records.items()}
@@ -205,14 +232,14 @@ for opp_title in opp_titles:
             # Follow links starting from the variable record to find out info about the variable
             var_info[var_name] = OrderedDict()
 
-            # if isinstance(var.frequency[0], str):
-            #     # retain this option for non-consolidated raw export?
-            #     assert isinstance(var.frequency, list)
-            #     frequency = var.frequency[0]
-            # else:
-            link = var.frequency[0]
-            freq = Frequency.get_record(link)
-            frequency = freq.name
+            if isinstance(var.frequency[0], str):
+                # retain this option for non-consolidated raw export?
+                assert isinstance(var.frequency, list)
+                frequency = var.frequency[0]
+            else:
+                link = var.frequency[0]
+                freq = Frequency.get_record(link)
+                frequency = freq.name
 
             link = var.temporal_shape[0]
             temporal_shape = TemporalShape.get_record(link)
@@ -261,17 +288,17 @@ for opp_title in opp_titles:
             link = var.physical_parameter[0]
             phys_param = PhysicalParameter.get_record(link)
             if hasattr(phys_param, 'cf_standard_name'):
-                # if isinstance(phys_param.cf_standard_name, str):
-                #     # retain this option for non-consolidated raw export?
-                #     var_info[var_name].update({
-                #         'CF standard name' : phys_param.cf_standard_name,
-                #     })
-                # else:
-                link = phys_param.cf_standard_name[0]
-                cfsn = CFStandardName.get_record(link)
-                var_info[var_name].update({
-                    'CF standard name' : cfsn.name,
-                })
+                if isinstance(phys_param.cf_standard_name, str):
+                    # retain this option for non-consolidated raw export?
+                    var_info[var_name].update({
+                        'CF standard name' : phys_param.cf_standard_name,
+                    })
+                else:
+                    link = phys_param.cf_standard_name[0]
+                    cfsn = CFStandardName.get_record(link)
+                    var_info[var_name].update({
+                        'CF standard name' : cfsn.name,
+                    })
             else:
                 var_info[var_name].update({
                     'CF standard name (proposed)' : phys_param.proposed_cf_standard_name,
