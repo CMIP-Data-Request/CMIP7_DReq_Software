@@ -415,7 +415,7 @@ def get_var_group_priority(var_group, PriorityLevel=None):
 
     Returns
     -------
-    str that states the priority level: "High", "Medium", or "Low"
+    str that states the priority level, e.g. "High"
     '''
     if not hasattr(var_group, 'priority_level'):
         return 'Undefined'
@@ -557,7 +557,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
             strings : include opportunities identified by their titles
     max_priority : str
         Variables up to this priority level will be returned.
-        E.g., max_priority='Low' means all priority levels (High, Medium, Low) are returned.
+        E.g., max_priority='Low' means all priority levels are returned.
 
     Returns
     -------
@@ -591,11 +591,14 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
     VarGroups = base['Variable Group']
     Vars = base['Variables']
 
-    all_priority_levels = ['High', 'Medium', 'Low']
+    # all_priority_levels = ['Core', 'High', 'Medium', 'Low']
+    all_priority_levels = [s.capitalize() for s in dreq_classes.PRIORITY_LEVELS]
+
     if 'Priority Level' in base:
         PriorityLevel = base['Priority Level']
         priority_levels_from_table = [rec.name for rec in PriorityLevel.records.values()]
-        assert set(all_priority_levels) == set(priority_levels_from_table)
+        assert set(all_priority_levels) == set(priority_levels_from_table), \
+            'inconsistent priority levels:\n  ' + str(all_priority_levels) + '\n  ' + str(priority_levels_from_table)
     else:
         PriorityLevel = None
     m = all_priority_levels.index(max_priority)
@@ -654,7 +657,7 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
             strings : include opportunities identified by their titles
     max_priority : str
         Variables up to this priority level will be returned.
-        E.g., max_priority='Low' means all priority levels (High, Medium, Low) are returned.
+        E.g., max_priority='Low' means all priority levels are returned.
 
     Returns
     -------

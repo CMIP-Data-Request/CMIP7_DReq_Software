@@ -19,6 +19,8 @@ from dataclasses import field as dataclass_field  # "field" is used often for Ai
 
 UNIQUE_VAR_NAME = 'compound name'  # method used to uniquely name variables
 
+PRIORITY_LEVELS = ('core', 'high', 'medium', 'low')  # names of priority levels, ordered from highest to lowest priority
+
 def format_attribute_name(k):
     '''
     Adjust input string so that it's suitable for use as an object attribute name using the dot syntax (object.attribute).
@@ -226,11 +228,14 @@ class expt_request:
     Variable names are stored in seperate sets for different priority levels.
     '''
     experiment : str
+    core : set[str] = dataclass_field(default_factory=set)
     high : set[str] = dataclass_field(default_factory=set)
     medium : set[str] = dataclass_field(default_factory=set)
     low : set[str] = dataclass_field(default_factory=set)
 
     def __post_init__(self):
+        for p in PRIORITY_LEVELS:
+            assert hasattr(self, p), 'expt_request object missing priority level: ' + p
         self.consistency_check()
 
     def add_vars(self, var_names, priority_level):
@@ -257,26 +262,37 @@ class expt_request:
         current_vars.update(var_names)
         # Remove any overlaps by ensuring a variable only appears at its highest
         # requested priority level.
+        self.high = self.high.difference(self.core)
+
+        self.medium = self.medium.difference(self.core)
         self.medium = self.medium.difference(self.high) # remove any high priority vars from medium priority group
+
+        self.low = self.low.difference(self.core)
         self.low = self.low.difference(self.high) # remove any high priority vars from low priority group
         self.low = self.low.difference(self.medium) # remove any medium priority vars from low priority group
+
         self.consistency_check()
 
     def consistency_check(self):
         # Confirm that priority sets don't overlap
-        assert self.high.intersection(self.medium.union(self.low)) == set()
-        assert self.medium.intersection(self.high.union(self.low)) == set()
-        assert self.low.intersection(self.high.union(self.medium)) == set()
+        # assert self.high.intersection(self.medium.union(self.low)) == set()
+        # assert self.medium.intersection(self.high.union(self.low)) == set()
+        # assert self.low.intersection(self.high.union(self.medium)) == set()
+        for this_p in PRIORITY_LEVELS:
+            other_p = [p for p in PRIORITY_LEVELS if p != this_p]
+            for p in other_p:
+                assert getattr(self, this_p).intersection( getattr(self, p) ) == set()
+
         # Also confirm object contains the expected priority levels
         pl = list(vars(self))
         pl.remove('experiment')
-        assert set(pl) == {'high', 'medium', 'low'}
+        assert set(pl) == set(PRIORITY_LEVELS)
 
     def __repr__(self):
         self.consistency_check()
         break_up_compound_name = not True
         l = [f'Variables (by priority) for experiment: {self.experiment}']
-        for p in ['high', 'medium', 'low']:
+        for p in PRIORITY_LEVELS:
             req = getattr(self, p)
             if len(req) == 0:
                 continue
@@ -308,6 +324,7 @@ class expt_request:
         sortby = str.lower
         return {
             self.experiment : {
+                'Core' : sorted(self.core, key=sortby),
                 'High' : sorted(self.high, key=sortby),
                 'Medium' : sorted(self.medium, key=sortby),
                 'Low' : sorted(self.low, key=sortby),
