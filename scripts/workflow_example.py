@@ -49,7 +49,7 @@ use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
 dq.DREQ_VERSION = use_dreq_version
-expt_vars = dq.get_requested_variables(content, use_opps, max_priority='Low', verbose=False)
+expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff='Low', verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:

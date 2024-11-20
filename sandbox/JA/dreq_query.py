@@ -557,7 +557,7 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
 
 
 
-def get_requested_variables(content, use_opps='all', max_priority='Low', verbose=True, consolidated=True):
+def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -573,9 +573,9 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
             'all' : include all available opportunities
             integers : include opportunities identified by their integer IDs
             strings : include opportunities identified by their titles
-    max_priority : str
-        Variables up to this priority level will be returned.
-        E.g., max_priority='Low' means all priority levels are returned.
+    priority_cutoff : str
+        Only return variables of equal or higher priority level than priority_cutoff.
+        E.g., priority_cutoff='Low' means all priority levels are returned.
 
     Returns
     -------
@@ -619,7 +619,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
             'inconsistent priority levels:\n  ' + str(all_priority_levels) + '\n  ' + str(priority_levels_from_table)
     else:
         PriorityLevel = None
-    m = all_priority_levels.index(max_priority)
+    m = all_priority_levels.index(priority_cutoff)
     priority_levels = all_priority_levels[:m+1]
 
     # Loop over Opportunities to get prioritized lists of variables
@@ -657,7 +657,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
 
 
 
-def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose=True):
+def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verbose=True):
     '''
     ******************
     *** DEPRECATED ***
@@ -676,9 +676,9 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
             'all' : include all available opportunities
             integers : include opportunities identified by their integer IDs
             strings : include opportunities identified by their titles
-    max_priority : str
-        Variables up to this priority level will be returned.
-        E.g., max_priority='Low' means all priority levels are returned.
+    priority_cutoff : str
+        Only return variables of equal or higher priority level than priority_cutoff.
+        E.g., priority_cutoff='Low' means all priority levels are returned.
 
     Returns
     -------
@@ -827,14 +827,14 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
 
     # Remove unwanted priority levels
     for expt_key, expt_var in expt_vars.items():
-        if max_priority.lower() == 'core':
+        if priority_cutoff.lower() == 'core':
             expt_var.pop('High')
             expt_var.pop('Medium')
             expt_var.pop('Low')
-        elif max_priority.lower() == 'high':
+        elif priority_cutoff.lower() == 'high':
             expt_var.pop('Medium')
             expt_var.pop('Low')
-        elif max_priority.lower() == 'medium':
+        elif priority_cutoff.lower() == 'medium':
             expt_var.pop('Low')
 
     for expt, req in expt_vars.items():
