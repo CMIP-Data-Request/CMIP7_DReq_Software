@@ -688,17 +688,21 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
 
     all_opps = tables['Opportunity']  # Opportunities table, specifying all defined data request opportunities
 
-    discard_empty_opps = True
-    if discard_empty_opps:
+    filter_opps = True
+    if filter_opps:
         # somehow empty opportunities are in the v1.0alpha base
         # this will cause problems below
         # discard them
-        discard_opp_id = []
+        discard_opp_id = set()
         for opp_id, opp in all_opps['records'].items():
             if len(opp) == 0:
-                discard_opp_id.append(opp_id)
+                # discard empty opportunities
+                discard_opp_id.add(opp_id)
+            if 'Status' in opp and opp['Status'] not in ['Accepted', 'Under review']:
+                discard_opp_id.add(opp_id)
         for opp_id in discard_opp_id:
             all_opps['records'].pop(opp_id)
+        del discard_opp_id
 
     if use_opp == 'all':
         # Include all opportunities
@@ -766,7 +770,16 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
             if isinstance(priority, list):  # True if priority is a link to a Priority Level record (instead of just a string)
                 assert len(priority) == 1, 'Variable Group should have one specified priority level'
                 prilev_id = priority[0]
-                prilev = tables['Priority Level']['records'][prilev_id]
+                
+                # prilev = tables['Priority Level']['records'][prilev_id]
+                # cluge for testing with latest working bases
+                pl_table = None
+                pl_try = ['Priority Level', 'Priority level']
+                for s in pl_try:
+                    if s in tables:
+                        pl_table = tables[s]
+                        break
+                prilev = pl_table['records'][prilev_id]
                 priority = prilev['Name']
                 assert priority in priority_levels, 'Unrecognized priority level: ' + priority
                 del prilev
@@ -810,7 +823,7 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
 
     request_dict = {
         'Header' : {
-            'Opportunities' : [all_opps['records'][opp_id]['Title of Opportunity'] for opp_id in use_opp],
+            'Opportunities' : sorted([all_opps['records'][opp_id]['Title of Opportunity'] for opp_id in use_opp]),
             'dreq version' : DREQ_VERSION,
         },
         'experiment' : expt_vars,
