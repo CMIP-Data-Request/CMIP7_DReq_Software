@@ -130,7 +130,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
     for old,new in change_table_names.items():
         assert new not in base, 'New table name already exists: ' + new
         if old not in base:
-            print(f'Unavailable table {old}, skipping name change')
+            # print(f'Unavailable table {old}, skipping name change')
             continue
         base[new] = base[old]
         base.pop(old)
@@ -364,7 +364,7 @@ def _create_dreq_table_objects(content, working_base='Opportunities'):
 # Functions to interrogate the data request, e.g. get variables requested for
 # each experiment.
 
-def get_opp_ids(use_opps, Opps, verbose=False):
+def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
     '''
     Return list of unique opportunity identifiers.
 
@@ -391,6 +391,22 @@ def get_opp_ids(use_opps, Opps, verbose=False):
                     opp_ids.append(title2id[title])
                 else:
                     print(f'\n* WARNING *    Opportunity not found: {title}\n')
+    assert len(set(opp_ids)) == len(opp_ids), 'found repeated opportunity ids'
+    if quality_control:
+        valid_opp_status = ['Accepted', 'Under review']
+        discard_opp_id = set()
+        for opp_id in opp_ids:
+            opp = Opps.get_record(opp_id)
+            # print(opp)
+            # if len(opp) == 0:
+            #     # discard empty opportunities
+            #     discard_opp_id.add(opp_id)
+            if hasattr(opp, 'status') and opp.status not in valid_opp_status:
+                discard_opp_id.add(opp_id)
+        for opp_id in discard_opp_id:
+            Opps.delete_record(opp_id)
+            opp_ids.remove(opp_id)
+        del discard_opp_id
     if verbose:
         if len(opp_ids) > 0:
             print('Found {} Opportunities:'.format(len(opp_ids)))
@@ -477,7 +493,8 @@ def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
     '''
     # Follow links to experiment groups to find the names of requested experiments
     opp_expts = set() # list to store names of experiments requested by this Opportunity
-    print('  Experiment Groups ({}):'.format(len(opp.experiment_groups)))
+    if verbose:
+        print('  Experiment Groups ({}):'.format(len(opp.experiment_groups)))
     for link in opp.experiment_groups:
         # expt_group = base[link.table_name].records[link.record_id]
         expt_group = ExptGroups.records[link.record_id]
@@ -485,8 +502,8 @@ def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
         if not hasattr(expt_group, 'experiments'):
             continue
 
-        n = len(expt_group.experiments)
-        print(f'    {expt_group.name}  ({n} experiments)')
+        if verbose:
+            print(f'    {expt_group.name}  ({len(expt_group.experiments)} experiments)')
 
         for link in expt_group.experiments:
             expt = Expts.records[link.record_id]
@@ -519,7 +536,8 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
     '''
     # Follow links to variable groups to find names of requested variables
     opp_vars = {p : set() for p in priority_levels}
-    print('  Variable Groups ({}):'.format(len(opp.variable_groups)))
+    if verbose:
+        print('  Variable Groups ({}):'.format(len(opp.variable_groups)))
     for link in opp.variable_groups:
         var_group = VarGroups.records[link.record_id]
 
@@ -527,8 +545,8 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
         if priority_level not in priority_levels:
             continue
 
-        n = len(var_group.variables)
-        print(f'    {var_group.name}  ({n} variables, {priority_level} priority)')
+        if verbose:
+            print(f'    {var_group.name}  ({len(var_group.variables)} variables, {priority_level} priority)')
 
         for link in var_group.variables:
             var = Vars.records[link.record_id]
@@ -539,7 +557,7 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
 
 
 
-def get_requested_variables(content, use_opps='all', max_priority='Low', verbose=True):
+def get_requested_variables(content, use_opps='all', max_priority='Low', verbose=True, consolidated=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -579,7 +597,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
             base = content
         else:
             # render tables as dreq_table objects
-            base = create_dreq_tables_for_request(content)
+            base = create_dreq_tables_for_request(content, consolidated=consolidated)
     else:
         raise TypeError('Expect dict as input')
 
@@ -608,7 +626,9 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
     request = {} # dict to hold aggregated request
     for opp_id in opp_ids:
         opp = Opps.records[opp_id] # one record from the Opportunity table
-        print(f'Opportunity: {opp.title}')
+
+        if verbose:
+            print(f'Opportunity: {opp.title}')
 
         opp_expts = get_opp_expts(opp, ExptGroups, Expts, verbose=verbose)
         opp_vars = get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel, verbose=verbose)
@@ -623,16 +643,17 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
             for priority_level, var_names in opp_vars.items():
                 request[expt_name].add_vars(var_names, priority_level)
 
-    request_dict = {
+    opp_titles = sorted([Opps.get_record(opp_id).title for opp_id in opp_ids])
+    requested_vars = {
         'Header' : {
-            'Opportunities' : use_opps,
+            'Opportunities' : opp_titles,
             'dreq version' : DREQ_VERSION,
         },
         'experiment' : {},
     }
     for expt_name, expt_req in request.items():
-        request_dict['experiment'].update(expt_req.to_dict())
-    return request_dict
+        requested_vars['experiment'].update(expt_req.to_dict())
+    return requested_vars
 
 
 
@@ -821,12 +842,12 @@ def _get_requested_variables(content, use_opp='all', max_priority='Low', verbose
         for p in req:
             req[p] = sorted(req[p], key=str.lower)
 
-    request_dict = {
+    opp_titles = sorted([all_opps['records'][opp_id]['Title of Opportunity'] for opp_id in use_opp])
+    requested_vars = {
         'Header' : {
-            'Opportunities' : sorted([all_opps['records'][opp_id]['Title of Opportunity'] for opp_id in use_opp]),
+            'Opportunities' : opp_titles,
             'dreq version' : DREQ_VERSION,
         },
         'experiment' : expt_vars,
     }
-    return request_dict
-
+    return requested_vars
