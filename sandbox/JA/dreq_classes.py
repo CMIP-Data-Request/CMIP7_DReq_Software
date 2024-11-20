@@ -210,6 +210,18 @@ class dreq_table:
         else:
             raise TypeError(f'Error specifying record to retrieve from table {self.table_name}')
     
+    def get_attr_record(self, attr, value, unique=True):
+        if attr in self.attr2field:
+            records = [record for record in self.records.values() if getattr(record, attr) == value]
+            if len(records) == 0:
+                raise Exception(f'No record found for {attr}={value}')
+            if unique:
+                return records[0]
+            else:
+                return records
+        else:
+            raise Exception(f'Record attribute does not exist: {attr}')
+
     def delete_record(self, record_id):
         self.records.pop(record_id)
         self.record_ids.remove(record_id)

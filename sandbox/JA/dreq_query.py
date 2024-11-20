@@ -377,6 +377,7 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
         table object representing the opportunities table
     '''
     opp_ids = []
+    use_opps = sorted(set(use_opps))
     records = Opps.records
     if use_opps == 'all':
         # Include all opportunities
@@ -390,8 +391,11 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
                 if title in title2id:
                     opp_ids.append(title2id[title])
                 else:
-                    print(f'\n* WARNING *    Opportunity not found: {title}\n')
+                    # print(f'\n* WARNING *    Opportunity not found: {title}\n')
+                    raise Exception(f'\n* ERROR *    Opportunity not found: {title}\n')
+
     assert len(set(opp_ids)) == len(opp_ids), 'found repeated opportunity ids'
+
     if quality_control:
         valid_opp_status = ['Accepted', 'Under review']
         discard_opp_id = set()
@@ -407,6 +411,7 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
             Opps.delete_record(opp_id)
             opp_ids.remove(opp_id)
         del discard_opp_id
+
     if verbose:
         if len(opp_ids) > 0:
             print('Found {} Opportunities:'.format(len(opp_ids)))
@@ -415,6 +420,7 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
                 print('  ' + opp.title)
         else:
             print('No Opportunities found')
+
     return opp_ids
 
 def get_var_group_priority(var_group, PriorityLevel=None):
