@@ -12,7 +12,7 @@ The module has two basic sections:
 # import dreq_classes
 # reload(dreq_classes)
 
-from dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME
+from dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS
 
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
 
@@ -592,7 +592,7 @@ def get_requested_variables(content, use_opps='all', max_priority='Low', verbose
     Vars = base['Variables']
 
     # all_priority_levels = ['Core', 'High', 'Medium', 'Low']
-    all_priority_levels = [s.capitalize() for s in dreq_classes.PRIORITY_LEVELS]
+    all_priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
 
     if 'Priority Level' in base:
         PriorityLevel = base['Priority Level']
