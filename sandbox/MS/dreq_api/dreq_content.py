@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import sys
 import time
 import warnings
 from filecmp import cmp
@@ -10,6 +11,16 @@ import consolidate_export as ce
 import pooch
 import requests
 from bs4 import BeautifulSoup
+from mapping_table import mapping_table
+
+# TODO: remove after initial "sandbox" dev period
+#add_paths = ["../../JA", "../../../../CMIP7_DReq_Software_gr/sandbox/GR/"]
+add_paths = ["../../JA", "../../GR"]
+for path in add_paths:
+    if path not in sys.path:
+        sys.path.append(path)
+
+from logger import get_logger  # noqa
 
 # Suppress pooch info output
 pooch.get_logger().setLevel("WARNING")
@@ -374,6 +385,7 @@ def retrieve(version="latest_stable", **kwargs):
     Warning
         If the specified version could not be downloaded or (if applicable) updated.
     """
+    logger = get_logger()
     if version == "latest":
         versions = [_get_latest_version(stable=False)]
     elif version == "latest_stable":
@@ -430,7 +442,7 @@ def retrieve(version="latest_stable", **kwargs):
             except Exception as e:
                 warnings.warn(f"Could not retrieve version '{version}': {e}")
                 continue
-            print(f"Retrieved version '{version}'.")
+            logger.info(f"Retrieved version '{version}'.")
 
         # or if the version is "dev" or a branch rather than a tag
         elif version == "dev" or version not in get_versions():
@@ -454,7 +466,7 @@ def retrieve(version="latest_stable", **kwargs):
                 # Compare files
                 if not cmp(json_path, json_path_temp, shallow=False):
                     move(json_path_temp, json_path)
-                    print(f"Updated version '{version}'.")
+                    logger.info(f"Updated version '{version}'.")
                 else:
                     os.remove(json_path_temp)
             except Exception as e:
@@ -491,6 +503,7 @@ def delete(version="all", keep_latest=False, **kwargs):
     Warning
         If 'keep_latest' option is active when 'version' is not 'all'.
     """
+    logger = get_logger()
     # Get locally cached versions
     local_versions = get_cached(**kwargs)
 
@@ -518,10 +531,10 @@ def delete(version="all", keep_latest=False, **kwargs):
 
     # Deletion
     if local_versions:
-        print("Deleting the following version(s):")
-        print(local_versions)
+        logger.info("Deleting the following version(s):")
+        logger.info(local_versions)
     else:
-        print("No version(s) found to delete.")
+        logger.info("No version(s) found to delete.")
         return
 
     # Compile file paths
@@ -544,7 +557,7 @@ def delete(version="all", keep_latest=False, **kwargs):
     for f in cached_files:
         if os.path.isfile(f):
             if "dryrun" in kwargs and kwargs["dryrun"]:
-                print(f"Dryrun: would delete '{f}'.")
+                logger.info(f"Dryrun: would delete '{f}'.")
             else:
                 os.remove(f)
 
@@ -561,21 +574,22 @@ def load(version="latest_stable", **kwargs):
     Returns:
         dict: of the loaded JSON file.
     """
+    logger = get_logger()
     if version == "all":
         raise ValueError("Cannot load 'all' versions.")
 
     version_dict = retrieve(version, **kwargs)
     if version_dict == {}:
-        print(f"Version '{version}' could not be loaded.")
+        logger.info(f"Version '{version}' could not be loaded.")
         return {}
     else:
         json_path = next(iter(version_dict.values()))
-        print(f"Loading version {next(iter(version_dict.keys()))}'.")
+        logger.info(f"Loading version {next(iter(version_dict.keys()))}'.")
     with open(json_path) as f:
         if "consolidate" in kwargs:
             if kwargs["consolidate"]:
-                return ce.map_data(json.load(f), ce.mapping_table)
+                return ce.map_data(json.load(f), mapping_table)
             else:
                 return json.load(f)
         else:
-            return ce.map_data(json.load(f), ce.mapping_table)
+            return ce.map_data(json.load(f), mapping_table)
