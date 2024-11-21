@@ -6,13 +6,13 @@ import warnings
 
 # TODO: remove after initial "sandbox" dev period
 #add_paths = ["../../JA", "../../../../CMIP7_DReq_Software_gr/sandbox/GR/"]
-add_paths = ["../../JA", "../../GR"]
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
+# add_paths = ["../../JA", "../../GR"]
+# for path in add_paths:
+#     if path not in sys.path:
+#         sys.path.append(path)
 
-from logger import get_logger  # noqa
-from mapping_table import version_consistency
+from sandbox.GR.logger import get_logger  # noqa
+from .mapping_table import version_consistency
 
 # UID generation
 default_count = 0
