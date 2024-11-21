@@ -39,7 +39,7 @@ def parse_args():
 
     dreq_res_dir = os.path.join(os.path.dirname(str(dreq_api.__file__)),'dreq_res')
     choices = os.listdir(dreq_res_dir)
-    parser = argparse.ArgumentParser(prog="export_dreq_lists_json")
+    parser = argparse.ArgumentParser()
     parser.add_argument('dreq_version', choices=choices, help="data request version")
     parser.add_argument('--opportunities_file', type=str, help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
     parser.add_argument('--all_opportunities', action='store_true', help="Respond to all opporunities")
