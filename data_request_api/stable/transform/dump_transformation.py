@@ -53,9 +53,9 @@ def correct_dictionaries(input_dict, is_record_ids=False):
         raise TypeError(f"Deal with dict types, not {type(input_dict).__name__}")
 
 
-def transform_content_three_bases(content, version):
+def transform_content_three_bases(content):
     logger = get_logger()
-    if isinstance(content, dict) and len(content) > 2:
+    if isinstance(content, dict):
         new_content = dict()
         opportunity_table = [elt for elt in list(content) if "opportunities" in elt.lower()][0]
         variables_table = [elt for elt in list(content) if "variables" in elt.lower()][0]
@@ -96,6 +96,14 @@ def transform_content_three_bases(content, version):
             new_content["Variables"]["records"][var_id]["Physical Parameter"] = \
                 [new_physical_parameters_ids[old_physical_parameters_ids[elt]] for elt in
                  new_content["Variables"]["records"][var_id]["Physical Parameter"]]
+        # Rename some entries
+        for record_id in list(new_content["Cell Methods"]["records"]):
+            if "Structure" in new_content["Cell Methods"]["records"][record_id]:
+                new_content["Cell Methods"]["records"][record_id]["Structures"] = \
+                    new_content["Cell Methods"]["records"][record_id].pop("Structure")
+            if "Comments" in new_content["Cell Methods"]["records"][record_id]:
+                new_content["Cell Methods"]["records"][record_id]["Variable Comments"] = \
+                    new_content["Cell Methods"]["records"][record_id].pop("Comments")
         # Create a new frequency entry if none
         if "CMIP7 Frequency" not in new_content:
             if "Frequency" not in new_content:
@@ -398,7 +406,7 @@ def transform_content(content, version):
             logger.info("Single database case - no structure transformation needed")
         elif len(content) in [3, 4]:
             logger.info("Several databases case - structure transformation needed")
-            content = transform_content_three_bases(content, version=version)
+            content = transform_content_three_bases(content)
         else:
             raise ValueError(f"Could not manage the {len(content):d} bases export file.")
         # Correct dictionaries
