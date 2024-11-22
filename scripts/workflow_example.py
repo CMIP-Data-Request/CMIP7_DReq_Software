@@ -19,11 +19,11 @@ To run interactively in ipython:
     run -i workflow_example.py
 
 '''
-
 import sys
 import json
 import os
 import hashlib
+from collections import OrderedDict
 add_paths = ['../sandbox/MS/dreq_api/', '../sandbox/JA', '../sandbox/GR']
 for path in add_paths:
     if path not in sys.path:
@@ -68,9 +68,14 @@ if len(expt_vars['experiment']) > 0:
         n_total = sum(d.values())
         print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
 
+    # Write results to json file
+    Header = OrderedDict({
+        'Opportunities' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
+    })
+
     m = priority_levels.index(priority_cutoff)+1
-    expt_vars['Header'].update({
-        'priority levels' : priority_levels[:m]
+    Header.update({
+        'Priority levels' : priority_levels[:m]
     })
     for req in expt_vars['experiment'].values():
         for p in priority_levels[m:]:
@@ -81,15 +86,29 @@ if len(expt_vars['experiment']) > 0:
     content_path = dc._dreq_content_loaded['json_path']
     with open(content_path, 'rb') as f:
         content_hash = hashlib.sha256(f.read()).hexdigest()
-    expt_vars['Header'].update({
+    Header.update({
+        'dreq version' : use_dreq_version,
         'dreq content file' : os.path.basename(os.path.normpath(content_path)),
         'dreq content sha256 hash' : content_hash,
     })
 
+    out = {
+        'Header' : Header,
+        'experiment' : OrderedDict(),
+    }
+    expt_names = sorted(expt_vars['experiment'].keys(), key=str.lower)
+    for expt_name in expt_names:
+        out['experiment'][expt_name] = OrderedDict()
+        req = expt_vars['experiment'][expt_name]
+        for p in priority_levels:
+            if p in req:
+                out['experiment'][expt_name][p] = req[p]
+
     # Write the results to json
     filename = f'requested_{use_dreq_version}.json'
     with open(filename, 'w') as f:
-        json.dump(expt_vars, f, indent=4, sort_keys=True)
+        # json.dump(expt_vars, f, indent=4, sort_keys=True)
+        json.dump(out, f, indent=4)
         print('\nWrote requested variables to ' + filename)
 
 else:
