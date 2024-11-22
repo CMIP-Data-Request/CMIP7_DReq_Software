@@ -6,7 +6,9 @@ import sys
 import json
 import os
 import hashlib
-add_paths = ['../MS/dreq_api/', '../GR/']
+add_paths = []
+add_paths.append('../content/dreq_api')
+add_paths.append('../transform')
 for path in add_paths:
     if path not in sys.path:
         sys.path.append(path)

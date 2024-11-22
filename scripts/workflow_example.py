@@ -24,7 +24,10 @@ import json
 import os
 import hashlib
 from collections import OrderedDict
-add_paths = ['../sandbox/MS/dreq_api/', '../sandbox/JA', '../sandbox/GR']
+add_paths = []
+add_paths.append('../data_request_api/stable/content/dreq_api')
+add_paths.append('../data_request_api/stable/query')
+add_paths.append('../data_request_api/stable/transform')
 for path in add_paths:
     if path not in sys.path:
         sys.path.append(path)
