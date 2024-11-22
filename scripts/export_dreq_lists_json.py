@@ -1,35 +1,19 @@
 #!/usr/bin/env python
-'''
-Example script for basic use of CMIP7 data request content
-
-Getting started
----------------
-First create an environment with the required dependencies:
-
-    conda env create -n my_dreq_env --file env.yml
-
-(replacing my_dreq_env with your preferred env name). Then activate it and run the script:
-
-    conda activate my_dreq_env
-    python workflow_example.py
-
-will load the data request content and save a json file of requested variables in the current dir.
-To run interactively in ipython:
-
-    run -i workflow_example.py
-
-'''
+"""
+Command line interface for retrieving simple variable lists from the data request.
+"""
 
 import sys
 import json
 import os
 import argparse
 
+# The following should be removed once python packaging is completed.
 sys.path.append(os.path.join(os.path.dirname('__file__'), '..'))
 
-import sandbox.MS.dreq_api as dreq_api
-import sandbox.MS.dreq_api.dreq_content as dc
-import sandbox.JA.dreq_query as dq
+import data_request_api.stable.content.dreq_api as dreq_api
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+import data_request_api.stable.query.dreq_query as dq
 
 
 def parse_args():
@@ -37,10 +21,8 @@ def parse_args():
     Parse command line arguments
     """
 
-    dreq_res_dir = os.path.join(os.path.dirname(str(dreq_api.__file__)),'dreq_res')
-    choices = os.listdir(dreq_res_dir)
     parser = argparse.ArgumentParser()
-    parser.add_argument('dreq_version', choices=choices, help="data request version")
+    parser.add_argument('dreq_version', choices=dc.get_versions(), help="data request version")
     parser.add_argument('--opportunities_file', type=str, help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
     parser.add_argument('--all_opportunities', action='store_true', help="Respond to all opporunities")
     parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments')

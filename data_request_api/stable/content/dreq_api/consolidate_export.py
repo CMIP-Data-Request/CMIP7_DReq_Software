@@ -11,7 +11,7 @@ import warnings
 #     if path not in sys.path:
 #         sys.path.append(path)
 
-from sandbox.GR.logger import get_logger  # noqa
+from ...transform.logger import get_logger  # noqa
 from .mapping_table import version_consistency
 
 # UID generation

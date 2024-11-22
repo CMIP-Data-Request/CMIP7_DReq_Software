@@ -20,7 +20,7 @@ from .mapping_table import mapping_table
 #    if path not in sys.path:
 #        sys.path.append(path)
 
-from sandbox.GR.logger import get_logger  # noqa
+from ...transform.logger import get_logger  # noqa
 
 
 # Suppress pooch info output
