@@ -4,6 +4,8 @@ Extract metadata of CMOR variables and write to json
 '''
 import sys
 import json
+import os
+import hashlib
 add_paths = ['../MS/dreq_api/', '../GR/']
 for path in add_paths:
     if path not in sys.path:

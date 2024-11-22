@@ -22,6 +22,8 @@ To run interactively in ipython:
 
 import sys
 import json
+import os
+import hashlib
 add_paths = ['../sandbox/MS/dreq_api/', '../sandbox/JA', '../sandbox/GR']
 for path in add_paths:
     if path not in sys.path:
@@ -49,7 +51,8 @@ use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
 dq.DREQ_VERSION = use_dreq_version
-expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff='Low', verbose=False)
+priority_cutoff = 'Low'
+expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff=priority_cutoff, verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:
@@ -65,8 +68,26 @@ if len(expt_vars['experiment']) > 0:
         n_total = sum(d.values())
         print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
 
+    m = priority_levels.index(priority_cutoff)+1
+    expt_vars['Header'].update({
+        'priority levels' : priority_levels[:m]
+    })
+    for req in expt_vars['experiment'].values():
+        for p in priority_levels[m:]:
+            assert req[p] == []
+            req.pop(p)
+
+    # Get provenance of content to include in the Header
+    content_path = dc._dreq_content_loaded['json_path']
+    with open(content_path, 'rb') as f:
+        content_hash = hashlib.sha256(f.read()).hexdigest()
+    expt_vars['Header'].update({
+        'dreq content file' : os.path.basename(os.path.normpath(content_path)),
+        'dreq content sha256 hash' : content_hash,
+    })
+
     # Write the results to json
-    filename = 'requested.json'
+    filename = f'requested_{use_dreq_version}.json'
     with open(filename, 'w') as f:
         json.dump(expt_vars, f, indent=4, sort_keys=True)
         print('\nWrote requested variables to ' + filename)
