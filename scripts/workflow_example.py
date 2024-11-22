@@ -70,12 +70,13 @@ if len(expt_vars['experiment']) > 0:
 
     # Write results to json file
     Header = OrderedDict({
-        'Opportunities' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
+        'Description' : 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
+        'Opportunities supported' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
     })
 
     m = priority_levels.index(priority_cutoff)+1
     Header.update({
-        'Priority levels' : priority_levels[:m]
+        'Priority levels supported' : priority_levels[:m]
     })
     for req in expt_vars['experiment'].values():
         for p in priority_levels[m:]:
