@@ -70,7 +70,7 @@ def transform_content_one_base(content):
             "Frequency": ["Table Identifiers", "Variables"],
             "CMIP7 Frequency": ["Table Identifiers", "Variables"],
             "Glossary": ["Opportunity", ],
-            "MIPs": ["Variable Group", ],
+            "MIPs": ["Variable Group", "Variable Groups of interest", "Variable Groups", "Variable Group of interest"],
             "Modelling Realm": ["Variables", ],
             "Opportunity": list(),
             "Opportunity/Variable Group Comments": ["Experiment Groups", "Opportunities", "Theme", "Variable Groups"],
@@ -139,7 +139,7 @@ def transform_content_one_base(content):
                     value = copy.deepcopy(content[subelt]["records"][uid])
                     data_request[new_subelt][uid] = dict(
                         variables=value.pop("Variables", list()),
-                        mips=value.pop("MIPs", list()),
+                        mips=value.pop("MIPs", value.pop("Of interest to MIPs", list())),
                         priority=value.pop("Priority Level", None)
                     )
                     vocabulary_server[new_subelt][uid] = value
