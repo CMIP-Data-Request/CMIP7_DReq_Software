@@ -28,7 +28,8 @@ from collections import defaultdict
 
 import six
 
-add_paths = ['../sandbox/MS/dreq_api/', '../sandbox/JA', '../sandbox/GR']
+add_paths = ['../data_request_api/stable/content/dreq_api/', '../data_request_api/stable/query',
+             '../data_request_api/stable/transform']
 for path in add_paths:
     if path not in sys.path:
         sys.path.append(path)
@@ -45,18 +46,19 @@ change_log_level("debug")
 
 ### Step 1: Get the content of the DR
 # Define content version to be used
-use_dreq_version = 'v1.0beta'
+use_dreq_version = 'v1.0'
 # use_dreq_version = "first_export"
 # use_dreq_version = 'new_export_15Oct2024'
 # Download specified version of data request content (if not locally cached)
 # dc.retrieve(use_dreq_version)
 # Load content into python dict
 # content = dc.load(use_dreq_version)
+use_export_version = "release"
 
 ### Step 2: Load it into the software of the DR
 # DR = DataRequest.from_input(json_input=content, version=use_dreq_version)
-DR = DataRequest.from_separated_inputs(DR_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/DR_content.json",
-                                       VS_input=f"../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}/VS_content.json")
+DR = DataRequest.from_separated_inputs(DR_input=f"../data_request_api/stable/content/dreq_api/dreq_res/{use_dreq_version}/DR_{use_export_version}_content.json",
+                                       VS_input=f"../data_request_api/stable/content/dreq_api/dreq_res/{use_dreq_version}/VS_{use_export_version}_content.json")
 
 ### Step 3: Get information from the DR
 # -> Print DR content
@@ -79,8 +81,12 @@ for elt in DR.get_variables_groups():
 rep = defaultdict(lambda: defaultdict(set))
 for elt in DR.get_variables_groups():
     for var in elt.get_variables():
-        param = var.physical_parameter["name"]
-        freq = var.frequency["name"]
+        param = var.physical_parameter
+        if isinstance(param, dict):
+            param = param["name"]
+        freq = var.frequency
+        if isinstance(freq, dict):
+            freq = freq["name"]
         realm = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.modelling_realm])
         spt_shp = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.spatial_shape])
         tmp_shp = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.temporal_shape])
