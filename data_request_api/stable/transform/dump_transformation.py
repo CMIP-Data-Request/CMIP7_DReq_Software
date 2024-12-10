@@ -120,6 +120,20 @@ def transform_content_three_bases(content):
                 for theme_id in copy.deepcopy(new_content["Opportunity"]["records"][opportunity_id]["Themes"]):
                     if theme_id not in new_content["Data Request Themes"]["records"]:
                         new_content["Data Request Themes"]["records"][theme_id] = dict(name=theme_id, uid=theme_id)
+            # Harmonise record ids through bases
+            logger.info("Harmonise bases content record ids")
+            content_str = json.dumps(new_content)
+            for id in sorted(list(old_variables_ids)):
+                content_str = re.sub(f'"{id}"', f'"{new_variables_ids[old_variables_ids[id]]}"', content_str)
+            for id in sorted(list(old_physical_parameters_ids)):
+                content_str = re.sub(f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"',
+                                     content_str)
+            new_content = json.loads(content_str)
+            # Return the content
+            return {f"Data Request {version}": new_content}
+        else:
+            logger.error(f"Deal with dict types, not {type(content).__name__}")
+            raise TypeError(f"Deal with dict types, not {type(content).__name__}")
         # Harmonise record ids through bases
         logger.info("Harmonise bases content record ids")
         content_str = json.dumps(new_content)
@@ -161,7 +175,7 @@ def transform_content_one_base(content):
         # Tidy the content of the export file
         default_patterns_to_remove = [r".*\(from.*\).*", r".*proposed.*", r".*review.*", r".*--.*",
                                       r".*created.*", r".*rank.*", ".*count.*", ".*alert.*", ".*tagged.*", ".*unique.*",
-                                      "last_modified.*", ".*validation.*", ".*number.*", ".*\(mj\).*"]
+                                      "last_modified.*", ".*validation.*", ".*number.*"]
         to_remove_keys_patterns = {
             "cell_measures": [r"variables", "structure"],
             "cell_methods": [r"structure", r"variables"],
@@ -393,9 +407,6 @@ def split_content_one_base(content):
                                 raise TypeError(f"Could not deal with target type {type(target_type)}")
                         data_request[subelt][uid][key] = value
         return data_request, content
-    else:
-        logger.error(f"Deal with dict types, not {type(content).__name__}")
-        raise TypeError(f"Deal with dict types, not {type(content).__name__}")
 
 
 def transform_content(content, version):
