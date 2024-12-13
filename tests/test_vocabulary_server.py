@@ -11,7 +11,7 @@ import unittest
 import sys
 
 
-sys.path.append("sandbox/GR")
+sys.path.append('../data_request_api/stable/transform')
 
 
 from vocabulary_server import VSObject, Experiment, Variable, VocabularyServer
@@ -20,7 +20,7 @@ from vocabulary_server import VSObject, Experiment, Variable, VocabularyServer
 class TestVSObject(unittest.TestCase):
 
 	def setUp(self):
-		self.vs = VocabularyServer.from_input("tests/test_datasets/VS_input.json")
+		self.vs = VocabularyServer.from_input("test_datasets/VS_output.json")
 		self.obj_str = "VSObject: my_id"
 
 	def test_init(self):
@@ -68,7 +68,7 @@ class TestVSObject(unittest.TestCase):
 class TestExperiment(unittest.TestCase):
 
 	def setUp(self):
-		self.vs = VocabularyServer.from_input("tests/test_datasets/VS_input.json")
+		self.vs = VocabularyServer.from_input("test_datasets/VS_output.json")
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -101,7 +101,7 @@ class TestExperiment(unittest.TestCase):
 		with self.assertRaises(TypeError):
 			Experiment.from_input(id="my_id", vs=self.vs, name="my_name")
 
-		exp = Experiment.from_input(id="my_id", vs=self.vs, input_dict=dict(experiment="my_name"))
+		exp = Experiment.from_input(id="my_id", vs=self.vs, input_dict=dict(name="my_name"))
 
 	def test_properties(self):
 		exp = Experiment(id="my_id", vs=self.vs, name="my_name")
@@ -118,7 +118,7 @@ class TestExperiment(unittest.TestCase):
 
 class TestVariable(unittest.TestCase):
 	def setUp(self):
-		self.vs = VocabularyServer.from_input("tests/test_datasets/VS_input.json")
+		self.vs = VocabularyServer.from_input("test_datasets/VS_output.json")
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -149,52 +149,31 @@ class TestVariable(unittest.TestCase):
 			Variable.from_input(id="my_id", vs=self.vs, name="my_name")
 
 		var = Variable.from_input(id="my_id", vs=self.vs,
-		                          input_dict={"coumpound_name": "my_name", "type": "test",
-		                                      "cf_standard_name_(from_physical_parameter)": "default_76"})
-		self.assertEqual(var.cf_standard_name["name"], "upward_sea_water_velocity")
+		                          input_dict={"name": "my_name", "type": "test"})
 		self.assertEqual(var.content_type, "test")
-
-		var = Variable.from_input(id="my_id", vs=self.vs,
-		                          input_dict={"content_type": "test", "type": "toto", "cf_standard_name": "default_76",
-		                                      "cf_standard_name_(from_physical_parameter)": "titi"})
-		self.assertEqual(var.content_type, "test")
-		self.assertEqual(var.cf_standard_name["name"], "upward_sea_water_velocity")
+		self.assertEqual(var.name, "my_name")
 
 	def test_properties(self):
-		test_var_dict = {"uid": "1aab80fc-b006-11e6-9289-ac72891c3257",
-		                 "cell_measures": ["default_110"],
-		                 "cell_methods": ["CellMethods::amse-tmn"],
-		                 "cf_standard_name": ["default_76"],
-		                 "cmip7_frequency": ["default_99"],
-		                 "compound_name": "Omon.wo",
+		test_var_dict = {"cell_measures": ["link::default_4"],
+		                 "cell_methods": ["link::CellMethods::amse-tmn"],
+		                 "cmip7_frequency": ["link::default_113"],
 		                 "description": "Prognostic z-ward velocity component resolved by the model.\n",
-		                 "esm-bcv_1.3": ["default_244"],
-		                 "horizontal_mesh": 68400,
-		                 "link_to_ranking": ["default_525"],
-		                 "min_rank": [32],
-		                 "modelling_realm": ["default_422"],
-		                 "name": "undef",
-		                 "physical_parameter": ["d476e6113f5c466d27fd3aa9e9c35411"],
+		                 "esm-bcv_1.3": ["link::default_240"],
+		                 "modelling_realm": ["link::default_422"],
+		                 "name": "Omon.wo",
+		                 "physical_parameter": ["link::d476e6113f5c466d27fd3aa9e9c35411"],
 		                 "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure "
 		                                    "vertical grid if depth or pressure are not native. Those who wish to "
 		                                    "record vertical velocities and vertical fluxes on ocean half-levels may do"
 		                                    " so. If using CMOR3 you will be required to specify artificial bounds "
 		                                    "(e.g. located at full model levels) to avoid an error exit.\n",
-		                 "proposed_cf_standard_name_(from_physical_parameter)_2": [None],
 		                 "provenance": "Omon ((isd.003))",
-		                 "size": 410.4,
-		                 "spatial_shape": ["a6562c2a-8883-11e5-b571-ac72891c3257"],
-		                 "status_(from_physical_parameter)": ["Existing physical parameter"],
-		                 "structure_label": ["str-157"],
-		                 "structure_title": ["default_669"],
-		                 "table": ["MIPtable::Omon"],
-		                 "table_section_(cmip6)": "Omon_3d",
-		                 "temporal_sampling_rate": 120,
-		                 "temporal_shape": ["cf34c974-80be-11e6-97ee-ac72891c3257"],
+		                 "spatial_shape": ["link::a6562c2a-8883-11e5-b571-ac72891c3257"],
+		                 "structure_title": ["link::default_498"],
+		                 "table": ["link::MIPtable::Omon"],
+		                 "temporal_shape": ["link::cf34c974-80be-11e6-97ee-ac72891c3257"],
 		                 "title": "Sea Water Vertical Velocity",
-		                 "content_type": "real",
-		                 "vertical_dimension": 50
-		                 }
+		                 "type": "real"}
 		test_var_dict_2 = copy.deepcopy(test_var_dict)
 		del test_var_dict_2["spatial_shape"]
 		del test_var_dict_2["modelling_realm"]
@@ -214,14 +193,12 @@ class TestVariable(unittest.TestCase):
 		self.assertEqual(var2.cell_measures, [{'name': 'area: areacello volume: volcello'}, ])
 
 		self.assertEqual(var.cell_methods, [{'brand_id': 'sea', 'cell_methods': 'area: mean where sea time: mean',
-		                                     'label': 'amse-tmn', 'name': 'undef', 'regex': 1,
-		                                     'title': 'Time Mean over Sea'}, ])
+		                                     'name': 'amse-tmn', 'regex': 1, 'title': 'Time Mean over Sea'}, ])
 		self.assertEqual(var2.cell_methods, [{'brand_id': 'sea', 'cell_methods': 'area: mean where sea time: mean',
-		                                     'label': 'amse-tmn', 'name': 'undef', 'regex': 1,
-		                                     'title': 'Time Mean over Sea'}, ])
+		                                     'name': 'amse-tmn', 'regex': 1, 'title': 'Time Mean over Sea'}, ])
 
-		self.assertEqual(var.compound_name, "Omon.wo")
-		self.assertEqual(var2.compound_name, "Omon.wo")
+		self.assertEqual(var.name, "Omon.wo")
+		self.assertEqual(var2.name, "Omon.wo")
 
 		self.assertEqual(var.content_type, "real")
 		self.assertEqual(var2.content_type, "real")
@@ -229,111 +206,89 @@ class TestVariable(unittest.TestCase):
 		self.assertEqual(var.description, "Prognostic z-ward velocity component resolved by the model.\n")
 		self.assertEqual(var2.description, "Prognostic z-ward velocity component resolved by the model.\n")
 
-		self.assertEqual(var.frequency, {'description': 'monthly mean samples', 'name': 'mon',
-		                                  'proposed_new_freq': 'mon', 'sampling_rate': 120}, )
-		self.assertEqual(var2.frequency, {'description': 'monthly mean samples', 'name': 'mon',
-		                                  'proposed_new_freq': 'mon', 'sampling_rate': 120}, )
+		self.assertEqual(var.frequency, {'description': 'monthly mean samples', 'name': 'mon', 'sampling_rate': 120}, )
+		self.assertEqual(var2.frequency, {'description': 'monthly mean samples', 'name': 'mon', 'sampling_rate': 120}, )
 
 		self.assertEqual(var.modelling_realm, [{'id': 'ocean', 'name': 'Ocean', 'other_name': 'Ocean'}])
 		self.assertEqual(var2.modelling_realm, ["???", ])
 
 		self.assertEqual(var.physical_parameter, {
-            "cf_standard_name": ["default_76"],
+            "cf_standard_name": ["link::default_99"],
             "description": "A velocity is a vector quantity. \"Upward\" indicates a vector component which is positive"
                            " when directed upward (negative downward).\n",
             "name": "wo",
-            "name_validation": 1,
             "provenance": "SPECS_Omon",
-            "status": "Existing physical parameter",
             "title": "Sea Water Vertical Velocity",
             "units": "m s-1"
         })
 		self.assertEqual(var2.physical_parameter, {
-            "cf_standard_name": ["default_76"],
+            "cf_standard_name": ["link::default_99"],
             "description": "A velocity is a vector quantity. \"Upward\" indicates a vector component which is positive"
                            " when directed upward (negative downward).\n",
             "name": "wo",
-            "name_validation": 1,
             "provenance": "SPECS_Omon",
-            "status": "Existing physical parameter",
             "title": "Sea Water Vertical Velocity",
             "units": "m s-1"
         })
 
 		self.assertEqual(var.spatial_shape, [{
-            "hor_label_dd": "hxy",
-            "horizontal_mesh_size": 68400,
             "level_flag": "False",
             "name": "XY-O",
-            "number_of_levels": 0,
             "title": "Global ocean field on model levels",
-            "vertical_label_dd": "l",
-            "vertical_label_mm": "ol",
-            "vertical_mesh": 50
         }, ])
 		self.assertEqual(var2.spatial_shape, ["???", ])
 
 		self.assertEqual(var.structure_title, {
-            "brand_area_dd": "sea",
-            "brand_t": "tavg",
-            "brand_xy": "hxy",
-            "brand_z": "l",
-            "calculation": 0,
-            "calculation_2": "tavg-l-hxy-sea",
             "cell_measures": "area: areacello volume: volcello",
             "cell_methods": [
-                "CellMethods::amse-tmn"
+                "link::CellMethods::amse-tmn"
             ],
             "cmip6_title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]",
-            "label": "str-157",
-            "name": "undef",
+            "name": "str-157",
             "spatial_shape": [
-                "a6562c2a-8883-11e5-b571-ac72891c3257"
+                "link::a6562c2a-8883-11e5-b571-ac72891c3257"
             ],
             "summary": "Structure",
             "temporal_shape": [
-                "cf34c974-80be-11e6-97ee-ac72891c3257"
+                "link::cf34c974-80be-11e6-97ee-ac72891c3257"
             ],
             "title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]"
         })
 		self.assertEqual(var2.structure_title, {
-            "brand_area_dd": "sea",
-            "brand_t": "tavg",
-            "brand_xy": "hxy",
-            "brand_z": "l",
-            "calculation": 0,
-            "calculation_2": "tavg-l-hxy-sea",
             "cell_measures": "area: areacello volume: volcello",
             "cell_methods": [
-                "CellMethods::amse-tmn"
+                "link::CellMethods::amse-tmn"
             ],
             "cmip6_title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]",
-            "label": "str-157",
-            "name": "undef",
+            "name": "str-157",
             "spatial_shape": [
-                "a6562c2a-8883-11e5-b571-ac72891c3257"
+                "link::a6562c2a-8883-11e5-b571-ac72891c3257"
             ],
             "summary": "Structure",
             "temporal_shape": [
-                "cf34c974-80be-11e6-97ee-ac72891c3257"
+                "link::cf34c974-80be-11e6-97ee-ac72891c3257"
             ],
             "title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]"
         })
 
-		self.assertEqual(var.table, [{'alternative_label': 'Omon', 'cmip7_frequency': ['default_99'], 'name': 'Omon',
-		                              'new_names': ['Omon'], 'title': 'Monthly ocean data'}, ])
-		self.assertEqual(var2.table, [{'alternative_label': 'Omon', 'cmip7_frequency': ['default_99'], 'name': 'Omon',
-		                              'new_names': ['Omon'], 'title': 'Monthly ocean data'}, ])
+		self.assertEqual(var.table, [{'alternative_label': 'Omon', 'cmip7_frequency': ['link::default_113'],
+		                              'name': 'Omon', 'new_names': ['Omon'], 'title': 'Monthly ocean data'}, ])
+		self.assertEqual(var2.table, [{'alternative_label': 'Omon', 'cmip7_frequency': ['link::default_113'],
+		                               'name': 'Omon', 'new_names': ['Omon'], 'title': 'Monthly ocean data'}, ])
 
-		self.assertEqual(var.temporal_shape, [{'brand': 'tavg','comments': ['default_693', 'default_712'],'name': 'time-mean', 'title': 'Temporal mean'}, ])
-		self.assertEqual(var2.temporal_shape, [{'brand': 'tavg','comments': ['default_693', 'default_712'],'name': 'time-mean', 'title': 'Temporal mean'}, ])
+		self.assertEqual(var.temporal_shape, [{'brand': 'tavg', 'dimensions': ['link::dim:time', ], 'name': 'time-mean',
+		                                       'title': 'Temporal mean',
+		                                       'variables_comments': ['link::default_536', 'link::default_555']}, ])
+		self.assertEqual(var2.temporal_shape, [{'brand': 'tavg','dimensions': ['link::dim:time', ], 'name': 'time-mean',
+		                                        'title': 'Temporal mean',
+		                                       'variables_comments': ['link::default_536', 'link::default_555']}, ])
 
 		self.assertEqual(var.title, "Sea Water Vertical Velocity")
 		self.assertEqual(var2.title, "Sea Water Vertical Velocity")
 
 	def test_print_content(self):
-		var = Variable(id="my_id", vs=self.vs, physical_parameter="d476e6113f5c466d27fd3aa9e9c35411",
-		               cmip7_frequency="default_101", title="my_title")
+		var = Variable(id="my_id", vs=self.vs, physical_parameter="link::d476e6113f5c466d27fd3aa9e9c35411",
+		               cmip7_frequency="link::default_110", title="my_title")
 		var_str = "variable wo at frequency day (id: my_id, title: my_title)"
 		self.assertEqual(var.print_content(), [var_str, ])
 		self.assertEqual(var.print_content(level=0), [var_str, ])

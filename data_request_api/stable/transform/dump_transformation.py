@@ -55,7 +55,7 @@ def correct_dictionaries(input_dict, is_record_ids=False):
 
 def transform_content_three_bases(content, version):
     logger = get_logger()
-    if isinstance(content, dict):
+    if isinstance(content, dict) and len(content) > 2:
         new_content = dict()
         opportunity_table = [elt for elt in list(content) if "opportunities" in elt.lower()][0]
         variables_table = [elt for elt in list(content) if "variables" in elt.lower()][0]
@@ -153,7 +153,7 @@ def transform_content_one_base(content):
         # Tidy the content of the export file
         default_patterns_to_remove = [r".*\(from.*\).*", r".*proposed.*", r".*review.*", r".*--.*",
                                       r".*created.*", r".*rank.*", ".*count.*", ".*alert.*", ".*tagged.*", ".*unique.*",
-                                      "last_modified.*", ".*validation.*", ".*number.*"]
+                                      "last_modified.*", ".*validation.*", ".*number.*", ".*\(mj\).*"]
         to_remove_keys_patterns = {
             "cell_measures": [r"variables", "structure"],
             "cell_methods": [r"structure", r"variables"],
@@ -280,7 +280,7 @@ def transform_content_one_base(content):
         for record_id in sorted(list(content[subelt])):
             if record_id not in experiment_groups:
                 del content[subelt][record_id]
-            if content[subelt][record_id].get("status") in ["Junk", ]:
+            elif content[subelt][record_id].get("status") in ["Junk", ]:
                 del content[subelt][record_id]
                 for op in list(content["opportunities"]):
                     if record_id in content["opportunities"][op]["experiment_groups"]:
@@ -321,6 +321,9 @@ def transform_content_one_base(content):
             (content_string, nb) = re.subn(f'"{record_id}"', f'"link::{uid}"', content_string)
             if nb == 0:
                 to_remove_entries[subelt].append((record_id, uid))
+        for record_id, _ in to_remove_entries["opportunities"]:
+            del record_to_uid_index[record_id]
+        del to_remove_entries["opportunities"]
         content = json.loads(content_string)
         # Remove unused entries
         for subelt in to_remove_entries:

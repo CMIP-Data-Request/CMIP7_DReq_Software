@@ -11,11 +11,11 @@ import unittest
 import sys
 
 
-sys.path.append("sandbox/GR")
+sys.path.append('../data_request_api/stable/transform')
 
 from tools import read_json_file, write_json_output_file_content
 from dump_transformation import correct_key_string, correct_dictionaries, transform_content_one_base,\
-	transform_content_three_bases, transform_content
+	transform_content_three_bases, transform_content, split_content_one_base
 
 
 class TestCorrectKeyString(unittest.TestCase):
@@ -47,7 +47,7 @@ class TestCorrectDictionaries(unittest.TestCase):
 			"TesT 2": {
 				"record&1": {"test 1": "Test2"},
 				"Record2": {"dummy_1": "&dummy2"},
-				"record3": {
+				"records": {
 					"test 1": "dummy&",
 					"&tesT2": "Dummy2"
 				}
@@ -57,11 +57,11 @@ class TestCorrectDictionaries(unittest.TestCase):
 		new_dict_2 = {
 			"testand1": ["dummy1", "DuMmy2"],
 			"test_2": {
-				"record&1": {"test_1": "Test2"},
-				"Record2": {"dummy_1": "&dummy2"},
-				"record3": {
-					"test_1": "dummy&",
-					"andtest2": "Dummy2"
+				"recordand1": {"test_1": "Test2"},
+				"record2": {"dummy_1": "&dummy2"},
+				"records": {
+					"test 1": "dummy&",
+					"&tesT2": "Dummy2"
 				}
 			},
 			"test3": 4
@@ -81,22 +81,51 @@ class TestCorrectDictionaries(unittest.TestCase):
 
 class TestTransformContent(unittest.TestCase):
 	def setUp(self):
-		self.input_one_base = read_json_file("tests/test_datasets/one_base_input.json")
-		# TODO: Create this file
-		# self.input_several_bases = read_json_file("tests/test_datasets/several_bases_input.json")
-		self.VS_output_noformat = read_json_file("tests/test_datasets/VS_input_noformat.json")
-		self.DR_output_complete = read_json_file("tests/test_datasets/DR_input.json")
+		self.input_one_base = read_json_file("test_datasets/one_base_input.json")
+		self.output_one_base_format = read_json_file("test_datasets/one_base_output_format.json")
+		# self.input_several_bases = read_json_file("test_datasets/several_bases_input.json")
+		# self.output_several_bases_transform = read_json_file("test_datasets/several_bases_output_transform.json")
+		# self.output_several_bases_format = read_json_file("test_datasets/several_bases_output_format.json")
+		self.output_transform = read_json_file("test_datasets/output_transform.json")
+		self.VS_output = read_json_file("test_datasets/VS_output.json")
+		self.DR_output = read_json_file("test_datasets/DR_output.json")
+		self.VS_output_noversion = copy.deepcopy(self.VS_output)
+		del self.VS_output_noversion["version"]
+		self.DR_output_noversion = copy.deepcopy(self.DR_output)
+		del self.DR_output_noversion["version"]
 		self.version = "test"
-		self.DR_output = copy.deepcopy(self.DR_output_complete)
-		del self.DR_output["version"]
-		self.VS_output_complete = read_json_file("tests/test_datasets/VS_input.json")
-		self.VS_output = copy.deepcopy(self.VS_output_complete)
-		del self.VS_output["version"]
 
 	def test_one_base_correct(self):
-		DR_output, VS_output = transform_content_one_base(self.input_one_base)
+		format_output = correct_dictionaries(self.input_one_base)
+		self.assertDictEqual(format_output, self.output_one_base_format)
+		transform_output = transform_content_one_base(format_output)
+		self.assertDictEqual(transform_output, self.output_transform)
+		DR_output, VS_output = split_content_one_base(transform_output)
+		self.assertDictEqual(DR_output, self.DR_output_noversion)
+		self.assertDictEqual(VS_output, self.VS_output_noversion)
+
+	def test_all_correct_from_one(self):
+		DR_output, VS_output = transform_content(self.input_one_base, version=self.version)
 		self.assertDictEqual(DR_output, self.DR_output)
-		self.assertDictEqual(VS_output, self.VS_output_noformat)
+		self.assertDictEqual(VS_output, self.VS_output)
+
+	@unittest.expectedFailure
+	def test_several_bases_correct(self):
+		transform_input = transform_content_three_bases(self.input_several_bases)
+		self.assertDictEqual(transform_input, self.output_several_bases_transform)
+		format_output = correct_dictionaries(transform_input)
+		self.assertDictEqual(format_output, self.output_several_bases_format)
+		transform_output = transform_content_one_base(format_output)
+		self.assertDictEqual(transform_output, self.output_transform)
+		DR_output, VS_output = split_content_one_base(transform_output)
+		self.assertDictEqual(DR_output, self.DR_output_noversion)
+		self.assertDictEqual(VS_output, self.VS_output_noversion)
+
+	@unittest.expectedFailure
+	def test_all_correct_from_several(self):
+		DR_output, VS_output = transform_content(self.input_several_bases, version=self.version)
+		self.assertDictEqual(DR_output, self.DR_output)
+		self.assertDictEqual(VS_output, self.VS_output)
 
 	@unittest.expectedFailure
 	def test_one_base_error(self):
@@ -107,29 +136,12 @@ class TestTransformContent(unittest.TestCase):
 			transform_content_one_base(["dummy", "test"])
 
 	@unittest.expectedFailure
-	def test_several_bases_correct(self):
-		DR_output, VS_output = transform_content_three_bases(self.input_several_bases)
-		self.assertDictEqual(DR_output, self.DR_output)
-		self.assertDictEqual(VS_output, self.VS_output_noformat)
-
-	@unittest.expectedFailure
 	def test_several_bases_error(self):
 		with self.assertRaises(ValueError):
 			transform_content_three_bases(self.input_one_base)
 
 		with self.assertRaises(TypeError):
 			transform_content_three_bases(["dummy", "test"])
-
-	def test_all_correct_from_one(self):
-		DR_output, VS_output = transform_content(self.input_one_base, version=self.version)
-		self.assertDictEqual(DR_output, self.DR_output_complete)
-		self.assertDictEqual(VS_output, self.VS_output_complete)
-
-	@unittest.expectedFailure
-	def test_all_correct_from_several(self):
-		DR_output, VS_output = transform_content(self.input_several_bases, version=self.version)
-		self.assertDictEqual(DR_output, self.DR_output_complete)
-		self.assertDictEqual(VS_output, self.VS_output_complete)
 
 	def test_all_error(self):
 		with self.assertRaises(TypeError):

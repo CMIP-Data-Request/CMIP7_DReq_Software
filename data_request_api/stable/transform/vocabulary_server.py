@@ -23,6 +23,13 @@ def is_link_id_or_value(elt):
 		return False, elt
 
 
+def build_link_from_id(elt):
+	if elt.startswith("link::"):
+		return elt
+	else:
+		return f"link::{elt}"
+
+
 class VSObject(object):
 	def __init__(self, id, vs, **kwargs):
 		self.vs = vs
@@ -110,8 +117,8 @@ class Variable(VSObject):
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
 		keys = ["cf_standard_name", "cell_measures", "cell_methods", "description", "cmip7_frequency",
-		        "modelling_realm", "content_type", "title", "spatial_shape", "temporal_shape", "table", "compound_name",
-		        "structure_label", "structure_title", "physical_parameter"]
+		        "modelling_realm", "content_type", "title", "spatial_shape", "temporal_shape", "table", "name",
+		        "structure_label", "structure_title", "physical_parameter", "type"]
 		defaults_dict = {key: "???" for key in keys}
 		defaults_dict.update(kwargs)
 		for elt in set(list(defaults_dict)) - set(keys):
@@ -126,7 +133,8 @@ class Variable(VSObject):
 
 	@property
 	def cf_standard_name(self):
-		return self.get_value_from_vs(key="cf_standard_name", element_type="cf_standard_names")
+		return self.vs.get_element(element_type="cf_standard_names",
+		                           element_id=self.physical_parameter["cf_standard_name"][0])
 
 	@property
 	def cell_measures(self):
@@ -137,12 +145,12 @@ class Variable(VSObject):
 		return self.get_value_from_vs(key="cell_methods", target_type="list")
 
 	@property
-	def compound_name(self):
-		return self.get("compound_name")
+	def name(self):
+		return self.get("name")
 
 	@property
 	def content_type(self):
-		return self.get("content_type")
+		return self.get("type")
 
 	@property
 	def description(self):
@@ -197,10 +205,6 @@ class Variable(VSObject):
 
 	@classmethod
 	def from_input(cls, id, vs, input_dict):
-		if "content_type" not in input_dict:
-			input_dict["content_type"] = input_dict.pop("type", "???")
-		if "cf_standard_name" not in input_dict:
-			input_dict["cf_standard_name"] = input_dict.pop("cf_standard_name_(from_physical_parameter)", "???")
 		return cls(id=id, vs=vs, **input_dict)
 
 
@@ -271,7 +275,7 @@ class VocabularyServer(object):
 							raise ValueError(f"Could not find key {element_key} of id {element_id} of type "
 							                 f"{element_type} in the vocabulary server.")
 					elif isinstance(element_key, dict):
-						value["uid"] = element_id
+						value["id"] = f"link::{element_id}"
 					return value
 				elif default:
 					logger.critical(f"Could not find {id_type} {element_id} of type {element_type}"
