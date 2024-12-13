@@ -140,6 +140,8 @@ for table_id in include_cmor_tables:
 
         var_diff = OrderedDict()
         for attr in compare_attributes:
+            if attr not in dreq_var_info:
+                continue
             if table_var_info[attr] != dreq_var_info[attr]:
                 var_diff[attr] = OrderedDict({
                     'PREV' : table_var_info[attr],

@@ -226,6 +226,15 @@ class dreq_table:
         else:
             raise Exception(f'Record attribute does not exist: {attr}')
 
+    def get_record_id(self, record):
+        # In case we need to get a record_id when we only have the record.
+        # For example, to use delete_record() to remove the record.
+        l = [record_id for record_id,rec in self.records.items() if rec == record]
+        if len(l) == 1:
+            return l[0]
+        else:
+            raise Exception('Could not find record_id matching the record')
+
     def delete_record(self, record_id):
         self.records.pop(record_id)
         self.record_ids.remove(record_id)

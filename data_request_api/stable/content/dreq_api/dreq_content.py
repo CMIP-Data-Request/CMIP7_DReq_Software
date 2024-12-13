@@ -7,20 +7,22 @@ import warnings
 from filecmp import cmp
 from shutil import move
 
+# from . import consolidate_export as ce
 import consolidate_export as ce
 import pooch
 import requests
 from bs4 import BeautifulSoup
+# from .mapping_table import mapping_table
 from mapping_table import mapping_table
 
 # TODO: remove after initial "sandbox" dev period
-#add_paths = ["../../JA", "../../../../CMIP7_DReq_Software_gr/sandbox/GR/"]
-add_paths = ["../../JA", "../../GR"]
+add_paths = ["../../transform"]
 for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
-
+   if path not in sys.path:
+       sys.path.append(path)
 from logger import get_logger  # noqa
+# from ...transform.logger import get_logger  # noqa
+
 
 # Suppress pooch info output
 pooch.get_logger().setLevel("WARNING")

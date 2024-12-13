@@ -33,7 +33,8 @@ organize_by_standard_name = True  # True ==> write additional file that groups v
 ###############################################################################
 # Load data request content
 
-use_dreq_version = 'v1.0beta'
+# use_dreq_version = 'v1.0beta'
+use_dreq_version = 'v1.0'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
@@ -59,6 +60,7 @@ try_freq_table_name.append('Frequency')
 try_freq_table_name.append('CMIP7 Frequency')
 try_freq_table_name.append('CMIP6 Frequency (legacy)')
 
+found_freq = False
 for freq_table_name in try_freq_table_name:
     freq_attr_name = dreq_classes.format_attribute_name(freq_table_name)
     # assert freq_attr_name in Vars.attr2field, 'attribute not found: ' + freq_attr_name
@@ -69,7 +71,9 @@ for freq_table_name in try_freq_table_name:
         Vars.rename_attr(freq_attr_name, 'frequency')
     if freq_table_name in base:
         Frequency = base[freq_table_name]
+    found_freq = True
     break
+assert found_freq, 'Which airtable field gives the frequency?'
 
 # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
 SpatialShape = base['Spatial Shape']
@@ -83,6 +87,10 @@ if 'CF Standard Names' in base:
 CMORtables = base['Table Identifiers']
 Realm = base['Modelling Realm']
 CellMeasures = base['Cell Measures']
+
+if use_dreq_version in ['v1.0']:
+    # needed for corrections below
+    CMIP6Frequency = base['CMIP6 Frequency (legacy)']
 
 # Compound names will be used to uniquely identify variables.
 # Check here that this is indeed a unique name as expected.
@@ -105,6 +113,12 @@ for var in Vars.records.values():
     if filter_by_cmor_table:
         if table_id not in include_cmor_tables:
             continue
+
+    if not hasattr(var, 'frequency') and use_dreq_version in ['v1.0']:
+        # seems to be an error for some vars in v1.0, so instead use their CMIP6 frequency
+        assert len(var.cmip6_frequency_legacy) == 1
+        link = var.cmip6_frequency_legacy[0]
+        var.frequency = [CMIP6Frequency.get_record(link).name]
 
     if isinstance(var.frequency[0], str):
         # retain this option for non-consolidated raw export?

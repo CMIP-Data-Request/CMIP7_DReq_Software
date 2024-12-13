@@ -8,10 +8,16 @@ The module has two basic sections:
 2) Functions that interrogate the data request, usually using output from (1) as their input.
 
 '''
+import os
+import hashlib
+import json
+from collections import OrderedDict
+
 # from importlib import reload
 # import dreq_classes
 # reload(dreq_classes)
 
+# from .dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS
 from dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS
 
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
@@ -51,6 +57,14 @@ def get_content_type(content):
 
 def version_base_name():
     return f'Data Request {DREQ_VERSION}'
+
+def get_priority_levels():
+    '''
+    Return list of all valid priority levels (str) in the data request.
+    List is ordered from highest to lowest priority.
+    '''
+    priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
+    return priority_levels
 
 def get_table_id2name(base, base_name):
     '''
@@ -138,6 +152,8 @@ def create_dreq_tables_for_request(content, consolidated=True):
     # Make some adjustments that are specific to the Opportunity table
     Opps = base['Opportunity']
     Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+    for opp in Opps.records.values():
+        opp.title = opp.title.strip()
     if content_type == 'working':
         if 'variable_groups' not in Opps.attr2field:
             # Try alternate names for the latest variable groups
@@ -152,17 +168,18 @@ def create_dreq_tables_for_request(content, consolidated=True):
     exclude_opps = set()
     for opp_id, opp in Opps.records.items():
         if not hasattr(opp, 'experiment_groups'):
-            print(f' * WARNING *    no experiment groups found for Opportunity {opp.title}')
+            print(f' * WARNING *    no experiment groups found for Opportunity: {opp.title}')
             exclude_opps.add(opp_id)
         if not hasattr(opp, 'variable_groups'):
-            print(f' * WARNING *    no variable groups found for Opportunity {opp.title}')
+            print(f' * WARNING *    no variable groups found for Opportunity: {opp.title}')
             exclude_opps.add(opp_id)
     if len(exclude_opps) > 0:
-        print('Excluding Opportunities:')
+        print('Quality control check is excluding these Opportunities:')
         for opp_id in exclude_opps:
             opp = Opps.records[opp_id]
             print(f'  {opp.title}')
             Opps.delete_record(opp_id)
+        print()
     if len(Opps.records) == 0:
         # If there are no opportunities left, there's no point in continuing!
         # This check is here because if something changes upstream in Airtable, it might cause
@@ -399,7 +416,7 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
                     opp_ids.append(title2id[title])
                 else:
                     # print(f'\n* WARNING *    Opportunity not found: {title}\n')
-                    raise Exception(f'\n* ERROR *    Opportunity not found: {title}\n')
+                    raise Exception(f'\n* ERROR *    The specified Opportunity is not found: {title}\n')
 
     assert len(set(opp_ids)) == len(opp_ids), 'found repeated opportunity ids'
 
@@ -761,7 +778,7 @@ def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verb
 
     # Loop over the opportunities
     expt_vars = {}
-    priority_levels = ['Core', 'High', 'Medium', 'Low']
+    priority_levels = get_priority_levels()
     for opp_id in use_opp:
         opp = all_opps['records'][opp_id] # one record from the Opportunity table
 
@@ -827,6 +844,7 @@ def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verb
                     expt_vars[expt_key][priority].add(var_key)
 
     # Remove overlaps between priority levels
+    assert priority_levels == ['Core', 'High', 'Medium', 'Low']
     for expt_key, expt_var in expt_vars.items():
         # remove any Core priority variables from other groups
         for p in ['High', 'Medium', 'Low']:
@@ -837,7 +855,6 @@ def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verb
         # remove any Medium priority variables from lower priority groups
         for p in ['Low']:
             expt_var[p] = expt_var[p].difference(expt_var['Medium'])
-
     # Remove unwanted priority levels
     for expt_key, expt_var in expt_vars.items():
         if priority_cutoff.lower() == 'core':
@@ -864,3 +881,70 @@ def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verb
         'experiment' : expt_vars,
     }
     return requested_vars
+
+
+def show_requested_vars_summary(expt_vars, use_dreq_version):
+    '''
+    Display quick summary to stdout of variables requested.
+    expt_vars is the output dict from dq.get_requested_variables().
+    '''
+    print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
+    priority_levels=get_priority_levels()
+    for expt, req in sorted(expt_vars['experiment'].items()):
+        d = {p : 0 for p in priority_levels}
+        for p in priority_levels:
+            if p in req:
+                d[p] = len(req[p])
+        n_total = sum(d.values())
+        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
+
+
+def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cutoff, content_path):
+    '''
+    Write a nicely formatted json file with lists of requested variables by experiment.
+    expt_vars is the output dict from dq.get_requested_variables().
+    '''
+
+    Header = OrderedDict({
+        'Description' : 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
+        'Opportunities supported' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
+    })
+
+    priority_levels=get_priority_levels()
+    m = priority_levels.index(priority_cutoff)+1
+    Header.update({
+        'Priority levels supported' : priority_levels[:m]
+    })
+    for req in expt_vars['experiment'].values():
+        for p in priority_levels[m:]:
+            assert req[p] == []
+            req.pop(p)
+
+    # Get provenance of content to include in the Header
+    # content_path = dc._dreq_content_loaded['json_path']
+    with open(content_path, 'rb') as f:
+        content_hash = hashlib.sha256(f.read()).hexdigest()
+    Header.update({
+        'dreq version' : use_dreq_version,
+        'dreq content file' : os.path.basename(os.path.normpath(content_path)),
+        'dreq content sha256 hash' : content_hash,
+    })
+
+    out = {
+        'Header' : Header,
+        'experiment' : OrderedDict(),
+    }
+    expt_names = sorted(expt_vars['experiment'].keys(), key=str.lower)
+    for expt_name in expt_names:
+        out['experiment'][expt_name] = OrderedDict()
+        req = expt_vars['experiment'][expt_name]
+        for p in priority_levels:
+            if p in req:
+                out['experiment'][expt_name][p] = req[p]
+
+    # Write the results to json
+    with open(outfile, 'w') as f:
+        # json.dump(expt_vars, f, indent=4, sort_keys=True)
+        json.dump(out, f, indent=4)
+        print('\nWrote requested variables to ' + outfile)
+

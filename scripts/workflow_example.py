@@ -18,12 +18,18 @@ To run interactively in ipython:
 
     run -i workflow_example.py
 
+Note that a command-line equivalent of this script is also available in the scripts/ folder.
+For usage info, do:
+
+    ./export_dreq_lists_json.py -h    
+
+Usage examples:
+
+    ./export_dreq_lists_json.py v1.0 dreq_list.json --all_opportunities
+    ./export_dreq_lists_json.py v1.0 dreq_list.json --opportunities_file opps.json
+
 '''
 import sys
-import json
-import os
-import hashlib
-from collections import OrderedDict
 add_paths = []
 add_paths.append('../data_request_api/stable/content/dreq_api')
 add_paths.append('../data_request_api/stable/query')
@@ -33,11 +39,11 @@ for path in add_paths:
         sys.path.append(path)
 import dreq_content as dc
 import dreq_query as dq
-# from importlib import reload
-# reload(dq)
+from importlib import reload
+reload(dq)
 
 
-use_dreq_version = 'v1.0beta'
+use_dreq_version = 'v1.0'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
@@ -48,8 +54,8 @@ content = dc.load(use_dreq_version)
 # This can be a subset:
 use_opps = []
 use_opps.append('Baseline Climate Variables for Earth System Modelling')
-use_opps.append('Synoptic systems and impacts')
-# Or to use all opportunities in the data request:
+use_opps.append('Synoptic systems')
+# Or, to support all opportunities in the data request:
 use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
@@ -61,59 +67,12 @@ expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff=priori
 if len(expt_vars['experiment']) > 0:
 
     # Show user what was found
-    print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
-    priority_levels = ['Core', 'High', 'Medium', 'Low']
-    for expt, req in sorted(expt_vars['experiment'].items()):
-        d = {p : 0 for p in priority_levels}
-        for p in priority_levels:
-            if p in req:
-                d[p] = len(req[p])
-        n_total = sum(d.values())
-        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
+    dq.show_requested_vars_summary(expt_vars, use_dreq_version)
 
-    # Write results to json file
-    Header = OrderedDict({
-        'Description' : 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
-        'Opportunities supported' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
-    })
-
-    m = priority_levels.index(priority_cutoff)+1
-    Header.update({
-        'Priority levels supported' : priority_levels[:m]
-    })
-    for req in expt_vars['experiment'].values():
-        for p in priority_levels[m:]:
-            assert req[p] == []
-            req.pop(p)
-
-    # Get provenance of content to include in the Header
+    # Write json file with the variable lists
     content_path = dc._dreq_content_loaded['json_path']
-    with open(content_path, 'rb') as f:
-        content_hash = hashlib.sha256(f.read()).hexdigest()
-    Header.update({
-        'dreq version' : use_dreq_version,
-        'dreq content file' : os.path.basename(os.path.normpath(content_path)),
-        'dreq content sha256 hash' : content_hash,
-    })
-
-    out = {
-        'Header' : Header,
-        'experiment' : OrderedDict(),
-    }
-    expt_names = sorted(expt_vars['experiment'].keys(), key=str.lower)
-    for expt_name in expt_names:
-        out['experiment'][expt_name] = OrderedDict()
-        req = expt_vars['experiment'][expt_name]
-        for p in priority_levels:
-            if p in req:
-                out['experiment'][expt_name][p] = req[p]
-
-    # Write the results to json
-    filename = f'requested_{use_dreq_version}.json'
-    with open(filename, 'w') as f:
-        # json.dump(expt_vars, f, indent=4, sort_keys=True)
-        json.dump(out, f, indent=4)
-        print('\nWrote requested variables to ' + filename)
+    outfile = f'requested_{use_dreq_version}.json'
+    dq.write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cutoff, content_path)
 
 else:
     print(f'\nFor data request version {use_dreq_version}, no requested variables were found')
