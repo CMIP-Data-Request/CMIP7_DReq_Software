@@ -2655,44 +2655,7 @@
             "mip_long_name": "Decadal Climate Prediction Project",
             "mip_short_name": "DCPP",
             "mip_website": "https://www.wcrp-climate.org/dcp-overview",
-            "name": "undef",
-            "variables": [
-                "rec6F1JxjFJxSTWtR",
-                "rec61CTCNrbjaSUV2",
-                "rec6jssWHkXq2umwz",
-                "rechfmeNjx5z1XBXR",
-                "rechj1GY36Lol34t5",
-                "link::bab42b88-e5dd-11e5-8482-ac72891c3257",
-                "link::bab52da8-e5dd-11e5-8482-ac72891c3257",
-                "recPilaZa80AAfXFP",
-                "recPBLgcnrFBVHcIK",
-                "recxIgUxU5kZmtqmq",
-                "recxMgeQ8gpi3yPNT",
-                "recxAI3IbeBhWgYT5",
-                "recyWCN48NAW65N04",
-                "recygcFaGkxqrKIqg",
-                "recyjPzOuteXJm5MW",
-                "recykeNHcq6Ry6tUt",
-                "recyqwlLo7jBhvtu6",
-                "recIrH2UqyOIrWg1m",
-                "recU55G4iw9ka8HAJ",
-                "recU8VfoZuuZFvpNw",
-                "recMTQeHjKAoJ8QlB",
-                "recMWxmp4wjLOQj1D",
-                "recNDg7Xwp8UWMiC9",
-                "recNHsqHmvCDVQ8TN",
-                "recNH4Pqk0nCl9yGz",
-                "link::baa58f74-e5dd-11e5-8482-ac72891c3257",
-                "link::85c3e888-357c-11e7-8257-5404a60d96b5",
-                "reczF6KUA8Sd9HO1O",
-                "recAZa2Rkjwon2M9p",
-                "recAeRAvH0qUKKgDe",
-                "recCElnRElUuG2thS",
-                "recCMHzBEwSrONK41",
-                "link::711075e2-faa7-11e6-bfb7-ac72891c3257",
-                "link::7147b8fe-faa7-11e6-bfb7-ac72891c3257",
-                "link::71237944-faa7-11e6-bfb7-ac72891c3257"
-            ]
+            "name": "undef"
         },
         "default_403": {
             "mip_abstract": "The Ice Sheet Model Intercomparison for CMIP7 (ISMIP7) has the key objective of improving projections of sea level contributions from the Greenland and Antarctic ice sheets, and our understanding of the cryosphere in a changing climate. These goals map into both \u201cMelting Ice and Global Consequences\u201d and \u201cRegional Sea-level Change\u201d Grand Challenges relevant to CliC and the World Climate Research Program (WCRP). As uncertainties in future sea level arise due to both the climate forcing and the response of the ice sheets, a primary focus for ISMIP6 was to become better integrated in the CMIP6 initiative. ISMIP6 became an endorsed activity of CMIP6 in 2015 allowing ice sheets to be considered as a component of the Earth system for the first time in CMIP. ISMIP6 became a major model inter-comparison effort (with 36 international groups and over 60 participants) making process-based projections for the Sixth Assessment Report of the IPCC. \n\nISMIP6 and ISMIP7 experimental protocols explore the uncertainty in sea level projections due to ice sheet model initialization as well as  ice sheet processes and parameters, climate scenario, and uncertainty in the representation of ice\u2013ocean interactions on centennial timescales. ISMIP7 intends to continue working on two main themes. The first relates to dynamic ice sheets within global coupled climate models, while the second is based on outputs from climate models to force standalone ice sheet models (perhaps coupled to regional ocean and/or atmosphere models). We will thus have different protocols for each type of modeling activity, and these will be related by a common set of scenarios.  Similarly, ISMIP7 will continue to employ a working group structure to allow focus on climate forcing from the oceans and atmosphere, as well as links to the observational community.",
@@ -2713,15 +2676,7 @@
             "mip_long_name": "High Resolution Model Intercomparison Project",
             "mip_short_name": "HighResMIP",
             "mip_website": "https://www.highresmip.org",
-            "name": "undef",
-            "variables": [
-                "rec7c8IiLNXYIa7Vc",
-                "rec7NNdIhRAMynBdK",
-                "rec7kGfl8TKpgSpUb",
-                "link::8bb11ef8-4a5b-11e6-9cd2-ac72891c3257",
-                "recNUzYetSB8l8F3r",
-                "recNe6dXzA3GyYHA5"
-            ]
+            "name": "undef"
         },
         "default_406": {
             "mip_abstract": "The Ocean Model Intercomparison Project (OMIP) aims to provide a framework for evaluating, understanding, and improving the ocean, sea-ice, tracer, and biogeochemical components of global climate and Earth system models contributing to the Coupled Model Intercomparison Project Phase 7 (CMIP7). Ocean and sea ice models not part of a coupled system are also welcome to participate. Existing papers define OMIP and detail protocols both for simulating global ocean/sea-ice models with inert chemical and biogeochemical tracers and for analyzing their output.",
@@ -2767,77 +2722,21 @@
             "mip_long_name": "Coupled Climate Carbon Cycle MIP",
             "mip_short_name": "C4MIP",
             "mip_website": "https://c4mip.net/home",
-            "name": "undef",
-            "variables": [
-                "recq6rg4bhUIjuSuS",
-                "recqD38r868Bjoi0M",
-                "recqF3y6x0SjBwXM4",
-                "recqH51krGtlKnwrb",
-                "recqSiMhPUqmEm4HJ",
-                "recqe7qcbqG9wki4q",
-                "recqjoaVI7S9FkSvv",
-                "recqBjeE51Kkpa1Rg",
-                "recqC0Rl1sKwLmWVJ",
-                "recrK1oWaVrFRcuvu",
-                "recr1FzzfifbIlYv8",
-                "recrvJKjCmtU5o5AD",
-                "recsU9ld6noPOzY8t",
-                "recsiUZ7dr4ZNorA7",
-                "recskGtLUbvMvgVYH",
-                "rect3CkaOHBrXaGzC",
-                "rect9Uzi1Gw5ISyIl",
-                "rectDfAbYbsVdBcfH",
-                "rectDdhbqqZQ6oDy8",
-                "recuJyboQja1nCNjF",
-                "recuPHOxYRw7lwfHI",
-                "recuPV1XKxiFwccu5",
-                "recuR7IducNobmCX4",
-                "recu0ppCwIn7RMRzz",
-                "recu2HQuN74CJsgJR",
-                "recvaVLyRPHZINPrL"
-            ]
+            "name": "undef"
         },
         "default_416": {
             "mip_abstract": "A better understanding of the role of sea ice for the changing climate of our planet is the central aim of the diagnostic Sea-Ice Model Intercomparison Project (SIMIP), having formally started for CMIP6. To reach this aim, SIMIP requests sea-ice-related variables from climate-model simulations that allow for a better understanding and, ultimately, improvement of biases and errors in sea-ice simulations with large-scale climate models. This then allows us to better understand to what degree CMIP model simulations relate to reality, thus improving our confidence in answering sea-ice-related questions based on these simulations. Furthermore, the SIMIP protocol provides a standard for sea-ice model output that will streamline and hence simplify the analysis of the simulated sea-ice evolution in research projects independent of CMIP. To reach its aims, SIMIP provides a structured list of model output that allows for an examination of the evolution of sea ice.",
             "mip_long_name": "Sea Ice Model Intercomparison Project",
             "mip_short_name": "SIMIP",
             "mip_website": "https://climate-cryosphere.org/simip-about/",
-            "name": "undef",
-            "variables": [
-                "recAJLAXfFHHofskr",
-                "recAJnIc9kSeVEGUs",
-                "recAwQSPn4lPdMMwD",
-                "recAwSAnFVMATpDiK",
-                "recAw9JQK1wSrUw1N",
-                "recAzuHecIAXH6pE6",
-                "recABTv5VmxPQx7Uc",
-                "recABWwc96UdMcjVK",
-                "recBEkiDAGgNoSFvl",
-                "recBG0Qy4F7h07XAO",
-                "recBHKs95nagKMzzn",
-                "recBLbdljsZGimBPm",
-                "recBQG8GdWnSpUEHh",
-                "recBS42r1jGYSPgpi",
-                "recBZzNPJGijTiYiQ",
-                "recBgHhZha7s2Kwt3",
-                "recBgnBvySrJqFwU6",
-                "recBi0OGdf5kXuVfO",
-                "recBlgVyWMcF2RHLe",
-                "recCEFoMLKAIxTIZZ",
-                "recCEG8ptrlEOOWIw"
-            ]
+            "name": "undef"
         },
         "default_417": {
             "mip_abstract": "DAMIP is the component of CMIP7 dealing with understanding the individual contributions of various external factors to past and future changes in global and regional climate. The primary goals of DAMIP are to facilitate improved estimation of the contributions of anthropogenic and natural forcing changes to observed global warming as well as to observed global and regional changes in other climate variables; to contribute to the estimation of how historical emissions have altered and are altering contemporary climate risk including for specific extreme events; to improve understanding of inter-model differences in the response to individual forcings; and to facilitate improved observationally-constrained projections of future climate change. DAMIP will support improved attribution of climate change in the next IPCC report.",
             "mip_long_name": "Detection and Attribution Model Intercomparison Project",
             "mip_short_name": "DAMIP",
             "mip_website": "https://wcrp-cmip.org/damip/",
-            "name": "undef",
-            "variables": [
-                "recqe7qcbqG9wki4q",
-                "recqp5R9B8JN5rIxI",
-                "recvaVLyRPHZINPrL"
-            ]
+            "name": "undef"
         }
     },
     "modelling_realm": {
@@ -2888,7 +2787,7 @@
             ],
             "minimum_ensemble_size": 1,
             "name": "Accurate assessment of land-atmosphere coupling",
-            "themes": [
+            "data_request_themes": [
                 "link::default_115",
                 "link::default_118"
             ],
@@ -2930,7 +2829,7 @@
             ],
             "minimum_ensemble_size": 1,
             "name": "Ocean Extremes",
-            "themes": [
+            "data_request_themes": [
                 "link::default_116",
                 "link::default_117",
                 "link::default_119"
