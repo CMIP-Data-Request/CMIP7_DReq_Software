@@ -188,7 +188,7 @@ def transform_content_one_base(content):
             "experiment_groups": [r"opportunit.*", r"theme.*", "comments.+"],
             "experiments": [r"experiment_group.*", r"opportunit.*", "variables", "mip"],
             "glossary": ["opportunit.*", ],
-            "mips": ["variable_group.*", "experiments.*", ".*opportunit.*"],
+            "mips": ["variable_group.*", "experiments.*", ".*opportunit.*", "variables"],
             "modelling_realm": ["variables", ],
             "opportunities": [".*data_volume_estimate", "opportunity_id", "originally_requested_variable_groups"],
             "opportunity/variable_group_comments": ["experiment_groups", "opportunities", "theme", "variable_groups"],
@@ -216,7 +216,7 @@ def transform_content_one_base(content):
             "experiments": [("experiment", "name")],
             "experiment_groups": [("comments", "opportunity/variable_group_comments")],
             "opportunities": [("title_of_opportunity", "name"), ("comments", "opportunity/variable_group_comments"),
-                            ("ensemble_size", "minimum_ensemble_size"),
+                              ("ensemble_size", "minimum_ensemble_size"), ("themes", "data_request_themes"),
                               ("working/updated_variable_groups", "variable_groups")],
             "physical_parameters": [("comments", "physical_parameters_comments"),
                                     ("cf_proposal_github_issue", "proposal_github_issue")],
@@ -232,7 +232,7 @@ def transform_content_one_base(content):
             # "opportunities": [(".+variable_groups", "variable_groups")]
         }
         to_sort_keys_content = {
-            "opportunities": ["variable_groups", "themes", "experiment_groups", "time_slice"],
+            "opportunities": ["variable_groups", "data_request_themes", "experiment_groups", "time_slice"],
             "experiment_groups": ["experiments", ],
             "variable_groups": ["variables", "mips"]
         }
@@ -385,7 +385,7 @@ def split_content_one_base(content):
     keys_to_dr_dict = {
         "opportunities": [("experiment_groups", list, list()),
                           ("variable_groups", list, list()),
-                          ("themes", list, list())],
+                          ("data_request_themes", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),
                             ("priority_level", (str, type(None)), None)],
