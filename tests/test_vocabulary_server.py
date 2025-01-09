@@ -11,11 +11,11 @@ import unittest
 import sys
 
 
-sys.path.append('../data_request_api/stable/transform')
+sys.path.append('../data_request_api/stable')
 
 
-from tools import read_json_input_file_content
-from vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from utilities.tools import read_json_input_file_content
+from query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 
 class TestLinks(unittest.TestCase):

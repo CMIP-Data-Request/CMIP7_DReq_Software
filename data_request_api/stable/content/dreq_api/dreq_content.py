@@ -16,11 +16,11 @@ from bs4 import BeautifulSoup
 from mapping_table import mapping_table
 
 # TODO: remove after initial "sandbox" dev period
-add_paths = ["../../transform"]
+add_paths = [os.path.abspath(os.sep.join([os.path.abspath(os.path.dirname(__file__)), "../.."])), ]
 for path in add_paths:
    if path not in sys.path:
        sys.path.append(path)
-from logger import get_logger  # noqa
+from utilities.logger import get_logger  # noqa
 # from ...transform.logger import get_logger  # noqa
 
 
