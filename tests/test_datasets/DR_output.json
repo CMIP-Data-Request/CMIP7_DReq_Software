@@ -69,7 +69,7 @@
         }
     },
     "opportunities": {
-        "default_424": {
+        "default_418": {
             "data_request_themes": [
                 "link::default_115",
                 "link::default_118"
@@ -77,22 +77,28 @@
             "experiment_groups": [
                 "link::default_288"
             ],
+            "mips": [],
+            "time_slice": [
+                "link::_slice_hist20"
+            ],
             "variable_groups": [
-                "link::default_584"
+                "link::default_578"
             ]
         },
-        "default_425": {
+        "default_419": {
             "data_request_themes": [],
             "experiment_groups": [
                 "link::default_287",
                 "link::default_288",
                 "link::default_289"
             ],
+            "mips": [],
+            "time_slice": [],
             "variable_groups": [
-                "link::default_583"
+                "link::default_577"
             ]
         },
-        "default_426": {
+        "default_420": {
             "data_request_themes": [
                 "link::default_116",
                 "link::default_117",
@@ -105,15 +111,17 @@
                 "link::default_288",
                 "link::default_289"
             ],
+            "mips": [],
+            "time_slice": [],
             "variable_groups": [
-                "link::default_575",
-                "link::default_576",
-                "link::default_577",
-                "link::default_578",
-                "link::default_585"
+                "link::default_569",
+                "link::default_570",
+                "link::default_571",
+                "link::default_572",
+                "link::default_579"
             ]
         },
-        "default_427": {
+        "default_421": {
             "data_request_themes": [],
             "experiment_groups": [
                 "link::default_285",
@@ -121,16 +129,18 @@
                 "link::default_288",
                 "link::default_289"
             ],
+            "mips": [],
+            "time_slice": [],
             "variable_groups": [
-                "link::default_579",
-                "link::default_580",
-                "link::default_581",
-                "link::default_582"
+                "link::default_573",
+                "link::default_574",
+                "link::default_575",
+                "link::default_576"
             ]
         }
     },
     "variable_groups": {
-        "default_575": {
+        "default_569": {
             "mips": [
                 "link::default_403",
                 "link::default_406",
@@ -141,13 +151,13 @@
                 "link::default_416",
                 "link::default_417"
             ],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::baa71c7c-e5dd-11e5-8482-ac72891c3257",
                 "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
             ]
         },
-        "default_576": {
+        "default_570": {
             "mips": [
                 "link::default_401",
                 "link::default_405",
@@ -157,21 +167,21 @@
                 "link::default_411",
                 "link::default_416"
             ],
-            "priority_level": "link::default_488",
+            "priority_level": "link::default_482",
             "variables": [
                 "link::83bbfc6e-7f07-11ef-9308-b1dd71e64bec",
                 "link::83bbfc6f-7f07-11ef-9308-b1dd71e64bec",
                 "link::baa4e07e-e5dd-11e5-8482-ac72891c3257"
             ]
         },
-        "default_577": {
+        "default_571": {
             "mips": [
                 "link::default_402",
                 "link::default_406",
                 "link::default_408",
                 "link::default_415"
             ],
-            "priority_level": "link::default_488",
+            "priority_level": "link::default_482",
             "variables": [
                 "link::83bbfb6e-7f07-11ef-9308-b1dd71e64bec",
                 "link::83bbfb71-7f07-11ef-9308-b1dd71e64bec",
@@ -188,7 +198,7 @@
                 "link::c9181982-c5e8-11e6-84e6-5404a60d96b5"
             ]
         },
-        "default_578": {
+        "default_572": {
             "mips": [
                 "link::default_400",
                 "link::default_401",
@@ -201,16 +211,16 @@
                 "link::default_414",
                 "link::default_416"
             ],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec",
                 "link::baa50c2a-e5dd-11e5-8482-ac72891c3257",
-                "link::default_586"
+                "link::default_580"
             ]
         },
-        "default_579": {
+        "default_573": {
             "mips": [],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::5a070350-c77d-11e6-8a33-5404a60d96b5",
                 "link::85c3e888-357c-11e7-8257-5404a60d96b5",
@@ -240,9 +250,9 @@
                 "link::babd0e56-e5dd-11e5-8482-ac72891c3257"
             ]
         },
-        "default_580": {
+        "default_574": {
             "mips": [],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::baa3e4d0-e5dd-11e5-8482-ac72891c3257",
                 "link::baa3ea2a-e5dd-11e5-8482-ac72891c3257",
@@ -260,9 +270,9 @@
                 "link::f2fad86e-c38d-11e6-abc1-1b922e5e1118"
             ]
         },
-        "default_581": {
+        "default_575": {
             "mips": [],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::1aab80fc-b006-11e6-9289-ac72891c3257",
                 "link::711075e2-faa7-11e6-bfb7-ac72891c3257",
@@ -348,9 +358,9 @@
                 "link::d241a6d2-4a9f-11e6-b84e-ac72891c3257"
             ]
         },
-        "default_582": {
+        "default_576": {
             "mips": [],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::6a35d178-aa6a-11e6-9736-5404a60d96b5",
                 "link::8bae55ba-4a5b-11e6-9cd2-ac72891c3257",
@@ -364,9 +374,9 @@
                 "link::babbdec8-e5dd-11e5-8482-ac72891c3257"
             ]
         },
-        "default_583": {
+        "default_577": {
             "mips": [],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::83bbfbbf-7f07-11ef-9308-b1dd71e64bec",
                 "link::83bbfbc0-7f07-11ef-9308-b1dd71e64bec",
@@ -379,14 +389,14 @@
                 "link::bab2f9d4-e5dd-11e5-8482-ac72891c3257"
             ]
         },
-        "default_584": {
+        "default_578": {
             "mips": [
                 "link::default_404",
                 "link::default_405",
                 "link::default_409",
                 "link::default_411"
             ],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::83bbfc65-7f07-11ef-9308-b1dd71e64bec",
                 "link::83bbfc71-7f07-11ef-9308-b1dd71e64bec",
@@ -404,13 +414,13 @@
                 "link::babb12ae-e5dd-11e5-8482-ac72891c3257"
             ]
         },
-        "default_585": {
+        "default_579": {
             "mips": [
                 "link::default_405",
                 "link::default_409",
                 "link::default_411"
             ],
-            "priority_level": "link::default_487",
+            "priority_level": "link::default_481",
             "variables": [
                 "link::83bbfbbc-7f07-11ef-9308-b1dd71e64bec",
                 "link::83bbfbbd-7f07-11ef-9308-b1dd71e64bec",

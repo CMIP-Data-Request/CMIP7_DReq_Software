@@ -64,33 +64,28 @@ DR = DataRequest.from_separated_inputs(DR_input=f"../data_request_api/stable/con
 # -> Print DR content
 print(DR)
 # -> Print an experiment group content
-print(DR.get_experiments_groups()[0])
+print(DR.get_experiment_groups()[0])
 # -> Get all variables' id associated with an opportunity
 print(DR.find_variables_per_opportunity(DR.get_opportunities()[0]))
 # -> Get all experiments' id associated with an opportunity
 print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0]))
 # -> Get information about the shapes of the variables of all variables groups
-rep = dict()
-for elt in DR.get_variables_groups():
-    rep[elt.id] = dict(spatial_shape=set(), frequency=set(), temporal_shape=set(), physical_parameter=set())
-    for var in elt.get_variables():
-        for key in ["spatial_shape", "frequency", "temporal_shape", "physical_parameter"]:
-            rep[elt.id][key] = rep[elt.id][key].union(set([elt.get("name", "???") if isinstance(elt, dict) else elt
-                                                           for elt in var.__getattribute__(key)]))
+# rep = defaultdict(lambda: defaultdict(lambda: set))
+# for elt in DR.get_variable_groups():
+#     for var in elt.get_variables():
+#         for key in ["spatial_shape", "cmip7_frequency", "temporal_shape", "physical_parameter"]:
+#             rep[elt.id][key] = rep[elt.id][key].add(var.get(key).name)
+#
+# rep = defaultdict(lambda: defaultdict(set))
+# for elt in DR.get_variable_groups():
+#     for var in elt.get_variables():
+#         realm = set([elt.name for elt in var.modelling_realm])
+#         spt_shp = set([elt.name for elt in var.spatial_shape])
+#         tmp_shp = set([elt.name for elt in var.temporal_shape])
+#         for (rlm, sshp, tshp) in zip(realm, spt_shp, tmp_shp):
+#             rep[rlm][var.physical_parameter.name].add(f"{var.cmip7_frequency.name} // {sshp} // {tshp}")
+# pprint.pprint(rep)
 
-rep = defaultdict(lambda: defaultdict(set))
-for elt in DR.get_variables_groups():
-    for var in elt.get_variables():
-        param = var.physical_parameter
-        if isinstance(param, dict):
-            param = param["name"]
-        freq = var.frequency
-        if isinstance(freq, dict):
-            freq = freq["name"]
-        realm = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.modelling_realm])
-        spt_shp = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.spatial_shape])
-        tmp_shp = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.temporal_shape])
-        for (rlm, freq, sshp, tshp) in zip(realm, [freq, ], spt_shp, tmp_shp):
-            rep[rlm][param].add(f"{freq} // {sshp} // {tshp}")
-pprint.pprint(rep)
-# pprint.pprint(rep_data)
+print(DR.find_experiments_per_theme("Atmosphere"))
+
+DR.export_summary("opportunities", "data_request_themes", "op_per_th.csv")
