@@ -18,6 +18,7 @@ for path in add_paths:
 
 import dreq_content as dc
 from dump_transformation import transform_content
+from data_request import DataRequest
 from tools import write_json_output_file_content
 from logger import change_log_file, change_log_level
 
@@ -44,5 +45,11 @@ for use_export_version in use_export_versions:
     data_request, vocabulary_server = transform_content(content, version=use_dreq_version)
 
     ### Step 3: Write down the two files
-    write_json_output_file_content(os.path.sep.join([output_directory, f"DR_{use_export_version}_content.json"]), data_request)
-    write_json_output_file_content(os.path.sep.join([output_directory, f"VS_{use_export_version}_content.json"]), vocabulary_server)
+    DR_file = os.path.sep.join([output_directory, f"DR_{use_export_version}_content.json"])
+    VS_file = os.path.sep.join([output_directory, f"VS_{use_export_version}_content.json"])
+    write_json_output_file_content(DR_file, data_request)
+    write_json_output_file_content(VS_file, vocabulary_server)
+
+    DR = DataRequest.from_separated_inputs(DR_input=DR_file, VS_input=VS_file)
+
+

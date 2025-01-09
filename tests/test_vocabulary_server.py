@@ -14,288 +14,94 @@ import sys
 sys.path.append('../data_request_api/stable/transform')
 
 
-from vocabulary_server import VSObject, Experiment, Variable, VocabularyServer
+from tools import read_json_input_file_content
+from vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 
-class TestVSObject(unittest.TestCase):
+class TestLinks(unittest.TestCase):
 
-	def setUp(self):
-		self.vs = VocabularyServer.from_input("test_datasets/VS_output.json")
-		self.obj_str = "VSObject: my_id"
+	def test_is_link_or_value(self):
+		self.assertEqual(is_link_id_or_value("test"), (False, "test"))
+		self.assertEqual(is_link_id_or_value(None), (False, None))
+		self.assertEqual(is_link_id_or_value(5), (False, 5))
+		self.assertEqual(is_link_id_or_value("link::test"), (True, "test"))
 
-	def test_init(self):
-		with self.assertRaises(TypeError):
-			VSObject()
-
-		with self.assertRaises(TypeError):
-			VSObject("my_id")
-
-		with self.assertRaises(TypeError):
-			VSObject(self.vs)
-
-		obj = VSObject("my_id", self.vs)
-		obj = VSObject(id="my_id", vs=self.vs)
-
-	def test_properties(self):
-		obj = VSObject(id="my_id", vs=self.vs)
-		self.assertEqual(obj.id, "my_id")
-
-	def test_buildins(self):
-		obj = VSObject(id="my_id", vs=self.vs)
-		self.assertEqual(str(obj), self.obj_str)
-		self.assertEqual(repr(obj), self.obj_str)
-		self.assertEqual(hash(obj), hash("my_id"))
-		self.assertEqual(obj.get("id"), "my_id")
-
-		obj2 = VSObject(id="other", vs=self.vs)
-		self.assertNotEqual(obj, obj2)
-		self.assertGreater(obj2, obj)
-		self.assertLess(obj, obj2)
-		self.assertEqual(obj2.get("id"), "other")
-
-	def test_print_content(self):
-		obj = VSObject(id="my_id", vs=self.vs)
-		self.assertEqual(obj.print_content(), [self.obj_str, ])
-		self.assertEqual(obj.print_content(level=0), [self.obj_str, ])
-		self.assertEqual(obj.print_content(add_content=False), [self.obj_str, ])
-		self.assertEqual(obj.print_content(level=1), ["    " + self.obj_str, ])
-
-	def test_get_value_from_vs(self):
-		# TODO: Implement this test
-		pass
-
-
-class TestExperiment(unittest.TestCase):
-
-	def setUp(self):
-		self.vs = VocabularyServer.from_input("test_datasets/VS_output.json")
-
-	def test_init(self):
-		with self.assertRaises(TypeError):
-			Experiment()
-
-		with self.assertRaises(TypeError):
-			Experiment("my_id")
-
-		with self.assertRaises(TypeError):
-			Experiment(vs=self.vs)
-
-		with self.assertRaises(TypeError):
-			Experiment(id="my_id", vs=self.vs)
-
-		exp = Experiment(id="my_id", vs=self.vs, name="my_name")
-
-	def test_from_input(self):
-		with self.assertRaises(TypeError):
-			Experiment.from_input()
-
-		with self.assertRaises(TypeError):
-			Experiment.from_input(id="my_id")
-
-		with self.assertRaises(TypeError):
-			Experiment.from_input(name="my_name")
-
-		with self.assertRaises(TypeError):
-			Experiment.from_input(vs=self.vs)
-
-		with self.assertRaises(TypeError):
-			Experiment.from_input(id="my_id", vs=self.vs, name="my_name")
-
-		exp = Experiment.from_input(id="my_id", vs=self.vs, input_dict=dict(name="my_name"))
-
-	def test_properties(self):
-		exp = Experiment(id="my_id", vs=self.vs, name="my_name")
-		self.assertEqual(exp.name, "my_name")
-
-	def test_print_content(self):
-		exp = Experiment(id="my_id", vs=self.vs, name="my_name")
-		exp_str = "experiment my_name (id: my_id)"
-		self.assertEqual(exp.print_content(), [exp_str, ])
-		self.assertEqual(exp.print_content(level=0), [exp_str, ])
-		self.assertEqual(exp.print_content(add_content=False), [exp_str, ])
-		self.assertEqual(exp.print_content(level=1), ["    " + exp_str, ])
-
-
-class TestVariable(unittest.TestCase):
-	def setUp(self):
-		self.vs = VocabularyServer.from_input("test_datasets/VS_output.json")
-
-	def test_init(self):
-		with self.assertRaises(TypeError):
-			Variable()
-
-		with self.assertRaises(TypeError):
-			Variable("my_id")
-
-		with self.assertRaises(TypeError):
-			Variable(vs=self.vs)
-
-		var = Variable(id="my_id", vs=self.vs, name="my_name")
-
-	def test_from_input(self):
-		with self.assertRaises(TypeError):
-			Variable.from_input()
-
-		with self.assertRaises(TypeError):
-			Variable.from_input(id="my_id")
-
-		with self.assertRaises(TypeError):
-			Variable.from_input(name="my_name")
-
-		with self.assertRaises(TypeError):
-			Variable.from_input(vs=self.vs)
-
-		with self.assertRaises(TypeError):
-			Variable.from_input(id="my_id", vs=self.vs, name="my_name")
-
-		var = Variable.from_input(id="my_id", vs=self.vs,
-		                          input_dict={"name": "my_name", "type": "test"})
-		self.assertEqual(var.content_type, "test")
-		self.assertEqual(var.name, "my_name")
-
-	def test_properties(self):
-		test_var_dict = {"cell_measures": ["link::default_4"],
-		                 "cell_methods": ["link::CellMethods::amse-tmn"],
-		                 "cmip7_frequency": ["link::default_113"],
-		                 "description": "Prognostic z-ward velocity component resolved by the model.\n",
-		                 "esm-bcv_1.3": ["link::default_240"],
-		                 "modelling_realm": ["link::default_422"],
-		                 "name": "Omon.wo",
-		                 "physical_parameter": ["link::d476e6113f5c466d27fd3aa9e9c35411"],
-		                 "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure "
-		                                    "vertical grid if depth or pressure are not native. Those who wish to "
-		                                    "record vertical velocities and vertical fluxes on ocean half-levels may do"
-		                                    " so. If using CMOR3 you will be required to specify artificial bounds "
-		                                    "(e.g. located at full model levels) to avoid an error exit.\n",
-		                 "provenance": "Omon ((isd.003))",
-		                 "spatial_shape": ["link::a6562c2a-8883-11e5-b571-ac72891c3257"],
-		                 "structure_title": ["link::default_498"],
-		                 "table": ["link::MIPtable::Omon"],
-		                 "temporal_shape": ["link::cf34c974-80be-11e6-97ee-ac72891c3257"],
-		                 "title": "Sea Water Vertical Velocity",
-		                 "type": "real"}
-		test_var_dict_2 = copy.deepcopy(test_var_dict)
-		del test_var_dict_2["spatial_shape"]
-		del test_var_dict_2["modelling_realm"]
-		var = Variable(id="my_id", vs=self.vs, **test_var_dict)
-		var2 = Variable(id="my_id", vs=self.vs, **test_var_dict_2)
-
-		self.assertEqual(var.id, "my_id")
-		self.assertEqual(var2.id, "my_id")
-
-		self.assertEqual(var.uid, "my_id")
-		self.assertEqual(var2.uid, "my_id")
-
-		self.assertEqual(var.cf_standard_name["name"], "upward_sea_water_velocity")
-		self.assertEqual(var2.cf_standard_name["name"], "upward_sea_water_velocity")
-
-		self.assertEqual(var.cell_measures, [{'name': 'area: areacello volume: volcello'}, ])
-		self.assertEqual(var2.cell_measures, [{'name': 'area: areacello volume: volcello'}, ])
-
-		self.assertEqual(var.cell_methods, [{'brand_id': 'sea', 'cell_methods': 'area: mean where sea time: mean',
-		                                     'name': 'amse-tmn', 'regex': 1, 'title': 'Time Mean over Sea'}, ])
-		self.assertEqual(var2.cell_methods, [{'brand_id': 'sea', 'cell_methods': 'area: mean where sea time: mean',
-		                                     'name': 'amse-tmn', 'regex': 1, 'title': 'Time Mean over Sea'}, ])
-
-		self.assertEqual(var.name, "Omon.wo")
-		self.assertEqual(var2.name, "Omon.wo")
-
-		self.assertEqual(var.content_type, "real")
-		self.assertEqual(var2.content_type, "real")
-
-		self.assertEqual(var.description, "Prognostic z-ward velocity component resolved by the model.\n")
-		self.assertEqual(var2.description, "Prognostic z-ward velocity component resolved by the model.\n")
-
-		self.assertEqual(var.frequency, {'description': 'monthly mean samples', 'name': 'mon', 'sampling_rate': 120}, )
-		self.assertEqual(var2.frequency, {'description': 'monthly mean samples', 'name': 'mon', 'sampling_rate': 120}, )
-
-		self.assertEqual(var.modelling_realm, [{'id': 'ocean', 'name': 'Ocean', 'other_name': 'Ocean'}])
-		self.assertEqual(var2.modelling_realm, ["???", ])
-
-		self.assertEqual(var.physical_parameter, {
-            "cf_standard_name": ["link::default_99"],
-            "description": "A velocity is a vector quantity. \"Upward\" indicates a vector component which is positive"
-                           " when directed upward (negative downward).\n",
-            "name": "wo",
-            "provenance": "SPECS_Omon",
-            "title": "Sea Water Vertical Velocity",
-            "units": "m s-1"
-        })
-		self.assertEqual(var2.physical_parameter, {
-            "cf_standard_name": ["link::default_99"],
-            "description": "A velocity is a vector quantity. \"Upward\" indicates a vector component which is positive"
-                           " when directed upward (negative downward).\n",
-            "name": "wo",
-            "provenance": "SPECS_Omon",
-            "title": "Sea Water Vertical Velocity",
-            "units": "m s-1"
-        })
-
-		self.assertEqual(var.spatial_shape, [{
-            "level_flag": "False",
-            "name": "XY-O",
-            "title": "Global ocean field on model levels",
-        }, ])
-		self.assertEqual(var2.spatial_shape, ["???", ])
-
-		self.assertEqual(var.structure_title, {
-            "cell_measures": "area: areacello volume: volcello",
-            "cell_methods": [
-                "link::CellMethods::amse-tmn"
-            ],
-            "cmip6_title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]",
-            "name": "str-157",
-            "spatial_shape": [
-                "link::a6562c2a-8883-11e5-b571-ac72891c3257"
-            ],
-            "summary": "Structure",
-            "temporal_shape": [
-                "link::cf34c974-80be-11e6-97ee-ac72891c3257"
-            ],
-            "title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]"
-        })
-		self.assertEqual(var2.structure_title, {
-            "cell_measures": "area: areacello volume: volcello",
-            "cell_methods": [
-                "link::CellMethods::amse-tmn"
-            ],
-            "cmip6_title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]",
-            "name": "str-157",
-            "spatial_shape": [
-                "link::a6562c2a-8883-11e5-b571-ac72891c3257"
-            ],
-            "summary": "Structure",
-            "temporal_shape": [
-                "link::cf34c974-80be-11e6-97ee-ac72891c3257"
-            ],
-            "title": "Temporal mean, Global ocean field on model levels [XY-O] [tmean]"
-        })
-
-		self.assertEqual(var.table, [{'alternative_label': 'Omon', 'cmip7_frequency': ['link::default_113'],
-		                              'name': 'Omon', 'new_names': ['Omon'], 'title': 'Monthly ocean data'}, ])
-		self.assertEqual(var2.table, [{'alternative_label': 'Omon', 'cmip7_frequency': ['link::default_113'],
-		                               'name': 'Omon', 'new_names': ['Omon'], 'title': 'Monthly ocean data'}, ])
-
-		self.assertEqual(var.temporal_shape, [{'brand': 'tavg', 'dimensions': ['link::dim:time', ], 'name': 'time-mean',
-		                                       'title': 'Temporal mean',
-		                                       'variables_comments': ['link::default_536', 'link::default_555']}, ])
-		self.assertEqual(var2.temporal_shape, [{'brand': 'tavg','dimensions': ['link::dim:time', ], 'name': 'time-mean',
-		                                        'title': 'Temporal mean',
-		                                       'variables_comments': ['link::default_536', 'link::default_555']}, ])
-
-		self.assertEqual(var.title, "Sea Water Vertical Velocity")
-		self.assertEqual(var2.title, "Sea Water Vertical Velocity")
-
-	def test_print_content(self):
-		var = Variable(id="my_id", vs=self.vs, physical_parameter="link::d476e6113f5c466d27fd3aa9e9c35411",
-		               cmip7_frequency="link::default_110", title="my_title")
-		var_str = "variable wo at frequency day (id: my_id, title: my_title)"
-		self.assertEqual(var.print_content(), [var_str, ])
-		self.assertEqual(var.print_content(level=0), [var_str, ])
-		self.assertEqual(var.print_content(add_content=False), [var_str, ])
-		self.assertEqual(var.print_content(level=1), ["    " + var_str, ])
+	def test_build_link_from_id(self):
+		self.assertEqual(build_link_from_id(None), None)
+		self.assertEqual(build_link_from_id(6), 6)
+		self.assertEqual(build_link_from_id("test"), "link::test")
+		self.assertEqual(build_link_from_id("link::test"), "link::test")
 
 
 class TestVocabularyServer(unittest.TestCase):
-	# TODO: Implement tests for Vocabulary Server
-	pass
+	def setUp(self):
+		self.vs_file = "test_datasets/VS_output.json"
+		self.vs_content = read_json_input_file_content(self.vs_file)
+		self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
+		self.vs_content_infinite_loop["cell_methods"]["CellMethods::am-tm"]["structure_title"] = "link::default_483"
+
+	def test_init(self):
+		with self.assertRaises(TypeError):
+			VocabularyServer()
+
+		content_no_version = copy.deepcopy(self.vs_content)
+		del content_no_version["version"]
+		with self.assertRaises(KeyError):
+			VocabularyServer(content_no_version)
+
+		obj = VocabularyServer(self.vs_content)
+		obj = VocabularyServer(self.vs_content, an_attrib="a_value")
+
+		with self.assertRaises(ValueError):
+			VocabularyServer(self.vs_content_infinite_loop)
+
+		with self.assertRaises(TypeError):
+			VocabularyServer.from_input(self.vs_content)
+
+		obj = VocabularyServer.from_input(self.vs_file)
+
+	def test_get_element(self):
+		vs = VocabularyServer.from_input(self.vs_file)
+
+		elt = vs.get_element(element_type="my_type", element_id="test")
+		self.assertEqual(elt, "test")
+		elt = vs.get_element(element_type="my_type", element_id="???")
+		self.assertEqual(elt, "???")
+		elt = vs.get_element(element_type="my_type", element_id=None)
+		self.assertEqual(elt, None)
+
+		with self.assertRaises(ValueError):
+			elt = vs.get_element(element_type="my_type", element_id="test", id_type="type")
+		with self.assertRaises(ValueError):
+			elt = vs.get_element(element_type="variable_comment", element_id="test", id_type="type")
+
+		elt = vs.get_element(element_type="mips", element_id="TIPMIP", id_type="mip_short_name")
+		target_dict = {
+			"mip_abstract": "TIPMIP is an international intercomparison project that aims to systematically advance our understanding of nonlinear dynamics in various Earth system components, and assess the associated uncertainties and risks. At present, no MIP exists which focuses specifically on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling this gap, TIPMIP will shed light on critical processes currently underrepresented in other MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are components of the Earth system highly susceptible to reaching a critical threshold \u2013 a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or irreversible changes in response to anthropogenic climate change. Crossing a tipping point can lead the systems to transition to an alternative state, often with reduced resilience to perturbations and recovery. Once triggered, the tipping of one of these elements can have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, understanding the dynamics of tipping elements and associated risks is crucial for developing effective strategies to mitigate and adapt to the impacts of global environmental change.\n\nWhy is this project important?\nOur current scientific knowledge of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) which components of the climate system and biosphere might show tipping behaviour, (ii) if so, at which forcing levels the critical thresholds are located, (iii) which feedback processes they are associated with, and (iv) if and how potential tipping cascades might evolve. These uncertainties have numerous sources, for instance connected to:\n-finding the \u201cright\u201d level of complexity regarding certain processes within and between Earth system components; \n-the representation of all relevant biophysical processes on the required timescales in Earth system models (in part, so far limited due to computational constraints);\n-the implementation of certain processes and feedbacks in the models; and\n-the limitations on observational data availability for long time horizons.\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is the risk of crossing potential tipping points in the cryosphere, biosphere and core circulation systems at different levels of ongoing climate and land-use change?\n-What are the key biophysical processes and feedbacks associated with these risks?\n-What are the characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping elements?\n-How does the forcing rate affect short- and long-term impacts of changes in the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the respective impacts reversible, and if so, on which timescales?\n-How do interactions between elements affect the overall stability of the Earth system?\n\nTypes of experiments \nInitially, we envision three major types of experiments for TIPMIP, all of which will be designed for the assessment of potential key tipping elements including the Greenland Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze the historical and projected response of potential tipping elements to different climate change scenarios;\n-Commitment experiments to assess the long-term consequences of surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe potential hysteresis behaviour;\n-Rate experiments to assess the impact of different forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be complemented by an additional set of \u2018make it happen\u2019-experiments, which apply additional forcings (e.g., land-use change, freshwater input etc.) tailored to the individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, in which the impact of fully collapsed tipping elements can be studied.",
+			"mip_long_name": "Tipping Point Modelling Intercomparison Project",
+			"mip_short_name": "TIPMIP",
+			"mip_website": "https://www.tipmip.org",
+			"name": "undef",
+			"id": "default_401"
+		}
+		self.assertDictEqual(elt, target_dict)
+		obj = vs.get_element(element_type="mips", element_id="link::default_401")
+		self.assertDictEqual(elt, target_dict)
+
+		with self.assertRaises(ValueError):
+			obj = vs.get_element(element_type="mips", element_id="link::default_200")
+
+		obj = vs.get_element(element_type="mips", element_id="link::default_200", default=None)
+		self.assertIsNone(obj)
+
+		with self.assertRaises(ValueError):
+			obj = vs.get_element(element_type="mips", element_id=None, id_type="name")
+
+		with self.assertRaises(ValueError):
+			obj = vs.get_element(element_type="mips", element_id="undef", id_type="name")
+
+		obj = vs.get_element(element_type="mips", element_id="link::default_401", element_key="mip_long_name")
+		self.assertEqual(obj, "Tipping Point Modelling Intercomparison Project")
+
+		with self.assertRaises(ValueError):
+			obj = vs.get_element(element_type="mips", element_id="link::default_401", element_key="long_name")
