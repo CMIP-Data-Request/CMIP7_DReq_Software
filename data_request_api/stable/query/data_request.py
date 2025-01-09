@@ -14,10 +14,10 @@ from collections import defaultdict
 
 import six
 
-from logger import get_logger, change_log_file, change_log_level
-from dump_transformation import transform_content
-from tools import read_json_file
-from vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from utilities.logger import get_logger, change_log_file, change_log_level
+from content.dump_transformation import transform_content
+from utilities.tools import read_json_file
+from query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 version = "0.1"
 

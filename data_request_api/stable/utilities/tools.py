@@ -9,7 +9,7 @@ from __future__ import division, absolute_import, print_function, unicode_litera
 import json
 import os
 
-from logger import get_logger
+from utilities.logger import get_logger
 
 
 def read_json_file(filename):

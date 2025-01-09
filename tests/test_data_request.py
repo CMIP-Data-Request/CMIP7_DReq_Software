@@ -12,13 +12,13 @@ import unittest
 import sys
 
 
-sys.path.append('../data_request_api/stable/transform')
+sys.path.append('../data_request_api/stable')
 
 
-from tools import read_json_input_file_content, write_json_output_file_content
+from utilities.tools import read_json_input_file_content, write_json_output_file_content
 
-from data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, DataRequest, version
-from vocabulary_server import VocabularyServer, is_link_id_or_value
+from query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, DataRequest, version
+from query.vocabulary_server import VocabularyServer, is_link_id_or_value
 
 
 class TestDRObjects(unittest.TestCase):

@@ -16,8 +16,8 @@ from collections import defaultdict
 
 import six
 
-from logger import get_logger, change_log_level, change_log_file
-from tools import read_json_input_file_content, write_json_output_file_content
+from utilities.logger import get_logger, change_log_level, change_log_file
+from utilities.tools import read_json_input_file_content, write_json_output_file_content
 
 
 def correct_key_string(input_string, *to_remove_strings):

@@ -14,8 +14,8 @@ from collections import defaultdict
 
 import six
 
-from logger import get_logger
-from tools import read_json_file
+from utilities.logger import get_logger
+from utilities.tools import read_json_file
 
 
 def is_link_id_or_value(elt):
