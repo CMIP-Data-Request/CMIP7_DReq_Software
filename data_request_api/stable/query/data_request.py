@@ -205,7 +205,7 @@ class Variable(DRObjects):
 			return True, request_value in self.table
 		elif request_type in ["temporal_shape", ]:
 			return True, request_value == self.temporal_shape
-		elif request_type in ["spatial_shpae", ]:
+		elif request_type in ["spatial_shape", ]:
 			return True, request_value == self.spatial_shape
 		elif request_type in ["structure", ]:
 			return True, request_value == self.structure_title
@@ -613,8 +613,9 @@ class DataRequest(object):
 		elif element_type in ["mips", ]:
 			elements = self.get_mips()
 		else:
-			logger.error(f"Could not list elements for element_type {element_type}")
-			raise ValueError(f"Could not list elements for element_type {element_type}")
+			logger.debug("Find elements list from vocabulary server.")
+			element_type, elements_ids = self.VS.get_element_type_ids(element_type)
+			elements = [self.find_element(element_type, id) for id in elements_ids]
 		return elements
 
 	@staticmethod
@@ -725,35 +726,57 @@ class DataRequest(object):
 		                                                 skip_if_missing=filtering_skip_if_missing)
 		sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
 
-		with open(output_file, "w") as f:
-			f.writelines([";".join(export_columns_request), ])
-			for data in sorted_filtered_data:
-				f.writelines([";".join([data.id, ] + [data.get(key) for key in export_columns_request]), ])
+		export_columns_request.insert(0, "id")
+		content = list()
+		content.append(";".join(export_columns_request))
+		for data in sorted_filtered_data:
+			content.append(";".join([str(data.__getattr__(key)) for key in export_columns_request]))
 
-	def export_summary(self, lines_data, columns_data_title, output_file, sorting_line="id", title_line="name",
+		with open(output_file, "w") as f:
+			f.write(os.linesep.join(content))
+
+	def export_summary(self, lines_data, columns_data, output_file, sorting_line="id", title_line="name",
 	                   sorting_column="id", title_column="name", filtering_requests=dict(), filtering_operation="all",
 	                   filtering_skip_if_missing=False):
+		logger = get_logger()
+		logger.info(f"Generate summary for {lines_data}/{columns_data}")
 		filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
 		                                                 operation=filtering_operation,
 		                                                 skip_if_missing=filtering_skip_if_missing)
 		sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
-		columns_data = self.filter_elements_per_request(element_type=columns_data_title)
-		columns_data = self.sort_func(columns_data, sorting_request=[sorting_column, ])
-		columns_title = [str(elt.__getattr__(title_column)) for elt in columns_data]
+		columns_datasets = self.filter_elements_per_request(element_type=columns_data)
+		columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
+		columns_title = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
+		table_title = f"{lines_data} {title_line} / {columns_data} {title_column}"
 
-		table_title = f"{lines_data} {title_line} / {columns_data_title} {title_column}"
-		content = list()
-		content.append(";".join([table_title, ] + columns_title))
-		for data in sorted_filtered_data:
-			content.append(";".join([str(data.__getattr__(title_line)), ] +
-			                         ["x"
-			                          if self.filter_elements_per_request(element_type=data.DR_type,
-			                                                              requests={data.DR_type: data,
-			                                                                        elt.DR_type: elt},
-			                                                              operation="all") else "" for elt in columns_data]))
+		nb_lines = len(sorted_filtered_data)
+		logger.debug(f"{nb_lines} elements found for {lines_data}")
+		logger.debug(f"{len(columns_title)} found elements for {columns_data}")
 
+		logger.info("Generate summary")
+		content = defaultdict(list)
+		for (i, data) in enumerate(columns_datasets):
+			logger.debug(f"Deal with column {i}/{len(columns_title)}")
+			filter_line_datasets = self.filter_elements_per_request(element_type=lines_data,
+			                                                        requests={data.DR_type: data},
+			                                                        operation="all")
+			for line_data in filtered_data:
+				line_data_title = line_data.__getattr__(title_line)
+				if line_data in filter_line_datasets:
+					content[line_data_title].append("x")
+				else:
+					content[line_data_title].append("")
+
+		logger.info("Format summary")
+		rep = list()
+		rep.append(";".join([table_title, ] + columns_title))
+		for line_data in filtered_data:
+			line_data_title = str(line_data.__getattr__(title_line))
+			rep.append(";".join([line_data_title, ] + content[line_data_title]))
+
+		logger.info("Write summary")
 		with open(output_file, "w") as f:
-			f.write(os.linesep.join(content))
+			f.write(os.linesep.join(rep))
 
 
 if __name__ == "__main__":
