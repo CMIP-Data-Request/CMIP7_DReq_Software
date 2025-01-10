@@ -53,7 +53,7 @@ def correct_dictionaries(input_dict, is_record_ids=False):
         raise TypeError(f"Deal with dict types, not {type(input_dict).__name__}")
 
 
-def transform_content_three_bases(content, version):
+def transform_content_three_bases(content):
     logger = get_logger()
     if isinstance(content, dict) and len(content) > 2:
         new_content = dict()
@@ -121,7 +121,7 @@ def transform_content_three_bases(content, version):
             content_str = re.sub(f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"', content_str)
         new_content = json.loads(content_str)
         # Return the content
-        return {f"Data Request {version}": new_content}
+        return {"Data Request": new_content}
     else:
         logger.error(f"Deal with dict types, not {type(content).__name__}")
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
@@ -430,7 +430,7 @@ def transform_content(content, version):
             logger.info("Single database case - no structure transformation needed")
         elif len(content) in [3, 4]:
             logger.info("Several databases case - structure transformation needed")
-            content = transform_content_three_bases(content, version=version)
+            content = transform_content_three_bases(content)
         else:
             raise ValueError(f"Could not manage the {len(content):d} bases export file.")
         # Correct dictionaries

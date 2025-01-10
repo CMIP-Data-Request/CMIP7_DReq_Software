@@ -8,8 +8,6 @@ Vocabulary server.
 from __future__ import division, print_function, unicode_literals, absolute_import
 
 import copy
-import os
-import pprint
 from collections import defaultdict
 
 import six
@@ -53,6 +51,15 @@ class VocabularyServer(object):
 		)
 		return element_type_dict.get(element_type, element_type)
 
+	@staticmethod
+	def to_plural(element_type):
+		if not element_type.endswith("s"):
+			if element_type.endswith("y"):
+				element_type = element_type.rstrip("y") + "ies"
+			else:
+				element_type += "s"
+		return element_type
+
 	def check_infinite_loop(self):
 		"""
 		Check that there is no infinite loop in the vocabulary server.
@@ -90,60 +97,65 @@ class VocabularyServer(object):
 			logger.critical("Infinite loop found in vocabulary server, see former error messages.")
 			raise ValueError("Infinite loop found in vocabulary server, see former error messages.")
 
+	def get_element_type_ids(self, element_type):
+		logger = get_logger()
+		element_type = self.alias(element_type)
+		if element_type not in self.vocabulary_server:
+			element_type = self.to_plural(element_type)
+		if element_type in self.vocabulary_server:
+			return element_type, sorted(list(self.vocabulary_server[element_type]))
+		else:
+			logger.error(f"Could not find element type {element_type} in the vocabulary server.")
+			raise ValueError(f"Could not find element type {element_type} in the vocabulary server.")
+
 	def get_element(self, element_type, element_id, element_key=None, default=False, id_type="id"):
 		logger = get_logger()
 		is_id, element_id = is_link_id_or_value(element_id)
 		if is_id or id_type != "id":
-			element_type = self.alias(element_type)
-			if element_type not in self.vocabulary_server:
-				element_type += "s"
-			if element_type in self.vocabulary_server:
-				found = False
-				if id_type in ["id", ] and element_id in self.vocabulary_server[element_type]:
-					value = self.vocabulary_server[element_type][element_id]
+			element_type, element_type_ids = self.get_element_type_ids(element_type)
+			found = False
+			if id_type in ["id", ] and element_id in element_type_ids:
+				value = self.vocabulary_server[element_type][element_id]
+				found = True
+			elif isinstance(id_type, six.string_types):
+				if element_id is None:
+					raise ValueError("None element_id found")
+				value = list()
+				for (key, val) in self.vocabulary_server[element_type].items():
+					val = val.get(id_type)
+					if (isinstance(val, list) and element_id in val) or element_id == val:
+						value.append(key)
+				if len(value) == 1:
 					found = True
-				elif isinstance(id_type, six.string_types):
-					if element_id is None:
-						raise ValueError("None element_id found")
-					value = list()
-					for (key, val) in self.vocabulary_server[element_type].items():
-						val = val.get(id_type)
-						if (isinstance(val, list) and element_id in val) or element_id == val:
-							value.append(key)
-					if len(value) == 1:
-						found = True
-						element_id = value[0]
-						value = self.vocabulary_server[element_type][element_id]
-					elif len(value) > 1:
-						logger.error(f"id_type {id_type} provided is not unique for element type {element_type} and "
-						             f"value {element_key}.")
-						raise ValueError(f"id_type {id_type} provided is not unique for element type {element_type} "
-						                 f"and value {element_key}.")
-				if found:
-					value = copy.deepcopy(value)
-					if element_key is not None:
-						if element_key in value:
-							value = value.get(element_key)
-						else:
-							logger.error(f"Could not find key {element_key} of id {element_id} of type {element_type} "
-							             f"in the vocabulary server.")
-							raise ValueError(f"Could not find key {element_key} of id {element_id} of type "
-							                 f"{element_type} in the vocabulary server.")
-					elif isinstance(value, dict):
-						value["id"] = element_id
-					return value
-				elif default is not False:
-					logger.critical(f"Could not find {id_type} {element_id} of type {element_type}"
-					                f" in the vocabulary server.")
-					return default
-				else:
-					logger.error(f"Could not find {id_type} {element_id} of type {element_type} "
-					             f"in the vocabulary server.")
-					raise ValueError(f"Could not find {id_type} {element_id} of type {element_type} "
-					                 f"in the vocabulary server.")
+					element_id = value[0]
+					value = self.vocabulary_server[element_type][element_id]
+				elif len(value) > 1:
+					logger.error(f"id_type {id_type} provided is not unique for element type {element_type} and "
+					             f"value {element_key}.")
+					raise ValueError(f"id_type {id_type} provided is not unique for element type {element_type} "
+					                 f"and value {element_key}.")
+			if found:
+				value = copy.deepcopy(value)
+				if element_key is not None:
+					if element_key in value:
+						value = value.get(element_key)
+					else:
+						logger.error(f"Could not find key {element_key} of id {element_id} of type {element_type} "
+						             f"in the vocabulary server.")
+						raise ValueError(f"Could not find key {element_key} of id {element_id} of type "
+						                 f"{element_type} in the vocabulary server.")
+				elif isinstance(value, dict):
+					value["id"] = element_id
+				return value
+			elif default is not False:
+				logger.critical(f"Could not find {id_type} {element_id} of type {element_type}"
+				                f" in the vocabulary server.")
+				return default
 			else:
-				logger.error(f"Could not find element type {element_type} in the vocabulary server.")
-				raise ValueError(f"Could not find element type {element_type} in the vocabulary server.")
+				logger.error(f"Could not find {id_type} {element_id} of type {element_type} "
+				             f"in the vocabulary server.")
+				raise ValueError(f"Could not find {id_type} {element_id} of type {element_type} "
+				                 f"in the vocabulary server.")
 		elif element_id in ["???", None]:
 			logger.critical(f"Undefined id of type {element_type}")
 			return element_id

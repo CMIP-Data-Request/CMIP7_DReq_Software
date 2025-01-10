@@ -89,3 +89,7 @@ print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0]))
 print(DR.find_experiments_per_theme("Atmosphere"))
 
 DR.export_summary("opportunities", "data_request_themes", "op_per_th.csv")
+DR.export_summary("variables", "opportunities", "var_per_op.csv")
+DR.export_summary("experiments", "opportunities", "exp_per_op.csv")
+DR.export_summary("variables", "spatial_shape", "var_per_spsh.csv")
+DR.export_data("opportunities", "op.csv", export_columns_request=["name", "lead_theme", "description"])
