@@ -71,7 +71,8 @@ def transform_content_three_bases(content):
         new_content["Variables"] = content[variables_table].pop("Variable")
         new_content["Coordinates and Dimensions"] = content[variables_table].pop("Coordinate or Dimension")
         new_content["Variable Comments"] = content[variables_table].pop("Comment")
-        new_content["Modelling Realm"] = content[variables_table].pop("Modeling Realm")
+        if "Modeling Realm" in content[variables_table]:
+            new_content["Modelling Realm"] = content[variables_table].pop("Modeling Realm")
         for elt in list(content[variables_table]):
             new_content[elt] = content[variables_table].pop(elt)
         new_content["Physical Parameter Comments"] = content[physical_parameters_table].pop("Comment")
@@ -96,22 +97,6 @@ def transform_content_three_bases(content):
             new_content["Variables"]["records"][var_id]["Physical Parameter"] = \
                 [new_physical_parameters_ids[old_physical_parameters_ids[elt]] for elt in
                  new_content["Variables"]["records"][var_id]["Physical Parameter"]]
-        # Create a new frequency entry if none
-        if "CMIP7 Frequency" not in new_content:
-            if "Frequency" not in new_content:
-                new_content["CMIP7 Frequency"] = dict(records=dict())
-                for var_id in new_content["Variables"]["records"]:
-                    for frequency_id in copy.deepcopy(new_content["Variables"]["records"][var_id]["Frequency"]):
-                        if frequency_id not in new_content["CMIP7 Frequency"]["records"]:
-                            new_content["CMIP7 Frequency"]["records"][frequency_id] = dict(name=frequency_id, uid=frequency_id)
-            else:
-                new_content["CMIP7 Frequency"] = new_content.pop("Frequency")
-        if "Data Request Themes" not in new_content:
-            new_content["Data Request Themes"] = dict(records=dict())
-            for opportunity_id in new_content["Opportunity"]["records"]:
-                for theme_id in copy.deepcopy(new_content["Opportunity"]["records"][opportunity_id]["Themes"]):
-                    if theme_id not in new_content["Data Request Themes"]["records"]:
-                        new_content["Data Request Themes"]["records"][theme_id] = dict(name=theme_id, uid=theme_id)
         # Harmonise record ids through bases
         logger.info("Harmonise bases content record ids")
         content_str = json.dumps(new_content)
@@ -122,6 +107,9 @@ def transform_content_three_bases(content):
         new_content = json.loads(content_str)
         # Return the content
         return {"Data Request": new_content}
+    elif isinstance(content, dict):
+        logger.error(f"Deal with several bases dict.")
+        raise ValueError(f"Deal with several bases dict.")
     else:
         logger.error(f"Deal with dict types, not {type(content).__name__}")
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
@@ -129,7 +117,7 @@ def transform_content_three_bases(content):
 
 def transform_content_one_base(content):
     logger = get_logger()
-    if isinstance(content, dict):
+    if isinstance(content, dict) and len(content) == 1:
         default_count = 0
         default_template = "default_{:d}"
         content = content[list(content)[0]]
@@ -173,7 +161,7 @@ def transform_content_one_base(content):
             "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
             "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names", "physical_parameters"],
             "priority_level": ["variable_group", ],
-            "spatial_shape": [r"dimensions.*", r"structure.*", r"variables.*", "hor.*", "vert.*"],
+            "spatial_shape": [r"dimensions.*", r"structure.*", r".*variables.*", "hor.*", "vert.*"],
             "structure_title": [r"variables.*", "brand_.*", "calculation.*"],
             "table_identifiers": ["variables", ],
             "temporal_shape": ["variables", "structure"],
@@ -382,6 +370,9 @@ def transform_content_one_base(content):
                         logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")
                         raise ValueError(f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")
         return content
+    elif isinstance(content, dict):
+        logger.error("Deal with one base content dict.")
+        raise ValueError("Deal with one base content dict.")
     else:
         logger.error(f"Deal with dict types, not {type(content).__name__}")
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")

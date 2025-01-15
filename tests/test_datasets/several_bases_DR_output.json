@@ -1,0 +1,409 @@
+{
+    "experiment_groups": {
+        "default_265": {
+            "experiments": [
+                "link::default_268",
+                "link::default_269",
+                "link::default_271",
+                "link::default_272",
+                "link::default_273",
+                "link::default_274",
+                "link::default_275",
+                "link::default_276",
+                "link::default_277",
+                "link::default_278",
+                "link::default_279",
+                "link::default_280",
+                "link::default_282",
+                "link::default_283",
+                "link::default_285",
+                "link::default_286",
+                "link::default_289",
+                "link::default_290",
+                "link::default_291",
+                "link::default_292",
+                "link::default_293",
+                "link::default_295",
+                "link::default_296",
+                "link::default_298",
+                "link::default_299",
+                "link::default_302",
+                "link::default_303",
+                "recOR3eMtlsumCHhO"
+            ]
+        },
+        "default_266": {
+            "experiments": [
+                "link::default_272"
+            ]
+        },
+        "default_267": {
+            "experiments": [
+                "link::default_270",
+                "link::default_281",
+                "link::default_284",
+                "link::default_287",
+                "link::default_288",
+                "link::default_294",
+                "link::default_297",
+                "link::default_300",
+                "link::default_301",
+                "link::default_304"
+            ]
+        }
+    },
+    "opportunities": {
+        "default_323": {
+            "data_request_themes": [
+                "Atmosphere",
+                "Land & Land-Ice"
+            ],
+            "experiment_groups": [
+                "recJoILQRKYKsPdd3"
+            ],
+            "mips": [],
+            "time_slice": [
+                "0",
+                "2",
+                "h",
+                "i",
+                "s",
+                "t"
+            ],
+            "variable_groups": [
+                "link::default_540"
+            ]
+        },
+        "default_324": {
+            "data_request_themes": [
+                "Earth System",
+                "Impacts & Adaptation",
+                "Ocean & Sea-Ice"
+            ],
+            "experiment_groups": [
+                "link::default_265",
+                "link::default_266",
+                "link::default_267",
+                "recJoILQRKYKsPdd3",
+                "recuqVDruA0gukjMw"
+            ],
+            "mips": [],
+            "time_slice": [],
+            "variable_groups": [
+                "link::default_532",
+                "link::default_533",
+                "link::default_534",
+                "link::default_535",
+                "link::default_541"
+            ]
+        },
+        "default_325": {
+            "data_request_themes": [
+                "Atmosphere",
+                "Earth System",
+                "Impacts & Adaptation",
+                "Ocean & Sea-Ice"
+            ],
+            "experiment_groups": [
+                "link::default_265",
+                "link::default_267",
+                "recJoILQRKYKsPdd3",
+                "recuqVDruA0gukjMw"
+            ],
+            "mips": [],
+            "time_slice": [],
+            "variable_groups": [
+                "link::default_536",
+                "link::default_537",
+                "link::default_538",
+                "link::default_539"
+            ]
+        }
+    },
+    "variable_groups": {
+        "default_532": {
+            "mips": [
+                "link::default_306",
+                "link::default_309",
+                "link::default_311",
+                "link::default_312",
+                "link::default_314",
+                "link::default_315",
+                "link::default_317",
+                "link::default_322"
+            ],
+            "priority_level": "High",
+            "variables": [
+                "link::83bbfb6e-7f07-11ef-9308-b1dd71e64bec",
+                "link::baa71c7c-e5dd-11e5-8482-ac72891c3257",
+                "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
+            ]
+        },
+        "default_533": {
+            "mips": [
+                "link::default_306",
+                "link::default_307",
+                "link::default_309",
+                "link::default_314",
+                "link::default_316",
+                "link::default_317",
+                "link::default_320"
+            ],
+            "priority_level": "Medium",
+            "variables": [
+                "link::83bbfc6e-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfc6f-7f07-11ef-9308-b1dd71e64bec",
+                "link::baa4e07e-e5dd-11e5-8482-ac72891c3257"
+            ]
+        },
+        "default_534": {
+            "mips": [
+                "link::default_306",
+                "link::default_313",
+                "link::default_316",
+                "link::default_321"
+            ],
+            "priority_level": "Medium",
+            "variables": [
+                "link::83bbfb6e-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfb71-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfb7c-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfb7f-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfb94-7f07-11ef-9308-b1dd71e64bec",
+                "link::ba9f3ac0-e5dd-11e5-8482-ac72891c3257",
+                "link::ba9f643c-e5dd-11e5-8482-ac72891c3257",
+                "link::ba9f686a-e5dd-11e5-8482-ac72891c3257",
+                "link::ba9f91f0-e5dd-11e5-8482-ac72891c3257",
+                "link::baa720e6-e5dd-11e5-8482-ac72891c3257",
+                "link::baa72514-e5dd-11e5-8482-ac72891c3257",
+                "link::c9180bae-c5e8-11e6-84e6-5404a60d96b5",
+                "link::c9181982-c5e8-11e6-84e6-5404a60d96b5"
+            ]
+        },
+        "default_535": {
+            "mips": [
+                "link::default_306",
+                "link::default_307",
+                "link::default_309",
+                "link::default_312",
+                "link::default_314",
+                "link::default_316",
+                "link::default_317",
+                "link::default_319",
+                "link::default_320",
+                "link::default_322"
+            ],
+            "priority_level": "High",
+            "variables": [
+                "link::527f5ccc-8c97-11ef-944e-41a8eb05f654",
+                "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec",
+                "link::baa50c2a-e5dd-11e5-8482-ac72891c3257"
+            ]
+        },
+        "default_536": {
+            "mips": [],
+            "priority_level": "Core",
+            "variables": [
+                "link::5a070350-c77d-11e6-8a33-5404a60d96b5",
+                "link::85c3e888-357c-11e7-8257-5404a60d96b5",
+                "link::8b8fbf42-4a5b-11e6-9cd2-ac72891c3257",
+                "link::8b9817e6-4a5b-11e6-9cd2-ac72891c3257",
+                "link::8bae00ba-4a5b-11e6-9cd2-ac72891c3257",
+                "link::8bae05ec-4a5b-11e6-9cd2-ac72891c3257",
+                "link::baa720e6-e5dd-11e5-8482-ac72891c3257",
+                "link::baa72514-e5dd-11e5-8482-ac72891c3257",
+                "link::baaace4e-e5dd-11e5-8482-ac72891c3257",
+                "link::baafec80-e5dd-11e5-8482-ac72891c3257",
+                "link::bab0135e-e5dd-11e5-8482-ac72891c3257",
+                "link::bab0238a-e5dd-11e5-8482-ac72891c3257",
+                "link::bab3d692-e5dd-11e5-8482-ac72891c3257",
+                "link::bab46db4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab491f4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5ecd4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab6fe58-e5dd-11e5-8482-ac72891c3257",
+                "link::bab902e8-e5dd-11e5-8482-ac72891c3257",
+                "link::bab928ae-e5dd-11e5-8482-ac72891c3257",
+                "link::bab94a50-e5dd-11e5-8482-ac72891c3257",
+                "link::bab95fae-e5dd-11e5-8482-ac72891c3257",
+                "link::babb5084-e5dd-11e5-8482-ac72891c3257",
+                "link::babb6cea-e5dd-11e5-8482-ac72891c3257",
+                "link::babbbbe6-e5dd-11e5-8482-ac72891c3257",
+                "link::babbd25c-e5dd-11e5-8482-ac72891c3257",
+                "link::babd0e56-e5dd-11e5-8482-ac72891c3257"
+            ]
+        },
+        "default_537": {
+            "mips": [],
+            "priority_level": "Core",
+            "variables": [
+                "link::baa3e4d0-e5dd-11e5-8482-ac72891c3257",
+                "link::baa3ea2a-e5dd-11e5-8482-ac72891c3257",
+                "link::baa3ee94-e5dd-11e5-8482-ac72891c3257",
+                "link::baa3f2e0-e5dd-11e5-8482-ac72891c3257",
+                "link::baa3f718-e5dd-11e5-8482-ac72891c3257",
+                "link::baa3fb50-e5dd-11e5-8482-ac72891c3257",
+                "link::baa83a12-e5dd-11e5-8482-ac72891c3257",
+                "link::bab1c08c-e5dd-11e5-8482-ac72891c3257",
+                "link::bab2f9d4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5c7fe-e5dd-11e5-8482-ac72891c3257",
+                "link::bab73a76-e5dd-11e5-8482-ac72891c3257",
+                "link::bab742c8-e5dd-11e5-8482-ac72891c3257",
+                "link::bab9bd00-e5dd-11e5-8482-ac72891c3257",
+                "link::f2fad86e-c38d-11e6-abc1-1b922e5e1118"
+            ]
+        },
+        "default_538": {
+            "mips": [],
+            "priority_level": "Core",
+            "variables": [
+                "link::1aab80fc-b006-11e6-9289-ac72891c3257",
+                "link::711075e2-faa7-11e6-bfb7-ac72891c3257",
+                "link::71237944-faa7-11e6-bfb7-ac72891c3257",
+                "link::714344cc-faa7-11e6-bfb7-ac72891c3257",
+                "link::7147b8fe-faa7-11e6-bfb7-ac72891c3257",
+                "link::714b603a-faa7-11e6-bfb7-ac72891c3257",
+                "link::714eec6e-faa7-11e6-bfb7-ac72891c3257",
+                "link::86119ff6-357c-11e7-8257-5404a60d96b5",
+                "link::baa507f2-e5dd-11e5-8482-ac72891c3257",
+                "link::baa51058-e5dd-11e5-8482-ac72891c3257",
+                "link::baa5147c-e5dd-11e5-8482-ac72891c3257",
+                "link::baa518c8-e5dd-11e5-8482-ac72891c3257",
+                "link::baa51d00-e5dd-11e5-8482-ac72891c3257",
+                "link::baa5255c-e5dd-11e5-8482-ac72891c3257",
+                "link::baa52de0-e5dd-11e5-8482-ac72891c3257",
+                "link::baa5491a-e5dd-11e5-8482-ac72891c3257",
+                "link::baa557f2-e5dd-11e5-8482-ac72891c3257",
+                "link::baa57688-e5dd-11e5-8482-ac72891c3257",
+                "link::baa586e6-e5dd-11e5-8482-ac72891c3257",
+                "link::baa58b1e-e5dd-11e5-8482-ac72891c3257",
+                "link::baa58f74-e5dd-11e5-8482-ac72891c3257",
+                "link::baa5942e-e5dd-11e5-8482-ac72891c3257",
+                "link::baa598c0-e5dd-11e5-8482-ac72891c3257",
+                "link::baa6c33a-e5dd-11e5-8482-ac72891c3257",
+                "link::baa6cf38-e5dd-11e5-8482-ac72891c3257",
+                "link::baa6d366-e5dd-11e5-8482-ac72891c3257",
+                "link::baaa4302-e5dd-11e5-8482-ac72891c3257",
+                "link::baaa8326-e5dd-11e5-8482-ac72891c3257",
+                "link::baaa9852-e5dd-11e5-8482-ac72891c3257",
+                "link::baaad7e0-e5dd-11e5-8482-ac72891c3257",
+                "link::baab0382-e5dd-11e5-8482-ac72891c3257",
+                "link::baab1818-e5dd-11e5-8482-ac72891c3257",
+                "link::baad45c0-e5dd-11e5-8482-ac72891c3257",
+                "link::baad5d9e-e5dd-11e5-8482-ac72891c3257",
+                "link::baad6596-e5dd-11e5-8482-ac72891c3257",
+                "link::baaefe2e-e5dd-11e5-8482-ac72891c3257",
+                "link::baaf86a0-e5dd-11e5-8482-ac72891c3257",
+                "link::baafe578-e5dd-11e5-8482-ac72891c3257",
+                "link::baaff41e-e5dd-11e5-8482-ac72891c3257",
+                "link::bab00b98-e5dd-11e5-8482-ac72891c3257",
+                "link::bab01dfe-e5dd-11e5-8482-ac72891c3257",
+                "link::bab0919e-e5dd-11e5-8482-ac72891c3257",
+                "link::bab1688a-e5dd-11e5-8482-ac72891c3257",
+                "link::bab17a6e-e5dd-11e5-8482-ac72891c3257",
+                "link::bab19ff8-e5dd-11e5-8482-ac72891c3257",
+                "link::bab1a782-e5dd-11e5-8482-ac72891c3257",
+                "link::bab1c85c-e5dd-11e5-8482-ac72891c3257",
+                "link::bab3cb52-e5dd-11e5-8482-ac72891c3257",
+                "link::bab3f8a2-e5dd-11e5-8482-ac72891c3257",
+                "link::bab42b88-e5dd-11e5-8482-ac72891c3257",
+                "link::bab45df6-e5dd-11e5-8482-ac72891c3257",
+                "link::bab47b56-e5dd-11e5-8482-ac72891c3257",
+                "link::bab48ce0-e5dd-11e5-8482-ac72891c3257",
+                "link::bab52da8-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5540e-e5dd-11e5-8482-ac72891c3257",
+                "link::bab578d0-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5aad0-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5bcdc-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5e1b2-e5dd-11e5-8482-ac72891c3257",
+                "link::bab607c8-e5dd-11e5-8482-ac72891c3257",
+                "link::bab6219a-e5dd-11e5-8482-ac72891c3257",
+                "link::bab6537c-e5dd-11e5-8482-ac72891c3257",
+                "link::bab670b4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab68ebe-e5dd-11e5-8482-ac72891c3257",
+                "link::bab69c06-e5dd-11e5-8482-ac72891c3257",
+                "link::bab6f494-e5dd-11e5-8482-ac72891c3257",
+                "link::bab7c2d4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab81e50-e5dd-11e5-8482-ac72891c3257",
+                "link::bab8fa0a-e5dd-11e5-8482-ac72891c3257",
+                "link::bab9237c-e5dd-11e5-8482-ac72891c3257",
+                "link::bab942a8-e5dd-11e5-8482-ac72891c3257",
+                "link::bab955ea-e5dd-11e5-8482-ac72891c3257",
+                "link::bab96cc4-e5dd-11e5-8482-ac72891c3257",
+                "link::bab9888a-e5dd-11e5-8482-ac72891c3257",
+                "link::babaef0e-e5dd-11e5-8482-ac72891c3257",
+                "link::babb4b34-e5dd-11e5-8482-ac72891c3257",
+                "link::babb67c2-e5dd-11e5-8482-ac72891c3257",
+                "link::babbb25e-e5dd-11e5-8482-ac72891c3257",
+                "link::babbcd34-e5dd-11e5-8482-ac72891c3257",
+                "link::babd0906-e5dd-11e5-8482-ac72891c3257",
+                "link::babd9ace-e5dd-11e5-8482-ac72891c3257",
+                "link::d241a6d2-4a9f-11e6-b84e-ac72891c3257"
+            ]
+        },
+        "default_539": {
+            "mips": [],
+            "priority_level": "Core",
+            "variables": [
+                "link::6a35d178-aa6a-11e6-9736-5404a60d96b5",
+                "link::8bae55ba-4a5b-11e6-9cd2-ac72891c3257",
+                "link::8bae5aba-4a5b-11e6-9cd2-ac72891c3257",
+                "link::8baebea6-4a5b-11e6-9cd2-ac72891c3257",
+                "link::917b8532-267c-11e7-8933-ac72891c3257",
+                "link::bab034a6-e5dd-11e5-8482-ac72891c3257",
+                "link::bab3c904-e5dd-11e5-8482-ac72891c3257",
+                "link::bab91b20-e5dd-11e5-8482-ac72891c3257",
+                "link::babb5db8-e5dd-11e5-8482-ac72891c3257",
+                "link::babbdec8-e5dd-11e5-8482-ac72891c3257"
+            ]
+        },
+        "default_540": {
+            "mips": [
+                "link::default_305",
+                "link::default_307",
+                "link::default_309",
+                "link::default_317"
+            ],
+            "priority_level": "High",
+            "variables": [
+                "link::83bbfc65-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfc71-7f07-11ef-9308-b1dd71e64bec",
+                "link::baaefbcc-e5dd-11e5-8482-ac72891c3257",
+                "link::baaf8452-e5dd-11e5-8482-ac72891c3257",
+                "link::bab034a6-e5dd-11e5-8482-ac72891c3257",
+                "link::bab1c668-e5dd-11e5-8482-ac72891c3257",
+                "link::bab3c904-e5dd-11e5-8482-ac72891c3257",
+                "link::bab47354-e5dd-11e5-8482-ac72891c3257",
+                "link::bab52b5a-e5dd-11e5-8482-ac72891c3257",
+                "link::bab59202-e5dd-11e5-8482-ac72891c3257",
+                "link::bab5df78-e5dd-11e5-8482-ac72891c3257",
+                "link::bab65138-e5dd-11e5-8482-ac72891c3257",
+                "link::bab91b20-e5dd-11e5-8482-ac72891c3257",
+                "link::babb12ae-e5dd-11e5-8482-ac72891c3257"
+            ]
+        },
+        "default_541": {
+            "mips": [
+                "link::default_307",
+                "link::default_309",
+                "link::default_317"
+            ],
+            "priority_level": "High",
+            "variables": [
+                "link::83bbfbbc-7f07-11ef-9308-b1dd71e64bec",
+                "link::83bbfbbd-7f07-11ef-9308-b1dd71e64bec",
+                "link::8bb11ef8-4a5b-11e6-9cd2-ac72891c3257",
+                "link::b811a784-7c00-11e6-bcdf-ac72891c3257",
+                "link::b811b062-7c00-11e6-bcdf-ac72891c3257",
+                "link::baa51d00-e5dd-11e5-8482-ac72891c3257",
+                "link::baa52de0-e5dd-11e5-8482-ac72891c3257",
+                "link::baa5491a-e5dd-11e5-8482-ac72891c3257",
+                "link::baa557f2-e5dd-11e5-8482-ac72891c3257",
+                "link::baa586e6-e5dd-11e5-8482-ac72891c3257",
+                "link::baa58b1e-e5dd-11e5-8482-ac72891c3257",
+                "link::babb20b4-e5dd-11e5-8482-ac72891c3257",
+                "link::d243ba76-4a9f-11e6-b84e-ac72891c3257"
+            ]
+        }
+    },
+    "version": "test"
+}

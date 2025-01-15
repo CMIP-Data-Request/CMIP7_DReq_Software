@@ -23,8 +23,8 @@ from query.vocabulary_server import VocabularyServer, is_link_id_or_value
 
 class TestDRObjects(unittest.TestCase):
 	def setUp(self):
-		self.dr = DataRequest.from_separated_inputs(VS_input="test_datasets/VS_output.json",
-		                                            DR_input="test_datasets/DR_output.json")
+		self.dr = DataRequest.from_separated_inputs(VS_input="test_datasets/one_base_VS_output.json",
+		                                            DR_input="test_datasets/one_base_DR_output.json")
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -92,8 +92,8 @@ class TestDRObjects(unittest.TestCase):
 
 class TestExperimentsGroup(unittest.TestCase):
 	def setUp(self):
-		self.dr = DataRequest.from_separated_inputs(VS_input="test_datasets/VS_output.json",
-		                                            DR_input="test_datasets/DR_output.json")
+		self.dr = DataRequest.from_separated_inputs(VS_input="test_datasets/one_base_VS_output.json",
+		                                            DR_input="test_datasets/one_base_DR_output.json")
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -193,8 +193,8 @@ class TestExperimentsGroup(unittest.TestCase):
 
 class TestVariablesGroup(unittest.TestCase):
 	def setUp(self):
-		self.dr = DataRequest.from_separated_inputs(DR_input="test_datasets/DR_output.json",
-		                                            VS_input="test_datasets/VS_output.json")
+		self.dr = DataRequest.from_separated_inputs(DR_input="test_datasets/one_base_DR_output.json",
+		                                            VS_input="test_datasets/one_base_VS_output.json")
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -301,8 +301,8 @@ class TestVariablesGroup(unittest.TestCase):
 
 class TestOpportunity(unittest.TestCase):
 	def setUp(self):
-		self.dr = DataRequest.from_separated_inputs(DR_input="test_datasets/DR_output.json",
-		                                            VS_input="test_datasets/VS_output.json")
+		self.dr = DataRequest.from_separated_inputs(DR_input="test_datasets/one_base_DR_output.json",
+		                                            VS_input="test_datasets/one_base_VS_output.json")
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -417,14 +417,14 @@ class TestOpportunity(unittest.TestCase):
 
 class TestDataRequest(unittest.TestCase):
 	def setUp(self):
-		self.vs_file = "test_datasets/VS_output.json"
+		self.vs_file = "test_datasets/one_base_VS_output.json"
 		self.vs_dict = read_json_input_file_content(self.vs_file)
 		self.vs = VocabularyServer.from_input(self.vs_file)
-		self.input_database_file = "test_datasets/DR_output.json"
+		self.input_database_file = "test_datasets/one_base_DR_output.json"
 		self.input_database = read_json_input_file_content(self.input_database_file)
 		self.complete_input_file = "test_datasets/one_base_input.json"
 		self.complete_input = read_json_input_file_content(self.complete_input_file)
-		self.DR_dump = "test_datasets/DR_dump.txt"
+		self.DR_dump = "test_datasets/one_base_DR_dump.txt"
 
 	def test_init(self):
 		with self.assertRaises(TypeError):
@@ -628,9 +628,9 @@ class TestDataRequest(unittest.TestCase):
 
 class TestDataRequestFilter(unittest.TestCase):
 	def setUp(self):
-		self.vs_file = "test_datasets/VS_output.json"
+		self.vs_file = "test_datasets/one_base_VS_output.json"
 		self.vs = VocabularyServer.from_input(self.vs_file)
-		self.input_database_file = "test_datasets/DR_output.json"
+		self.input_database_file = "test_datasets/one_base_DR_output.json"
 		self.input_database = read_json_input_file_content(self.input_database_file)
 		self.dr = DataRequest(input_database=self.input_database, VS=self.vs)
 

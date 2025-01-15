@@ -35,7 +35,7 @@ class TestLinks(unittest.TestCase):
 
 class TestVocabularyServer(unittest.TestCase):
 	def setUp(self):
-		self.vs_file = "test_datasets/VS_output.json"
+		self.vs_file = "test_datasets/one_base_VS_output.json"
 		self.vs_content = read_json_input_file_content(self.vs_file)
 		self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
 		self.vs_content_infinite_loop["cell_methods"]["CellMethods::am-tm"]["structure_title"] = "link::default_483"
