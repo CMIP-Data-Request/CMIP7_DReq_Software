@@ -134,10 +134,7 @@ class DRObjects(object):
 		"""
 		indent = "    " * level
 		DR_type = copy.deepcopy(self.DR_type)
-		if DR_type.endswith("ies"):
-			DR_type = DR_type.removesuffix("ies") + "y"
-		else:
-			DR_type = DR_type.rstrip("s")
+		DR_type = self.dr.VS.to_singular(DR_type)
 		return [f"{indent}{DR_type}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
 
 	def filter_on_request(self, request_value):

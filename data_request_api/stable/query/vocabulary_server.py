@@ -60,6 +60,14 @@ class VocabularyServer(object):
 				element_type += "s"
 		return element_type
 
+	@staticmethod
+	def to_singular(element_type):
+		if element_type.endswith("ies"):
+			element_type = element_type.removesuffix("ies") + "y"
+		elif element_type.endswith("s"):
+			element_type = element_type.removesuffix("s")
+		return element_type
+
 	def check_infinite_loop(self):
 		"""
 		Check that there is no infinite loop in the vocabulary server.
@@ -82,7 +90,7 @@ class VocabularyServer(object):
 		def follow_loop(current_key, former_keys=list()):
 			logger = get_logger()
 			found = False
-			alias_key = self.alias(current_key)
+			alias_key, _ = self.get_element_type_ids(current_key)
 			if alias_key in former_keys:
 				logger.error(f"Infinite loop found: {former_keys + [current_key, ]}")
 				found = True

@@ -60,6 +60,18 @@ class TestVocabularyServer(unittest.TestCase):
 
 		obj = VocabularyServer.from_input(self.vs_file)
 
+	def test_to_singular(self):
+		vs = VocabularyServer.from_input(self.vs_file)
+		self.assertEqual(vs.to_singular("opportunities"), "opportunity")
+		self.assertEqual(vs.to_singular("variables_groups"), "variables_group")
+		self.assertEqual(vs.to_singular("variables_group"), "variables_group")
+
+	def test_to_plural(self):
+		vs = VocabularyServer.from_input(self.vs_file)
+		self.assertEqual(vs.to_plural("opportunity"), "opportunities")
+		self.assertEqual(vs.to_plural("variables_groups"), "variables_groups")
+		self.assertEqual(vs.to_plural("variables_group"), "variables_groups")
+
 	def test_get_element(self):
 		vs = VocabularyServer.from_input(self.vs_file)
 

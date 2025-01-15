@@ -37,8 +37,6 @@ use_export_versions = ["raw", "release"]
 output_directory = f'{dc._dreq_res}/{use_dreq_version}'
 for use_export_version in use_export_versions:
     # Download specified version of data request content (if not locally cached)
-    dc.retrieve(use_dreq_version, export=use_export_version)
-    # Load content into python dict
     content = dc.load(use_dreq_version, export=use_export_version, consolidate=False)
 
     ### Step 2: Transform content into DR and VS
