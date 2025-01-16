@@ -7,21 +7,13 @@ import warnings
 from filecmp import cmp
 from shutil import move
 
-# from . import consolidate_export as ce
-import consolidate_export as ce
+from . import consolidate_export as ce
 import pooch
 import requests
 from bs4 import BeautifulSoup
-# from .mapping_table import mapping_table
-from mapping_table import mapping_table
+from .mapping_table import mapping_table
 
-# TODO: remove after initial "sandbox" dev period
-add_paths = [os.path.abspath(os.sep.join([os.path.abspath(os.path.dirname(__file__)), "../.."])), ]
-for path in add_paths:
-   if path not in sys.path:
-       sys.path.append(path)
-from utilities.logger import get_logger  # noqa
-# from ...transform.logger import get_logger  # noqa
+from data_request_api.stable.utilities.logger import get_logger  # noqa
 
 
 # Suppress pooch info output

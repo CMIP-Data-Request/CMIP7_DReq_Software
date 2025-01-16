@@ -17,8 +17,7 @@ from collections import OrderedDict
 # import dreq_classes
 # reload(dreq_classes)
 
-# from .dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS
-from dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS
+from .dreq_classes import dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS
 
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
 

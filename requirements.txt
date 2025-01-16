@@ -6,3 +6,4 @@ pandas
 requests
 bs4
 coverage
+pytest

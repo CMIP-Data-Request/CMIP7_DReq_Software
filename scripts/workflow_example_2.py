@@ -28,16 +28,15 @@ from collections import defaultdict
 
 import six
 
-add_paths = ['../data_request_api/stable/content/dreq_api/',
-             '../data_request_api/stable']
+add_paths = ['../']
 for path in add_paths:
     if path not in sys.path:
         sys.path.append(path)
 
 
-import content.dreq_api.dreq_content as dc
-from query.data_request import DataRequest
-from utilities.logger import change_log_file, change_log_level
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+from data_request_api.stable.query.data_request import DataRequest
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
 
 
 # Set up log file (default to stdout) and log level

@@ -1,0 +1,9 @@
+[run]
+command_line = -m pytest
+source =
+    data_request_api/stable
+
+[report]
+fail_under = 50
+exclude_lines =
+    if __name__ == "__main__":

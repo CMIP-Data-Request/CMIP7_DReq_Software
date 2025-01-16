@@ -1,6 +1,6 @@
 import os
 
-import dreq_content as dc
+from . import dreq_content as dc
 import pytest
 
 

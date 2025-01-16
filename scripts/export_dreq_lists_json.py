@@ -11,18 +11,9 @@ import argparse
 # The following should be removed once python packaging is completed.
 sys.path.append(os.path.join(os.path.dirname('__file__'), '..'))
 
-# import data_request_api.stable.content.dreq_api as dreq_api
-# import data_request_api.stable.content.dreq_api.dreq_content as dc
-# import data_request_api.stable.query.dreq_query as dq
-add_paths = []
-add_paths.append('../data_request_api/stable/content/dreq_api')
-add_paths.append('../data_request_api/stable/query')
-add_paths.append('../data_request_api/stable/transform')
-for path in add_paths:
-   if path not in sys.path:
-       sys.path.append(path)
-import dreq_content as dc
-import dreq_query as dq
+
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+import data_request_api.stable.query.dreq_query as dq
 
 
 def parse_args():

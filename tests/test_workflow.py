@@ -7,16 +7,12 @@ Test workflow
 from __future__ import print_function, division, unicode_literals, absolute_import
 
 import os
-import sys
 import unittest
 import tempfile
 
-sys.path.append('../data_request_api/stable')
-sys.path.append("../data_request_api/stable/content/dreq_api")
 
-
-import dreq_content as dc
-from query.data_request import DataRequest
+from data_request_api.stable.content.dreq_api import dreq_content as dc
+from data_request_api.stable.query.data_request import DataRequest
 
 
 class TestWorkflow1(unittest.TestCase):
