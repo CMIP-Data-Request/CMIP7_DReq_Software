@@ -30,11 +30,12 @@ Usage examples:
 
 '''
 import sys
-add_paths = []
-add_paths.append('../')
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
+import os
+
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 import data_request_api.stable.content.dreq_api.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 from importlib import reload

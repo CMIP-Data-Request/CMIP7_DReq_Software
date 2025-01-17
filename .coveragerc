@@ -1,4 +1,5 @@
 [run]
+parallel = True
 command_line = -m pytest
 source =
     data_request_api/stable

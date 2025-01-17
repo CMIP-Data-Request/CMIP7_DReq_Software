@@ -736,7 +736,7 @@ class DataRequest(object):
 	                   sorting_column="id", title_column="name", filtering_requests=dict(), filtering_operation="all",
 	                   filtering_skip_if_missing=False):
 		logger = get_logger()
-		logger.info(f"Generate summary for {lines_data}/{columns_data}")
+		logger.debug(f"Generate summary for {lines_data}/{columns_data}")
 		filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
 		                                                 operation=filtering_operation,
 		                                                 skip_if_missing=filtering_skip_if_missing)
@@ -750,7 +750,7 @@ class DataRequest(object):
 		logger.debug(f"{nb_lines} elements found for {lines_data}")
 		logger.debug(f"{len(columns_title)} found elements for {columns_data}")
 
-		logger.info("Generate summary")
+		logger.debug("Generate summary")
 		content = defaultdict(list)
 		for (i, data) in enumerate(columns_datasets):
 			logger.debug(f"Deal with column {i}/{len(columns_title)}")
@@ -764,14 +764,14 @@ class DataRequest(object):
 				else:
 					content[line_data_title].append("")
 
-		logger.info("Format summary")
+		logger.debug("Format summary")
 		rep = list()
 		rep.append(";".join([table_title, ] + columns_title))
 		for line_data in filtered_data:
 			line_data_title = str(line_data.__getattr__(title_line))
 			rep.append(";".join([line_data_title, ] + content[line_data_title]))
 
-		logger.info("Write summary")
+		logger.debug("Write summary")
 		with open(output_file, "w") as f:
 			f.write(os.linesep.join(rep))
 
