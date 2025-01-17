@@ -386,7 +386,7 @@ class TestOpportunity(unittest.TestCase):
 			"        data_request_theme: Atmosphere (id: default_115)",
 			"        data_request_theme: Impacts & Adaptation (id: default_117)",
 			"        data_request_theme: Land & Land-Ice (id: default_118)",
-			"    Time slices included:"
+			"    Time subsets included:"
 		]
 		self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
 		self.assertEqual(obj.print_content(level=1, add_content=False), ["    " + ref_str, ])
