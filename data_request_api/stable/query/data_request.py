@@ -16,7 +16,7 @@ import six
 
 from utilities.logger import get_logger, change_log_file, change_log_level
 from content.dump_transformation import transform_content
-from utilities.tools import read_json_file
+from utilities.tools import read_json_file, write_csv_output_file_content
 from query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 version = "0.1"
@@ -717,7 +717,7 @@ class DataRequest(object):
 			return rep
 
 	def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation="all",
-	                filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list()):
+	                filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(), **kwargs):
 		filtered_data = self.filter_elements_per_request(element_type=main_data, requests=filtering_requests,
 		                                                 operation=filtering_operation,
 		                                                 skip_if_missing=filtering_skip_if_missing)
@@ -725,16 +725,15 @@ class DataRequest(object):
 
 		export_columns_request.insert(0, "id")
 		content = list()
-		content.append(";".join(export_columns_request))
+		content.append(export_columns_request)
 		for data in sorted_filtered_data:
-			content.append(";".join([str(data.__getattr__(key)) for key in export_columns_request]))
+			content.append([str(data.__getattr__(key)) for key in export_columns_request])
 
-		with open(output_file, "w") as f:
-			f.write(os.linesep.join(content))
+		write_csv_output_file_content(output_file, content, **kwargs)
 
 	def export_summary(self, lines_data, columns_data, output_file, sorting_line="id", title_line="name",
 	                   sorting_column="id", title_column="name", filtering_requests=dict(), filtering_operation="all",
-	                   filtering_skip_if_missing=False):
+	                   filtering_skip_if_missing=False, **kwargs):
 		logger = get_logger()
 		logger.info(f"Generate summary for {lines_data}/{columns_data}")
 		filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
@@ -766,14 +765,12 @@ class DataRequest(object):
 
 		logger.info("Format summary")
 		rep = list()
-		rep.append(";".join([table_title, ] + columns_title))
+		rep.append([table_title, ] + columns_title)
 		for line_data in filtered_data:
-			line_data_title = str(line_data.__getattr__(title_line))
-			rep.append(";".join([line_data_title, ] + content[line_data_title]))
+			rep.append([line_data.__getattr__(title_line), ] + content[line_data_title])
 
 		logger.info("Write summary")
-		with open(output_file, "w") as f:
-			f.write(os.linesep.join(rep))
+		write_csv_output_file_content(output_file, rep, **kwargs)
 
 
 if __name__ == "__main__":

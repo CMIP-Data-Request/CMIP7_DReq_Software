@@ -8,6 +8,7 @@ from __future__ import division, absolute_import, print_function, unicode_litera
 
 import json
 import os
+import csv
 
 from utilities.logger import get_logger
 
@@ -33,3 +34,10 @@ def write_json_output_file_content(filename, content, **kwargs):
         defaults = dict(indent=4, allow_nan=True, sort_keys=True)
         defaults.update(kwargs)
         json.dump(content, fic, **defaults)
+
+
+def write_csv_output_file_content(filename, content, **kwargs):
+    with open(filename, 'w', newline='') as csvfile:
+        csvfile_content = csv.writer(csvfile, **kwargs)
+        for elt in content:
+            csvfile_content.writerow(elt)
