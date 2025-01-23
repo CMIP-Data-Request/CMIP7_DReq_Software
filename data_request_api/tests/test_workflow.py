@@ -11,7 +11,6 @@ import sys
 import unittest
 import tempfile
 
-
 import data_request_api.stable.content.dreq_api.dreq_content as dc
 from data_request_api.stable.query.data_request import DataRequest
 
