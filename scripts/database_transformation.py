@@ -27,9 +27,8 @@ parser.add_argument("--log_level", default="info", help="Log level")
 parser.add_argument("--dreq_version", default="latest_stable", help="Version to be used")
 parser.add_argument("--dreq_export_version", default="release", help="Export version to be used")
 parser.add_argument("--use_consolidation", default=False, help="Should content consolidation be used?")
-parser.add_argument("--output_dir", choices=["default", "test", "customed"], default="default",
-                    help="Output directory management")
-parser.add_argument("--output_dir_customed", default=None, help="Customed output directory to be used")
+parser.add_argument("--output_dir", default="default",
+                    help="Output directory to be used ('default', 'test' or a specify output directory)")
 args = parser.parse_args()
 
 
@@ -59,17 +58,13 @@ def database_transformation(output_dir, dreq_version="latest_stable", dreq_expor
 change_log_file(default=True)
 change_log_level(args.log_level)
 
-if args.output_dir in ["default", "customed"]:
-    if args.output_dir in ["default", ]:
-        output_dir = dc._dreq_res
-    elif args.output_dir_customed is not None:
-        output_dir = args.output_dir_customed
-    else:
-        raise ValueError("If --output_dir='customed', --output_dir_customed should be defined with a not None value.")
-
-    database_transformation(output_dir=output_dir, dreq_version=args.dreq_version,
-                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
-elif args.output_dir in ["test", ]:
+if args.output_dir in ["test", ]:
     with tempfile.TemporaryDirectory() as output_dir:
         database_transformation(output_dir=output_dir, dreq_version=args.dreq_version,
                                 dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
+elif args.output_dir in ["default", ]:
+    database_transformation(output_dir=dc._dreq_res, dreq_version=args.dreq_version,
+                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
+else:
+    database_transformation(output_dir=args.output_dir, dreq_version=args.dreq_version,
+                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
