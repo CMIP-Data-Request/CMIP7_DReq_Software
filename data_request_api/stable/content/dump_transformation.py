@@ -21,6 +21,13 @@ from utilities.tools import read_json_input_file_content, write_json_output_file
 
 
 def correct_key_string(input_string, *to_remove_strings):
+    """
+    Change the input string by replacing '&' by 'and' and spaces by underscores.
+    It also removes others specified strings.
+    :param six.string_types input_string: the input string to be changed
+    :param list of six.string_types to_remove_strings: the list of strings to be removed from input_string
+    :return six.string_types: the changed string
+    """
     logger = get_logger()
     if isinstance(input_string, six.string_types):
         input_string = input_string.lower()
@@ -35,6 +42,12 @@ def correct_key_string(input_string, *to_remove_strings):
 
 
 def correct_dictionaries(input_dict, is_record_ids=False):
+    """
+    Correct the input_dict to correct the strings except the record ids.
+    :param dict input_dict: the input dictionary to be corrected
+    :param bool is_record_ids: a boolean to indicate whether the keys of input_dict contain record ids or not
+    :return dict: the corrected dictionary
+    """
     logger = get_logger()
     if isinstance(input_dict, dict):
         rep = dict()
@@ -54,6 +67,13 @@ def correct_dictionaries(input_dict, is_record_ids=False):
 
 
 def transform_content_three_bases(content):
+    """
+    Transform the several bases export content into something similar to a one base export content.
+    To do that, the content of the different entries of the input dictionary are copied to a single dictionary.
+    The record ids are also harmonised through the different bases.
+    :param dict content: input dictionary containing the different databases
+    :return dict: dictionary containing the content of the different databases
+    """
     logger = get_logger()
     if isinstance(content, dict) and len(content) > 2:
         new_content = dict()
@@ -116,6 +136,16 @@ def transform_content_three_bases(content):
 
 
 def transform_content_one_base(content):
+    """
+    Transform a one base export content to:
+    - remove unused keys which could create circle import later
+    - harmonise some entries
+    - reshape entries if needed
+    - remove elements which are not used
+    - filter content on status
+    :param dict content: one base content export (direct export or created from `transform_content_three_bases`
+    :return dict: the transform content
+    """
     logger = get_logger()
     if isinstance(content, dict) and len(content) == 1:
         default_count = 0
@@ -379,6 +409,13 @@ def transform_content_one_base(content):
 
 
 def split_content_one_base(content):
+    """
+    Split the one base content into two dictionaries:
+    - the DR (structure)
+    - the VS (vocabulary server with all information)
+    :param dict content: dictionary containing the one base content
+    :return dict, dict: two dictionaries containing respectively the DR and VS
+    """
     logger = get_logger()
     data_request = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: dict)))
     keys_to_dr_dict = {
@@ -414,6 +451,13 @@ def split_content_one_base(content):
 
 
 def transform_content(content, version):
+    """
+    Function to transform the export content (single or several base-s- export) to VS and DR dictionaries.
+    The key "version" is added to the DR and VS dictionaries.
+    :param dict content: input export content (either single base or several bases)
+    :param six.string_types version: string containing the version of the export content
+    :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
+    """
     logger = get_logger()
     if isinstance(content, dict):
         # Get back to one database case if needed
