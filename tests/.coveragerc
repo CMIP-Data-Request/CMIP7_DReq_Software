@@ -1,0 +1,24 @@
+[run]
+branch = True
+parallel = True
+command_line = -m pytest
+source =
+    data_request_api/stable
+data_file = tests/.coverage
+
+[report]
+fail_under = 50
+exclude_lines =
+    if __name__ == "__main__":
+
+[html]
+directory = tests/htmlcov
+
+[xml]
+output = tests/coverage.xml
+
+[json]
+output = tests/coverage.json
+
+[lcov]
+output = tests.coverage.lcov

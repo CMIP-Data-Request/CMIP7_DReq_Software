@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 
+export COVERAGE_RCFILE=tests/.coveragerc
+
 coverage erase
 
 coverage run
