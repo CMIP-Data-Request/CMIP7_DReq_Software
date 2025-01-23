@@ -33,4 +33,4 @@ Issues = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/issues"
 export_dreq_lists_json = "data_request_api.command_line.export_dreq_lists_json:main"
 
 [tools.setuptools.package-data]
-'src' = ['*.json']
+'src' = ['data_request_api/tests/test_datasets/*.json']
