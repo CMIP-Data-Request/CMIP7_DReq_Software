@@ -10,27 +10,38 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 import copy
 from collections import defaultdict
 
-import six
-
-from utilities.logger import get_logger
-from utilities.tools import read_json_file
+from data_request_api.stable.utilities.logger import get_logger
+from data_request_api.stable.utilities.tools import read_json_file
 
 
 def is_link_id_or_value(elt):
-	if isinstance(elt, six.string_types) and elt.startswith("link::"):
+	"""
+	Check if the input value is a link and transform it into a value if so
+	:param elt: element to be transformed into a value
+	:return: not link version oof elt
+	"""
+	if isinstance(elt, str) and elt.startswith("link::"):
 		return True, elt.replace("link::", "")
 	else:
 		return False, elt
 
 
 def build_link_from_id(elt):
-	if not isinstance(elt, six.string_types) or elt.startswith("link::"):
+	"""
+	Check if the input value is already a link and transform it if not
+	:param elt: element to be transformed into a link
+	:return: link version of elt
+	"""
+	if not isinstance(elt, str) or elt.startswith("link::"):
 		return elt
 	else:
 		return f"link::{elt}"
 
 
 class VocabularyServer(object):
+	"""
+	Class to generate a Vocabulary Server from a json file.
+	"""
 	def __init__(self, input_database, **kwargs):
 		self.vocabulary_server = copy.deepcopy(input_database)
 		self.version = self.vocabulary_server.pop("version")
@@ -38,10 +49,20 @@ class VocabularyServer(object):
 
 	@classmethod
 	def from_input(cls, input_database):
+		"""
+		Generate VocabularyServer from a json file
+		:param input_database: json file name
+		:return:
+		"""
 		content = read_json_file(input_database)
 		return cls(content)
 
 	def alias(self, element_type):
+		"""
+		Find the real element_type if aliased
+		:param element_type: input kind of element
+		:return:
+		"""
 		element_type_dict = dict(
 			keyword="glossary",
 			lead_theme="data_request_themes",
@@ -106,6 +127,11 @@ class VocabularyServer(object):
 			raise ValueError("Infinite loop found in vocabulary server, see former error messages.")
 
 	def get_element_type_ids(self, element_type):
+		"""
+		Get elements corresponding a a specific kind
+		:param element_type:
+		:return:
+		"""
 		logger = get_logger()
 		element_type = self.alias(element_type)
 		if element_type not in self.vocabulary_server:
@@ -117,6 +143,17 @@ class VocabularyServer(object):
 			raise ValueError(f"Could not find element type {element_type} in the vocabulary server.")
 
 	def get_element(self, element_type, element_id, element_key=None, default=False, id_type="id"):
+		"""
+		Get an element corresponding to an element_id (corresponding to attribute id_type) of a kind element_type.
+		If element_key is specified, get the corresponding attribute.
+		If no element found, return default.
+		:param element_type:
+		:param element_id:
+		:param element_key:
+		:param default:
+		:param id_type:
+		:return:
+		"""
 		logger = get_logger()
 		is_id, element_id = is_link_id_or_value(element_id)
 		if is_id or id_type != "id":
@@ -125,7 +162,7 @@ class VocabularyServer(object):
 			if id_type in ["id", ] and element_id in element_type_ids:
 				value = self.vocabulary_server[element_type][element_id]
 				found = True
-			elif isinstance(id_type, six.string_types):
+			elif isinstance(id_type, str):
 				if element_id is None:
 					raise ValueError("None element_id found")
 				value = list()

@@ -47,4 +47,3 @@ jobs:
         run: |
           echo "Installation or test failed for Python ${{ matrix.python-version }} on OS ${{ matrix.os }}."
           echo "::error file=install_test_report.txt,line=1::Installation or test failed for Python ${{ matrix.python-version }} on OS ${{ matrix.os }}"
-

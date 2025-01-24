@@ -22,74 +22,89 @@ To run interactively in ipython:
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 
-import sys
 import pprint
+import sys
+import os
+import argparse
+import tempfile
 from collections import defaultdict
 
-import six
-
-add_paths = ['../data_request_api/stable/content/dreq_api/',
-             '../data_request_api/stable']
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-import content.dreq_api.dreq_content as dc
-from query.data_request import DataRequest
-from utilities.logger import change_log_file, change_log_level
+from data_request_api.stable.content.dump_transformation import get_transformed_content
+from data_request_api.stable.query.data_request import DataRequest
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--log_level", default="info", help="Log level")
+parser.add_argument("--dreq_version", default="latest_stable", help="Version to be used")
+parser.add_argument("--dreq_export_version", default="release", help="Export version to be used")
+parser.add_argument("--use_consolidation", default=False, help="Should content consolidation be used?")
+parser.add_argument("--output_dir", default="default",
+                    help="Output directory to be used ('default', 'test' or a specify output directory)")
+args = parser.parse_args()
+
+
+def get_information_from_data_request(dreq_version, dreq_export_version, use_consolidation, output_dir):
+    ### Step 1: Get the data request content
+    DR_content, VS_content = get_transformed_content(version=dreq_version, export_version=dreq_export_version,
+                                                     use_consolidation=use_consolidation, output_dir=output_dir)
+    DR = DataRequest.from_separated_inputs(DR_input=DR_content, VS_input=VS_content)
+
+    ### Step 2: Get information from the DR
+    # -> Print DR content
+    print(DR)
+    # -> Print an experiment group content
+    print(DR.get_experiment_groups()[0])
+    # -> Get all variables' id associated with an opportunity
+    print(DR.find_variables_per_opportunity(DR.get_opportunities()[0]))
+    # -> Get all experiments' id associated with an opportunity
+    print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0]))
+    # -> Get information about the shapes of the variables of all variables groups
+    rep = defaultdict(lambda: defaultdict(set))
+    for elt in DR.get_variable_groups():
+        for var in elt.get_variables():
+            for key in ["spatial_shape", "cmip7_frequency", "temporal_shape", "physical_parameter"]:
+                rep[elt.id][key].add(var.get(key).name)
+    pprint.pprint(rep)
+
+    rep = defaultdict(lambda: defaultdict(set))
+    for elt in DR.get_variable_groups():
+        for var in elt.get_variables():
+            realm = set([elt.name for elt in var.modelling_realm])
+            for realm in realm:
+                rep[realm][var.physical_parameter.name].add(f"{var.cmip7_frequency.name} // {var.spatial_shape.name} // {var.temporal_shape.name}")
+    pprint.pprint(rep)
+
+    print(DR.find_experiments_per_theme("Atmosphere"))
+
+    if output_dir is None:
+        output_dir = "."
+
+    DR.export_summary("opportunities", "data_request_themes", os.sep.join([output_dir, "op_per_th.csv"]))
+    DR.export_summary("variables", "opportunities", os.sep.join([output_dir, "var_per_op.csv"]))
+    DR.export_summary("experiments", "opportunities", os.sep.join([output_dir, "exp_per_op.csv"]))
+    DR.export_summary("variables", "spatial_shape", os.sep.join([output_dir, "var_per_spsh.csv"]))
+    DR.export_data("opportunities", os.sep.join([output_dir, "op.csv"]),
+                   export_columns_request=["name", "lead_theme", "description"])
 
 
 # Set up log file (default to stdout) and log level
 change_log_file(default=True)
-change_log_level("debug")
+change_log_level(args.log_level)
 
-### Step 1: Get the content of the DR
-# Define content version to be used
-use_dreq_version = 'v1.0'
-# use_dreq_version = "first_export"
-# use_dreq_version = 'new_export_15Oct2024'
-# Download specified version of data request content (if not locally cached)
-# dc.retrieve(use_dreq_version)
-# Load content into python dict
-# content = dc.load(use_dreq_version)
-use_export_version = "release"
-
-### Step 2: Load it into the software of the DR
-# DR = DataRequest.from_input(json_input=content, version=use_dreq_version)
-DR = DataRequest.from_separated_inputs(DR_input=f"../data_request_api/stable/content/dreq_api/dreq_res/{use_dreq_version}/DR_{use_export_version}_content.json",
-                                       VS_input=f"../data_request_api/stable/content/dreq_api/dreq_res/{use_dreq_version}/VS_{use_export_version}_content.json")
-
-### Step 3: Get information from the DR
-# -> Print DR content
-print(DR)
-# -> Print an experiment group content
-print(DR.get_experiment_groups()[0])
-# -> Get all variables' id associated with an opportunity
-print(DR.find_variables_per_opportunity(DR.get_opportunities()[0]))
-# -> Get all experiments' id associated with an opportunity
-print(DR.find_experiments_per_opportunity(DR.get_opportunities()[0]))
-# -> Get information about the shapes of the variables of all variables groups
-# rep = defaultdict(lambda: defaultdict(lambda: set))
-# for elt in DR.get_variable_groups():
-#     for var in elt.get_variables():
-#         for key in ["spatial_shape", "cmip7_frequency", "temporal_shape", "physical_parameter"]:
-#             rep[elt.id][key] = rep[elt.id][key].add(var.get(key).name)
-#
-# rep = defaultdict(lambda: defaultdict(set))
-# for elt in DR.get_variable_groups():
-#     for var in elt.get_variables():
-#         realm = set([elt.name for elt in var.modelling_realm])
-#         spt_shp = set([elt.name for elt in var.spatial_shape])
-#         tmp_shp = set([elt.name for elt in var.temporal_shape])
-#         for (rlm, sshp, tshp) in zip(realm, spt_shp, tmp_shp):
-#             rep[rlm][var.physical_parameter.name].add(f"{var.cmip7_frequency.name} // {sshp} // {tshp}")
-# pprint.pprint(rep)
-
-print(DR.find_experiments_per_theme("Atmosphere"))
-
-DR.export_summary("opportunities", "data_request_themes", "op_per_th.csv")
-DR.export_summary("variables", "opportunities", "var_per_op.csv")
-DR.export_summary("experiments", "opportunities", "exp_per_op.csv")
-DR.export_summary("variables", "spatial_shape", "var_per_spsh.csv")
-DR.export_data("opportunities", "op.csv", export_columns_request=["name", "lead_theme", "description"])
+if args.output_dir in ["test", ]:
+    with tempfile.TemporaryDirectory() as output_dir:
+        get_information_from_data_request(output_dir=output_dir, dreq_version=args.dreq_version,
+                                          dreq_export_version=args.dreq_export_version,
+                                          use_consolidation=args.use_consolidation)
+elif args.output_dir in ["default", ]:
+    get_information_from_data_request(output_dir=None, dreq_version=args.dreq_version,
+                                      dreq_export_version=args.dreq_export_version,
+                                      use_consolidation=args.use_consolidation)
+else:
+    get_information_from_data_request(output_dir=args.output_dir, dreq_version=args.dreq_version,
+                                      dreq_export_version=args.dreq_export_version,
+                                      use_consolidation=args.use_consolidation)

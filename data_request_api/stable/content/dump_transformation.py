@@ -14,15 +14,22 @@ import argparse
 import re
 from collections import defaultdict
 
-import six
 
-from utilities.logger import get_logger, change_log_level, change_log_file
-from utilities.tools import read_json_input_file_content, write_json_output_file_content
+from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
+from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
+from .dreq_api import dreq_content as dc
 
 
 def correct_key_string(input_string, *to_remove_strings):
+    """
+    Change the input string by replacing '&' by 'and' and spaces by underscores.
+    It also removes others specified strings.
+    :param str input_string: the input string to be changed
+    :param list of str to_remove_strings: the list of strings to be removed from input_string
+    :return str: the changed string
+    """
     logger = get_logger()
-    if isinstance(input_string, six.string_types):
+    if isinstance(input_string, str):
         input_string = input_string.lower()
         for to_remove_string in to_remove_strings:
             input_string = input_string.replace(to_remove_string.lower(), "")
@@ -35,6 +42,12 @@ def correct_key_string(input_string, *to_remove_strings):
 
 
 def correct_dictionaries(input_dict, is_record_ids=False):
+    """
+    Correct the input_dict to correct the strings except the record ids.
+    :param dict input_dict: the input dictionary to be corrected
+    :param bool is_record_ids: a boolean to indicate whether the keys of input_dict contain record ids or not
+    :return dict: the corrected dictionary
+    """
     logger = get_logger()
     if isinstance(input_dict, dict):
         rep = dict()
@@ -54,6 +67,13 @@ def correct_dictionaries(input_dict, is_record_ids=False):
 
 
 def transform_content_three_bases(content):
+    """
+    Transform the several bases export content into something similar to a one base export content.
+    To do that, the content of the different entries of the input dictionary are copied to a single dictionary.
+    The record ids are also harmonised through the different bases.
+    :param dict content: input dictionary containing the different databases
+    :return dict: dictionary containing the content of the different databases
+    """
     logger = get_logger()
     if isinstance(content, dict) and len(content) > 2:
         new_content = dict()
@@ -116,6 +136,16 @@ def transform_content_three_bases(content):
 
 
 def transform_content_one_base(content):
+    """
+    Transform a one base export content to:
+    - remove unused keys which could create circle import later
+    - harmonise some entries
+    - reshape entries if needed
+    - remove elements which are not used
+    - filter content on status
+    :param dict content: one base content export (direct export or created from `transform_content_three_bases`
+    :return dict: the transform content
+    """
     logger = get_logger()
     if isinstance(content, dict) and len(content) == 1:
         default_count = 0
@@ -127,7 +157,8 @@ def transform_content_one_base(content):
             esm_bcv = esm_bcv[0]
             content["esm-bcv"] = content.pop(esm_bcv)
         for (key, new_key) in [("opportunity", "opportunities"), ("experiment_group", "experiment_groups"),
-                               ("variable_group", "variable_groups"), ("structure", "structure_title")]:
+                               ("variable_group", "variable_groups"), ("structure", "structure_title"),
+                               ("time_slice", "time_subset")]:
             if key in content:
                     content[new_key] = content.pop(key)
         for pattern in [".*rank.*", ]:
@@ -165,7 +196,7 @@ def transform_content_one_base(content):
             "structure_title": [r"variables.*", "brand_.*", "calculation.*"],
             "table_identifiers": ["variables", ],
             "temporal_shape": ["variables", "structure"],
-            "time_slice": ["uid.+", "opportunit.*"],
+            "time_subset": ["uid.+", "opportunit.*"],
             "variable_comments": ["variable.*", "spatial_shape", "temporal_shape", "coordinates_and_dimensions",
                                   "cell_methods", "cell_measures"],
             "variable_groups": [".*opportunit.*", "theme", r"size.*", "mip_ownership"],
@@ -184,7 +215,7 @@ def transform_content_one_base(content):
             "modelling_realm": [("id", "uid")],
             "opportunities": [("title_of_opportunity", "name"), ("comments", "opportunity/variable_group_comments"),
                               ("ensemble_size", "minimum_ensemble_size"), ("themes", "data_request_themes"),
-                              ("working/updated_variable_groups", "variable_groups")],
+                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subset")],
             "physical_parameters": [("comments", "physical_parameter_comments"),
                                     ("cf_proposal_github_issue", "proposal_github_issue"),
                                     ("flag.*change.*", "flag_change_since_cmip6")],
@@ -192,6 +223,7 @@ def transform_content_one_base(content):
             "temporal_shape": [("comments", "variable_comments")],
             "structure_title": [("label", "name")],
             "table_identifiers": [("comment", "notes"), ("frequency", "cmip6_frequency")],
+            "time_subset": [("label", "name")],
             "variable_groups": [(".*mips.*", "mips"), ("comments", "opportunity/variable_group_comments")],
             "variables": [("compound_name", "name"), ("cmip6_frequency.+", "cmip6_frequency"), (esm_bcv, "esm-bcv"),
                           ("modeling_realm", "modelling_realm"), ("comments", "variable_comments"),
@@ -364,7 +396,7 @@ def transform_content_one_base(content):
                         else:
                             logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
                             raise ValueError(f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
-                    elif isinstance(content[subelt][uid][key], six.string_types):
+                    elif isinstance(content[subelt][uid][key], str):
                         logger.warning(f"Could not reshape key {key} from id {uid} of element type {subelt}: already a string")
                     else:
                         logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")
@@ -379,13 +411,20 @@ def transform_content_one_base(content):
 
 
 def split_content_one_base(content):
+    """
+    Split the one base content into two dictionaries:
+    - the DR (structure)
+    - the VS (vocabulary server with all information)
+    :param dict content: dictionary containing the one base content
+    :return dict, dict: two dictionaries containing respectively the DR and VS
+    """
     logger = get_logger()
     data_request = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: dict)))
     keys_to_dr_dict = {
         "opportunities": [("experiment_groups", list, list()),
                           ("variable_groups", list, list()),
                           ("data_request_themes", list, list()),
-                          ("time_slice", list, list()),
+                          ("time_subset", list, list()),
                           ("mips", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),
@@ -414,6 +453,13 @@ def split_content_one_base(content):
 
 
 def transform_content(content, version):
+    """
+    Function to transform the export content (single or several base-s- export) to VS and DR dictionaries.
+    The key "version" is added to the DR and VS dictionaries.
+    :param dict content: input export content (either single base or several bases)
+    :param str version: string containing the version of the export content
+    :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
+    """
     logger = get_logger()
     if isinstance(content, dict):
         # Get back to one database case if needed
@@ -436,6 +482,41 @@ def transform_content(content, version):
     else:
         logger.error(f"Deal with dict types, not {type(content).__name__}")
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
+
+
+def get_transformed_content(version="latest_stable", export_version="release", use_consolidation=False,
+                            force_retrieve=False, output_dir=None,
+                            default_transformed_content_pattern="{kind}_{export_version}_content.json"):
+    # Download specified version of data request content (if not locally cached)
+    versions = dc.retrieve(version, export=export_version, consolidate=use_consolidation)
+
+    # Check that there is only one version associated
+    if len(versions) > 1:
+        raise ValueError("Could only deal with one version.")
+    elif len(versions) == 0:
+        raise ValueError("No version found.")
+    else:
+        version = list(versions)[0]
+        content = versions[version]
+        if output_dir is None:
+            output_dir = os.path.dirname(content)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export_version)
+        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export_version)
+        DR_content = os.sep.join([output_dir, DR_content])
+        VS_content = os.sep.join([output_dir, VS_content])
+        if force_retrieve or not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+            if os.path.exists(DR_content):
+                os.remove(DR_content)
+            if os.path.exists(VS_content):
+                os.remove(VS_content)
+        if not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+            content = dc.load(version, export=export_version, consolidate=use_consolidation)
+            data_request, vocabulary_server = transform_content(content, version)
+            write_json_output_file_content(DR_content, data_request)
+            write_json_output_file_content(VS_content, vocabulary_server)
+        return DR_content, VS_content
 
 
 if __name__ == "__main__":

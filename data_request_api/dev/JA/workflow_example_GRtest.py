@@ -6,7 +6,6 @@
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 
-import sys
 import pprint
 from collections import defaultdict
 
@@ -14,16 +13,9 @@ import six
 
 import json
 
-# add_paths = ['../sandbox/MS/dreq_api/', '../sandbox/JA', '../sandbox/GR']
-add_paths = ['../MS/dreq_api/', '../GR']
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
-
-
-import dreq_content as dc
-from data_request import DataRequest
-from logger import change_log_file, change_log_level
+from data_request_api.stable.content.dreq_api import dreq_content as dc
+from data_request_api.stable.query.data_request import DataRequest
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
 
 # Set up log file (default to stdout) and log level
 change_log_file(default=True)

@@ -30,15 +30,13 @@ Usage examples:
 
 '''
 import sys
-add_paths = []
-add_paths.append('../data_request_api/stable/content/dreq_api')
-add_paths.append('../data_request_api/stable/query')
-add_paths.append('../data_request_api/stable/transform')
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
-import dreq_content as dc
-import dreq_query as dq
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+from data_request_api.stable.content.dreq_api import dreq_content as dc
+from data_request_api.stable.query import dreq_query as dq
 from importlib import reload
 reload(dq)
 

@@ -8,14 +8,9 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 
 import copy
 import unittest
-import sys
 
-
-sys.path.append('../data_request_api/stable')
-
-
-from utilities.tools import read_json_input_file_content
-from query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from data_request_api.stable.utilities.tools import read_json_input_file_content
+from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 
 class TestLinks(unittest.TestCase):
@@ -35,7 +30,7 @@ class TestLinks(unittest.TestCase):
 
 class TestVocabularyServer(unittest.TestCase):
 	def setUp(self):
-		self.vs_file = "test_datasets/one_base_VS_output.json"
+		self.vs_file = "tests/test_datasets/one_base_VS_output.json"
 		self.vs_content = read_json_input_file_content(self.vs_file)
 		self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
 		self.vs_content_infinite_loop["cell_methods"]["CellMethods::am-tm"]["structure_title"] = "link::default_483"

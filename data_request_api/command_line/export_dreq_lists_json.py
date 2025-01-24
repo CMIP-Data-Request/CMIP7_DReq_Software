@@ -8,21 +8,9 @@ import json
 import os
 import argparse
 
-# The following should be removed once python packaging is completed.
-sys.path.append(os.path.join(os.path.dirname('__file__'), '..'))
-
 # import data_request_api.stable.content.dreq_api as dreq_api
-# import data_request_api.stable.content.dreq_api.dreq_content as dc
-# import data_request_api.stable.query.dreq_query as dq
-add_paths = []
-add_paths.append('../data_request_api/stable/content/dreq_api')
-add_paths.append('../data_request_api/stable/query')
-add_paths.append('../data_request_api/stable/transform')
-for path in add_paths:
-   if path not in sys.path:
-       sys.path.append(path)
-import dreq_content as dc
-import dreq_query as dq
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+import data_request_api.stable.query.dreq_query as dq
 
 
 def parse_args():
@@ -33,7 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('dreq_version', choices=dc.get_versions(), help="data request version")
     parser.add_argument('--opportunities_file', type=str, help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
-    parser.add_argument('--all_opportunities', action='store_true', help="Respond to all opporunities")
+    parser.add_argument('--all_opportunities', action='store_true', help="Respond to all opportunities")
     parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments')
     parser.add_argument('output_file', help='file to write JSON output to')
     return parser.parse_args()
@@ -98,6 +86,7 @@ def main():
 
     else:
         print(f'\nFor data request version {use_dreq_version}, no requested variables were found')
+
 
 if __name__ == '__main__':
     main()

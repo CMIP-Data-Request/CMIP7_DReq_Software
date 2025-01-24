@@ -10182,7 +10182,7 @@
                         "Land & Land-Ice",
                         "Atmosphere"
                     ],
-                    "Time Slice": "hist20",
+                    "Time Slice": "recTrKBLWZSASwQva",
                     "Title of Opportunity": "Accurate assessment of land-atmosphere coupling",
                     "Working/Updated Variable Groups": [
                         "recH9q8YycXMEkUYz"
@@ -19529,7 +19529,22 @@
             },
             "id": "tblalUGBSYivsPdUq",
             "name": "Time Slice",
-            "records": {}
+            "records": {
+                "recTrKBLWZSASwQva": {
+                    "End": 2014,
+                    "Label": "hist20",
+                    "Nyears": 20,
+                    "Opportunity": [
+                        "rec7HVXqHqzEtSdZo",
+                        "recjWG1SNiMhMa7rP"
+                    ],
+                    "Start": 1995,
+                    "Title": "1995-2014",
+                    "Type": "simpleRange",
+                    "uid": "527f5cac-8c97-11ef-944e-41a8eb05f654",
+                    "uid copy": "_slice_hist20"
+                }
+            }
         },
         "Variable Comments": {
             "base_id": "appBWxP0SS7K1hweJ",

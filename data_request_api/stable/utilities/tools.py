@@ -10,7 +10,7 @@ import json
 import os
 import csv
 
-from utilities.logger import get_logger
+from data_request_api.stable.utilities.logger import get_logger
 
 
 def read_json_file(filename):
@@ -30,6 +30,12 @@ def read_json_input_file_content(filename):
 
 
 def write_json_output_file_content(filename, content, **kwargs):
+    logger = get_logger()
+    logger.debug(f"Writing file {filename}.")
+    dirname = os.path.dirname(filename)
+    if not os.path.isdir(dirname):
+        logger.warning(f"Create directory {dirname}")
+        os.makedirs(dirname)
     with open(filename, "w") as fic:
         defaults = dict(indent=4, allow_nan=True, sort_keys=True)
         defaults.update(kwargs)

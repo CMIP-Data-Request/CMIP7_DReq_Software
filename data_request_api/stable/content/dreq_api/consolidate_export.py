@@ -1,19 +1,10 @@
 import json
 import os
 import re
-import sys
 import warnings
 
-# TODO: remove after initial "sandbox" dev period
-add_paths = [os.path.abspath(os.sep.join([os.path.abspath(os.path.dirname(__file__)), "../.."])), ]
-for path in add_paths:
-   if path not in sys.path:
-       sys.path.append(path)
-from utilities.logger import get_logger  # noqa
-# from ...transform.logger import get_logger  # noqa
-
-# from .mapping_table import version_consistency
-from mapping_table import version_consistency
+from data_request_api.stable.utilities.logger import get_logger  # noqa
+from .mapping_table import version_consistency
 
 # UID generation
 default_count = 0
