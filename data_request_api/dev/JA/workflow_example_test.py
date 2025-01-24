@@ -50,8 +50,6 @@ if False:
     stop
 
 import json
-
-
 from data_request_api.stable.content.dreq_api import dreq_content as dc
 from data_request_api.stable.query import dreq_query as dq
 

@@ -8,10 +8,7 @@ import json
 import os
 import argparse
 
-# The following should be removed once python packaging is completed.
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
+# import data_request_api.stable.content.dreq_api as dreq_api
 import data_request_api.stable.content.dreq_api.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 

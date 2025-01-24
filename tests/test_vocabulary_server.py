@@ -9,7 +9,6 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 import copy
 import unittest
 
-
 from data_request_api.stable.utilities.tools import read_json_input_file_content
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 

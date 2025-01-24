@@ -1,18 +1,17 @@
 import json
 import os
 import re
-import sys
 import time
 import warnings
 from filecmp import cmp
 from shutil import move
 
-from . import consolidate_export as ce
 import pooch
 import requests
 from bs4 import BeautifulSoup
-from .mapping_table import mapping_table
 
+from . import consolidate_export as ce
+from data_request_api.stable.content.dreq_api.mapping_table import mapping_table
 from data_request_api.stable.utilities.logger import get_logger  # noqa
 
 
@@ -58,6 +57,7 @@ _version_pattern = re.compile(
 _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
 
 _dreq_content_loaded = {}
+
 
 def _parse_version(version):
     """Parse a version tag and return a tuple for sorting.

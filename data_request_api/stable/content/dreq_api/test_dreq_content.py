@@ -1,6 +1,6 @@
 import os
 
-from . import dreq_content as dc
+from data_request_api.stable.content.dreq_api import dreq_content as dc
 import pytest
 
 

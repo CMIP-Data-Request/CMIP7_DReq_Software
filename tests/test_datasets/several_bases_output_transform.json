@@ -2050,14 +2050,7 @@
             "lead_theme": "Land & Land-Ice",
             "minimum_ensemble_size": 1,
             "name": "Accurate assessment of land-atmosphere coupling",
-            "time_slice": [
-                "0",
-                "2",
-                "h",
-                "i",
-                "s",
-                "t"
-            ],
+            "time_subset": "link::527f5cac-8c97-11ef-944e-41a8eb05f654",
             "variable_groups": [
                 "link::default_540"
             ]
@@ -3777,7 +3770,16 @@
             "title": "Temporal mean"
         }
     },
-    "time_slice": {},
+    "time_subset": {
+        "527f5cac-8c97-11ef-944e-41a8eb05f654": {
+            "end": 2014,
+            "name": "hist20",
+            "nyears": 20,
+            "start": 1995,
+            "title": "1995-2014",
+            "type": "simpleRange"
+        }
+    },
     "variable_comments": {
         "default_517": {
             "comment": "These three variables are all mass per unit area, incorrectly labelled as area sum rather than area mean.\n",

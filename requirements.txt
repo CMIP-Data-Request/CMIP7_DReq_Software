@@ -1,9 +1,9 @@
+bs4
+coverage
 ipython
-pooch
 numpy
 openpyxl
 pandas
+pooch
 requests
-bs4
-coverage
 pytest

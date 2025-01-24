@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0", "pooch", "openpyxl", "requests", "bs4", "coverage", "pytest"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "CMIP7_data_request_api"
+version = "1.0.1"
+authors = [
+  { name="James Anstey"},
+  { name="Gaëlle Rigoudy"},
+  { name="Martin Schupfner"},
+  { name="Matthew Mizielinski"},
+  { name="Daniel Ellis"},
+  { name="Elisabeth Dingley"},
+  { name="Marie-Pierre Moine"},
+]
+description = "A programatic interface to the CMIP7 Data Request"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software"
+Issues = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/issues"
+
+[project.scripts]
+# modules and functions that act as command line utilities to be specified here
+# use pip install -e . from the root directory of the repository to set up the entry points
+export_dreq_lists_json = "data_request_api.command_line.export_dreq_lists_json:main"

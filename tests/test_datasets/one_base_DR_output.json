@@ -78,7 +78,7 @@
                 "link::default_288"
             ],
             "mips": [],
-            "time_slice": [
+            "time_subset": [
                 "link::_slice_hist20"
             ],
             "variable_groups": [
@@ -93,7 +93,7 @@
                 "link::default_289"
             ],
             "mips": [],
-            "time_slice": [],
+            "time_subset": [],
             "variable_groups": [
                 "link::default_577"
             ]
@@ -112,7 +112,7 @@
                 "link::default_289"
             ],
             "mips": [],
-            "time_slice": [],
+            "time_subset": [],
             "variable_groups": [
                 "link::default_569",
                 "link::default_570",
@@ -130,7 +130,7 @@
                 "link::default_289"
             ],
             "mips": [],
-            "time_slice": [],
+            "time_subset": [],
             "variable_groups": [
                 "link::default_573",
                 "link::default_574",

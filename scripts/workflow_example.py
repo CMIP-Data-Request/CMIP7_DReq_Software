@@ -29,15 +29,8 @@ Usage examples:
     ./export_dreq_lists_json.py v1.0 dreq_list.json --opportunities_file opps.json
 
 '''
-import sys
-import os
-
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
-import data_request_api.stable.content.dreq_api.dreq_content as dc
-import data_request_api.stable.query.dreq_query as dq
+from data_request_api.stable.content.dreq_api import dreq_content as dc
+from data_request_api.stable.query import dreq_query as dq
 from importlib import reload
 reload(dq)
 

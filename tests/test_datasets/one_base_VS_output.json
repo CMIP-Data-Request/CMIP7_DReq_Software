@@ -4420,11 +4420,10 @@
             ]
         }
     },
-    "time_slice": {
+    "time_subset": {
         "_slice_hist20": {
             "end": 2014,
-            "label": "hist20",
-            "name": "undef",
+            "name": "hist20",
             "nyears": 20,
             "start": 1995,
             "title": "1995-2014",

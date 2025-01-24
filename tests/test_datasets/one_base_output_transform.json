@@ -2351,7 +2351,7 @@
             "lead_theme": "link::default_118",
             "minimum_ensemble_size": 1,
             "name": "Accurate assessment of land-atmosphere coupling",
-            "time_slice": [
+            "time_subset": [
                 "link::_slice_hist20"
             ],
             "variable_groups": [
@@ -4529,11 +4529,10 @@
             ]
         }
     },
-    "time_slice": {
+    "time_subset": {
         "_slice_hist20": {
             "end": 2014,
-            "label": "hist20",
-            "name": "undef",
+            "name": "hist20",
             "nyears": 20,
             "start": 1995,
             "title": "1995-2014",
