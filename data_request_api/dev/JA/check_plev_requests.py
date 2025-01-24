@@ -8,15 +8,12 @@ Some of the bits might be useful elsewhere.
 '''
 
 import os
-import sys
 import json
-add_paths = ['../../sandbox/MS/dreq_api/']
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
-import dreq_content as dc
-import dreq_query as dq
-import dreq_classes
+
+
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+import data_request_api.stable.query.dreq_query as dq
+from data_request_api.stable.query import dreq_classes
 
 from collections import OrderedDict, defaultdict
 from copy import deepcopy
@@ -31,8 +28,6 @@ reload(dc)
 # use_dreq_version = 'first_export'
 # use_dreq_version = 'v1.0alpha'
 use_dreq_version = 'v1.0beta'
-
-
 
 # # Download specified version of data request content (if not locally cached)
 # dc.retrieve(use_dreq_version, export='raw')

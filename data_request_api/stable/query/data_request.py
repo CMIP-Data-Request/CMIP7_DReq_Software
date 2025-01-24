@@ -14,10 +14,10 @@ from collections import defaultdict
 
 import six
 
-from utilities.logger import get_logger, change_log_file, change_log_level
-from content.dump_transformation import transform_content
-from utilities.tools import read_json_file
-from query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from data_request_api.stable.utilities.logger import get_logger, change_log_file, change_log_level
+from data_request_api.stable.content.dump_transformation import transform_content
+from data_request_api.stable.utilities.tools import read_json_file
+from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 version = "0.1"
 
@@ -338,7 +338,7 @@ class VariablesGroup(DRObjects):
 
 class Opportunity(DRObjects):
 	def __init__(self, id, dr, DR_type="opportunities",
-	             structure=dict(experiment_groups=list(), variable_groups=list(), data_request_themes=list(), time_slices=list()),
+	             structure=dict(experiment_groups=list(), variable_groups=list(), data_request_themes=list(), time_subsets=list()),
 	             **attributes):
 		super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
 
@@ -354,11 +354,11 @@ class Opportunity(DRObjects):
 
 	@classmethod
 	def from_input(cls, dr, id, experiment_groups=list(), variable_groups=list(), data_request_themes=list(),
-	               time_slices=list(), mips=list(), **kwargs):
+	               time_subsets=list(), mips=list(), **kwargs):
 
 		return super().from_input(DR_type="opportunities", dr=dr, id=id, elements=kwargs,
 		                          structure=dict(experiment_groups=experiment_groups, variable_groups=variable_groups,
-		                                         data_request_themes=data_request_themes, time_slices=time_slices,
+		                                         data_request_themes=data_request_themes, time_subsets=time_subsets,
 		                                         mips=mips))
 
 	def get_experiment_groups(self):
@@ -389,12 +389,12 @@ class Opportunity(DRObjects):
 		"""
 		return self.get_data_request_themes()
 
-	def get_time_slices(self):
+	def get_time_subsets(self):
 		"""
-		Return the list of time slices linked to the Opportunity.
-		:return list of DRObject: list of time slices linked to Opportunity
+		Return the list of time subsets linked to the Opportunity.
+		:return list of DRObject: list of time subsets linked to Opportunity
 		"""
-		return self.structure["time_slices"]
+		return self.structure["time_subsets"]
 
 	def get_mips(self):
 		"""
@@ -416,9 +416,9 @@ class Opportunity(DRObjects):
 			rep.append(f"{indent}Themes included:")
 			for theme in self.get_data_request_themes():
 				rep.extend(theme.print_content(level=level + 2, add_content=False))
-			rep.append(f"{indent}Time slices included:")
-			for time_slice in self.get_time_slices():
-				rep.extend(time_slice.print_content(level=level + 2, add_content=False))
+			rep.append(f"{indent}Time subsets included:")
+			for time_subset in self.get_time_subsets():
+				rep.extend(time_subset.print_content(level=level + 2, add_content=False))
 		return rep
 
 	def filter_on_request(self, request_value):
@@ -429,8 +429,8 @@ class Opportunity(DRObjects):
 			return True, request_value in self.get_experiment_groups()
 		elif request_type in ["variable_groups", ]:
 			return True, request_value in self.get_variable_groups()
-		elif request_type in ["time_slice", ]:
-			return True, request_value in self.get_time_slices()
+		elif request_type in ["time_subset", ]:
+			return True, request_value in self.get_time_subsets()
 		elif request_type in ["mips", ]:
 			return True, request_value in self.get_mips() or \
 			             any(var_grp.filter_on_request(request_value=request_value)[1]

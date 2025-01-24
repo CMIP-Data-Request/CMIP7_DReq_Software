@@ -11,12 +11,9 @@ import sys
 import unittest
 import tempfile
 
-sys.path.append('../data_request_api/stable')
-sys.path.append("../data_request_api/stable/content/dreq_api")
 
-
-import dreq_content as dc
-from query.data_request import DataRequest
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+from data_request_api.stable.query.data_request import DataRequest
 
 
 class TestWorkflow1(unittest.TestCase):

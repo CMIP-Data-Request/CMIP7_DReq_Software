@@ -9,19 +9,11 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 import os
 import sys
 
-add_paths = ['../data_request_api/stable/content/dreq_api/',
-             '../data_request_api/stable']
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
-
-
-import dreq_content as dc
-from content.dump_transformation import transform_content
-from query.data_request import DataRequest
-from utilities.tools import write_json_output_file_content
-from utilities.logger import change_log_file, change_log_level
-
+import data_request_api.stable.content.dreq_api.dreq_content as dc
+from data_request_api.stable.content.dump_transformation import transform_content
+from data_request_api.stable.utilities.tools import write_json_output_file_content
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
+from data_request_api.stable.query.data_request import DataRequest
 
 # Set up log file (default to stdout) and log level
 change_log_file(default=True)

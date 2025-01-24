@@ -16,8 +16,8 @@ from collections import defaultdict
 
 import six
 
-from utilities.logger import get_logger, change_log_level, change_log_file
-from utilities.tools import read_json_input_file_content, write_json_output_file_content
+from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
+from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
 
 
 def correct_key_string(input_string, *to_remove_strings):
@@ -157,7 +157,8 @@ def transform_content_one_base(content):
             esm_bcv = esm_bcv[0]
             content["esm-bcv"] = content.pop(esm_bcv)
         for (key, new_key) in [("opportunity", "opportunities"), ("experiment_group", "experiment_groups"),
-                               ("variable_group", "variable_groups"), ("structure", "structure_title")]:
+                               ("variable_group", "variable_groups"), ("structure", "structure_title"),
+                               ("time_slice", "time_subset")]:
             if key in content:
                     content[new_key] = content.pop(key)
         for pattern in [".*rank.*", ]:
@@ -195,7 +196,7 @@ def transform_content_one_base(content):
             "structure_title": [r"variables.*", "brand_.*", "calculation.*"],
             "table_identifiers": ["variables", ],
             "temporal_shape": ["variables", "structure"],
-            "time_slice": ["uid.+", "opportunit.*"],
+            "time_subset": ["uid.+", "opportunit.*"],
             "variable_comments": ["variable.*", "spatial_shape", "temporal_shape", "coordinates_and_dimensions",
                                   "cell_methods", "cell_measures"],
             "variable_groups": [".*opportunit.*", "theme", r"size.*", "mip_ownership"],
@@ -214,7 +215,7 @@ def transform_content_one_base(content):
             "modelling_realm": [("id", "uid")],
             "opportunities": [("title_of_opportunity", "name"), ("comments", "opportunity/variable_group_comments"),
                               ("ensemble_size", "minimum_ensemble_size"), ("themes", "data_request_themes"),
-                              ("working/updated_variable_groups", "variable_groups")],
+                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subset")],
             "physical_parameters": [("comments", "physical_parameter_comments"),
                                     ("cf_proposal_github_issue", "proposal_github_issue"),
                                     ("flag.*change.*", "flag_change_since_cmip6")],
@@ -222,6 +223,7 @@ def transform_content_one_base(content):
             "temporal_shape": [("comments", "variable_comments")],
             "structure_title": [("label", "name")],
             "table_identifiers": [("comment", "notes"), ("frequency", "cmip6_frequency")],
+            "time_subset": [("label", "name")],
             "variable_groups": [(".*mips.*", "mips"), ("comments", "opportunity/variable_group_comments")],
             "variables": [("compound_name", "name"), ("cmip6_frequency.+", "cmip6_frequency"), (esm_bcv, "esm-bcv"),
                           ("modeling_realm", "modelling_realm"), ("comments", "variable_comments"),
@@ -422,7 +424,7 @@ def split_content_one_base(content):
         "opportunities": [("experiment_groups", list, list()),
                           ("variable_groups", list, list()),
                           ("data_request_themes", list, list()),
-                          ("time_slice", list, list()),
+                          ("time_subset", list, list()),
                           ("mips", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),

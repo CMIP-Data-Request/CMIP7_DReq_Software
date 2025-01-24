@@ -8,14 +8,9 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 
 import copy
 import unittest
-import sys
 
-
-sys.path.append('../data_request_api/stable')
-
-
-from utilities.tools import read_json_input_file_content
-from query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from data_request_api.stable.utilities.tools import read_json_input_file_content
+from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
 
 class TestLinks(unittest.TestCase):

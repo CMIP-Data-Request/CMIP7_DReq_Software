@@ -8,13 +8,9 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 
 import copy
 import unittest
-import sys
 
-
-sys.path.append('../data_request_api/stable')
-
-from utilities.tools import read_json_file, write_json_output_file_content
-from content.dump_transformation import correct_key_string, correct_dictionaries, transform_content_one_base,\
+from data_request_api.stable.utilities.tools import read_json_file, write_json_output_file_content
+from data_request_api.stable.content.dump_transformation import correct_key_string, correct_dictionaries, transform_content_one_base,\
 	transform_content_three_bases, transform_content, split_content_one_base
 
 

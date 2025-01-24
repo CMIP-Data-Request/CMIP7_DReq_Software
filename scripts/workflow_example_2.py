@@ -22,22 +22,14 @@ To run interactively in ipython:
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 
-import sys
 import pprint
 from collections import defaultdict
 
 import six
 
-add_paths = ['../data_request_api/stable/content/dreq_api/',
-             '../data_request_api/stable']
-for path in add_paths:
-    if path not in sys.path:
-        sys.path.append(path)
-
-
-import content.dreq_api.dreq_content as dc
-from query.data_request import DataRequest
-from utilities.logger import change_log_file, change_log_level
+from data_request_api.stable.content.dreq_api import dreq_content as dc
+from data_request_api.stable.query.data_request import DataRequest
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
 
 
 # Set up log file (default to stdout) and log level
