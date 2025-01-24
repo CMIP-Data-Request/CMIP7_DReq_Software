@@ -19,7 +19,7 @@ from data_request_api.stable.content.dump_transformation import transform_conten
 from data_request_api.stable.utilities.tools import read_json_file
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
-version = "0.1"
+version = "1.0.1"
 
 
 class ConstantValueObj(object):
