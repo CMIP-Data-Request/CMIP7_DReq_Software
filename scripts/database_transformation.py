@@ -8,6 +8,12 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 
 import os
 import sys
+import argparse
+import tempfile
+
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 import data_request_api.stable.content.dreq_api.dreq_content as dc
 from data_request_api.stable.content.dump_transformation import transform_content
@@ -15,31 +21,49 @@ from data_request_api.stable.utilities.tools import write_json_output_file_conte
 from data_request_api.stable.utilities.logger import change_log_file, change_log_level
 from data_request_api.stable.query.data_request import DataRequest
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--log_level", default="info", help="Log level")
+parser.add_argument("--dreq_version", default="latest_stable", help="Version to be used")
+parser.add_argument("--dreq_export_version", default="release", help="Export version to be used")
+parser.add_argument("--use_consolidation", default=False, help="Should content consolidation be used?")
+parser.add_argument("--output_dir", default="default",
+                    help="Output directory to be used ('default', 'test' or a specify output directory)")
+args = parser.parse_args()
+
+
+def database_transformation(output_dir, dreq_version="latest_stable", dreq_export_version="release",
+                            use_consolidation=False):
+    # Download specified version of data request content (if not locally cached)
+    versions = dc.retrieve(dreq_version, export=dreq_export_version, consolidate=use_consolidation)
+
+    for (version, content) in versions.items():
+        # Load the content
+        content = dc.load(version, export=dreq_export_version, consolidate=use_consolidation)
+
+        # Transform content into DR and VS
+        data_request, vocabulary_server = transform_content(content, version=dreq_version)
+
+        # Write down the two files
+        DR_file = os.path.sep.join([output_dir, version, f"DR_{dreq_export_version}_content.json"])
+        VS_file = os.path.sep.join([output_dir, version, f"VS_{dreq_export_version}_content.json"])
+        write_json_output_file_content(DR_file, data_request)
+        write_json_output_file_content(VS_file, vocabulary_server)
+
+        # Test that the two files do not produce issues with the API
+        DR = DataRequest.from_separated_inputs(DR_input=DR_file, VS_input=VS_file)
+
+
 # Set up log file (default to stdout) and log level
 change_log_file(default=True)
-change_log_level("debug")
+change_log_level(args.log_level)
 
-### Step 1: Get the content of the DR
-# Define content version to be used
-# use_dreq_version = 'v1.0alpha'
-# use_dreq_version = "first_export"
-# use_dreq_version = 'new_export_15Oct2024'
-use_dreq_version = "v1.0"
-use_export_versions = ["raw", "release"]
-output_directory = f'{dc._dreq_res}/{use_dreq_version}'
-for use_export_version in use_export_versions:
-    # Download specified version of data request content (if not locally cached)
-    content = dc.load(use_dreq_version, export=use_export_version, consolidate=False)
-
-    ### Step 2: Transform content into DR and VS
-    data_request, vocabulary_server = transform_content(content, version=use_dreq_version)
-
-    ### Step 3: Write down the two files
-    DR_file = os.path.sep.join([output_directory, f"DR_{use_export_version}_content.json"])
-    VS_file = os.path.sep.join([output_directory, f"VS_{use_export_version}_content.json"])
-    write_json_output_file_content(DR_file, data_request)
-    write_json_output_file_content(VS_file, vocabulary_server)
-
-    DR = DataRequest.from_separated_inputs(DR_input=DR_file, VS_input=VS_file)
-
-
+if args.output_dir in ["test", ]:
+    with tempfile.TemporaryDirectory() as output_dir:
+        database_transformation(output_dir=output_dir, dreq_version=args.dreq_version,
+                                dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
+elif args.output_dir in ["default", ]:
+    database_transformation(output_dir=dc._dreq_res, dreq_version=args.dreq_version,
+                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
+else:
+    database_transformation(output_dir=args.output_dir, dreq_version=args.dreq_version,
+                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)

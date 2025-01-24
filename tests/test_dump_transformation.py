@@ -10,8 +10,8 @@ import copy
 import unittest
 
 from data_request_api.stable.utilities.tools import read_json_file, write_json_output_file_content
-from data_request_api.stable.content.dump_transformation import correct_key_string, correct_dictionaries, transform_content_one_base,\
-	transform_content_three_bases, transform_content, split_content_one_base
+from data_request_api.stable.content.dump_transformation import correct_key_string, correct_dictionaries, \
+	transform_content_one_base, transform_content_three_bases, transform_content, split_content_one_base
 
 
 class TestCorrectKeyString(unittest.TestCase):
@@ -78,21 +78,21 @@ class TestCorrectDictionaries(unittest.TestCase):
 class TestTransformContent(unittest.TestCase):
 	def setUp(self):
 		self.version = "test"
-		self.one_base_input = read_json_file("test_datasets/one_base_input.json")
-		self.one_base_output_format = read_json_file("test_datasets/one_base_output_format.json")
-		self.one_base_output_transform = read_json_file("test_datasets/one_base_output_transform.json")
-		self.one_base_VS_output = read_json_file("test_datasets/one_base_VS_output.json")
-		self.one_base_DR_output = read_json_file("test_datasets/one_base_DR_output.json")
+		self.one_base_input = read_json_file("tests/test_datasets/one_base_input.json")
+		self.one_base_output_format = read_json_file("tests/test_datasets/one_base_output_format.json")
+		self.one_base_output_transform = read_json_file("tests/test_datasets/one_base_output_transform.json")
+		self.one_base_VS_output = read_json_file("tests/test_datasets/one_base_VS_output.json")
+		self.one_base_DR_output = read_json_file("tests/test_datasets/one_base_DR_output.json")
 		self.one_base_VS_output_noversion = copy.deepcopy(self.one_base_VS_output)
 		del self.one_base_VS_output_noversion["version"]
 		self.one_base_DR_output_noversion = copy.deepcopy(self.one_base_DR_output)
 		del self.one_base_DR_output_noversion["version"]
-		self.several_bases_input = read_json_file("test_datasets/several_bases_input.json")
-		self.several_bases_output_transform_to_one = read_json_file("test_datasets/several_bases_output_transform_to_one.json")
-		self.several_bases_output_format = read_json_file("test_datasets/several_bases_output_format.json")
-		self.several_bases_output_transform = read_json_file("test_datasets/several_bases_output_transform.json")
-		self.several_bases_VS_output = read_json_file("test_datasets/several_bases_VS_output.json")
-		self.several_bases_DR_output = read_json_file("test_datasets/several_bases_DR_output.json")
+		self.several_bases_input = read_json_file("tests/test_datasets/several_bases_input.json")
+		self.several_bases_output_transform_to_one = read_json_file("tests/test_datasets/several_bases_output_transform_to_one.json")
+		self.several_bases_output_format = read_json_file("tests/test_datasets/several_bases_output_format.json")
+		self.several_bases_output_transform = read_json_file("tests/test_datasets/several_bases_output_transform.json")
+		self.several_bases_VS_output = read_json_file("tests/test_datasets/several_bases_VS_output.json")
+		self.several_bases_DR_output = read_json_file("tests/test_datasets/several_bases_DR_output.json")
 		self.several_bases_VS_output_noversion = copy.deepcopy(self.several_bases_VS_output)
 		del self.several_bases_VS_output_noversion["version"]
 		self.several_bases_DR_output_noversion = copy.deepcopy(self.several_bases_DR_output)

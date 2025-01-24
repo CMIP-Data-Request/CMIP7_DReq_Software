@@ -10,8 +10,6 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 import copy
 from collections import defaultdict
 
-import six
-
 from data_request_api.stable.utilities.logger import get_logger
 from data_request_api.stable.utilities.tools import read_json_file
 
@@ -22,7 +20,7 @@ def is_link_id_or_value(elt):
 	:param elt: element to be transformed into a value
 	:return: not link version oof elt
 	"""
-	if isinstance(elt, six.string_types) and elt.startswith("link::"):
+	if isinstance(elt, str) and elt.startswith("link::"):
 		return True, elt.replace("link::", "")
 	else:
 		return False, elt
@@ -34,7 +32,7 @@ def build_link_from_id(elt):
 	:param elt: element to be transformed into a link
 	:return: link version of elt
 	"""
-	if not isinstance(elt, six.string_types) or elt.startswith("link::"):
+	if not isinstance(elt, str) or elt.startswith("link::"):
 		return elt
 	else:
 		return f"link::{elt}"
@@ -164,7 +162,7 @@ class VocabularyServer(object):
 			if id_type in ["id", ] and element_id in element_type_ids:
 				value = self.vocabulary_server[element_type][element_id]
 				found = True
-			elif isinstance(id_type, six.string_types):
+			elif isinstance(id_type, str):
 				if element_id is None:
 					raise ValueError("None element_id found")
 				value = list()

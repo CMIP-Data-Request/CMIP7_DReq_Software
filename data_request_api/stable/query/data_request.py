@@ -12,14 +12,12 @@ import copy
 import os
 from collections import defaultdict
 
-import six
-
 from data_request_api.stable.utilities.logger import get_logger, change_log_file, change_log_level
 from data_request_api.stable.content.dump_transformation import transform_content
 from data_request_api.stable.utilities.tools import read_json_file
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
 
-version = "0.1"
+version = "1.0.1"
 
 
 class ConstantValueObj(object):
@@ -63,9 +61,9 @@ class DRObjects(object):
 	def __init__(self, id, dr, DR_type="undef", structure=dict(), **attributes):
 		"""
 		Initialisation of the object.
-		:param six.string_types id: id of the object
+		:param str id: id of the object
 		:param DataRequest dr: reference data request object
-		:param six.string_types DR_type: type of DR object (for reference in vocabulary server)
+		:param str DR_type: type of DR object (for reference in vocabulary server)
 		:param dict structure: if needed, elements linked by structure to the current object
 		:param dict attributes: attributes of the object coming from vocabulary server
 		"""
@@ -91,13 +89,13 @@ class DRObjects(object):
 		for (key, values) in input_dict.items():
 			if isinstance(values, list):
 				for (i, value) in enumerate(values):
-					if isinstance(value, six.string_types) and (force_transform or is_link_id_or_value(value)[0]):
+					if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
 						input_dict[key][i] = dr.find_element(key, value)
-					elif isinstance(value, six.string_types):
+					elif isinstance(value, str):
 						input_dict[key][i] = ConstantValueObj(value)
-			elif isinstance(values, six.string_types) and (force_transform or is_link_id_or_value(values)[0]):
+			elif isinstance(values, str) and (force_transform or is_link_id_or_value(values)[0]):
 				input_dict[key] = dr.find_element(key, values)
-			elif isinstance(values, six.string_types):
+			elif isinstance(values, str):
 				input_dict[key] = ConstantValueObj(values)
 		return input_dict
 
@@ -106,8 +104,8 @@ class DRObjects(object):
 		"""
 		Create instance of the class using specific arguments.
 		:param DataRequest dr: reference Data Request objects
-		:param six.string_types id: id of the object
-		:param six.string_types DR_type: type of the object
+		:param str id: id of the object
+		:param str DR_type: type of the object
 		:param dict elements: attributes of the objects (coming from VS)
 		:param dict structure: structure of the object through Data Request
 		:return: instance of the current class.
@@ -487,7 +485,7 @@ class DataRequest(object):
 	def software_version(self):
 		"""
 		Method to get the version of the software.
-		:return six.string_types: version of the software
+		:return str: version of the software
 		"""
 		return version
 
@@ -495,7 +493,7 @@ class DataRequest(object):
 	def version(self):
 		"""
 		Method to get the version of both software and content
-		:return six.string_types : formatted version of the software and the content
+		:return str : formatted version of the software and the content
 		"""
 		return f"Software {self.software_version} - Content {self.content_version}"
 
@@ -503,8 +501,8 @@ class DataRequest(object):
 	def from_input(cls, json_input, version, **kwargs):
 		"""
 		Method to instanciate the DataRequest object from a single input.
-		:param six.string_types or dict json_input: dictionary or name of the dedicated json file containing the export content
-		:param six.string_types version: version of the content
+		:param str or dict json_input: dictionary or name of the dedicated json file containing the export content
+		:param str version: version of the content
 		:param dict kwargs: additional parameters
 		:return DataRequest: instance of the DataRequest object.
 		"""
@@ -516,20 +514,20 @@ class DataRequest(object):
 	def from_separated_inputs(cls, DR_input, VS_input, **kwargs):
 		"""
 		Method to instanciate the DataRequestObject from two inputs.
-		:param six.string_types or dict DR_input: dictionary or name of the json file containing the data request structure
-		:param six.string_types or dict VS_input: dictionary or name of the json file containing the vocabulary server
+		:param str or dict DR_input: dictionary or name of the json file containing the data request structure
+		:param str or dict VS_input: dictionary or name of the json file containing the vocabulary server
 		:param dict kwargs: additional parameters
 		:return DataRequest: instance of the DataRequest object
 		"""
 		logger = get_logger()
-		if isinstance(DR_input, six.string_types) and os.path.isfile(DR_input):
+		if isinstance(DR_input, str) and os.path.isfile(DR_input):
 			DR = read_json_file(DR_input)
 		elif isinstance(DR_input, dict):
 			DR = copy.deepcopy(DR_input)
 		else:
 			logger.error("DR_input should be either the name of a json file or a dictionary.")
 			raise TypeError("DR_input should be either the name of a json file or a dictionary.")
-		if isinstance(VS_input, six.string_types) and os.path.isfile(VS_input):
+		if isinstance(VS_input, str) and os.path.isfile(VS_input):
 			VS = VocabularyServer.from_input(VS_input)
 		elif isinstance(VS_input, dict):
 			VS = VocabularyServer(copy.deepcopy(VS_input))
@@ -542,15 +540,15 @@ class DataRequest(object):
 	def _split_content_from_input_json(input_json, version):
 		"""
 		Split the export if given through a single file and not from two files into the two dictionaries.
-		:param dict or six.string_types input_json: json input containing the bases or content as a dict
-		:param six.string_types version: version of the content used
+		:param dict or str input_json: json input containing the bases or content as a dict
+		:param str version: version of the content used
 		:return dict, dict: two dictionaries containing the DR and the VS
 		"""
 		logger = get_logger()
-		if not isinstance(version, six.string_types):
+		if not isinstance(version, str):
 			logger.error(f"Version should be a string, not {type(version).__name__}.")
 			raise TypeError(f"Version should be a string, not {type(version).__name__}.")
-		if isinstance(input_json, six.string_types) and os.path.isfile(input_json):
+		if isinstance(input_json, str) and os.path.isfile(input_json):
 			content = read_json_file(input_json)
 		elif isinstance(input_json, dict):
 			content = input_json
@@ -585,7 +583,7 @@ class DataRequest(object):
 	def get_experiment_group(self, id):
 		"""
 		Get the ExperimentsGroup associated with a specific id.
-		:param six.string_types id: id of the ExperimentsGroup
+		:param str id: id of the ExperimentsGroup
 		:return ExperimentsGroup: the ExperimentsGroup associated with the input id
 		"""
 		rep = self.find_element("experiment_groups", id, default=None)
@@ -604,7 +602,7 @@ class DataRequest(object):
 	def get_variable_group(self, id):
 		"""
 		Get the VariablesGroup associated with a specific id.
-		:param six.string_types id: id of the VariablesGroup
+		:param str id: id of the VariablesGroup
 		:return VariablesGroup: the VariablesGroup associated with the input id
 		"""
 		rep = self.find_element("variable_groups", id, default=None)
@@ -623,7 +621,7 @@ class DataRequest(object):
 	def get_opportunity(self, id):
 		"""
 		Get the Opportunity associated with a specific id.
-		:param six.string_types id: id of the Opportunity
+		:param str id: id of the Opportunity
 		:return Opportunity: the Opportunity associated with the input id
 		"""
 		rep = self.find_element("opportunities", id, default=None)
@@ -681,7 +679,7 @@ class DataRequest(object):
 	def find_variables_per_priority(self, priority):
 		"""
 		Find all the variables which have a specified priority.
-		:param DRObjects or ConstantValueObj or six.string_types priority: priority to be considered
+		:param DRObjects or ConstantValueObj or str priority: priority to be considered
 		:return list of Variable: list of the variables which have a specified priority.
 		"""
 		return self.filter_elements_per_request(element_type="variables", requests=dict(priority_level=[priority, ]))
@@ -689,7 +687,7 @@ class DataRequest(object):
 	def find_opportunities_per_theme(self, theme):
 		"""
 		Find all the opportunities which are linked to a specified theme.
-		:param DRObjects or ConstantValueObj or six.string_types theme: theme to be considered
+		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of Opportunity: list of the opportunities which are linked to a specified theme.
 		"""
 		return self.filter_elements_per_request(element_type="opportunities", requests=dict(data_request_themes=[theme, ]))
@@ -697,7 +695,7 @@ class DataRequest(object):
 	def find_experiments_per_theme(self, theme):
 		"""
 		Find all the experiments which are linked to a specified theme.
-		:param DRObjects or ConstantValueObj or six.string_types theme: theme to be considered
+		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.
 		"""
 		return self.filter_elements_per_request(element_type="experiments", requests=dict(data_request_themes=[theme, ]))
@@ -705,7 +703,7 @@ class DataRequest(object):
 	def find_variables_per_theme(self, theme):
 		"""
 		Find all the variables which are linked to a specified theme.
-		:param DRObjects or ConstantValueObj or six.string_types theme: theme to be considered
+		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of Variable: list of the variables which are linked to a specified theme.
 		"""
 		return self.filter_elements_per_request(element_type="variables", requests=dict(data_request_themes=[theme, ]))
@@ -713,7 +711,7 @@ class DataRequest(object):
 	def find_mips_per_theme(self, theme):
 		"""
 		Find all the MIPs which are linked to a specified theme.
-		:param DRObjects or ConstantValueObj or six.string_types theme: theme to be considered
+		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.
 		"""
 		return self.filter_elements_per_request(element_type="mips", requests=dict(data_request_themes=[theme, ]))
@@ -721,7 +719,7 @@ class DataRequest(object):
 	def find_themes_per_opportunity(self, opportunity):
 		"""
 		Find all the themes which are linked to a specified opportunity.
-		:param Opportunity or six.string_types opportunity: opportunity to be considered
+		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.
 		"""
 		return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(opportunities=[opportunity, ]))
@@ -729,7 +727,7 @@ class DataRequest(object):
 	def find_experiments_per_opportunity(self, opportunity):
 		"""
 		Find all the experiments which are linked to a specified opportunity.
-		:param Opportunity or six.string_types opportunity: opportunity to be considered
+		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified opportunity.
 		"""
 		return self.filter_elements_per_request(element_type="experiments", requests=dict(opportunities=[opportunity, ]))
@@ -737,7 +735,7 @@ class DataRequest(object):
 	def find_variables_per_opportunity(self, opportunity):
 		"""
 		Find all the variables which are linked to a specified opportunity.
-		:param Opportunity or six.string_types opportunity: opportunity to be considered
+		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of Variable: list of the variables which are linked to a specified opportunity.
 		"""
 		return self.filter_elements_per_request(element_type="variables", requests=dict(opportunities=[opportunity, ]))
@@ -745,7 +743,7 @@ class DataRequest(object):
 	def find_mips_per_opportunity(self, opportunity):
 		"""
 		Find all the MIPs which are linked to a specified opportunity.
-		:param Opportunity or six.string_types opportunity: opportunity to be considered
+		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.
 		"""
 		return self.filter_elements_per_request(element_type="mips", requests=dict(opportunities=[opportunity, ]))
@@ -753,7 +751,7 @@ class DataRequest(object):
 	def find_opportunities_per_variable(self, variable):
 		"""
 		Find all the opportunities which are linked to a specified variable.
-		:param Variable or six.string_types variable: variable to be considered
+		:param Variable or str variable: variable to be considered
 		:return list of Opportunity: list of the opportunities which are linked to a specified variable.
 		"""
 		return self.filter_elements_per_request(element_type="opportunities", requests=dict(variables=[variable, ]))
@@ -761,7 +759,7 @@ class DataRequest(object):
 	def find_themes_per_variable(self, variable):
 		"""
 		Find all the themes which are linked to a specified variable.
-		:param Variable or six.string_types variable: variable to be considered
+		:param Variable or str variable: variable to be considered
 		:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.
 		"""
 		return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(variables=[variable, ]))
@@ -769,7 +767,7 @@ class DataRequest(object):
 	def find_mips_per_variable(self, variable):
 		"""
 		Find all the MIPs which are linked to a specified variable.
-		:param Variable or six.string_types variable: variable to be considered
+		:param Variable or str variable: variable to be considered
 		:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.
 		"""
 		return self.filter_elements_per_request(element_type="mips", requests=dict(variables=[variable, ]))
@@ -777,7 +775,7 @@ class DataRequest(object):
 	def find_opportunities_per_experiment(self, experiment):
 		"""
 		Find all the opportunities which are linked to a specified experiment.
-		:param DRObjects or ConstantValueObj or six.string_types experiment: experiment to be considered
+		:param DRObjects or ConstantValueObj or str experiment: experiment to be considered
 		:return list of Opportunity: list of the opportunities which are linked to a specified experiment.
 		"""
 		return self.filter_elements_per_request(element_type="opportunities", requests=dict(experiments=[experiment, ]))
@@ -785,7 +783,7 @@ class DataRequest(object):
 	def find_themes_per_experiment(self, experiment):
 		"""
 		Find all the themes which are linked to a specified experiment.
-		:param DRObjects or ConstantValueObj or six.string_types experiment: experiment to be considered
+		:param DRObjects or ConstantValueObj or str experiment: experiment to be considered
 		:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.
 		"""
 		return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(experiments=[experiment, ]))
@@ -793,9 +791,9 @@ class DataRequest(object):
 	def find_element_per_identifier_from_vs(self, element_type, key, value, default=False, **kwargs):
 		"""
 		Find an element of a specific type and specified by a value (of a given kind) from vocabulary server.
-		:param six.string_types element_type: type of the element to be found (same as in vocabulary server).
-		:param six.string_types key: type of the value key to be looked for ("id", "name"...)
-		:param six.string_types value: value to be looked for
+		:param str element_type: type of the element to be found (same as in vocabulary server).
+		:param str key: type of the value key to be looked for ("id", "name"...)
+		:param str value: value to be looked for
 		:param default: default value to be used if the value is not found
 		:param dict kwargs: additional attributes to be used for vocabulary server search.
 		:return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or default: the element found from vocabulary server or the default value if none is found.
@@ -823,8 +821,8 @@ class DataRequest(object):
 		"""
 		Find an element of a specific type and specified by a value from vocabulary server.
 		Update the content and mapping list not to have to ask the vocabulary server again for it.
-		:param six.string_types element_type: kind of element to be looked for
-		:param six.string_types value: value to be looked for
+		:param str element_type: kind of element to be looked for
+		:param str value: value to be looked for
 		:param default: default value to be returned if no value found
 		:return: element corresponding to the specified value of a given type if found, else the default value
 		"""
@@ -843,8 +841,8 @@ class DataRequest(object):
 		"""
 		Find an element of a specific type and specified by a value from mapping/content if existing,
 		 else from vocabulary server.
-		:param six.string_types element_type: kind of element to be found
-		:param six.string_types value: value to be looked for
+		:param str element_type: kind of element to be found
+		:param str value: value to be looked for
 		:param default: value to be returned if non found
 		:return: the found element if existing, else the default value
 		"""
@@ -858,7 +856,7 @@ class DataRequest(object):
 	def get_elements_per_kind(self, element_type):
 		"""
 		Return the list of elements of kind element_type
-		:param six.string_types element_type: the kind of the elements to be found
+		:param str element_type: the kind of the elements to be found
 		:return list: the list of elements of kind element_type
 		"""
 		logger = get_logger()
@@ -906,9 +904,9 @@ class DataRequest(object):
 	def filter_elements_per_request(self, element_type, requests=dict(), operation="all", skip_if_missing=False):
 		"""
 		Filter the elements of kind element_type with a dictionary of requests.
-		:param six.string_types element_type: kind of elements to be filtered
+		:param str element_type: kind of elements to be filtered
 		:param dict requests: dictionary of the filters to be applied
-		:param six.string_types operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+		:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
 		:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
 		:return: list of elements of kind element_type which correspond to the filtering requests
 		"""
@@ -922,7 +920,7 @@ class DataRequest(object):
 				if not isinstance(values, list):
 					values = [values, ]
 				for val in values:
-					if isinstance(val, six.string_types):
+					if isinstance(val, str):
 						new_val = self.find_element(element_type=req, value=val, default=None)
 					else:
 						new_val = val
@@ -976,7 +974,7 @@ class DataRequest(object):
 	def find_opportunities(self, operation="any", skip_if_missing=False, **kwargs):
 		"""
 		Find the opportunities corresponding to filtering criteria.
-		:param six.string_types operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+		:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
 		:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
 		:param dict kwargs: filters to be applied
 		:return list of Opportunity: opportunities linked to the filters
@@ -987,7 +985,7 @@ class DataRequest(object):
 	def find_experiments(self, operation="any", skip_if_missing=False, **kwargs):
 		"""
 		Find the experiments corresponding to filtering criteria.
-		:param six.string_types operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+		:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
 		:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
 		:param dict kwargs: filters to be applied
 		:return list of DRObjects: experiments linked to the filters
@@ -998,7 +996,7 @@ class DataRequest(object):
 	def find_variables(self, operation="any", skip_if_missing=False, **kwargs):
 		"""
 		Find the variables corresponding to filtering criteria.
-		:param six.string_types operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+		:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
 		:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
 		:param dict kwargs: filters to be applied
 		:return list of Variable: variables linked to the filters
@@ -1030,10 +1028,10 @@ class DataRequest(object):
 	                filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list()):
 		"""
 		Method to export a filtered and sorted list of data to a csv file.
-		:param six.string_types main_data: kind of data to be exported
-		:param six.string_types output_file: name of the output faile (csv)
+		:param str main_data: kind of data to be exported
+		:param str output_file: name of the output faile (csv)
 		:param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
-		:param six.string_types filtering_operation: filtering operation to be applied to the list of object of main_data kind
+		:param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
 		:param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
 		:param list export_columns_request: columns to be putted in the output file
 		:param list sorting_request: sorting criteria to be applied
@@ -1058,20 +1056,20 @@ class DataRequest(object):
 	                   filtering_skip_if_missing=False):
 		"""
 		Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
-		:param six.string_types lines_data: kind of data to be put in row
-		:param six.string_types columns_data: kind of data to be put in range
-		:param six.string_types output_file: name of the output file (csv)
-		:param six.string_types sorting_line: criteria to sort raw data
-		:param six.string_types title_line: attribute to be used for raw header
-		:param six.string_types sorting_column: criteria to sort range data
-		:param six.string_types title_column: attribute to be used for range header
+		:param str lines_data: kind of data to be put in row
+		:param str columns_data: kind of data to be put in range
+		:param str output_file: name of the output file (csv)
+		:param str sorting_line: criteria to sort raw data
+		:param str title_line: attribute to be used for raw header
+		:param str sorting_column: criteria to sort range data
+		:param str title_column: attribute to be used for range header
 		:param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
-		:param six.string_types filtering_operation: filtering operation to be applied to the list of object of main_data kind
+		:param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
 		:param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
 		:return: a csv output file
 		"""
 		logger = get_logger()
-		logger.info(f"Generate summary for {lines_data}/{columns_data}")
+		logger.debug(f"Generate summary for {lines_data}/{columns_data}")
 		filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
 		                                                 operation=filtering_operation,
 		                                                 skip_if_missing=filtering_skip_if_missing)
@@ -1085,7 +1083,7 @@ class DataRequest(object):
 		logger.debug(f"{nb_lines} elements found for {lines_data}")
 		logger.debug(f"{len(columns_title)} found elements for {columns_data}")
 
-		logger.info("Generate summary")
+		logger.debug("Generate summary")
 		content = defaultdict(list)
 		for (i, data) in enumerate(columns_datasets):
 			logger.debug(f"Deal with column {i}/{len(columns_title)}")
@@ -1099,14 +1097,14 @@ class DataRequest(object):
 				else:
 					content[line_data_title].append("")
 
-		logger.info("Format summary")
+		logger.debug("Format summary")
 		rep = list()
 		rep.append(";".join([table_title, ] + columns_title))
 		for line_data in filtered_data:
 			line_data_title = str(line_data.__getattr__(title_line))
 			rep.append(";".join([line_data_title, ] + content[line_data_title]))
 
-		logger.info("Write summary")
+		logger.debug("Write summary")
 		with open(output_file, "w") as f:
 			f.write(os.linesep.join(rep))
 

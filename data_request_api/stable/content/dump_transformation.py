@@ -14,22 +14,22 @@ import argparse
 import re
 from collections import defaultdict
 
-import six
 
 from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
+from .dreq_api import dreq_content as dc
 
 
 def correct_key_string(input_string, *to_remove_strings):
     """
     Change the input string by replacing '&' by 'and' and spaces by underscores.
     It also removes others specified strings.
-    :param six.string_types input_string: the input string to be changed
-    :param list of six.string_types to_remove_strings: the list of strings to be removed from input_string
-    :return six.string_types: the changed string
+    :param str input_string: the input string to be changed
+    :param list of str to_remove_strings: the list of strings to be removed from input_string
+    :return str: the changed string
     """
     logger = get_logger()
-    if isinstance(input_string, six.string_types):
+    if isinstance(input_string, str):
         input_string = input_string.lower()
         for to_remove_string in to_remove_strings:
             input_string = input_string.replace(to_remove_string.lower(), "")
@@ -396,7 +396,7 @@ def transform_content_one_base(content):
                         else:
                             logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
                             raise ValueError(f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
-                    elif isinstance(content[subelt][uid][key], six.string_types):
+                    elif isinstance(content[subelt][uid][key], str):
                         logger.warning(f"Could not reshape key {key} from id {uid} of element type {subelt}: already a string")
                     else:
                         logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")
@@ -457,7 +457,7 @@ def transform_content(content, version):
     Function to transform the export content (single or several base-s- export) to VS and DR dictionaries.
     The key "version" is added to the DR and VS dictionaries.
     :param dict content: input export content (either single base or several bases)
-    :param six.string_types version: string containing the version of the export content
+    :param str version: string containing the version of the export content
     :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
     """
     logger = get_logger()
@@ -482,6 +482,41 @@ def transform_content(content, version):
     else:
         logger.error(f"Deal with dict types, not {type(content).__name__}")
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
+
+
+def get_transformed_content(version="latest_stable", export_version="release", use_consolidation=False,
+                            force_retrieve=False, output_dir=None,
+                            default_transformed_content_pattern="{kind}_{export_version}_content.json"):
+    # Download specified version of data request content (if not locally cached)
+    versions = dc.retrieve(version, export=export_version, consolidate=use_consolidation)
+
+    # Check that there is only one version associated
+    if len(versions) > 1:
+        raise ValueError("Could only deal with one version.")
+    elif len(versions) == 0:
+        raise ValueError("No version found.")
+    else:
+        version = list(versions)[0]
+        content = versions[version]
+        if output_dir is None:
+            output_dir = os.path.dirname(content)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export_version)
+        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export_version)
+        DR_content = os.sep.join([output_dir, DR_content])
+        VS_content = os.sep.join([output_dir, VS_content])
+        if force_retrieve or not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+            if os.path.exists(DR_content):
+                os.remove(DR_content)
+            if os.path.exists(VS_content):
+                os.remove(VS_content)
+        if not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+            content = dc.load(version, export=export_version, consolidate=use_consolidation)
+            data_request, vocabulary_server = transform_content(content, version)
+            write_json_output_file_content(DR_content, data_request)
+            write_json_output_file_content(VS_content, vocabulary_server)
+        return DR_content, VS_content
 
 
 if __name__ == "__main__":

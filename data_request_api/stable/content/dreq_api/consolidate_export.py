@@ -4,7 +4,7 @@ import re
 import warnings
 
 from data_request_api.stable.utilities.logger import get_logger  # noqa
-from data_request_api.stable.content.dreq_api.mapping_table import version_consistency
+from .mapping_table import version_consistency
 
 # UID generation
 default_count = 0
