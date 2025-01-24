@@ -14,7 +14,6 @@ import argparse
 import re
 from collections import defaultdict
 
-import six
 
 from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
@@ -23,7 +22,7 @@ from .dreq_api import dreq_content as dc
 
 def correct_key_string(input_string, *to_remove_strings):
     logger = get_logger()
-    if isinstance(input_string, six.string_types):
+    if isinstance(input_string, str):
         input_string = input_string.lower()
         for to_remove_string in to_remove_strings:
             input_string = input_string.replace(to_remove_string.lower(), "")
@@ -367,7 +366,7 @@ def transform_content_one_base(content):
                         else:
                             logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
                             raise ValueError(f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
-                    elif isinstance(content[subelt][uid][key], six.string_types):
+                    elif isinstance(content[subelt][uid][key], str):
                         logger.warning(f"Could not reshape key {key} from id {uid} of element type {subelt}: already a string")
                     else:
                         logger.error(f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")

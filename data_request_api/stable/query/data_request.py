@@ -12,8 +12,6 @@ import copy
 import os
 from collections import defaultdict
 
-import six
-
 from data_request_api.stable.utilities.logger import get_logger, change_log_file, change_log_level
 from data_request_api.stable.content.dump_transformation import transform_content
 from data_request_api.stable.utilities.tools import read_json_file
@@ -70,13 +68,13 @@ class DRObjects(object):
 		for (key, values) in input_dict.items():
 			if isinstance(values, list):
 				for (i, value) in enumerate(values):
-					if isinstance(value, six.string_types) and (force_transform or is_link_id_or_value(value)[0]):
+					if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
 						input_dict[key][i] = dr.find_element(key, value)
-					elif isinstance(value, six.string_types):
+					elif isinstance(value, str):
 						input_dict[key][i] = ConstantValueObj(value)
-			elif isinstance(values, six.string_types) and (force_transform or is_link_id_or_value(values)[0]):
+			elif isinstance(values, str) and (force_transform or is_link_id_or_value(values)[0]):
 				input_dict[key] = dr.find_element(key, values)
-			elif isinstance(values, six.string_types):
+			elif isinstance(values, str):
 				input_dict[key] = ConstantValueObj(values)
 		return input_dict
 
@@ -404,14 +402,14 @@ class DataRequest(object):
 	@classmethod
 	def from_separated_inputs(cls, DR_input, VS_input, **kwargs):
 		logger = get_logger()
-		if isinstance(DR_input, six.string_types) and os.path.isfile(DR_input):
+		if isinstance(DR_input, str) and os.path.isfile(DR_input):
 			DR = read_json_file(DR_input)
 		elif isinstance(DR_input, dict):
 			DR = copy.deepcopy(DR_input)
 		else:
 			logger.error("DR_input should be either the name of a json file or a dictionary.")
 			raise TypeError("DR_input should be either the name of a json file or a dictionary.")
-		if isinstance(VS_input, six.string_types) and os.path.isfile(VS_input):
+		if isinstance(VS_input, str) and os.path.isfile(VS_input):
 			VS = VocabularyServer.from_input(VS_input)
 		elif isinstance(VS_input, dict):
 			VS = VocabularyServer(copy.deepcopy(VS_input))
@@ -423,10 +421,10 @@ class DataRequest(object):
 	@staticmethod
 	def _split_content_from_input_json(input_json, version):
 		logger = get_logger()
-		if not isinstance(version, six.string_types):
+		if not isinstance(version, str):
 			logger.error(f"Version should be a string, not {type(version).__name__}.")
 			raise TypeError(f"Version should be a string, not {type(version).__name__}.")
-		if isinstance(input_json, six.string_types) and os.path.isfile(input_json):
+		if isinstance(input_json, str) and os.path.isfile(input_json):
 			content = read_json_file(input_json)
 		elif isinstance(input_json, dict):
 			content = input_json
@@ -639,7 +637,7 @@ class DataRequest(object):
 				if not isinstance(values, list):
 					values = [values, ]
 				for val in values:
-					if isinstance(val, six.string_types):
+					if isinstance(val, str):
 						new_val = self.find_element(element_type=req, value=val, default=None)
 					else:
 						new_val = val

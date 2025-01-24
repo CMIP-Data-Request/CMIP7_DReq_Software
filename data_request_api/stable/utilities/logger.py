@@ -8,7 +8,6 @@ from __future__ import unicode_literals, print_function, absolute_import, divisi
 
 import logging
 import os
-import six
 import sys
 
 
@@ -47,7 +46,7 @@ def get_logger():
 
 
 def log_level_to_int(level):
-    if isinstance(level, six.string_types):
+    if isinstance(level, str):
         if level.lower() in ['debug', ]:
             return logging.DEBUG
         elif level.lower() in ['critical', ]:
