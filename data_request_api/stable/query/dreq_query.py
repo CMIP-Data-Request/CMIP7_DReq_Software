@@ -61,6 +61,14 @@ def get_priority_levels():
     List is ordered from highest to lowest priority.
     '''
     priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
+
+    # The priorities are specified in PRIORITY_LEVELS from dreq_classes.
+    # Check here that 'Core' is highest priority.
+    # The 'Core' priority represents the Baseline Climate Variables (BCVs, https://doi.org/10.5194/egusphere-2024-2363).
+    # It should be highest priority unless something has been mistakenly modified in dreq_classes.py.
+    # Hence this check should NEVER fail, and is done here only to be EXTRA safe.
+    assert priority_levels[0] == 'Core', 'error in PRIORITY_LEVELS: highest priority should be Core (BCVs)'
+    
     return priority_levels
 
 def get_table_id2name(base, base_name):
@@ -584,7 +592,7 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
 
 
 
-def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True):
+def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True, check_core_variables=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -603,6 +611,9 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     priority_cutoff : str
         Only return variables of equal or higher priority level than priority_cutoff.
         E.g., priority_cutoff='Low' means all priority levels are returned.
+    check_core_variables : bool
+        True ==> check that all experiments contain a non-empty list of Core variables,
+        and that it's the same list for all experiments.
 
     Returns
     -------
@@ -637,7 +648,8 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     Vars = base['Variables']
 
     # all_priority_levels = ['Core', 'High', 'Medium', 'Low']
-    all_priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
+    # all_priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
+    all_priority_levels = get_priority_levels()
 
     if 'Priority Level' in base:
         PriorityLevel = base['Priority Level']
@@ -646,8 +658,12 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
             'inconsistent priority levels:\n  ' + str(all_priority_levels) + '\n  ' + str(priority_levels_from_table)
     else:
         PriorityLevel = None
+    priority_cutoff = priority_cutoff.capitalize()
+    if priority_cutoff not in all_priority_levels:
+        raise ValueError('Invalid priority level cutoff: ' + priority_cutoff + '\nCould not determine priority levels to include.')
     m = all_priority_levels.index(priority_cutoff)
     priority_levels = all_priority_levels[:m+1]
+    del priority_cutoff
 
     # Loop over Opportunities to get prioritized lists of variables
     request = {} # dict to hold aggregated request
@@ -680,6 +696,21 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     }
     for expt_name, expt_req in request.items():
         requested_vars['experiment'].update(expt_req.to_dict())
+
+    if check_core_variables:
+        # Confirm that 'Core' priority level variables are included, and identical for each experiment.
+        # The setting of priority_levels list, above, should guarantee this.
+        # Putting this extra check here just to be extra sure.
+        core_vars = set()
+        for expt_name, expt_req in requested_vars['experiment'].items():
+            assert 'Core' in expt_req, 'Missing Core variables for experiment: ' + expt_name
+            vars = set(expt_req['Core'])
+            assert len(vars) > 0, 'Empty Core variables list for experiment: ' + expt_name
+            if len(core_vars) == 0:
+                core_vars = vars
+            assert vars == core_vars, 'Inconsistent Core variables for experiment: ' + expt_name
+        del vars, core_vars, expt_req
+ 
     return requested_vars
 
 
@@ -908,6 +939,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     })
 
     priority_levels=get_priority_levels()
+    priority_cutoff = priority_cutoff.capitalize()
     m = priority_levels.index(priority_cutoff)+1
     Header.update({
         'Priority levels supported' : priority_levels[:m]
