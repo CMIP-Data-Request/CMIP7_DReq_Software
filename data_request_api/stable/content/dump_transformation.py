@@ -114,9 +114,13 @@ def transform_content_three_bases(content):
         new_physical_parameters_ids = {value["Name"]: record_id for (record_id, value) in
                                        new_content["Physical Parameters"]["records"].items()}
         for var_id in list(new_content["Variables"]["records"]):
-            new_content["Variables"]["records"][var_id]["Physical Parameter"] = \
-                [new_physical_parameters_ids[old_physical_parameters_ids[elt]] for elt in
-                 new_content["Variables"]["records"][var_id]["Physical Parameter"]]
+            if "Physical Parameter" not in new_content["Variables"]["records"][var_id]:
+                logger.debug(f"Remove Variables record ID {var_id}, no 'Physical Parameter' field defined.")
+                del new_content["Variables"]["records"][var_id]
+            else:
+                new_content["Variables"]["records"][var_id]["Physical Parameter"] = \
+                    [new_physical_parameters_ids[old_physical_parameters_ids[elt]] for elt in
+                     new_content["Variables"]["records"][var_id]["Physical Parameter"]]
         # Harmonise record ids through bases
         logger.info("Harmonise bases content record ids")
         content_str = json.dumps(new_content)
@@ -152,7 +156,8 @@ def transform_content_one_base(content):
         default_template = "default_{:d}"
         content = content[list(content)[0]]
         # Rename some elements
-        esm_bcv = [elt for elt in list(content) if re.match(r"esm-bcv.*", elt)]
+        esm_bcv_regexp = re.compile(r"esm-bcv.*")
+        esm_bcv = [elt for elt in list(content) if esm_bcv_regexp.match(elt)]
         if len(esm_bcv) == 1:
             esm_bcv = esm_bcv[0]
             content["esm-bcv"] = content.pop(esm_bcv)
@@ -255,7 +260,7 @@ def transform_content_one_base(content):
             patterns_to_remove.extend(default_patterns_to_remove)
             patterns_to_remove = [re.compile(elt) for elt in patterns_to_remove]
             patterns_to_rename = to_rename_keys_patterns.get(subelt, list())
-            patterns_to_rename = [(re.compile(elt[0]), elt[1]) for elt in patterns_to_rename]
+            patterns_to_rename = [(re.compile(elt[0]), elt[1]) if not isinstance(elt[0], list) else elt for elt in patterns_to_rename]
             patterns_to_merge = to_merge_keys_patterns.get(subelt, list())
             patterns_to_merge = [(re.compile(elt[0]), elt[1]) for elt in patterns_to_merge]
             for record_id in sorted(list(content[subelt])):
@@ -268,7 +273,13 @@ def transform_content_one_base(content):
                 # Rename needed keys
                 list_keys = sorted(list(content[subelt][record_id]))
                 for (patt, repl) in patterns_to_rename:
-                    to_rename = [elt for elt in list_keys if patt.match(elt) is not None]
+                    if isinstance(patt, list) and len(patt) == 0:
+                        if repl in ["esm-bcv", ]:
+                            to_rename = [elt for elt in list_keys if esm_bcv_regexp.match(elt) is not None]
+                        else:
+                            raise ValueError(f"Issue with patt void list with replacement {repl}.")
+                    else:
+                        to_rename = [elt for elt in list_keys if patt.match(elt) is not None]
                     if len(to_rename) == 1:
                         content[subelt][record_id][repl] = content[subelt][record_id].pop(to_rename[0])
                     elif len(to_rename) > 1:
@@ -341,6 +352,9 @@ def transform_content_one_base(content):
                     default_count += 1
                     logger.debug(f"Undefined uid for element {os.sep.join([subelt, 'records', record_id])}, set {uid}")
                 uid = content[subelt][record_id].pop("uid")
+                if uid.endswith(os.linesep):
+                    logger.debug(f"uid of element type {subelt} and record id {record_id} endswith '\\n'.")
+                    uid = uid.rstrip(os.linesep)
                 record_to_uid_index[record_id] = (uid, subelt)
                 content[subelt][uid] = content[subelt].pop(record_id)
         # Replace record_id by uid
