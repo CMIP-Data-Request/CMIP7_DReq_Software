@@ -709,7 +709,6 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
             if len(core_vars) == 0:
                 core_vars = vars
             assert vars == core_vars, 'Inconsistent Core variables for experiment: ' + expt_name
-        del vars, core_vars, expt_req
  
     return requested_vars
 

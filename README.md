@@ -14,6 +14,7 @@ Those trying out the Software should use:
 - the latest stable version, which will be the most recent commmit on the `main` branch.
 
 For the **Quick Start** guide, please see below.
+The **Overview** section explains more about what the Software is intended to do and how this relates to the Content of the data request.
 
 **This Software is under active development** and will continue to evolve following the `v1.1` release. 
 Accordingly we encourage users to try the latest stable version in order to access the latest features.
@@ -62,28 +63,54 @@ Stable releases will eventually be migrated into the https://github.com/WCRP-CMI
 
 ## Quick Start
 
-To get started, in a shell session clone the Software and navigate to the `scripts/` directory:
+To get started by cloning from github, in a shell session clone the Software and navigate to the `scripts/` directory:
 ```
 git clone git@github.com:CMIP-Data-Request/CMIP7_DReq_Software.git
-cd CMIP7_DReq_Software/scripts
+cd CMIP7_DReq_Software
 ```
-The `env.yml` file can then be used to create a conda environment in which to run the Software:
+Alternately, see below for instructions on installing using `pip`, but note the following section's guidance on setting up an environment with the required dependencies.
+
+### Environment setup
+
+The `env.yml` file can be used to create a conda environment in which to run the Software:
 ```
 conda env create -n my_dreq_env --file env.yml
 ```
-where `my_dreq_env` can be replaced with your preferred environment name. 
-Then activate this environment:
+where `my_dreq_env` should be replaced with your preferred environment name. 
+Activate this environment:
 ```
 conda activate my_dreq_env
 ```
-and run the the example script:
+(On some systems it may be `source activate my_dreq_env`.)
+Note that `env.yml` explicitly avoids using the conda `defaults` channel.
+
+Alternately, the `requirements.txt` file  can be used to create a python virtual environment:
+```
+python -m venv my_dreq_env_dir
+source my_dreq_env_dir/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+replacing `my_dreq_env_dir` with the path where you wish to store your environment.
+This approach avoids using `conda`, although note that the package currently requires python 3.10 or higher.
+
+### Running the software
+
+There are two example workflow scripts in the `scripts/` directory. 
+In a shell session where the environment (conda or venv/virtualenv, as explained above) has been activated, running:
 ```
 python workflow_example.py
 ```
-This will produce a `json` file listing requested variables for each CMIP7 experiment.
+will produce a `json` file listing requested variables for each CMIP7 experiment.
 The same functionality is available from a command-line interface. To access this interface 
 we recommend installing the python package using pip (see below) and then using the
 `export_dreq_lists_json` command.
+Running:
+```
+python workflow_example_2.py
+```
+will produce a set of `csv` files (i.e., spreadsheets) summarizing different aspects of the data request content.
+
 
 ## Pip installation
 
