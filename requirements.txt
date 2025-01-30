@@ -1,9 +1,6 @@
 bs4
 coverage
-ipython
-numpy
 openpyxl
-pandas
 pooch
-requests
 pytest
+requests
