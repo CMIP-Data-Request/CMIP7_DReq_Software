@@ -92,7 +92,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 replacing `my_dreq_env_dir` with the path where you wish to store your environment.
-This approach avoids using `conda`, although note that the package currently requires python 3.10 or higher.
+This approach avoids using `conda`.
 
 ### Running the software
 
