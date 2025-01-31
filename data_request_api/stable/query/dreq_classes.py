@@ -15,7 +15,12 @@ are stored as well, allowing unambiguous comparison with Airtable content.
 '''
 
 from dataclasses import dataclass
-from dataclasses import field as dataclass_field  # "field" is used often for Airtable column names
+from dataclasses import field as dataclass_field  # "field" is used often for Airtable column names, so need a different name here
+
+import sys
+PYTHON_VERSION = (sys.version_info.major, sys.version_info.minor)
+if PYTHON_VERSION < (3,9):
+    from typing import Set
 
 UNIQUE_VAR_NAME = 'compound name'  # method used to uniquely name variables
 
@@ -253,10 +258,19 @@ class expt_request:
     Variable names are stored in seperate sets for different priority levels.
     '''
     experiment : str
-    core : set[str] = dataclass_field(default_factory=set)
-    high : set[str] = dataclass_field(default_factory=set)
-    medium : set[str] = dataclass_field(default_factory=set)
-    low : set[str] = dataclass_field(default_factory=set)
+    if PYTHON_VERSION < (3,9):
+        # Required for python versions before 3.9, see:
+        #   https://stackoverflow.com/questions/75202610/typeerror-type-object-is-not-subscriptable-python
+        # Should remove this if we decide not to support versions before 3.9.
+        core : Set[str] = dataclass_field(default_factory=set)
+        high : Set[str] = dataclass_field(default_factory=set)
+        medium : Set[str] = dataclass_field(default_factory=set)
+        low : Set[str] = dataclass_field(default_factory=set)
+    else:
+        core : set[str] = dataclass_field(default_factory=set)
+        high : set[str] = dataclass_field(default_factory=set)
+        medium : set[str] = dataclass_field(default_factory=set)
+        low : set[str] = dataclass_field(default_factory=set)
 
     def __post_init__(self):
         for p in PRIORITY_LEVELS:
