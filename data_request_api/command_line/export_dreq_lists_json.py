@@ -7,6 +7,7 @@ import sys
 import json
 import os
 import argparse
+from collections import OrderedDict
 
 # import data_request_api.stable.content.dreq_api as dreq_api
 import data_request_api.stable.content.dreq_api.dreq_content as dc
@@ -48,7 +49,8 @@ def main():
         Opps = base['Opportunity']
         if not os.path.exists(opportunities_file):
             # create opportunities file template
-            default_opportunity_dict = {opp.title:True for opp in Opps.records.values()}
+            use_opps = sorted([opp.title for opp in Opps.records.values()], key=str.lower)
+            default_opportunity_dict = OrderedDict({title : True for title in use_opps})
             with open(opportunities_file, 'w') as fh:
                 json.dump(default_opportunity_dict, fh, indent=4)
                 print("written opportunities dict to {}. Please edit and re-run".format(opportunities_file))
