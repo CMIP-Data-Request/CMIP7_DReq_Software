@@ -1102,7 +1102,8 @@ class DataRequest(object):
 		rep = list()
 		rep.append([table_title, ] + columns_title)
 		for line_data in filtered_data:
-			rep.append([line_data.__getattr__(title_line), ] + content[line_data_title])
+			line_data_title = line_data.__getattr__(title_line)
+			rep.append([line_data_title, ] + content[line_data_title])
 
 		logger.debug("Write summary")
 		write_csv_output_file_content(output_file, rep, **kwargs)
