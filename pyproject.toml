@@ -16,7 +16,7 @@ authors = [
 ]
 description = "A programatic interface to the CMIP7 Data Request"
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
