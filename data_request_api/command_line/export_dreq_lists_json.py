@@ -50,7 +50,13 @@ def main():
         if not os.path.exists(opportunities_file):
             # create opportunities file template
             use_opps = sorted([opp.title for opp in Opps.records.values()], key=str.lower)
-            default_opportunity_dict = OrderedDict({title : True for title in use_opps})
+            default_opportunity_dict = OrderedDict({
+                'Header' : OrderedDict({
+                    'Description' : 'Opportunities template file for use with export_dreq_lists_json. Set supported/unsupported Opportunities to true/false.',
+                    'dreq version': use_dreq_version,
+                }),
+                'Opportunity' : OrderedDict({title : True for title in use_opps})
+            })
             with open(opportunities_file, 'w') as fh:
                 json.dump(default_opportunity_dict, fh, indent=4)
                 print("written opportunities dict to {}. Please edit and re-run".format(opportunities_file))
@@ -60,6 +66,14 @@ def main():
             with open(opportunities_file, 'r') as fh:
                 opportunity_dict = json.load(fh)
             
+            dreq_version = opportunity_dict['Header']['dreq version']
+            if dreq_version != use_dreq_version:
+                raise ValueError('Data request version mismatch!' + \
+                                 f'\nOpportunities file was generated for data request version {dreq_version}' + \
+                                 f'\nPlease regenerate the file using version {use_dreq_version}')
+
+            opportunity_dict = opportunity_dict['Opportunity']
+
             # validate opportunities
             # (mismatches can occur if an opportunities file created with an earlier data request version is loaded)
             valid_opps = [opp.title for opp in Opps.records.values()]
