@@ -15,7 +15,7 @@ dependencies = [
 
 
 # version is dynamically set from the tag on the github repo
-dynamic = ["version","authors"]  # Let setuptools_scm handle versioning
+dynamic = ["version"]  # Let setuptools_scm handle versioning
 
 authors = [
   { name="James Anstey"},
