@@ -9,6 +9,7 @@ import os
 import argparse
 
 # import data_request_api.stable.content.dreq_api as dreq_api
+import data_request_api
 import data_request_api.stable.content.dreq_api.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 
@@ -24,6 +25,7 @@ def parse_args():
     parser.add_argument('--all_opportunities', action='store_true', help="Respond to all opportunities")
     parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments')
     parser.add_argument('output_file', help='file to write JSON output to')
+    parser.add_argument('--version', action='store_true', help='Return version information and exit')
     return parser.parse_args()
 
 
@@ -32,6 +34,10 @@ def main():
     main routine
     """
     args = parse_args()
+
+    if args.version:
+        print("CMIP7 data request api version {}".format(data_request_api.__version__))
+        sys.exit(0)
     use_dreq_version = args.dreq_version
 
     # Download specified version of data request content (if not locally cached)
