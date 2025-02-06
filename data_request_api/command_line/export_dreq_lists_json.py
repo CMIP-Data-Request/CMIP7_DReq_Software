@@ -38,7 +38,7 @@ def main():
     args = parse_args()
 
     if args.version:
-        print("CMIP7 data request api version {}".format(data_request_api.__version__))
+        print("CMIP7 data request api version {}".format(data_request_api.version))
         sys.exit(0)
     use_dreq_version = args.dreq_version
 
@@ -59,7 +59,8 @@ def main():
             default_opportunity_dict = OrderedDict({
                 'Header' : OrderedDict({
                     'Description' : 'Opportunities template file for use with export_dreq_lists_json. Set supported/unsupported Opportunities to true/false.',
-                    'dreq version': use_dreq_version,
+                    'dreq content version': use_dreq_version,
+                    'dreq api version' : data_request_api.version,
                 }),
                 'Opportunity' : OrderedDict({title : True for title in use_opps})
             })
@@ -72,7 +73,7 @@ def main():
             with open(opportunities_file, 'r') as fh:
                 opportunity_dict = json.load(fh)
             
-            dreq_version = opportunity_dict['Header']['dreq version']
+            dreq_version = opportunity_dict['Header']['dreq content version']
             if dreq_version != use_dreq_version:
                 raise ValueError('Data request version mismatch!' + \
                                  f'\nOpportunities file was generated for data request version {dreq_version}' + \
