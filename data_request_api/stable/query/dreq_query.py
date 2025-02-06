@@ -41,15 +41,13 @@ def get_content_type(content):
 
         'version' : 1 base containing the content of a tagged data request version.
     '''
-    match len(content):
-        case 3:
-            content_type = 'working'
-        case 4:
-            content_type = 'working'
-        case 1:
-            content_type = 'version'
-        case _:
-            raise Exception(' * ERROR *    Unable to determine type of data request content in the exported json file')
+    n = len(content)
+    if n in [3,4]:
+        content_type = 'working'
+    elif n == 1:
+        content_type = 'version'
+    else:
+        raise ValueError('Unable to determine type of data request content in the exported json file')
     return content_type
 
 def version_base_name():
@@ -121,13 +119,12 @@ def create_dreq_tables_for_request(content, consolidated=True):
     else:
         # for backward compatibility
         content_type = get_content_type(content)
-        match content_type:
-            case 'working':
-                base_name = 'Data Request Opportunities (Public)'
-            case 'version':
-                base_name = version_base_name()
-            case _:
-                raise Exception('Unknown content type: ' + content_type)
+        if content_type == 'working':
+            base_name = 'Data Request Opportunities (Public)'
+        elif content_type == 'version':
+            base_name = version_base_name()
+        else:
+            raise ValueError('Unknown content type: ' + content_type)
     # base_name = 'Data Request'
     base = content[base_name]
 
@@ -211,13 +208,12 @@ def create_dreq_tables_for_variables(content, consolidated=True):
     else:
         # for backward compatibility
         content_type = get_content_type(content)
-        match content_type:
-            case 'working':
-                base_name = 'Data Request Variables (Public)'
-            case 'version':
-                base_name = version_base_name()
-            case _:
-                raise Exception('Unknown content type: ' + content_type)
+        if content_type == 'working':
+            base_name = 'Data Request Variables (Public)'
+        elif content_type == 'version':
+            base_name = version_base_name()
+        else:
+            raise ValueError('Unknown content type: ' + content_type)
     base = content[base_name]
 
     # Create objects representing data request tables
@@ -296,19 +292,18 @@ def _create_dreq_table_objects(content, working_base='Opportunities'):
 
     # Content is dict loaded from raw airtable export json file
     content_type = get_content_type(content)
-    match content_type:
-        case 'working':
-            match working_base:
-                case 'Opportunities':
-                    base_name = 'Data Request Opportunities (Public)'
-                case 'Variables':
-                    base_name = 'Data Request Variables (Public)'
-                case _:
-                    raise Exception('Which working base to use? Unknown type: ' + working_base)
-        case 'version':
-            base_name = version_base_name()
-        case _:
-            raise Exception('Unknown content type: ' + content_type)
+
+    if content_type == 'working':
+        if working_base == 'Opportunities':
+            base_name = 'Data Request Opportunities (Public)'
+        elif working_base == 'Variables':
+            base_name = 'Data Request Variables (Public)'
+        else:
+            raise ValueError('Which working base to use? Unknown type: ' + working_base)
+    elif content_type == 'version':
+        base_name = version_base_name()
+    else:
+        raise ValueError('Unknown content type: ' + content_type)
     base = content[base_name]
 
     # Get a mapping from table id to table name
@@ -500,12 +495,11 @@ def get_unique_var_name(var):
     -------
     str that uniquely identifes a variable in the data request
     '''
-    match UNIQUE_VAR_NAME:
-        case 'compound name':
-            return var.compound_name
-        case _:
-            raise Exception('How to determine unique variable name?')
-
+    if UNIQUE_VAR_NAME == 'compound name':
+        return var.compound_name
+    else:
+        raise ValueError('Unknown identifier for UNIQUE_VAR_NAME: ' + UNIQUE_VAR_NAME + 
+                         '\nHow should the unique variable name be determined?')
 
 def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
     '''
@@ -756,11 +750,10 @@ def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verb
         raise TypeError('Input should be dict from raw airtable export json file')
 
     content_type = get_content_type(content)
-    match content_type:
-        case 'working':
-            base_name = 'Data Request Opportunities (Public)'
-        case 'version':
-            base_name = version_base_name()
+    if content_type == 'working':
+        base_name = 'Data Request Opportunities (Public)'
+    elif content_type == 'version':
+        base_name = version_base_name()
 
     tables = content[base_name]
 
@@ -818,11 +811,11 @@ def _get_requested_variables(content, use_opp='all', priority_cutoff='Low', verb
             # Get names of experiments in this experiment group
             for expt_id in expt_group['Experiments']:
 
-                match content_type: # cluge, fix later
-                    case 'working':
-                        expt_table_name = 'Experiment'
-                    case 'version':
-                        expt_table_name = 'Experiments'
+                # cluge
+                if content_type == 'working':
+                    expt_table_name = 'Experiment'
+                elif content_type == 'version':
+                    expt_table_name = 'Experiments'
 
                 expt = tables[expt_table_name]['records'][expt_id]
                 expt_key = expt[' Experiment'].strip()  # Name of experiment, e.g "historical"
