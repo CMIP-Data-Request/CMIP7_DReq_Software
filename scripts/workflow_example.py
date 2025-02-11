@@ -41,7 +41,7 @@ from importlib import reload
 reload(dq)
 
 
-use_dreq_version = 'v1.0'
+use_dreq_version = 'v1.1'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
