@@ -1,15 +1,22 @@
 #!/usr/bin/env python
 '''
-Extract metadata of CMOR variables and write to json
+Extract metadata of CMOR variables and write them to a json file.
+Example output file: scripts/variable_info/all_var_info.json
+Output file names (filepath) are set below.
 '''
 import json
 import os
 import hashlib
 from collections import OrderedDict
 
+import sys
+sys.path.append(os.path.abspath('..'))
+
 import data_request_api.stable.content.dreq_api.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 from data_request_api.stable.query import dreq_classes
+from data_request_api import version as api_version
+
 
 
 # from importlib import reload
@@ -18,17 +25,19 @@ from data_request_api.stable.query import dreq_classes
 ###############################################################################
 
 
-filter_by_cmor_table = not True  # False ==> include all tables (i.e., all variables in the data request)
+filter_by_cmor_table = False  # False ==> include all tables (i.e., all variables in the data request)
 include_cmor_tables = ['Amon', 'day']
 
 organize_by_standard_name = True  # True ==> write additional file that groups variables by CF standard name
 
+# Some variables in these dreq versions lack a 'frequency' attribute; use the legacy CMIP6 frequency for them
+dreq_versions_substitute_cmip6_freq = ['v1.0', 'v1.1']
 
 ###############################################################################
 # Load data request content
 
-# use_dreq_version = 'v1.0beta'
-use_dreq_version = 'v1.0'
+use_dreq_version = 'v1.1'
+# use_dreq_version = 'v1.0'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
@@ -82,7 +91,7 @@ CMORtables = base['Table Identifiers']
 Realm = base['Modelling Realm']
 CellMeasures = base['Cell Measures']
 
-if use_dreq_version in ['v1.0']:
+if use_dreq_version in dreq_versions_substitute_cmip6_freq:
     # needed for corrections below
     CMIP6Frequency = base['CMIP6 Frequency (legacy)']
 
@@ -108,11 +117,12 @@ for var in Vars.records.values():
         if table_id not in include_cmor_tables:
             continue
 
-    if not hasattr(var, 'frequency') and use_dreq_version in ['v1.0']:
+    if not hasattr(var, 'frequency') and use_dreq_version in dreq_versions_substitute_cmip6_freq:
         # seems to be an error for some vars in v1.0, so instead use their CMIP6 frequency
         assert len(var.cmip6_frequency_legacy) == 1
         link = var.cmip6_frequency_legacy[0]
         var.frequency = [CMIP6Frequency.get_record(link).name]
+        print('using CMIP6 frequency for ' + var.compound_name)
 
     if isinstance(var.frequency[0], str):
         # retain this option for non-consolidated raw export?
@@ -248,9 +258,10 @@ with open(content_path, 'rb') as f:
 out = OrderedDict({
     'Header' : OrderedDict({
         'Description' : 'Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.',
-        'dreq version': use_dreq_version,
+        'dreq content version': use_dreq_version,
         'dreq content file' : os.path.basename(os.path.normpath(content_path)),
         'dreq content sha256 hash' : content_hash,
+        'dreq api version' : api_version,
     }),
     'Compound Name' : all_var_info,
 })
@@ -258,7 +269,7 @@ out = OrderedDict({
 filepath = '_all_var_info.json'
 with open(filepath, 'w') as f:
     json.dump(out, f, indent=4)
-    print(f'wrote {filepath} for {len(all_var_info)} variables')
+    print(f'wrote {filepath} for {len(all_var_info)} variables, dreq version = {use_dreq_version}')
 
 
 ###############################################################################
@@ -291,4 +302,4 @@ if organize_by_standard_name:
     filepath = '_all_var_info_by_standard_name.json'
     with open(filepath, 'w') as f:
         json.dump(out, f, indent=4)
-        print(f'wrote {filepath} for {n} variables')
+        print(f'wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
