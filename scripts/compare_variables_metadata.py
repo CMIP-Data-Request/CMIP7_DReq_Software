@@ -14,7 +14,8 @@ include_cmor_tables = ['Amon', 'day']
 filepath = '_all_var_info.json'
 
 # Name of output file to write with the diffs
-outfilepath = 'var_diffs.json'
+outfile_name = 'diffs_by_variable_name.json'
+outfile_attr = 'diffs_by_metadata_attribute.json'
 
 # Names of attributes to compare
 compare_attributes = [
@@ -44,6 +45,13 @@ min_max_attributes = [
     'ok_min_mean_abs', 
     'ok_max_mean_abs',
 ]
+
+# Corrections for typos or minor differences in dreq var names from their equivalents in the tables that
+# we're comparing to. These could reflect updates or errors in the dreq var names, but in any case it's
+# useful to ignore them for the comparison.
+name_corrections = {
+    'Amon.co2massCLim' : 'Amon.co2massClim'
+}
 
 ###############################################################################
 
@@ -78,13 +86,7 @@ else:
     # Use all available tables
     include_cmor_tables = sorted(dreq_tables, key=str.lower)
 
-# Corrections for typos or minor differences in dreq var names from their equivalents in the tables that
-# we're comparing to. These could reflect updates or errors in the dreq var names, but in any case it's
-# useful to ignore them for the comparison.
-corrections = {
-    'Amon.co2massCLim' : 'Amon.co2massClim'
-}
-for old,new in corrections.items():
+for old,new in name_corrections.items():
     if old in dreq_vars:
         assert new not in dreq_vars, f'variable already exists in dreq: {new}'
         dreq_vars[new] = dreq_vars[old]
@@ -102,6 +104,7 @@ table_header_keep = [
     'Conventions',
 ]
 tables_checked = []
+attr_diffs = set()
 for table_id in include_cmor_tables:
     filepath = os.path.join(path_tables, filename_template.format(table=table_id))
     if not os.path.exists(filepath):
@@ -147,6 +150,7 @@ for table_id in include_cmor_tables:
                     'PREV' : table_var_info[attr],
                     'DREQ' : dreq_var_info[attr],
                 })
+                attr_diffs.add(attr)
         if len(var_diff) > 0:
             diffs[var_name] = var_diff
 
@@ -160,7 +164,7 @@ for table_id in include_cmor_tables:
 out = OrderedDict({
     'Header' : {
         'Description': 'Comparison of variable metadata between data request (DREQ) and previous cmor tables (PREV)',
-        'dreq version': dreq_header['dreq version'],
+        'dreq content version': dreq_header['dreq content version'],
         'dreq content file' : dreq_header['dreq content file'],
         'dreq content sha256 hash' : dreq_header['dreq content sha256 hash'],
         'cmor tables source' : repo_tables,
@@ -169,6 +173,31 @@ out = OrderedDict({
     },
     'Compound Name' : diffs
 })
-with open(outfilepath, 'w') as f:
+outfile = outfile_name
+with open(outfile, 'w') as f:
     json.dump(out, f, indent=4)
-    print(f'Wrote {outfilepath} with differences in {len(diffs)} variables')
+    print('Wrote ' + outfile)
+
+# Write another output file with the same info but instead organized by attribute as the top-level dict key
+diffs_by_attr = OrderedDict()
+attr_diffs = sorted(attr_diffs, key=str.lower)
+for attr in attr_diffs:
+    diffs_by_attr[attr] = OrderedDict()
+for var_name, var_diff in diffs.items():
+    for attr in var_diff:
+        diffs_by_attr[attr][var_name] = var_diff[attr]
+del out['Compound Name']
+out['Metadata Attribute'] = diffs_by_attr
+outfile = outfile_attr
+with open(outfile, 'w') as f:
+    json.dump(out, f, indent=4)
+    print('Wrote ' + outfile)
+
+# Summarize what was fond
+print(f'\nTotal number of variables with differences: {len(diffs)}')
+print(f'Number of variables with differences in each metadata attribute:')
+m = max([len(s) for s in attr_diffs])
+fmt = f'%-{m}s'
+for attr in attr_diffs:
+    n = len(diffs_by_attr[attr])
+    print(f'  {fmt % attr}  {n}')
