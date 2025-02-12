@@ -174,5 +174,6 @@ dreq_res
 !tests/test_datasets/*.json
 # assume spreadsheets are also content of some kind, which we don't want in this repo
 *.xlsx
+*.csv
 
 cmip6-cmor-tables

@@ -4,9 +4,9 @@ Extract metadata of CMOR variables and write them to a json file.
 Example output file: scripts/variable_info/all_var_info.json
 Output file names (filepath) are set below.
 '''
+import hashlib
 import json
 import os
-import hashlib
 from collections import OrderedDict
 
 import sys
@@ -16,7 +16,7 @@ import data_request_api.stable.content.dreq_api.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 from data_request_api.stable.query import dreq_classes
 from data_request_api import version as api_version
-
+from data_request_api.stable.utilities.tools import write_csv_output_file_content
 
 
 # from importlib import reload
@@ -29,6 +29,8 @@ filter_by_cmor_table = False  # False ==> include all tables (i.e., all variable
 include_cmor_tables = ['Amon', 'day']
 
 organize_by_standard_name = True  # True ==> write additional file that groups variables by CF standard name
+
+write_csv = True # True ==> write spreadsheet listing metadata of all variables
 
 # Some variables in these dreq versions lack a 'frequency' attribute; use the legacy CMIP6 frequency for them
 dreq_versions_substitute_cmip6_freq = ['v1.0', 'v1.1']
@@ -303,3 +305,31 @@ if organize_by_standard_name:
     with open(filepath, 'w') as f:
         json.dump(out, f, indent=4)
         print(f'wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
+
+###############################################################################
+if write_csv:
+
+    var_info = next(iter(all_var_info.values()))
+    attrs = list(var_info.keys())
+    columns = ['Compound Name']
+    columns.append('standard_name')
+    columns.append('standard_name_proposed')
+    columns += [s for s in attrs if s not in columns]
+
+    rows = [columns]  # column header line
+    # Add each variable as a row
+    for var_name, var_info in all_var_info.items():
+        row = []
+        for col in columns:
+            if col == 'Compound Name':
+                val = var_name
+            elif col in var_info:
+                val = var_info[col]
+            else:
+                val = ''
+            row.append(val)
+        rows.append(row)
+
+    filepath = '_all_var_info.csv'
+    write_csv_output_file_content(filepath, rows)
+    print(f'wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
