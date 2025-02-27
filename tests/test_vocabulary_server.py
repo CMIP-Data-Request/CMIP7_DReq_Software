@@ -10,7 +10,8 @@ import copy
 import unittest
 
 from data_request_api.stable.utilities.tools import read_json_input_file_content
-from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
+	to_plural, to_singular
 
 
 class TestLinks(unittest.TestCase):
@@ -26,6 +27,23 @@ class TestLinks(unittest.TestCase):
 		self.assertEqual(build_link_from_id(6), 6)
 		self.assertEqual(build_link_from_id("test"), "link::test")
 		self.assertEqual(build_link_from_id("link::test"), "link::test")
+
+
+class TestChangeNumber(unittest.TestCase):
+	def setUp(self):
+		self.vs_file = "tests/test_datasets/one_base_VS_output.json"
+
+	def test_to_singular(self):
+		vs = VocabularyServer.from_input(self.vs_file)
+		self.assertEqual(to_singular("opportunities"), "opportunity")
+		self.assertEqual(to_singular("variables_groups"), "variables_group")
+		self.assertEqual(to_singular("variables_group"), "variables_group")
+
+	def test_to_plural(self):
+		vs = VocabularyServer.from_input(self.vs_file)
+		self.assertEqual(to_plural("opportunity"), "opportunities")
+		self.assertEqual(to_plural("variables_groups"), "variables_groups")
+		self.assertEqual(to_plural("variables_group"), "variables_groups")
 
 
 class TestVocabularyServer(unittest.TestCase):
@@ -54,18 +72,6 @@ class TestVocabularyServer(unittest.TestCase):
 			VocabularyServer.from_input(self.vs_content)
 
 		obj = VocabularyServer.from_input(self.vs_file)
-
-	def test_to_singular(self):
-		vs = VocabularyServer.from_input(self.vs_file)
-		self.assertEqual(vs.to_singular("opportunities"), "opportunity")
-		self.assertEqual(vs.to_singular("variables_groups"), "variables_group")
-		self.assertEqual(vs.to_singular("variables_group"), "variables_group")
-
-	def test_to_plural(self):
-		vs = VocabularyServer.from_input(self.vs_file)
-		self.assertEqual(vs.to_plural("opportunity"), "opportunities")
-		self.assertEqual(vs.to_plural("variables_groups"), "variables_groups")
-		self.assertEqual(vs.to_plural("variables_group"), "variables_groups")
 
 	def test_get_element(self):
 		vs = VocabularyServer.from_input(self.vs_file)

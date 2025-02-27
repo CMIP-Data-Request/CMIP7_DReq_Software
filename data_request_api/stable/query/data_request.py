@@ -15,7 +15,8 @@ from collections import defaultdict
 from data_request_api.stable.utilities.logger import get_logger, change_log_file, change_log_level
 from data_request_api.stable.content.dump_transformation import transform_content
 from data_request_api.stable.utilities.tools import read_json_file, write_csv_output_file_content
-from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
+	to_singular
 
 version = "1.0.1"
 
@@ -161,7 +162,7 @@ class DRObjects(object):
 		"""
 		indent = "    " * level
 		DR_type = copy.deepcopy(self.DR_type)
-		DR_type = self.dr.VS.to_singular(DR_type)
+		DR_type = to_singular(DR_type)
 		return [f"{indent}{DR_type}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
 
 	def filter_on_request(self, request_value):
