@@ -12,7 +12,8 @@ import unittest
 
 
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
-from data_request_api.stable.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, DataRequest, version
+from data_request_api.stable.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, \
+	DataRequest, version, ConstantValueObj
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value
 
 
@@ -49,6 +50,8 @@ class TestDRObjects(unittest.TestCase):
 
 		obj = DRObjects.from_input(dr=self.dr, id="link::my_id", DR_type="priority_level")
 
+		obj = DRObjects.from_input(dr=self.dr, id="link::default_481", DR_type="priority_level")
+
 	def test_check(self):
 		obj = DRObjects("my_id", self.dr)
 		obj.check()
@@ -74,6 +77,17 @@ class TestDRObjects(unittest.TestCase):
 		my_set.add(DRObjects(id="link::my_id_2", dr=self.dr))
 		my_set.add(copy.deepcopy(obj))
 		self.assertEqual(len(my_set), 2)
+
+		my_dict = dict()
+		obj2 = self.dr.find_element("cmip7_frequency", "link::default_104")
+		obj3 = self.dr.find_element("cmip7_frequency", "link::default_105")
+		self.assertTrue(isinstance(obj2, DRObjects))
+		self.assertTrue(isinstance(obj2.name, ConstantValueObj))
+		self.assertTrue(isinstance(obj2.name, ConstantValueObj))
+		my_dict[obj2.id] = obj2
+		my_dict[obj2.name] = obj2
+		my_dict[obj3.id] = obj3
+		my_dict[obj3.name] = obj3
 
 	def test_filter_on_request(self):
 		obj1 = DRObjects(id="my_id", DR_type="test", dr=self.dr)
