@@ -163,7 +163,7 @@ def transform_content_one_base(content):
             content["esm-bcv"] = content.pop(esm_bcv)
         for (key, new_key) in [("opportunity", "opportunities"), ("experiment_group", "experiment_groups"),
                                ("variable_group", "variable_groups"), ("structure", "structure_title"),
-                               ("time_slice", "time_subset")]:
+                               ("time_slice", "time_subsets"), ('time_subset', 'time_subsets')]:
             if key in content:
                     content[new_key] = content.pop(key)
         for pattern in [".*rank.*", ]:
@@ -197,11 +197,11 @@ def transform_content_one_base(content):
             "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
             "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names", "physical_parameters"],
             "priority_level": ["variable_group", ],
-            "spatial_shape": [r"dimensions.*", r"structure.*", r".*variables.*", "hor.*", "vert.*"],
+            "spatial_shape": [r"structure.*", r".*variables.*", "hor.*", "vert.*"],
             "structure_title": [r"variables.*", "brand_.*", "calculation.*"],
             "table_identifiers": ["variables", ],
             "temporal_shape": ["variables", "structure"],
-            "time_subset": ["uid.+", "opportunit.*"],
+            "time_subsets": ["uid.+", "opportunit.*"],
             "variable_comments": ["variable.*", "spatial_shape", "temporal_shape", "coordinates_and_dimensions",
                                   "cell_methods", "cell_measures"],
             "variable_groups": [".*opportunit.*", "theme", r"size.*", "mip_ownership"],
@@ -217,10 +217,11 @@ def transform_content_one_base(content):
             "data_request_themes": [("comments", "opportunity/variable_group_comments"), ("uid.+", "uid")],
             "experiments": [("experiment", "name")],
             "experiment_groups": [("comments", "opportunity/variable_group_comments")],
+            "mips": [('mip_short_name', "name")],
             "modelling_realm": [("id", "uid")],
             "opportunities": [("title_of_opportunity", "name"), ("comments", "opportunity/variable_group_comments"),
                               ("ensemble_size", "minimum_ensemble_size"), ("themes", "data_request_themes"),
-                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subset")],
+                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subsets")],
             "physical_parameters": [("comments", "physical_parameter_comments"),
                                     ("cf_proposal_github_issue", "proposal_github_issue"),
                                     ("flag.*change.*", "flag_change_since_cmip6")],
@@ -228,7 +229,7 @@ def transform_content_one_base(content):
             "temporal_shape": [("comments", "variable_comments")],
             "structure_title": [("label", "name")],
             "table_identifiers": [("comment", "notes"), ("frequency", "cmip6_frequency")],
-            "time_subset": [("label", "name")],
+            "time_subsets": [("label", "name")],
             "variable_groups": [(".*mips.*", "mips"), ("comments", "opportunity/variable_group_comments")],
             "variables": [("compound_name", "name"), ("cmip6_frequency.+", "cmip6_frequency"), (esm_bcv, "esm-bcv"),
                           ("modeling_realm", "modelling_realm"), ("comments", "variable_comments"),
@@ -438,7 +439,7 @@ def split_content_one_base(content):
         "opportunities": [("experiment_groups", list, list()),
                           ("variable_groups", list, list()),
                           ("data_request_themes", list, list()),
-                          ("time_subset", list, list()),
+                          ("time_subsets", list, list()),
                           ("mips", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),
@@ -530,7 +531,7 @@ def get_transformed_content(version="latest_stable", export_version="release", u
             data_request, vocabulary_server = transform_content(content, version)
             write_json_output_file_content(DR_content, data_request)
             write_json_output_file_content(VS_content, vocabulary_server)
-        return DR_content, VS_content
+        return dict(DR_input=DR_content, VS_input=VS_content)
 
 
 if __name__ == "__main__":
