@@ -742,6 +742,19 @@
         }
     },
     "coordinates_and_dimensions": {
+        "dim:alevel": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "cf_standard_name": "x",
+            "description": "Generic atmospheric model vertical coordinate (nondimensional or dimensional) [use CF standard name apporpriate for model vertical coordinate, e.g. model_level_number or atmosphere_sigma_coordinate]",
+            "grid_class": "options",
+            "name": "alevel",
+            "output_name": "lev",
+            "positive_direction": "up",
+            "title": "Atmospheric Model Level",
+            "type": "double"
+        },
         "dim:depth0m": {
             "axis_flag": "Z",
             "cf_category": "coordinate",
@@ -825,6 +838,85 @@
             "title": "Longitude",
             "type": "double",
             "units": "degrees_east"
+        },
+        "dim:olevel": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "description": "generic ocean model vertical coordinate (nondimensional or dimensional)",
+            "grid_class": "options",
+            "name": "olevel",
+            "output_name": "lev",
+            "positive_direction": "down",
+            "title": "Ocean Model Levels",
+            "type": "double"
+        },
+        "dim:plev19": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "cf_standard_name": "air_pressure",
+            "description": "There are 19  requested levels. If the upper levels are above the model top they should be omitted.",
+            "grid_class": "fixedScalar",
+            "name": "plev19",
+            "output_name": "plev",
+            "positive_direction": "down",
+            "requested_values": "100000. 92500. 85000. 70000. 60000. 50000. 40000. 30000. 25000. 20000. 15000. 10000. 7000. 5000. 3000. 2000. 1000. 500. 100.",
+            "stored_direction": "decreasing",
+            "title": "Pressure Levels (19)",
+            "tolerance": 1,
+            "type": "double",
+            "units": "Pa",
+            "variable_comments": [
+                "link::default_543"
+            ]
+        },
+        "dim:plev3": {
+            "axis_flag": "Z",
+            "cf_category": "dimension",
+            "cf_standard_name": "air_pressure",
+            "grid_class": "fixed",
+            "name": "plev3",
+            "output_name": "plev",
+            "positive_direction": "down",
+            "requested_values": "85000. 50000. 25000.",
+            "stored_direction": "decreasing",
+            "title": "Pressure Levels (3)",
+            "tolerance": 1,
+            "type": "double",
+            "units": "Pa"
+        },
+        "dim:plev8": {
+            "axis_flag": "Z",
+            "cf_category": "dimension",
+            "cf_standard_name": "air_pressure",
+            "grid_class": "fixed",
+            "name": "plev8",
+            "output_name": "plev",
+            "positive_direction": "down",
+            "requested_values": "100000. 85000. 70000. 50000. 25000. 10000. 5000. 1000.",
+            "stored_direction": "decreasing",
+            "title": "Pressure Levels (8)",
+            "tolerance": 1,
+            "type": "double",
+            "units": "Pa"
+        },
+        "dim:sdepth": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "cf_standard_name": "depth",
+            "description": "Soil layers (depth). If soil layer thicknesses vary from one location to another, interpolate to a standard set of depths.  Ideally, the interpolation should preserve the vertical integral where appropriate (e.g. for layer mass content).",
+            "grid_class": "model",
+            "maximum_valid_value": 200,
+            "minimum_valid_value": 0,
+            "name": "sdepth",
+            "output_name": "depth",
+            "positive_direction": "down",
+            "stored_direction": "increasing",
+            "title": "depth",
+            "type": "double",
+            "units": "m"
         },
         "dim:sdepth1": {
             "axis_flag": "Z",
@@ -2109,107 +2201,92 @@
         }
     },
     "mips": {
-        "default_400": {
-            "mip_abstract": "As the climate warms, mass loss of the grounded ice sheet and floating ice shelves surrounding Antarctica is accelerating, increasing meltwater input into the Southern Ocean. Meltwater-induced changes in ocean circulation have the potential to influence the ability of the Southern Ocean to uptake heat and carbon, providing an important feedback on climate change. Nonetheless, almost all existing coupled climate models have fixed ice sheets, and lack the physics required to represent the dominant sources of Antarctic melt. These missing ice dynamics represent a key uncertainty that is unaccounted for in current global climate change projections.\n\nThe goal of the Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project (SOFIAMIP) is to quantify the climate system response to Antarctic meltwater input. Notably, changes in ocean dynamics, sea ice loss and ice shelf melt around the Antarctic margins, as well as resulting changes in atmospheric dynamics, precipitation, global warming rate and sea level rise are of direct interest and relevance both to CMIP and resulting climate assessments. Associated responses and feedbacks are model dependent and SOFIAMIP will enable the quantification of such model uncertainty.\n\nThe MIP proposes a series of coupled atmosphere/ocean/sea-ice model experiments, including idealized meltwater experiments, historical experiments with observationally consistent meltwater input, and future scenarios driven by meltwater inputs derived from stand-alone ice sheet models. These experiments are designed to test forcing uncertainties. We welcome contributions based on both CMIP6 and CMIP7 models. By comparing these experiments with the equivalent (standard CMIP) simulations without additional meltwater input, the climate impacts will be quantified.\n",
-            "mip_long_name": "Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project",
-            "mip_short_name": "SOFIAMIP",
-            "mip_website": "https://sofiamip.github.io/",
-            "name": "undef"
-        },
         "default_401": {
-            "mip_abstract": "TIPMIP is an international intercomparison project that aims to systematically advance our understanding of nonlinear dynamics in various Earth system components, and assess the associated uncertainties and risks. At present, no MIP exists which focuses specifically on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling this gap, TIPMIP will shed light on critical processes currently underrepresented in other MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are components of the Earth system highly susceptible to reaching a critical threshold \u2013 a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or irreversible changes in response to anthropogenic climate change. Crossing a tipping point can lead the systems to transition to an alternative state, often with reduced resilience to perturbations and recovery. Once triggered, the tipping of one of these elements can have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, understanding the dynamics of tipping elements and associated risks is crucial for developing effective strategies to mitigate and adapt to the impacts of global environmental change.\n\nWhy is this project important?\nOur current scientific knowledge of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) which components of the climate system and biosphere might show tipping behaviour, (ii) if so, at which forcing levels the critical thresholds are located, (iii) which feedback processes they are associated with, and (iv) if and how potential tipping cascades might evolve. These uncertainties have numerous sources, for instance connected to:\n-finding the \u201cright\u201d level of complexity regarding certain processes within and between Earth system components; \n-the representation of all relevant biophysical processes on the required timescales in Earth system models (in part, so far limited due to computational constraints);\n-the implementation of certain processes and feedbacks in the models; and\n-the limitations on observational data availability for long time horizons.\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is the risk of crossing potential tipping points in the cryosphere, biosphere and core circulation systems at different levels of ongoing climate and land-use change?\n-What are the key biophysical processes and feedbacks associated with these risks?\n-What are the characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping elements?\n-How does the forcing rate affect short- and long-term impacts of changes in the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the respective impacts reversible, and if so, on which timescales?\n-How do interactions between elements affect the overall stability of the Earth system?\n\nTypes of experiments \nInitially, we envision three major types of experiments for TIPMIP, all of which will be designed for the assessment of potential key tipping elements including the Greenland Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze the historical and projected response of potential tipping elements to different climate change scenarios;\n-Commitment experiments to assess the long-term consequences of surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe potential hysteresis behaviour;\n-Rate experiments to assess the impact of different forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be complemented by an additional set of \u2018make it happen\u2019-experiments, which apply additional forcings (e.g., land-use change, freshwater input etc.) tailored to the individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, in which the impact of fully collapsed tipping elements can be studied.",
-            "mip_long_name": "Tipping Point Modelling Intercomparison Project",
-            "mip_short_name": "TIPMIP",
-            "mip_website": "https://www.tipmip.org",
-            "name": "undef"
-        },
-        "default_402": {
-            "mip_abstract": "The Decadal Climate Prediction Project (DCPP) is a coordinated multi-model investigation into decadal climate prediction, predictability, and variability that builds on the work of DCPP in CMIP6.  In particular, DCPP addresses a range of scientific issues that are highly relevant to both science and society, including the ability to improve near-term climate predictions, the skill that is potentially available, and the mechanisms responsible for such long time-horizon predictability. In CMIP7, DCPP will build on recent improvements in models, data assimilation, and model initialization to provide an updated reference of decadal climate variability and prediction skill. Furthermore, DCPP will further coordinate testing of model resolution, as well as capitalize on interest on multi-annual predictions to expand the scope of coupled multi-model prediction as part of CMIP7. DCPP will contribute to CMIP7 as well as make key contributions to the World Climate Research Program\u2019s lighthouse activity on Explaining and Predicting Earth System Change (EPESC) and the World Meteorological Organisation lead-centre activity on Annual-to-Decadal Climate Prediction (LC-ADCP).\n\nAs in CMIP6, DCPP will likely consist of three components. Component A encompasses the production of an archive of retrospective forecasts to be used to assess and understand historical decadal prediction skill. In comparison with CMIP6, the highest priority retrospective predictions (or hindcasts) will be a core set (the DCPP-DECK) which focuses on a shorter verification window with fewer start dates, a minimal ensemble size, and multi-year forecast lead times. It is envisioned that such reduced requirements of the DCPP-DECK will encourage more groups to take part in DCPP in CMIP7. The DCPP-DECK will also allow DCPP to diversify into questions it has not currently addressed due to the expense of the experiment, including for example high-resolution initialized predictions and large ensembles of multi-year predictions. Component B organizes the ongoing production and dissemination of real-time multi-model decadal forecasts. Component C will involve more idealized simulations in order to better understand the mechanisms of internal or externally forced decadal climate variability. Modelling groups will be invited to participate in as many of the components of DCPP as interests them, although the DCPP-DECK will be the core requirement for Component A and Component B. \n",
-            "mip_long_name": "Decadal Climate Prediction Project",
-            "mip_short_name": "DCPP",
-            "mip_website": "https://www.wcrp-climate.org/dcp-overview",
-            "name": "undef"
-        },
-        "default_403": {
-            "mip_abstract": "The Ice Sheet Model Intercomparison for CMIP7 (ISMIP7) has the key objective of improving projections of sea level contributions from the Greenland and Antarctic ice sheets, and our understanding of the cryosphere in a changing climate. These goals map into both \u201cMelting Ice and Global Consequences\u201d and \u201cRegional Sea-level Change\u201d Grand Challenges relevant to CliC and the World Climate Research Program (WCRP). As uncertainties in future sea level arise due to both the climate forcing and the response of the ice sheets, a primary focus for ISMIP6 was to become better integrated in the CMIP6 initiative. ISMIP6 became an endorsed activity of CMIP6 in 2015 allowing ice sheets to be considered as a component of the Earth system for the first time in CMIP. ISMIP6 became a major model inter-comparison effort (with 36 international groups and over 60 participants) making process-based projections for the Sixth Assessment Report of the IPCC. \n\nISMIP6 and ISMIP7 experimental protocols explore the uncertainty in sea level projections due to ice sheet model initialization as well as  ice sheet processes and parameters, climate scenario, and uncertainty in the representation of ice\u2013ocean interactions on centennial timescales. ISMIP7 intends to continue working on two main themes. The first relates to dynamic ice sheets within global coupled climate models, while the second is based on outputs from climate models to force standalone ice sheet models (perhaps coupled to regional ocean and/or atmosphere models). We will thus have different protocols for each type of modeling activity, and these will be related by a common set of scenarios.  Similarly, ISMIP7 will continue to employ a working group structure to allow focus on climate forcing from the oceans and atmosphere, as well as links to the observational community.",
-            "mip_long_name": "Ice Sheet Model Intercomparison Project for CMIP",
-            "mip_short_name": "ISMIP7",
-            "mip_website": "https://theghub.org/groups/ismip6/wiki",
-            "name": "undef"
-        },
-        "default_404": {
-            "mip_abstract": "Human land-use activities have resulted in large changes to the Earth's surface, with resulting implications for climate. In the future, land-use activities are likely to expand and intensify further to meet growing demands for food, fiber, and energy. The Land Use Model Intercomparison Project (LUMIP) aims to further advance understanding of the impacts of land-use and land-cover change (LULCC) on climate, specifically addressing the following questions. (1) What are the effects of LULCC on climate and biogeochemical cycling (past\u2013future)? (2) What are the impacts of land management on surface fluxes of carbon, water, and energy, and are there regional land-management strategies with the promise to help mitigate climate change? In addressing these questions, LUMIP will also address a range of more detailed science questions to get at process-level attribution, uncertainty, data requirements, and other related issues in more depth and sophistication than possible in a multi-model context to date. There will be particular focus on the separation and quantification of the effects on climate from LULCC relative to all forcings, separation of biogeochemical from biogeophysical effects of land use, the unique impacts of land-cover change vs. land-management change, modulation of land-use impact on climate by land\u2013atmosphere coupling strength, and the extent to which impacts of enhanced CO2 concentrations on plant photosynthesis are modulated by past and future land use.\n\nLUMIP involves three major sets of science activities: (1) development of an updated and expanded historical and future land-use data set, (2) an experimental protocol for specific LUMIP experiments for CMIP6, and (3) definition of metrics and diagnostic protocols that quantify model performance, and related sensitivities, with respect to LULCC. In this paper, we describe LUMIP activity (2), i.e., the LUMIP simulations that will formally be part of CMIP6. These experiments are explicitly designed to be complementary to simulations requested in the CMIP6 DECK and historical simulations and other CMIP6 MIPs including ScenarioMIP, C4MIP, LS3MIP, and DAMIP. LUMIP includes a two-phase experimental design. Phase one features idealized coupled and land-only model simulations designed to advance process-level understanding of LULCC impacts on climate, as well as to quantify model sensitivity to potential land-cover and land-use change. Phase two experiments focus on quantification of the historic impact of land use and the potential for future land management decisions to aid in mitigation of climate change. This paper documents these simulations in detail, explains their rationale, outlines plans for analysis, and describes a new subgrid land-use tile data request for selected variables (reporting model output data separately for primary and secondary land, crops, pasture, and urban land-use types). It is essential that modeling groups participating in LUMIP adhere to the experimental design as closely as possible and clearly report how the model experiments were executed.",
-            "mip_long_name": "Land-Use Model Intercomparison Project",
-            "mip_short_name": "LUMIP",
-            "mip_website": "https://www.cesm.ucar.edu/projects/cmip6/lumip",
-            "name": "undef"
-        },
-        "default_405": {
-            "mip_abstract": "Robust projections and predictions of climate variability and change, particularly at regional scales, rely on the driving processes being represented with fidelity in model simulations. The role of enhanced horizontal resolution in improved process representation in all components of the climate system continues to be of great interest. In particular, recent simulations suggest both the possibility of significant changes in large-scale aspects of circulation and response to climate change, as well as improvements in small-scale processes and extremes.\nThe first HighResMIP (HighResMIP v1.0 for CMIP6) was successful in producing a baseline multi-model assessment of global simulations with model grid spacings  of around 50km in the atmosphere and 0.25\u00b0 in the ocean, comparing to models with standard resolutions typically used as part of the Coupled Model Intercomparison Project 6 (CMIP6) DECK experiments. In addition to a large number of peer-reviewed publications using the published HighResMIP datasets, the results were widely cited in the IPCC AR6 WG1 report, and were the basis for a variety of derived datasets including tracked cyclones (both tropical and extratropical), storm surge and others used for impact studies.\nHowever, there were a number of aspects of HighResMIPv1.0 that were less than ideal, through both practical and design choices at that time. These included: long (and relatively expensive) simulation designs, which even so only reached to 2050; specification of little to no tuning between standard and higher resolution model configurations; simplified aerosol specification; small ensemble size; short spin-up for coupled simulations; one future scenario. In addition, with the increasing use of global km-scale models (currently run for relatively short timescales), there is a danger of a gap opening between such models and the CMIP community which still (generally) relies on ~100km model simulations.\nTherefore we propose an updated HighResMIP v2.0 to improve and extend the previous work, to address new science questions as well as some of these shortcomings above, and to further advance our understanding of the role of horizontal resolution on climate simulation. With further increases in high-performance computing (HPC) resources and new models able to take full advantage of such resources, enhanced investigation of the drivers and consequences of variability and change in both large- synoptic-scale weather and climate is made possible.\nThe set of HighResMIP v2.0 experiments is divided into several tiers consisting of atmosphere-only and coupled runs spanning the period 1950\u20132100, together with some additional shorter experiments to enable process understanding and links to other communities. This paper describes the experimental set-up of HighResMIPv2, the analysis plan, and the connection with other CMIP projects. It also aims to link to other international efforts such as the World Climate Research Program (WCRP) lighthouse activities.\n",
-            "mip_long_name": "High Resolution Model Intercomparison Project",
-            "mip_short_name": "HighResMIP",
-            "mip_website": "https://www.highresmip.org",
-            "name": "undef"
-        },
-        "default_406": {
-            "mip_abstract": "The Ocean Model Intercomparison Project (OMIP) aims to provide a framework for evaluating, understanding, and improving the ocean, sea-ice, tracer, and biogeochemical components of global climate and Earth system models contributing to the Coupled Model Intercomparison Project Phase 7 (CMIP7). Ocean and sea ice models not part of a coupled system are also welcome to participate. Existing papers define OMIP and detail protocols both for simulating global ocean/sea-ice models with inert chemical and biogeochemical tracers and for analyzing their output.",
-            "mip_long_name": "Ocean Model Intercomparison Project",
-            "mip_short_name": "OMIP",
-            "mip_website": "https://OceanMIP.github.io",
-            "name": "undef"
-        },
-        "default_408": {
-            "mip_long_name": "Flux-Anomaly-Forced Model Intercomparison Project",
-            "mip_short_name": "FAFMIP",
-            "mip_website": "http://www.fafmip.org",
-            "name": "undef"
-        },
-        "default_409": {
-            "mip_long_name": "Coupled Model Intercomparison Project",
-            "mip_short_name": "CMIP",
-            "mip_website": "https://www.wcrp-cmip.org/",
-            "name": "undef"
-        },
-        "default_411": {
-            "mip_long_name": "Scenario Model Intercomparison Project",
-            "mip_short_name": "ScenarioMIP",
-            "mip_website": "https://wcrp-cmip.org/mips/scenariomip/",
-            "name": "undef"
-        },
-        "default_413": {
-            "mip_abstract": "Coordinated Regional Climate Downscaling Experiment (CORDEX) builds on a foundation of previous downscaling intercomparison projects and aims to advance and coordinate the science and application of regional climate downscaling through global partnerships. The main four CORDEX goals include i) understanding relevant regional/local climate phenomena, ii) improving regional climate downscaling models and techniques, iii) producing coordinated sets of regional high-resolution downscaled projections worldwide and iv) fostering communication and knowledge exchange with users of regional climate information. While CORDEX goals include interaction with users of regional climate information, CORDEX is not a climate service per se. However, the CORDEX community has been actively involved in establishing national and regional climate services over the last 10 years including co-production of regional climate information through dialogue with regional impact communities, stakeholders and authorities. Currently, CORDEX is a key scientific pillar in a new WCRP core project - Regional Information for Society (RIfS). The main CORDEX protocol includes a set of 14 continental-scale domains covering essentially all land areas of the globe. An integral part of CORDEX is the Flagship Pilot Studies (FPS). FPS are intended to be targeted studies aimed at addressing specific scientific challenges (e.g. convection-permitting scales, regional land use changes, regional effects of aerosol, etc.) over the standard CORDEX domains or over selected sub-domains. CORDEX is a diagnostic MIP not contributing by any experiment to CMIP7 but requesting specific CMIP7 output for regional climate downscaling.",
-            "mip_long_name": "Coordinated Regional Climate Downscaling Experiment",
-            "mip_short_name": "CORDEX",
-            "mip_website": "https://cordex.org",
-            "name": "undef"
-        },
-        "default_414": {
-            "mip_abstract": "The Geoengineering Model Intercomparison Project (GeoMIP) is a coordinating framework, started in 2010, that includes a series of standardized climate model experiments aimed at understanding the physical processes and projected impacts of solar geoengineering. Numerous experiments have been conducted, and numerous more have been proposed as \"Testbed'' experiments, spanning a variety of geoengineering techniques aimed at modifying the planetary radiation budget: stratospheric aerosol injection, marine cloud brightening, surface albedo modification, cirrus cloud thinning and sunshade mirrors. To date, more than one hundred studies have been published that used results from GeoMIP simulations, and its results have been recently used both in the IPCC Sixth Assessment Report and in the WMO 2022 Ozone Report. \n\nFor the GeoMIP phase connected with the Coupled Model Intercomparison Project Phase 6 (CMIP6), three experiments have been proposed as Tier 1: G1ext, which aim to balance a 4\u00d7CO2 forcing via solar irradiance reduction, and is identical to previous experiments under older CMIP phases to allow for an evaluation of models' evolution; and G6sulfur and G6solar, which aim to reduce forcing from a ScenarioMIP Tier 1 high forcing scenario to a medium forcing scenario with stratospheric sulfate aerosols or solar reduction. One experiment has also been proposed as Tier 2: G7cirrus, which  aims to reduce forcing by a constant amount (against a baseline of the ScenarioMIP Tier 1 high forcing scenario) via increasing cirrus ice crystal fall speed.\n\nFor the future CMIP phase, based on current results, the community is working towards an updated minimal set of scenarios to be proposed, which try to balance scientific significance with policy relevance in order to produce useful results for future climate assessments. ",
-            "mip_long_name": "Geoengineering Model Intercomparison Project",
-            "mip_short_name": "GeoMIP",
-            "mip_website": "http://climate.envsci.rutgers.edu/GeoMIP/",
-            "name": "undef"
-        },
-        "default_415": {
             "mip_abstract": "Coordinated experimental design and implementation has become a cornerstone of global climate modelling. Model Intercomparison Projects (MIPs) enable systematic and robust analysis of results across many models, by reducing the influence of ad hoc differences in model set-up or experimental\nBoundary conditions. \n\nThe Coupled Climate\u2013Carbon Cycle Model Intercomparison Project (C4MIP) takes responsibility for design, documentation, and analysis of carbon cycle feedbacks and interactions in climate simulations. These feedbacks are potentially large and play a leading-order contribution in determining the atmospheric composition in response to human emissions of CO2 and in the setting of emissions targets to stabilize climate or avoid dangerous climate change. For nearly two decades, C4MIP has coordinated coupled climate\u2013carbon cycle simulations. While the climate\u2013carbon cycle community contributes to our experimental design, the simulations also fit within the wider CMIP activity, conform to some common standards including documentation and diagnostic requests, and are designed to complement the CMIP core experiments (DECK).\n\nC4MIP evolves, but retains three key strands of scientific motivation:\n(1) pre-industrial and historical simulations (formally part of the common set of CMIP6 experiments) to enable model evaluation\n(2) idealized coupled and partially coupled simulations with 1% per year increases in CO2 to enable diagnosis of feedback strength and its components, quantify TCRE and ZEC and understand processes surrounding reversibility and symmetry to negative emissions\n(3) future scenario simulations to project how the Earth system will respond to anthropogenic activity over the 21st century and beyond. Focus moving towards low (policy relevant) pathways with and without overshoot",
             "mip_long_name": "Coupled Climate Carbon Cycle MIP",
-            "mip_short_name": "C4MIP",
             "mip_website": "https://c4mip.net/home",
-            "name": "undef"
+            "name": "C4MIP"
         },
-        "default_416": {
-            "mip_abstract": "A better understanding of the role of sea ice for the changing climate of our planet is the central aim of the diagnostic Sea-Ice Model Intercomparison Project (SIMIP), having formally started for CMIP6. To reach this aim, SIMIP requests sea-ice-related variables from climate-model simulations that allow for a better understanding and, ultimately, improvement of biases and errors in sea-ice simulations with large-scale climate models. This then allows us to better understand to what degree CMIP model simulations relate to reality, thus improving our confidence in answering sea-ice-related questions based on these simulations. Furthermore, the SIMIP protocol provides a standard for sea-ice model output that will streamline and hence simplify the analysis of the simulated sea-ice evolution in research projects independent of CMIP. To reach its aims, SIMIP provides a structured list of model output that allows for an examination of the evolution of sea ice.",
-            "mip_long_name": "Sea Ice Model Intercomparison Project",
-            "mip_short_name": "SIMIP",
-            "mip_website": "https://climate-cryosphere.org/simip-about/",
-            "name": "undef"
+        "default_403": {
+            "mip_long_name": "Coupled Model Intercomparison Project",
+            "mip_website": "https://www.wcrp-cmip.org/",
+            "name": "CMIP"
         },
-        "default_417": {
+        "default_404": {
+            "mip_abstract": "Coordinated Regional Climate Downscaling Experiment (CORDEX) builds on a foundation of previous downscaling intercomparison projects and aims to advance and coordinate the science and application of regional climate downscaling through global partnerships. The main four CORDEX goals include i) understanding relevant regional/local climate phenomena, ii) improving regional climate downscaling models and techniques, iii) producing coordinated sets of regional high-resolution downscaled projections worldwide and iv) fostering communication and knowledge exchange with users of regional climate information. While CORDEX goals include interaction with users of regional climate information, CORDEX is not a climate service per se. However, the CORDEX community has been actively involved in establishing national and regional climate services over the last 10 years including co-production of regional climate information through dialogue with regional impact communities, stakeholders and authorities. Currently, CORDEX is a key scientific pillar in a new WCRP core project - Regional Information for Society (RIfS). The main CORDEX protocol includes a set of 14 continental-scale domains covering essentially all land areas of the globe. An integral part of CORDEX is the Flagship Pilot Studies (FPS). FPS are intended to be targeted studies aimed at addressing specific scientific challenges (e.g. convection-permitting scales, regional land use changes, regional effects of aerosol, etc.) over the standard CORDEX domains or over selected sub-domains. CORDEX is a diagnostic MIP not contributing by any experiment to CMIP7 but requesting specific CMIP7 output for regional climate downscaling.",
+            "mip_long_name": "Coordinated Regional Climate Downscaling Experiment",
+            "mip_website": "https://cordex.org",
+            "name": "CORDEX"
+        },
+        "default_405": {
             "mip_abstract": "DAMIP is the component of CMIP7 dealing with understanding the individual contributions of various external factors to past and future changes in global and regional climate. The primary goals of DAMIP are to facilitate improved estimation of the contributions of anthropogenic and natural forcing changes to observed global warming as well as to observed global and regional changes in other climate variables; to contribute to the estimation of how historical emissions have altered and are altering contemporary climate risk including for specific extreme events; to improve understanding of inter-model differences in the response to individual forcings; and to facilitate improved observationally-constrained projections of future climate change. DAMIP will support improved attribution of climate change in the next IPCC report.",
             "mip_long_name": "Detection and Attribution Model Intercomparison Project",
-            "mip_short_name": "DAMIP",
             "mip_website": "https://wcrp-cmip.org/damip/",
-            "name": "undef"
+            "name": "DAMIP"
+        },
+        "default_406": {
+            "mip_abstract": "The Decadal Climate Prediction Project (DCPP) is a coordinated multi-model investigation into decadal climate prediction, predictability, and variability that builds on the work of DCPP in CMIP6.  In particular, DCPP addresses a range of scientific issues that are highly relevant to both science and society, including the ability to improve near-term climate predictions, the skill that is potentially available, and the mechanisms responsible for such long time-horizon predictability. In CMIP7, DCPP will build on recent improvements in models, data assimilation, and model initialization to provide an updated reference of decadal climate variability and prediction skill. Furthermore, DCPP will further coordinate testing of model resolution, as well as capitalize on interest on multi-annual predictions to expand the scope of coupled multi-model prediction as part of CMIP7. DCPP will contribute to CMIP7 as well as make key contributions to the World Climate Research Program\u2019s lighthouse activity on Explaining and Predicting Earth System Change (EPESC) and the World Meteorological Organisation lead-centre activity on Annual-to-Decadal Climate Prediction (LC-ADCP).\n\nAs in CMIP6, DCPP will likely consist of three components. Component A encompasses the production of an archive of retrospective forecasts to be used to assess and understand historical decadal prediction skill. In comparison with CMIP6, the highest priority retrospective predictions (or hindcasts) will be a core set (the DCPP-DECK) which focuses on a shorter verification window with fewer start dates, a minimal ensemble size, and multi-year forecast lead times. It is envisioned that such reduced requirements of the DCPP-DECK will encourage more groups to take part in DCPP in CMIP7. The DCPP-DECK will also allow DCPP to diversify into questions it has not currently addressed due to the expense of the experiment, including for example high-resolution initialized predictions and large ensembles of multi-year predictions. Component B organizes the ongoing production and dissemination of real-time multi-model decadal forecasts. Component C will involve more idealized simulations in order to better understand the mechanisms of internal or externally forced decadal climate variability. Modelling groups will be invited to participate in as many of the components of DCPP as interests them, although the DCPP-DECK will be the core requirement for Component A and Component B. \n",
+            "mip_long_name": "Decadal Climate Prediction Project",
+            "mip_website": "https://www.wcrp-climate.org/dcp-overview",
+            "name": "DCPP"
+        },
+        "default_407": {
+            "mip_long_name": "Flux-Anomaly-Forced Model Intercomparison Project",
+            "mip_website": "http://www.fafmip.org",
+            "name": "FAFMIP"
+        },
+        "default_408": {
+            "mip_abstract": "The Geoengineering Model Intercomparison Project (GeoMIP) is a coordinating framework, started in 2010, that includes a series of standardized climate model experiments aimed at understanding the physical processes and projected impacts of solar geoengineering. Numerous experiments have been conducted, and numerous more have been proposed as \"Testbed'' experiments, spanning a variety of geoengineering techniques aimed at modifying the planetary radiation budget: stratospheric aerosol injection, marine cloud brightening, surface albedo modification, cirrus cloud thinning and sunshade mirrors. To date, more than one hundred studies have been published that used results from GeoMIP simulations, and its results have been recently used both in the IPCC Sixth Assessment Report and in the WMO 2022 Ozone Report. \n\nFor the GeoMIP phase connected with the Coupled Model Intercomparison Project Phase 6 (CMIP6), three experiments have been proposed as Tier 1: G1ext, which aim to balance a 4\u00d7CO2 forcing via solar irradiance reduction, and is identical to previous experiments under older CMIP phases to allow for an evaluation of models' evolution; and G6sulfur and G6solar, which aim to reduce forcing from a ScenarioMIP Tier 1 high forcing scenario to a medium forcing scenario with stratospheric sulfate aerosols or solar reduction. One experiment has also been proposed as Tier 2: G7cirrus, which  aims to reduce forcing by a constant amount (against a baseline of the ScenarioMIP Tier 1 high forcing scenario) via increasing cirrus ice crystal fall speed.\n\nFor the future CMIP phase, based on current results, the community is working towards an updated minimal set of scenarios to be proposed, which try to balance scientific significance with policy relevance in order to produce useful results for future climate assessments. ",
+            "mip_long_name": "Geoengineering Model Intercomparison Project",
+            "mip_website": "http://climate.envsci.rutgers.edu/GeoMIP/",
+            "name": "GeoMIP"
+        },
+        "default_409": {
+            "mip_abstract": "Robust projections and predictions of climate variability and change, particularly at regional scales, rely on the driving processes being represented with fidelity in model simulations. The role of enhanced horizontal resolution in improved process representation in all components of the climate system continues to be of great interest. In particular, recent simulations suggest both the possibility of significant changes in large-scale aspects of circulation and response to climate change, as well as improvements in small-scale processes and extremes.\nThe first HighResMIP (HighResMIP v1.0 for CMIP6) was successful in producing a baseline multi-model assessment of global simulations with model grid spacings  of around 50km in the atmosphere and 0.25\u00b0 in the ocean, comparing to models with standard resolutions typically used as part of the Coupled Model Intercomparison Project 6 (CMIP6) DECK experiments. In addition to a large number of peer-reviewed publications using the published HighResMIP datasets, the results were widely cited in the IPCC AR6 WG1 report, and were the basis for a variety of derived datasets including tracked cyclones (both tropical and extratropical), storm surge and others used for impact studies.\nHowever, there were a number of aspects of HighResMIPv1.0 that were less than ideal, through both practical and design choices at that time. These included: long (and relatively expensive) simulation designs, which even so only reached to 2050; specification of little to no tuning between standard and higher resolution model configurations; simplified aerosol specification; small ensemble size; short spin-up for coupled simulations; one future scenario. In addition, with the increasing use of global km-scale models (currently run for relatively short timescales), there is a danger of a gap opening between such models and the CMIP community which still (generally) relies on ~100km model simulations.\nTherefore we propose an updated HighResMIP v2.0 to improve and extend the previous work, to address new science questions as well as some of these shortcomings above, and to further advance our understanding of the role of horizontal resolution on climate simulation. With further increases in high-performance computing (HPC) resources and new models able to take full advantage of such resources, enhanced investigation of the drivers and consequences of variability and change in both large- synoptic-scale weather and climate is made possible.\nThe set of HighResMIP v2.0 experiments is divided into several tiers consisting of atmosphere-only and coupled runs spanning the period 1950\u20132100, together with some additional shorter experiments to enable process understanding and links to other communities. This paper describes the experimental set-up of HighResMIPv2, the analysis plan, and the connection with other CMIP projects. It also aims to link to other international efforts such as the World Climate Research Program (WCRP) lighthouse activities.\n",
+            "mip_long_name": "High Resolution Model Intercomparison Project",
+            "mip_website": "https://www.highresmip.org",
+            "name": "HighResMIP"
+        },
+        "default_410": {
+            "mip_abstract": "The Ice Sheet Model Intercomparison for CMIP7 (ISMIP7) has the key objective of improving projections of sea level contributions from the Greenland and Antarctic ice sheets, and our understanding of the cryosphere in a changing climate. These goals map into both \u201cMelting Ice and Global Consequences\u201d and \u201cRegional Sea-level Change\u201d Grand Challenges relevant to CliC and the World Climate Research Program (WCRP). As uncertainties in future sea level arise due to both the climate forcing and the response of the ice sheets, a primary focus for ISMIP6 was to become better integrated in the CMIP6 initiative. ISMIP6 became an endorsed activity of CMIP6 in 2015 allowing ice sheets to be considered as a component of the Earth system for the first time in CMIP. ISMIP6 became a major model inter-comparison effort (with 36 international groups and over 60 participants) making process-based projections for the Sixth Assessment Report of the IPCC. \n\nISMIP6 and ISMIP7 experimental protocols explore the uncertainty in sea level projections due to ice sheet model initialization as well as  ice sheet processes and parameters, climate scenario, and uncertainty in the representation of ice\u2013ocean interactions on centennial timescales. ISMIP7 intends to continue working on two main themes. The first relates to dynamic ice sheets within global coupled climate models, while the second is based on outputs from climate models to force standalone ice sheet models (perhaps coupled to regional ocean and/or atmosphere models). We will thus have different protocols for each type of modeling activity, and these will be related by a common set of scenarios.  Similarly, ISMIP7 will continue to employ a working group structure to allow focus on climate forcing from the oceans and atmosphere, as well as links to the observational community.",
+            "mip_long_name": "Ice Sheet Model Intercomparison Project for CMIP",
+            "mip_website": "https://theghub.org/groups/ismip6/wiki",
+            "name": "ISMIP7"
+        },
+        "default_411": {
+            "mip_abstract": "Human land-use activities have resulted in large changes to the Earth's surface, with resulting implications for climate. In the future, land-use activities are likely to expand and intensify further to meet growing demands for food, fiber, and energy. The Land Use Model Intercomparison Project (LUMIP) aims to further advance understanding of the impacts of land-use and land-cover change (LULCC) on climate, specifically addressing the following questions. (1) What are the effects of LULCC on climate and biogeochemical cycling (past\u2013future)? (2) What are the impacts of land management on surface fluxes of carbon, water, and energy, and are there regional land-management strategies with the promise to help mitigate climate change? In addressing these questions, LUMIP will also address a range of more detailed science questions to get at process-level attribution, uncertainty, data requirements, and other related issues in more depth and sophistication than possible in a multi-model context to date. There will be particular focus on the separation and quantification of the effects on climate from LULCC relative to all forcings, separation of biogeochemical from biogeophysical effects of land use, the unique impacts of land-cover change vs. land-management change, modulation of land-use impact on climate by land\u2013atmosphere coupling strength, and the extent to which impacts of enhanced CO2 concentrations on plant photosynthesis are modulated by past and future land use.\n\nLUMIP involves three major sets of science activities: (1) development of an updated and expanded historical and future land-use data set, (2) an experimental protocol for specific LUMIP experiments for CMIP6, and (3) definition of metrics and diagnostic protocols that quantify model performance, and related sensitivities, with respect to LULCC. In this paper, we describe LUMIP activity (2), i.e., the LUMIP simulations that will formally be part of CMIP6. These experiments are explicitly designed to be complementary to simulations requested in the CMIP6 DECK and historical simulations and other CMIP6 MIPs including ScenarioMIP, C4MIP, LS3MIP, and DAMIP. LUMIP includes a two-phase experimental design. Phase one features idealized coupled and land-only model simulations designed to advance process-level understanding of LULCC impacts on climate, as well as to quantify model sensitivity to potential land-cover and land-use change. Phase two experiments focus on quantification of the historic impact of land use and the potential for future land management decisions to aid in mitigation of climate change. This paper documents these simulations in detail, explains their rationale, outlines plans for analysis, and describes a new subgrid land-use tile data request for selected variables (reporting model output data separately for primary and secondary land, crops, pasture, and urban land-use types). It is essential that modeling groups participating in LUMIP adhere to the experimental design as closely as possible and clearly report how the model experiments were executed.",
+            "mip_long_name": "Land-Use Model Intercomparison Project",
+            "mip_website": "https://www.cesm.ucar.edu/projects/cmip6/lumip",
+            "name": "LUMIP"
+        },
+        "default_412": {
+            "mip_abstract": "The Ocean Model Intercomparison Project (OMIP) aims to provide a framework for evaluating, understanding, and improving the ocean, sea-ice, tracer, and biogeochemical components of global climate and Earth system models contributing to the Coupled Model Intercomparison Project Phase 7 (CMIP7). Ocean and sea ice models not part of a coupled system are also welcome to participate. Existing papers define OMIP and detail protocols both for simulating global ocean/sea-ice models with inert chemical and biogeochemical tracers and for analyzing their output.",
+            "mip_long_name": "Ocean Model Intercomparison Project",
+            "mip_website": "https://OceanMIP.github.io",
+            "name": "OMIP"
+        },
+        "default_414": {
+            "mip_abstract": "A better understanding of the role of sea ice for the changing climate of our planet is the central aim of the diagnostic Sea-Ice Model Intercomparison Project (SIMIP), having formally started for CMIP6. To reach this aim, SIMIP requests sea-ice-related variables from climate-model simulations that allow for a better understanding and, ultimately, improvement of biases and errors in sea-ice simulations with large-scale climate models. This then allows us to better understand to what degree CMIP model simulations relate to reality, thus improving our confidence in answering sea-ice-related questions based on these simulations. Furthermore, the SIMIP protocol provides a standard for sea-ice model output that will streamline and hence simplify the analysis of the simulated sea-ice evolution in research projects independent of CMIP. To reach its aims, SIMIP provides a structured list of model output that allows for an examination of the evolution of sea ice.",
+            "mip_long_name": "Sea Ice Model Intercomparison Project",
+            "mip_website": "https://climate-cryosphere.org/simip-about/",
+            "name": "SIMIP"
+        },
+        "default_415": {
+            "mip_abstract": "As the climate warms, mass loss of the grounded ice sheet and floating ice shelves surrounding Antarctica is accelerating, increasing meltwater input into the Southern Ocean. Meltwater-induced changes in ocean circulation have the potential to influence the ability of the Southern Ocean to uptake heat and carbon, providing an important feedback on climate change. Nonetheless, almost all existing coupled climate models have fixed ice sheets, and lack the physics required to represent the dominant sources of Antarctic melt. These missing ice dynamics represent a key uncertainty that is unaccounted for in current global climate change projections.\n\nThe goal of the Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project (SOFIAMIP) is to quantify the climate system response to Antarctic meltwater input. Notably, changes in ocean dynamics, sea ice loss and ice shelf melt around the Antarctic margins, as well as resulting changes in atmospheric dynamics, precipitation, global warming rate and sea level rise are of direct interest and relevance both to CMIP and resulting climate assessments. Associated responses and feedbacks are model dependent and SOFIAMIP will enable the quantification of such model uncertainty.\n\nThe MIP proposes a series of coupled atmosphere/ocean/sea-ice model experiments, including idealized meltwater experiments, historical experiments with observationally consistent meltwater input, and future scenarios driven by meltwater inputs derived from stand-alone ice sheet models. These experiments are designed to test forcing uncertainties. We welcome contributions based on both CMIP6 and CMIP7 models. By comparing these experiments with the equivalent (standard CMIP) simulations without additional meltwater input, the climate impacts will be quantified.\n",
+            "mip_long_name": "Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project",
+            "mip_website": "https://sofiamip.github.io/",
+            "name": "SOFIAMIP"
+        },
+        "default_416": {
+            "mip_long_name": "Scenario Model Intercomparison Project",
+            "mip_website": "https://wcrp-cmip.org/mips/scenariomip/",
+            "name": "ScenarioMIP"
+        },
+        "default_417": {
+            "mip_abstract": "TIPMIP is an international intercomparison project that aims to systematically advance our understanding of nonlinear dynamics in various Earth system components, and assess the associated uncertainties and risks. At present, no MIP exists which focuses specifically on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling this gap, TIPMIP will shed light on critical processes currently underrepresented in other MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are components of the Earth system highly susceptible to reaching a critical threshold \u2013 a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or irreversible changes in response to anthropogenic climate change. Crossing a tipping point can lead the systems to transition to an alternative state, often with reduced resilience to perturbations and recovery. Once triggered, the tipping of one of these elements can have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, understanding the dynamics of tipping elements and associated risks is crucial for developing effective strategies to mitigate and adapt to the impacts of global environmental change.\n\nWhy is this project important?\nOur current scientific knowledge of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) which components of the climate system and biosphere might show tipping behaviour, (ii) if so, at which forcing levels the critical thresholds are located, (iii) which feedback processes they are associated with, and (iv) if and how potential tipping cascades might evolve. These uncertainties have numerous sources, for instance connected to:\n-finding the \u201cright\u201d level of complexity regarding certain processes within and between Earth system components; \n-the representation of all relevant biophysical processes on the required timescales in Earth system models (in part, so far limited due to computational constraints);\n-the implementation of certain processes and feedbacks in the models; and\n-the limitations on observational data availability for long time horizons.\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is the risk of crossing potential tipping points in the cryosphere, biosphere and core circulation systems at different levels of ongoing climate and land-use change?\n-What are the key biophysical processes and feedbacks associated with these risks?\n-What are the characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping elements?\n-How does the forcing rate affect short- and long-term impacts of changes in the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the respective impacts reversible, and if so, on which timescales?\n-How do interactions between elements affect the overall stability of the Earth system?\n\nTypes of experiments \nInitially, we envision three major types of experiments for TIPMIP, all of which will be designed for the assessment of potential key tipping elements including the Greenland Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze the historical and projected response of potential tipping elements to different climate change scenarios;\n-Commitment experiments to assess the long-term consequences of surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe potential hysteresis behaviour;\n-Rate experiments to assess the impact of different forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be complemented by an additional set of \u2018make it happen\u2019-experiments, which apply additional forcings (e.g., land-use change, freshwater input etc.) tailored to the individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, in which the impact of fully collapsed tipping elements can be studied.",
+            "mip_long_name": "Tipping Point Modelling Intercomparison Project",
+            "mip_website": "https://www.tipmip.org",
+            "name": "TIPMIP"
         }
     },
     "modelling_realm": {
@@ -3491,6 +3568,10 @@
     },
     "spatial_shape": {
         "a656047a-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:latitude",
+                "link::dim:longitude"
+            ],
             "level_flag": "True",
             "name": "XY-na",
             "title": "Global field (single level)",
@@ -3508,11 +3589,21 @@
             ]
         },
         "a65615fa-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:latitude",
+                "link::dim:longitude",
+                "link::dim:plev3"
+            ],
             "level_flag": "True",
             "name": "XY-P3",
             "title": "Global field (3 pressure levels)"
         },
         "a6562a9a-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:latitude",
+                "link::dim:longitude",
+                "link::dim:plev19"
+            ],
             "level_flag": "True",
             "name": "XY-P19",
             "title": "Global field (19 pressure levels)",
@@ -3521,21 +3612,41 @@
             ]
         },
         "a6562c2a-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:latitude",
+                "link::dim:longitude",
+                "link::dim:olevel"
+            ],
             "level_flag": "False",
             "name": "XY-O",
             "title": "Global ocean field on model levels"
         },
         "a6563724-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:alevel",
+                "link::dim:latitude",
+                "link::dim:longitude"
+            ],
             "level_flag": "False",
             "name": "XY-A",
             "title": "Global field on model atmosphere levels"
         },
         "a6563a44-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:latitude",
+                "link::dim:longitude",
+                "link::dim:plev8"
+            ],
             "level_flag": "True",
             "name": "XY-P8",
             "title": "Global field (8 pressure levels)"
         },
         "a6563bca-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:latitude",
+                "link::dim:longitude",
+                "link::dim:sdepth"
+            ],
             "level_flag": "False",
             "name": "XY-S",
             "title": "Global field on soil levels"
@@ -4382,7 +4493,7 @@
             ]
         }
     },
-    "time_subset": {
+    "time_subsets": {
         "_slice_hist20": {
             "end": 2014,
             "name": "hist20",
@@ -4440,6 +4551,14 @@
             "comment": "The variable Ofx.basin in the CMIP6 data request (also in CMIP5 standard output) had flag\\_values and flag\\_meanings specified. These were listed in the \"Structure\" record. Ofx.basin is the only CMIP6 variable that uses these CF terms. As the structure record is not being used to define variables in CMIP7, we need to move the information somewhere else. This potentially means adding one or two columns in one of the Air TAble tables. \n\n1. Add \"Flag Values\" and \"Flag Meanings\" columns in the \"Physical Parameter\" table. These columns would be blank for all other variables, but it is easy to implement.  \n2. It may be clearer to use the \"Units\" table, and rename it \"Units and Flags\". The examples given for flag\\_values and flag\\_meanings in the CF Conventions document to not include a \"units\" value because there is no unit of measure here: each value in the Ofx.basin field is just a flag to be associated with a character value. This means that the value of \"units\" is redundant for this variable. Placing the flag\\_values and the flag\\_meanings in the \"Units and Flags\" table will make it easier to attach a clear explanation of this feature. This will not impact on how the information is exported to MIP Tables. [Note: the \"Units\" table from the CMIP6 request has not yet been added to Air Table but can easily be imported in option 2 is taken). \n",
             "name": "undef",
             "title": "Adding flag_values and flag_meanings"
+        },
+        "default_543": {
+            "comment": "In a [comment to the GMD BCV](https://doi.org/10.5194/egusphere-2024-2363-CC2) paper there has been a question about visibility of pressure level information. E.g. where do people find which levels are include in the 19 pressure levels.\nThis is included in air table ([see here)](https://airtable.com/appBWxP0SS7K1hweJ/shrxhV6tenQBnOGRj/tblDgm0SuMVzRxGdn/viwXp13lTZZFHj7dg/recABeb7kv0Knp9hi?blocks=bip0j1KMajP5L0L2W) but is not very accessible. There is also a discussion of the levels used in [CMIP6 here](https://cmip6dr.github.io/Data_Request_Home/Documents/CMIP6_pressure_levels.pdf) (also not very easily found).\n\nCan we make this information more visible?\n",
+            "github_issue_description": "In a [comment to the GMD BCV](https://doi.org/10.5194/egusphere-2024-2363-CC2) paper there has been a question about visibility of pressure level information. E.g. where do people find which levels are include in the 19 pressure levels.\nThis is included in air table ([see here)](https://airtable.com/appBWxP0SS7K1hweJ/shrxhV6tenQBnOGRj/tblDgm0SuMVzRxGdn/viwXp13lTZZFHj7dg/recABeb7kv0Knp9hi?blocks=bip0j1KMajP5L0L2W) but is not very accessible. There is also a discussion of the levels used in [CMIP6 here](https://cmip6dr.github.io/Data_Request_Home/Documents/CMIP6_pressure_levels.pdf) (also not very easily found).\n\nCan we make this information more visible?\n",
+            "github_issue_title": "Visibility of pressure level information.",
+            "github_issue_url": "https://github.com/CMIP-Data-Request/Harmonised-Consultation-Phase-1/issues/20",
+            "name": "undef",
+            "title": "Visibility of pressure level information. "
         },
         "default_548": {
             "comment": "fx.mrsofc - this variable exists and is already in the baseline request \u2013 we request to provide a more precise definition of the physical quantity \u2013 it should exclude lake water and must refer to soil water only\n",
@@ -4640,7 +4759,7 @@
             "description": "Report surface temperature of snow where snow covers the sea ice.\n",
             "esm-bcv": "link::default_249",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::seaIce"
@@ -4666,7 +4785,7 @@
             "description": "The y-velocity of ice on native model grid\n",
             "esm-bcv": "link::default_253",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::seaIce"
@@ -4715,7 +4834,7 @@
             "description": "The x-velocity of ice on native model grid\n",
             "esm-bcv": "link::default_252",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::seaIce"
@@ -5160,7 +5279,7 @@
             "description": "Percentage of grid cell covered by sea ice\n",
             "esm-bcv": "link::default_245",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::seaIce"
@@ -5375,7 +5494,7 @@
             "cmip7_frequency": "link::default_104",
             "description": "Sea level pressure\n",
             "mips": [
-                "link::default_405"
+                "link::default_409"
             ],
             "modelling_realm": [
                 "link::atmos"
@@ -6063,7 +6182,7 @@
             "description": "Upward mass transport from residual mean (resolved plus parameterized) advective transport.\n",
             "esm-bcv": "link::default_239",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::ocean"
@@ -7165,7 +7284,7 @@
             "description": "at surface; includes precipitation of all forms of water in the solid phase\n",
             "esm-bcv": "link::default_148",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::atmos"
@@ -7354,7 +7473,7 @@
             "description": "The surface called \"surface\" means the lower boundary of the atmosphere. \"longwave\" means longwave radiation. Downwelling radiation is radiation from above. It does not mean \"net downward\". When thought of as being incident on a surface, a radiative flux is sometimes called \"irradiance\". In addition, it is identical with the quantity measured by a cosine-collector light-meter and sometimes called \"vector irradiance\". In accordance with common usage in geophysical disciplines, \"flux\" implies per unit area, called \"flux density\" in physics.\n",
             "esm-bcv": "link::default_154",
             "mips": [
-                "link::default_402"
+                "link::default_406"
             ],
             "modelling_realm": [
                 "link::atmos"

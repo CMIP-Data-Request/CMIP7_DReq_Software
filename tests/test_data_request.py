@@ -773,8 +773,8 @@ class TestDataRequestFilter(unittest.TestCase):
 		theme_id = "link::default_115"
 		theme_name = "Atmosphere"
 		theme_target = self.dr.find_element("data_request_themes", theme_id)
-		mips = [self.dr.find_element("mips", id) for id in ["link::default_404", "link::default_405",
-		                                                    "link::default_409", "link::default_411"]]
+		mips = [self.dr.find_element("mips", id) for id in ["link::default_403", "link::default_409",
+		                                                    "link::default_411", "link::default_416"]]
 		self.assertListEqual(self.dr.find_mips_per_theme(theme_id), mips)
 		self.assertListEqual(self.dr.find_mips_per_theme(theme_name), mips)
 		self.assertListEqual(self.dr.find_mips_per_theme(theme_target), mips)
@@ -823,8 +823,8 @@ class TestDataRequestFilter(unittest.TestCase):
 		op_id = "link::default_418"
 		op_name = "Accurate assessment of land-atmosphere coupling"
 		op_target = self.dr.find_element("opportunities", op_id)
-		mips = [self.dr.find_element("mips", id) for id in ["link::default_404", "link::default_405",
-		                                                    "link::default_409", "link::default_411"]]
+		mips = [self.dr.find_element("mips", id) for id in ["link::default_403", "link::default_409",
+		                                                    "link::default_411", "link::default_416"]]
 		self.assertListEqual(self.dr.find_mips_per_opportunity(op_id), mips)
 		self.assertListEqual(self.dr.find_mips_per_opportunity(op_name), mips)
 		self.assertListEqual(self.dr.find_mips_per_opportunity(op_target), mips)
@@ -852,11 +852,11 @@ class TestDataRequestFilter(unittest.TestCase):
 		var_id = "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec"
 		var_name = "Oday.zos"
 		var_target = self.dr.find_element("variables", var_id)
-		mips = [self.dr.find_element("mips", id) for id in ["link::default_400", "link::default_401",
-		                                                    "link::default_403", "link::default_405",
-		                                                    "link::default_406", "link::default_408",
-		                                                    "link::default_409", "link::default_411",
-		                                                    "link::default_414", "link::default_416"]]
+		mips = [self.dr.find_element("mips", id) for id in ["link::default_403", "link::default_407",
+		                                                    "link::default_408", "link::default_409",
+		                                                    "link::default_410", "link::default_412",
+		                                                    "link::default_414", "link::default_415",
+		                                                    "link::default_416", "link::default_417"]]
 		self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
 		self.assertListEqual(self.dr.find_mips_per_variable(var_name), mips)
 		self.assertListEqual(self.dr.find_mips_per_variable(var_target), mips)

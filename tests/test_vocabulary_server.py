@@ -82,17 +82,16 @@ class TestVocabularyServer(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			elt = vs.get_element(element_type="variable_comment", element_id="test", id_type="type")
 
-		elt = vs.get_element(element_type="mips", element_id="TIPMIP", id_type="mip_short_name")
+		elt = vs.get_element(element_type="mips", element_id="TIPMIP", id_type="name")
 		target_dict = {
 			"mip_abstract": "TIPMIP is an international intercomparison project that aims to systematically advance our understanding of nonlinear dynamics in various Earth system components, and assess the associated uncertainties and risks. At present, no MIP exists which focuses specifically on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling this gap, TIPMIP will shed light on critical processes currently underrepresented in other MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are components of the Earth system highly susceptible to reaching a critical threshold \u2013 a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or irreversible changes in response to anthropogenic climate change. Crossing a tipping point can lead the systems to transition to an alternative state, often with reduced resilience to perturbations and recovery. Once triggered, the tipping of one of these elements can have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, understanding the dynamics of tipping elements and associated risks is crucial for developing effective strategies to mitigate and adapt to the impacts of global environmental change.\n\nWhy is this project important?\nOur current scientific knowledge of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) which components of the climate system and biosphere might show tipping behaviour, (ii) if so, at which forcing levels the critical thresholds are located, (iii) which feedback processes they are associated with, and (iv) if and how potential tipping cascades might evolve. These uncertainties have numerous sources, for instance connected to:\n-finding the \u201cright\u201d level of complexity regarding certain processes within and between Earth system components; \n-the representation of all relevant biophysical processes on the required timescales in Earth system models (in part, so far limited due to computational constraints);\n-the implementation of certain processes and feedbacks in the models; and\n-the limitations on observational data availability for long time horizons.\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is the risk of crossing potential tipping points in the cryosphere, biosphere and core circulation systems at different levels of ongoing climate and land-use change?\n-What are the key biophysical processes and feedbacks associated with these risks?\n-What are the characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping elements?\n-How does the forcing rate affect short- and long-term impacts of changes in the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the respective impacts reversible, and if so, on which timescales?\n-How do interactions between elements affect the overall stability of the Earth system?\n\nTypes of experiments \nInitially, we envision three major types of experiments for TIPMIP, all of which will be designed for the assessment of potential key tipping elements including the Greenland Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze the historical and projected response of potential tipping elements to different climate change scenarios;\n-Commitment experiments to assess the long-term consequences of surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe potential hysteresis behaviour;\n-Rate experiments to assess the impact of different forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be complemented by an additional set of \u2018make it happen\u2019-experiments, which apply additional forcings (e.g., land-use change, freshwater input etc.) tailored to the individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, in which the impact of fully collapsed tipping elements can be studied.",
 			"mip_long_name": "Tipping Point Modelling Intercomparison Project",
-			"mip_short_name": "TIPMIP",
+			"name": "TIPMIP",
 			"mip_website": "https://www.tipmip.org",
-			"name": "undef",
-			"id": "default_401"
+			"id": "default_417"
 		}
 		self.assertDictEqual(elt, target_dict)
-		obj = vs.get_element(element_type="mips", element_id="link::default_401")
+		obj = vs.get_element(element_type="mips", element_id="link::default_417")
 		self.assertDictEqual(elt, target_dict)
 
 		with self.assertRaises(ValueError):
@@ -107,8 +106,8 @@ class TestVocabularyServer(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			obj = vs.get_element(element_type="mips", element_id="undef", id_type="name")
 
-		obj = vs.get_element(element_type="mips", element_id="link::default_401", element_key="mip_long_name")
+		obj = vs.get_element(element_type="mips", element_id="link::default_417", element_key="mip_long_name")
 		self.assertEqual(obj, "Tipping Point Modelling Intercomparison Project")
 
 		with self.assertRaises(ValueError):
-			obj = vs.get_element(element_type="mips", element_id="link::default_401", element_key="long_name")
+			obj = vs.get_element(element_type="mips", element_id="link::default_417", element_key="long_name")
