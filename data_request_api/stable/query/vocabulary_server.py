@@ -38,6 +38,23 @@ def build_link_from_id(elt):
 		return f"link::{elt}"
 
 
+def to_plural(element_type):
+	if not element_type.endswith("s"):
+		if element_type.endswith("y"):
+			element_type = element_type.rstrip("y") + "ies"
+		else:
+			element_type += "s"
+	return element_type
+
+
+def to_singular(element_type):
+	if element_type.endswith("ies"):
+		element_type = element_type.removesuffix("ies") + "y"
+	elif element_type.endswith("s"):
+		element_type = element_type.removesuffix("s")
+	return element_type
+
+
 class VocabularyServer(object):
 	"""
 	Class to generate a Vocabulary Server from a json file.
@@ -68,26 +85,10 @@ class VocabularyServer(object):
 			lead_theme="data_request_themes",
 			dimensions="coordinates_and_dimensions",
 			coordinates="coordinates_and_dimensions",
-			extra_dimensions="coordinates_and_dimensions"
+			extra_dimensions="coordinates_and_dimensions",
+			max_priority_level="priority_level"
 		)
 		return element_type_dict.get(element_type, element_type)
-
-	@staticmethod
-	def to_plural(element_type):
-		if not element_type.endswith("s"):
-			if element_type.endswith("y"):
-				element_type = element_type.rstrip("y") + "ies"
-			else:
-				element_type += "s"
-		return element_type
-
-	@staticmethod
-	def to_singular(element_type):
-		if element_type.endswith("ies"):
-			element_type = element_type.removesuffix("ies") + "y"
-		elif element_type.endswith("s"):
-			element_type = element_type.removesuffix("s")
-		return element_type
 
 	def check_infinite_loop(self):
 		"""
@@ -135,7 +136,7 @@ class VocabularyServer(object):
 		logger = get_logger()
 		element_type = self.alias(element_type)
 		if element_type not in self.vocabulary_server:
-			element_type = self.to_plural(element_type)
+			element_type = to_plural(element_type)
 		if element_type in self.vocabulary_server:
 			return element_type, sorted(list(self.vocabulary_server[element_type]))
 		else:
@@ -180,7 +181,6 @@ class VocabularyServer(object):
 					raise ValueError(f"id_type {id_type} provided is not unique for element type {element_type} "
 					                 f"and value {element_key}.")
 			if found:
-				value = copy.deepcopy(value)
 				if element_key is not None:
 					if element_key in value:
 						value = value.get(element_key)

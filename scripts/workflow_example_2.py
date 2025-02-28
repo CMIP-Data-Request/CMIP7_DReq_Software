@@ -49,9 +49,9 @@ args = parser.parse_args()
 
 def get_information_from_data_request(dreq_version, dreq_export_version, use_consolidation, output_dir):
     ### Step 1: Get the data request content
-    DR_content, VS_content = get_transformed_content(version=dreq_version, export_version=dreq_export_version,
-                                                     use_consolidation=use_consolidation, output_dir=output_dir)
-    DR = DataRequest.from_separated_inputs(DR_input=DR_content, VS_input=VS_content)
+    content_dict = get_transformed_content(version=dreq_version, export_version=dreq_export_version,
+                                           use_consolidation=use_consolidation, output_dir=output_dir)
+    DR = DataRequest.from_separated_inputs(**content_dict)
 
     ### Step 2: Get information from the DR
     # -> Print DR content

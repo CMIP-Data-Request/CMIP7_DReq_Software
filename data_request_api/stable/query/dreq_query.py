@@ -959,7 +959,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
         'dreq content version' : use_dreq_version,
         'dreq content file' : os.path.basename(os.path.normpath(content_path)),
         'dreq content sha256 hash' : content_hash,
-        'dreq api version' : api_version,
+        'dreq api version' : api_version.__version__,
     })
 
     out = {

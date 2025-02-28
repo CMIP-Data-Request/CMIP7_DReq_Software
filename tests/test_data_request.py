@@ -12,7 +12,8 @@ import unittest
 
 
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
-from data_request_api.stable.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, DataRequest, version
+from data_request_api.stable.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, \
+	DataRequest, version, ConstantValueObj
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value
 
 
@@ -49,6 +50,8 @@ class TestDRObjects(unittest.TestCase):
 
 		obj = DRObjects.from_input(dr=self.dr, id="link::my_id", DR_type="priority_level")
 
+		obj = DRObjects.from_input(dr=self.dr, id="link::default_481", DR_type="priority_level")
+
 	def test_check(self):
 		obj = DRObjects("my_id", self.dr)
 		obj.check()
@@ -74,6 +77,17 @@ class TestDRObjects(unittest.TestCase):
 		my_set.add(DRObjects(id="link::my_id_2", dr=self.dr))
 		my_set.add(copy.deepcopy(obj))
 		self.assertEqual(len(my_set), 2)
+
+		my_dict = dict()
+		obj2 = self.dr.find_element("cmip7_frequency", "link::default_104")
+		obj3 = self.dr.find_element("cmip7_frequency", "link::default_105")
+		self.assertTrue(isinstance(obj2, DRObjects))
+		self.assertTrue(isinstance(obj2.name, ConstantValueObj))
+		self.assertTrue(isinstance(obj2.name, ConstantValueObj))
+		my_dict[obj2.id] = obj2
+		my_dict[obj2.name] = obj2
+		my_dict[obj3.id] = obj3
+		my_dict[obj3.name] = obj3
 
 	def test_filter_on_request(self):
 		obj1 = DRObjects(id="my_id", DR_type="test", dr=self.dr)
@@ -679,9 +693,9 @@ class TestDataRequestFilter(unittest.TestCase):
 
 		with self.assertRaises(ValueError):
 			self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"))
-		self.assertEqual(self.dr.filter_elements_per_request("opportunities",
-		                                                     requests=dict(variables="link::test_dummy"),
-		                                                     skip_if_missing=True), self.dr.get_opportunities())
+		self.assertEqual(
+			self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"),
+			                                    skip_if_missing=True), self.dr.get_opportunities())
 
 	def test_find_variables_per_priority(self):
 		priority = "Medium"
@@ -759,8 +773,8 @@ class TestDataRequestFilter(unittest.TestCase):
 		theme_id = "link::default_115"
 		theme_name = "Atmosphere"
 		theme_target = self.dr.find_element("data_request_themes", theme_id)
-		mips = [self.dr.find_element("mips", id) for id in ["link::default_404", "link::default_405",
-		                                                    "link::default_409", "link::default_411"]]
+		mips = [self.dr.find_element("mips", id) for id in ["link::default_403", "link::default_409",
+		                                                    "link::default_411", "link::default_416"]]
 		self.assertListEqual(self.dr.find_mips_per_theme(theme_id), mips)
 		self.assertListEqual(self.dr.find_mips_per_theme(theme_name), mips)
 		self.assertListEqual(self.dr.find_mips_per_theme(theme_target), mips)
@@ -809,8 +823,8 @@ class TestDataRequestFilter(unittest.TestCase):
 		op_id = "link::default_418"
 		op_name = "Accurate assessment of land-atmosphere coupling"
 		op_target = self.dr.find_element("opportunities", op_id)
-		mips = [self.dr.find_element("mips", id) for id in ["link::default_404", "link::default_405",
-		                                                    "link::default_409", "link::default_411"]]
+		mips = [self.dr.find_element("mips", id) for id in ["link::default_403", "link::default_409",
+		                                                    "link::default_411", "link::default_416"]]
 		self.assertListEqual(self.dr.find_mips_per_opportunity(op_id), mips)
 		self.assertListEqual(self.dr.find_mips_per_opportunity(op_name), mips)
 		self.assertListEqual(self.dr.find_mips_per_opportunity(op_target), mips)
@@ -838,11 +852,11 @@ class TestDataRequestFilter(unittest.TestCase):
 		var_id = "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec"
 		var_name = "Oday.zos"
 		var_target = self.dr.find_element("variables", var_id)
-		mips = [self.dr.find_element("mips", id) for id in ["link::default_400", "link::default_401",
-		                                                    "link::default_403", "link::default_405",
-		                                                    "link::default_406", "link::default_408",
-		                                                    "link::default_409", "link::default_411",
-		                                                    "link::default_414", "link::default_416"]]
+		mips = [self.dr.find_element("mips", id) for id in ["link::default_403", "link::default_407",
+		                                                    "link::default_408", "link::default_409",
+		                                                    "link::default_410", "link::default_412",
+		                                                    "link::default_414", "link::default_415",
+		                                                    "link::default_416", "link::default_417"]]
 		self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
 		self.assertListEqual(self.dr.find_mips_per_variable(var_name), mips)
 		self.assertListEqual(self.dr.find_mips_per_variable(var_target), mips)
