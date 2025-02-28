@@ -69,15 +69,21 @@ class DRObjects(object):
 		:param dict attributes: attributes of the object coming from vocabulary server
 		"""
 		self.DR_type = DR_type
-		self.attributes = copy.deepcopy(attributes)
-		_, self.attributes["id"] = is_link_id_or_value(id)
-		self.structure = copy.deepcopy(structure)
+		_, attributes["id"] = is_link_id_or_value(id)
 		self.dr = dr
-		self.attributes = self.transform_content(self.attributes, dr)
-		self.structure = self.transform_content(self.structure, dr, force_transform=True)
+		self.attributes = self.transform_content(attributes, dr)
+		self.structure = self.transform_content(structure, dr, force_transform=True)
 
 	@staticmethod
-	def transform_content(input_dict, dr, force_transform=False):
+	def transform_content_inner(key, value, dr, force_transform=False):
+		if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
+			return dr.find_element(key, value)
+		elif isinstance(value, str):
+			return ConstantValueObj(value)
+		else:
+			return value
+
+	def transform_content(self, input_dict, dr, force_transform=False):
 		"""
 		Transform the input dict to have only elements which are object (either DRObject -for links- or
 		ConstantValueObj -for strings-).
@@ -89,15 +95,11 @@ class DRObjects(object):
 		"""
 		for (key, values) in input_dict.items():
 			if isinstance(values, list):
-				for (i, value) in enumerate(values):
-					if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
-						input_dict[key][i] = dr.find_element(key, value)
-					elif isinstance(value, str):
-						input_dict[key][i] = ConstantValueObj(value)
-			elif isinstance(values, str) and (force_transform or is_link_id_or_value(values)[0]):
-				input_dict[key] = dr.find_element(key, values)
-			elif isinstance(values, str):
-				input_dict[key] = ConstantValueObj(values)
+				input_dict[key] = [self.transform_content_inner(key=key, value=value, dr=dr,
+				                                                force_transform=force_transform) for value in values]
+			else:
+				input_dict[key] = self.transform_content_inner(key=key, value=values, dr=dr,
+				                                               force_transform=force_transform)
 		return input_dict
 
 	@classmethod
@@ -161,9 +163,7 @@ class DRObjects(object):
 		:return: a list of strings that can be assembled to print the content.
 		"""
 		indent = "    " * level
-		DR_type = copy.deepcopy(self.DR_type)
-		DR_type = to_singular(DR_type)
-		return [f"{indent}{DR_type}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
+		return [f"{indent}{to_singular(self.DR_type)}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
 
 	def filter_on_request(self, request_value):
 		"""
@@ -803,15 +803,13 @@ class DataRequest(object):
 			value = build_link_from_id(value)
 		rep = self.VS.get_element(element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
 		if rep not in [default, ]:
+			structure = self.structure.get(element_type, dict()).get(rep["id"], dict())
 			if element_type in ["opportunities", ]:
-				rep = Opportunity.from_input(dr=self, **rep,
-				                             **self.structure.get("opportunities", dict()).get(rep["id"], dict()))
+				rep = Opportunity.from_input(dr=self, **rep, **structure)
 			elif element_type in ["variable_groups", ]:
-				rep = VariablesGroup.from_input(dr=self, **rep,
-				                                **self.structure.get("variable_groups", dict()).get(rep["id"], dict()))
+				rep = VariablesGroup.from_input(dr=self, **rep, **structure)
 			elif element_type in ["experiment_groups", ]:
-				rep = ExperimentsGroup.from_input(dr=self, **rep,
-				                                  **self.structure.get("experiment_groups", dict()).get(rep["id"], dict()))
+				rep = ExperimentsGroup.from_input(dr=self, **rep, **structure)
 			elif element_type in ["variables", ]:
 				rep = Variable.from_input(dr=self, **rep)
 			else:
@@ -828,14 +826,12 @@ class DataRequest(object):
 		:return: element corresponding to the specified value of a given type if found, else the default value
 		"""
 		rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id", default=None)
-		if rep is not None:
-			self.content[element_type][rep.id] = rep
-		else:
+		if rep is None:
 			rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="name",
 			                                               default=default)
-			if rep not in [default, ]:
-				self.content[element_type][rep.id] = rep
-				self.mapping[element_type][rep.name] = rep
+		if rep not in [default, ]:
+			self.content[element_type][rep.id] = rep
+			self.mapping[element_type][rep.name] = rep
 		return rep
 
 	def find_element(self, element_type, value, default=False):
@@ -847,10 +843,11 @@ class DataRequest(object):
 		:param default: value to be returned if non found
 		:return: the found element if existing, else the default value
 		"""
-		if value in self.content[element_type]:
-			return self.content[element_type][value]
-		elif value in self.mapping[element_type]:
-			return self.mapping[element_type][value]
+		check_val = is_link_id_or_value(value)[1]
+		if check_val in self.content[element_type]:
+			return self.content[element_type][check_val]
+		elif check_val in self.mapping[element_type]:
+			return self.mapping[element_type][check_val]
 		else:
 			return self.find_element_from_vs(element_type=element_type, value=value, default=default)
 

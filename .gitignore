@@ -177,3 +177,5 @@ dreq_res
 *.csv
 
 cmip6-cmor-tables
+
+*profiling*

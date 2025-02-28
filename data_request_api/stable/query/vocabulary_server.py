@@ -180,7 +180,6 @@ class VocabularyServer(object):
 					raise ValueError(f"id_type {id_type} provided is not unique for element type {element_type} "
 					                 f"and value {element_key}.")
 			if found:
-				value = copy.deepcopy(value)
 				if element_key is not None:
 					if element_key in value:
 						value = value.get(element_key)
