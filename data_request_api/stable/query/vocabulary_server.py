@@ -85,7 +85,8 @@ class VocabularyServer(object):
 			lead_theme="data_request_themes",
 			dimensions="coordinates_and_dimensions",
 			coordinates="coordinates_and_dimensions",
-			extra_dimensions="coordinates_and_dimensions"
+			extra_dimensions="coordinates_and_dimensions",
+			max_priority_level="priority_level"
 		)
 		return element_type_dict.get(element_type, element_type)
 

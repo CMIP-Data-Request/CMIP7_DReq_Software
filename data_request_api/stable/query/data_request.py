@@ -124,10 +124,10 @@ class DRObjects(object):
 			self.structure == other.structure and self.attributes == other.attributes
 
 	def __lt__(self, other):
-		return isinstance(other, type(self)) and self.id < other.id
+		return self.id < other.id
 
 	def __gt__(self, other):
-		return isinstance(other, type(self)) and self.id > other.id
+		return self.id > other.id
 
 	def __copy__(self):
 		return type(self).__call__(dr=self.dr, DR_type=copy.deepcopy(self.DR_type),
@@ -323,6 +323,10 @@ class VariablesGroup(DRObjects):
 			return True, request_value in self.get_variables()
 		elif request_type in ["mips", ]:
 			return True, request_value in self.get_mips()
+		elif request_type in ["max_priority_level", ]:
+			priority = self.dr.find_element("priority_level", self.get_priority_level().id)
+			req_priority = self.dr.find_element("priority_level", request_value.id)
+			return True, priority.value < req_priority.value
 		elif request_type in ["priority_level", ]:
 			_, priority = is_link_id_or_value(self.get_priority_level().id)
 			_, req_priority = is_link_id_or_value(request_value.id)
@@ -436,7 +440,7 @@ class Opportunity(DRObjects):
 			                 for var_grp in self.get_variable_groups())
 		elif request_type in ["variables", "priority_level", "table_identifiers", "temporal_shape",
 		                      "spatial_shape", "structure", "physical_parameters", "modelling_realm", "esm-bcv",
-		                      "cf_standard_names", "cell_methods", "cell_measures"]:
+		                      "cf_standard_names", "cell_methods", "cell_measures", "max_priority_level"]:
 			return True, any(var_grp.filter_on_request(request_value=request_value)[1]
 			                 for var_grp in self.get_variable_groups())
 		elif request_type in ["experiments", ]:
@@ -464,6 +468,7 @@ class DataRequest(object):
 		self.content = defaultdict(lambda: defaultdict(lambda: dict))
 		for op in input_database["opportunities"]:
 			self.content["opportunities"][op] = self.find_element("opportunities", op)
+		self.cache = dict()
 
 	def check(self):
 		"""
@@ -574,12 +579,17 @@ class DataRequest(object):
 			rep.extend(elt.print_content(level=2))
 		return os.linesep.join(rep)
 
+	def _get_sorted_list(self, list_id):
+		if self.cache.get(list_id) is None:
+			self.cache[list_id] = [self.content[list_id][key] for key in sorted(list(self.content[list_id]))]
+		return self.cache[list_id]
+
 	def get_experiment_groups(self):
 		"""
 		Get the ExperimentsGroup of the Data Request.
 		:return list of ExperimentsGroup: list of the ExperimentsGroup of the DR content.
 		"""
-		return [self.content["experiment_groups"][key] for key in sorted(list(self.content["experiment_groups"]))]
+		return self._get_sorted_list("experiment_groups")
 
 	def get_experiment_group(self, id):
 		"""
@@ -598,7 +608,7 @@ class DataRequest(object):
 		Get the VariablesGroup of the Data Request.
 		:return list of VariablesGroup: list of the VariablesGroup of the DR content.
 		"""
-		return [self.content["variable_groups"][key] for key in sorted(list(self.content["variable_groups"]))]
+		return self._get_sorted_list("variable_groups")
 
 	def get_variable_group(self, id):
 		"""
@@ -617,7 +627,7 @@ class DataRequest(object):
 		Get the Opportunity of the Data Request.
 		:return list of Opportunity: list of the Opportunity of the DR content.
 		"""
-		return [self.content["opportunities"][key] for key in sorted(list(self.content["opportunities"]))]
+		return self._get_sorted_list("opportunities")
 
 	def get_opportunity(self, id):
 		"""
@@ -636,46 +646,50 @@ class DataRequest(object):
 		Get the Variable of the Data Request.
 		:return list of Variable: list of the Variable of the DR content.
 		"""
-		rep = set()
-		for var_grp in self.get_variable_groups():
-			rep = rep | set(var_grp.get_variables())
-		rep = sorted(list(rep))
-		return rep
+		if self.cache.get("variables") is None:
+			rep = set()
+			for var_grp in self.get_variable_groups():
+				rep = rep | set(var_grp.get_variables())
+			self.cache["variables"] = sorted(list(rep))
+		return self.cache["variables"]
 
 	def get_mips(self):
 		"""
 		Get the MIPs of the Data Request.
 		:return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.
 		"""
-		rep = set()
-		for op in self.get_opportunities():
-			rep = rep | set(op.get_mips())
-		for var_grp in self.get_variable_groups():
-			rep = rep | set(var_grp.get_mips())
-		rep = sorted(list(rep))
-		return rep
+		if self.cache.get("mips") is None:
+			rep = set()
+			for op in self.get_opportunities():
+				rep = rep | set(op.get_mips())
+			for var_grp in self.get_variable_groups():
+				rep = rep | set(var_grp.get_mips())
+			self.cache["mips"] = sorted(list(rep))
+		return self.cache["mips"]
 
 	def get_experiments(self):
 		"""
 		Get the experiments of the Data Request.
 		:return list of DRObject: list of the experiments of the DR content.
 		"""
-		rep = set()
-		for exp_grp in self.get_experiment_groups():
-			rep = rep | set(exp_grp.get_experiments())
-		rep = sorted(list(rep))
-		return rep
+		if self.cache.get("experiments") is None:
+			rep = set()
+			for exp_grp in self.get_experiment_groups():
+				rep = rep | set(exp_grp.get_experiments())
+			self.cache["experiments"] = sorted(list(rep))
+		return self.cache["experiments"]
 
 	def get_data_request_themes(self):
 		"""
 		Get the themes of the Data Request.
 		:return list of DRObject: list of the themes of the DR content.
 		"""
-		rep = set()
-		for op in self.get_opportunities():
-			rep = rep | set(op.get_themes())
-		rep = sorted(list(rep))
-		return rep
+		if self.cache.get("data_request_themes") is None:
+			rep = set()
+			for op in self.get_opportunities():
+				rep = rep | set(op.get_themes())
+			self.cache["data_request_themes"] = sorted(list(rep))
+		return self.cache["data_request_themes"]
 
 	def find_variables_per_priority(self, priority):
 		"""
@@ -683,7 +697,8 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str priority: priority to be considered
 		:return list of Variable: list of the variables which have a specified priority.
 		"""
-		return self.filter_elements_per_request(element_type="variables", requests=dict(priority_level=[priority, ]))
+		return self.filter_elements_per_request(elements_to_filter="variables",
+		                                        requests=dict(priority_level=[priority, ]))
 
 	def find_opportunities_per_theme(self, theme):
 		"""
@@ -691,7 +706,8 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of Opportunity: list of the opportunities which are linked to a specified theme.
 		"""
-		return self.filter_elements_per_request(element_type="opportunities", requests=dict(data_request_themes=[theme, ]))
+		return self.filter_elements_per_request(elements_to_filter="opportunities",
+		                                        requests=dict(data_request_themes=[theme, ]))
 
 	def find_experiments_per_theme(self, theme):
 		"""
@@ -699,7 +715,8 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.
 		"""
-		return self.filter_elements_per_request(element_type="experiments", requests=dict(data_request_themes=[theme, ]))
+		return self.filter_elements_per_request(elements_to_filter="experiments",
+		                                        requests=dict(data_request_themes=[theme, ]))
 
 	def find_variables_per_theme(self, theme):
 		"""
@@ -707,7 +724,8 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of Variable: list of the variables which are linked to a specified theme.
 		"""
-		return self.filter_elements_per_request(element_type="variables", requests=dict(data_request_themes=[theme, ]))
+		return self.filter_elements_per_request(elements_to_filter="variables",
+		                                        requests=dict(data_request_themes=[theme, ]))
 
 	def find_mips_per_theme(self, theme):
 		"""
@@ -715,7 +733,7 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str theme: theme to be considered
 		:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.
 		"""
-		return self.filter_elements_per_request(element_type="mips", requests=dict(data_request_themes=[theme, ]))
+		return self.filter_elements_per_request(elements_to_filter="mips", requests=dict(data_request_themes=[theme, ]))
 
 	def find_themes_per_opportunity(self, opportunity):
 		"""
@@ -723,7 +741,8 @@ class DataRequest(object):
 		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.
 		"""
-		return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(opportunities=[opportunity, ]))
+		return self.filter_elements_per_request(elements_to_filter="data_request_themes",
+		                                        requests=dict(opportunities=[opportunity, ]))
 
 	def find_experiments_per_opportunity(self, opportunity):
 		"""
@@ -731,7 +750,8 @@ class DataRequest(object):
 		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified opportunity.
 		"""
-		return self.filter_elements_per_request(element_type="experiments", requests=dict(opportunities=[opportunity, ]))
+		return self.filter_elements_per_request(elements_to_filter="experiments",
+		                                        requests=dict(opportunities=[opportunity, ]))
 
 	def find_variables_per_opportunity(self, opportunity):
 		"""
@@ -739,7 +759,8 @@ class DataRequest(object):
 		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of Variable: list of the variables which are linked to a specified opportunity.
 		"""
-		return self.filter_elements_per_request(element_type="variables", requests=dict(opportunities=[opportunity, ]))
+		return self.filter_elements_per_request(elements_to_filter="variables",
+		                                        requests=dict(opportunities=[opportunity, ]))
 
 	def find_mips_per_opportunity(self, opportunity):
 		"""
@@ -747,7 +768,7 @@ class DataRequest(object):
 		:param Opportunity or str opportunity: opportunity to be considered
 		:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.
 		"""
-		return self.filter_elements_per_request(element_type="mips", requests=dict(opportunities=[opportunity, ]))
+		return self.filter_elements_per_request(elements_to_filter="mips", requests=dict(opportunities=[opportunity, ]))
 
 	def find_opportunities_per_variable(self, variable):
 		"""
@@ -755,7 +776,8 @@ class DataRequest(object):
 		:param Variable or str variable: variable to be considered
 		:return list of Opportunity: list of the opportunities which are linked to a specified variable.
 		"""
-		return self.filter_elements_per_request(element_type="opportunities", requests=dict(variables=[variable, ]))
+		return self.filter_elements_per_request(elements_to_filter="opportunities",
+		                                        requests=dict(variables=[variable, ]))
 
 	def find_themes_per_variable(self, variable):
 		"""
@@ -763,7 +785,8 @@ class DataRequest(object):
 		:param Variable or str variable: variable to be considered
 		:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.
 		"""
-		return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(variables=[variable, ]))
+		return self.filter_elements_per_request(elements_to_filter="data_request_themes",
+		                                        requests=dict(variables=[variable, ]))
 
 	def find_mips_per_variable(self, variable):
 		"""
@@ -771,7 +794,7 @@ class DataRequest(object):
 		:param Variable or str variable: variable to be considered
 		:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.
 		"""
-		return self.filter_elements_per_request(element_type="mips", requests=dict(variables=[variable, ]))
+		return self.filter_elements_per_request(elements_to_filter="mips", requests=dict(variables=[variable, ]))
 
 	def find_opportunities_per_experiment(self, experiment):
 		"""
@@ -779,7 +802,8 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str experiment: experiment to be considered
 		:return list of Opportunity: list of the opportunities which are linked to a specified experiment.
 		"""
-		return self.filter_elements_per_request(element_type="opportunities", requests=dict(experiments=[experiment, ]))
+		return self.filter_elements_per_request(elements_to_filter="opportunities",
+		                                        requests=dict(experiments=[experiment, ]))
 
 	def find_themes_per_experiment(self, experiment):
 		"""
@@ -787,7 +811,8 @@ class DataRequest(object):
 		:param DRObjects or ConstantValueObj or str experiment: experiment to be considered
 		:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.
 		"""
-		return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(experiments=[experiment, ]))
+		return self.filter_elements_per_request(elements_to_filter="data_request_themes",
+		                                        requests=dict(experiments=[experiment, ]))
 
 	def find_element_per_identifier_from_vs(self, element_type, key, value, default=False, **kwargs):
 		"""
@@ -899,10 +924,10 @@ class DataRequest(object):
 			             for elt in list_to_filter])
 		return filtered_found, found
 
-	def filter_elements_per_request(self, element_type, requests=dict(), operation="all", skip_if_missing=False):
+	def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation="all", skip_if_missing=False):
 		"""
 		Filter the elements of kind element_type with a dictionary of requests.
-		:param str element_type: kind of elements to be filtered
+		:param str or list od DRObjects elements_to_filter: kind of elements to be filtered
 		:param dict requests: dictionary of the filters to be applied
 		:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
 		:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
@@ -930,7 +955,11 @@ class DataRequest(object):
 						logger.error(f"Could not find value {val} for element type {req}.")
 						raise ValueError(f"Could not find value {val} for element type {req}.")
 			# Get elements corresponding to element_type
-			elements = self.get_elements_per_kind(element_type)
+			if isinstance(elements_to_filter, str):
+				elements = self.get_elements_per_kind(elements_to_filter)
+			else:
+				elements = elements_to_filter
+				elements_to_filter = elements[0].DR_type
 			# Filter elements
 			rep = defaultdict(lambda: defaultdict(set))
 			for (request, values) in request_dict.items():
@@ -948,8 +977,8 @@ class DataRequest(object):
 						if not filtered_found:
 							filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())
 						if not filtered_found:
-							logger.error(f"Could not filter {element_type} by {request}")
-							raise ValueError(f"Could not filter {element_type} by {request}")
+							logger.error(f"Could not filter {elements_to_filter} by {request}")
+							raise ValueError(f"Could not filter {elements_to_filter} by {request}")
 						if found:
 							rep[request][val.id].add(elt)
 			if len(rep) == 0:
@@ -977,8 +1006,8 @@ class DataRequest(object):
 		:param dict kwargs: filters to be applied
 		:return list of Opportunity: opportunities linked to the filters
 		"""
-		return self.filter_elements_per_request(element_type="opportunities", operation=operation,
-		                                        skip_if_missing=skip_if_missing, requests=kwargs)
+		return self.filter_elements_per_request(elements_to_filter="opportunities", requests=kwargs,
+		                                        operation=operation, skip_if_missing=skip_if_missing)
 
 	def find_experiments(self, operation="any", skip_if_missing=False, **kwargs):
 		"""
@@ -988,8 +1017,8 @@ class DataRequest(object):
 		:param dict kwargs: filters to be applied
 		:return list of DRObjects: experiments linked to the filters
 		"""
-		return self.filter_elements_per_request(element_type="experiments", operation=operation,
-		                                        skip_if_missing=skip_if_missing, requests=kwargs)
+		return self.filter_elements_per_request(elements_to_filter="experiments", requests=kwargs, operation=operation,
+		                                        skip_if_missing=skip_if_missing)
 
 	def find_variables(self, operation="any", skip_if_missing=False, **kwargs):
 		"""
@@ -999,8 +1028,8 @@ class DataRequest(object):
 		:param dict kwargs: filters to be applied
 		:return list of Variable: variables linked to the filters
 		"""
-		return self.filter_elements_per_request(element_type="variables", operation=operation,
-		                                        skip_if_missing=skip_if_missing, requests=kwargs)
+		return self.filter_elements_per_request(elements_to_filter="variables", requests=kwargs, operation=operation,
+		                                        skip_if_missing=skip_if_missing)
 
 	def sort_func(self, data_list, sorting_request=list()):
 		"""
@@ -1036,7 +1065,7 @@ class DataRequest(object):
 		:param dict kwargs: additional arguments to be given to function write_csv_output_file_content
 		:return: an output csv file
 		"""
-		filtered_data = self.filter_elements_per_request(element_type=main_data, requests=filtering_requests,
+		filtered_data = self.filter_elements_per_request(elements_to_filter=main_data, requests=filtering_requests,
 		                                                 operation=filtering_operation,
 		                                                 skip_if_missing=filtering_skip_if_missing)
 		sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
@@ -1069,39 +1098,36 @@ class DataRequest(object):
 		"""
 		logger = get_logger()
 		logger.debug(f"Generate summary for {lines_data}/{columns_data}")
-		filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
+		filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
 		                                                 operation=filtering_operation,
 		                                                 skip_if_missing=filtering_skip_if_missing)
 		sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
-		columns_datasets = self.filter_elements_per_request(element_type=columns_data)
+		columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
 		columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
 		columns_title = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
 		table_title = f"{lines_data} {title_line} / {columns_data} {title_column}"
+		lines_title = {elt.id: elt.__getattr__(title_line) for elt in sorted_filtered_data}
 
 		nb_lines = len(sorted_filtered_data)
 		logger.debug(f"{nb_lines} elements found for {lines_data}")
 		logger.debug(f"{len(columns_title)} found elements for {columns_data}")
 
 		logger.debug("Generate summary")
-		content = defaultdict(list)
-		for (i, data) in enumerate(columns_datasets):
-			logger.debug(f"Deal with column {i}/{len(columns_title)}")
-			filter_line_datasets = self.filter_elements_per_request(element_type=lines_data,
-			                                                        requests={data.DR_type: data},
-			                                                        operation="all")
-			for line_data in filtered_data:
-				line_data_title = line_data.__getattr__(title_line)
-				if line_data in filter_line_datasets:
-					content[line_data_title].append("x")
-				else:
-					content[line_data_title].append("")
+		content = defaultdict(lambda: dict())
+		DR_type = columns_datasets[0].DR_type
+		for (column_data, column_title) in zip(columns_datasets, columns_title):
+			filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
+			                                                        requests={DR_type: column_data}, operation="all")
+			for line in filter_line_datasets:
+				content[lines_title[line.id]][column_title] = "x"
 
 		logger.debug("Format summary")
 		rep = list()
 		rep.append([table_title, ] + columns_title)
-		for line_data in filtered_data:
-			line_data_title = line_data.__getattr__(title_line)
-			rep.append([line_data_title, ] + content[line_data_title])
+		for line_data in sorted_filtered_data:
+			line_data_title = lines_title[line_data.id]
+			rep.append([line_data_title, ] +
+			           [content[line_data_title].get(column_title, "") for column_title in columns_title])
 
 		logger.debug("Write summary")
 		write_csv_output_file_content(output_file, rep, **kwargs)

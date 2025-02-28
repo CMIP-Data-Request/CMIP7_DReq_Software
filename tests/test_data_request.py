@@ -693,9 +693,9 @@ class TestDataRequestFilter(unittest.TestCase):
 
 		with self.assertRaises(ValueError):
 			self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"))
-		self.assertEqual(self.dr.filter_elements_per_request("opportunities",
-		                                                     requests=dict(variables="link::test_dummy"),
-		                                                     skip_if_missing=True), self.dr.get_opportunities())
+		self.assertEqual(
+			self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"),
+			                                    skip_if_missing=True), self.dr.get_opportunities())
 
 	def test_find_variables_per_priority(self):
 		priority = "Medium"

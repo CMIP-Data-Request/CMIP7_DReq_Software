@@ -50,7 +50,7 @@ def add_profiling(func):
 
 class TestDataRequest11(unittest.TestCase):
 	def setUp(self):
-		self.profiling = False
+		self.profiling = True
 		self.version = "v1.1"
 		export_version = "release"
 		self.single = f"{_dreq_res}/{self.version}/dreq_{export_version}_export.json"
@@ -80,3 +80,22 @@ class TestDataRequest11(unittest.TestCase):
 	@add_profiling
 	def test_transform_to_one(self):
 		content = transform_content_one_base(self.single_format)
+
+	@unittest.skip
+	@add_profiling
+	def test_filter_variables(self):
+		DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+		content = DR.find_variables(operation="all", skip_if_missing=False, max_priority_level="Core")
+
+	@unittest.skip
+	@add_profiling
+	def test_export_summary(self):
+		DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+		DR.export_summary("variables", "opportunities", os.sep.join(["tests", "var_per_op.csv"]))
+
+	@unittest.skip
+	@add_profiling
+	def test_export_data(self):
+		DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+		DR.export_data("opportunities", os.sep.join(["tests", "op.csv"]),
+		               export_columns_request=["name", "lead_theme", "description"])
