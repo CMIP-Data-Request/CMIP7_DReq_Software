@@ -1,7 +1,21 @@
 import os
+import pathlib
+import sys
+import tempfile
 
-from data_request_api.stable.content.dreq_api import dreq_content as dc
 import pytest
+
+from data_request_api.stable.content import dreq_content as dc
+import data_request_api.stable.utilities.config
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
+
+# Set up config file
+temp_config_file = tempfile.NamedTemporaryFile(delete=False, suffix=".yaml")
+data_request_api.stable.utilities.config.CONFIG_FILE = pathlib.Path(temp_config_file.name) 
+
+# Configure logger for testing
+change_log_file(default=True)
+change_log_level("info")
 
 
 def test_parse_version():
@@ -52,7 +66,7 @@ def test_get_cached(tmp_path):
     assert cached_versions == ["v1.0.0"]
 
 
-def test_retrieve(tmp_path, capfd):
+def test_retrieve(tmp_path, caplog):
     "Test the retrieval function."
     dc._dreq_res = str(tmp_path)
 
@@ -68,10 +82,9 @@ def test_retrieve(tmp_path, capfd):
 
     # Make sure it updates
     json_path = dc.retrieve("dev")["dev"]
-    stdout = capfd.readouterr().out.splitlines()
-    assert len(stdout) == 2
-    assert "Retrieved version 'dev'." in stdout
-    assert "Updated version 'dev'." in stdout
+    assert len(caplog.text.splitlines()) == 2
+    assert "Retrieved version 'dev'." in caplog.text
+    assert "Updated version 'dev'." in caplog.text
     # ... and the file was replaced
     with open(json_path) as f:
         lines_update = f.read().splitlines(keepends=True)
@@ -96,19 +109,41 @@ def test_api_and_html_request():
     assert branches1 == branches2
 
 
-def test_load(tmp_path):
+def test_load_dont_consolidate(tmp_path):
     "Test the load function."
     dc._dreq_res = str(tmp_path)
 
     with pytest.raises(ValueError):
         jsondict = dc.load(" invalid-version ")
 
-    jsondict = dc.load("dev")
+    # Load multi-base export without consolidation
+    jsondict = dc.load("dev", consolidate=False)
     assert isinstance(jsondict, dict)
     assert os.path.isfile(tmp_path / "dev" / dc._json_raw)
     assert not os.path.isfile(tmp_path / "dev" / dc._json_release)
 
-    jsondict = dc.load("dev", export="release")
+    # Load release export without consolidation
+    jsondict = dc.load("dev", export="release", consolidate=False)
+    assert isinstance(jsondict, dict)
+    assert os.path.isfile(tmp_path / "dev" / dc._json_release)
+
+
+def test_load_consolidate(tmp_path):
+    "Test the load function."
+    dc._dreq_res = str(tmp_path)
+
+    with pytest.raises(ValueError):
+        jsondict = dc.load(" invalid-version ")
+
+    # Load multi-base export with consolidation
+    with pytest.raises(KeyError):
+        jsondict = dc.load("dev", consolidate=True)
+    # assert isinstance(jsondict, dict)
+    # assert os.path.isfile(tmp_path / "dev" / dc._json_raw)
+    # assert not os.path.isfile(tmp_path / "dev" / dc._json_release)
+
+    # Load release export with consolidation
+    jsondict = dc.load("dev", export="release", consolidate=True)
     assert isinstance(jsondict, dict)
     assert os.path.isfile(tmp_path / "dev" / dc._json_release)
 
@@ -149,23 +184,24 @@ class TestDreqContent:
         with pytest.warns(UserWarning, match="Unknown export type"):
             dc.get_cached(export="invalid")
 
-    def test_delete(self, capfd):
+    def test_delete(self, caplog):
         "Test the delete function."
         dc._dreq_res = self.dreq_res
         # Delete non-existent version
+
         dc.delete("notpresent")
-        stdout = capfd.readouterr().out.splitlines()
-        assert len(stdout) == 1
-        assert "No version(s) found to delete." in stdout
+        assert len(caplog.text.splitlines()) == 1
+        assert "No version(s) found to delete." in caplog.text
 
         # Delete only branches / dryrun
+        caplog.clear()
         dc.delete("all", export="raw", dryrun=True)
-        stdout = capfd.readouterr().out.splitlines()
-        assert len(stdout) == 5
-        assert "Deleting the following version(s):" in stdout
+        assert len(caplog.text.splitlines()) == 5
+        assert "Deleting the following version(s):" in caplog.text
         for b in self.branches:
             assert (
-                f"Dryrun: would delete '{dc._dreq_res / b / dc._json_raw}'." in stdout
+                f"Dryrun: would delete '{dc._dreq_res / b / dc._json_raw}'."
+                in caplog.text
             )
 
         # Delete all but latest

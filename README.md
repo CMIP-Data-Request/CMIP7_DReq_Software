@@ -1,13 +1,13 @@
 
 # CMIP7 Data Request Software
 
-This repository contains python code to interact with the [CMIP7 data request](https://wcrp-cmip.org/cmip7/cmip7-data-request/). 
+This repository contains python code to interact with the [CMIP7 data request](https://wcrp-cmip.org/cmip7/cmip7-data-request/).
 Its aim is to provide an API and scripts that can produce lists of the variables requested for each CMIP7 experiment, information about the requested variables, and in general allow users to query and utilize the information in the data request.
 
 
 ## v1.1 release
 
-The latest **official release** of the Data Request (30 Jan 2025) is tagged as `v1.1`. 
+The latest **official release** of the Data Request (30 Jan 2025) is tagged as `v1.1`.
 Access all information about the v1.1 release [on the CMIP website](https://wcrp-cmip.org/cmip7-data-request-v1-1/).
 Those trying out the Software should use:
 - the `v1.1` tag, or
@@ -16,7 +16,7 @@ Those trying out the Software should use:
 For the **Quick Start** guide, please see below.
 The **Overview** section explains more about what the Software is intended to do and how this relates to the Content of the data request.
 
-**This Software is under active development** and will continue to evolve following the `v1.1` release. 
+**This Software is under active development** and will continue to evolve following the `v1.1` release.
 Accordingly we encourage users to try the latest stable version in order to access the latest features.
 
 The next sections provide a brief overview of the Software and explain how to get started.
@@ -29,12 +29,12 @@ Here are some ways to provide feedback:
 ## Overview
 
 The CMIP7 data request **Software** and **Content** are version controlled in separate github repositories.
-Official releases of the data request correspond to a tag in each of these repositories (e.g., `v1.1`). 
+Official releases of the data request correspond to a tag in each of these repositories (e.g., `v1.1`).
 However the Software can interact with different versions of the Content - for example, to examine changes that have occurred when a new version of the data request is issued.
 
-The data request **Content**, which is version controlled [here](https://github.com/CMIP-Data-Request/CMIP7_DReq_Content), refers to all of the information comprising the data request. 
+The data request **Content**, which is version controlled [here](https://github.com/CMIP-Data-Request/CMIP7_DReq_Content), refers to all of the information comprising the data request.
 This includes descriptions of Opportunities and their lists of requested variables, definitions of the variables, etc.
-The Content is stored as a large `json` file, which is read by the data request Software. 
+The Content is stored as a large `json` file, which is read by the data request Software.
 However users should not interact with this `json` file directly and its structure is not designed for readability.
 Users do not need to manually download the Content as this is done automatically by the Software (see "Getting Started", below, for further details).
 
@@ -76,7 +76,7 @@ The `env.yml` file can be used to create a conda environment in which to run the
 ```bash
 conda env create -n my_dreq_env --file env.yml
 ```
-where `my_dreq_env` should be replaced with your preferred environment name. 
+where `my_dreq_env` should be replaced with your preferred environment name.
 Activate this environment:
 ```bash
 conda activate my_dreq_env
@@ -96,7 +96,7 @@ This approach avoids using `conda`.
 
 ### Running the software
 
-There are two example workflow scripts in the `scripts/` directory. 
+There are two example workflow scripts in the `scripts/` directory.
 In a shell session where the environment (conda or venv/virtualenv, as explained above) has been activated, running:
 ```bash
 python workflow_example.py
@@ -120,7 +120,7 @@ python -m pip install git+https://github.com/CMIP-Data-Request/CMIP7_DReq_Softwa
 where `<tag>` needs to be replaced with the version you wish to
 install.
 
-If installation is successful you should be able to run the command 
+If installation is successful you should be able to run the command
 ```bash
 export_dreq_lists_json --all_opportunities v1.1 amip.json --experiments amip
 ```
@@ -151,8 +151,42 @@ python -m pip install -e .
 
 Command line utilities should be hosted under the
 `data_request_api.command_line` package and pointed at by adding
-references to the appropriate `main()` routine into the 
+references to the appropriate `main()` routine into the
 `[project:scripts]` section of the pyproject.toml file.
+
+
+
+### Configuration
+
+The package comes with a default configuration.
+After installation, you can initialize the configuration file with the default settings by running:
+```bash
+CMIP7_data_request_api_config init
+```
+
+This will create the `.CMIP7_data_request_api_config` file in your home directory.
+Alternatively, the file will be automatically created the first time you use the software.
+
+The configuration file is a YAML file containing `key: value` pairs that
+control the behavior of the software.
+You can modify the values by either editing the file directly or using the following command:
+```bash
+CMIP7_data_request_api_config <key> <value>
+```
+
+To reset the configuration to its default values, run:
+```bash
+CMIP7_data_request_api_config reset
+```
+
+For example, to set the software to run offline, use:
+```bash
+CMIP7_data_request_api_config offline true
+```
+This will prevent checks for updates and retrievals of new versions of the data request content.
+See also [Further details](#further-details).
+
+
 
 ## Further details
 
@@ -163,7 +197,7 @@ The example output file assumes that all data request Opportunities are supporte
 Each listed variable in the output file is currently identified by a unique "compound name" using CMIP6-era table names and short variable names (`Amon.tas`, `Omon.tos`, etc).
 Variable names may change in upcoming releases, but in any case a mapping to CMIP6-era variable names will be retained in the data request so as to allow comparison with CMIP6 output (for those variables that were defined in CMIP6).
 
-To access the data request Content, the example script first needs to identify the version of the data request Content that is being used. 
+To access the data request Content, the example script first needs to identify the version of the data request Content that is being used.
 This is done in the example script by specifying a tag in the Content repo and calling the retrieval function.
 For example:
 ```python
@@ -174,6 +208,13 @@ The script can then access it by loading it into a python dict variable:
 ```python
 content = dc.load('v1.1')
 ```
+
+When offline mode is enabled in the configuration, you can provide a key word argument (kwarg) when calling the function:
+```python
+dc.retrieve('v1.1', offline=False)
+dc.load('v1.1', offline=False)
+```
+
 Currently a single version of the Content `json` file for a versioned release is roughly 20 MB in size.
 The size of local cache can be managed by deleting unused versions.
 For example, to remove a specific version:
