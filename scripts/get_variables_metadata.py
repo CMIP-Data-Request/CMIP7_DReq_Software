@@ -4,6 +4,7 @@ Extract metadata of CMOR variables and write them to a json file.
 Example output file: scripts/variable_info/all_var_info.json
 Output file names (filepath) are set below.
 '''
+import argparse
 import hashlib
 import json
 import os
@@ -19,36 +20,46 @@ from data_request_api import version as api_version
 from data_request_api.stable.utilities.tools import write_csv_output_file_content
 
 
-# from importlib import reload
-# reload(dq)
-# reload(dc)
-###############################################################################
+default_dreq_version = 'v1.1'
+
+outfile_extensions = ['.json', '.csv']
+
+parser = argparse.ArgumentParser(
+    description='Get CMOR variables metadata and write to json.'
+    )
+parser.add_argument('-dr', '--dreq_version', type=str, default=default_dreq_version,
+                    help='version of data request content to use')
+parser.add_argument('-o', '--outfile', nargs='+', type=str,
+                    help=f'outfile (one or more), identified by extensions: {outfile_extensions}')
+# parser.add_argument('-oj', '--outfile_json', type=str, default='all_var_info.json',
+#                     help='name of output json file for variables metadata')
+# parser.add_argument('-oc', '--outfile_csv', type=str, default='all_var_info.csv',
+#                     help='name of output csv file for variables metadata')135
+parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
+                    help='include only the specified CMOR tables (aka MIP tables, examples: "Amon", "Omon")')
+parser.add_argument('-v', '--cmor_variables', nargs='+', type=str,
+                    help='include only the specified CMOR variables (out_name, examples: "tas", "siconc")')
+args = parser.parse_args()
 
 
-filter_by_cmor_table = False  # False ==> include all tables (i.e., all variables in the data request)
-include_cmor_tables = ['Amon', 'day']
 
-organize_by_standard_name = True  # True ==> write additional file that groups variables by CF standard name
 
-write_csv = True # True ==> write spreadsheet listing metadata of all variables
+organize_by_standard_name = False  # True ==> write additional file that groups variables by CF standard name
+
 
 # Some variables in these dreq versions lack a 'frequency' attribute; use the legacy CMIP6 frequency for them
 dreq_versions_substitute_cmip6_freq = ['v1.0', 'v1.1']
 
-###############################################################################
+
 # Load data request content
-
-use_dreq_version = 'v1.1'
-# use_dreq_version = 'v1.0'
-
+use_dreq_version = args.dreq_version
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
 # Load content into python dict
 content = dc.load(use_dreq_version)
 
-###############################################################################
-# Retrive info about variables
 
+# Retrive info about variables
 base = dq.create_dreq_tables_for_variables(content)
 
 Vars = base['Variables']
@@ -102,8 +113,10 @@ if use_dreq_version in dreq_versions_substitute_cmip6_freq:
 var_name_map = {record.compound_name : record_id for record_id, record in Vars.records.items()}
 assert len(var_name_map) == len(Vars.records), 'compound names do not uniquely map to variable record ids'
 
-if filter_by_cmor_table:
-    print('Retaining only these CMOR tables: ' + ', '.join(include_cmor_tables))
+if args.cmor_tables:
+    print('Retaining only these CMOR tables: ' + ', '.join(args.cmor_tables))
+if args.cmor_variables:
+    print('Retaining only these CMOR variables: ' + ', '.join(args.cmor_variables))
 
 substitute = {
     # replacement character(s) : [characters to replace with the replacement character]
@@ -115,8 +128,9 @@ for var in Vars.records.values():
     assert len(var.table) == 1
     table_id = CMORtables.get_record(var.table[0]).name
 
-    if filter_by_cmor_table:
-        if table_id not in include_cmor_tables:
+    if args.cmor_tables:
+        # Filter by CMOR table name
+        if table_id not in args.cmor_tables:
             continue
 
     if not hasattr(var, 'frequency') and use_dreq_version in dreq_versions_substitute_cmip6_freq:
@@ -124,7 +138,7 @@ for var in Vars.records.values():
         assert len(var.cmip6_frequency_legacy) == 1
         link = var.cmip6_frequency_legacy[0]
         var.frequency = [CMIP6Frequency.get_record(link).name]
-        print('using CMIP6 frequency for ' + var.compound_name)
+        # print('using CMIP6 frequency for ' + var.compound_name)
 
     if isinstance(var.frequency[0], str):
         # retain this option for non-consolidated raw export?
@@ -161,12 +175,17 @@ for var in Vars.records.values():
             dims_list.append(dims.name)
     dims_list.append(temporal_shape.name)
 
-    # Get CF standard name, if it exists
-    # record_id = var.cf_standard_name_from_physical_parameter[0]  # not a real link! 
-    # phys_param = PhysicalParameter.get_record(record_id)
+    # Get physical parameter record and out_name
     link = var.physical_parameter[0]
     phys_param = PhysicalParameter.get_record(link)
     out_name = phys_param.name
+
+    if args.cmor_variables:
+        # Filter by CMOR variable name
+        if out_name not in args.cmor_variables:
+            continue
+
+    # Get CF standard name, if it exists
     standard_name = ''
     standard_name_proposed = ''
     if hasattr(phys_param, 'cf_standard_name'):
@@ -251,15 +270,16 @@ for var_name in sorted(all_var_info, key=str.lower):
 all_var_info = d
 del d
 
-
 # Get provenance of content to include in the Header
 content_path = dc._dreq_content_loaded['json_path']
 with open(content_path, 'rb') as f:
     content_hash = hashlib.sha256(f.read()).hexdigest()
 
+# Create output dict
 out = OrderedDict({
     'Header' : OrderedDict({
         'Description' : 'Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.',
+        'no. of variables' : len(all_var_info),
         'dreq content version': use_dreq_version,
         'dreq content file' : os.path.basename(os.path.normpath(content_path)),
         'dreq content sha256 hash' : content_hash,
@@ -267,12 +287,40 @@ out = OrderedDict({
     }),
     'Compound Name' : all_var_info,
 })
- 
-filepath = '_all_var_info.json'
-with open(filepath, 'w') as f:
-    json.dump(out, f, indent=4)
-    print(f'wrote {filepath} for {len(all_var_info)} variables, dreq version = {use_dreq_version}')
 
+for filepath in args.outfile:
+    ext = os.path.splitext(filepath)[-1]
+
+    if ext == '.json':
+        # Write variables metadata to json
+        with open(filepath, 'w') as f:
+            json.dump(out, f, indent=4)
+            print(f'Wrote {filepath} for {len(all_var_info)} variables, dreq version = {use_dreq_version}')
+
+    elif ext == '.csv':
+        # Write variables metadata to csv
+        var_info = next(iter(all_var_info.values()))
+        attrs = list(var_info.keys())
+        columns = ['Compound Name']
+        columns.append('standard_name')
+        columns.append('standard_name_proposed')
+        columns += [s for s in attrs if s not in columns]
+        rows = [columns]  # column header line
+        # Add each variable as a row
+        for var_name, var_info in all_var_info.items():
+            row = []
+            for col in columns:
+                if col == 'Compound Name':
+                    val = var_name
+                elif col in var_info:
+                    val = var_info[col]
+                else:
+                    val = ''
+                row.append(val)
+            rows.append(row)
+        write_csv_output_file_content(filepath, rows)
+        n = out['Header']['no. of variables']
+        print(f'Wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
 
 ###############################################################################
 if organize_by_standard_name:
@@ -307,29 +355,3 @@ if organize_by_standard_name:
         print(f'wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
 
 ###############################################################################
-if write_csv:
-
-    var_info = next(iter(all_var_info.values()))
-    attrs = list(var_info.keys())
-    columns = ['Compound Name']
-    columns.append('standard_name')
-    columns.append('standard_name_proposed')
-    columns += [s for s in attrs if s not in columns]
-
-    rows = [columns]  # column header line
-    # Add each variable as a row
-    for var_name, var_info in all_var_info.items():
-        row = []
-        for col in columns:
-            if col == 'Compound Name':
-                val = var_name
-            elif col in var_info:
-                val = var_info[col]
-            else:
-                val = ''
-            row.append(val)
-        rows.append(row)
-
-    filepath = '_all_var_info.csv'
-    write_csv_output_file_content(filepath, rows)
-    print(f'wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
