@@ -565,7 +565,7 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     return requested_vars
 
 
-def get_variables_metadata(content, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
+def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
 
@@ -576,6 +576,9 @@ def get_variables_metadata(content, cmor_tables=None, cmor_variables=None, conso
         - data request content as exported from airtable
         OR
         - dreq_table objects representing tables (dict keys are table names)
+    compound_names : list[str]
+        Compound names of variables to include. If not given, all are included.
+        Example: ['Amon.tas', 'Omon.sos']
     cmor_tables : list[str]
         Names of CMOR tables to include. If not given, all are included.
         Example: ['Amon', 'Omon']
@@ -672,9 +675,12 @@ def get_variables_metadata(content, cmor_tables=None, cmor_variables=None, conso
     all_var_info = {}
     for var in Vars.records.values():
 
+        if compound_names:
+            if var.compound_name not in compound_names:
+                continue
+
         assert len(var.table) == 1
         table_id = CMORtables.get_record(var.table[0]).name
-
         if cmor_tables:
             # Filter by CMOR table name
             if table_id not in cmor_tables:
@@ -803,7 +809,7 @@ def get_variables_metadata(content, cmor_tables=None, cmor_variables=None, conso
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
-        var_name = var.compound_name  # note, comment in Header below refers to Compound Name, so update it if this changes
+        var_name = var.compound_name
         assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
         all_var_info[var_name] = var_info
 

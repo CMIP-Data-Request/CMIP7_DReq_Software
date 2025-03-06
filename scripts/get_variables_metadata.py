@@ -31,10 +31,8 @@ parser.add_argument('-dr', '--dreq_version', type=str, default=default_dreq_vers
                     help='version of data request content to use')
 parser.add_argument('-o', '--outfile', nargs='+', type=str,
                     help=f'outfile (one or more), identified by extensions: {outfile_extensions}')
-# parser.add_argument('-oj', '--outfile_json', type=str, default='all_var_info.json',
-#                     help='name of output json file for variables metadata')
-# parser.add_argument('-oc', '--outfile_csv', type=str, default='all_var_info.csv',
-#                     help='name of output csv file for variables metadata')135
+parser.add_argument('-cn', '--compound_names', nargs='+', type=str,
+                    help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
 parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
                     help='include only the specified CMOR tables (aka MIP tables, examples: "Amon", "Omon")')
 parser.add_argument('-v', '--cmor_variables', nargs='+', type=str,
@@ -50,6 +48,7 @@ content = dc.load(use_dreq_version)
 # Get metadata for variables
 all_var_info = dq.get_variables_metadata(
     content,
+    compound_names=args.compound_names,
     cmor_tables=args.cmor_tables,
     cmor_variables=args.cmor_variables,
     use_dreq_version=use_dreq_version  # TO DEPRECATE
