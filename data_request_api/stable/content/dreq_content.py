@@ -63,7 +63,6 @@ _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
 _dreq_content_loaded = {}
 
 
-@append_kwargs_from_config
 def _parse_version(version):
     """Parse a version tag and return a tuple for sorting.
 
@@ -98,8 +97,9 @@ def get_cached(**kwargs):
 
     Parameters
     ----------
-    kwargs : dict, optional
-        Additional parameters to pass to the function.
+    **kwargs
+        export : {'raw', 'release'}, optional
+            Export type. Defaults to "release".
 
     Returns
     -------
@@ -303,9 +303,9 @@ def get_versions(target="tags", **kwargs):
         The target to send the request for, either 'tags' or 'branches' (default is 'tags').
         Please note that the main development branch is excluded from the list of branches
         and is included in the list of tags.
-    kwargs: dict, optional:
-        Additional parameters to pass to the retrieve function.
-        Set 'offline=True' for offline mode.
+    **kwargs
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
 
     Returns
     -------
@@ -364,9 +364,9 @@ def _get_latest_version(stable=True, **kwargs):
     stable : bool, optional
         If True, return the latest stable version. If False, return the latest version
         (i.e. incl. alpha/beta versions) (default is True).
-    kwargs : dict, optional
-        Additional parameters to pass to the function.
-        Set 'offline=True' for offline mode.
+    **kwargs
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
 
     Returns
     -------
@@ -394,9 +394,11 @@ def retrieve(version="latest_stable", **kwargs):
         The version to retrieve. Can be 'latest', 'latest_stable',
         'dev', or 'all' or a specific version, eg. '1.0.0'.
         (default is 'latest_stable').
-    kwargs: dict, optional:
-        Additional parameters to pass to the retrieve function.
-        Set 'offline=True' for offline mode.
+    **kwargs
+        export : {'raw', 'release'}, optional
+            Export type. Defaults to 'release'.
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
 
     Returns
     -------
@@ -534,8 +536,12 @@ def delete(version="all", keep_latest=False, **kwargs):
     keep_latest : bool, optional
         If True, keep the latest stable, prerelease and "dev" versions.
         If False, delete all locally cached versions (default is False).
-    kwargs : dict, optional
-        Additional parameters to pass to the function.
+    **kwargs
+        export : {'raw', 'release'}, optional
+            Export type. Defaults to 'release'.
+        dryrun : bool, optional
+            Whether to only list the files that would be removed instead of actually
+            removing them. Defaults to False.
 
     Returns
     -------
@@ -616,8 +622,15 @@ def load(version="latest_stable", **kwargs):
                  Can be 'latest', 'latest_stable', 'dev',
                  or a specific version, eg. '1.0.0'.
                  The default is 'latest_stable'.
-        kwargs (dict): Additional parameters to pass to the retrieve function.
-                       Set 'offline = True' for offline mode.
+    **kwargs
+        export : {'raw', 'release'}, optional
+            Export type. Defaults to 'release'.
+        consolidate: bool, optional
+            Whether to consolidate the data request dictionary after loading it.
+            Experimental feature. Defaults to False.
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
+
     Returns:
         dict: of the loaded JSON file.
     """
@@ -642,4 +655,4 @@ def load(version="latest_stable", **kwargs):
             else:
                 return json.load(f)
         else:
-            return ce.map_data(json.load(f), mapping_table)
+            return json.load(f)  # ce.map_data(json.load(f), mapping_table)
