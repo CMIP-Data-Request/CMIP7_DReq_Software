@@ -22,80 +22,80 @@ from data_request_api.stable.content.dump_transformation import correct_dictiona
 
 
 def add_profiling(func):
-	def do_profiling(self, *args, **kwargs):
-		if self.profiling:
-			pr = cProfile.Profile()
-			pr.enable()
-		rep = func(self, *args, **kwargs)
-		if self.profiling:
-			pr.disable()
-			stdout = sys.stdout
-			test_name = str(self)
-			test_name = re.sub("(?P<name>.*) .*", "\g<name>", test_name)
-			file_name = f"tests/profiling_{test_name}.txt"
-			if os.path.isfile(file_name):
-				os.remove(file_name)
-			with codecs.open(file_name, "w", encoding="utf-8") as statsfile:
-				sys.stdout = statsfile
-				s = io.StringIO()
-				sortby = "cumulative"
-				ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-				ps.print_stats()
-				print(s.getvalue())
-			sys.stdout = stdout
-		return rep
+    def do_profiling(self, *args, **kwargs):
+        if self.profiling:
+            pr = cProfile.Profile()
+            pr.enable()
+        rep = func(self, *args, **kwargs)
+        if self.profiling:
+            pr.disable()
+            stdout = sys.stdout
+            test_name = str(self)
+            test_name = re.sub("(?P<name>.*) .*", "\g<name>", test_name)
+            file_name = f"tests/profiling_{test_name}.txt"
+            if os.path.isfile(file_name):
+                os.remove(file_name)
+            with codecs.open(file_name, "w", encoding="utf-8") as statsfile:
+                sys.stdout = statsfile
+                s = io.StringIO()
+                sortby = "cumulative"
+                ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+                ps.print_stats()
+                print(s.getvalue())
+            sys.stdout = stdout
+        return rep
 
-	return do_profiling
+    return do_profiling
 
 
 class TestDataRequest11(unittest.TestCase):
-	def setUp(self):
-		self.profiling = True
-		self.version = "v1.1"
-		export_version = "release"
-		self.single = f"{_dreq_res}/{self.version}/dreq_{export_version}_export.json"
-		self.single_content = read_json_input_file_content(self.single)
-		self.single_format = correct_dictionaries((self.single_content))
-		self.vs_file = f"{_dreq_res}/{self.version}/VS_{export_version}_content.json"
-		self.vs_dict = read_json_input_file_content(self.vs_file)
-		self.input_database_file = f"{_dreq_res}/{self.version}/DR_{export_version}_content.json"
-		self.input_database = read_json_input_file_content(self.input_database_file)
+    def setUp(self):
+        self.profiling = True
+        self.version = "v1.1"
+        export_version = "release"
+        self.single = f"{_dreq_res}/{self.version}/dreq_{export_version}_export.json"
+        self.single_content = read_json_input_file_content(self.single)
+        self.single_format = correct_dictionaries((self.single_content))
+        self.vs_file = f"{_dreq_res}/{self.version}/VS_{export_version}_content.json"
+        self.vs_dict = read_json_input_file_content(self.vs_file)
+        self.input_database_file = f"{_dreq_res}/{self.version}/DR_{export_version}_content.json"
+        self.input_database = read_json_input_file_content(self.input_database_file)
 
-	@unittest.skip
-	@add_profiling
-	def test_from_separated_inputs(self):
-		obj = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+    @unittest.skip
+    @add_profiling
+    def test_from_separated_inputs(self):
+        obj = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
 
-	@unittest.skip
-	@add_profiling
-	def test_from_single_input(self):
-		obj = DataRequest.from_input(self.single, version=self.version)
+    @unittest.skip
+    @add_profiling
+    def test_from_single_input(self):
+        obj = DataRequest.from_input(self.single, version=self.version)
 
-	@unittest.skip
-	@add_profiling
-	def test_correct_dictionaries(self):
-		content = correct_dictionaries(self.single_content)
+    @unittest.skip
+    @add_profiling
+    def test_correct_dictionaries(self):
+        content = correct_dictionaries(self.single_content)
 
-	@unittest.skip
-	@add_profiling
-	def test_transform_to_one(self):
-		content = transform_content_one_base(self.single_format)
+    @unittest.skip
+    @add_profiling
+    def test_transform_to_one(self):
+        content = transform_content_one_base(self.single_format)
 
-	@unittest.skip
-	@add_profiling
-	def test_filter_variables(self):
-		DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
-		content = DR.find_variables(operation="all", skip_if_missing=False, max_priority_level="Core")
+    @unittest.skip
+    @add_profiling
+    def test_filter_variables(self):
+        DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+        content = DR.find_variables(operation="all", skip_if_missing=False, max_priority_level="Core")
 
-	@unittest.skip
-	@add_profiling
-	def test_export_summary(self):
-		DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
-		DR.export_summary("variables", "opportunities", os.sep.join(["tests", "var_per_op.csv"]))
+    @unittest.skip
+    @add_profiling
+    def test_export_summary(self):
+        DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+        DR.export_summary("variables", "opportunities", os.sep.join(["tests", "var_per_op.csv"]))
 
-	@unittest.skip
-	@add_profiling
-	def test_export_data(self):
-		DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
-		DR.export_data("opportunities", os.sep.join(["tests", "op.csv"]),
-		               export_columns_request=["name", "lead_theme", "description"])
+    @unittest.skip
+    @add_profiling
+    def test_export_data(self):
+        DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
+        DR.export_data("opportunities", os.sep.join(["tests", "op.csv"]),
+                       export_columns_request=["name", "lead_theme", "description"])
