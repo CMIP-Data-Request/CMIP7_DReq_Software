@@ -13,9 +13,9 @@ import hashlib
 import json
 from collections import OrderedDict
 
-
 from data_request_api.stable.query.dreq_classes import (
     dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
+from data_request_api.stable.utilities.tools import write_csv_output_file_content
 
 # Version of data request content:
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
@@ -898,4 +898,61 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
         json.dump(out, f, indent=4)
         print('\nWrote requested variables to ' + outfile)
 
+def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None):
+ 
+    ext = os.path.splitext(filepath)[-1]
 
+    if not api_version:
+        raise ValueError(f'Must provide API version, received: {api_version}')
+    if not use_dreq_version:
+        raise ValueError(f'Must provide data request content version, received: {use_dreq_version}')
+    if not content_path:
+        raise ValueError(f'Must provide path to data request content, received: {content_path}')
+
+    if ext == '.json':
+        # Get provenance of content to include in the Header
+        with open(content_path, 'rb') as f:
+            content_hash = hashlib.sha256(f.read()).hexdigest()
+
+        # Create output dict
+        out = OrderedDict({
+            'Header' : OrderedDict({
+                'Description' : 'Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.',
+                'no. of variables' : len(all_var_info),
+                'dreq content version': use_dreq_version,
+                'dreq content file' : os.path.basename(os.path.normpath(content_path)),
+                'dreq content sha256 hash' : content_hash,
+                'dreq api version' : api_version,
+            }),
+            'Compound Name' : all_var_info,
+        })
+
+        # Write variables metadata to json
+        with open(filepath, 'w') as f:
+            json.dump(out, f, indent=4)
+            print(f'Wrote {filepath} for {len(all_var_info)} variables, dreq version = {use_dreq_version}')
+
+    elif ext == '.csv':
+        # Write variables metadata to csv
+        var_info = next(iter(all_var_info.values()))
+        attrs = list(var_info.keys())
+        columns = ['Compound Name']
+        columns.append('standard_name')
+        columns.append('standard_name_proposed')
+        columns += [s for s in attrs if s not in columns]
+        rows = [columns]  # column header line
+        # Add each variable as a row
+        for var_name, var_info in all_var_info.items():
+            row = []
+            for col in columns:
+                if col == 'Compound Name':
+                    val = var_name
+                elif col in var_info:
+                    val = var_info[col]
+                else:
+                    val = ''
+                row.append(val)
+            rows.append(row)
+        write_csv_output_file_content(filepath, rows)
+        n = len(all_var_info)
+        print(f'Wrote {filepath} for {n} variables, dreq version = {use_dreq_version}')
