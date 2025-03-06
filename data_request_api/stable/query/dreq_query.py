@@ -15,7 +15,7 @@ from collections import OrderedDict
 
 
 from data_request_api.stable.query.dreq_classes import (
-    dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS)
+    dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
 
 # Version of data request content:
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
@@ -444,7 +444,6 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
     return opp_vars
 
 
-
 def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True, check_core_variables=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
@@ -566,6 +565,260 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     return requested_vars
 
 
+def get_variables_metadata(content, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
+    '''
+    Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
+
+    Parameters:
+    -----------
+    content : dict
+        Dict containing either:
+        - data request content as exported from airtable
+        OR
+        - dreq_table objects representing tables (dict keys are table names)
+    cmor_tables : list[str]
+        Names of CMOR tables to include. If not given, all are included.
+        Example: ['Amon', 'Omon']
+    cmor_variables : list[str]
+        Names of CMOR variables to include. If not given, all are included.
+        Here the out_name is used as the CMOR variable name.
+        Example: ['tas', 'siconc']
+
+    Returns:
+    --------
+    all_var_info : dict
+        Dictionary indexed by unique variable name, giving metadata for each variable.
+        Also includes a header giving info on provenance of the info (data request version used, etc).
+
+    Notes:
+    ------
+    TO DEPRECATE: use_dreq_version as input should be removed once CMIP6 frequency issue fixed.
+    '''
+    if isinstance(content, dict):
+        if all([isinstance(table, dreq_table) for table in content.values()]):
+            # tables have already been rendered as dreq_table objects
+            base = content
+        else:
+            # render tables as dreq_table objects
+            base = create_dreq_tables_for_request(content, consolidated=consolidated)
+    else:
+        raise TypeError('Expect dict as input')
+    
+    # Some variables in these dreq versions lack a 'frequency' attribute; use the legacy CMIP6 frequency for them
+    dreq_versions_substitute_cmip6_freq = ['v1.0', 'v1.1']
+    if not use_dreq_version:
+        raise ValueError('\n(TO DEPRECATE) use_dreq_version is required to set frequencies\n')
+
+    Vars = base['Variables']
+    # The Variables table is the master list of variables in the data request.
+    # Each entry (row) is a CMOR variable, containing the variable's metadata.
+    # Many of these entries are links to other tables in the database (see below).
+
+    # Choose which table to use for freqency
+    # freq_table_name = 'Frequency'  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
+    # freq_table_name = 'CMIP7 Frequency'
+    # freq_table_name = 'CMIP6 Frequency (legacy)'
+    try_freq_table_name = []
+    try_freq_table_name.append('Frequency')
+    try_freq_table_name.append('CMIP7 Frequency')
+    try_freq_table_name.append('CMIP6 Frequency (legacy)')
+
+    found_freq = False
+    for freq_table_name in try_freq_table_name:
+        freq_attr_name = format_attribute_name(freq_table_name)
+        # assert freq_attr_name in Vars.attr2field, 'attribute not found: ' + freq_attr_name
+        if freq_attr_name not in Vars.attr2field:
+            continue
+        if 'frequency' not in Vars.attr2field:
+            # code below assumes a variable's frequency is given by its "frequency" 
+            Vars.rename_attr(freq_attr_name, 'frequency')
+        if freq_table_name in base:
+            Frequency = base[freq_table_name]
+        found_freq = True
+        break
+    assert found_freq, 'Which airtable field gives the frequency?'
+
+    # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
+    SpatialShape = base['Spatial Shape']
+    Dimensions = base['Coordinates and Dimensions']
+    TemporalShape = base['Temporal Shape']
+    CellMethods = base['Cell Methods']
+    PhysicalParameter = base['Physical Parameters']
+    CFStandardName = None
+    if 'CF Standard Names' in base:
+        CFStandardName = base['CF Standard Names']
+    CMORtables = base['Table Identifiers']
+    Realm = base['Modelling Realm']
+    CellMeasures = base['Cell Measures']
+
+    if use_dreq_version in dreq_versions_substitute_cmip6_freq:
+        # needed for corrections below
+        CMIP6Frequency = base['CMIP6 Frequency (legacy)']
+
+    # Compound names will be used to uniquely identify variables.
+    # Check here that this is indeed a unique name as expected.
+    var_name_map = {record.compound_name : record_id for record_id, record in Vars.records.items()}
+    assert len(var_name_map) == len(Vars.records), 'compound names do not uniquely map to variable record ids'
+
+    if cmor_tables:
+        print('Retaining only these CMOR tables: ' + ', '.join(cmor_tables))
+    if cmor_variables:
+        print('Retaining only these CMOR variables: ' + ', '.join(cmor_variables))
+
+    substitute = {
+        # replacement character(s) : [characters to replace with the replacement character]
+        '_' : ['\\_']
+    }
+    all_var_info = {}
+    for var in Vars.records.values():
+
+        assert len(var.table) == 1
+        table_id = CMORtables.get_record(var.table[0]).name
+
+        if cmor_tables:
+            # Filter by CMOR table name
+            if table_id not in cmor_tables:
+                continue
+
+        if not hasattr(var, 'frequency') and use_dreq_version in dreq_versions_substitute_cmip6_freq:
+            # seems to be an error for some vars in v1.0, so instead use their CMIP6 frequency
+            assert len(var.cmip6_frequency_legacy) == 1
+            link = var.cmip6_frequency_legacy[0]
+            var.frequency = [CMIP6Frequency.get_record(link).name]
+            # print('using CMIP6 frequency for ' + var.compound_name)
+
+        if isinstance(var.frequency[0], str):
+            # retain this option for non-consolidated raw export?
+            assert isinstance(var.frequency, list)
+            frequency = var.frequency[0]
+        else:
+            link = var.frequency[0]
+            freq = Frequency.get_record(link)
+            frequency = freq.name
+
+        link = var.temporal_shape[0]
+        temporal_shape = TemporalShape.get_record(link)
+
+        cell_methods = ''
+        area_label_dd = ''
+        if hasattr(var, 'cell_methods'):
+            assert len(var.cell_methods) == 1
+            link = var.cell_methods[0]
+            cm = CellMethods.get_record(link)
+            cell_methods = cm.cell_methods
+            if hasattr(cm, 'brand_id'):
+                area_label_dd = cm.brand_id
+
+        # get the 'Spatial Shape' record, which contains info about dimensions
+        assert len(var.spatial_shape) == 1
+        link = var.spatial_shape[0]
+        spatial_shape = SpatialShape.get_record(link)
+
+        dims_list = []
+        dims = None
+        if hasattr(spatial_shape, 'dimensions'):
+            for link in spatial_shape.dimensions:
+                dims = Dimensions.get_record(link)
+                dims_list.append(dims.name)
+        dims_list.append(temporal_shape.name)
+
+        # Get physical parameter record and out_name
+        link = var.physical_parameter[0]
+        phys_param = PhysicalParameter.get_record(link)
+        out_name = phys_param.name
+
+        if cmor_variables:
+            # Filter by CMOR variable name
+            if out_name not in cmor_variables:
+                continue
+
+        # Get CF standard name, if it exists
+        standard_name = ''
+        standard_name_proposed = ''
+        if hasattr(phys_param, 'cf_standard_name'):
+            if isinstance(phys_param.cf_standard_name, str):
+                # retain this option for non-consolidated raw export?
+                standard_name = phys_param.cf_standard_name
+            else:
+                link = phys_param.cf_standard_name[0]
+                cfsn = CFStandardName.get_record(link)
+                standard_name = cfsn.name
+        else:
+            standard_name_proposed = phys_param.proposed_cf_standard_name
+
+        modeling_realm = [Realm.get_record(link).id for link in var.modelling_realm]
+
+        cell_measures = ''
+        if hasattr(var, 'cell_measures'):
+            # assert len(var.cell_measures) == 1
+            # link = var.cell_measures[0]
+            # cell_measures = CellMeasures.get_record(link).name
+            cell_measures = [CellMeasures.get_record(link).name for link in var.cell_measures]
+
+        positive = ''
+        if hasattr(var, 'positive_direction'):
+            positive = var.positive_direction
+
+        comment = ''
+        if hasattr(var, 'description'):
+            comment = var.description
+
+        var_info = OrderedDict()
+        # Insert fields in order given by CMIP6 cmor tables (https://github.com/PCMDI/cmip6-cmor-tables)
+        var_info.update({
+            'frequency' : frequency,
+            'modeling_realm' : ' '.join(modeling_realm),
+        })
+        if standard_name != '':
+            var_info['standard_name'] = standard_name
+        else:
+            var_info['standard_name_proposed'] = standard_name_proposed
+        var_info.update({
+            'units' : phys_param.units,
+            'cell_methods' : cell_methods,
+            'cell_measures' : ' '.join(cell_measures),
+
+            'long_name' : var.title,
+            'comment' : comment,
+
+            'dimensions' : ' '.join(dims_list),
+            'out_name' : out_name,
+            'type' : var.type,
+            'positive' : positive,
+
+            'spatial_shape' : spatial_shape.name,
+            'temporal_shape' : temporal_shape.name,
+
+            # 'temporalLabelDD' : temporal_shape.brand,
+            # 'verticalLabelDD' : spatial_shape.vertical_label_dd,
+            # 'horizontalLabelDD' : spatial_shape.hor_label_dd,
+            # 'areaLabelDD' : area_label_dd,  # this comes from cell methods
+
+            'cmip6_cmor_table' : table_id,
+        })
+        for k,v in var_info.items():
+            v = v.strip()
+            for replacement in substitute:
+                for s in substitute[replacement]:
+                    if s in v:
+                        v = v.replace(s, replacement)
+            var_info[k] = v
+        var_name = var.compound_name  # note, comment in Header below refers to Compound Name, so update it if this changes
+        assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
+        all_var_info[var_name] = var_info
+
+        del var_info, var_name
+
+    # Sort the all-variables dict
+    d = OrderedDict()
+    for var_name in sorted(all_var_info, key=str.lower):
+        d[var_name] = all_var_info[var_name]
+    all_var_info = d
+    del d
+
+    return all_var_info
+
+
 def show_requested_vars_summary(expt_vars, use_dreq_version):
     '''
     Display quick summary to stdout of variables requested.
@@ -638,3 +891,5 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
         # json.dump(expt_vars, f, indent=4, sort_keys=True)
         json.dump(out, f, indent=4)
         print('\nWrote requested variables to ' + outfile)
+
+
