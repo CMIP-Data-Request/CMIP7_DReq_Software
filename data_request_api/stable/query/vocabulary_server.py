@@ -20,6 +20,8 @@ def is_link_id_or_value(elt):
     :param elt: element to be transformed into a value
     :return: not link version oof elt
     """
+    if isinstance(elt, ConstantValueObj):
+        elt = str(elt)
     if isinstance(elt, str) and elt.startswith("link::"):
         return True, elt.replace("link::", "")
     else:
@@ -32,6 +34,8 @@ def build_link_from_id(elt):
     :param elt: element to be transformed into a link
     :return: link version of elt
     """
+    if isinstance(elt, ConstantValueObj):
+        elt = str(elt)
     if not isinstance(elt, str) or elt.startswith("link::"):
         return elt
     else:
@@ -206,3 +210,39 @@ class VocabularyServer(object):
             return element_id
         else:
             return element_id
+
+
+class ConstantValueObj(object):
+    """
+    Constant object which return the same value each time an attribute is asked.
+    It is used to avoid discrepancies between objects and strings.
+    """
+    def __init__(self, value="undef"):
+        self.value = value
+
+    def __getattr__(self, item):
+        return self.value
+
+    def __str__(self):
+        return str(self.value)
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __copy__(self):
+        return ConstantValueObj(self.value)
+
+    def __eq__(self, other):
+        return str(self) == str(other)
+
+    def __gt__(self, other):
+        return str(self) > str(other)
+
+    def __lt__(self, other):
+        return str(self) < str(other)
+
+    def __deepcopy__(self, memodict={}):
+        return self.__copy__()
+
+    def __len__(self):
+        return len(str(self))

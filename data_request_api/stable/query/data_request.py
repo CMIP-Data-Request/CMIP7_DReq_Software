@@ -16,42 +16,9 @@ from data_request_api.stable.utilities.logger import get_logger, change_log_file
 from data_request_api.stable.content.dump_transformation import transform_content
 from data_request_api.stable.utilities.tools import read_json_file, write_csv_output_file_content
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
-    to_singular
+    to_singular, ConstantValueObj
 
-version = "1.0.1"
-
-
-class ConstantValueObj(object):
-    """
-    Constant object which return the same value each time an attribute is asked.
-    It is used to avoid discrepancies between objects and strings.
-    """
-    def __init__(self, value="undef"):
-        self.value = value
-
-    def __getattr__(self, item):
-        return str(self)
-
-    def __str__(self):
-        return self.value
-
-    def __hash__(self):
-        return hash(self.value)
-
-    def __copy__(self):
-        return ConstantValueObj(self.value)
-
-    def __eq__(self, other):
-        return str(self) == str(other)
-
-    def __gt__(self, other):
-        return str(self) > str(other)
-
-    def __lt__(self, other):
-        return str(self) < str(other)
-
-    def __deepcopy__(self, memodict={}):
-        return self.__copy__()
+from data_request_api import version
 
 
 class DRObjects(object):
@@ -831,7 +798,9 @@ class DataRequest(object):
         if key in ["id", ]:
             value = build_link_from_id(value)
         rep = self.VS.get_element(element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
-        if rep not in [default, ]:
+        if rep in [value, ]:
+            rep = default
+        elif rep not in [default, ]:
             structure = self.structure.get(element_type, dict()).get(rep["id"], dict())
             if element_type in ["opportunities", ]:
                 rep = Opportunity.from_input(dr=self, **rep, **structure)
@@ -845,7 +814,7 @@ class DataRequest(object):
                 rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=element_type, elements=rep)
         return rep
 
-    def find_element_from_vs(self, element_type, value, default=False):
+    def find_element_from_vs(self, element_type, value,key="name", default=False):
         """
         Find an element of a specific type and specified by a value from vocabulary server.
         Update the content and mapping list not to have to ask the vocabulary server again for it.
@@ -854,16 +823,21 @@ class DataRequest(object):
         :param default: default value to be returned if no value found
         :return: element corresponding to the specified value of a given type if found, else the default value
         """
-        rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id", default=None)
+        if key in ["id", ]:
+            init_default = default
+        else:
+            init_default = None
+        rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id",
+                                                       default=init_default)
         if rep is None:
-            rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="name",
+            rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=key,
                                                            default=default)
         if rep not in [default, ]:
             self.content[element_type][rep.id] = rep
             self.mapping[element_type][rep.name] = rep
         return rep
 
-    def find_element(self, element_type, value, default=False):
+    def find_element(self, element_type, value, default=False, key="name"):
         """
         Find an element of a specific type and specified by a value from mapping/content if existing,
          else from vocabulary server.
@@ -878,7 +852,7 @@ class DataRequest(object):
         elif check_val in self.mapping[element_type]:
             return self.mapping[element_type][check_val]
         else:
-            return self.find_element_from_vs(element_type=element_type, value=value, default=default)
+            return self.find_element_from_vs(element_type=element_type, value=value, default=default, key=key)
 
     def get_elements_per_kind(self, element_type):
         """
@@ -949,7 +923,7 @@ class DataRequest(object):
                 if not isinstance(values, list):
                     values = [values, ]
                 for val in values:
-                    if isinstance(val, str):
+                    if not isinstance(val, DRObjects):
                         new_val = self.find_element(element_type=req, value=val, default=None)
                     else:
                         new_val = val
@@ -1112,30 +1086,38 @@ class DataRequest(object):
         sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
         columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
         columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
-        columns_title = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
+        columns_title_list = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
+        columns_title_dict = {elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
         table_title = f"{lines_data} {title_line} / {columns_data} {title_column}"
-        lines_title = {elt.id: elt.__getattr__(title_line) for elt in sorted_filtered_data}
+        lines_title_list = [elt.__getattr__(title_line) for elt in sorted_filtered_data]
+        lines_title_dict = {elt.id: title for (elt, title) in zip(sorted_filtered_data, lines_title_list)}
 
         nb_lines = len(sorted_filtered_data)
         logger.debug(f"{nb_lines} elements found for {lines_data}")
-        logger.debug(f"{len(columns_title)} found elements for {columns_data}")
+        logger.debug(f"{len(columns_title_list)} found elements for {columns_data}")
 
         logger.debug("Generate summary")
         content = defaultdict(lambda: dict())
-        DR_type = columns_datasets[0].DR_type
-        for (column_data, column_title) in zip(columns_datasets, columns_title):
-            filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
-                                                                    requests={DR_type: column_data}, operation="all")
-            for line in filter_line_datasets:
-                content[lines_title[line.id]][column_title] = "x"
+        if len(columns_title_list) > len(lines_title_list):
+            DR_type = columns_datasets[0].DR_type
+            for (column_data, column_title) in zip(columns_datasets, columns_title_list):
+                filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
+                                                                        requests={DR_type: column_data}, operation="all")
+                for line in filter_line_datasets:
+                    content[lines_title_dict[line.id]][column_title] = "x"
+        else:
+            DR_type = sorted_filtered_data[0].DR_type
+            for (line_data, line_title) in zip(sorted_filtered_data, lines_title_list):
+                filtered_columns = self.filter_elements_per_request(elements_to_filter=columns_datasets,
+                                                                    requests={DR_type: line_data}, operation="all")
+                content[line_title] = {columns_title_dict[elt.id]: "x" for elt in filtered_columns}
 
         logger.debug("Format summary")
         rep = list()
-        rep.append([table_title, ] + columns_title)
-        for line_data in sorted_filtered_data:
-            line_data_title = lines_title[line_data.id]
+        rep.append([table_title, ] + columns_title_list)
+        for line_data_title in lines_title_list:
             rep.append([line_data_title, ] +
-                       [content[line_data_title].get(column_title, "") for column_title in columns_title])
+                       [content[line_data_title].get(column_title, "") for column_title in columns_title_list])
 
         logger.debug("Write summary")
         write_csv_output_file_content(output_file, rep, **kwargs)

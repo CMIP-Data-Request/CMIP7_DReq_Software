@@ -32,7 +32,7 @@ class TestLinks(unittest.TestCase):
 
 class TestChangeNumber(unittest.TestCase):
     def setUp(self):
-        self.vs_file = "tests/test_datasets/one_base_VS_output.json"
+        self.vs_file = filepath("one_base_VS_output.json")
 
     def test_to_singular(self):
         vs = VocabularyServer.from_input(self.vs_file)
