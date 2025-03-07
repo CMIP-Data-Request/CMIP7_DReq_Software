@@ -73,3 +73,6 @@ output = "tests.coverage.lcov"
 
 [tool.setuptools_scm]
 write_to = "data_request_api/version.py"
+
+[tools.setuptools.package-data]
+'src' = ['data_request_api/tests/test_datasets/*.json']
