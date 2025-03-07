@@ -12,6 +12,7 @@ import unittest
 from data_request_api.stable.utilities.tools import read_json_input_file_content
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
     to_plural, to_singular
+from data_request_api.tests import filepath
 
 
 class TestLinks(unittest.TestCase):
@@ -48,7 +49,7 @@ class TestChangeNumber(unittest.TestCase):
 
 class TestVocabularyServer(unittest.TestCase):
     def setUp(self):
-        self.vs_file = "tests/test_datasets/one_base_VS_output.json"
+        self.vs_file = filepath("one_base_VS_output.json")
         self.vs_content = read_json_input_file_content(self.vs_file)
         self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
         self.vs_content_infinite_loop["cell_methods"]["CellMethods::am-tm"]["structure_title"] = "link::default_483"
