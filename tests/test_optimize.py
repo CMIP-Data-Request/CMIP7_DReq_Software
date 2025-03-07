@@ -31,7 +31,7 @@ def add_profiling(func):
             pr.disable()
             stdout = sys.stdout
             test_name = str(self)
-            test_name = re.sub("(?P<name>.*) .*", "\g<name>", test_name)
+            test_name = re.sub(r"(?P<name>.*) .*", r"\g<name>", test_name)
             file_name = f"tests/profiling_{test_name}.txt"
             if os.path.isfile(file_name):
                 os.remove(file_name)

@@ -127,7 +127,8 @@ def transform_content_three_bases(content):
         for id in sorted(list(old_variables_ids)):
             content_str = re.sub(f'"{id}"', f'"{new_variables_ids[old_variables_ids[id]]}"', content_str)
         for id in sorted(list(old_physical_parameters_ids)):
-            content_str = re.sub(f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"', content_str)
+            content_str = re.sub(f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"',
+                                 content_str)
         new_content = json.loads(content_str)
         # Return the content
         return {"Data Request": new_content}
@@ -361,7 +362,7 @@ def transform_content_one_base(content):
                                ("variable_group", "variable_groups"), ("structure", "structure_title"),
                                ("time_slice", "time_subsets"), ('time_subset', 'time_subsets')]:
             if key in content:
-                    content[new_key] = content.pop(key)
+                content[new_key] = content.pop(key)
         for pattern in [".*rank.*", ]:
             elts = [elt for elt in list(content) if re.compile(pattern).match(elt)]
             for elt in elts:
@@ -391,7 +392,8 @@ def transform_content_one_base(content):
             "opportunities": [".*data_volume_estimate", "opportunity_id", "originally_requested_variable_groups"],
             "opportunity/variable_group_comments": ["experiment_groups", "opportunities", "theme", "variable_groups"],
             "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
-            "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names", "physical_parameters"],
+            "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names",
+                                            "physical_parameters"],
             "priority_level": ["variable_group", ],
             "spatial_shape": [r"structure.*", r".*variables.*", "hor.*", "vert.*"],
             "structure_title": [r"variables.*", "brand_.*", "calculation.*"],
@@ -409,7 +411,8 @@ def transform_content_one_base(content):
             "cell_methods": [("comments", "variable_comments"), ("label", "name")],
             "cf_standard_names": [("comments", "physical_parameter_comments")],
             "cmip7_frequency": [("cmip6_frequency.*", "cmip6_frequency")],
-            "coordinates_and_dimensions": [("requested_bounds.+", "requested_bounds"), ("comments", "variable_comments")],
+            "coordinates_and_dimensions": [("requested_bounds.+", "requested_bounds"),
+                                           ("comments", "variable_comments")],
             "data_request_themes": [("comments", "opportunity/variable_group_comments"), ("uid.+", "uid")],
             "experiments": [("experiment", "name")],
             "experiment_groups": [("comments", "opportunity/variable_group_comments")],
