@@ -680,6 +680,19 @@
         }
     },
     "coordinates_and_dimensions": {
+        "dim:alevel": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "cf_standard_name": "x",
+            "description": "Generic atmospheric model vertical coordinate (nondimensional or dimensional) [use CF standard name apporpriate for model vertical coordinate, e.g. model_level_number or atmosphere_sigma_coordinate]",
+            "grid_class": "options",
+            "name": "alevel",
+            "output_name": "lev",
+            "positive_direction": "up",
+            "title": "Atmospheric Model Level",
+            "type": "double"
+        },
         "dim:depth0m": {
             "axis_flag": "Z",
             "cf_category": "coordinate",
@@ -760,6 +773,82 @@
             "title": "Longitude",
             "type": "double",
             "units": "degrees_east"
+        },
+        "dim:olevel": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "description": "generic ocean model vertical coordinate (nondimensional or dimensional)",
+            "grid_class": "options",
+            "name": "olevel",
+            "output_name": "lev",
+            "positive_direction": "down",
+            "title": "Ocean Model Levels",
+            "type": "double"
+        },
+        "dim:plev19": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "cf_standard_name": "air_pressure",
+            "description": "There are 19  requested levels. If the upper levels are above the model top they should be omitted.",
+            "grid_class": "fixedScalar",
+            "name": "plev19",
+            "output_name": "plev",
+            "positive_direction": "down",
+            "requested_values": "100000. 92500. 85000. 70000. 60000. 50000. 40000. 30000. 25000. 20000. 15000. 10000. 7000. 5000. 3000. 2000. 1000. 500. 100.",
+            "stored_direction": "decreasing",
+            "title": "Pressure Levels (19)",
+            "tolerance": 1,
+            "type": "double",
+            "units": "Pa"
+        },
+        "dim:plev3": {
+            "axis_flag": "Z",
+            "cf_category": "dimension",
+            "cf_standard_name": "air_pressure",
+            "grid_class": "fixed",
+            "name": "plev3",
+            "output_name": "plev",
+            "positive_direction": "down",
+            "requested_values": "85000. 50000. 25000.",
+            "stored_direction": "decreasing",
+            "title": "Pressure Levels (3)",
+            "tolerance": 1,
+            "type": "double",
+            "units": "Pa"
+        },
+        "dim:plev8": {
+            "axis_flag": "Z",
+            "cf_category": "dimension",
+            "cf_standard_name": "air_pressure",
+            "grid_class": "fixed",
+            "name": "plev8",
+            "output_name": "plev",
+            "positive_direction": "down",
+            "requested_values": "100000. 85000. 70000. 50000. 25000. 10000. 5000. 1000.",
+            "stored_direction": "decreasing",
+            "title": "Pressure Levels (8)",
+            "tolerance": 1,
+            "type": "double",
+            "units": "Pa"
+        },
+        "dim:sdepth": {
+            "axis_flag": "Z",
+            "bounds_flag": true,
+            "cf_category": "dimension",
+            "cf_standard_name": "depth",
+            "description": "Soil layers (depth). If soil layer thicknesses vary from one location to another, interpolate to a standard set of depths.  Ideally, the interpolation should preserve the vertical integral where appropriate (e.g. for layer mass content).",
+            "grid_class": "model",
+            "maximum_valid_value": 200,
+            "minimum_valid_value": 0,
+            "name": "sdepth",
+            "output_name": "depth",
+            "positive_direction": "down",
+            "stored_direction": "increasing",
+            "title": "depth",
+            "type": "double",
+            "units": "m"
         },
         "dim:sdepth1": {
             "axis_flag": "Z",
@@ -1899,95 +1988,80 @@
         }
     },
     "mips": {
-        "default_305": {
-            "mip_long_name": "Land-Use Model Intercomparison Project",
-            "mip_short_name": "LUMIP",
-            "mip_website": "https://www.cesm.ucar.edu/projects/cmip6/lumip",
-            "name": "undef"
-        },
         "default_306": {
-            "mip_long_name": "Ocean Model Intercomparison Project",
-            "mip_short_name": "OMIP",
-            "mip_website": "https://OceanMIP.github.io",
-            "name": "undef"
+            "mip_long_name": "Coupled Climate Carbon Cycle MIP",
+            "mip_website": "https://c4mip.net/home",
+            "name": "C4MIP"
         },
-        "default_307": {
-            "mip_long_name": "High Resolution Model Intercomparison Project",
-            "mip_short_name": "HighResMIP",
-            "mip_website": "https://www.highresmip.org",
-            "name": "undef"
+        "default_308": {
+            "mip_long_name": "Coupled Model Intercomparison Project",
+            "mip_website": "https://www.wcrp-cmip.org/",
+            "name": "CMIP"
         },
         "default_309": {
-            "mip_long_name": "Scenario Model Intercomparison Project",
-            "mip_short_name": "ScenarioMIP",
-            "mip_website": "https://wcrp-cmip.org/mips/scenariomip/",
-            "name": "undef"
+            "mip_long_name": "Coordinated Regional Climate Downscaling Experiment",
+            "mip_website": "https://cordex.org",
+            "name": "CORDEX"
+        },
+        "default_310": {
+            "mip_long_name": "Detection and Attribution Model Intercomparison Project",
+            "mip_website": "https://wcrp-cmip.org/damip/",
+            "name": "DAMIP"
         },
         "default_311": {
-            "mip_long_name": "Coordinated Regional Climate Downscaling Experiment",
-            "mip_short_name": "CORDEX",
-            "mip_website": "https://cordex.org",
-            "name": "undef"
+            "mip_long_name": "Decadal Climate Prediction Project",
+            "mip_website": "https://www.wcrp-climate.org/dcp-overview",
+            "name": "DCPP"
         },
         "default_312": {
-            "mip_long_name": "Geoengineering Model Intercomparison Project",
-            "mip_short_name": "GeoMIP",
-            "mip_website": "http://climate.envsci.rutgers.edu/GeoMIP/",
-            "name": "undef"
+            "mip_long_name": "Flux-Anomaly-Forced Model Intercomparison Project",
+            "mip_website": "http://www.fafmip.org",
+            "name": "FAFMIP"
         },
         "default_313": {
-            "mip_long_name": "Coupled Climate Carbon Cycle MIP",
-            "mip_short_name": "C4MIP",
-            "mip_website": "https://c4mip.net/home",
-            "name": "undef"
+            "mip_long_name": "Geoengineering Model Intercomparison Project",
+            "mip_website": "http://climate.envsci.rutgers.edu/GeoMIP/",
+            "name": "GeoMIP"
         },
         "default_314": {
-            "mip_long_name": "Sea Ice Model Intercomparison Project",
-            "mip_short_name": "SIMIP",
-            "mip_website": "https://climate-cryosphere.org/simip-about/",
-            "name": "undef"
+            "mip_long_name": "High Resolution Model Intercomparison Project",
+            "mip_website": "https://www.highresmip.org",
+            "name": "HighResMIP"
         },
         "default_315": {
-            "mip_long_name": "Detection and Attribution Model Intercomparison Project",
-            "mip_short_name": "DAMIP",
-            "mip_website": "https://wcrp-cmip.org/damip/",
-            "name": "undef"
+            "mip_long_name": "Ice Sheet Model Intercomparison Project for CMIP",
+            "mip_website": "https://theghub.org/groups/ismip6/wiki",
+            "name": "ISMIP7"
         },
         "default_316": {
-            "mip_long_name": "Flux-Anomaly-Forced Model Intercomparison Project",
-            "mip_short_name": "FAFMIP",
-            "mip_website": "http://www.fafmip.org",
-            "name": "undef"
+            "mip_long_name": "Land-Use Model Intercomparison Project",
+            "mip_website": "https://www.cesm.ucar.edu/projects/cmip6/lumip",
+            "name": "LUMIP"
         },
         "default_317": {
-            "mip_long_name": "Coupled Model Intercomparison Project",
-            "mip_short_name": "CMIP",
-            "mip_website": "https://www.wcrp-cmip.org/",
-            "name": "undef"
+            "mip_long_name": "Ocean Model Intercomparison Project",
+            "mip_website": "https://OceanMIP.github.io",
+            "name": "OMIP"
         },
         "default_319": {
-            "mip_long_name": "Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project",
-            "mip_short_name": "SOFIAMIP",
-            "mip_website": "https://sofiamip.github.io/",
-            "name": "undef"
+            "mip_long_name": "Sea Ice Model Intercomparison Project",
+            "mip_website": "https://climate-cryosphere.org/simip-about/",
+            "name": "SIMIP"
         },
         "default_320": {
-            "mip_long_name": "Tipping Point Modelling Intercomparison Project",
-            "mip_short_name": "TIPMIP",
-            "mip_website": "https://www.tipmip.org",
-            "name": "undef"
+            "mip_long_name": "Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project",
+            "mip_website": "https://sofiamip.github.io/",
+            "name": "SOFIAMIP"
         },
         "default_321": {
-            "mip_long_name": "Decadal Climate Prediction Project",
-            "mip_short_name": "DCPP",
-            "mip_website": "https://www.wcrp-climate.org/dcp-overview",
-            "name": "undef"
+            "mip_long_name": "Scenario Model Intercomparison Project",
+            "mip_website": "https://wcrp-cmip.org/mips/scenariomip/",
+            "name": "ScenarioMIP"
         },
         "default_322": {
-            "mip_long_name": "Ice Sheet Model Intercomparison Project for CMIP",
-            "mip_short_name": "ISMIP7",
-            "mip_website": "https://theghub.org/groups/ismip6/wiki",
-            "name": "undef"
+            "mip_long_name": "Tipping Point Modelling Intercomparison Project",
+            "mip_website": "https://www.tipmip.org",
+            "name": "TIPMIP"
         }
     },
     "opportunities": {
@@ -3026,6 +3100,10 @@
     },
     "spatial_shape": {
         "a656047a-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude"
+            ],
             "level_flag": "True",
             "name": "XY-na",
             "title": "Global field (single level)"
@@ -3036,31 +3114,61 @@
             "title": "Global mean or constant"
         },
         "a65615fa-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude",
+                "link::dim:plev3"
+            ],
             "level_flag": "True",
             "name": "XY-P3",
             "title": "Global field (3 pressure levels)"
         },
         "a6562a9a-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude",
+                "link::dim:plev19"
+            ],
             "level_flag": "True",
             "name": "XY-P19",
             "title": "Global field (19 pressure levels)"
         },
         "a6562c2a-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude",
+                "link::dim:olevel"
+            ],
             "level_flag": "False",
             "name": "XY-O",
             "title": "Global ocean field on model levels"
         },
         "a6563724-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude",
+                "link::dim:alevel"
+            ],
             "level_flag": "False",
             "name": "XY-A",
             "title": "Global field on model atmosphere levels"
         },
         "a6563a44-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude",
+                "link::dim:plev8"
+            ],
             "level_flag": "True",
             "name": "XY-P8",
             "title": "Global field (8 pressure levels)"
         },
         "a6563bca-8883-11e5-b571-ac72891c3257": {
+            "dimensions": [
+                "link::dim:longitude",
+                "link::dim:latitude",
+                "link::dim:sdepth"
+            ],
             "level_flag": "False",
             "name": "XY-S",
             "title": "Global field on soil levels"
@@ -3677,14 +3785,14 @@
             "title": "Temporal mean"
         }
     },
-    "time_subset": {
+    "time_subsets": {
         "527f5cac-8c97-11ef-944e-41a8eb05f654": {
-                "end": 2014,
-                "name": "hist20",
-                "nyears": 20,
-                "start": 1995,
-                "title": "1995-2014",
-                "type": "simpleRange"
+            "end": 2014,
+            "name": "hist20",
+            "nyears": 20,
+            "start": 1995,
+            "title": "1995-2014",
+            "type": "simpleRange"
         }
     },
     "variable_comments": {
