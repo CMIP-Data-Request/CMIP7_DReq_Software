@@ -83,7 +83,7 @@ class TestDRObjects(unittest.TestCase):
         obj3 = self.dr.find_element("cmip7_frequency", "link::default_105")
         self.assertTrue(isinstance(obj2, DRObjects))
         self.assertTrue(isinstance(obj2.name, ConstantValueObj))
-        self.assertTrue(isinstance(obj2.name, ConstantValueObj))
+        self.assertTrue(isinstance(obj3.name, ConstantValueObj))
         my_dict[obj2.id] = obj2
         my_dict[obj2.name] = obj2
         my_dict[obj3.id] = obj3

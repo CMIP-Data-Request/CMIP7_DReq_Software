@@ -75,8 +75,9 @@ def get_information_from_data_request(dreq_version, dreq_export_version, use_con
         for var in elt.get_variables():
             realm = set([elt.name for elt in var.modelling_realm])
             for realm in realm:
-                rep[realm][var.physical_parameter.name].add("//".join([var.cmip7_frequency.name, var.spatial_shape.name,
-                                                                       var.temporal_shape.name]))
+                rep[realm][var.physical_parameter.name].add("//".join([str(var.cmip7_frequency.name),
+                                                                       str(var.spatial_shape.name),
+                                                                       str(var.temporal_shape.name)]))
     pprint.pprint(rep)
 
     print(DR.find_experiments_per_theme("Atmosphere"))
