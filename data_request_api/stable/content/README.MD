@@ -62,7 +62,7 @@ These are:
 -----------------
 
 ```python
-import data_request_api.stable.content.dreq_api.dreq_content as dc
+import data_request_api.stable.content.dreq_content as dc
 
 # Get the list of available versions
 versions = dc.get_versions()
