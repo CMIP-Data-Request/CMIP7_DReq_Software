@@ -145,7 +145,7 @@ def get_cached(**kwargs):
     return local_versions
 
 
-def _send_api_request(api_url, page_url, target="tags"):
+def _send_api_request(api_url, page_url="", target="tags"):
     """
     Send a request to the GitHub API for a list of tags or branches.
 
@@ -153,8 +153,8 @@ def _send_api_request(api_url, page_url, target="tags"):
     ----------
     api_url : str
         The base URL to send the request to.
-    page_url : str
-        The page URL to send the request to.
+    page_url : str, optional
+        The page URL to send the request to if the GitHub API request to api_url fails.
     target : str, optional
         The target to send the request for, either 'tags' or 'branches' (default is 'tags').
 
@@ -166,7 +166,7 @@ def _send_api_request(api_url, page_url, target="tags"):
     Raises
     ------
     Warning
-        If the GitHub API is not accessible.
+        If the GitHub API is not accessible and page_url is not set.
     Warning
         If a HTTP error occurs when retrieving the list of tags or branches.
     Warning
@@ -189,10 +189,15 @@ def _send_api_request(api_url, page_url, target="tags"):
 
     except requests.exceptions.HTTPError as http_err:
         if response.status_code in _fallback_status_codes:
-            warnings.warn(
-                f"GitHub API not accessible, falling back to parsing the public GitHub page: {http_err}"
-            )
-            results = _send_html_request(page_url, target)
+            if page_url:
+                warnings.warn(
+                    f"GitHub API not accessible, falling back to parsing the public GitHub page: {http_err}"
+                )
+                results = _send_html_request(page_url, target)
+            else:
+                warnings.warn(
+                    f"A HTTP error occurred when retrieving '{target}' via the GitHub API ({response.status_code}): {http_err}"
+                )
         else:
             warnings.warn(
                 f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}"

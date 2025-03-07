@@ -5,13 +5,15 @@ import tempfile
 
 import pytest
 
-from data_request_api.stable.content import dreq_content as dc
 import data_request_api.stable.utilities.config
+from data_request_api.stable.content import dreq_content as dc
 from data_request_api.stable.utilities.logger import change_log_file, change_log_level
 
 # Set up config file
 temp_config_file = tempfile.NamedTemporaryFile(delete=False, suffix=".yaml")
-data_request_api.stable.utilities.config.CONFIG_FILE = pathlib.Path(temp_config_file.name) 
+data_request_api.stable.utilities.config.CONFIG_FILE = pathlib.Path(
+    temp_config_file.name
+)
 
 # Configure logger for testing
 change_log_file(default=True)
@@ -98,13 +100,24 @@ def test_retrieve_with_invalid_version(tmp_path):
         dc.retrieve(" invalid-version ")
 
 
-def test_api_and_html_request():
+def test_api_and_html_request(recwarn):
     "Test the _send_api_request and _send_html_request functions."
     tags1 = set(dc._send_api_request(dc.REPO_API_URL, "", "tags"))
+    for warning in recwarn.list:
+        if str(warning.message).startswith(
+            "A HTTP error occurred when retrieving 'tags' via the GitHub API "
+        ):
+            pytest.xfail("GitHub API not accessible.")
     tags2 = set(dc._send_html_request(dc.REPO_PAGE_URL, "tags"))
+    recwarn.clear()
     assert tags1 == tags2
 
     branches1 = set(dc._send_api_request(dc.REPO_API_URL, "", "branches"))
+    for warning in recwarn.list:
+        if str(warning.message).startswith(
+            "A HTTP error occurred when retrieving 'branches' via the GitHub API "
+        ):
+            pytest.xfail("GitHub API not accessible.")
     branches2 = set(dc._send_html_request(dc.REPO_PAGE_URL, "branches"))
     assert branches1 == branches2
 
