@@ -327,7 +327,7 @@ class VariablesGroup(DRObjects):
         elif request_type in ["max_priority_level", ]:
             priority = self.dr.find_element("priority_level", self.get_priority_level().id)
             req_priority = self.dr.find_element("priority_level", request_value.id)
-            return True, priority.value < req_priority.value
+            return True, priority.value <= req_priority.value
         elif request_type in ["priority_level", ]:
             _, priority = is_link_id_or_value(self.get_priority_level().id)
             _, req_priority = is_link_id_or_value(request_value.id)

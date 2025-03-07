@@ -205,7 +205,7 @@ class TestExperimentsGroup(unittest.TestCase):
 class TestVariablesGroup(unittest.TestCase):
     def setUp(self):
         self.dr = DataRequest.from_separated_inputs(DR_input=filepath("one_base_DR_output.json"),
-                                                    VS_input=filepath"one_base_VS_output.json"))
+                                                    VS_input=filepath("one_base_VS_output.json"))
 
     def test_init(self):
         with self.assertRaises(TypeError):
