@@ -13,6 +13,7 @@ import pooch
 import requests
 from bs4 import BeautifulSoup
 
+import data_request_api.stable.utilities.config as dreqcfg
 from data_request_api.stable.content.mapping_table import mapping_table
 from data_request_api.stable.utilities.decorators import append_kwargs_from_config
 from data_request_api.stable.utilities.logger import get_logger  # noqa
@@ -58,7 +59,10 @@ _version_pattern = re.compile(
 )
 
 # Directory where to find/store the data request JSON files
-_dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
+try:
+    _dreq_res = dreqcfg.load_config()["cache_dir"]
+except KeyError:
+    _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
 
 _dreq_content_loaded = {}
 
@@ -115,33 +119,21 @@ def get_cached(**kwargs):
     if os.path.isdir(_dreq_res):
         # List all subdirectories in the dreq_res directory that include both dreq.json files
         #   - the subdirectory name is the tag name
-        json_export = False
         if "export" in kwargs:
             if kwargs["export"] == "raw":
                 json_export = _json_raw
             elif kwargs["export"] == "release":
                 json_export = _json_release
             else:
-                warnings.warn(f"Unknown export type '{kwargs['export']}'.")
-        if json_export:
-            local_versions = [
-                name
-                for name in os.listdir(_dreq_res)
-                if os.path.isfile(os.path.join(_dreq_res, name, json_export))
-            ]
-        else:
-            local_versions = [
-                name
-                for name in os.listdir(_dreq_res)
-                if (
-                    os.path.isfile(os.path.join(_dreq_res, name, _json_raw))
-                    and not _version_pattern.match(name)
+                warnings.warn(
+                    f"Unknown export type '{kwargs['export']}'. Defaulting to 'release'."
                 )
-                or (
-                    os.path.isfile(os.path.join(_dreq_res, name, _json_release))
-                    and _version_pattern.match(name)
-                )
-            ]
+                json_export = _json_release
+        local_versions = [
+            name
+            for name in os.listdir(_dreq_res)
+            if os.path.isfile(os.path.join(_dreq_res, name, json_export))
+        ]
     return local_versions
 
 
@@ -594,20 +586,16 @@ def delete(version="all", keep_latest=False, **kwargs):
         return
 
     # Compile file paths
-    cached_files = []
-    cached_files_raw = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
-    cached_files_release = [
-        os.path.join(_dreq_res, v, _json_release) for v in local_versions
-    ]
-    if "export" in kwargs:
-        if kwargs["export"] == "raw":
-            cached_files = cached_files_raw
-        elif kwargs["export"] == "release":
-            cached_files = cached_files_release
-        else:
-            raise ValueError(f"Unknown export type '{kwargs['export']}'.")
+    if kwargs["export"] == "raw":
+        cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
+    elif kwargs["export"] == "release":
+        cached_files = [
+            os.path.join(_dreq_res, v, _json_release) for v in local_versions
+        ]
     else:
-        cached_files = cached_files_raw + cached_files_release
+        # Since files are to be deleted, not defaulting to "release" but rather
+        #  raising a ValueError
+        raise ValueError(f"Unknown export type '{kwargs['export']}'.")
 
     # Delete files
     for f in cached_files:
@@ -660,4 +648,4 @@ def load(version="latest_stable", **kwargs):
             else:
                 return json.load(f)
         else:
-            return json.load(f)  # ce.map_data(json.load(f), mapping_table)
+            return json.load(f)
