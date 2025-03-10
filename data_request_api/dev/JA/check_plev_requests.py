@@ -11,7 +11,7 @@ import os
 import json
 
 
-import data_request_api.stable.content.dreq_api.dreq_content as dc
+import data_request_api.stable.content.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 from data_request_api.stable.query import dreq_classes
 
