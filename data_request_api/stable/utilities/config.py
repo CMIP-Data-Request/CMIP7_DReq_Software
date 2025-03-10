@@ -74,16 +74,18 @@ def load_config() -> dict:
             with open(CONFIG_FILE) as f:
                 CONFIG = yaml.safe_load(f)
         except FileNotFoundError:
-            # Create the config file if it doesn't exist
-            with open(CONFIG_FILE, "w") as f:
-                yaml.dump(DEFAULT_CONFIG, f)
-            CONFIG = DEFAULT_CONFIG.copy()
+            pass
         except yaml.YAMLError as e:
             print(f"Error parsing config file: {e}")
             raise
 
-        # Read configuration must be a dict
-        if not isinstance(CONFIG, dict):
+        # Read configuration must be a dict - if no or an empty file is read,
+        #  assign DEFAULT_CONFIG
+        if CONFIG == "" or CONFIG is None or CONFIG == {}:
+            with open(CONFIG_FILE, "w") as f:
+                yaml.dump(DEFAULT_CONFIG, f)
+            CONFIG = DEFAULT_CONFIG.copy()
+        elif not isinstance(CONFIG, dict):
             raise TypeError(f"Config file ('{CONFIG_FILE}') must contain a dictionary")
 
         # Sanity test for allowed types and values

@@ -12,7 +12,6 @@ import data_request_api.stable.utilities.config as dreqcfg
 def temp_config_file(tmp_path_factory):
     temp_dir = tmp_path_factory.mktemp("data")
     config_file = temp_dir / ".CMIP7_data_request_api_config"
-    # config_file.unlink(missing_ok=True)
     try:
         yield config_file
     finally:
