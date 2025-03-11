@@ -42,7 +42,7 @@ export_dreq_lists_json = "data_request_api.command_line.export_dreq_lists_json:m
 CMIP7_data_request_api_config = "data_request_api.command_line.config:main"
 
 [tool.pytest.ini_options]
-cache_dir = "tests/.pytest_cache"
+cache_dir = "./.pytest_cache"
 
 [tool.coverage.run]
 branch = true
