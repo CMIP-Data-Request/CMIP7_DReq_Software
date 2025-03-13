@@ -1,0 +1,50 @@
+name: Update Content
+
+on:
+  push:
+    branches:
+      - main
+      - docs
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      #  Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # Adjust Python version if needed
+
+      # Install dependencies (pdoc and autopep8)
+      - name: Install dependencies
+        run: |
+          pip install pdoc autopep8
+
+      # Step 4: Run your two commands
+      - name: Pep8ify
+        run: |
+          autopep8 data_request_api --recursive --in-place --pep8-passes 2000 --verbose
+
+      - name: Tech documentation generation
+        run: |
+          pip install -e . 
+          pdoc --force --html data_request_api/stable  --output-dir docs/
+
+      # Step 5: Commit and push changes (if any)
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'cmip-ipo'
+          git config --global user.email 'cmip-ipo@users.noreply.github.com'
+          git add .
+          git diff --staged --quiet || git commit -m "Automation: Updating formatting and documentation."
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

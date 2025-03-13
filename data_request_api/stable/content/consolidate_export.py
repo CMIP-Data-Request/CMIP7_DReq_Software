@@ -81,7 +81,8 @@ def _map_record_id(record, records, keys):
         return matches[0]
     elif len(matches) == 0:
         if len(matches_tmp) == 0:
-            raise KeyError(f"No matches when consolidating '{record}' via '{keys}'.")
+            raise KeyError(
+                f"No matches when consolidating '{record}' via '{keys}'.")
     else:
         raise KeyError(f"Multiple matches when consolidating '{record}'.")
 
@@ -92,15 +93,18 @@ def _map_attribute(attr, records, key):
     """
     global filtered_records
     # For the specified "key", check if there is an entry in "records" that matches with "attr"
-    matches_tmp = [r for r, v in records.items() if key in v and v[key] == attr]
+    matches_tmp = [
+        r for r, v in records.items() if key in v and v[key] == attr]
     matches = [m for m in matches_tmp if m not in filtered_records]
     if len(matches) == 1:
         return matches[0]
     elif len(matches) == 0:
         if len(matches_tmp) == 0:
-            raise KeyError(f"No matches when consolidating '{attr}' via '{key}'.")
+            raise KeyError(
+                f"No matches when consolidating '{attr}' via '{key}'.")
     else:
-        raise KeyError(f"Multiple matches when consolidating '{attr}' via '{key}'.")
+        raise KeyError(
+            f"Multiple matches when consolidating '{attr}' via '{key}'.")
 
 
 def map_data(data, mapping_table):
@@ -192,7 +196,8 @@ def map_data(data, mapping_table):
                 and mapinfo["source_table"] in data[mapinfo["source_base"]]
             ):
                 # Copy the selected data to the one-base structure
-                logger.debug(f"Mapping '{mapinfo['source_base']}' -> '{table}'")
+                logger.debug(
+                    f"Mapping '{mapinfo['source_base']}' -> '{table}'")
                 mapped_data["Data Request"][table] = {
                     **data[mapinfo["source_base"]][mapinfo["source_table"]],
                     "records": {
@@ -327,7 +332,8 @@ def map_data(data, mapping_table):
                 mapped_data[tto] = mapped_data.pop(tfrom)
         return {"Data Request": mapped_data}
     else:
-        raise ValueError("The loaded Data Request has an unexpected data structure.")
+        raise ValueError(
+            "The loaded Data Request has an unexpected data structure.")
 
 
 def transform_content(data):
