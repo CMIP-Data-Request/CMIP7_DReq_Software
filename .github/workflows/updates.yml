@@ -38,13 +38,24 @@ jobs:
           pip install -e . 
           pdoc --html data_request_api/stable  --output-dir docs/ --force
 
-      # Step 5: Commit and push changes (if any)
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'cmip-ipo'
-          git config --global user.email 'cmip-ipo@users.noreply.github.com'
-          git add .
-          git diff --staged --quiet || git commit -m "Automation: Updating formatting and documentation."
-          git push
+      # # Step 5: Commit and push changes (if any)
+      # - name: Commit and push changes
+      #   run: |
+      #     git config --global user.name 'cmip-ipo'
+      #     git config --global user.email 'cmip-ipo@users.noreply.github.com'
+      #     git add .
+      #     git diff --staged --quiet || git commit -m "Automation: Updating formatting and documentation."
+      #     git push
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit All
+        uses: WCRP-CMIP/CMIP-LD/actions/commit-all@main
+        with:
+          message: "Automated Content Update"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Push Changes
+        run: |
+          git push 
