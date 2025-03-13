@@ -1,0 +1,2923 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.5">
+<title>stable.query.data_request API documentation</title>
+<meta name="description" content="Data request.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>stable.query.data_request</code></h1>
+</header>
+<section id="section-intro">
+<p>Data request.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="stable.query.data_request.ConstantValueObj"><code class="flex name class">
+<span>class <span class="ident">ConstantValueObj</span></span>
+<span>(</span><span>value='undef')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConstantValueObj(object):
+    &#34;&#34;&#34;
+    Constant object which return the same value each time an attribute is asked.
+    It is used to avoid discrepancies between objects and strings.
+    &#34;&#34;&#34;
+
+    def __init__(self, value=&#34;undef&#34;):
+        self.value = value
+
+    def __getattr__(self, item):
+        return str(self)
+
+    def __str__(self):
+        return self.value
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __copy__(self):
+        return ConstantValueObj(self.value)
+
+    def __eq__(self, other):
+        return str(self) == str(other)
+
+    def __gt__(self, other):
+        return str(self) &gt; str(other)
+
+    def __lt__(self, other):
+        return str(self) &lt; str(other)
+
+    def __deepcopy__(self, memodict={}):
+        return self.__copy__()</code></pre>
+</details>
+<div class="desc"><p>Constant object which return the same value each time an attribute is asked.
+It is used to avoid discrepancies between objects and strings.</p></div>
+</dd>
+<dt id="stable.query.data_request.DRObjects"><code class="flex name class">
+<span>class <span class="ident">DRObjects</span></span>
+<span>(</span><span>id, dr, DR_type='undef', structure={}, **attributes)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DRObjects(object):
+    &#34;&#34;&#34;
+    Base object to build the ones used within the DR API.
+    Use to define basic information needed.
+    &#34;&#34;&#34;
+
+    def __init__(self, id, dr, DR_type=&#34;undef&#34;, structure=dict(), **attributes):
+        &#34;&#34;&#34;
+        Initialisation of the object.
+        :param str id: id of the object
+        :param DataRequest dr: reference data request object
+        :param str DR_type: type of DR object (for reference in vocabulary server)
+        :param dict structure: if needed, elements linked by structure to the current object
+        :param dict attributes: attributes of the object coming from vocabulary server
+        &#34;&#34;&#34;
+        self.DR_type = DR_type
+        self.attributes = copy.deepcopy(attributes)
+        _, self.attributes[&#34;id&#34;] = is_link_id_or_value(id)
+        self.structure = copy.deepcopy(structure)
+        self.dr = dr
+        self.attributes = self.transform_content(self.attributes, dr)
+        self.structure = self.transform_content(
+            self.structure, dr, force_transform=True)
+
+    @staticmethod
+    def transform_content(input_dict, dr, force_transform=False):
+        &#34;&#34;&#34;
+        Transform the input dict to have only elements which are object (either DRObject -for links- or
+        ConstantValueObj -for strings-).
+        :param dict input_dict: input dictionary to transform
+        :param DataRequest dr: reference Data Request to find elements from VS
+        :param bool force_transform: boolean indicating whether all elements should be considered as linked and
+        transform into DRObject (True) or alternatively to DRObject if link or ConstantValueObj if string.
+        :return dict: transformed dictionary
+        &#34;&#34;&#34;
+        for (key, values) in input_dict.items():
+            if isinstance(values, list):
+                for (i, value) in enumerate(values):
+                    if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
+                        input_dict[key][i] = dr.find_element(key, value)
+                    elif isinstance(value, str):
+                        input_dict[key][i] = ConstantValueObj(value)
+            elif isinstance(values, str) and (force_transform or is_link_id_or_value(values)[0]):
+                input_dict[key] = dr.find_element(key, values)
+            elif isinstance(values, str):
+                input_dict[key] = ConstantValueObj(values)
+        return input_dict
+
+    @classmethod
+    def from_input(cls, dr, id, DR_type=&#34;undef&#34;, elements=dict(), structure=dict()):
+        &#34;&#34;&#34;
+        Create instance of the class using specific arguments.
+        :param DataRequest dr: reference Data Request objects
+        :param str id: id of the object
+        :param str DR_type: type of the object
+        :param dict elements: attributes of the objects (coming from VS)
+        :param dict structure: structure of the object through Data Request
+        :return: instance of the current class.
+        &#34;&#34;&#34;
+        elements[&#34;id&#34;] = id
+        return cls(dr=dr, DR_type=DR_type, structure=structure, **elements)
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return isinstance(other, type(self)) and self.id == other.id and self.DR_type == other.DR_type and \
+            self.structure == other.structure and self.attributes == other.attributes
+
+    def __lt__(self, other):
+        return isinstance(other, type(self)) and self.id &lt; other.id
+
+    def __gt__(self, other):
+        return isinstance(other, type(self)) and self.id &gt; other.id
+
+    def __copy__(self):
+        return type(self).__call__(dr=self.dr, DR_type=copy.deepcopy(self.DR_type),
+                                   structure=copy.deepcopy(self.structure), **copy.deepcopy(self.attributes))
+
+    def __deepcopy__(self, memodict={}):
+        return self.__copy__()
+
+    def check(self):
+        &#34;&#34;&#34;
+        Make checks on the current object.
+        :return:
+        &#34;&#34;&#34;
+        pass
+
+    def __str__(self):
+        return os.linesep.join(self.print_content())
+
+    def __repr__(self):
+        return os.linesep.join(self.print_content())
+
+    def __getattr__(self, item):
+        return self.attributes.get(item, ConstantValueObj())
+
+    def get(self, item):
+        return self.__getattr__(item)
+
+    def print_content(self, level=0, add_content=True):
+        &#34;&#34;&#34;
+        Function to return a printable version of the content of the current class.
+        :param level: level of indent of the result
+        :param add_content: should inner content be added?
+        :return: a list of strings that can be assembled to print the content.
+        &#34;&#34;&#34;
+        indent = &#34;    &#34; * level
+        DR_type = copy.deepcopy(self.DR_type)
+        DR_type = self.dr.VS.to_singular(DR_type)
+        return [f&#34;{indent}{DR_type}: {self.name} (id: {is_link_id_or_value(self.id)[1]})&#34;, ]
+
+    def filter_on_request(self, request_value):
+        &#34;&#34;&#34;
+        Check whether the current object can be filtered by the requested value.
+        :param request_value: an object to be tested
+        :return bool, bool: a bool indicating whether the current object can be filtered by the requested one,
+                            a bool indicating whether the current object is linked to the request one.
+        &#34;&#34;&#34;
+        return request_value.DR_type == self.DR_type, request_value == self</code></pre>
+</details>
+<div class="desc"><p>Base object to build the ones used within the DR API.
+Use to define basic information needed.</p>
+<p>Initialisation of the object.
+:param str id: id of the object
+:param DataRequest dr: reference data request object
+:param str DR_type: type of DR object (for reference in vocabulary server)
+:param dict structure: if needed, elements linked by structure to the current object
+:param dict attributes: attributes of the object coming from vocabulary server</p></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="stable.query.data_request.ExperimentsGroup" href="#stable.query.data_request.ExperimentsGroup">ExperimentsGroup</a></li>
+<li><a title="stable.query.data_request.Opportunity" href="#stable.query.data_request.Opportunity">Opportunity</a></li>
+<li><a title="stable.query.data_request.Variable" href="#stable.query.data_request.Variable">Variable</a></li>
+<li><a title="stable.query.data_request.VariablesGroup" href="#stable.query.data_request.VariablesGroup">VariablesGroup</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="stable.query.data_request.DRObjects.from_input"><code class="name flex">
+<span>def <span class="ident">from_input</span></span>(<span>dr, id, DR_type='undef', elements={}, structure={})</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create instance of the class using specific arguments.
+:param DataRequest dr: reference Data Request objects
+:param str id: id of the object
+:param str DR_type: type of the object
+:param dict elements: attributes of the objects (coming from VS)
+:param dict structure: structure of the object through Data Request
+:return: instance of the current class.</p></div>
+</dd>
+<dt id="stable.query.data_request.DRObjects.transform_content"><code class="name flex">
+<span>def <span class="ident">transform_content</span></span>(<span>input_dict, dr, force_transform=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def transform_content(input_dict, dr, force_transform=False):
+    &#34;&#34;&#34;
+    Transform the input dict to have only elements which are object (either DRObject -for links- or
+    ConstantValueObj -for strings-).
+    :param dict input_dict: input dictionary to transform
+    :param DataRequest dr: reference Data Request to find elements from VS
+    :param bool force_transform: boolean indicating whether all elements should be considered as linked and
+    transform into DRObject (True) or alternatively to DRObject if link or ConstantValueObj if string.
+    :return dict: transformed dictionary
+    &#34;&#34;&#34;
+    for (key, values) in input_dict.items():
+        if isinstance(values, list):
+            for (i, value) in enumerate(values):
+                if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
+                    input_dict[key][i] = dr.find_element(key, value)
+                elif isinstance(value, str):
+                    input_dict[key][i] = ConstantValueObj(value)
+        elif isinstance(values, str) and (force_transform or is_link_id_or_value(values)[0]):
+            input_dict[key] = dr.find_element(key, values)
+        elif isinstance(values, str):
+            input_dict[key] = ConstantValueObj(values)
+    return input_dict</code></pre>
+</details>
+<div class="desc"><p>Transform the input dict to have only elements which are object (either DRObject -for links- or
+ConstantValueObj -for strings-).
+:param dict input_dict: input dictionary to transform
+:param DataRequest dr: reference Data Request to find elements from VS
+:param bool force_transform: boolean indicating whether all elements should be considered as linked and
+transform into DRObject (True) or alternatively to DRObject if link or ConstantValueObj if string.
+:return dict: transformed dictionary</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="stable.query.data_request.DRObjects.check"><code class="name flex">
+<span>def <span class="ident">check</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check(self):
+    &#34;&#34;&#34;
+    Make checks on the current object.
+    :return:
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<div class="desc"><p>Make checks on the current object.
+:return:</p></div>
+</dd>
+<dt id="stable.query.data_request.DRObjects.filter_on_request"><code class="name flex">
+<span>def <span class="ident">filter_on_request</span></span>(<span>self, request_value)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def filter_on_request(self, request_value):
+    &#34;&#34;&#34;
+    Check whether the current object can be filtered by the requested value.
+    :param request_value: an object to be tested
+    :return bool, bool: a bool indicating whether the current object can be filtered by the requested one,
+                        a bool indicating whether the current object is linked to the request one.
+    &#34;&#34;&#34;
+    return request_value.DR_type == self.DR_type, request_value == self</code></pre>
+</details>
+<div class="desc"><p>Check whether the current object can be filtered by the requested value.
+:param request_value: an object to be tested
+:return bool, bool: a bool indicating whether the current object can be filtered by the requested one,
+a bool indicating whether the current object is linked to the request one.</p></div>
+</dd>
+<dt id="stable.query.data_request.DRObjects.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, item)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get(self, item):
+    return self.__getattr__(item)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="stable.query.data_request.DRObjects.print_content"><code class="name flex">
+<span>def <span class="ident">print_content</span></span>(<span>self, level=0, add_content=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def print_content(self, level=0, add_content=True):
+    &#34;&#34;&#34;
+    Function to return a printable version of the content of the current class.
+    :param level: level of indent of the result
+    :param add_content: should inner content be added?
+    :return: a list of strings that can be assembled to print the content.
+    &#34;&#34;&#34;
+    indent = &#34;    &#34; * level
+    DR_type = copy.deepcopy(self.DR_type)
+    DR_type = self.dr.VS.to_singular(DR_type)
+    return [f&#34;{indent}{DR_type}: {self.name} (id: {is_link_id_or_value(self.id)[1]})&#34;, ]</code></pre>
+</details>
+<div class="desc"><p>Function to return a printable version of the content of the current class.
+:param level: level of indent of the result
+:param add_content: should inner content be added?
+:return: a list of strings that can be assembled to print the content.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="stable.query.data_request.DataRequest"><code class="flex name class">
+<span>class <span class="ident">DataRequest</span></span>
+<span>(</span><span>input_database, VS, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataRequest(object):
+    &#34;&#34;&#34;
+    Data Request API object used to navigate among the Data Request and Vocabulary Server contents.
+    &#34;&#34;&#34;
+
+    def __init__(self, input_database, VS, **kwargs):
+        &#34;&#34;&#34;
+        Initialisation of the Data Request object
+        :param dict input_database: dictionary containing the DR database
+        :param VocabularyServer VS: reference Vocabulary Server to et information on objects
+        :param dict kwargs: additional parameters
+        &#34;&#34;&#34;
+        self.VS = VS
+        self.content_version = input_database[&#34;version&#34;]
+        self.structure = input_database
+        self.mapping = defaultdict(lambda: defaultdict(lambda: dict))
+        self.content = defaultdict(lambda: defaultdict(lambda: dict))
+        for op in input_database[&#34;opportunities&#34;]:
+            self.content[&#34;opportunities&#34;][op] = self.find_element(
+                &#34;opportunities&#34;, op)
+
+    def check(self):
+        &#34;&#34;&#34;
+        Method to check the content of the Data Request.
+        :return:
+        &#34;&#34;&#34;
+        logger = get_logger()
+        logger.info(&#34;Check data request metadata&#34;)
+        logger.info(&#34;... Check experiments groups&#34;)
+        for elt in self.get_experiment_groups():
+            elt.check()
+        logger.info(&#34;... Check variables groups&#34;)
+        for elt in self.get_variable_groups():
+            elt.check()
+        logger.info(&#34;... Check opportunities&#34;)
+        for elt in self.get_opportunities():
+            elt.check()
+
+    @property
+    def software_version(self):
+        &#34;&#34;&#34;
+        Method to get the version of the software.
+        :return str: version of the software
+        &#34;&#34;&#34;
+        return version
+
+    @property
+    def version(self):
+        &#34;&#34;&#34;
+        Method to get the version of both software and content
+        :return str : formatted version of the software and the content
+        &#34;&#34;&#34;
+        return f&#34;Software {self.software_version} - Content {self.content_version}&#34;
+
+    @classmethod
+    def from_input(cls, json_input, version, **kwargs):
+        &#34;&#34;&#34;
+        Method to instanciate the DataRequest object from a single input.
+        :param str or dict json_input: dictionary or name of the dedicated json file containing the export content
+        :param str version: version of the content
+        :param dict kwargs: additional parameters
+        :return DataRequest: instance of the DataRequest object.
+        &#34;&#34;&#34;
+        DR_content, VS_content = cls._split_content_from_input_json(
+            json_input, version=version)
+        VS = VocabularyServer(VS_content)
+        return cls(input_database=DR_content, VS=VS, **kwargs)
+
+    @classmethod
+    def from_separated_inputs(cls, DR_input, VS_input, **kwargs):
+        &#34;&#34;&#34;
+        Method to instanciate the DataRequestObject from two inputs.
+        :param str or dict DR_input: dictionary or name of the json file containing the data request structure
+        :param str or dict VS_input: dictionary or name of the json file containing the vocabulary server
+        :param dict kwargs: additional parameters
+        :return DataRequest: instance of the DataRequest object
+        &#34;&#34;&#34;
+        logger = get_logger()
+        if isinstance(DR_input, str) and os.path.isfile(DR_input):
+            DR = read_json_file(DR_input)
+        elif isinstance(DR_input, dict):
+            DR = copy.deepcopy(DR_input)
+        else:
+            logger.error(
+                &#34;DR_input should be either the name of a json file or a dictionary.&#34;)
+            raise TypeError(
+                &#34;DR_input should be either the name of a json file or a dictionary.&#34;)
+        if isinstance(VS_input, str) and os.path.isfile(VS_input):
+            VS = VocabularyServer.from_input(VS_input)
+        elif isinstance(VS_input, dict):
+            VS = VocabularyServer(copy.deepcopy(VS_input))
+        else:
+            logger.error(
+                &#34;VS_input should be either the name of a json file or a dictionary.&#34;)
+            raise TypeError(
+                &#34;VS_input should be either the name of a json file or a dictionary.&#34;)
+        return cls(input_database=DR, VS=VS, **kwargs)
+
+    @staticmethod
+    def _split_content_from_input_json(input_json, version):
+        &#34;&#34;&#34;
+        Split the export if given through a single file and not from two files into the two dictionaries.
+        :param dict or str input_json: json input containing the bases or content as a dict
+        :param str version: version of the content used
+        :return dict, dict: two dictionaries containing the DR and the VS
+        &#34;&#34;&#34;
+        logger = get_logger()
+        if not isinstance(version, str):
+            logger.error(
+                f&#34;Version should be a string, not {type(version).__name__}.&#34;)
+            raise TypeError(
+                f&#34;Version should be a string, not {type(version).__name__}.&#34;)
+        if isinstance(input_json, str) and os.path.isfile(input_json):
+            content = read_json_file(input_json)
+        elif isinstance(input_json, dict):
+            content = input_json
+        else:
+            logger.error(
+                &#34;input_json should be either the name of a json file or a dictionary.&#34;)
+            raise TypeError(
+                &#34;input_json should be either the name of a json file or a dictionary.&#34;)
+        DR, VS = transform_content(content, version=version)
+        return DR, VS
+
+    def __str__(self):
+        rep = list()
+        indent = &#34;    &#34;
+        rep.append(&#34;Data Request content:&#34;)
+        rep.append(f&#34;{indent}Experiments groups:&#34;)
+        for elt in self.get_experiment_groups():
+            rep.extend(elt.print_content(level=2))
+        rep.append(f&#34;{indent}Variables groups:&#34;)
+        for elt in self.get_variable_groups():
+            rep.extend(elt.print_content(level=2))
+        rep.append(f&#34;{indent}Opportunities:&#34;)
+        for elt in self.get_opportunities():
+            rep.extend(elt.print_content(level=2))
+        return os.linesep.join(rep)
+
+    def get_experiment_groups(self):
+        &#34;&#34;&#34;
+        Get the ExperimentsGroup of the Data Request.
+        :return list of ExperimentsGroup: list of the ExperimentsGroup of the DR content.
+        &#34;&#34;&#34;
+        return [self.content[&#34;experiment_groups&#34;][key] for key in sorted(list(self.content[&#34;experiment_groups&#34;]))]
+
+    def get_experiment_group(self, id):
+        &#34;&#34;&#34;
+        Get the ExperimentsGroup associated with a specific id.
+        :param str id: id of the ExperimentsGroup
+        :return ExperimentsGroup: the ExperimentsGroup associated with the input id
+        &#34;&#34;&#34;
+        rep = self.find_element(&#34;experiment_groups&#34;, id, default=None)
+        if rep is not None:
+            return rep
+        else:
+            raise ValueError(
+                f&#34;Could not find experiments group {id} among {self.get_experiment_groups()}.&#34;)
+
+    def get_variable_groups(self):
+        &#34;&#34;&#34;
+        Get the VariablesGroup of the Data Request.
+        :return list of VariablesGroup: list of the VariablesGroup of the DR content.
+        &#34;&#34;&#34;
+        return [self.content[&#34;variable_groups&#34;][key] for key in sorted(list(self.content[&#34;variable_groups&#34;]))]
+
+    def get_variable_group(self, id):
+        &#34;&#34;&#34;
+        Get the VariablesGroup associated with a specific id.
+        :param str id: id of the VariablesGroup
+        :return VariablesGroup: the VariablesGroup associated with the input id
+        &#34;&#34;&#34;
+        rep = self.find_element(&#34;variable_groups&#34;, id, default=None)
+        if rep is not None:
+            return rep
+        else:
+            raise ValueError(f&#34;Could not find variables group {id}.&#34;)
+
+    def get_opportunities(self):
+        &#34;&#34;&#34;
+        Get the Opportunity of the Data Request.
+        :return list of Opportunity: list of the Opportunity of the DR content.
+        &#34;&#34;&#34;
+        return [self.content[&#34;opportunities&#34;][key] for key in sorted(list(self.content[&#34;opportunities&#34;]))]
+
+    def get_opportunity(self, id):
+        &#34;&#34;&#34;
+        Get the Opportunity associated with a specific id.
+        :param str id: id of the Opportunity
+        :return Opportunity: the Opportunity associated with the input id
+        &#34;&#34;&#34;
+        rep = self.find_element(&#34;opportunities&#34;, id, default=None)
+        if rep is not None:
+            return rep
+        else:
+            raise ValueError(f&#34;Could not find opportunity {id}.&#34;)
+
+    def get_variables(self):
+        &#34;&#34;&#34;
+        Get the Variable of the Data Request.
+        :return list of Variable: list of the Variable of the DR content.
+        &#34;&#34;&#34;
+        rep = set()
+        for var_grp in self.get_variable_groups():
+            rep = rep | set(var_grp.get_variables())
+        rep = sorted(list(rep))
+        return rep
+
+    def get_mips(self):
+        &#34;&#34;&#34;
+        Get the MIPs of the Data Request.
+        :return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.
+        &#34;&#34;&#34;
+        rep = set()
+        for op in self.get_opportunities():
+            rep = rep | set(op.get_mips())
+        for var_grp in self.get_variable_groups():
+            rep = rep | set(var_grp.get_mips())
+        rep = sorted(list(rep))
+        return rep
+
+    def get_experiments(self):
+        &#34;&#34;&#34;
+        Get the experiments of the Data Request.
+        :return list of DRObject: list of the experiments of the DR content.
+        &#34;&#34;&#34;
+        rep = set()
+        for exp_grp in self.get_experiment_groups():
+            rep = rep | set(exp_grp.get_experiments())
+        rep = sorted(list(rep))
+        return rep
+
+    def get_data_request_themes(self):
+        &#34;&#34;&#34;
+        Get the themes of the Data Request.
+        :return list of DRObject: list of the themes of the DR content.
+        &#34;&#34;&#34;
+        rep = set()
+        for op in self.get_opportunities():
+            rep = rep | set(op.get_themes())
+        rep = sorted(list(rep))
+        return rep
+
+    def find_variables_per_priority(self, priority):
+        &#34;&#34;&#34;
+        Find all the variables which have a specified priority.
+        :param DRObjects or ConstantValueObj or str priority: priority to be considered
+        :return list of Variable: list of the variables which have a specified priority.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;variables&#34;, requests=dict(priority_level=[priority, ]))
+
+    def find_opportunities_per_theme(self, theme):
+        &#34;&#34;&#34;
+        Find all the opportunities which are linked to a specified theme.
+        :param DRObjects or ConstantValueObj or str theme: theme to be considered
+        :return list of Opportunity: list of the opportunities which are linked to a specified theme.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, requests=dict(data_request_themes=[theme, ]))
+
+    def find_experiments_per_theme(self, theme):
+        &#34;&#34;&#34;
+        Find all the experiments which are linked to a specified theme.
+        :param DRObjects or ConstantValueObj or str theme: theme to be considered
+        :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;experiments&#34;, requests=dict(data_request_themes=[theme, ]))
+
+    def find_variables_per_theme(self, theme):
+        &#34;&#34;&#34;
+        Find all the variables which are linked to a specified theme.
+        :param DRObjects or ConstantValueObj or str theme: theme to be considered
+        :return list of Variable: list of the variables which are linked to a specified theme.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;variables&#34;, requests=dict(data_request_themes=[theme, ]))
+
+    def find_mips_per_theme(self, theme):
+        &#34;&#34;&#34;
+        Find all the MIPs which are linked to a specified theme.
+        :param DRObjects or ConstantValueObj or str theme: theme to be considered
+        :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;mips&#34;, requests=dict(data_request_themes=[theme, ]))
+
+    def find_themes_per_opportunity(self, opportunity):
+        &#34;&#34;&#34;
+        Find all the themes which are linked to a specified opportunity.
+        :param Opportunity or str opportunity: opportunity to be considered
+        :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;data_request_themes&#34;, requests=dict(opportunities=[opportunity, ]))
+
+    def find_experiments_per_opportunity(self, opportunity):
+        &#34;&#34;&#34;
+        Find all the experiments which are linked to a specified opportunity.
+        :param Opportunity or str opportunity: opportunity to be considered
+        :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified opportunity.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;experiments&#34;, requests=dict(opportunities=[opportunity, ]))
+
+    def find_variables_per_opportunity(self, opportunity):
+        &#34;&#34;&#34;
+        Find all the variables which are linked to a specified opportunity.
+        :param Opportunity or str opportunity: opportunity to be considered
+        :return list of Variable: list of the variables which are linked to a specified opportunity.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;variables&#34;, requests=dict(opportunities=[opportunity, ]))
+
+    def find_mips_per_opportunity(self, opportunity):
+        &#34;&#34;&#34;
+        Find all the MIPs which are linked to a specified opportunity.
+        :param Opportunity or str opportunity: opportunity to be considered
+        :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;mips&#34;, requests=dict(opportunities=[opportunity, ]))
+
+    def find_opportunities_per_variable(self, variable):
+        &#34;&#34;&#34;
+        Find all the opportunities which are linked to a specified variable.
+        :param Variable or str variable: variable to be considered
+        :return list of Opportunity: list of the opportunities which are linked to a specified variable.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, requests=dict(variables=[variable, ]))
+
+    def find_themes_per_variable(self, variable):
+        &#34;&#34;&#34;
+        Find all the themes which are linked to a specified variable.
+        :param Variable or str variable: variable to be considered
+        :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;data_request_themes&#34;, requests=dict(variables=[variable, ]))
+
+    def find_mips_per_variable(self, variable):
+        &#34;&#34;&#34;
+        Find all the MIPs which are linked to a specified variable.
+        :param Variable or str variable: variable to be considered
+        :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;mips&#34;, requests=dict(variables=[variable, ]))
+
+    def find_opportunities_per_experiment(self, experiment):
+        &#34;&#34;&#34;
+        Find all the opportunities which are linked to a specified experiment.
+        :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
+        :return list of Opportunity: list of the opportunities which are linked to a specified experiment.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, requests=dict(experiments=[experiment, ]))
+
+    def find_themes_per_experiment(self, experiment):
+        &#34;&#34;&#34;
+        Find all the themes which are linked to a specified experiment.
+        :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
+        :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;data_request_themes&#34;, requests=dict(experiments=[experiment, ]))
+
+    def find_element_per_identifier_from_vs(self, element_type, key, value, default=False, **kwargs):
+        &#34;&#34;&#34;
+        Find an element of a specific type and specified by a value (of a given kind) from vocabulary server.
+        :param str element_type: type of the element to be found (same as in vocabulary server).
+        :param str key: type of the value key to be looked for (&#34;id&#34;, &#34;name&#34;...)
+        :param str value: value to be looked for
+        :param default: default value to be used if the value is not found
+        :param dict kwargs: additional attributes to be used for vocabulary server search.
+        :return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or default: the element found from vocabulary server or the default value if none is found.
+        &#34;&#34;&#34;
+        if key in [&#34;id&#34;, ]:
+            value = build_link_from_id(value)
+        rep = self.VS.get_element(
+            element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
+        if rep not in [default, ]:
+            if element_type in [&#34;opportunities&#34;, ]:
+                rep = Opportunity.from_input(dr=self, **rep,
+                                             **self.structure.get(&#34;opportunities&#34;, dict()).get(rep[&#34;id&#34;], dict()))
+            elif element_type in [&#34;variable_groups&#34;, ]:
+                rep = VariablesGroup.from_input(dr=self, **rep,
+                                                **self.structure.get(&#34;variable_groups&#34;, dict()).get(rep[&#34;id&#34;], dict()))
+            elif element_type in [&#34;experiment_groups&#34;, ]:
+                rep = ExperimentsGroup.from_input(dr=self, **rep,
+                                                  **self.structure.get(&#34;experiment_groups&#34;, dict()).get(rep[&#34;id&#34;], dict()))
+            elif element_type in [&#34;variables&#34;, ]:
+                rep = Variable.from_input(dr=self, **rep)
+            else:
+                rep = DRObjects.from_input(
+                    dr=self, id=rep[&#34;id&#34;], DR_type=element_type, elements=rep)
+        return rep
+
+    def find_element_from_vs(self, element_type, value, default=False):
+        &#34;&#34;&#34;
+        Find an element of a specific type and specified by a value from vocabulary server.
+        Update the content and mapping list not to have to ask the vocabulary server again for it.
+        :param str element_type: kind of element to be looked for
+        :param str value: value to be looked for
+        :param default: default value to be returned if no value found
+        :return: element corresponding to the specified value of a given type if found, else the default value
+        &#34;&#34;&#34;
+        rep = self.find_element_per_identifier_from_vs(
+            element_type=element_type, value=value, key=&#34;id&#34;, default=None)
+        if rep is not None:
+            self.content[element_type][rep.id] = rep
+        else:
+            rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=&#34;name&#34;,
+                                                           default=default)
+            if rep not in [default, ]:
+                self.content[element_type][rep.id] = rep
+                self.mapping[element_type][rep.name] = rep
+        return rep
+
+    def find_element(self, element_type, value, default=False):
+        &#34;&#34;&#34;
+        Find an element of a specific type and specified by a value from mapping/content if existing,
+         else from vocabulary server.
+        :param str element_type: kind of element to be found
+        :param str value: value to be looked for
+        :param default: value to be returned if non found
+        :return: the found element if existing, else the default value
+        &#34;&#34;&#34;
+        if value in self.content[element_type]:
+            return self.content[element_type][value]
+        elif value in self.mapping[element_type]:
+            return self.mapping[element_type][value]
+        else:
+            return self.find_element_from_vs(element_type=element_type, value=value, default=default)
+
+    def get_elements_per_kind(self, element_type):
+        &#34;&#34;&#34;
+        Return the list of elements of kind element_type
+        :param str element_type: the kind of the elements to be found
+        :return list: the list of elements of kind element_type
+        &#34;&#34;&#34;
+        logger = get_logger()
+        if element_type in [&#34;opportunities&#34;, ]:
+            elements = self.get_opportunities()
+        elif element_type in [&#34;experiment_groups&#34;, ]:
+            elements = self.get_experiment_groups()
+        elif element_type in [&#34;variable_groups&#34;, ]:
+            elements = self.get_variable_groups()
+        elif element_type in [&#34;variables&#34;, ]:
+            elements = self.get_variables()
+        elif element_type in [&#34;experiments&#34;, ]:
+            elements = self.get_experiments()
+        elif element_type in [&#34;data_request_themes&#34;, ]:
+            elements = self.get_data_request_themes()
+        elif element_type in [&#34;mips&#34;, ]:
+            elements = self.get_mips()
+        else:
+            logger.debug(&#34;Find elements list from vocabulary server.&#34;)
+            element_type, elements_ids = self.VS.get_element_type_ids(
+                element_type)
+            elements = [self.find_element(element_type, id)
+                        for id in elements_ids]
+        return elements
+
+    @staticmethod
+    def _two_elements_filtering(filtering_elt_1, filtering_elt_2, list_to_filter):
+        &#34;&#34;&#34;
+        Check if a list of elements can be filtered by two values
+        :param filtering_elt_1: first element for filtering
+        :param filtering_elt_2: second element for filtering
+        :param list list_to_filter: list of elements to be filtered
+        :return bool, bool: a boolean to tell if it relevant to filter list_to_filter by filtering_elt_1 and filtering_elt_2,
+                            a boolean to tell, if relevant, if filtering_elt_1 and filtering_elt_2 are linked to list_to_filter
+        &#34;&#34;&#34;
+        elt = list_to_filter[0]
+        filtered_found_1, found_1 = elt.filter_on_request(filtering_elt_1)
+        filtered_found_2, found_2 = elt.filter_on_request(filtering_elt_2)
+        filtered_found = filtered_found_1 and filtered_found_2
+        found = found_1 and found_2
+        if filtered_found and not found:
+            found = any([elt.filter_on_request(filtering_elt_1)[1] and
+                         elt.filter_on_request(filtering_elt_2)[1]
+                         for elt in list_to_filter])
+        return filtered_found, found
+
+    def filter_elements_per_request(self, element_type, requests=dict(), operation=&#34;all&#34;, skip_if_missing=False):
+        &#34;&#34;&#34;
+        Filter the elements of kind element_type with a dictionary of requests.
+        :param str element_type: kind of elements to be filtered
+        :param dict requests: dictionary of the filters to be applied
+        :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :return: list of elements of kind element_type which correspond to the filtering requests
+        &#34;&#34;&#34;
+        logger = get_logger()
+        if operation not in [&#34;any&#34;, &#34;all&#34;]:
+            raise ValueError(
+                f&#34;Operation does not accept {operation} as value: choose among &#39;any&#39; (match at least one requirement) and &#39;all&#39; (match all requirements)&#34;)
+        else:
+            # Prepare the request dictionary
+            request_dict = defaultdict(list)
+            for (req, values) in requests.items():
+                if not isinstance(values, list):
+                    values = [values, ]
+                for val in values:
+                    if isinstance(val, str):
+                        new_val = self.find_element(
+                            element_type=req, value=val, default=None)
+                    else:
+                        new_val = val
+                    if new_val is not None:
+                        request_dict[req].append(new_val)
+                    elif skip_if_missing:
+                        logger.warning(
+                            f&#34;Could not find value {val} for element type {req}, skip it.&#34;)
+                    else:
+                        logger.error(
+                            f&#34;Could not find value {val} for element type {req}.&#34;)
+                        raise ValueError(
+                            f&#34;Could not find value {val} for element type {req}.&#34;)
+            # Get elements corresponding to element_type
+            elements = self.get_elements_per_kind(element_type)
+            # Filter elements
+            rep = defaultdict(lambda: defaultdict(set))
+            for (request, values) in request_dict.items():
+                for val in values:
+                    for elt in elements:
+                        filtered_found, found = elt.filter_on_request(val)
+                        if not filtered_found:
+                            filtered_found, found = val.filter_on_request(elt)
+                        if not filtered_found:
+                            filtered_found, found = self._two_elements_filtering(
+                                val, elt, self.get_experiment_groups())
+                        if not filtered_found:
+                            filtered_found, found = self._two_elements_filtering(
+                                val, elt, self.get_variables())
+                        if not filtered_found:
+                            filtered_found, found = self._two_elements_filtering(
+                                val, elt, self.get_variable_groups())
+                        if not filtered_found:
+                            filtered_found, found = self._two_elements_filtering(
+                                val, elt, self.get_opportunities())
+                        if not filtered_found:
+                            logger.error(
+                                f&#34;Could not filter {element_type} by {request}&#34;)
+                            raise ValueError(
+                                f&#34;Could not filter {element_type} by {request}&#34;)
+                        if found:
+                            rep[request][val.id].add(elt)
+            if len(rep) == 0:
+                rep_list = set(elements)
+            elif operation in [&#34;any&#34;, ]:
+                rep_list = set()
+                for req in rep:
+                    for val in rep[req]:
+                        rep_list = rep_list | rep[req][val]
+            elif operation in [&#34;all&#34;, ]:
+                rep_list = set(elements)
+                for req in rep:
+                    for val in rep[req]:
+                        rep_list = rep_list &amp; rep[req][val]
+            else:
+                raise ValueError(
+                    f&#34;Unknown value {operation} for operation (only &#39;all&#39; and &#39;any&#39; are available).&#34;)
+            rep_list = sorted(list(rep_list))
+            return rep_list
+
+    def find_opportunities(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
+        &#34;&#34;&#34;
+        Find the opportunities corresponding to filtering criteria.
+        :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param dict kwargs: filters to be applied
+        :return list of Opportunity: opportunities linked to the filters
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, operation=operation,
+                                                skip_if_missing=skip_if_missing, requests=kwargs)
+
+    def find_experiments(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
+        &#34;&#34;&#34;
+        Find the experiments corresponding to filtering criteria.
+        :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param dict kwargs: filters to be applied
+        :return list of DRObjects: experiments linked to the filters
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;experiments&#34;, operation=operation,
+                                                skip_if_missing=skip_if_missing, requests=kwargs)
+
+    def find_variables(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
+        &#34;&#34;&#34;
+        Find the variables corresponding to filtering criteria.
+        :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param dict kwargs: filters to be applied
+        :return list of Variable: variables linked to the filters
+        &#34;&#34;&#34;
+        return self.filter_elements_per_request(element_type=&#34;variables&#34;, operation=operation,
+                                                skip_if_missing=skip_if_missing, requests=kwargs)
+
+    def sort_func(self, data_list, sorting_request=list()):
+        &#34;&#34;&#34;
+        Method to sort a list of objects based on some criteria
+        :param list data_list: the list of objects to be sorted
+        :param list sorting_request: list of criteria to sort the input list
+        :return list: sorted list
+        &#34;&#34;&#34;
+        sorting_request = copy.deepcopy(sorting_request)
+        if len(sorting_request) == 0:
+            return sorted(data_list, key=lambda x: x.id)
+        else:
+            sorting_val = sorting_request.pop(0)
+            sorting_values_dict = defaultdict(list)
+            for data in data_list:
+                sorting_values_dict[data.get(sorting_val)].append(data)
+            rep = list()
+            for elt in sorted(list(sorting_values_dict)):
+                rep.extend(self.sort_func(
+                    sorting_values_dict[elt], sorting_request))
+            return rep
+
+    def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
+                    filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(), **kwargs):
+        &#34;&#34;&#34;
+        Method to export a filtered and sorted list of data to a csv file.
+        :param str main_data: kind of data to be exported
+        :param str output_file: name of the output faile (csv)
+        :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
+        :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+        :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+        :param list export_columns_request: columns to be putted in the output file
+        :param list sorting_request: sorting criteria to be applied
+        :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
+        :return: an output csv file
+        &#34;&#34;&#34;
+        filtered_data = self.filter_elements_per_request(element_type=main_data, requests=filtering_requests,
+                                                         operation=filtering_operation,
+                                                         skip_if_missing=filtering_skip_if_missing)
+        sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
+
+        export_columns_request.insert(0, &#34;id&#34;)
+        content = list()
+        content.append(export_columns_request)
+        for data in sorted_filtered_data:
+            content.append([str(data.__getattr__(key))
+                           for key in export_columns_request])
+
+        write_csv_output_file_content(output_file, content, **kwargs)
+
+    def export_summary(self, lines_data, columns_data, output_file, sorting_line=&#34;id&#34;, title_line=&#34;name&#34;,
+                       sorting_column=&#34;id&#34;, title_column=&#34;name&#34;, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
+                       filtering_skip_if_missing=False, **kwargs):
+        &#34;&#34;&#34;
+        Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
+        :param str lines_data: kind of data to be put in row
+        :param str columns_data: kind of data to be put in range
+        :param str output_file: name of the output file (csv)
+        :param str sorting_line: criteria to sort raw data
+        :param str title_line: attribute to be used for raw header
+        :param str sorting_column: criteria to sort range data
+        :param str title_column: attribute to be used for range header
+        :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
+        :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+        :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+        :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
+        :return: a csv output file
+        &#34;&#34;&#34;
+        logger = get_logger()
+        logger.debug(f&#34;Generate summary for {lines_data}/{columns_data}&#34;)
+        filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
+                                                         operation=filtering_operation,
+                                                         skip_if_missing=filtering_skip_if_missing)
+        sorted_filtered_data = self.sort_func(
+            filtered_data, sorting_request=[sorting_line, ])
+        columns_datasets = self.filter_elements_per_request(
+            element_type=columns_data)
+        columns_datasets = self.sort_func(
+            columns_datasets, sorting_request=[sorting_column, ])
+        columns_title = [str(elt.__getattr__(title_column))
+                         for elt in columns_datasets]
+        table_title = f&#34;{lines_data} {title_line} / {columns_data} {title_column}&#34;
+
+        nb_lines = len(sorted_filtered_data)
+        logger.debug(f&#34;{nb_lines} elements found for {lines_data}&#34;)
+        logger.debug(f&#34;{len(columns_title)} found elements for {columns_data}&#34;)
+
+        logger.debug(&#34;Generate summary&#34;)
+        content = defaultdict(list)
+        for (i, data) in enumerate(columns_datasets):
+            logger.debug(f&#34;Deal with column {i}/{len(columns_title)}&#34;)
+            filter_line_datasets = self.filter_elements_per_request(element_type=lines_data,
+                                                                    requests={
+                                                                        data.DR_type: data},
+                                                                    operation=&#34;all&#34;)
+            for line_data in filtered_data:
+                line_data_title = line_data.__getattr__(title_line)
+                if line_data in filter_line_datasets:
+                    content[line_data_title].append(&#34;x&#34;)
+                else:
+                    content[line_data_title].append(&#34;&#34;)
+
+        logger.debug(&#34;Format summary&#34;)
+        rep = list()
+        rep.append([table_title, ] + columns_title)
+        for line_data in filtered_data:
+            line_data_title = line_data.__getattr__(title_line)
+            rep.append([line_data_title, ] + content[line_data_title])
+
+        logger.debug(&#34;Write summary&#34;)
+        write_csv_output_file_content(output_file, rep, **kwargs)</code></pre>
+</details>
+<div class="desc"><p>Data Request API object used to navigate among the Data Request and Vocabulary Server contents.</p>
+<p>Initialisation of the Data Request object
+:param dict input_database: dictionary containing the DR database
+:param VocabularyServer VS: reference Vocabulary Server to et information on objects
+:param dict kwargs: additional parameters</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="stable.query.data_request.DataRequest.from_input"><code class="name flex">
+<span>def <span class="ident">from_input</span></span>(<span>json_input, version, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to instanciate the DataRequest object from a single input.
+:param str or dict json_input: dictionary or name of the dedicated json file containing the export content
+:param str version: version of the content
+:param dict kwargs: additional parameters
+:return DataRequest: instance of the DataRequest object.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.from_separated_inputs"><code class="name flex">
+<span>def <span class="ident">from_separated_inputs</span></span>(<span>DR_input, VS_input, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method to instanciate the DataRequestObject from two inputs.
+:param str or dict DR_input: dictionary or name of the json file containing the data request structure
+:param str or dict VS_input: dictionary or name of the json file containing the vocabulary server
+:param dict kwargs: additional parameters
+:return DataRequest: instance of the DataRequest object</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="stable.query.data_request.DataRequest.software_version"><code class="name">prop <span class="ident">software_version</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def software_version(self):
+    &#34;&#34;&#34;
+    Method to get the version of the software.
+    :return str: version of the software
+    &#34;&#34;&#34;
+    return version</code></pre>
+</details>
+<div class="desc"><p>Method to get the version of the software.
+:return str: version of the software</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.version"><code class="name">prop <span class="ident">version</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def version(self):
+    &#34;&#34;&#34;
+    Method to get the version of both software and content
+    :return str : formatted version of the software and the content
+    &#34;&#34;&#34;
+    return f&#34;Software {self.software_version} - Content {self.content_version}&#34;</code></pre>
+</details>
+<div class="desc"><p>Method to get the version of both software and content
+:return str : formatted version of the software and the content</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="stable.query.data_request.DataRequest.check"><code class="name flex">
+<span>def <span class="ident">check</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check(self):
+    &#34;&#34;&#34;
+    Method to check the content of the Data Request.
+    :return:
+    &#34;&#34;&#34;
+    logger = get_logger()
+    logger.info(&#34;Check data request metadata&#34;)
+    logger.info(&#34;... Check experiments groups&#34;)
+    for elt in self.get_experiment_groups():
+        elt.check()
+    logger.info(&#34;... Check variables groups&#34;)
+    for elt in self.get_variable_groups():
+        elt.check()
+    logger.info(&#34;... Check opportunities&#34;)
+    for elt in self.get_opportunities():
+        elt.check()</code></pre>
+</details>
+<div class="desc"><p>Method to check the content of the Data Request.
+:return:</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.export_data"><code class="name flex">
+<span>def <span class="ident">export_data</span></span>(<span>self,<br>main_data,<br>output_file,<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>export_columns_request=[],<br>sorting_request=[],<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
+                filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(), **kwargs):
+    &#34;&#34;&#34;
+    Method to export a filtered and sorted list of data to a csv file.
+    :param str main_data: kind of data to be exported
+    :param str output_file: name of the output faile (csv)
+    :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
+    :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+    :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+    :param list export_columns_request: columns to be putted in the output file
+    :param list sorting_request: sorting criteria to be applied
+    :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
+    :return: an output csv file
+    &#34;&#34;&#34;
+    filtered_data = self.filter_elements_per_request(element_type=main_data, requests=filtering_requests,
+                                                     operation=filtering_operation,
+                                                     skip_if_missing=filtering_skip_if_missing)
+    sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
+
+    export_columns_request.insert(0, &#34;id&#34;)
+    content = list()
+    content.append(export_columns_request)
+    for data in sorted_filtered_data:
+        content.append([str(data.__getattr__(key))
+                       for key in export_columns_request])
+
+    write_csv_output_file_content(output_file, content, **kwargs)</code></pre>
+</details>
+<div class="desc"><p>Method to export a filtered and sorted list of data to a csv file.
+:param str main_data: kind of data to be exported
+:param str output_file: name of the output faile (csv)
+:param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
+:param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+:param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+:param list export_columns_request: columns to be putted in the output file
+:param list sorting_request: sorting criteria to be applied
+:param dict kwargs: additional arguments to be given to function write_csv_output_file_content
+:return: an output csv file</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.export_summary"><code class="name flex">
+<span>def <span class="ident">export_summary</span></span>(<span>self,<br>lines_data,<br>columns_data,<br>output_file,<br>sorting_line='id',<br>title_line='name',<br>sorting_column='id',<br>title_column='name',<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_summary(self, lines_data, columns_data, output_file, sorting_line=&#34;id&#34;, title_line=&#34;name&#34;,
+                   sorting_column=&#34;id&#34;, title_column=&#34;name&#34;, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
+                   filtering_skip_if_missing=False, **kwargs):
+    &#34;&#34;&#34;
+    Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
+    :param str lines_data: kind of data to be put in row
+    :param str columns_data: kind of data to be put in range
+    :param str output_file: name of the output file (csv)
+    :param str sorting_line: criteria to sort raw data
+    :param str title_line: attribute to be used for raw header
+    :param str sorting_column: criteria to sort range data
+    :param str title_column: attribute to be used for range header
+    :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
+    :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+    :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+    :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
+    :return: a csv output file
+    &#34;&#34;&#34;
+    logger = get_logger()
+    logger.debug(f&#34;Generate summary for {lines_data}/{columns_data}&#34;)
+    filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
+                                                     operation=filtering_operation,
+                                                     skip_if_missing=filtering_skip_if_missing)
+    sorted_filtered_data = self.sort_func(
+        filtered_data, sorting_request=[sorting_line, ])
+    columns_datasets = self.filter_elements_per_request(
+        element_type=columns_data)
+    columns_datasets = self.sort_func(
+        columns_datasets, sorting_request=[sorting_column, ])
+    columns_title = [str(elt.__getattr__(title_column))
+                     for elt in columns_datasets]
+    table_title = f&#34;{lines_data} {title_line} / {columns_data} {title_column}&#34;
+
+    nb_lines = len(sorted_filtered_data)
+    logger.debug(f&#34;{nb_lines} elements found for {lines_data}&#34;)
+    logger.debug(f&#34;{len(columns_title)} found elements for {columns_data}&#34;)
+
+    logger.debug(&#34;Generate summary&#34;)
+    content = defaultdict(list)
+    for (i, data) in enumerate(columns_datasets):
+        logger.debug(f&#34;Deal with column {i}/{len(columns_title)}&#34;)
+        filter_line_datasets = self.filter_elements_per_request(element_type=lines_data,
+                                                                requests={
+                                                                    data.DR_type: data},
+                                                                operation=&#34;all&#34;)
+        for line_data in filtered_data:
+            line_data_title = line_data.__getattr__(title_line)
+            if line_data in filter_line_datasets:
+                content[line_data_title].append(&#34;x&#34;)
+            else:
+                content[line_data_title].append(&#34;&#34;)
+
+    logger.debug(&#34;Format summary&#34;)
+    rep = list()
+    rep.append([table_title, ] + columns_title)
+    for line_data in filtered_data:
+        line_data_title = line_data.__getattr__(title_line)
+        rep.append([line_data_title, ] + content[line_data_title])
+
+    logger.debug(&#34;Write summary&#34;)
+    write_csv_output_file_content(output_file, rep, **kwargs)</code></pre>
+</details>
+<div class="desc"><p>Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
+:param str lines_data: kind of data to be put in row
+:param str columns_data: kind of data to be put in range
+:param str output_file: name of the output file (csv)
+:param str sorting_line: criteria to sort raw data
+:param str title_line: attribute to be used for raw header
+:param str sorting_column: criteria to sort range data
+:param str title_column: attribute to be used for range header
+:param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
+:param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+:param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+:param dict kwargs: additional arguments to be given to function write_csv_output_file_content
+:return: a csv output file</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.filter_elements_per_request"><code class="name flex">
+<span>def <span class="ident">filter_elements_per_request</span></span>(<span>self, element_type, requests={}, operation='all', skip_if_missing=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def filter_elements_per_request(self, element_type, requests=dict(), operation=&#34;all&#34;, skip_if_missing=False):
+    &#34;&#34;&#34;
+    Filter the elements of kind element_type with a dictionary of requests.
+    :param str element_type: kind of elements to be filtered
+    :param dict requests: dictionary of the filters to be applied
+    :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+    :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+    :return: list of elements of kind element_type which correspond to the filtering requests
+    &#34;&#34;&#34;
+    logger = get_logger()
+    if operation not in [&#34;any&#34;, &#34;all&#34;]:
+        raise ValueError(
+            f&#34;Operation does not accept {operation} as value: choose among &#39;any&#39; (match at least one requirement) and &#39;all&#39; (match all requirements)&#34;)
+    else:
+        # Prepare the request dictionary
+        request_dict = defaultdict(list)
+        for (req, values) in requests.items():
+            if not isinstance(values, list):
+                values = [values, ]
+            for val in values:
+                if isinstance(val, str):
+                    new_val = self.find_element(
+                        element_type=req, value=val, default=None)
+                else:
+                    new_val = val
+                if new_val is not None:
+                    request_dict[req].append(new_val)
+                elif skip_if_missing:
+                    logger.warning(
+                        f&#34;Could not find value {val} for element type {req}, skip it.&#34;)
+                else:
+                    logger.error(
+                        f&#34;Could not find value {val} for element type {req}.&#34;)
+                    raise ValueError(
+                        f&#34;Could not find value {val} for element type {req}.&#34;)
+        # Get elements corresponding to element_type
+        elements = self.get_elements_per_kind(element_type)
+        # Filter elements
+        rep = defaultdict(lambda: defaultdict(set))
+        for (request, values) in request_dict.items():
+            for val in values:
+                for elt in elements:
+                    filtered_found, found = elt.filter_on_request(val)
+                    if not filtered_found:
+                        filtered_found, found = val.filter_on_request(elt)
+                    if not filtered_found:
+                        filtered_found, found = self._two_elements_filtering(
+                            val, elt, self.get_experiment_groups())
+                    if not filtered_found:
+                        filtered_found, found = self._two_elements_filtering(
+                            val, elt, self.get_variables())
+                    if not filtered_found:
+                        filtered_found, found = self._two_elements_filtering(
+                            val, elt, self.get_variable_groups())
+                    if not filtered_found:
+                        filtered_found, found = self._two_elements_filtering(
+                            val, elt, self.get_opportunities())
+                    if not filtered_found:
+                        logger.error(
+                            f&#34;Could not filter {element_type} by {request}&#34;)
+                        raise ValueError(
+                            f&#34;Could not filter {element_type} by {request}&#34;)
+                    if found:
+                        rep[request][val.id].add(elt)
+        if len(rep) == 0:
+            rep_list = set(elements)
+        elif operation in [&#34;any&#34;, ]:
+            rep_list = set()
+            for req in rep:
+                for val in rep[req]:
+                    rep_list = rep_list | rep[req][val]
+        elif operation in [&#34;all&#34;, ]:
+            rep_list = set(elements)
+            for req in rep:
+                for val in rep[req]:
+                    rep_list = rep_list &amp; rep[req][val]
+        else:
+            raise ValueError(
+                f&#34;Unknown value {operation} for operation (only &#39;all&#39; and &#39;any&#39; are available).&#34;)
+        rep_list = sorted(list(rep_list))
+        return rep_list</code></pre>
+</details>
+<div class="desc"><p>Filter the elements of kind element_type with a dictionary of requests.
+:param str element_type: kind of elements to be filtered
+:param dict requests: dictionary of the filters to be applied
+:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+:return: list of elements of kind element_type which correspond to the filtering requests</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_element"><code class="name flex">
+<span>def <span class="ident">find_element</span></span>(<span>self, element_type, value, default=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_element(self, element_type, value, default=False):
+    &#34;&#34;&#34;
+    Find an element of a specific type and specified by a value from mapping/content if existing,
+     else from vocabulary server.
+    :param str element_type: kind of element to be found
+    :param str value: value to be looked for
+    :param default: value to be returned if non found
+    :return: the found element if existing, else the default value
+    &#34;&#34;&#34;
+    if value in self.content[element_type]:
+        return self.content[element_type][value]
+    elif value in self.mapping[element_type]:
+        return self.mapping[element_type][value]
+    else:
+        return self.find_element_from_vs(element_type=element_type, value=value, default=default)</code></pre>
+</details>
+<div class="desc"><p>Find an element of a specific type and specified by a value from mapping/content if existing,
+else from vocabulary server.
+:param str element_type: kind of element to be found
+:param str value: value to be looked for
+:param default: value to be returned if non found
+:return: the found element if existing, else the default value</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_element_from_vs"><code class="name flex">
+<span>def <span class="ident">find_element_from_vs</span></span>(<span>self, element_type, value, default=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_element_from_vs(self, element_type, value, default=False):
+    &#34;&#34;&#34;
+    Find an element of a specific type and specified by a value from vocabulary server.
+    Update the content and mapping list not to have to ask the vocabulary server again for it.
+    :param str element_type: kind of element to be looked for
+    :param str value: value to be looked for
+    :param default: default value to be returned if no value found
+    :return: element corresponding to the specified value of a given type if found, else the default value
+    &#34;&#34;&#34;
+    rep = self.find_element_per_identifier_from_vs(
+        element_type=element_type, value=value, key=&#34;id&#34;, default=None)
+    if rep is not None:
+        self.content[element_type][rep.id] = rep
+    else:
+        rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=&#34;name&#34;,
+                                                       default=default)
+        if rep not in [default, ]:
+            self.content[element_type][rep.id] = rep
+            self.mapping[element_type][rep.name] = rep
+    return rep</code></pre>
+</details>
+<div class="desc"><p>Find an element of a specific type and specified by a value from vocabulary server.
+Update the content and mapping list not to have to ask the vocabulary server again for it.
+:param str element_type: kind of element to be looked for
+:param str value: value to be looked for
+:param default: default value to be returned if no value found
+:return: element corresponding to the specified value of a given type if found, else the default value</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_element_per_identifier_from_vs"><code class="name flex">
+<span>def <span class="ident">find_element_per_identifier_from_vs</span></span>(<span>self, element_type, key, value, default=False, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_element_per_identifier_from_vs(self, element_type, key, value, default=False, **kwargs):
+    &#34;&#34;&#34;
+    Find an element of a specific type and specified by a value (of a given kind) from vocabulary server.
+    :param str element_type: type of the element to be found (same as in vocabulary server).
+    :param str key: type of the value key to be looked for (&#34;id&#34;, &#34;name&#34;...)
+    :param str value: value to be looked for
+    :param default: default value to be used if the value is not found
+    :param dict kwargs: additional attributes to be used for vocabulary server search.
+    :return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or default: the element found from vocabulary server or the default value if none is found.
+    &#34;&#34;&#34;
+    if key in [&#34;id&#34;, ]:
+        value = build_link_from_id(value)
+    rep = self.VS.get_element(
+        element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
+    if rep not in [default, ]:
+        if element_type in [&#34;opportunities&#34;, ]:
+            rep = Opportunity.from_input(dr=self, **rep,
+                                         **self.structure.get(&#34;opportunities&#34;, dict()).get(rep[&#34;id&#34;], dict()))
+        elif element_type in [&#34;variable_groups&#34;, ]:
+            rep = VariablesGroup.from_input(dr=self, **rep,
+                                            **self.structure.get(&#34;variable_groups&#34;, dict()).get(rep[&#34;id&#34;], dict()))
+        elif element_type in [&#34;experiment_groups&#34;, ]:
+            rep = ExperimentsGroup.from_input(dr=self, **rep,
+                                              **self.structure.get(&#34;experiment_groups&#34;, dict()).get(rep[&#34;id&#34;], dict()))
+        elif element_type in [&#34;variables&#34;, ]:
+            rep = Variable.from_input(dr=self, **rep)
+        else:
+            rep = DRObjects.from_input(
+                dr=self, id=rep[&#34;id&#34;], DR_type=element_type, elements=rep)
+    return rep</code></pre>
+</details>
+<div class="desc"><p>Find an element of a specific type and specified by a value (of a given kind) from vocabulary server.
+:param str element_type: type of the element to be found (same as in vocabulary server).
+:param str key: type of the value key to be looked for ("id", "name"&hellip;)
+:param str value: value to be looked for
+:param default: default value to be used if the value is not found
+:param dict kwargs: additional attributes to be used for vocabulary server search.
+:return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or default: the element found from vocabulary server or the default value if none is found.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_experiments"><code class="name flex">
+<span>def <span class="ident">find_experiments</span></span>(<span>self, operation='any', skip_if_missing=False, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_experiments(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
+    &#34;&#34;&#34;
+    Find the experiments corresponding to filtering criteria.
+    :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+    :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+    :param dict kwargs: filters to be applied
+    :return list of DRObjects: experiments linked to the filters
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;experiments&#34;, operation=operation,
+                                            skip_if_missing=skip_if_missing, requests=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Find the experiments corresponding to filtering criteria.
+:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+:param dict kwargs: filters to be applied
+:return list of DRObjects: experiments linked to the filters</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_experiments_per_opportunity"><code class="name flex">
+<span>def <span class="ident">find_experiments_per_opportunity</span></span>(<span>self, opportunity)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_experiments_per_opportunity(self, opportunity):
+    &#34;&#34;&#34;
+    Find all the experiments which are linked to a specified opportunity.
+    :param Opportunity or str opportunity: opportunity to be considered
+    :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified opportunity.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;experiments&#34;, requests=dict(opportunities=[opportunity, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the experiments which are linked to a specified opportunity.
+:param Opportunity or str opportunity: opportunity to be considered
+:return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified opportunity.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_experiments_per_theme"><code class="name flex">
+<span>def <span class="ident">find_experiments_per_theme</span></span>(<span>self, theme)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_experiments_per_theme(self, theme):
+    &#34;&#34;&#34;
+    Find all the experiments which are linked to a specified theme.
+    :param DRObjects or ConstantValueObj or str theme: theme to be considered
+    :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;experiments&#34;, requests=dict(data_request_themes=[theme, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the experiments which are linked to a specified theme.
+:param DRObjects or ConstantValueObj or str theme: theme to be considered
+:return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_mips_per_opportunity"><code class="name flex">
+<span>def <span class="ident">find_mips_per_opportunity</span></span>(<span>self, opportunity)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_mips_per_opportunity(self, opportunity):
+    &#34;&#34;&#34;
+    Find all the MIPs which are linked to a specified opportunity.
+    :param Opportunity or str opportunity: opportunity to be considered
+    :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;mips&#34;, requests=dict(opportunities=[opportunity, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the MIPs which are linked to a specified opportunity.
+:param Opportunity or str opportunity: opportunity to be considered
+:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_mips_per_theme"><code class="name flex">
+<span>def <span class="ident">find_mips_per_theme</span></span>(<span>self, theme)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_mips_per_theme(self, theme):
+    &#34;&#34;&#34;
+    Find all the MIPs which are linked to a specified theme.
+    :param DRObjects or ConstantValueObj or str theme: theme to be considered
+    :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;mips&#34;, requests=dict(data_request_themes=[theme, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the MIPs which are linked to a specified theme.
+:param DRObjects or ConstantValueObj or str theme: theme to be considered
+:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_mips_per_variable"><code class="name flex">
+<span>def <span class="ident">find_mips_per_variable</span></span>(<span>self, variable)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_mips_per_variable(self, variable):
+    &#34;&#34;&#34;
+    Find all the MIPs which are linked to a specified variable.
+    :param Variable or str variable: variable to be considered
+    :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;mips&#34;, requests=dict(variables=[variable, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the MIPs which are linked to a specified variable.
+:param Variable or str variable: variable to be considered
+:return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_opportunities"><code class="name flex">
+<span>def <span class="ident">find_opportunities</span></span>(<span>self, operation='any', skip_if_missing=False, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_opportunities(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
+    &#34;&#34;&#34;
+    Find the opportunities corresponding to filtering criteria.
+    :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+    :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+    :param dict kwargs: filters to be applied
+    :return list of Opportunity: opportunities linked to the filters
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, operation=operation,
+                                            skip_if_missing=skip_if_missing, requests=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Find the opportunities corresponding to filtering criteria.
+:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+:param dict kwargs: filters to be applied
+:return list of Opportunity: opportunities linked to the filters</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_opportunities_per_experiment"><code class="name flex">
+<span>def <span class="ident">find_opportunities_per_experiment</span></span>(<span>self, experiment)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_opportunities_per_experiment(self, experiment):
+    &#34;&#34;&#34;
+    Find all the opportunities which are linked to a specified experiment.
+    :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
+    :return list of Opportunity: list of the opportunities which are linked to a specified experiment.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, requests=dict(experiments=[experiment, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the opportunities which are linked to a specified experiment.
+:param DRObjects or ConstantValueObj or str experiment: experiment to be considered
+:return list of Opportunity: list of the opportunities which are linked to a specified experiment.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_opportunities_per_theme"><code class="name flex">
+<span>def <span class="ident">find_opportunities_per_theme</span></span>(<span>self, theme)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_opportunities_per_theme(self, theme):
+    &#34;&#34;&#34;
+    Find all the opportunities which are linked to a specified theme.
+    :param DRObjects or ConstantValueObj or str theme: theme to be considered
+    :return list of Opportunity: list of the opportunities which are linked to a specified theme.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, requests=dict(data_request_themes=[theme, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the opportunities which are linked to a specified theme.
+:param DRObjects or ConstantValueObj or str theme: theme to be considered
+:return list of Opportunity: list of the opportunities which are linked to a specified theme.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_opportunities_per_variable"><code class="name flex">
+<span>def <span class="ident">find_opportunities_per_variable</span></span>(<span>self, variable)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_opportunities_per_variable(self, variable):
+    &#34;&#34;&#34;
+    Find all the opportunities which are linked to a specified variable.
+    :param Variable or str variable: variable to be considered
+    :return list of Opportunity: list of the opportunities which are linked to a specified variable.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;opportunities&#34;, requests=dict(variables=[variable, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the opportunities which are linked to a specified variable.
+:param Variable or str variable: variable to be considered
+:return list of Opportunity: list of the opportunities which are linked to a specified variable.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_themes_per_experiment"><code class="name flex">
+<span>def <span class="ident">find_themes_per_experiment</span></span>(<span>self, experiment)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_themes_per_experiment(self, experiment):
+    &#34;&#34;&#34;
+    Find all the themes which are linked to a specified experiment.
+    :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
+    :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;data_request_themes&#34;, requests=dict(experiments=[experiment, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the themes which are linked to a specified experiment.
+:param DRObjects or ConstantValueObj or str experiment: experiment to be considered
+:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_themes_per_opportunity"><code class="name flex">
+<span>def <span class="ident">find_themes_per_opportunity</span></span>(<span>self, opportunity)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_themes_per_opportunity(self, opportunity):
+    &#34;&#34;&#34;
+    Find all the themes which are linked to a specified opportunity.
+    :param Opportunity or str opportunity: opportunity to be considered
+    :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;data_request_themes&#34;, requests=dict(opportunities=[opportunity, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the themes which are linked to a specified opportunity.
+:param Opportunity or str opportunity: opportunity to be considered
+:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_themes_per_variable"><code class="name flex">
+<span>def <span class="ident">find_themes_per_variable</span></span>(<span>self, variable)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_themes_per_variable(self, variable):
+    &#34;&#34;&#34;
+    Find all the themes which are linked to a specified variable.
+    :param Variable or str variable: variable to be considered
+    :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;data_request_themes&#34;, requests=dict(variables=[variable, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the themes which are linked to a specified variable.
+:param Variable or str variable: variable to be considered
+:return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_variables"><code class="name flex">
+<span>def <span class="ident">find_variables</span></span>(<span>self, operation='any', skip_if_missing=False, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_variables(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
+    &#34;&#34;&#34;
+    Find the variables corresponding to filtering criteria.
+    :param str operation: should at least one filter be applied (&#34;any&#34;) or all filters be fulfilled (&#34;all&#34;)
+    :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+    :param dict kwargs: filters to be applied
+    :return list of Variable: variables linked to the filters
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;variables&#34;, operation=operation,
+                                            skip_if_missing=skip_if_missing, requests=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Find the variables corresponding to filtering criteria.
+:param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+:param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+:param dict kwargs: filters to be applied
+:return list of Variable: variables linked to the filters</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_variables_per_opportunity"><code class="name flex">
+<span>def <span class="ident">find_variables_per_opportunity</span></span>(<span>self, opportunity)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_variables_per_opportunity(self, opportunity):
+    &#34;&#34;&#34;
+    Find all the variables which are linked to a specified opportunity.
+    :param Opportunity or str opportunity: opportunity to be considered
+    :return list of Variable: list of the variables which are linked to a specified opportunity.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;variables&#34;, requests=dict(opportunities=[opportunity, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the variables which are linked to a specified opportunity.
+:param Opportunity or str opportunity: opportunity to be considered
+:return list of Variable: list of the variables which are linked to a specified opportunity.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_variables_per_priority"><code class="name flex">
+<span>def <span class="ident">find_variables_per_priority</span></span>(<span>self, priority)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_variables_per_priority(self, priority):
+    &#34;&#34;&#34;
+    Find all the variables which have a specified priority.
+    :param DRObjects or ConstantValueObj or str priority: priority to be considered
+    :return list of Variable: list of the variables which have a specified priority.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;variables&#34;, requests=dict(priority_level=[priority, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the variables which have a specified priority.
+:param DRObjects or ConstantValueObj or str priority: priority to be considered
+:return list of Variable: list of the variables which have a specified priority.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.find_variables_per_theme"><code class="name flex">
+<span>def <span class="ident">find_variables_per_theme</span></span>(<span>self, theme)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_variables_per_theme(self, theme):
+    &#34;&#34;&#34;
+    Find all the variables which are linked to a specified theme.
+    :param DRObjects or ConstantValueObj or str theme: theme to be considered
+    :return list of Variable: list of the variables which are linked to a specified theme.
+    &#34;&#34;&#34;
+    return self.filter_elements_per_request(element_type=&#34;variables&#34;, requests=dict(data_request_themes=[theme, ]))</code></pre>
+</details>
+<div class="desc"><p>Find all the variables which are linked to a specified theme.
+:param DRObjects or ConstantValueObj or str theme: theme to be considered
+:return list of Variable: list of the variables which are linked to a specified theme.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_data_request_themes"><code class="name flex">
+<span>def <span class="ident">get_data_request_themes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data_request_themes(self):
+    &#34;&#34;&#34;
+    Get the themes of the Data Request.
+    :return list of DRObject: list of the themes of the DR content.
+    &#34;&#34;&#34;
+    rep = set()
+    for op in self.get_opportunities():
+        rep = rep | set(op.get_themes())
+    rep = sorted(list(rep))
+    return rep</code></pre>
+</details>
+<div class="desc"><p>Get the themes of the Data Request.
+:return list of DRObject: list of the themes of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_elements_per_kind"><code class="name flex">
+<span>def <span class="ident">get_elements_per_kind</span></span>(<span>self, element_type)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_elements_per_kind(self, element_type):
+    &#34;&#34;&#34;
+    Return the list of elements of kind element_type
+    :param str element_type: the kind of the elements to be found
+    :return list: the list of elements of kind element_type
+    &#34;&#34;&#34;
+    logger = get_logger()
+    if element_type in [&#34;opportunities&#34;, ]:
+        elements = self.get_opportunities()
+    elif element_type in [&#34;experiment_groups&#34;, ]:
+        elements = self.get_experiment_groups()
+    elif element_type in [&#34;variable_groups&#34;, ]:
+        elements = self.get_variable_groups()
+    elif element_type in [&#34;variables&#34;, ]:
+        elements = self.get_variables()
+    elif element_type in [&#34;experiments&#34;, ]:
+        elements = self.get_experiments()
+    elif element_type in [&#34;data_request_themes&#34;, ]:
+        elements = self.get_data_request_themes()
+    elif element_type in [&#34;mips&#34;, ]:
+        elements = self.get_mips()
+    else:
+        logger.debug(&#34;Find elements list from vocabulary server.&#34;)
+        element_type, elements_ids = self.VS.get_element_type_ids(
+            element_type)
+        elements = [self.find_element(element_type, id)
+                    for id in elements_ids]
+    return elements</code></pre>
+</details>
+<div class="desc"><p>Return the list of elements of kind element_type
+:param str element_type: the kind of the elements to be found
+:return list: the list of elements of kind element_type</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_experiment_group"><code class="name flex">
+<span>def <span class="ident">get_experiment_group</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_experiment_group(self, id):
+    &#34;&#34;&#34;
+    Get the ExperimentsGroup associated with a specific id.
+    :param str id: id of the ExperimentsGroup
+    :return ExperimentsGroup: the ExperimentsGroup associated with the input id
+    &#34;&#34;&#34;
+    rep = self.find_element(&#34;experiment_groups&#34;, id, default=None)
+    if rep is not None:
+        return rep
+    else:
+        raise ValueError(
+            f&#34;Could not find experiments group {id} among {self.get_experiment_groups()}.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Get the ExperimentsGroup associated with a specific id.
+:param str id: id of the ExperimentsGroup
+:return ExperimentsGroup: the ExperimentsGroup associated with the input id</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_experiment_groups"><code class="name flex">
+<span>def <span class="ident">get_experiment_groups</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_experiment_groups(self):
+    &#34;&#34;&#34;
+    Get the ExperimentsGroup of the Data Request.
+    :return list of ExperimentsGroup: list of the ExperimentsGroup of the DR content.
+    &#34;&#34;&#34;
+    return [self.content[&#34;experiment_groups&#34;][key] for key in sorted(list(self.content[&#34;experiment_groups&#34;]))]</code></pre>
+</details>
+<div class="desc"><p>Get the ExperimentsGroup of the Data Request.
+:return list of ExperimentsGroup: list of the ExperimentsGroup of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_experiments"><code class="name flex">
+<span>def <span class="ident">get_experiments</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_experiments(self):
+    &#34;&#34;&#34;
+    Get the experiments of the Data Request.
+    :return list of DRObject: list of the experiments of the DR content.
+    &#34;&#34;&#34;
+    rep = set()
+    for exp_grp in self.get_experiment_groups():
+        rep = rep | set(exp_grp.get_experiments())
+    rep = sorted(list(rep))
+    return rep</code></pre>
+</details>
+<div class="desc"><p>Get the experiments of the Data Request.
+:return list of DRObject: list of the experiments of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_mips"><code class="name flex">
+<span>def <span class="ident">get_mips</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mips(self):
+    &#34;&#34;&#34;
+    Get the MIPs of the Data Request.
+    :return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.
+    &#34;&#34;&#34;
+    rep = set()
+    for op in self.get_opportunities():
+        rep = rep | set(op.get_mips())
+    for var_grp in self.get_variable_groups():
+        rep = rep | set(var_grp.get_mips())
+    rep = sorted(list(rep))
+    return rep</code></pre>
+</details>
+<div class="desc"><p>Get the MIPs of the Data Request.
+:return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_opportunities"><code class="name flex">
+<span>def <span class="ident">get_opportunities</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_opportunities(self):
+    &#34;&#34;&#34;
+    Get the Opportunity of the Data Request.
+    :return list of Opportunity: list of the Opportunity of the DR content.
+    &#34;&#34;&#34;
+    return [self.content[&#34;opportunities&#34;][key] for key in sorted(list(self.content[&#34;opportunities&#34;]))]</code></pre>
+</details>
+<div class="desc"><p>Get the Opportunity of the Data Request.
+:return list of Opportunity: list of the Opportunity of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_opportunity"><code class="name flex">
+<span>def <span class="ident">get_opportunity</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_opportunity(self, id):
+    &#34;&#34;&#34;
+    Get the Opportunity associated with a specific id.
+    :param str id: id of the Opportunity
+    :return Opportunity: the Opportunity associated with the input id
+    &#34;&#34;&#34;
+    rep = self.find_element(&#34;opportunities&#34;, id, default=None)
+    if rep is not None:
+        return rep
+    else:
+        raise ValueError(f&#34;Could not find opportunity {id}.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Get the Opportunity associated with a specific id.
+:param str id: id of the Opportunity
+:return Opportunity: the Opportunity associated with the input id</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_variable_group"><code class="name flex">
+<span>def <span class="ident">get_variable_group</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variable_group(self, id):
+    &#34;&#34;&#34;
+    Get the VariablesGroup associated with a specific id.
+    :param str id: id of the VariablesGroup
+    :return VariablesGroup: the VariablesGroup associated with the input id
+    &#34;&#34;&#34;
+    rep = self.find_element(&#34;variable_groups&#34;, id, default=None)
+    if rep is not None:
+        return rep
+    else:
+        raise ValueError(f&#34;Could not find variables group {id}.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Get the VariablesGroup associated with a specific id.
+:param str id: id of the VariablesGroup
+:return VariablesGroup: the VariablesGroup associated with the input id</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_variable_groups"><code class="name flex">
+<span>def <span class="ident">get_variable_groups</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variable_groups(self):
+    &#34;&#34;&#34;
+    Get the VariablesGroup of the Data Request.
+    :return list of VariablesGroup: list of the VariablesGroup of the DR content.
+    &#34;&#34;&#34;
+    return [self.content[&#34;variable_groups&#34;][key] for key in sorted(list(self.content[&#34;variable_groups&#34;]))]</code></pre>
+</details>
+<div class="desc"><p>Get the VariablesGroup of the Data Request.
+:return list of VariablesGroup: list of the VariablesGroup of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.get_variables"><code class="name flex">
+<span>def <span class="ident">get_variables</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variables(self):
+    &#34;&#34;&#34;
+    Get the Variable of the Data Request.
+    :return list of Variable: list of the Variable of the DR content.
+    &#34;&#34;&#34;
+    rep = set()
+    for var_grp in self.get_variable_groups():
+        rep = rep | set(var_grp.get_variables())
+    rep = sorted(list(rep))
+    return rep</code></pre>
+</details>
+<div class="desc"><p>Get the Variable of the Data Request.
+:return list of Variable: list of the Variable of the DR content.</p></div>
+</dd>
+<dt id="stable.query.data_request.DataRequest.sort_func"><code class="name flex">
+<span>def <span class="ident">sort_func</span></span>(<span>self, data_list, sorting_request=[])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sort_func(self, data_list, sorting_request=list()):
+    &#34;&#34;&#34;
+    Method to sort a list of objects based on some criteria
+    :param list data_list: the list of objects to be sorted
+    :param list sorting_request: list of criteria to sort the input list
+    :return list: sorted list
+    &#34;&#34;&#34;
+    sorting_request = copy.deepcopy(sorting_request)
+    if len(sorting_request) == 0:
+        return sorted(data_list, key=lambda x: x.id)
+    else:
+        sorting_val = sorting_request.pop(0)
+        sorting_values_dict = defaultdict(list)
+        for data in data_list:
+            sorting_values_dict[data.get(sorting_val)].append(data)
+        rep = list()
+        for elt in sorted(list(sorting_values_dict)):
+            rep.extend(self.sort_func(
+                sorting_values_dict[elt], sorting_request))
+        return rep</code></pre>
+</details>
+<div class="desc"><p>Method to sort a list of objects based on some criteria
+:param list data_list: the list of objects to be sorted
+:param list sorting_request: list of criteria to sort the input list
+:return list: sorted list</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="stable.query.data_request.ExperimentsGroup"><code class="flex name class">
+<span>class <span class="ident">ExperimentsGroup</span></span>
+<span>(</span><span>id, dr, DR_type='experiment_groups', structure={'experiments': []}, **attributes)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ExperimentsGroup(DRObjects):
+    def __init__(self, id, dr, DR_type=&#34;experiment_groups&#34;, structure=dict(experiments=list()), **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
+    def check(self):
+        super().check()
+        logger = get_logger()
+        if self.count() == 0:
+            logger.critical(
+                f&#34;No experiment defined for {self.DR_type} id {self.id}&#34;)
+
+    def count(self):
+        &#34;&#34;&#34;
+        Return the number of experiments linked to the ExperimentGroup
+        :return int: number of experiments of the ExperimentGroup
+        &#34;&#34;&#34;
+        return len(self.get_experiments())
+
+    def get_experiments(self):
+        &#34;&#34;&#34;
+        Return the list of experiments linked to the ExperimentGroup.
+        :return list of DRObjects: list of the experiments linked to the ExperimentGroup
+        &#34;&#34;&#34;
+        return self.structure[&#34;experiments&#34;]
+
+    def print_content(self, level=0, add_content=True):
+        rep = super().print_content(level=level)
+        if add_content:
+            indent = &#34;    &#34; * (level + 1)
+            rep.append(f&#34;{indent}Experiments included:&#34;)
+            for experiment in self.get_experiments():
+                rep.extend(experiment.print_content(level=level + 2))
+        return rep
+
+    @classmethod
+    def from_input(cls, dr, id, experiments=list(), **kwargs):
+        return super().from_input(DR_type=&#34;experiment_groups&#34;, dr=dr, id=id, structure=dict(experiments=experiments),
+                                  elements=kwargs)
+
+    def filter_on_request(self, request_value):
+        if request_value.DR_type in [&#34;experiments&#34;, ]:
+            return True, request_value in self.get_experiments()
+        else:
+            return super().filter_on_request(request_value=request_value)</code></pre>
+</details>
+<div class="desc"><p>Base object to build the ones used within the DR API.
+Use to define basic information needed.</p>
+<p>Initialisation of the object.
+:param str id: id of the object
+:param DataRequest dr: reference data request object
+:param str DR_type: type of DR object (for reference in vocabulary server)
+:param dict structure: if needed, elements linked by structure to the current object
+:param dict attributes: attributes of the object coming from vocabulary server</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="stable.query.data_request.ExperimentsGroup.count"><code class="name flex">
+<span>def <span class="ident">count</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def count(self):
+    &#34;&#34;&#34;
+    Return the number of experiments linked to the ExperimentGroup
+    :return int: number of experiments of the ExperimentGroup
+    &#34;&#34;&#34;
+    return len(self.get_experiments())</code></pre>
+</details>
+<div class="desc"><p>Return the number of experiments linked to the ExperimentGroup
+:return int: number of experiments of the ExperimentGroup</p></div>
+</dd>
+<dt id="stable.query.data_request.ExperimentsGroup.get_experiments"><code class="name flex">
+<span>def <span class="ident">get_experiments</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_experiments(self):
+    &#34;&#34;&#34;
+    Return the list of experiments linked to the ExperimentGroup.
+    :return list of DRObjects: list of the experiments linked to the ExperimentGroup
+    &#34;&#34;&#34;
+    return self.structure[&#34;experiments&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of experiments linked to the ExperimentGroup.
+:return list of DRObjects: list of the experiments linked to the ExperimentGroup</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<ul class="hlist">
+<li><code><a title="stable.query.data_request.DRObjects.check" href="#stable.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.filter_on_request" href="#stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.from_input" href="#stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.print_content" href="#stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.transform_content" href="#stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="stable.query.data_request.Opportunity"><code class="flex name class">
+<span>class <span class="ident">Opportunity</span></span>
+<span>(</span><span>id,<br>dr,<br>DR_type='opportunities',<br>structure={'experiment_groups': [], 'variable_groups': [], 'data_request_themes': [], 'time_subsets': []},<br>**attributes)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Opportunity(DRObjects):
+    def __init__(self, id, dr, DR_type=&#34;opportunities&#34;,
+                 structure=dict(experiment_groups=list(), variable_groups=list(
+                 ), data_request_themes=list(), time_subsets=list()),
+                 **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
+    def check(self):
+        super().check()
+        logger = get_logger()
+        if len(self.get_experiment_groups()) == 0:
+            logger.critical(
+                f&#34;No experiments group defined for {self.DR_type} id {self.id}&#34;)
+        if len(self.get_variable_groups()) == 0:
+            logger.critical(
+                f&#34;No variables group defined for {self.DR_type} id {self.id}&#34;)
+        if len(self.get_data_request_themes()) == 0:
+            logger.critical(
+                f&#34;No theme defined for {self.DR_type} id {self.id}&#34;)
+
+    @classmethod
+    def from_input(cls, dr, id, experiment_groups=list(), variable_groups=list(), data_request_themes=list(),
+                   time_subsets=list(), mips=list(), **kwargs):
+
+        return super().from_input(DR_type=&#34;opportunities&#34;, dr=dr, id=id, elements=kwargs,
+                                  structure=dict(experiment_groups=experiment_groups, variable_groups=variable_groups,
+                                                 data_request_themes=data_request_themes, time_subsets=time_subsets,
+                                                 mips=mips))
+
+    def get_experiment_groups(self):
+        &#34;&#34;&#34;
+        Return the list of ExperimentsGroup linked to the Opportunity.
+        :return list of ExperimentsGroup: list of ExperimentsGroup linked to Opportunity
+        &#34;&#34;&#34;
+        return self.structure[&#34;experiment_groups&#34;]
+
+    def get_variable_groups(self):
+        &#34;&#34;&#34;
+        Return the list of VariablesGroup linked to the Opportunity.
+        :return list of VariablesGroup: list of VariablesGroup linked to Opportunity
+        &#34;&#34;&#34;
+        return self.structure[&#34;variable_groups&#34;]
+
+    def get_data_request_themes(self):
+        &#34;&#34;&#34;
+        Return the list of themes linked to the Opportunity.
+        :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity
+        &#34;&#34;&#34;
+        return self.structure[&#34;data_request_themes&#34;]
+
+    def get_themes(self):
+        &#34;&#34;&#34;
+        Return the list of themes linked to the Opportunity.
+        :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity
+        &#34;&#34;&#34;
+        return self.get_data_request_themes()
+
+    def get_time_subsets(self):
+        &#34;&#34;&#34;
+        Return the list of time subsets linked to the Opportunity.
+        :return list of DRObject: list of time subsets linked to Opportunity
+        &#34;&#34;&#34;
+        return self.structure[&#34;time_subsets&#34;]
+
+    def get_mips(self):
+        &#34;&#34;&#34;
+        Return the list of MIPs linked to the Opportunity.
+        :return list of DRObject: list of MIPs linked to Opportunity
+        &#34;&#34;&#34;
+        return self.structure[&#34;mips&#34;]
+
+    def print_content(self, level=0, add_content=True):
+        rep = super().print_content(level=level)
+        if add_content:
+            indent = &#34;    &#34; * (level + 1)
+            rep.append(f&#34;{indent}Experiments groups included:&#34;)
+            for experiments_group in self.get_experiment_groups():
+                rep.extend(experiments_group.print_content(
+                    level=level + 2, add_content=False))
+            rep.append(f&#34;{indent}Variables groups included:&#34;)
+            for variables_group in self.get_variable_groups():
+                rep.extend(variables_group.print_content(
+                    level=level + 2, add_content=False))
+            rep.append(f&#34;{indent}Themes included:&#34;)
+            for theme in self.get_data_request_themes():
+                rep.extend(theme.print_content(
+                    level=level + 2, add_content=False))
+            rep.append(f&#34;{indent}Time subsets included:&#34;)
+            for time_subset in self.get_time_subsets():
+                rep.extend(time_subset.print_content(
+                    level=level + 2, add_content=False))
+        return rep
+
+    def filter_on_request(self, request_value):
+        request_type = request_value.DR_type
+        if request_type in [&#34;data_request_themes&#34;, ]:
+            return True, request_value in self.get_data_request_themes()
+        elif request_type in [&#34;experiment_groups&#34;, ]:
+            return True, request_value in self.get_experiment_groups()
+        elif request_type in [&#34;variable_groups&#34;, ]:
+            return True, request_value in self.get_variable_groups()
+        elif request_type in [&#34;time_subset&#34;, ]:
+            return True, request_value in self.get_time_subsets()
+        elif request_type in [&#34;mips&#34;, ]:
+            return True, request_value in self.get_mips() or \
+                any(var_grp.filter_on_request(request_value=request_value)[1]
+                    for var_grp in self.get_variable_groups())
+        elif request_type in [&#34;variables&#34;, &#34;priority_level&#34;, &#34;table_identifiers&#34;, &#34;temporal_shape&#34;,
+                              &#34;spatial_shape&#34;, &#34;structure&#34;, &#34;physical_parameters&#34;, &#34;modelling_realm&#34;, &#34;esm-bcv&#34;,
+                              &#34;cf_standard_names&#34;, &#34;cell_methods&#34;, &#34;cell_measures&#34;]:
+            return True, any(var_grp.filter_on_request(request_value=request_value)[1]
+                             for var_grp in self.get_variable_groups())
+        elif request_type in [&#34;experiments&#34;, ]:
+            return True, any(exp_grp.filter_on_request(request_value=request_value)[1]
+                             for exp_grp in self.get_experiment_groups())
+        else:
+            return super().filter_on_request(request_value=request_value)</code></pre>
+</details>
+<div class="desc"><p>Base object to build the ones used within the DR API.
+Use to define basic information needed.</p>
+<p>Initialisation of the object.
+:param str id: id of the object
+:param DataRequest dr: reference data request object
+:param str DR_type: type of DR object (for reference in vocabulary server)
+:param dict structure: if needed, elements linked by structure to the current object
+:param dict attributes: attributes of the object coming from vocabulary server</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="stable.query.data_request.Opportunity.get_data_request_themes"><code class="name flex">
+<span>def <span class="ident">get_data_request_themes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data_request_themes(self):
+    &#34;&#34;&#34;
+    Return the list of themes linked to the Opportunity.
+    :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity
+    &#34;&#34;&#34;
+    return self.structure[&#34;data_request_themes&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of themes linked to the Opportunity.
+:return list of DRObject or ConstantValueObj: list of themes linked to Opportunity</p></div>
+</dd>
+<dt id="stable.query.data_request.Opportunity.get_experiment_groups"><code class="name flex">
+<span>def <span class="ident">get_experiment_groups</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_experiment_groups(self):
+    &#34;&#34;&#34;
+    Return the list of ExperimentsGroup linked to the Opportunity.
+    :return list of ExperimentsGroup: list of ExperimentsGroup linked to Opportunity
+    &#34;&#34;&#34;
+    return self.structure[&#34;experiment_groups&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of ExperimentsGroup linked to the Opportunity.
+:return list of ExperimentsGroup: list of ExperimentsGroup linked to Opportunity</p></div>
+</dd>
+<dt id="stable.query.data_request.Opportunity.get_mips"><code class="name flex">
+<span>def <span class="ident">get_mips</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mips(self):
+    &#34;&#34;&#34;
+    Return the list of MIPs linked to the Opportunity.
+    :return list of DRObject: list of MIPs linked to Opportunity
+    &#34;&#34;&#34;
+    return self.structure[&#34;mips&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of MIPs linked to the Opportunity.
+:return list of DRObject: list of MIPs linked to Opportunity</p></div>
+</dd>
+<dt id="stable.query.data_request.Opportunity.get_themes"><code class="name flex">
+<span>def <span class="ident">get_themes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_themes(self):
+    &#34;&#34;&#34;
+    Return the list of themes linked to the Opportunity.
+    :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity
+    &#34;&#34;&#34;
+    return self.get_data_request_themes()</code></pre>
+</details>
+<div class="desc"><p>Return the list of themes linked to the Opportunity.
+:return list of DRObject or ConstantValueObj: list of themes linked to Opportunity</p></div>
+</dd>
+<dt id="stable.query.data_request.Opportunity.get_time_subsets"><code class="name flex">
+<span>def <span class="ident">get_time_subsets</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_time_subsets(self):
+    &#34;&#34;&#34;
+    Return the list of time subsets linked to the Opportunity.
+    :return list of DRObject: list of time subsets linked to Opportunity
+    &#34;&#34;&#34;
+    return self.structure[&#34;time_subsets&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of time subsets linked to the Opportunity.
+:return list of DRObject: list of time subsets linked to Opportunity</p></div>
+</dd>
+<dt id="stable.query.data_request.Opportunity.get_variable_groups"><code class="name flex">
+<span>def <span class="ident">get_variable_groups</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variable_groups(self):
+    &#34;&#34;&#34;
+    Return the list of VariablesGroup linked to the Opportunity.
+    :return list of VariablesGroup: list of VariablesGroup linked to Opportunity
+    &#34;&#34;&#34;
+    return self.structure[&#34;variable_groups&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of VariablesGroup linked to the Opportunity.
+:return list of VariablesGroup: list of VariablesGroup linked to Opportunity</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<ul class="hlist">
+<li><code><a title="stable.query.data_request.DRObjects.check" href="#stable.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.filter_on_request" href="#stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.from_input" href="#stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.print_content" href="#stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.transform_content" href="#stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="stable.query.data_request.Variable"><code class="flex name class">
+<span>class <span class="ident">Variable</span></span>
+<span>(</span><span>id, dr, DR_type='variables', structure={}, **attributes)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Variable(DRObjects):
+    def __init__(self, id, dr, DR_type=&#34;variables&#34;, structure=dict(), **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
+    @classmethod
+    def from_input(cls, dr, id, **kwargs):
+        return super().from_input(DR_type=&#34;variables&#34;, dr=dr, id=id, elements=kwargs, structure=dict())
+
+    def print_content(self, level=0, add_content=True):
+        &#34;&#34;&#34;
+        Function to return a printable version of the content of the current class.
+        :param level: level of indent of the result
+        :param add_content: should inner content be added?
+        :return: a list of strings that can be assembled to print the content.
+        &#34;&#34;&#34;
+        indent = &#34;    &#34; * level
+        return [f&#34;{indent}{self.DR_type.rstrip(&#39;s&#39;)}: {self.physical_parameter.name} at frequency {self.cmip7_frequency.name} (id: {is_link_id_or_value(self.id)[1]}, title: {self.title})&#34;, ]
+
+    def filter_on_request(self, request_value):
+        request_type = request_value.DR_type
+        if request_type in [&#34;table_identifiers&#34;, ]:
+            return True, request_value in self.table
+        elif request_type in [&#34;temporal_shape&#34;, ]:
+            return True, request_value == self.temporal_shape
+        elif request_type in [&#34;spatial_shape&#34;, ]:
+            return True, request_value == self.spatial_shape
+        elif request_type in [&#34;structure&#34;, ]:
+            return True, request_value == self.structure_title
+        elif request_type in [&#34;physical_parameters&#34;, ]:
+            return True, request_value == self.physical_parameter
+        elif request_type in [&#34;modelling_realm&#34;, ]:
+            return True, request_value in self.modelling_realm
+        elif request_type in [&#34;esm-bcv&#34;, ]:
+            return True, request_value == self.esm_bcv
+        elif request_type in [&#34;cf_standard_names&#34;, ]:
+            return True, request_value == self.cf_standard_name
+        elif request_type in [&#34;cell_methods&#34;, ]:
+            return True, request_value == self.cell_methods
+        elif request_type in [&#34;cell_measures&#34;, ]:
+            return True, request_value == self.cell_measures
+        else:
+            return super().filter_on_request(request_value)</code></pre>
+</details>
+<div class="desc"><p>Base object to build the ones used within the DR API.
+Use to define basic information needed.</p>
+<p>Initialisation of the object.
+:param str id: id of the object
+:param DataRequest dr: reference data request object
+:param str DR_type: type of DR object (for reference in vocabulary server)
+:param dict structure: if needed, elements linked by structure to the current object
+:param dict attributes: attributes of the object coming from vocabulary server</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<ul class="hlist">
+<li><code><a title="stable.query.data_request.DRObjects.check" href="#stable.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.filter_on_request" href="#stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.from_input" href="#stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.print_content" href="#stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.transform_content" href="#stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="stable.query.data_request.VariablesGroup"><code class="flex name class">
+<span>class <span class="ident">VariablesGroup</span></span>
+<span>(</span><span>id,<br>dr,<br>DR_type='variable_groups',<br>structure={'variables': [], 'mips': [], 'priority_level': 'High'},<br>**attributes)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VariablesGroup(DRObjects):
+    def __init__(self, id, dr, DR_type=&#34;variable_groups&#34;,
+                 structure=dict(variables=list(), mips=list(), priority_level=&#34;High&#34;), **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
+    def check(self):
+        super().check()
+        logger = get_logger()
+        if self.count() == 0:
+            logger.critical(
+                f&#34;No variable defined for {self.DR_type} id {self.id}&#34;)
+
+    @classmethod
+    def from_input(cls, dr, id, variables=list(), mips=list(), priority_level=&#34;High&#34;, **kwargs):
+        return super().from_input(DR_type=&#34;variable_groups&#34;, dr=dr, id=id, elements=kwargs,
+                                  structure=dict(variables=variables, mips=mips, priority_level=priority_level))
+
+    def count(self):
+        &#34;&#34;&#34;
+        Count the number of variables linked to the VariablesGroup.
+        :return int: number of variables linked to the VariablesGroup
+        &#34;&#34;&#34;
+        return len(self.get_variables())
+
+    def get_variables(self):
+        &#34;&#34;&#34;
+        Return the list of Variables linked to the VariablesGroup.
+        :return list of Variable: list of Variable linked to VariablesGroup
+        &#34;&#34;&#34;
+        return self.structure[&#34;variables&#34;]
+
+    def get_mips(self):
+        &#34;&#34;&#34;
+        Return the list of MIPs linked to the VariablesGroup.
+        :return list of DrObject: list of MIPs linked to VariablesGroup
+        &#34;&#34;&#34;
+        return self.structure[&#34;mips&#34;]
+
+    def get_priority_level(self):
+        &#34;&#34;&#34;
+        Return the priority level of the VariablesGroup.
+        :return DrObject: priority level of VariablesGroup
+        &#34;&#34;&#34;
+        return self.structure[&#34;priority_level&#34;]
+
+    def print_content(self, level=0, add_content=True):
+        rep = super().print_content(level=level)
+        if add_content:
+            indent = &#34;    &#34; * (level + 1)
+            rep.append(f&#34;{indent}Variables included:&#34;)
+            for variable in self.get_variables():
+                rep.extend(variable.print_content(level=level + 2))
+        return rep
+
+    def filter_on_request(self, request_value):
+        request_type = request_value.DR_type
+        if request_type in [&#34;variables&#34;, ]:
+            return True, request_value in self.get_variables()
+        elif request_type in [&#34;mips&#34;, ]:
+            return True, request_value in self.get_mips()
+        elif request_type in [&#34;priority_level&#34;, ]:
+            _, priority = is_link_id_or_value(self.get_priority_level().id)
+            _, req_priority = is_link_id_or_value(request_value.id)
+            return True, req_priority == priority
+        elif request_type in [&#34;table_identifiers&#34;, &#34;temporal_shape&#34;, &#34;spatial_shape&#34;, &#34;structure&#34;,
+                              &#34;physical_parameters&#34;, &#34;modelling_realm&#34;, &#34;esm-bcv&#34;, &#34;cf_standard_names&#34;, &#34;cell_methods&#34;,
+                              &#34;cell_measures&#34;]:
+            return True, any(var.filter_on_request(request_value=request_value)[1] for var in self.get_variables())
+        else:
+            return super().filter_on_request(request_value=request_value)</code></pre>
+</details>
+<div class="desc"><p>Base object to build the ones used within the DR API.
+Use to define basic information needed.</p>
+<p>Initialisation of the object.
+:param str id: id of the object
+:param DataRequest dr: reference data request object
+:param str DR_type: type of DR object (for reference in vocabulary server)
+:param dict structure: if needed, elements linked by structure to the current object
+:param dict attributes: attributes of the object coming from vocabulary server</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="stable.query.data_request.VariablesGroup.count"><code class="name flex">
+<span>def <span class="ident">count</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def count(self):
+    &#34;&#34;&#34;
+    Count the number of variables linked to the VariablesGroup.
+    :return int: number of variables linked to the VariablesGroup
+    &#34;&#34;&#34;
+    return len(self.get_variables())</code></pre>
+</details>
+<div class="desc"><p>Count the number of variables linked to the VariablesGroup.
+:return int: number of variables linked to the VariablesGroup</p></div>
+</dd>
+<dt id="stable.query.data_request.VariablesGroup.get_mips"><code class="name flex">
+<span>def <span class="ident">get_mips</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_mips(self):
+    &#34;&#34;&#34;
+    Return the list of MIPs linked to the VariablesGroup.
+    :return list of DrObject: list of MIPs linked to VariablesGroup
+    &#34;&#34;&#34;
+    return self.structure[&#34;mips&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of MIPs linked to the VariablesGroup.
+:return list of DrObject: list of MIPs linked to VariablesGroup</p></div>
+</dd>
+<dt id="stable.query.data_request.VariablesGroup.get_priority_level"><code class="name flex">
+<span>def <span class="ident">get_priority_level</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_priority_level(self):
+    &#34;&#34;&#34;
+    Return the priority level of the VariablesGroup.
+    :return DrObject: priority level of VariablesGroup
+    &#34;&#34;&#34;
+    return self.structure[&#34;priority_level&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the priority level of the VariablesGroup.
+:return DrObject: priority level of VariablesGroup</p></div>
+</dd>
+<dt id="stable.query.data_request.VariablesGroup.get_variables"><code class="name flex">
+<span>def <span class="ident">get_variables</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variables(self):
+    &#34;&#34;&#34;
+    Return the list of Variables linked to the VariablesGroup.
+    :return list of Variable: list of Variable linked to VariablesGroup
+    &#34;&#34;&#34;
+    return self.structure[&#34;variables&#34;]</code></pre>
+</details>
+<div class="desc"><p>Return the list of Variables linked to the VariablesGroup.
+:return list of Variable: list of Variable linked to VariablesGroup</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<ul class="hlist">
+<li><code><a title="stable.query.data_request.DRObjects.check" href="#stable.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.filter_on_request" href="#stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.from_input" href="#stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.print_content" href="#stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.transform_content" href="#stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="stable.query" href="index.html">stable.query</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="stable.query.data_request.ConstantValueObj" href="#stable.query.data_request.ConstantValueObj">ConstantValueObj</a></code></h4>
+</li>
+<li>
+<h4><code><a title="stable.query.data_request.DRObjects" href="#stable.query.data_request.DRObjects">DRObjects</a></code></h4>
+<ul class="two-column">
+<li><code><a title="stable.query.data_request.DRObjects.check" href="#stable.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.filter_on_request" href="#stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.from_input" href="#stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.get" href="#stable.query.data_request.DRObjects.get">get</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.print_content" href="#stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="stable.query.data_request.DRObjects.transform_content" href="#stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="stable.query.data_request.DataRequest" href="#stable.query.data_request.DataRequest">DataRequest</a></code></h4>
+<ul class="">
+<li><code><a title="stable.query.data_request.DataRequest.check" href="#stable.query.data_request.DataRequest.check">check</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.export_data" href="#stable.query.data_request.DataRequest.export_data">export_data</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.export_summary" href="#stable.query.data_request.DataRequest.export_summary">export_summary</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.filter_elements_per_request" href="#stable.query.data_request.DataRequest.filter_elements_per_request">filter_elements_per_request</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_element" href="#stable.query.data_request.DataRequest.find_element">find_element</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_element_from_vs" href="#stable.query.data_request.DataRequest.find_element_from_vs">find_element_from_vs</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_element_per_identifier_from_vs" href="#stable.query.data_request.DataRequest.find_element_per_identifier_from_vs">find_element_per_identifier_from_vs</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_experiments" href="#stable.query.data_request.DataRequest.find_experiments">find_experiments</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_experiments_per_opportunity" href="#stable.query.data_request.DataRequest.find_experiments_per_opportunity">find_experiments_per_opportunity</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_experiments_per_theme" href="#stable.query.data_request.DataRequest.find_experiments_per_theme">find_experiments_per_theme</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_mips_per_opportunity" href="#stable.query.data_request.DataRequest.find_mips_per_opportunity">find_mips_per_opportunity</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_mips_per_theme" href="#stable.query.data_request.DataRequest.find_mips_per_theme">find_mips_per_theme</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_mips_per_variable" href="#stable.query.data_request.DataRequest.find_mips_per_variable">find_mips_per_variable</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_opportunities" href="#stable.query.data_request.DataRequest.find_opportunities">find_opportunities</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_opportunities_per_experiment" href="#stable.query.data_request.DataRequest.find_opportunities_per_experiment">find_opportunities_per_experiment</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_opportunities_per_theme" href="#stable.query.data_request.DataRequest.find_opportunities_per_theme">find_opportunities_per_theme</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_opportunities_per_variable" href="#stable.query.data_request.DataRequest.find_opportunities_per_variable">find_opportunities_per_variable</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_themes_per_experiment" href="#stable.query.data_request.DataRequest.find_themes_per_experiment">find_themes_per_experiment</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_themes_per_opportunity" href="#stable.query.data_request.DataRequest.find_themes_per_opportunity">find_themes_per_opportunity</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_themes_per_variable" href="#stable.query.data_request.DataRequest.find_themes_per_variable">find_themes_per_variable</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_variables" href="#stable.query.data_request.DataRequest.find_variables">find_variables</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_variables_per_opportunity" href="#stable.query.data_request.DataRequest.find_variables_per_opportunity">find_variables_per_opportunity</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_variables_per_priority" href="#stable.query.data_request.DataRequest.find_variables_per_priority">find_variables_per_priority</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.find_variables_per_theme" href="#stable.query.data_request.DataRequest.find_variables_per_theme">find_variables_per_theme</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.from_input" href="#stable.query.data_request.DataRequest.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.from_separated_inputs" href="#stable.query.data_request.DataRequest.from_separated_inputs">from_separated_inputs</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_data_request_themes" href="#stable.query.data_request.DataRequest.get_data_request_themes">get_data_request_themes</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_elements_per_kind" href="#stable.query.data_request.DataRequest.get_elements_per_kind">get_elements_per_kind</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_experiment_group" href="#stable.query.data_request.DataRequest.get_experiment_group">get_experiment_group</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_experiment_groups" href="#stable.query.data_request.DataRequest.get_experiment_groups">get_experiment_groups</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_experiments" href="#stable.query.data_request.DataRequest.get_experiments">get_experiments</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_mips" href="#stable.query.data_request.DataRequest.get_mips">get_mips</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_opportunities" href="#stable.query.data_request.DataRequest.get_opportunities">get_opportunities</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_opportunity" href="#stable.query.data_request.DataRequest.get_opportunity">get_opportunity</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_variable_group" href="#stable.query.data_request.DataRequest.get_variable_group">get_variable_group</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_variable_groups" href="#stable.query.data_request.DataRequest.get_variable_groups">get_variable_groups</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.get_variables" href="#stable.query.data_request.DataRequest.get_variables">get_variables</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.software_version" href="#stable.query.data_request.DataRequest.software_version">software_version</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.sort_func" href="#stable.query.data_request.DataRequest.sort_func">sort_func</a></code></li>
+<li><code><a title="stable.query.data_request.DataRequest.version" href="#stable.query.data_request.DataRequest.version">version</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="stable.query.data_request.ExperimentsGroup" href="#stable.query.data_request.ExperimentsGroup">ExperimentsGroup</a></code></h4>
+<ul class="">
+<li><code><a title="stable.query.data_request.ExperimentsGroup.count" href="#stable.query.data_request.ExperimentsGroup.count">count</a></code></li>
+<li><code><a title="stable.query.data_request.ExperimentsGroup.get_experiments" href="#stable.query.data_request.ExperimentsGroup.get_experiments">get_experiments</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="stable.query.data_request.Opportunity" href="#stable.query.data_request.Opportunity">Opportunity</a></code></h4>
+<ul class="">
+<li><code><a title="stable.query.data_request.Opportunity.get_data_request_themes" href="#stable.query.data_request.Opportunity.get_data_request_themes">get_data_request_themes</a></code></li>
+<li><code><a title="stable.query.data_request.Opportunity.get_experiment_groups" href="#stable.query.data_request.Opportunity.get_experiment_groups">get_experiment_groups</a></code></li>
+<li><code><a title="stable.query.data_request.Opportunity.get_mips" href="#stable.query.data_request.Opportunity.get_mips">get_mips</a></code></li>
+<li><code><a title="stable.query.data_request.Opportunity.get_themes" href="#stable.query.data_request.Opportunity.get_themes">get_themes</a></code></li>
+<li><code><a title="stable.query.data_request.Opportunity.get_time_subsets" href="#stable.query.data_request.Opportunity.get_time_subsets">get_time_subsets</a></code></li>
+<li><code><a title="stable.query.data_request.Opportunity.get_variable_groups" href="#stable.query.data_request.Opportunity.get_variable_groups">get_variable_groups</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="stable.query.data_request.Variable" href="#stable.query.data_request.Variable">Variable</a></code></h4>
+</li>
+<li>
+<h4><code><a title="stable.query.data_request.VariablesGroup" href="#stable.query.data_request.VariablesGroup">VariablesGroup</a></code></h4>
+<ul class="">
+<li><code><a title="stable.query.data_request.VariablesGroup.count" href="#stable.query.data_request.VariablesGroup.count">count</a></code></li>
+<li><code><a title="stable.query.data_request.VariablesGroup.get_mips" href="#stable.query.data_request.VariablesGroup.get_mips">get_mips</a></code></li>
+<li><code><a title="stable.query.data_request.VariablesGroup.get_priority_level" href="#stable.query.data_request.VariablesGroup.get_priority_level">get_priority_level</a></code></li>
+<li><code><a title="stable.query.data_request.VariablesGroup.get_variables" href="#stable.query.data_request.VariablesGroup.get_variables">get_variables</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+</footer>
+</body>
+</html>

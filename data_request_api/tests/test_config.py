@@ -147,7 +147,8 @@ def test_sanity_checks():
     _sanity_check("consolidate", True)
     _sanity_check("log_level", "info")
     _sanity_check("log_file", "default")
-    _sanity_check("cache_dir", str(Path.home() / ".CMIP7_data_request_api_cache"))
+    _sanity_check("cache_dir", str(
+        Path.home() / ".CMIP7_data_request_api_cache"))
 
 
 def test_caching(temp_config_file, monkeypatch):

@@ -86,14 +86,16 @@ def load_config() -> dict:
                 yaml.dump(DEFAULT_CONFIG, f)
             CONFIG = DEFAULT_CONFIG.copy()
         elif not isinstance(CONFIG, dict):
-            raise TypeError(f"Config file ('{CONFIG_FILE}') must contain a dictionary")
+            raise TypeError(
+                f"Config file ('{CONFIG_FILE}') must contain a dictionary")
 
         # Sanity test for allowed types and values
         for key, value in CONFIG.items():
             _sanity_check(key, value)
 
         # Ensure all required keys are present and update config file if necessary
-        missing_keys = {k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG}
+        missing_keys = {k: v for k, v in DEFAULT_CONFIG.items()
+                        if k not in CONFIG}
         for key, value in missing_keys.items():
             update_config(key, value)
 

@@ -62,7 +62,8 @@ _version_pattern = re.compile(
 try:
     _dreq_res = dreqcfg.load_config()["cache_dir"]
 except KeyError:
-    _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
+    _dreq_res = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), "dreq_res")
 
 _dreq_content_loaded = {}
 
@@ -83,7 +84,8 @@ def _parse_version(version):
     """
     match = _version_pattern.match(version)
     if match:
-        major, minor, patch = map(lambda x: int(x) if x else 0, match.groups()[:3])
+        major, minor, patch = map(lambda x: int(
+            x) if x else 0, match.groups()[:3])
         # 'a' for alpha, 'b' for beta, or None
         pre_release_type = match.group(4)[0] if match.group(4) else None
         # alpha/beta version number or 0
@@ -274,7 +276,8 @@ def _send_html_request(page_url, target="tags"):
             )
             if next_page_links:
                 current_urls.append(current_url)
-                current_url = "https://github.com" + next_page_links[-1]["href"]
+                current_url = "https://github.com" + \
+                    next_page_links[-1]["href"]
                 if current_url in current_urls:
                     current_url = None
             else:
@@ -340,7 +343,8 @@ def get_versions(target="tags", **kwargs):
             not versions[target]
             or _versions_retrieved_last[target] - time.time() > 60 * 60
         ):
-            versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
+            versions[target] = _send_api_request(
+                REPO_API_URL, REPO_PAGE_URL, target)
 
             # Update the last time the tags/branches were retrieved
             _versions_retrieved_last[target] = time.time()
@@ -475,7 +479,8 @@ def retrieve(version="latest_stable", **kwargs):
                         fname=json_export,
                     )
                 except Exception as e:
-                    warnings.warn(f"Could not retrieve version '{version}': {e}")
+                    warnings.warn(
+                        f"Could not retrieve version '{version}': {e}")
                     continue
                 logger.info(f"Retrieved version '{version}'.")
 
@@ -558,7 +563,8 @@ def delete(version="all", keep_latest=False, **kwargs):
     if version == "all":
         if keep_latest:
             # Identify the latest stable and prerelease versions
-            valid_versions = [v for v in local_versions if _version_pattern.match(v)]
+            valid_versions = [
+                v for v in local_versions if _version_pattern.match(v)]
             valid_sversions = [
                 v for v in valid_versions if "a" not in v and "b" not in v
             ]
@@ -587,7 +593,8 @@ def delete(version="all", keep_latest=False, **kwargs):
 
     # Compile file paths
     if kwargs["export"] == "raw":
-        cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
+        cached_files = [os.path.join(_dreq_res, v, _json_raw)
+                        for v in local_versions]
     elif kwargs["export"] == "release":
         cached_files = [
             os.path.join(_dreq_res, v, _json_release) for v in local_versions

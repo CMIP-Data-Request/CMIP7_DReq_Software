@@ -74,7 +74,8 @@ def test_init_config_entry_point(temp_config_file, monkeypatch):
         "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
-        ["CMIP7_data_request_api_config", "init", "--cfgfile", str(temp_config_file)],
+        ["CMIP7_data_request_api_config", "init",
+            "--cfgfile", str(temp_config_file)],
         capture_output=True,
         text=True,
     )
