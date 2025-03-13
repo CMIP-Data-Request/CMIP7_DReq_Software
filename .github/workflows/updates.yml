@@ -58,4 +58,5 @@ jobs:
   
       - name: Push Changes
         run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/CMIP-Data-Request/CMIP7_DReq_Software.git
           git push 
