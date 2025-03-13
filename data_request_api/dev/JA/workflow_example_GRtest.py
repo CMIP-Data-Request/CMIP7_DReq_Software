@@ -21,7 +21,7 @@ from data_request_api.stable.utilities.logger import change_log_file, change_log
 change_log_file(default=True)
 change_log_level("debug")
 
-### Step 1: Get the content of the DR
+# Step 1: Get the content of the DR
 # Define content version to be used
 use_dreq_version = 'v1.0beta'
 # use_dreq_version = "first_export"
@@ -31,7 +31,7 @@ use_dreq_version = 'v1.0beta'
 # Load content into python dict
 # content = dc.load(use_dreq_version)
 
-### Step 2: Load it into the software of the DR
+# Step 2: Load it into the software of the DR
 # DR = DataRequest.from_input(json_input=content, version=use_dreq_version)
 # path = f'../sandbox/MS/dreq_api/dreq_res/{use_dreq_version}'
 path = f'../MS/dreq_api/dreq_res/{use_dreq_version}'
@@ -41,7 +41,7 @@ DR = DataRequest.from_separated_inputs(DR_input=f"{path}/DR_content.json",
 
 GR_demo = False
 if GR_demo:
-    ### Step 3: Get information from the DR
+    # Step 3: Get information from the DR
     # -> Print DR content
     print(DR)
     # -> Print an experiment group content
@@ -53,26 +53,28 @@ if GR_demo:
     # -> Get information about the shapes of the variables of all variables groups
     rep = dict()
     for elt in DR.get_variables_groups():
-        rep[elt.id] = dict(spatial_shape=set(), frequency=set(), temporal_shape=set(), physical_parameter=set())
+        rep[elt.id] = dict(spatial_shape=set(), frequency=set(
+        ), temporal_shape=set(), physical_parameter=set())
         for var in elt.get_variables():
             for key in ["spatial_shape", "frequency", "temporal_shape", "physical_parameter"]:
                 rep[elt.id][key] = rep[elt.id][key].union(set([elt.get("name", "???") if isinstance(elt, dict) else elt
-                                                            for elt in var.__getattribute__(key)]))
+                                                               for elt in var.__getattribute__(key)]))
 
     rep = defaultdict(lambda: defaultdict(set))
     for elt in DR.get_variables_groups():
         for var in elt.get_variables():
             param = var.physical_parameter["name"]
             freq = var.frequency["name"]
-            realm = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.modelling_realm])
-            spt_shp = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.spatial_shape])
-            tmp_shp = set([elt if isinstance(elt, six.string_types) else elt.get("name", "???") for elt in var.temporal_shape])
+            realm = set([elt if isinstance(elt, six.string_types) else elt.get(
+                "name", "???") for elt in var.modelling_realm])
+            spt_shp = set([elt if isinstance(elt, six.string_types) else elt.get(
+                "name", "???") for elt in var.spatial_shape])
+            tmp_shp = set([elt if isinstance(elt, six.string_types) else elt.get(
+                "name", "???") for elt in var.temporal_shape])
             for (rlm, freq, sshp, tshp) in zip(realm, [freq, ], spt_shp, tmp_shp):
                 rep[rlm][param].add(f"{freq} // {sshp} // {tshp}")
     pprint.pprint(rep)
     # pprint.pprint(rep_data)
-
-
 
 
 # from copy import deepcopy
@@ -87,8 +89,10 @@ opp = DR.get_opportunities()[0]
 def get_name(x):
     return x.vs.get_element(x.DR_type, x.id, 'name')
 
+
 title = 'Ocean Extremes'
-opp = [opp for opp in DR.get_opportunities() if get_name(opp) == 'Ocean Extremes'][0]
+opp = [opp for opp in DR.get_opportunities() if get_name(opp) ==
+       'Ocean Extremes'][0]
 
 # print()
 # print(opp)
@@ -143,6 +147,7 @@ lookup = {
 }
 priority_levels = [info['name'] for info in lookup['priority_level'].values()]
 
+
 def get_unique_var_name(var):
     return var.compound_name
 
@@ -162,7 +167,7 @@ for opp in DR.get_opportunities():
     assert title not in opps, f'opp title not unique: {title}'
     opps[title] = opp
 
-request = {} # dict to hold aggregated request
+request = {}  # dict to hold aggregated request
 
 check = not True
 
@@ -177,7 +182,8 @@ for title in use_opps:
     if check:
         opp_expts = set()
         for expt_group in opp.experiments_groups:
-            opp_expts.update([expt.name for expt in expt_group.get_experiments()])
+            opp_expts.update(
+                [expt.name for expt in expt_group.get_experiments()])
         opp_expts0 = opp_expts
 
     # -> Get all experiments' id associated with an opportunity
@@ -194,7 +200,7 @@ for title in use_opps:
         opp_vars0 = set([get_unique_var_name(var) for var in opp_vars])
 
     # Loop over variable groups to get opportunity's variables separated by priority level
-    opp_vars = {p : set() for p in priority_levels}
+    opp_vars = {p: set() for p in priority_levels}
     for vg in opp.variables_groups:
 
         assert isinstance(vg.priority, list) and len(vg.priority) == 1
@@ -210,14 +216,15 @@ for title in use_opps:
         opp_vars1 = set()
         for priority_level in opp_vars:
             opp_vars1.update(opp_vars[priority_level])
-        assert opp_vars1 == opp_vars0  # confirm that DR.find_variables_per_opportunity(opp) lumps all priority levels together
+        # confirm that DR.find_variables_per_opportunity(opp) lumps all priority levels together
+        assert opp_vars1 == opp_vars0
         del opp_vars0, opp_vars1
 
     # Aggregate this Opportunity's request into the master list of requests
     for expt_name in opp_expts:
         if expt_name not in request:
             # If we haven't encountered this experiment yet, initialize an expt_request object for it
-            request[expt_name] = {p : set() for p in priority_levels}
+            request[expt_name] = {p: set() for p in priority_levels}
 
         # Add this Opportunity's variables request to the expt_request object
         for priority_level, var_names in opp_vars.items():
@@ -225,13 +232,15 @@ for title in use_opps:
 
 
 # Remove any overlaps in variable lists between different priority levels
-priority_hierarchy = ['Core', 'High', 'Medium', 'Low']  # ordered from highest to lowest priority
+# ordered from highest to lowest priority
+priority_hierarchy = ['Core', 'High', 'Medium', 'Low']
 assert set(priority_hierarchy) == set(priority_levels)
 assert len(set(priority_hierarchy)) == len(priority_hierarchy)
 for expt_request in request.values():
-    for k,p in enumerate(priority_hierarchy):
+    for k, p in enumerate(priority_hierarchy):
         for p_higher in priority_hierarchy[:k]:
-            expt_request[p] = expt_request[p].difference(expt_request[p_higher])
+            expt_request[p] = expt_request[p].difference(
+                expt_request[p_higher])
             # print(p,p_higher)
             # print()
 
@@ -240,26 +249,28 @@ for expt_request in request.values():
         expt_request[p] = sorted(expt_request[p], key=str.lower)
 
 expt_vars = {
-    'Header' : {
-        'Opportunities' : use_opps,
-        'dreq version' : use_dreq_version,
+    'Header': {
+        'Opportunities': use_opps,
+        'dreq version': use_dreq_version,
     },
-    'experiment' : request,
+    'experiment': request,
 }
 
 
 if len(expt_vars['experiment']) > 0:
 
     # Show user what was found
-    print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
+    print(
+        f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
     priority_levels = ['Core', 'High', 'Medium', 'Low']
     for expt, req in sorted(expt_vars['experiment'].items()):
-        d = {p : 0 for p in priority_levels}
+        d = {p: 0 for p in priority_levels}
         for p in priority_levels:
             if p in req:
                 d[p] = len(req[p])
         n_total = sum(d.values())
-        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
+        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p, n=d[p])
+              for p in priority_levels]) + f', TOTAL={n_total}')
 
     # Write the results to json
     filename = 'requested2.json'
@@ -268,8 +279,5 @@ if len(expt_vars['experiment']) > 0:
         print('\nWrote requested variables to ' + filename)
 
 else:
-    print(f'\nFor data request version {use_dreq_version}, no requested variables were found')
-
-
-
-
+    print(
+        f'\nFor data request version {use_dreq_version}, no requested variables were found')

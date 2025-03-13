@@ -99,9 +99,8 @@ if test:
         # Download specified version of data request content (if not locally cached)
         dc.retrieve(use_dreq_version, export=use_export)
         # Load content into python dict
-        content = dc.load(use_dreq_version, export=use_export, consolidate=use_consolidated)
-
-
+        content = dc.load(use_dreq_version, export=use_export,
+                          consolidate=use_consolidated)
 
 
 else:
@@ -128,14 +127,13 @@ if test:
             if k in content:
                 content[f'{k} {use_dreq_version}'] = content[k]
                 content.pop(k)
-        expt_vars = dq._get_requested_variables(content, use_opps, priority_cutoff='Low')
+        expt_vars = dq._get_requested_variables(
+            content, use_opps, priority_cutoff='Low')
 
     else:
 
-        expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff='Low', verbose=False, consolidated=use_consolidated)
-
-
-
+        expt_vars = dq.get_requested_variables(
+            content, use_opps, priority_cutoff='Low', verbose=False, consolidated=use_consolidated)
 
         if False:
             # return Opps, VarGroups, PriorityLevel, ExptGroups, Expts
@@ -144,22 +142,23 @@ if test:
             del expt_vars
 
             tables[use_export] = {
-                'Opps' : Opps, 'VarGroups' : VarGroups,
+                'Opps': Opps, 'VarGroups': VarGroups,
             }
-            
+
             opps = []
-            opps.append( Opps.get_attr_record('title', 'Temperature variability') )
+            opps.append(Opps.get_attr_record(
+                'title', 'Temperature variability'))
 
             # opps.append( Opps.get_attr_record('title', 'Ocean Extremes') )
 
-            for title in [            
+            for title in [
                 "Ocean Extremes",
                 "Ocean changes, drivers and impacts",
                 "Rapid Evaluation Framework",
                 "Paleoclimate research at the interface between past, present, and future",
                 "Robust Risk Assessment of Tipping Points",
             ]:
-                opps.append( Opps.get_attr_record('title', title) )
+                opps.append(Opps.get_attr_record('title', title))
 
             # achtung!
             # "Ocean Extremes",
@@ -175,7 +174,7 @@ if test:
                 print('\n' + opp.title)
                 # opp_expts = dq.get_opp_expts(opp, ExptGroups, Expts, verbose=False)
                 # print(opp_expts.difference(opp_expts0))
-                for link in opp.variable_groups: 
+                for link in opp.variable_groups:
                     vg = VarGroups.get_record(link)
                     if isinstance(vg.priority_level, str):
                         assert PriorityLevel is None
@@ -188,22 +187,25 @@ if test:
 
 
 else:
-    
-    expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff='Low')
+
+    expt_vars = dq.get_requested_variables(
+        content, use_opps, priority_cutoff='Low')
 
 
 if len(expt_vars['experiment']) > 0:
 
     # Show user what was found
-    print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
+    print(
+        f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
     priority_levels = ['Core', 'High', 'Medium', 'Low']
     for expt, req in expt_vars['experiment'].items():
-        d = {p : 0 for p in priority_levels}
+        d = {p: 0 for p in priority_levels}
         for p in priority_levels:
             if p in req:
                 d[p] = len(req[p])
         n_total = sum(d.values())
-        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
+        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p, n=d[p])
+              for p in priority_levels]) + f', TOTAL={n_total}')
 
     # Write the results to json
     # filename = 'requested.json'
@@ -214,7 +216,8 @@ if len(expt_vars['experiment']) > 0:
         print('\nWrote requested variables to ' + filename)
 
 else:
-    print(f'\nFor data request version {use_dreq_version}, no requested variables were found')
+    print(
+        f'\nFor data request version {use_dreq_version}, no requested variables were found')
 
 # To remove locally cached version:
 # dc.delete(use_dreq_version)

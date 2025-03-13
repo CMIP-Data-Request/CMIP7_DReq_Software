@@ -1,3 +1,5 @@
+from data_request_api.stable.utilities.logger import change_log_file, change_log_level
+from data_request_api.stable.content import dreq_content as dc
 import os
 import pathlib
 import sys
@@ -11,8 +13,6 @@ import data_request_api.stable.utilities.config as dreqcfg
 temp_config_file = tempfile.NamedTemporaryFile(delete=False, suffix=".yaml")
 dreqcfg.CONFIG_FILE = pathlib.Path(temp_config_file.name)
 
-from data_request_api.stable.content import dreq_content as dc
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level
 
 # Configure logger for testing
 change_log_file(default=True)
@@ -246,7 +246,8 @@ class TestDreqContent:
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception("Network request detected despite active offline mode.")
+            raise Exception(
+                "Network request detected despite active offline mode.")
 
         monkeypatch.setattr("requests.get", mock_requests_get)
 
