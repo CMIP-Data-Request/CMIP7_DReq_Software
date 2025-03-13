@@ -36,7 +36,7 @@ jobs:
       - name: Tech documentation generation
         run: |
           pip install -e . 
-          pdoc --force --html data_request_api/stable  --output-dir docs/
+          pdoc --html data_request_api/stable  --output-dir docs/
 
       # Step 5: Commit and push changes (if any)
       - name: Commit and push changes
