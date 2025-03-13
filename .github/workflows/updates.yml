@@ -26,7 +26,7 @@ jobs:
       # Install dependencies (pdoc and autopep8)
       - name: Install dependencies
         run: |
-          pip install pdoc autopep8
+          pip install pdoc3 autopep8
 
       # Step 4: Run your two commands
       - name: Pep8ify
