@@ -54,7 +54,8 @@ _version_pattern = re.compile(
 )
 
 # Directory where to find/store the data request JSON files
-_dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
+_dreq_res = os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), "dreq_res")
 
 _dreq_content_loaded = {}
 
@@ -75,7 +76,8 @@ def _parse_version(version):
     """
     match = _version_pattern.match(version)
     if match:
-        major, minor, patch = map(lambda x: int(x) if x else 0, match.groups()[:3])
+        major, minor, patch = map(lambda x: int(
+            x) if x else 0, match.groups()[:3])
         # 'a' for alpha, 'b' for beta, or None
         pre_release_type = match.group(4)[0] if match.group(4) else None
         # alpha/beta version number or 0
@@ -132,7 +134,8 @@ def get_cached(**kwargs):
                     and not _version_pattern.match(name)
                 )
                 or (
-                    os.path.isfile(os.path.join(_dreq_res, name, _json_release))
+                    os.path.isfile(os.path.join(
+                        _dreq_res, name, _json_release))
                     and _version_pattern.match(name)
                 )
             ]
@@ -271,7 +274,8 @@ def _send_html_request(page_url, target="tags"):
             )
             if next_page_links:
                 current_urls.append(current_url)
-                current_url = "https://github.com" + next_page_links[-1]["href"]
+                current_url = "https://github.com" + \
+                    next_page_links[-1]["href"]
                 if current_url in current_urls:
                     current_url = None
             else:
@@ -315,7 +319,8 @@ def get_versions(target="tags"):
 
     # Retrieve the list of tags or branches from the GitHub API
     if not versions[target] or _versions_retrieved_last[target] - time.time() > 60 * 60:
-        versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
+        versions[target] = _send_api_request(
+            REPO_API_URL, REPO_PAGE_URL, target)
 
         # Update the last time the tags/branches were retrieved
         _versions_retrieved_last[target] = time.time()
@@ -465,7 +470,8 @@ def retrieve(version="latest_stable", **kwargs):
                 else:
                     os.remove(json_path_temp)
             except Exception as e:
-                warnings.warn(f"Potential update for version '{version}' failed: {e}")
+                warnings.warn(
+                    f"Potential update for version '{version}' failed: {e}")
 
         # Store the path to the dreq.json in the json_paths dictionary
         json_paths[version] = json_path
@@ -505,7 +511,8 @@ def delete(version="all", keep_latest=False, **kwargs):
     if version == "all":
         if keep_latest:
             # Identify the latest stable and prerelease versions
-            valid_versions = [v for v in local_versions if _version_pattern.match(v)]
+            valid_versions = [
+                v for v in local_versions if _version_pattern.match(v)]
             valid_sversions = [
                 v for v in valid_versions if "a" not in v and "b" not in v
             ]
@@ -534,7 +541,8 @@ def delete(version="all", keep_latest=False, **kwargs):
 
     # Compile file paths
     cached_files = []
-    cached_files_raw = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
+    cached_files_raw = [os.path.join(_dreq_res, v, _json_raw)
+                        for v in local_versions]
     cached_files_release = [
         os.path.join(_dreq_res, v, _json_release) for v in local_versions
     ]

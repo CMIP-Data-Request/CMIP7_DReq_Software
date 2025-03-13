@@ -32,7 +32,8 @@ def test_get_versions_list_branches():
 
 def test_get_latest_version(monkeypatch):
     "Test the _get_latest_version function."
-    monkeypatch.setattr(dc, "get_versions", lambda: ["1.0.0", "2.0.2b", "2.0.2a"])
+    monkeypatch.setattr(dc, "get_versions", lambda: [
+                        "1.0.0", "2.0.2b", "2.0.2a"])
     assert dc._get_latest_version() == "1.0.0"
     assert dc._get_latest_version(stable=False) == "2.0.2b"
 
