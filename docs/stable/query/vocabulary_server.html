@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.5">
+<title>stable.query.vocabulary_server API documentation</title>
+<meta name="description" content="Vocabulary server.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>stable.query.vocabulary_server</code></h1>
+</header>
+<section id="section-intro">
+<p>Vocabulary server.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="stable.query.vocabulary_server.build_link_from_id"><code class="name flex">
+<span>def <span class="ident">build_link_from_id</span></span>(<span>elt)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_link_from_id(elt):
+    &#34;&#34;&#34;
+    Check if the input value is already a link and transform it if not
+    :param elt: element to be transformed into a link
+    :return: link version of elt
+    &#34;&#34;&#34;
+    if not isinstance(elt, str) or elt.startswith(&#34;link::&#34;):
+        return elt
+    else:
+        return f&#34;link::{elt}&#34;</code></pre>
+</details>
+<div class="desc"><p>Check if the input value is already a link and transform it if not
+:param elt: element to be transformed into a link
+:return: link version of elt</p></div>
+</dd>
+<dt id="stable.query.vocabulary_server.is_link_id_or_value"><code class="name flex">
+<span>def <span class="ident">is_link_id_or_value</span></span>(<span>elt)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_link_id_or_value(elt):
+    &#34;&#34;&#34;
+    Check if the input value is a link and transform it into a value if so
+    :param elt: element to be transformed into a value
+    :return: not link version oof elt
+    &#34;&#34;&#34;
+    if isinstance(elt, str) and elt.startswith(&#34;link::&#34;):
+        return True, elt.replace(&#34;link::&#34;, &#34;&#34;)
+    else:
+        return False, elt</code></pre>
+</details>
+<div class="desc"><p>Check if the input value is a link and transform it into a value if so
+:param elt: element to be transformed into a value
+:return: not link version oof elt</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="stable.query.vocabulary_server.VocabularyServer"><code class="flex name class">
+<span>class <span class="ident">VocabularyServer</span></span>
+<span>(</span><span>input_database, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VocabularyServer(object):
+    &#34;&#34;&#34;
+    Class to generate a Vocabulary Server from a json file.
+    &#34;&#34;&#34;
+
+    def __init__(self, input_database, **kwargs):
+        self.vocabulary_server = copy.deepcopy(input_database)
+        self.version = self.vocabulary_server.pop(&#34;version&#34;)
+        self.check_infinite_loop()
+
+    @classmethod
+    def from_input(cls, input_database):
+        &#34;&#34;&#34;
+        Generate VocabularyServer from a json file
+        :param input_database: json file name
+        :return:
+        &#34;&#34;&#34;
+        content = read_json_file(input_database)
+        return cls(content)
+
+    def alias(self, element_type):
+        &#34;&#34;&#34;
+        Find the real element_type if aliased
+        :param element_type: input kind of element
+        :return:
+        &#34;&#34;&#34;
+        element_type_dict = dict(
+            keyword=&#34;glossary&#34;,
+            lead_theme=&#34;data_request_themes&#34;,
+            dimensions=&#34;coordinates_and_dimensions&#34;,
+            coordinates=&#34;coordinates_and_dimensions&#34;,
+            extra_dimensions=&#34;coordinates_and_dimensions&#34;
+        )
+        return element_type_dict.get(element_type, element_type)
+
+    @staticmethod
+    def to_plural(element_type):
+        if not element_type.endswith(&#34;s&#34;):
+            if element_type.endswith(&#34;y&#34;):
+                element_type = element_type.rstrip(&#34;y&#34;) + &#34;ies&#34;
+            else:
+                element_type += &#34;s&#34;
+        return element_type
+
+    @staticmethod
+    def to_singular(element_type):
+        if element_type.endswith(&#34;ies&#34;):
+            element_type = element_type.removesuffix(&#34;ies&#34;) + &#34;y&#34;
+        elif element_type.endswith(&#34;s&#34;):
+            element_type = element_type.removesuffix(&#34;s&#34;)
+        return element_type
+
+    def check_infinite_loop(self):
+        &#34;&#34;&#34;
+        Check that there is no infinite loop in the vocabulary server.
+        Raise an error if at least one is found.
+        &#34;&#34;&#34;
+        logger = get_logger()
+        # Build the call dict
+        call_dict = defaultdict(set)
+        for key in self.vocabulary_server:
+            for id in self.vocabulary_server[key]:
+                for elt in self.vocabulary_server[key][id]:
+                    if isinstance(self.vocabulary_server[key][id][elt], list) and \
+                            any(is_link_id_or_value(subelt)[0] for subelt in self.vocabulary_server[key][id][elt]):
+                        call_dict[key].add(elt)
+                    elif not (isinstance(self.vocabulary_server[key][id][elt], list)) and \
+                            is_link_id_or_value(self.vocabulary_server[key][id][elt])[0]:
+                        call_dict[key].add(elt)
+
+        # Implement the function to be used
+        def follow_loop(current_key, former_keys=list()):
+            logger = get_logger()
+            found = False
+            alias_key, _ = self.get_element_type_ids(current_key)
+            if alias_key in former_keys:
+                logger.error(
+                    f&#34;Infinite loop found: {former_keys + [current_key, ]}&#34;)
+                found = True
+            else:
+                for next_key in sorted(list(call_dict[alias_key])):
+                    found = found or follow_loop(
+                        next_key, former_keys + [alias_key, ])
+            return found
+
+        # Follow the call dict to check if there is infinite loop
+        found = any(follow_loop(key) for key in sorted(list(call_dict)))
+        if found:
+            logger.critical(
+                &#34;Infinite loop found in vocabulary server, see former error messages.&#34;)
+            raise ValueError(
+                &#34;Infinite loop found in vocabulary server, see former error messages.&#34;)
+
+    def get_element_type_ids(self, element_type):
+        &#34;&#34;&#34;
+        Get elements corresponding a a specific kind
+        :param element_type:
+        :return:
+        &#34;&#34;&#34;
+        logger = get_logger()
+        element_type = self.alias(element_type)
+        if element_type not in self.vocabulary_server:
+            element_type = self.to_plural(element_type)
+        if element_type in self.vocabulary_server:
+            return element_type, sorted(list(self.vocabulary_server[element_type]))
+        else:
+            logger.error(
+                f&#34;Could not find element type {element_type} in the vocabulary server.&#34;)
+            raise ValueError(
+                f&#34;Could not find element type {element_type} in the vocabulary server.&#34;)
+
+    def get_element(self, element_type, element_id, element_key=None, default=False, id_type=&#34;id&#34;):
+        &#34;&#34;&#34;
+        Get an element corresponding to an element_id (corresponding to attribute id_type) of a kind element_type.
+        If element_key is specified, get the corresponding attribute.
+        If no element found, return default.
+        :param element_type:
+        :param element_id:
+        :param element_key:
+        :param default:
+        :param id_type:
+        :return:
+        &#34;&#34;&#34;
+        logger = get_logger()
+        is_id, element_id = is_link_id_or_value(element_id)
+        if is_id or id_type != &#34;id&#34;:
+            element_type, element_type_ids = self.get_element_type_ids(
+                element_type)
+            found = False
+            if id_type in [&#34;id&#34;, ] and element_id in element_type_ids:
+                value = self.vocabulary_server[element_type][element_id]
+                found = True
+            elif isinstance(id_type, str):
+                if element_id is None:
+                    raise ValueError(&#34;None element_id found&#34;)
+                value = list()
+                for (key, val) in self.vocabulary_server[element_type].items():
+                    val = val.get(id_type)
+                    if (isinstance(val, list) and element_id in val) or element_id == val:
+                        value.append(key)
+                if len(value) == 1:
+                    found = True
+                    element_id = value[0]
+                    value = self.vocabulary_server[element_type][element_id]
+                elif len(value) &gt; 1:
+                    logger.error(f&#34;id_type {id_type} provided is not unique for element type {element_type} and &#34;
+                                 f&#34;value {element_key}.&#34;)
+                    raise ValueError(f&#34;id_type {id_type} provided is not unique for element type {element_type} &#34;
+                                     f&#34;and value {element_key}.&#34;)
+            if found:
+                value = copy.deepcopy(value)
+                if element_key is not None:
+                    if element_key in value:
+                        value = value.get(element_key)
+                    else:
+                        logger.error(f&#34;Could not find key {element_key} of id {element_id} of type {element_type} &#34;
+                                     f&#34;in the vocabulary server.&#34;)
+                        raise ValueError(f&#34;Could not find key {element_key} of id {element_id} of type &#34;
+                                         f&#34;{element_type} in the vocabulary server.&#34;)
+                elif isinstance(value, dict):
+                    value[&#34;id&#34;] = element_id
+                return value
+            elif default is not False:
+                logger.critical(f&#34;Could not find {id_type} {element_id} of type {element_type}&#34;
+                                f&#34; in the vocabulary server.&#34;)
+                return default
+            else:
+                logger.error(f&#34;Could not find {id_type} {element_id} of type {element_type} &#34;
+                             f&#34;in the vocabulary server.&#34;)
+                raise ValueError(f&#34;Could not find {id_type} {element_id} of type {element_type} &#34;
+                                 f&#34;in the vocabulary server.&#34;)
+        elif element_id in [&#34;???&#34;, None]:
+            logger.critical(f&#34;Undefined id of type {element_type}&#34;)
+            return element_id
+        else:
+            return element_id</code></pre>
+</details>
+<div class="desc"><p>Class to generate a Vocabulary Server from a json file.</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="stable.query.vocabulary_server.VocabularyServer.from_input"><code class="name flex">
+<span>def <span class="ident">from_input</span></span>(<span>input_database)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate VocabularyServer from a json file
+:param input_database: json file name
+:return:</p></div>
+</dd>
+<dt id="stable.query.vocabulary_server.VocabularyServer.to_plural"><code class="name flex">
+<span>def <span class="ident">to_plural</span></span>(<span>element_type)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def to_plural(element_type):
+    if not element_type.endswith(&#34;s&#34;):
+        if element_type.endswith(&#34;y&#34;):
+            element_type = element_type.rstrip(&#34;y&#34;) + &#34;ies&#34;
+        else:
+            element_type += &#34;s&#34;
+    return element_type</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="stable.query.vocabulary_server.VocabularyServer.to_singular"><code class="name flex">
+<span>def <span class="ident">to_singular</span></span>(<span>element_type)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def to_singular(element_type):
+    if element_type.endswith(&#34;ies&#34;):
+        element_type = element_type.removesuffix(&#34;ies&#34;) + &#34;y&#34;
+    elif element_type.endswith(&#34;s&#34;):
+        element_type = element_type.removesuffix(&#34;s&#34;)
+    return element_type</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="stable.query.vocabulary_server.VocabularyServer.alias"><code class="name flex">
+<span>def <span class="ident">alias</span></span>(<span>self, element_type)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def alias(self, element_type):
+    &#34;&#34;&#34;
+    Find the real element_type if aliased
+    :param element_type: input kind of element
+    :return:
+    &#34;&#34;&#34;
+    element_type_dict = dict(
+        keyword=&#34;glossary&#34;,
+        lead_theme=&#34;data_request_themes&#34;,
+        dimensions=&#34;coordinates_and_dimensions&#34;,
+        coordinates=&#34;coordinates_and_dimensions&#34;,
+        extra_dimensions=&#34;coordinates_and_dimensions&#34;
+    )
+    return element_type_dict.get(element_type, element_type)</code></pre>
+</details>
+<div class="desc"><p>Find the real element_type if aliased
+:param element_type: input kind of element
+:return:</p></div>
+</dd>
+<dt id="stable.query.vocabulary_server.VocabularyServer.check_infinite_loop"><code class="name flex">
+<span>def <span class="ident">check_infinite_loop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_infinite_loop(self):
+    &#34;&#34;&#34;
+    Check that there is no infinite loop in the vocabulary server.
+    Raise an error if at least one is found.
+    &#34;&#34;&#34;
+    logger = get_logger()
+    # Build the call dict
+    call_dict = defaultdict(set)
+    for key in self.vocabulary_server:
+        for id in self.vocabulary_server[key]:
+            for elt in self.vocabulary_server[key][id]:
+                if isinstance(self.vocabulary_server[key][id][elt], list) and \
+                        any(is_link_id_or_value(subelt)[0] for subelt in self.vocabulary_server[key][id][elt]):
+                    call_dict[key].add(elt)
+                elif not (isinstance(self.vocabulary_server[key][id][elt], list)) and \
+                        is_link_id_or_value(self.vocabulary_server[key][id][elt])[0]:
+                    call_dict[key].add(elt)
+
+    # Implement the function to be used
+    def follow_loop(current_key, former_keys=list()):
+        logger = get_logger()
+        found = False
+        alias_key, _ = self.get_element_type_ids(current_key)
+        if alias_key in former_keys:
+            logger.error(
+                f&#34;Infinite loop found: {former_keys + [current_key, ]}&#34;)
+            found = True
+        else:
+            for next_key in sorted(list(call_dict[alias_key])):
+                found = found or follow_loop(
+                    next_key, former_keys + [alias_key, ])
+        return found
+
+    # Follow the call dict to check if there is infinite loop
+    found = any(follow_loop(key) for key in sorted(list(call_dict)))
+    if found:
+        logger.critical(
+            &#34;Infinite loop found in vocabulary server, see former error messages.&#34;)
+        raise ValueError(
+            &#34;Infinite loop found in vocabulary server, see former error messages.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Check that there is no infinite loop in the vocabulary server.
+Raise an error if at least one is found.</p></div>
+</dd>
+<dt id="stable.query.vocabulary_server.VocabularyServer.get_element"><code class="name flex">
+<span>def <span class="ident">get_element</span></span>(<span>self, element_type, element_id, element_key=None, default=False, id_type='id')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_element(self, element_type, element_id, element_key=None, default=False, id_type=&#34;id&#34;):
+    &#34;&#34;&#34;
+    Get an element corresponding to an element_id (corresponding to attribute id_type) of a kind element_type.
+    If element_key is specified, get the corresponding attribute.
+    If no element found, return default.
+    :param element_type:
+    :param element_id:
+    :param element_key:
+    :param default:
+    :param id_type:
+    :return:
+    &#34;&#34;&#34;
+    logger = get_logger()
+    is_id, element_id = is_link_id_or_value(element_id)
+    if is_id or id_type != &#34;id&#34;:
+        element_type, element_type_ids = self.get_element_type_ids(
+            element_type)
+        found = False
+        if id_type in [&#34;id&#34;, ] and element_id in element_type_ids:
+            value = self.vocabulary_server[element_type][element_id]
+            found = True
+        elif isinstance(id_type, str):
+            if element_id is None:
+                raise ValueError(&#34;None element_id found&#34;)
+            value = list()
+            for (key, val) in self.vocabulary_server[element_type].items():
+                val = val.get(id_type)
+                if (isinstance(val, list) and element_id in val) or element_id == val:
+                    value.append(key)
+            if len(value) == 1:
+                found = True
+                element_id = value[0]
+                value = self.vocabulary_server[element_type][element_id]
+            elif len(value) &gt; 1:
+                logger.error(f&#34;id_type {id_type} provided is not unique for element type {element_type} and &#34;
+                             f&#34;value {element_key}.&#34;)
+                raise ValueError(f&#34;id_type {id_type} provided is not unique for element type {element_type} &#34;
+                                 f&#34;and value {element_key}.&#34;)
+        if found:
+            value = copy.deepcopy(value)
+            if element_key is not None:
+                if element_key in value:
+                    value = value.get(element_key)
+                else:
+                    logger.error(f&#34;Could not find key {element_key} of id {element_id} of type {element_type} &#34;
+                                 f&#34;in the vocabulary server.&#34;)
+                    raise ValueError(f&#34;Could not find key {element_key} of id {element_id} of type &#34;
+                                     f&#34;{element_type} in the vocabulary server.&#34;)
+            elif isinstance(value, dict):
+                value[&#34;id&#34;] = element_id
+            return value
+        elif default is not False:
+            logger.critical(f&#34;Could not find {id_type} {element_id} of type {element_type}&#34;
+                            f&#34; in the vocabulary server.&#34;)
+            return default
+        else:
+            logger.error(f&#34;Could not find {id_type} {element_id} of type {element_type} &#34;
+                         f&#34;in the vocabulary server.&#34;)
+            raise ValueError(f&#34;Could not find {id_type} {element_id} of type {element_type} &#34;
+                             f&#34;in the vocabulary server.&#34;)
+    elif element_id in [&#34;???&#34;, None]:
+        logger.critical(f&#34;Undefined id of type {element_type}&#34;)
+        return element_id
+    else:
+        return element_id</code></pre>
+</details>
+<div class="desc"><p>Get an element corresponding to an element_id (corresponding to attribute id_type) of a kind element_type.
+If element_key is specified, get the corresponding attribute.
+If no element found, return default.
+:param element_type:
+:param element_id:
+:param element_key:
+:param default:
+:param id_type:
+:return:</p></div>
+</dd>
+<dt id="stable.query.vocabulary_server.VocabularyServer.get_element_type_ids"><code class="name flex">
+<span>def <span class="ident">get_element_type_ids</span></span>(<span>self, element_type)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_element_type_ids(self, element_type):
+    &#34;&#34;&#34;
+    Get elements corresponding a a specific kind
+    :param element_type:
+    :return:
+    &#34;&#34;&#34;
+    logger = get_logger()
+    element_type = self.alias(element_type)
+    if element_type not in self.vocabulary_server:
+        element_type = self.to_plural(element_type)
+    if element_type in self.vocabulary_server:
+        return element_type, sorted(list(self.vocabulary_server[element_type]))
+    else:
+        logger.error(
+            f&#34;Could not find element type {element_type} in the vocabulary server.&#34;)
+        raise ValueError(
+            f&#34;Could not find element type {element_type} in the vocabulary server.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Get elements corresponding a a specific kind
+:param element_type:
+:return:</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="stable.query" href="index.html">stable.query</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="stable.query.vocabulary_server.build_link_from_id" href="#stable.query.vocabulary_server.build_link_from_id">build_link_from_id</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.is_link_id_or_value" href="#stable.query.vocabulary_server.is_link_id_or_value">is_link_id_or_value</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="stable.query.vocabulary_server.VocabularyServer" href="#stable.query.vocabulary_server.VocabularyServer">VocabularyServer</a></code></h4>
+<ul class="">
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.alias" href="#stable.query.vocabulary_server.VocabularyServer.alias">alias</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.check_infinite_loop" href="#stable.query.vocabulary_server.VocabularyServer.check_infinite_loop">check_infinite_loop</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.from_input" href="#stable.query.vocabulary_server.VocabularyServer.from_input">from_input</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.get_element" href="#stable.query.vocabulary_server.VocabularyServer.get_element">get_element</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.get_element_type_ids" href="#stable.query.vocabulary_server.VocabularyServer.get_element_type_ids">get_element_type_ids</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.to_plural" href="#stable.query.vocabulary_server.VocabularyServer.to_plural">to_plural</a></code></li>
+<li><code><a title="stable.query.vocabulary_server.VocabularyServer.to_singular" href="#stable.query.vocabulary_server.VocabularyServer.to_singular">to_singular</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+</footer>
+</body>
+</html>
