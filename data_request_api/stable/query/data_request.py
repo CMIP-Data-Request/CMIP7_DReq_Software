@@ -212,25 +212,25 @@ class Variable(DRObjects):
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
         if request_type in ["table_identifiers", ]:
-            return True, request_value in self.table
-        elif request_type in ["temporal_shape", ]:
+            return True, request_value == self.table_identifier
+        elif request_type in ["temporal_shapes", ]:
             return True, request_value == self.temporal_shape
-        elif request_type in ["spatial_shape", ]:
+        elif request_type in ["spatial_shapes", ]:
             return True, request_value == self.spatial_shape
-        elif request_type in ["structure", ]:
-            return True, request_value == self.structure_title
+        elif request_type in ["structures", "structure_titles"]:
+            return True, request_value in self.structure_title
         elif request_type in ["physical_parameters", ]:
             return True, request_value == self.physical_parameter
-        elif request_type in ["modelling_realm", ]:
+        elif request_type in ["modelling_realms", ]:
             return True, request_value in self.modelling_realm
-        elif request_type in ["esm-bcv", ]:
-            return True, request_value == self.esm_bcv
+        elif request_type in ["esm-bcvs", ]:
+            return True, request_value == self.__getattr__("esm-bcv")
         elif request_type in ["cf_standard_names", ]:
-            return True, request_value == self.cf_standard_name
+            return True, request_value == self.physical_parameter.cf_standard_name
         elif request_type in ["cell_methods", ]:
             return True, request_value == self.cell_methods
         elif request_type in ["cell_measures", ]:
-            return True, request_value == self.cell_measures
+            return True, request_value in self.cell_measures
         else:
             return super().filter_on_request(request_value)
 
@@ -302,8 +302,8 @@ class VariablesGroup(DRObjects):
             _, priority = is_link_id_or_value(self.get_priority_level().id)
             _, req_priority = is_link_id_or_value(request_value.id)
             return True, req_priority == priority
-        elif request_type in ["table_identifiers", "temporal_shape", "spatial_shape", "structure",
-                              "physical_parameters", "modelling_realm", "esm-bcv", "cf_standard_names", "cell_methods",
+        elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
+                              "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
                               "cell_measures"]:
             return True, any(var.filter_on_request(request_value=request_value)[1] for var in self.get_variables())
         else:
@@ -404,15 +404,15 @@ class Opportunity(DRObjects):
             return True, request_value in self.get_experiment_groups()
         elif request_type in ["variable_groups", ]:
             return True, request_value in self.get_variable_groups()
-        elif request_type in ["time_subset", ]:
+        elif request_type in ["time_subsets", ]:
             return True, request_value in self.get_time_subsets()
         elif request_type in ["mips", ]:
             return True, request_value in self.get_mips() or \
                          any(var_grp.filter_on_request(request_value=request_value)[1]
                              for var_grp in self.get_variable_groups())
-        elif request_type in ["variables", "priority_level", "table_identifiers", "temporal_shape",
-                              "spatial_shape", "structure", "physical_parameters", "modelling_realm", "esm-bcv",
-                              "cf_standard_names", "cell_methods", "cell_measures", "max_priority_level"]:
+        elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
+                              "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
+                              "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
             return True, any(var_grp.filter_on_request(request_value=request_value)[1]
                              for var_grp in self.get_variable_groups())
         elif request_type in ["experiments", ]:
@@ -809,6 +809,8 @@ class DataRequest(object):
         """
         if key in ["id", ]:
             value = build_link_from_id(value)
+        init_element_type = to_plural(element_type)
+        element_type = self.VS.get_element_type(element_type)
         rep = self.VS.get_element(element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
         if rep in [value, ]:
             rep = default
@@ -822,6 +824,8 @@ class DataRequest(object):
                 rep = ExperimentsGroup.from_input(dr=self, **rep, **structure)
             elif element_type in ["variables", ]:
                 rep = Variable.from_input(dr=self, **rep)
+            elif init_element_type in ["max_priority_levels", ]:
+                rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=init_element_type, elements=rep)
             else:
                 rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=element_type, elements=rep)
         return rep

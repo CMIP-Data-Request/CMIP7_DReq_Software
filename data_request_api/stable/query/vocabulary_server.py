@@ -87,10 +87,11 @@ class VocabularyServer(object):
         element_type_dict = dict(
             keyword="glossary",
             lead_theme="data_request_themes",
-            dimensions="coordinates_and_dimensions",
-            coordinates="coordinates_and_dimensions",
-            extra_dimensions="coordinates_and_dimensions",
-            max_priority_level="priority_level"
+            dimension="coordinates_and_dimensions",
+            coordinate="coordinates_and_dimensions",
+            extra_dimension="coordinates_and_dimensions",
+            max_priority_level="priority_level",
+            structure="structure_title"
         )
         return element_type_dict.get(element_type, element_type)
 
@@ -131,21 +132,26 @@ class VocabularyServer(object):
             logger.critical("Infinite loop found in vocabulary server, see former error messages.")
             raise ValueError("Infinite loop found in vocabulary server, see former error messages.")
 
+    def get_element_type(self, element_type):
+        logger = get_logger()
+        element_type = to_singular(element_type)
+        element_type = self.alias(element_type)
+        if element_type not in self.vocabulary_server:
+            element_type = to_plural(element_type)
+        if element_type in self.vocabulary_server:
+            return element_type
+        else:
+            logger.error(f"Could not find element type {element_type} in the vocabulary server.")
+            raise ValueError(f"Could not find element type {element_type} in the vocabulary server.")
+
     def get_element_type_ids(self, element_type):
         """
         Get elements corresponding a a specific kind
         :param element_type:
         :return:
         """
-        logger = get_logger()
-        element_type = self.alias(element_type)
-        if element_type not in self.vocabulary_server:
-            element_type = to_plural(element_type)
-        if element_type in self.vocabulary_server:
-            return element_type, sorted(list(self.vocabulary_server[element_type]))
-        else:
-            logger.error(f"Could not find element type {element_type} in the vocabulary server.")
-            raise ValueError(f"Could not find element type {element_type} in the vocabulary server.")
+        element_type = self.get_element_type(element_type)
+        return element_type, sorted(list(self.vocabulary_server[element_type]))
 
     def get_element(self, element_type, element_id, element_key=None, default=False, id_type="id"):
         """
@@ -246,3 +252,9 @@ class ConstantValueObj(object):
 
     def __len__(self):
         return len(str(self))
+
+    def __iter__(self):
+        return iter(list())
+
+    def __next__(self):
+        raise StopIteration

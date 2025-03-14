@@ -13,7 +13,7 @@ import unittest
 
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
 from data_request_api.stable.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, \
-    DataRequest, version
+    DataRequest, version, Variable
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, ConstantValueObj
 from data_request_api.tests import filepath
 
@@ -89,6 +89,12 @@ class TestDRObjects(unittest.TestCase):
         my_dict[obj2.name] = obj2
         my_dict[obj3.id] = obj3
         my_dict[obj3.name] = obj3
+
+    def test_get(self):
+        obj1 = DRObjects(id="my_id", dr=self.dr)
+        self.assertEqual(obj1.get("id"), "my_id")
+        self.assertEqual(obj1.get("DR_type"), "undef")
+        self.assertEqual(obj1.get("test"), "undef")
 
     def test_filter_on_request(self):
         obj1 = DRObjects(id="my_id", DR_type="test", dr=self.dr)
@@ -202,6 +208,73 @@ class TestExperimentsGroup(unittest.TestCase):
         self.assertEqual(exp_grp1.filter_on_request(obj), (False, False))
 
 
+class TestVariables(unittest.TestCase):
+    def setUp(self):
+        self.dr = DataRequest.from_separated_inputs(VS_input=filepath("one_base_VS_output.json"),
+                                                    DR_input=filepath("one_base_DR_output.json"))
+
+    def test_print(self):
+        obj = self.dr.find_element("variable", "1aab80fc-b006-11e6-9289-ac72891c3257")
+        ref_str = 'variable: wo at frequency mon (id: 1aab80fc-b006-11e6-9289-ac72891c3257, title: Sea Water Vertical Velocity)'
+        ref_str_2 = [
+            ref_str,
+        ]
+        self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
+        self.assertEqual(obj.print_content(level=1, add_content=False), ["    " + ref_str, ])
+        self.assertEqual(obj.print_content(), ref_str_2)
+        self.assertEqual(obj.print_content(level=1), ["    " + elt for elt in ref_str_2])
+        self.assertEqual(str(obj), os.linesep.join(ref_str_2))
+
+    def test_filter_on_request(self):
+        var_1 = self.dr.find_element("variable", "1aab80fc-b006-11e6-9289-ac72891c3257")
+        var_2 = copy.deepcopy(var_1)
+        var_3 = self.dr.find_element("variable", "5a070350-c77d-11e6-8a33-5404a60d96b5")
+        table_1 = self.dr.find_element("table_identifier", "MIPtable::Omon")
+        table_2 = self.dr.find_element("table_identifier", "MIPtable::Oday")
+        tshp_1 = self.dr.find_element("temporal_shape", "cf34c974-80be-11e6-97ee-ac72891c3257")
+        tshp_2 = self.dr.find_element("temporal_shape", "7a97ae58-8042-11e6-97ee-ac72891c3257")
+        sshp_1 = self.dr.find_element("spatial_shape", "a6562c2a-8883-11e5-b571-ac72891c3257")
+        sshp_2 = self.dr.find_element("spatial_shape", "a6562a9a-8883-11e5-b571-ac72891c3257")
+        str_1 = self.dr.find_element("structure", "default_492")
+        str_2 = self.dr.find_element("structure", "default_493")
+        param_1 = self.dr.find_element("physical_parameter", "d476e6113f5c466d27fd3aa9e9c35411")
+        param_2 = self.dr.find_element("physical_parameter", "d76ba4c5868a0a9a02f433dc3c86d5d2")
+        realm_1 = self.dr.find_element("modelling_realm", "ocean")
+        realm_2 = self.dr.find_element("modelling_realm", "atmos")
+        bcv_1 = self.dr.find_element("esm-bcv", "default_240")
+        bcv_2 = self.dr.find_element("esm-bcv", "default_241")
+        cf_1 = self.dr.find_element("cf_standard_name", "default_99")
+        cf_2 = self.dr.find_element("cf_standard_name", "default_100")
+        cell_method_1 = self.dr.find_element("cell_method", "CellMethods::amse-tmn")
+        cell_method_2 = self.dr.find_element("cell_method", "CellMethods::amse-tpt")
+        cell_measure_1 = self.dr.find_element("cell_measure", "default_4")
+        cell_measure_2 = self.dr.find_element("cell_measure", "default_3")
+        obj = DRObjects(id="link::my_id", dr=self.dr)
+        self.assertEqual(var_1.filter_on_request(var_2), (True, True))
+        self.assertEqual(var_1.filter_on_request(var_3), (True, False))
+        self.assertEqual(var_1.filter_on_request(table_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(table_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(tshp_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(tshp_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(sshp_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(sshp_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(str_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(str_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(param_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(param_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(realm_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(realm_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(bcv_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(bcv_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(cf_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(cf_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(cell_method_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(cell_method_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(cell_measure_1), (True, True))
+        self.assertEqual(var_1.filter_on_request(cell_measure_2), (True, False))
+        self.assertEqual(var_1.filter_on_request(obj), (False, False))
+
+
 class TestVariablesGroup(unittest.TestCase):
     def setUp(self):
         self.dr = DataRequest.from_separated_inputs(DR_input=filepath("one_base_DR_output.json"),
@@ -270,6 +343,69 @@ class TestVariablesGroup(unittest.TestCase):
         self.assertDictEqual(obj.get_priority_level().attributes,
                              {'name': "High", "notes": "High priority should be used sparingly", "value": 1,
                               'id': "default_481"})
+
+    def test_filter_on_request(self):
+        var_grp1 = self.dr.find_element("variable_groups", "default_570")
+        var_grp2 = copy.deepcopy(var_grp1)
+        var_grp3 = self.dr.find_element("variable_groups", "default_569")
+        var_2 = self.dr.find_element("variable", "baa71c7c-e5dd-11e5-8482-ac72891c3257")
+        var_1 = self.dr.find_element("variable", "83bbfc6e-7f07-11ef-9308-b1dd71e64bec")
+        mip_2 = self.dr.find_element("mips", "default_404")
+        mip_1 = self.dr.find_element("mips", "default_417")
+        prio_2 = self.dr.find_element("priority_level", "default_481")
+        prio_1 = self.dr.find_element("priority_level", "default_482")
+        max_prio_1 = self.dr.find_element("max_priority_level", "default_482")
+        max_prio_2 = self.dr.find_element("max_priority_level", "default_481")
+        table_1 = self.dr.find_element("table_identifier", "MIPtable::Oday")
+        table_2 = self.dr.find_element("table_identifier", "MIPtable::Omon")
+        tshp_1 = self.dr.find_element("temporal_shape", "cf34c974-80be-11e6-97ee-ac72891c3257")
+        tshp_2 = self.dr.find_element("temporal_shape", "7a97ae58-8042-11e6-97ee-ac72891c3257")
+        sshp_1 = self.dr.find_element("spatial_shape", "a656047a-8883-11e5-b571-ac72891c3257")
+        sshp_2 = self.dr.find_element("spatial_shape", "a65615fa-8883-11e5-b571-ac72891c3257")
+        str_1 = self.dr.find_element("structure", "link::default_504")
+        str_2 = self.dr.find_element("structure", "link::default_513")
+        param_1 = self.dr.find_element("physical_parameter", "3e3ddc77800e7d421834b9cb808602d7")
+        param_2 = self.dr.find_element("physical_parameter", "00e77372e8b909d9a827a0790e991fd9")
+        realm_1 = self.dr.find_element("modelling_realm", "ocean")
+        realm_2 = self.dr.find_element("modelling_realm", "atmos")
+        bcv_2 = self.dr.find_element("esm-bcv", "link::default_121")
+        cf_std_1 = self.dr.find_element("cf_standard_name", "default_65")
+        cf_std_2 = self.dr.find_element("cf_standard_name", "default_101")
+        cell_method_1 = self.dr.find_element("cell_methods", "CellMethods::amns-fx")
+        cell_method_2 = self.dr.find_element("cell_methods", "CellMethods::amnsi-twm")
+        cell_measure_1 = self.dr.find_element("cell_measure", "link::default_5")
+        cell_measure_2 = self.dr.find_element("cell_measure", "link::default_1")
+        obj = DRObjects(id="link::my_id", dr=self.dr)
+        self.assertEqual(var_grp1.filter_on_request(var_grp2), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(var_grp3), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(var_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(var_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(mip_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(mip_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(prio_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(prio_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(max_prio_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(max_prio_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(table_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(table_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(tshp_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(tshp_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(sshp_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(sshp_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(str_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(str_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(param_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(param_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(realm_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(realm_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(bcv_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(cf_std_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(cf_std_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(cell_method_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(cell_method_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(cell_measure_1), (True, True))
+        self.assertEqual(var_grp1.filter_on_request(cell_measure_2), (True, False))
+        self.assertEqual(var_grp1.filter_on_request(obj), (False, False))
 
     def test_print(self):
         obj = VariablesGroup.from_input(id="link::default_575", dr=self.dr, priority_level="Medium",
@@ -429,6 +565,88 @@ class TestOpportunity(unittest.TestCase):
 
         obj7 = DRObjects(id="my_id", dr=self.dr)
         self.assertNotEqual(obj, obj7)
+
+    def test_filter_on_request(self):
+        op_1 = self.dr.find_element("opportunities", "default_420")
+        op_2 = copy.deepcopy(op_1)
+        op_3 = self.dr.find_element("opportunities", "default_418")
+        theme_1 = self.dr.find_element("data_request_theme", "default_115")
+        theme_2 = self.dr.find_element("data_request_theme", "default_116")
+        var_grp_1 = self.dr.find_element("variable_group", "default_579")
+        var_grp_2 = self.dr.find_element("variable_group", "default_578")
+        exp_grp_1 = self.dr.find_element("experiment_group", "default_288")
+        exp_grp_2 = self.dr.find_element("experiment_group", "default_285")
+        exp_1 = self.dr.find_element("experiment", "default_310")
+        exp_2 = self.dr.find_element("experiment", "default_320")
+        time_1 = self.dr.find_element("time_subset", "link::_slice_hist20")
+        var_2 = self.dr.find_element("variable", "5a070350-c77d-11e6-8a33-5404a60d96b5")
+        var_1 = self.dr.find_element("variable", "83bbfc6e-7f07-11ef-9308-b1dd71e64bec")
+        mip_2 = self.dr.find_element("mips", "default_411")
+        mip_1 = self.dr.find_element("mips", "default_417")
+        prio_2 = self.dr.find_element("priority_level", "default_481")
+        prio_1 = self.dr.find_element("priority_level", "default_482")
+        max_prio_1 = self.dr.find_element("max_priority_level", "default_482")
+        max_prio_2 = self.dr.find_element("max_priority_level", "default_481")
+        table_1 = self.dr.find_element("table_identifier", "MIPtable::Oday")
+        table_2 = self.dr.find_element("table_identifier", "MIPtable::CFday")
+        tshp_1 = self.dr.find_element("temporal_shape", "cf34c974-80be-11e6-97ee-ac72891c3257")
+        tshp_2 = self.dr.find_element("temporal_shape", "7a97ae58-8042-11e6-97ee-ac72891c3257")
+        sshp_1 = self.dr.find_element("spatial_shape", "a656047a-8883-11e5-b571-ac72891c3257")
+        sshp_2 = self.dr.find_element("spatial_shape", "a65615fa-8883-11e5-b571-ac72891c3257")
+        str_1 = self.dr.find_element("structure", "link::default_504")
+        str_2 = self.dr.find_element("structure", "link::default_513")
+        param_1 = self.dr.find_element("physical_parameter", "3e3ddc77800e7d421834b9cb808602d7")
+        param_2 = self.dr.find_element("physical_parameter", "00e77372e8b909d9a827a0790e991fd9")
+        realm_1 = self.dr.find_element("modelling_realm", "ocean")
+        realm_2 = self.dr.find_element("modelling_realm", "land")
+        bcv_2 = self.dr.find_element("esm-bcv", "link::default_121")
+        cf_std_1 = self.dr.find_element("cf_standard_name", "default_65")
+        cf_std_2 = self.dr.find_element("cf_standard_name", "default_101")
+        cell_method_1 = self.dr.find_element("cell_methods", "CellMethods::amns-fx")
+        cell_method_2 = self.dr.find_element("cell_methods", "CellMethods::amla")
+        cell_measure_1 = self.dr.find_element("cell_measure", "link::default_5")
+        cell_measure_2 = self.dr.find_element("cell_measure", "link::default_1")
+        obj = DRObjects(id="link::my_id", dr=self.dr)
+        self.assertEqual(op_1.filter_on_request(op_2), (True, True))
+        self.assertEqual(op_1.filter_on_request(op_3), (True, False))
+        self.assertEqual(op_3.filter_on_request(theme_1), (True, True))
+        self.assertEqual(op_3.filter_on_request(theme_2), (True, False))
+        self.assertEqual(op_3.filter_on_request(exp_1), (True, True))
+        self.assertEqual(op_3.filter_on_request(exp_2), (True, False))
+        self.assertEqual(op_3.filter_on_request(time_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(time_1), (True, False))
+        self.assertEqual(op_3.filter_on_request(exp_grp_1), (True, True))
+        self.assertEqual(op_3.filter_on_request(exp_grp_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(var_grp_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(var_grp_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(var_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(var_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(mip_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(mip_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(prio_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(prio_2), (True, True))
+        self.assertEqual(op_1.filter_on_request(max_prio_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(max_prio_2), (True, True))
+        self.assertEqual(op_1.filter_on_request(table_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(table_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(tshp_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(tshp_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(sshp_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(sshp_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(str_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(str_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(param_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(param_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(realm_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(realm_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(bcv_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(cf_std_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(cf_std_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(cell_method_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(cell_method_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(cell_measure_1), (True, True))
+        self.assertEqual(op_1.filter_on_request(cell_measure_2), (True, False))
+        self.assertEqual(op_1.filter_on_request(obj), (False, False))
 
 
 class TestDataRequest(unittest.TestCase):
@@ -650,6 +868,8 @@ class TestDataRequestFilter(unittest.TestCase):
         self.input_database_file = filepath("one_base_DR_output.json")
         self.input_database = read_json_input_file_content(self.input_database_file)
         self.dr = DataRequest(input_database=self.input_database, VS=self.vs)
+        self.exp_export = filepath("experiments_export.txt")
+        self.exp_expgrp_summmary = filepath("exp_expgrp_summary.txt")
 
     def test_element_per_identifier_from_vs(self):
         id_var = "link::1aab80fc-b006-11e6-9289-ac72891c3257"
@@ -674,6 +894,9 @@ class TestDataRequestFilter(unittest.TestCase):
             self.dr.find_element_per_identifier_from_vs(element_type="opportunity/variable_group_comments", key="name",
                                                         value="undef")
 
+        self.assertEqual(self.dr.find_element_per_identifier_from_vs(element_type="variable", value=None, key="id", default=None),
+                         None)
+
     def test_element_from_vs(self):
         id_var = "link::1aab80fc-b006-11e6-9289-ac72891c3257"
         name_var = "Omon.wo"
@@ -688,6 +911,7 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertEqual(self.dr.find_element_from_vs(element_type="variables", value="toto", default=None), None)
         with self.assertRaises(ValueError):
             self.dr.find_element_from_vs(element_type="opportunity/variable_group_comments", value="undef")
+        self.assertEqual(self.dr.find_element_from_vs(element_type="variables", value=id_var, key="id"), target_var)
 
     def test_filter_elements_per_request(self):
         with self.assertRaises(TypeError):
@@ -701,9 +925,26 @@ class TestDataRequestFilter(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"))
-        self.assertEqual(
-            self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"),
-                                                skip_if_missing=True), self.dr.get_opportunities())
+        self.assertListEqual(self.dr.filter_elements_per_request("opportunities", skip_if_missing=True,
+                                                                 requests=dict(variables="link::test_dummy")),
+                             self.dr.get_opportunities())
+
+        self.assertListEqual(self.dr.filter_elements_per_request("experiment_groups",
+                                                                 requests=dict(variable="1aab80fc-b006-11e6-9289-ac72891c3257")),
+                             [self.dr.find_element("experiment_group", id) for id in ["default_285", "default_287",
+                                                                                      "default_288", "default_289"]])
+        list_var_grp = [self.dr.find_element("variable_groups", id)
+                        for id in ["default_569", "default_570", "default_571", "default_572", "default_573",
+                                   "default_574", "default_575", "default_576", "default_579"]]
+        self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
+                                                                 requests=dict(experiment="default_290")),
+                             list_var_grp)
+        self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
+                                                                 requests=dict(experiment="default_290")),
+                             list_var_grp)
+        self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group("default_569"),
+                                                                 requests=dict(experiment="default_290")),
+                             [self.dr.find_element("variable_group", "default_569"), ])
 
     def test_find_variables_per_priority(self):
         priority = "Medium"
@@ -909,6 +1150,66 @@ class TestDataRequestFilter(unittest.TestCase):
                                                       experiment_groups=expgrp_id), list_all)
         self.assertListEqual(self.dr.find_experiments(operation="any", opportunities=op_id,
                                                       experiment_groups=expgrp_id), list_any)
+
+    def test_find_variables(self):
+        table_id = "MIPtable::E1hr"
+        vars_id = ["83bbfbbc-7f07-11ef-9308-b1dd71e64bec", "83bbfbbd-7f07-11ef-9308-b1dd71e64bec",
+                   "83bbfbbf-7f07-11ef-9308-b1dd71e64bec", "83bbfbc0-7f07-11ef-9308-b1dd71e64bec",
+                   "83bbfbc2-7f07-11ef-9308-b1dd71e64bec", "83bbfbc4-7f07-11ef-9308-b1dd71e64bec",
+                   "83bbfbc5-7f07-11ef-9308-b1dd71e64bec", "83bbfbc7-7f07-11ef-9308-b1dd71e64bec",
+                   "83bbfbca-7f07-11ef-9308-b1dd71e64bec", "8baebea6-4a5b-11e6-9cd2-ac72891c3257",
+                   "8bb11ef8-4a5b-11e6-9cd2-ac72891c3257"]
+        self.assertListEqual(self.dr.find_variables(operation="all", table_identifier=table_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        tshp_id = "7a97ae58-8042-11e6-97ee-ac72891c3257"
+        vars_id = ["bab942a8-e5dd-11e5-8482-ac72891c3257", "bab955ea-e5dd-11e5-8482-ac72891c3257"]
+        self.assertListEqual(self.dr.find_variables(operation="all", temporal_shape=tshp_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        sshp_id = "a6563bca-8883-11e5-b571-ac72891c3257"
+        vars_id = ["f2fad86e-c38d-11e6-abc1-1b922e5e1118", ]
+        self.assertListEqual(self.dr.find_variables(operation="all", spatial_shape=sshp_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        str_id = "default_487"
+        vars_id = ["bab955ea-e5dd-11e5-8482-ac72891c3257", ]
+        self.assertListEqual(self.dr.find_variables(operation="all", structure=str_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        param_id = "00e77372e8b909d9a827a0790e991fd9"
+        vars_id = ["bab2f9d4-e5dd-11e5-8482-ac72891c3257", ]
+        self.assertListEqual(self.dr.find_variables(operation="all", physical_parameter=param_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        realm_id = "ocnBgchem"
+        vars_id = ["83bbfb7c-7f07-11ef-9308-b1dd71e64bec", "83bbfb7f-7f07-11ef-9308-b1dd71e64bec",
+                   "83bbfb94-7f07-11ef-9308-b1dd71e64bec", "ba9f3ac0-e5dd-11e5-8482-ac72891c3257",
+                   "ba9f643c-e5dd-11e5-8482-ac72891c3257", "ba9f686a-e5dd-11e5-8482-ac72891c3257",
+                   "ba9f91f0-e5dd-11e5-8482-ac72891c3257", "c9180bae-c5e8-11e6-84e6-5404a60d96b5",
+                   "c9181982-c5e8-11e6-84e6-5404a60d96b5"]
+        self.assertListEqual(self.dr.find_variables(operation="all", modelling_realm=realm_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        bcv_id = "default_122"
+        vars_id = ["bab3c904-e5dd-11e5-8482-ac72891c3257", ]
+        self.assertListEqual(self.dr.find_variables(operation="all", **{"esm-bcv": bcv_id}),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        cf_std_id = "default_32"
+        vars_id = ["baab0382-e5dd-11e5-8482-ac72891c3257", ]
+        self.assertListEqual(self.dr.find_variables(operation="all", cf_standard_name=cf_std_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        cell_methods_id = "CellMethods::amla"
+        vars_id = ["bab1c08c-e5dd-11e5-8482-ac72891c3257", "f2fad86e-c38d-11e6-abc1-1b922e5e1118"]
+        self.assertListEqual(self.dr.find_variables(operation="all", cell_methods=cell_methods_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
+
+        cell_measure_id = "default_2"
+        vars_id = ["baa3f2e0-e5dd-11e5-8482-ac72891c3257", ]
+        self.assertListEqual(self.dr.find_variables(operation="all", cell_measures=cell_measure_id),
+                             [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
     def test_find_priority_per_variable(self):
         var_id = "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
