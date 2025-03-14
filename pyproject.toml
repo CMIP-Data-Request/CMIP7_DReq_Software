@@ -40,16 +40,18 @@ Issues = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/issues"
 export_dreq_lists_json = "data_request_api.command_line.export_dreq_lists_json:main"
 
 [tool.pytest.ini_options]
-cache_dir = "tests/.pytest_cache"
+cache_dir = "data_request_api/tests/.pytest_cache"
 
 [tool.coverage.run]
 branch = true
 parallel = true
 command_line = "-m pytest"
 source = [
-    "data_request_api/stable"
+    "data_request_api/stable",
+    "data_request_api/command_line",
+    "scripts"
     ]
-data_file = "tests/.coverage"
+data_file = "data_request_api/tests/.coverage"
 
 [tool.coverage.report]
 fail_under = 50
@@ -58,16 +60,16 @@ exclude_lines = [
     ]
 
 [tool.coverage.html]
-directory = "tests/htmlcov"
+directory = "data_request_api/tests/htmlcov"
 
 [tool.coverage.xml]
-output = "tests/coverage.xml"
+output = "data_request_api/tests/coverage.xml"
 
 [tool.coverage.json]
-output = "tests/coverage.json"
+output = "data_request_api/tests/coverage.json"
 
 [tool.coverage.lcov]
-output = "tests.coverage.lcov"
+output = "data_request_api/tests.coverage.lcov"
 
 [tool.setuptools_scm]
 write_to = "data_request_api/version.py"
