@@ -910,5 +910,7 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_experiments(operation="any", opportunities=op_id,
                                                       experiment_groups=expgrp_id), list_any)
 
-
-
+    def test_find_priority_per_variable(self):
+        var_id = "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
+        var = self.dr.find_element("variable", var_id)
+        self.assertEqual(self.dr.find_priority_per_variable(var), 1)

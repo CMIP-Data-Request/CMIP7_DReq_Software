@@ -16,7 +16,7 @@ from data_request_api.stable.utilities.logger import get_logger, change_log_file
 from data_request_api.stable.content.dump_transformation import transform_content
 from data_request_api.stable.utilities.tools import read_json_file, write_csv_output_file_content
 from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
-    to_singular, ConstantValueObj
+    to_singular, ConstantValueObj, to_plural
 
 from data_request_api import version
 
@@ -35,7 +35,10 @@ class DRObjects(object):
         :param dict structure: if needed, elements linked by structure to the current object
         :param dict attributes: attributes of the object coming from vocabulary server
         """
-        self.DR_type = DR_type
+        if DR_type in ["undef", ]:
+            self.DR_type = DR_type
+        else:
+            self.DR_type = to_plural(DR_type)
         _, attributes["id"] = is_link_id_or_value(id)
         self.dr = dr
         self.attributes = self.transform_content(attributes, dr)
@@ -291,11 +294,11 @@ class VariablesGroup(DRObjects):
             return True, request_value in self.get_variables()
         elif request_type in ["mips", ]:
             return True, request_value in self.get_mips()
-        elif request_type in ["max_priority_level", ]:
+        elif request_type in ["max_priority_levels", ]:
             priority = self.dr.find_element("priority_level", self.get_priority_level().id)
             req_priority = self.dr.find_element("priority_level", request_value.id)
             return True, priority.value <= req_priority.value
-        elif request_type in ["priority_level", ]:
+        elif request_type in ["priority_levels", ]:
             _, priority = is_link_id_or_value(self.get_priority_level().id)
             _, req_priority = is_link_id_or_value(request_value.id)
             return True, req_priority == priority
@@ -660,6 +663,15 @@ class DataRequest(object):
             self.cache["data_request_themes"] = sorted(list(rep))
         return self.cache["data_request_themes"]
 
+    def find_priority_per_variable(self, variable, **filter_request):
+        logger = get_logger()
+        priorities = self.filter_elements_per_request(elements_to_filter="priority_level",
+                                                      requests={"variable": variable, **filter_request})
+        logger.debug(f"Priorities found: {priorities} ({[int(priority.value) for priority in priorities]})")
+        priority = min(int(priority.value) for priority in priorities)
+        logger.debug(f"Priority_retain {priority}")
+        return priority
+
     def find_variables_per_priority(self, priority):
         """
         Find all the variables which have a specified priority.
@@ -861,24 +873,28 @@ class DataRequest(object):
         :return list: the list of elements of kind element_type
         """
         logger = get_logger()
-        if element_type in ["opportunities", ]:
+        element_types = to_plural(element_type)
+        if element_types in ["opportunities", ]:
             elements = self.get_opportunities()
-        elif element_type in ["experiment_groups", ]:
+        elif element_types in ["experiment_groups", ]:
             elements = self.get_experiment_groups()
-        elif element_type in ["variable_groups", ]:
+        elif element_types in ["variable_groups", ]:
             elements = self.get_variable_groups()
-        elif element_type in ["variables", ]:
+        elif element_types in ["variables", ]:
             elements = self.get_variables()
-        elif element_type in ["experiments", ]:
+        elif element_types in ["experiments", ]:
             elements = self.get_experiments()
-        elif element_type in ["data_request_themes", ]:
+        elif element_types in ["data_request_themes", ]:
             elements = self.get_data_request_themes()
-        elif element_type in ["mips", ]:
+        elif element_types in ["mips", ]:
             elements = self.get_mips()
+        elif element_types in self.cache:
+            elements = sorted(self.cache[element_types])
         else:
-            logger.debug("Find elements list from vocabulary server.")
+            logger.debug(f"Find elements list of kind {element_type} from vocabulary server.")
             element_type, elements_ids = self.VS.get_element_type_ids(element_type)
             elements = [self.find_element(element_type, id) for id in elements_ids]
+            self.cache[element_types] = elements
         return elements
 
     @staticmethod
@@ -938,7 +954,10 @@ class DataRequest(object):
             if isinstance(elements_to_filter, str):
                 elements = self.get_elements_per_kind(elements_to_filter)
             else:
-                elements = elements_to_filter
+                if not isinstance(elements_to_filter, list):
+                    elements = [elements_to_filter, ]
+                else:
+                    elements = elements_to_filter
                 elements_to_filter = elements[0].DR_type
             # Filter elements
             rep = defaultdict(lambda: defaultdict(set))

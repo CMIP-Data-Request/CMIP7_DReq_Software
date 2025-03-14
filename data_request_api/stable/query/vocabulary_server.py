@@ -53,9 +53,9 @@ def to_plural(element_type):
 
 def to_singular(element_type):
     if element_type.endswith("ies"):
-        element_type = element_type.removesuffix("ies") + "y"
+        element_type = element_type[0:-3] + "y"
     elif element_type.endswith("s"):
-        element_type = element_type.removesuffix("s")
+        element_type = element_type[0:-1]
     return element_type
 
 
