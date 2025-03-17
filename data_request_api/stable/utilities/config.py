@@ -2,12 +2,12 @@
 
 
 from pathlib import Path
-
+import os
 import yaml
 
 # Config file location in the user's home directory
 PACKAGE_NAME = "CMIP7_data_request_api"
-CONFIG_FILE = Path.home() / f".{PACKAGE_NAME}_config"
+CONFIG_FILE = os.environ.get("CMIP7_DR_API_CONFIGFILE", Path.home() / f".{PACKAGE_NAME}_config")
 
 # Default config dictionary
 DEFAULT_CONFIG = {
