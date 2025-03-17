@@ -776,7 +776,7 @@ class TestDataRequest(unittest.TestCase):
 
     def test_str(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        with open(self.DR_dump) as f:
+        with open(self.DR_dump, encoding="utf-8", newline="\n") as f:
             ref_str = f.read()
         self.assertEqual(str(obj), ref_str)
 
