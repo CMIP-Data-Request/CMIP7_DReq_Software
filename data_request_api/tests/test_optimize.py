@@ -16,9 +16,10 @@ import io
 import pstats
 
 from data_request_api.stable.query.data_request import DataRequest
-from data_request_api.stable.content.dreq_api.dreq_content import _dreq_res
+from data_request_api.stable.content.dreq_content import _dreq_res
 from data_request_api.stable.utilities.tools import read_json_input_file_content
 from data_request_api.stable.content.dump_transformation import correct_dictionaries, transform_content_one_base
+from data_request_api.tests import filepath
 
 
 def add_profiling(func):
@@ -32,7 +33,7 @@ def add_profiling(func):
             stdout = sys.stdout
             test_name = str(self)
             test_name = re.sub(r"(?P<name>.*) .*", r"\g<name>", test_name)
-            file_name = f"tests/profiling_{test_name}.txt"
+            file_name = filepath(f"profiling_{test_name}.txt")
             if os.path.isfile(file_name):
                 os.remove(file_name)
             with codecs.open(file_name, "w", encoding="utf-8") as statsfile:
