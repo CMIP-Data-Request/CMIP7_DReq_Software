@@ -14,7 +14,7 @@ import json
 from collections import OrderedDict
 
 from data_request_api.stable.query.dreq_classes import (
-    dreq_table, expt_request, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
+    DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
 from data_request_api.stable.utilities.tools import write_csv_output_file_content
 
 # Version of data request content:
@@ -92,7 +92,7 @@ def get_table_id2name(base):
 def create_dreq_tables_for_request(content, consolidated=True):
     '''
     For the "request" part of the data request content (Opportunities, Variable Groups, etc),
-    render raw airtable export content as dreq_table objects.
+    render raw airtable export content as DreqTable objects.
     
     For the "data" part of the data request, the corresponding function is create_dreq_tables_for_variables().
 
@@ -112,7 +112,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
 
     Returns
     -------
-    Dict whose keys are table names and values are dreq_table objects.
+    Dict whose keys are table names and values are DreqTable objects.
     (The base name from the input 'content' dict no longer appears.)
     '''
     if not isinstance(content, dict):
@@ -138,7 +138,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
     table_id2name = get_table_id2name(base)
     for table_name, table in base.items():
         # print('Creating table object for table: ' + table_name)
-        base[table_name] = dreq_table(table, table_id2name)
+        base[table_name] = DreqTable(table, table_id2name)
 
     # Change names of tables if needed 
     # (insulates downstream code from upstream name changes that don't affect functionality)
@@ -200,7 +200,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
 def create_dreq_tables_for_variables(content, consolidated=True):
     '''
     For the "data" part of the data request content (Variables, Cell Methods etc),
-    render raw airtable export content as dreq_table objects.
+    render raw airtable export content as DreqTable objects.
 
     For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().
 
@@ -227,7 +227,7 @@ def create_dreq_tables_for_variables(content, consolidated=True):
     table_id2name = get_table_id2name(base)
     for table_name, table in base.items():
         # print('Creating table object for table: ' + table_name)
-        base[table_name] = dreq_table(table, table_id2name)
+        base[table_name] = DreqTable(table, table_id2name)
 
     # Change names of tables if needed 
     # (insulates downstream code from upstream name changes that don't affect functionality)
@@ -259,7 +259,7 @@ def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
     use_opps : str or list
         "all" : return all available ids
         list of str : return ids for with the listed opportunity titles
-    dreq_opps : dreq_table
+    dreq_opps : DreqTable
         table object representing the opportunities table
     '''
     opp_ids = []
@@ -316,10 +316,10 @@ def get_var_group_priority(var_group, dreq_priorities=None):
 
     Parameters
     ----------
-    var_group : dreq_record
+    var_group : DreqRecord
         Object representing a variable group
         Its "priority_level" attribute specifies the priority as either string or link to dreq_priorities table 
-    dreq_priorities : dreq_table
+    dreq_priorities : DreqTable
         Required if var_group.priority_level is link to dreq_priorities table 
 
     Returns
@@ -332,7 +332,7 @@ def get_var_group_priority(var_group, dreq_priorities=None):
     if isinstance(var_group.priority_level, list):
         assert len(var_group.priority_level) == 1, 'Variable group should have one specified priority level'
         link = var_group.priority_level[0]
-        assert isinstance(dreq_priorities, dreq_table)
+        assert isinstance(dreq_priorities, DreqTable)
         rec = dreq_priorities.records[link.record_id]
         priority_level = rec.name
     elif isinstance(var_group.priority_level, str):
@@ -352,7 +352,7 @@ def get_unique_var_name(var):
 
     Parameters
     ----------
-    var : dreq_record
+    var : DreqRecord
         Object representing a variable
 
     Returns
@@ -373,11 +373,11 @@ def get_opp_expts(opp, expt_groups, expts, verbose=False):
 
     Parameters
     ----------
-    opp : dreq_record
+    opp : DreqRecord
         One record from the Opportunity table
-    expt_groups : dreq_table
+    expt_groups : DreqTable
         Experiment Group table
-    expts : dreq_table
+    expts : DreqTable
         Experiments table
 
     Returns
@@ -411,15 +411,15 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
 
     Parameters
     ----------
-    opp : dreq_record
+    opp : DreqRecord
         One record from the Opportunity table
     priority_levels : list[str]
         Priority levels to get, example: ['High', 'Medium']
-    var_groups : dreq_table
+    var_groups : DreqTable
         Variable Group table
-    dreq_vars : dreq_table
+    dreq_vars : DreqTable
         Variables table
-    dreq_priorities : dreq_table
+    dreq_priorities : DreqTable
         Required if var_group.priority_level is link to dreq_priorities table 
 
     Returns
@@ -459,7 +459,7 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
         Dict containing either:
         - data request content as exported from airtable
         OR
-        - dreq_table objects representing tables (dict keys are table names)
+        - DreqTable objects representing tables (dict keys are table names)
     use_opp : str or list of str/int
         Identifies the opportunities being supported. Options:
             'all' : include all available opportunities
@@ -487,11 +487,11 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     }
     '''
     if isinstance(content, dict):
-        if all([isinstance(table, dreq_table) for table in content.values()]):
-            # tables have already been rendered as dreq_table objects
+        if all([isinstance(table, DreqTable) for table in content.values()]):
+            # tables have already been rendered as DreqTable objects
             base = content
         else:
-            # render tables as dreq_table objects
+            # render tables as DreqTable objects
             base = create_dreq_tables_for_request(content, consolidated=consolidated)
     else:
         raise TypeError('Expect dict as input')
@@ -546,10 +546,10 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
         # Aggregate this Opportunity's request into the master list of requests
         for expt_name in opp_expts:
             if expt_name not in request:
-                # If we haven't encountered this experiment yet, initialize an expt_request object for it
-                request[expt_name] = expt_request(expt_name)
+                # If we haven't encountered this experiment yet, initialize an ExptRequest object for it
+                request[expt_name] = ExptRequest(expt_name)
 
-            # Add this Opportunity's variables request to the expt_request object
+            # Add this Opportunity's variables request to the ExptRequest object
             for priority_level, var_names in opp_vars.items():
                 request[expt_name].add_vars(var_names, priority_level)
 
@@ -590,7 +590,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         Dict containing either:
         - data request content as exported from airtable
         OR
-        - dreq_table objects representing tables (dict keys are table names)
+        - DreqTable objects representing tables (dict keys are table names)
     compound_names : list[str]
         Compound names of variables to include. If not given, all are included.
         Example: ['Amon.tas', 'Omon.sos']
@@ -613,11 +613,11 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     TO DEPRECATE: use_dreq_version as input should be removed once CMIP6 frequency issue fixed.
     '''
     if isinstance(content, dict):
-        if all([isinstance(table, dreq_table) for table in content.values()]):
-            # tables have already been rendered as dreq_table objects
+        if all([isinstance(table, DreqTable) for table in content.values()]):
+            # tables have already been rendered as DreqTable objects
             base = content
         else:
-            # render tables as dreq_table objects
+            # render tables as DreqTable objects
             base = create_dreq_tables_for_request(content, consolidated=consolidated)
     else:
         raise TypeError('Expect dict as input')
@@ -627,7 +627,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     if not use_dreq_version:
         raise ValueError('\n(TO DEPRECATE) use_dreq_version is required to set frequencies\n')
 
-    # Use dict dreq_tables to store instances of the dreq_table class that are used in this function.
+    # Use dict dreq_tables to store instances of the DreqTable class that are used in this function.
     # Mostly this would be the same as simply using base[table name], but in some cases there's a choice
     # of which table to use. Using dreq_tables as a mapping makes this choice explicit.
     dreq_tables = {
