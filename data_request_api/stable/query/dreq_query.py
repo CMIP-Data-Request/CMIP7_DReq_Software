@@ -54,8 +54,10 @@ def get_content_type(content):
         raise ValueError('Unable to determine type of data request content in the exported json file')
     return content_type
 
+
 def version_base_name():
     return f'Data Request {DREQ_VERSION}'
+
 
 def get_priority_levels():
     '''
@@ -73,19 +75,19 @@ def get_priority_levels():
     
     return priority_levels
 
-def get_table_id2name(base, base_name):
+
+def get_table_id2name(base):
     '''
     Get a mapping from table id to table name
     '''
     table_id2name = {}
-    for table_name, table in base.items():
-        # assert table['name'] == table_name
-        # assert table['base_name'] == base_name, table['base_name'] + ', ' + base_name
+    for table in base.values():
         table_id2name.update({
             table['id'] : table['name']
         })
     assert len(table_id2name) == len(base), 'table ids are not unique!'
     return table_id2name
+
 
 def create_dreq_tables_for_request(content, consolidated=True):
     '''
@@ -133,7 +135,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
     base = content[base_name]
 
     # Create objects representing data request tables
-    table_id2name = get_table_id2name(base, base_name)
+    table_id2name = get_table_id2name(base)
     for table_name, table in base.items():
         # print('Creating table object for table: ' + table_name)
         base[table_name] = dreq_table(table, table_id2name)
@@ -156,23 +158,23 @@ def create_dreq_tables_for_request(content, consolidated=True):
         base.pop(old)
 
     # Make some adjustments that are specific to the Opportunity table
-    Opps = base['Opportunity']
-    Opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
-    for opp in Opps.records.values():
+    dreq_opps = base['Opportunity']
+    dreq_opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+    for opp in dreq_opps.records.values():
         opp.title = opp.title.strip()
     if content_type == 'working':
-        if 'variable_groups' not in Opps.attr2field:
+        if 'variable_groups' not in dreq_opps.attr2field:
             # Try alternate names for the latest variable groups
             try_vg_attr = []
             try_vg_attr.append('working_updated_variable_groups') # takes precendence over originally requested groups
             try_vg_attr.append('originally_requested_variable_groups')
             for vg_attr in try_vg_attr:
-                if vg_attr in Opps.attr2field:
-                    Opps.rename_attr(vg_attr, 'variable_groups')
+                if vg_attr in dreq_opps.attr2field:
+                    dreq_opps.rename_attr(vg_attr, 'variable_groups')
                     break
-            assert 'variable_groups' in Opps.attr2field, f'unable to determine variable groups attribute for opportunity: {opp.title}'
+            assert 'variable_groups' in dreq_opps.attr2field, f'unable to determine variable groups attribute for opportunity: {opp.title}'
     exclude_opps = set()
-    for opp_id, opp in Opps.records.items():
+    for opp_id, opp in dreq_opps.records.items():
         if not hasattr(opp, 'experiment_groups'):
             print(f' * WARNING *    no experiment groups found for Opportunity: {opp.title}')
             exclude_opps.add(opp_id)
@@ -182,17 +184,18 @@ def create_dreq_tables_for_request(content, consolidated=True):
     if len(exclude_opps) > 0:
         print('Quality control check is excluding these Opportunities:')
         for opp_id in exclude_opps:
-            opp = Opps.records[opp_id]
+            opp = dreq_opps.records[opp_id]
             print(f'  {opp.title}')
-            Opps.delete_record(opp_id)
+            dreq_opps.delete_record(opp_id)
         print()
-    if len(Opps.records) == 0:
+    if len(dreq_opps.records) == 0:
         # If there are no opportunities left, there's no point in continuing!
         # This check is here because if something changes upstream in Airtable, it might cause
         # the above code to erroneously remove all opportunities.
         raise Exception(' * ERROR *    All Opportunities were removed!')
 
     return base
+
 
 def create_dreq_tables_for_variables(content, consolidated=True):
     '''
@@ -221,7 +224,7 @@ def create_dreq_tables_for_variables(content, consolidated=True):
     base = content[base_name]
 
     # Create objects representing data request tables
-    table_id2name = get_table_id2name(base, base_name)
+    table_id2name = get_table_id2name(base)
     for table_name, table in base.items():
         # print('Creating table object for table: ' + table_name)
         base[table_name] = dreq_table(table, table_id2name)
@@ -247,7 +250,7 @@ def create_dreq_tables_for_variables(content, consolidated=True):
 # Functions to interrogate the data request, e.g. get variables requested for
 # each experiment.
 
-def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
+def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
     '''
     Return list of unique opportunity identifiers.
 
@@ -256,11 +259,11 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
     use_opps : str or list
         "all" : return all available ids
         list of str : return ids for with the listed opportunity titles
-    Opps : dreq_table
+    dreq_opps : dreq_table
         table object representing the opportunities table
     '''
     opp_ids = []
-    records = Opps.records
+    records = dreq_opps.records
     if use_opps == 'all':
         # Include all opportunities
         opp_ids = list(records.keys())
@@ -283,7 +286,7 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
         valid_opp_status = ['Accepted', 'Under review']
         discard_opp_id = set()
         for opp_id in opp_ids:
-            opp = Opps.get_record(opp_id)
+            opp = dreq_opps.get_record(opp_id)
             # print(opp)
             # if len(opp) == 0:
             #     # discard empty opportunities
@@ -291,7 +294,7 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
             if hasattr(opp, 'status') and opp.status not in valid_opp_status:
                 discard_opp_id.add(opp_id)
         for opp_id in discard_opp_id:
-            Opps.delete_record(opp_id)
+            dreq_opps.delete_record(opp_id)
             opp_ids.remove(opp_id)
         del discard_opp_id
 
@@ -306,7 +309,8 @@ def get_opp_ids(use_opps, Opps, verbose=False, quality_control=True):
 
     return opp_ids
 
-def get_var_group_priority(var_group, PriorityLevel=None):
+
+def get_var_group_priority(var_group, dreq_priorities=None):
     '''
     Returns string stating the priorty level of variable group.
 
@@ -314,9 +318,9 @@ def get_var_group_priority(var_group, PriorityLevel=None):
     ----------
     var_group : dreq_record
         Object representing a variable group
-        Its "priority_level" attribute specifies the priority as either string or link to PriorityLevel table 
-    PriorityLevel : dreq_table
-        Required if var_group.priority_level is link to PriorityLevel table 
+        Its "priority_level" attribute specifies the priority as either string or link to dreq_priorities table 
+    dreq_priorities : dreq_table
+        Required if var_group.priority_level is link to dreq_priorities table 
 
     Returns
     -------
@@ -328,8 +332,8 @@ def get_var_group_priority(var_group, PriorityLevel=None):
     if isinstance(var_group.priority_level, list):
         assert len(var_group.priority_level) == 1, 'Variable group should have one specified priority level'
         link = var_group.priority_level[0]
-        assert isinstance(PriorityLevel, dreq_table)
-        rec = PriorityLevel.records[link.record_id]
+        assert isinstance(dreq_priorities, dreq_table)
+        rec = dreq_priorities.records[link.record_id]
         priority_level = rec.name
     elif isinstance(var_group.priority_level, str):
         priority_level = var_group.priority_level
@@ -338,6 +342,7 @@ def get_var_group_priority(var_group, PriorityLevel=None):
     if not isinstance(priority_level, str):
         raise TypeError('Priority level should be str, instead got {}'.format(type(priority_level)))
     return priority_level
+
 
 def get_unique_var_name(var):
     '''
@@ -360,7 +365,8 @@ def get_unique_var_name(var):
         raise ValueError('Unknown identifier for UNIQUE_VAR_NAME: ' + UNIQUE_VAR_NAME + 
                          '\nHow should the unique variable name be determined?')
 
-def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
+
+def get_opp_expts(opp, expt_groups, expts, verbose=False):
     '''
     For one Opportunity, get its requested experiments.
     Input parameters are not modified.
@@ -369,9 +375,9 @@ def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
     ----------
     opp : dreq_record
         One record from the Opportunity table
-    ExptGroups : dreq_table
+    expt_groups : dreq_table
         Experiment Group table
-    Expts : dreq_table
+    expts : dreq_table
         Experiments table
 
     Returns
@@ -384,8 +390,7 @@ def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
     if verbose:
         print('  Experiment Groups ({}):'.format(len(opp.experiment_groups)))
     for link in opp.experiment_groups:
-        # expt_group = base[link.table_name].records[link.record_id]
-        expt_group = ExptGroups.records[link.record_id]
+        expt_group = expt_groups.records[link.record_id]
 
         if not hasattr(expt_group, 'experiments'):
             continue
@@ -394,12 +399,12 @@ def get_opp_expts(opp, ExptGroups, Expts, verbose=False):
             print(f'    {expt_group.name}  ({len(expt_group.experiments)} experiments)')
 
         for link in expt_group.experiments:
-            expt = Expts.records[link.record_id]
-            # print(f'  {expt.experiment}')
+            expt = expts.records[link.record_id]
             opp_expts.add(expt.experiment)
     return opp_expts
 
-def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verbose=False):
+
+def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=None, verbose=False):
     '''
     For one Opportunity, get its requested variables grouped by priority level.
     Input parameters are not modified.
@@ -410,12 +415,12 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
         One record from the Opportunity table
     priority_levels : list[str]
         Priority levels to get, example: ['High', 'Medium']
-    VarGroups : dreq_table
+    var_groups : dreq_table
         Variable Group table
-    Vars : dreq_table
+    dreq_vars : dreq_table
         Variables table
-    PriorityLevel : dreq_table
-        Required if var_group.priority_level is link to PriorityLevel table 
+    dreq_priorities : dreq_table
+        Required if var_group.priority_level is link to dreq_priorities table 
 
     Returns
     -------
@@ -427,9 +432,9 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
     if verbose:
         print('  Variable Groups ({}):'.format(len(opp.variable_groups)))
     for link in opp.variable_groups:
-        var_group = VarGroups.records[link.record_id]
+        var_group = var_groups.records[link.record_id]
 
-        priority_level = get_var_group_priority(var_group, PriorityLevel)
+        priority_level = get_var_group_priority(var_group, dreq_priorities)
         if priority_level not in priority_levels:
             continue
 
@@ -437,7 +442,7 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
             print(f'    {var_group.name}  ({len(var_group.variables)} variables, {priority_level} priority)')
 
         for link in var_group.variables:
-            var = Vars.records[link.record_id]
+            var = dreq_vars.records[link.record_id]
             var_name = get_unique_var_name(var)
             # Add this variable to the list of requested variables at the specified priority
             opp_vars[priority_level].add(var_name)
@@ -491,25 +496,26 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     else:
         raise TypeError('Expect dict as input')
 
-    Opps = base['Opportunity']
-    opp_ids = get_opp_ids(use_opps, Opps, verbose=verbose)
-
-    ExptGroups = base['Experiment Group']
-    Expts = base['Experiments']
-    VarGroups = base['Variable Group']
-    Vars = base['Variables']
+    dreq_tables = {
+        'opps' : base['Opportunity'],
+        'expt groups' : base['Experiment Group'],
+        'expts' : base['Experiments'],
+        'var groups' : base['Variable Group'],
+        'vars' : base['Variables']
+    }
+    opp_ids = get_opp_ids(use_opps, dreq_tables['opps'], verbose=verbose)
 
     # all_priority_levels = ['Core', 'High', 'Medium', 'Low']
     # all_priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
     all_priority_levels = get_priority_levels()
 
     if 'Priority Level' in base:
-        PriorityLevel = base['Priority Level']
-        priority_levels_from_table = [rec.name for rec in PriorityLevel.records.values()]
+        dreq_tables['priority level'] = base['Priority Level']
+        priority_levels_from_table = [rec.name for rec in dreq_tables['priority level'].records.values()]
         assert set(all_priority_levels) == set(priority_levels_from_table), \
             'inconsistent priority levels:\n  ' + str(all_priority_levels) + '\n  ' + str(priority_levels_from_table)
     else:
-        PriorityLevel = None
+        dreq_tables['priority level'] = None
     priority_cutoff = priority_cutoff.capitalize()
     if priority_cutoff not in all_priority_levels:
         raise ValueError('Invalid priority level cutoff: ' + priority_cutoff + '\nCould not determine priority levels to include.')
@@ -520,13 +526,22 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
     # Loop over Opportunities to get prioritized lists of variables
     request = {} # dict to hold aggregated request
     for opp_id in opp_ids:
-        opp = Opps.records[opp_id] # one record from the Opportunity table
+        opp = dreq_tables['opps'].records[opp_id] # one record from the Opportunity table
 
         if verbose:
             print(f'Opportunity: {opp.title}')
 
-        opp_expts = get_opp_expts(opp, ExptGroups, Expts, verbose=verbose)
-        opp_vars = get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel, verbose=verbose)
+        opp_expts = get_opp_expts(opp, 
+                                  dreq_tables['expt groups'], 
+                                  dreq_tables['expts'], 
+                                  verbose=verbose)
+        
+        opp_vars = get_opp_vars(opp, 
+                                priority_levels, 
+                                dreq_tables['var groups'], 
+                                dreq_tables['vars'], 
+                                dreq_tables['priority level'], 
+                                verbose=verbose)
 
         # Aggregate this Opportunity's request into the master list of requests
         for expt_name in opp_expts:
@@ -538,7 +553,7 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
             for priority_level, var_names in opp_vars.items():
                 request[expt_name].add_vars(var_names, priority_level)
 
-    opp_titles = sorted([Opps.get_record(opp_id).title for opp_id in opp_ids])
+    opp_titles = sorted([dreq_tables['opps'].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {
         'Header' : {
             'Opportunities' : opp_titles,
@@ -847,7 +862,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     expt_vars is the output dict from dq.get_requested_variables().
     '''
 
-    Header = OrderedDict({
+    header = OrderedDict({
         'Description' : 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
         'Opportunities supported' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
     })
@@ -856,7 +871,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     priority_levels=get_priority_levels()
     priority_cutoff = priority_cutoff.capitalize()
     m = priority_levels.index(priority_cutoff)+1
-    Header.update({
+    header.update({
         'Priority levels supported' : priority_levels[:m]
     })
     for req in expt_vars['experiment'].values():
@@ -865,15 +880,15 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
             req.pop(p) # remove empty lists of unsupported priorities from the output
 
     # List included experiments
-    Header.update({
+    header.update({
         'Experiments included' : sorted(expt_vars['experiment'].keys(), key=str.lower)
     })
 
-    # Get provenance of content to include in the Header
+    # Get provenance of content to include in the header
     # content_path = dc._dreq_content_loaded['json_path']
     with open(content_path, 'rb') as f:
         content_hash = hashlib.sha256(f.read()).hexdigest()
-    Header.update({
+    header.update({
         'dreq content version' : use_dreq_version,
         'dreq content file' : os.path.basename(os.path.normpath(content_path)),
         'dreq content sha256 hash' : content_hash,
@@ -881,7 +896,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     })
 
     out = {
-        'Header' : Header,
+        'Header' : header,
         'experiment' : OrderedDict(),
     }
     expt_names = sorted(expt_vars['experiment'].keys(), key=str.lower)
@@ -898,6 +913,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
         json.dump(out, f, indent=4)
         print('\nWrote requested variables to ' + outfile)
 
+
 def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None):
  
     ext = os.path.splitext(filepath)[-1]
@@ -910,7 +926,7 @@ def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_
         raise ValueError(f'Must provide path to data request content, received: {content_path}')
 
     if ext == '.json':
-        # Get provenance of content to include in the Header
+        # Get provenance of content to include in the header
         with open(content_path, 'rb') as f:
             content_hash = hashlib.sha256(f.read()).hexdigest()
 
