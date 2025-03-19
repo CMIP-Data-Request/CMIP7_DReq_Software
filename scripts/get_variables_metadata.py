@@ -21,15 +21,20 @@ from data_request_api import version as api_version
 
 default_dreq_version = 'v1.1'
 
-outfile_extensions = ['.json', '.csv']
 
 parser = argparse.ArgumentParser(
     description='Get CMOR variables metadata and write to json.'
     )
 parser.add_argument('-dr', '--dreq_version', type=str, default=default_dreq_version,
                     help='version of data request content to use')
-parser.add_argument('-o', '--outfile', nargs='+', type=str,
-                    help=f'outfile (one or more), identified by extensions: {outfile_extensions}')
+def _var_metadata_check(arg):
+    if arg.endswith('.json') or arg.endswith('.csv'):
+        return arg
+    else:
+        raise ValueError()
+parser.register('type', 'json_or_csv_file', _var_metadata_check)
+parser.add_argument('-o', '--outfile', nargs='+', type='json_or_csv_file',
+                    help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
 parser.add_argument('-cn', '--compound_names', nargs='+', type=str,
                     help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
 parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
@@ -37,7 +42,6 @@ parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
 parser.add_argument('-v', '--cmor_variables', nargs='+', type=str,
                     help='include only the specified CMOR variables (out_name, examples: "tas", "siconc")')
 args = parser.parse_args()
-
 
 # Load data request content
 use_dreq_version = args.dreq_version
