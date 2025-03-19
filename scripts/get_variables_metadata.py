@@ -19,21 +19,19 @@ from data_request_api.stable.query import dreq_classes
 from data_request_api import version as api_version
 
 
-default_dreq_version = 'v1.1'
-
-
 parser = argparse.ArgumentParser(
     description='Get CMOR variables metadata and write to json.'
     )
-parser.add_argument('-dr', '--dreq_version', type=str, default=default_dreq_version,
-                    help='version of data request content to use')
+parser.add_argument('dreq_version', choices=dc.get_versions(),
+                    help='data request version')
 def _var_metadata_check(arg):
     if arg.endswith('.json') or arg.endswith('.csv'):
         return arg
     else:
         raise ValueError()
 parser.register('type', 'json_or_csv_file', _var_metadata_check)
-parser.add_argument('-o', '--outfile', nargs='+', type='json_or_csv_file',
+required_named_args = parser.add_argument_group('required named arguments')
+required_named_args.add_argument('-o', '--outfile', nargs='+', type='json_or_csv_file', required=True,
                     help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
 parser.add_argument('-cn', '--compound_names', nargs='+', type=str,
                     help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
