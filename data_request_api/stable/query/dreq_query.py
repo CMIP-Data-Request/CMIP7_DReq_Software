@@ -612,56 +612,59 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     if not use_dreq_version:
         raise ValueError('\n(TO DEPRECATE) use_dreq_version is required to set frequencies\n')
 
-    Vars = base['Variables']
+    # Use dict dreq_tables to store instances of the dreq_table class that are used in this function.
+    # Mostly this would be the same as simply using base[table name], but in some cases there's a choice
+    # of which table to use. Using dreq_tables as a mapping makes this choice explicit.
+    dreq_tables = {
+        'variables' : base['Variables']
+    }
     # The Variables table is the master list of variables in the data request.
     # Each entry (row) is a CMOR variable, containing the variable's metadata.
     # Many of these entries are links to other tables in the database (see below).
 
     # Choose which table to use for freqency
-    # freq_table_name = 'Frequency'  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
-    # freq_table_name = 'CMIP7 Frequency'
-    # freq_table_name = 'CMIP6 Frequency (legacy)'
     try_freq_table_name = []
-    try_freq_table_name.append('Frequency')
+    try_freq_table_name.append('Frequency') # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
     try_freq_table_name.append('CMIP7 Frequency')
     try_freq_table_name.append('CMIP6 Frequency (legacy)')
 
     found_freq = False
     for freq_table_name in try_freq_table_name:
         freq_attr_name = format_attribute_name(freq_table_name)
-        # assert freq_attr_name in Vars.attr2field, 'attribute not found: ' + freq_attr_name
-        if freq_attr_name not in Vars.attr2field:
+        if freq_attr_name not in dreq_tables['variables'].attr2field:
             continue
-        if 'frequency' not in Vars.attr2field:
+        if 'frequency' not in dreq_tables['variables'].attr2field:
             # code below assumes a variable's frequency is given by its "frequency" 
-            Vars.rename_attr(freq_attr_name, 'frequency')
+            dreq_tables['variables'].rename_attr(freq_attr_name, 'frequency')
         if freq_table_name in base:
-            Frequency = base[freq_table_name]
+            dreq_tables['frequency'] = base[freq_table_name]
         found_freq = True
         break
     assert found_freq, 'Which airtable field gives the frequency?'
 
     # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
-    SpatialShape = base['Spatial Shape']
-    Dimensions = base['Coordinates and Dimensions']
-    TemporalShape = base['Temporal Shape']
-    CellMethods = base['Cell Methods']
-    PhysicalParameter = base['Physical Parameters']
-    CFStandardName = None
+    dreq_tables.update({
+        'spatial shape' : base['Spatial Shape'],
+        'dimensions' : base['Coordinates and Dimensions'],
+        'temporal shape' : base['Temporal Shape'],
+        'cell methods' : base['Cell Methods'],
+        'physical parameters' : base['Physical Parameters'],
+        'CMOR tables' : base['Table Identifiers'],
+        'realm' : base['Modelling Realm'],
+        'cell measures' : base['Cell Measures'],
+        'CF standard name' : None,
+    })
     if 'CF Standard Names' in base:
-        CFStandardName = base['CF Standard Names']
-    CMORtables = base['Table Identifiers']
-    Realm = base['Modelling Realm']
-    CellMeasures = base['Cell Measures']
+        dreq_tables['CF standard name'] = base['CF Standard Names']
 
     if use_dreq_version in dreq_versions_substitute_cmip6_freq:
         # needed for corrections below
-        CMIP6Frequency = base['CMIP6 Frequency (legacy)']
+        dreq_tables['CMIP6 frequency'] = base['CMIP6 Frequency (legacy)']
 
     # Compound names will be used to uniquely identify variables.
     # Check here that this is indeed a unique name as expected.
-    var_name_map = {record.compound_name : record_id for record_id, record in Vars.records.items()}
-    assert len(var_name_map) == len(Vars.records), 'compound names do not uniquely map to variable record ids'
+    var_name_map = {record.compound_name : record_id for record_id, record in dreq_tables['variables'].records.items()}
+    assert len(var_name_map) == len(dreq_tables['variables'].records), 'compound names do not uniquely map to variable record ids'
 
     if cmor_tables:
         print('Retaining only these CMOR tables: ' + ', '.join(cmor_tables))
@@ -673,14 +676,14 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         '_' : ['\\_']
     }
     all_var_info = {}
-    for var in Vars.records.values():
+    for var in dreq_tables['variables'].records.values():
 
         if compound_names:
             if var.compound_name not in compound_names:
                 continue
 
         assert len(var.table) == 1
-        table_id = CMORtables.get_record(var.table[0]).name
+        table_id = dreq_tables['CMOR tables'].get_record(var.table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
             if table_id not in cmor_tables:
@@ -690,7 +693,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
             # seems to be an error for some vars in v1.0, so instead use their CMIP6 frequency
             assert len(var.cmip6_frequency_legacy) == 1
             link = var.cmip6_frequency_legacy[0]
-            var.frequency = [CMIP6Frequency.get_record(link).name]
+            var.frequency = [dreq_tables['CMIP6 frequency'].get_record(link).name]
             # print('using CMIP6 frequency for ' + var.compound_name)
 
         if isinstance(var.frequency[0], str):
@@ -699,18 +702,18 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
             frequency = var.frequency[0]
         else:
             link = var.frequency[0]
-            freq = Frequency.get_record(link)
+            freq = dreq_tables['frequency'].get_record(link)
             frequency = freq.name
 
         link = var.temporal_shape[0]
-        temporal_shape = TemporalShape.get_record(link)
+        temporal_shape = dreq_tables['temporal shape'].get_record(link)
 
         cell_methods = ''
         area_label_dd = ''
         if hasattr(var, 'cell_methods'):
             assert len(var.cell_methods) == 1
             link = var.cell_methods[0]
-            cm = CellMethods.get_record(link)
+            cm = dreq_tables['cell methods'].get_record(link)
             cell_methods = cm.cell_methods
             if hasattr(cm, 'brand_id'):
                 area_label_dd = cm.brand_id
@@ -718,19 +721,19 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         # get the 'Spatial Shape' record, which contains info about dimensions
         assert len(var.spatial_shape) == 1
         link = var.spatial_shape[0]
-        spatial_shape = SpatialShape.get_record(link)
+        spatial_shape = dreq_tables['spatial shape'].get_record(link)
 
         dims_list = []
         dims = None
         if hasattr(spatial_shape, 'dimensions'):
             for link in spatial_shape.dimensions:
-                dims = Dimensions.get_record(link)
+                dims = dreq_tables['dimensions'].get_record(link)
                 dims_list.append(dims.name)
         dims_list.append(temporal_shape.name)
 
         # Get physical parameter record and out_name
         link = var.physical_parameter[0]
-        phys_param = PhysicalParameter.get_record(link)
+        phys_param = dreq_tables['physical parameters'].get_record(link)
         out_name = phys_param.name
 
         if cmor_variables:
@@ -747,19 +750,16 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
                 standard_name = phys_param.cf_standard_name
             else:
                 link = phys_param.cf_standard_name[0]
-                cfsn = CFStandardName.get_record(link)
+                cfsn = dreq_tables['CF standard name'].get_record(link)
                 standard_name = cfsn.name
         else:
             standard_name_proposed = phys_param.proposed_cf_standard_name
 
-        modeling_realm = [Realm.get_record(link).id for link in var.modelling_realm]
+        modeling_realm = [dreq_tables['realm'].get_record(link).id for link in var.modelling_realm]
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):
-            # assert len(var.cell_measures) == 1
-            # link = var.cell_measures[0]
-            # cell_measures = CellMeasures.get_record(link).name
-            cell_measures = [CellMeasures.get_record(link).name for link in var.cell_measures]
+            cell_measures = [dreq_tables['cell measures'].get_record(link).name for link in var.cell_measures]
 
         positive = ''
         if hasattr(var, 'positive_direction'):
