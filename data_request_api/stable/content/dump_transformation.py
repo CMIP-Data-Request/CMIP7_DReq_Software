@@ -17,7 +17,7 @@ from collections import defaultdict
 
 from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
-from .dreq_api import dreq_content as dc
+from data_request_api.stable.content import dreq_content as dc
 
 
 def correct_key_string(input_string, *to_remove_strings):
