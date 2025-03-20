@@ -28,7 +28,13 @@ def parse_args():
     parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
     parser.add_argument('output_file', help='file to write JSON output to')
     parser.add_argument('--version', action='store_true', help='Return version information and exit')
-    parser.add_argument('-vm', '--variables_metadata', nargs='+', type=str, help='output file(s) for metadata of requested variables (options: json, csv)')
+    def _var_metadata_check(arg):
+        if arg.endswith('.json') or arg.endswith('.csv'):
+            return arg
+        else:
+            raise ValueError()
+    parser.register('type', 'json_or_csv_file', _var_metadata_check)
+    parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file', help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
     return parser.parse_args()
 
 
