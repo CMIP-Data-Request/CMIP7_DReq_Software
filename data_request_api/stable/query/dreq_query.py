@@ -660,7 +660,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
     dreq_tables.update({
         'spatial shape' : base['Spatial Shape'],
-        'dimensions' : base['Coordinates and Dimensions'],
+        'coordinates and dimensions' : base['Coordinates and Dimensions'],
         'temporal shape' : base['Temporal Shape'],
         'cell methods' : base['Cell Methods'],
         'physical parameters' : base['Physical Parameters'],
@@ -685,6 +685,8 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         print('Retaining only these CMOR tables: ' + ', '.join(cmor_tables))
     if cmor_variables:
         print('Retaining only these CMOR variables: ' + ', '.join(cmor_variables))
+    if compound_names:
+        print('Retaining only these compound names: ' + ', '.join(compound_names))
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
@@ -742,9 +744,13 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         dims = None
         if hasattr(spatial_shape, 'dimensions'):
             for link in spatial_shape.dimensions:
-                dims = dreq_tables['dimensions'].get_record(link)
+                dims = dreq_tables['coordinates and dimensions'].get_record(link)
                 dims_list.append(dims.name)
         dims_list.append(temporal_shape.name)
+        if hasattr(var, 'coordinates'):
+            for link in var.coordinates:
+                coordinate = dreq_tables['coordinates and dimensions'].get_record(link)
+                dims_list.append(coordinate.name)
 
         # Get physical parameter record and out_name
         link = var.physical_parameter[0]
