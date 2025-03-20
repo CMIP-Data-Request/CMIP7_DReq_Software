@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 '''
-parking this code here in case useful later
+This opens a json file created by get_variables_metadata.py and writes a new one
+containing the same info but organized by CF standard name, as prpoposed in Karl
+Taylor's draft branded variables paper.
+
+Parking this code here in case useful later.
 '''
 
 import argparse
