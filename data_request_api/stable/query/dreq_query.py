@@ -821,7 +821,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
             # 'horizontalLabelDD' : spatial_shape.hor_label_dd,
             # 'areaLabelDD' : area_label_dd,  # this comes from cell methods
 
-            'cmip6_cmor_table' : table_id,
+            'table' : table_id,
         })
         for k,v in var_info.items():
             v = v.strip()
