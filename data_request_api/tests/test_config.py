@@ -50,6 +50,26 @@ def test_load_config_file_does_not_exist(temp_config_file, monkeypatch):
     assert temp_config_file.exists()
 
 
+def test_load_config_invalid_yaml(temp_config_file, monkeypatch):
+    monkeypatch.setattr(
+        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+    )
+    with open(temp_config_file, "w") as f:
+        f.write("Just a string not proper yaml")
+    with pytest.raises(TypeError):
+        load_config()
+
+
+def test_load_config_non_dict_yaml(temp_config_file, monkeypatch):
+    monkeypatch.setattr(
+        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+    )
+    with open(temp_config_file, "w") as f:
+        f.write("['list', 'instead', 'of', 'dict']")
+    with pytest.raises(TypeError):
+        load_config()
+
+
 def test_update_config_valid_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
         "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
