@@ -845,7 +845,7 @@ class DataRequest(object):
             init_default = None
         rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id",
                                                        default=init_default)
-        if rep is None:
+        if rep is None and key not in ["id", ]:
             rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=key,
                                                            default=default)
         if rep not in [default, ]:

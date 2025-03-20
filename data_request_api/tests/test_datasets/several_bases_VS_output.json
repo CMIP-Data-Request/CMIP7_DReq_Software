@@ -708,7 +708,7 @@
             "title": "depth",
             "type": "double",
             "units": "m",
-            "value_(scalar_or_string)": "0."
+            "value": "0."
         },
         "dim:height10m": {
             "axis_flag": "Z",
@@ -725,7 +725,7 @@
             "title": "height",
             "type": "double",
             "units": "m",
-            "value_(scalar_or_string)": "10."
+            "value": "10."
         },
         "dim:height2m": {
             "axis_flag": "Z",
@@ -742,7 +742,7 @@
             "title": "height",
             "type": "double",
             "units": "m",
-            "value_(scalar_or_string)": "2."
+            "value": "2."
         },
         "dim:latitude": {
             "axis_flag": "Y",
@@ -867,7 +867,7 @@
             "title": "depth",
             "type": "double",
             "units": "m",
-            "value_(scalar_or_string)": "0.05"
+            "value": "0.05"
         },
         "dim:time": {
             "axis_flag": "T",
@@ -919,7 +919,7 @@
             "output_name": "type",
             "title": "Sea Ice area type",
             "type": "character",
-            "value_(scalar_or_string)": "sea_ice"
+            "value": "sea_ice"
         }
     },
     "docs_for_opportunities": {},

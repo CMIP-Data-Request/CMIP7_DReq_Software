@@ -14,7 +14,7 @@ import argparse
 import re
 from collections import defaultdict
 
-
+from data_request_api.stable.utilities.decorators import append_kwargs_from_config
 from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
 from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
 from data_request_api.stable.content import dreq_content as dc
@@ -412,7 +412,7 @@ def transform_content_one_base(content):
             "cf_standard_names": [("comments", "physical_parameter_comments")],
             "cmip7_frequency": [("cmip6_frequency.*", "cmip6_frequency")],
             "coordinates_and_dimensions": [("requested_bounds.+", "requested_bounds"),
-                                           ("comments", "variable_comments")],
+                                           ("comments", "variable_comments"), ("value.+", "value")],
             "data_request_themes": [("comments", "opportunity/variable_group_comments"), ("uid.+", "uid")],
             "experiments": [("experiment", "name")],
             "experiment_groups": [("comments", "opportunity/variable_group_comments")],
@@ -546,11 +546,12 @@ def transform_content(content, version):
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
 
 
-def get_transformed_content(version="latest_stable", export_version="release", use_consolidation=False,
+@append_kwargs_from_config
+def get_transformed_content(version="latest_stable", export="release", consolidate=False,
                             force_retrieve=False, output_dir=None,
-                            default_transformed_content_pattern="{kind}_{export_version}_content.json"):
+                            default_transformed_content_pattern="{kind}_{export_version}_content.json", **kwargs):
     # Download specified version of data request content (if not locally cached)
-    versions = dc.retrieve(version, export=export_version, consolidate=use_consolidation)
+    versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
 
     # Check that there is only one version associated
     if len(versions) > 1:
@@ -564,8 +565,8 @@ def get_transformed_content(version="latest_stable", export_version="release", u
             output_dir = os.path.dirname(content)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export_version)
-        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export_version)
+        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
+        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
         DR_content = os.sep.join([output_dir, DR_content])
         VS_content = os.sep.join([output_dir, VS_content])
         if force_retrieve or not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
@@ -574,7 +575,7 @@ def get_transformed_content(version="latest_stable", export_version="release", u
             if os.path.exists(VS_content):
                 os.remove(VS_content)
         if not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            content = dc.load(version, export=export_version, consolidate=use_consolidation)
+            content = dc.load(version, export=export, consolidate=consolidate)
             data_request, vocabulary_server = transform_content(content, version)
             write_json_output_file_content(DR_content, data_request)
             write_json_output_file_content(VS_content, vocabulary_server)
