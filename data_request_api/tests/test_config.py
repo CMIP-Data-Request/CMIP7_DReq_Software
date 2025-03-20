@@ -34,6 +34,8 @@ def test_load_config_file_exists(temp_config_file, monkeypatch):
     monkeypatch.setattr(
         "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
     )
+    assert temp_config_file.exists()
+    dreqcfg.CONFIG = {}
     config = load_config()
     assert config == DEFAULT_CONFIG
     assert config == dreqcfg.CONFIG
@@ -167,7 +169,9 @@ def test_sanity_checks():
     _sanity_check("consolidate", True)
     _sanity_check("log_level", "info")
     _sanity_check("log_file", "default")
-    _sanity_check("cache_dir", str(Path.home() / ".CMIP7_data_request_api_cache"))
+    _sanity_check(
+        "cache_dir", str(Path.home() / ".CMIP7_data_request_api_cache")
+    )
 
 
 def test_caching(temp_config_file, monkeypatch):
