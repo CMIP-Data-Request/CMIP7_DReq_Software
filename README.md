@@ -165,7 +165,7 @@ CMIP7_data_request_api_config init
 ```
 
 This will create the `.CMIP7_data_request_api_config` file in your home directory. 
-The default location can be changed using the `CMIP7_DR_API_CONFIGFILE` environment variable.
+Optionally, the default location of this file can be changed by setting the `CMIP7_DR_API_CONFIGFILE` environment variable.
 Alternatively, the file will be automatically created the first time you use the software.
 
 The configuration file is a YAML file containing `key: value` pairs that
