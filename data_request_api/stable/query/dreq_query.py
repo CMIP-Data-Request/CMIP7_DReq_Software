@@ -8,9 +8,9 @@ The module has two basic sections:
 2) Functions that interrogate the data request, usually using output from (1) as their input.
 
 '''
-import os
 import hashlib
 import json
+import os
 from collections import OrderedDict
 
 from data_request_api.stable.query.dreq_classes import (
