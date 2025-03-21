@@ -81,7 +81,7 @@ def check_variables_attributes(version="latest_stable", **kwargs):
 				logger.info(f"... the following attributes have missing values {missing}.")
 			logger.info("... see output file.")
 
-	write_json_output_file_content("check_attributes.txt", content=rep)
+	write_json_output_file_content("check_attributes.json", content=rep)
 
 
 if __name__ == "__main__":
