@@ -15,7 +15,9 @@ from bs4 import BeautifulSoup
 
 import data_request_api.stable.utilities.config as dreqcfg
 from data_request_api.stable.content.mapping_table import mapping_table
-from data_request_api.stable.utilities.decorators import append_kwargs_from_config
+from data_request_api.stable.utilities.decorators import (
+    append_kwargs_from_config,
+)
 from data_request_api.stable.utilities.logger import get_logger  # noqa
 
 from . import consolidate_export as ce
@@ -62,7 +64,9 @@ _version_pattern = re.compile(
 try:
     _dreq_res = dreqcfg.load_config()["cache_dir"]
 except KeyError:
-    _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
+    _dreq_res = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "dreq_res"
+    )
 
 _dreq_content_loaded = {}
 
@@ -83,7 +87,9 @@ def _parse_version(version):
     """
     match = _version_pattern.match(version)
     if match:
-        major, minor, patch = map(lambda x: int(x) if x else 0, match.groups()[:3])
+        major, minor, patch = map(
+            lambda x: int(x) if x else 0, match.groups()[:3]
+        )
         # 'a' for alpha, 'b' for beta, or None
         pre_release_type = match.group(4)[0] if match.group(4) else None
         # alpha/beta version number or 0
@@ -126,7 +132,8 @@ def get_cached(**kwargs):
                 json_export = _json_release
             else:
                 warnings.warn(
-                    f"Unknown export type '{kwargs['export']}'. Defaulting to 'release'."
+                    f"Unknown export type '{kwargs['export']}'. Defaulting to"
+                    " 'release'."
                 )
                 json_export = _json_release
         local_versions = [
@@ -183,16 +190,19 @@ def _send_api_request(api_url, page_url="", target="tags"):
         if response.status_code in _fallback_status_codes:
             if page_url:
                 warnings.warn(
-                    f"GitHub API not accessible, falling back to parsing the public GitHub page: {http_err}"
+                    "GitHub API not accessible, falling back to parsing the"
+                    f" public GitHub page: {http_err}"
                 )
                 results = _send_html_request(page_url, target)
             else:
                 warnings.warn(
-                    f"A HTTP error occurred when retrieving '{target}' via the GitHub API ({response.status_code}): {http_err}"
+                    f"A HTTP error occurred when retrieving '{target}' via the"
+                    f" GitHub API ({response.status_code}): {http_err}"
                 )
         else:
             warnings.warn(
-                f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}"
+                f"A HTTP error occurred when retrieving '{target}'"
+                f" ({response.status_code}): {http_err}"
             )
     except Exception as e:
         warnings.warn(f"An error occurred when retrieving '{target}': {e}")
@@ -340,7 +350,9 @@ def get_versions(target="tags", **kwargs):
             not versions[target]
             or _versions_retrieved_last[target] - time.time() > 60 * 60
         ):
-            versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
+            versions[target] = _send_api_request(
+                REPO_API_URL, REPO_PAGE_URL, target
+            )
 
             # Update the last time the tags/branches were retrieved
             _versions_retrieved_last[target] = time.time()
@@ -432,7 +444,11 @@ def retrieve(version="latest_stable", **kwargs):
 
     if versions == [None] or not versions:
         raise ValueError(f"Version '{version}' not found.")
-    elif version in ["v1.0alpha"] and "export" in kwargs and kwargs["export"] == "raw":
+    elif (
+        version in ["v1.0alpha"]
+        and "export" in kwargs
+        and kwargs["export"] == "raw"
+    ):
         warnings.warn(f"For version '{version}' no raw export exists.")
 
     json_paths = dict()
@@ -467,7 +483,9 @@ def retrieve(version="latest_stable", **kwargs):
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=REPO_RAW_URL.format(
-                            version=_dev_branch if version == "dev" else version,
+                            version=(
+                                _dev_branch if version == "dev" else version
+                            ),
                             _json_export=json_export,
                             _github_org=_github_org,
                         ),
@@ -475,7 +493,9 @@ def retrieve(version="latest_stable", **kwargs):
                         fname=json_export,
                     )
                 except Exception as e:
-                    warnings.warn(f"Could not retrieve version '{version}': {e}")
+                    warnings.warn(
+                        f"Could not retrieve version '{version}': {e}"
+                    )
                     continue
                 logger.info(f"Retrieved version '{version}'.")
 
@@ -491,7 +511,9 @@ def retrieve(version="latest_stable", **kwargs):
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=REPO_RAW_URL.format(
-                            version=_dev_branch if version == "dev" else version,
+                            version=(
+                                _dev_branch if version == "dev" else version
+                            ),
                             _json_export=json_export,
                             _github_org=_github_org,
                         ),
@@ -515,7 +537,8 @@ def retrieve(version="latest_stable", **kwargs):
     # Capture no correct export found for cached versions (offline mode)
     if not json_paths or json_paths == {}:
         raise ValueError(
-            "The version(s) you requested are not cached. Please deactivate offline mode and try again."
+            "The version(s) you requested are not cached. Please deactivate"
+            " offline mode and try again."
         )
 
     return json_paths
@@ -558,7 +581,9 @@ def delete(version="all", keep_latest=False, **kwargs):
     if version == "all":
         if keep_latest:
             # Identify the latest stable and prerelease versions
-            valid_versions = [v for v in local_versions if _version_pattern.match(v)]
+            valid_versions = [
+                v for v in local_versions if _version_pattern.match(v)
+            ]
             valid_sversions = [
                 v for v in valid_versions if "a" not in v and "b" not in v
             ]
@@ -587,7 +612,9 @@ def delete(version="all", keep_latest=False, **kwargs):
 
     # Compile file paths
     if kwargs["export"] == "raw":
-        cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
+        cached_files = [
+            os.path.join(_dreq_res, v, _json_raw) for v in local_versions
+        ]
     elif kwargs["export"] == "release":
         cached_files = [
             os.path.join(_dreq_res, v, _json_release) for v in local_versions
@@ -620,7 +647,7 @@ def load(version="latest_stable", **kwargs):
             Export type. Defaults to 'release'.
         consolidate: bool, optional
             Whether to consolidate the data request dictionary after loading it.
-            Experimental feature. Defaults to False.
+            Experimental feature. Defaults to True.
         offline : bool, optional
             Whether to disable online requests / retrievals. Defaults to False.
 
@@ -644,8 +671,12 @@ def load(version="latest_stable", **kwargs):
     with open(json_path) as f:
         if "consolidate" in kwargs:
             if kwargs["consolidate"]:
-                return ce.map_data(json.load(f), mapping_table)
+                return ce.map_data(
+                    json.load(f), mapping_table, next(iter(version_dict.keys()))
+                )
             else:
                 return json.load(f)
         else:
-            return json.load(f)
+            return ce.map_data(
+                json.load(f), mapping_table, next(iter(version_dict.keys()))
+            )
