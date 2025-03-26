@@ -473,6 +473,7 @@ class DataRequest(object):
             self.content["opportunities"][op] = self.find_element("opportunities", op)
         self.cache = dict()
         self.cache_filtering = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: (None, None)))))
+        self.filtering_structure = read_json_file(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "filtering.json"]))["definition"]
 
     def check(self):
         """
@@ -955,6 +956,17 @@ class DataRequest(object):
                          for elt in list_to_filter])
         return filtered_found, found
 
+    def get_filtering_structure(self, DR_type):
+        rep = set(self.filtering_structure.get(DR_type, list()))
+        tmp_rep = copy.deepcopy(rep)
+        while len(tmp_rep) > 0:
+            rep = rep | tmp_rep
+            to_add = set()
+            for elt in tmp_rep:
+                to_add = to_add | set(self.filtering_structure.get(elt, list()))
+            tmp_rep, to_add = to_add, set()
+        return rep
+
     def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation="all", skip_if_missing=False):
         """
         Filter the elements of kind element_type with a dictionary of requests.
@@ -997,7 +1009,9 @@ class DataRequest(object):
                 elements_to_filter = elements[0].DR_type
             # Filter elements
             rep = defaultdict(lambda: defaultdict(set))
+            elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
             for (request, values) in request_dict.items():
+                request_filtering_structure = self.get_filtering_structure(request)
                 for val in values:
                     for elt in elements:
                         filtered_found, found = self.cache_filtering[request][val.id][elements_to_filter][elt.id]
@@ -1005,11 +1019,11 @@ class DataRequest(object):
                             filtered_found, found = elt.filter_on_request(val)
                             if not filtered_found:
                                 filtered_found, found = val.filter_on_request(elt)
-                            if not filtered_found:
+                            if not filtered_found and "experiment_groups" in elements_filtering_structure & request_filtering_structure:
                                 filtered_found, found = self._two_elements_filtering(val, elt, self.get_experiment_groups())
-                            if not filtered_found:
+                            if not filtered_found and "variables" in elements_filtering_structure & request_filtering_structure:
                                 filtered_found, found = self._two_elements_filtering(val, elt, self.get_variables())
-                            if not filtered_found:
+                            if not filtered_found and "variable_groups" in elements_filtering_structure & request_filtering_structure:
                                 filtered_found, found = self._two_elements_filtering(val, elt, self.get_variable_groups())
                             if not filtered_found:
                                 filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())

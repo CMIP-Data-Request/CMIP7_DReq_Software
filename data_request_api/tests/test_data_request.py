@@ -860,6 +860,15 @@ class TestDataRequest(unittest.TestCase):
                              [obj.find_element("data_request_themes", f"link::{nb}")
                               for nb in sorted(list(self.vs.vocabulary_server["data_request_themes"]))])
 
+    def test_get_filtering_structure(self):
+        obj = DataRequest(input_database=self.input_database, VS=self.vs)
+        self.assertEqual(obj.get_filtering_structure("opportunities"), set())
+        self.assertEqual(obj.get_filtering_structure("variable_groups"), {"opportunities", })
+        self.assertEqual(obj.get_filtering_structure("variables"), {"opportunities", "variable_groups"})
+        self.assertEqual(obj.get_filtering_structure("physical_parameters"), {"opportunities", "variable_groups", "variables"})
+        self.assertEqual(obj.get_filtering_structure("experiment_groups"), {"opportunities", })
+        self.assertEqual(obj.get_filtering_structure("experiments"), {"opportunities", "experiment_groups"})
+        self.assertEqual(obj.get_filtering_structure("test"), set())
 
 class TestDataRequestFilter(unittest.TestCase):
     def setUp(self):
