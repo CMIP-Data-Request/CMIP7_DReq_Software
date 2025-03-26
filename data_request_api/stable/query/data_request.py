@@ -44,6 +44,10 @@ class DRObjects(object):
         self.attributes = self.transform_content(attributes, dr)
         self.structure = self.transform_content(structure, dr, force_transform=True)
 
+    @property
+    def id(self):
+        return str(self.attributes["id"])
+
     @staticmethod
     def transform_content_inner(key, value, dr, force_transform=False):
         if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
@@ -142,7 +146,13 @@ class DRObjects(object):
         :return bool, bool: a bool indicating whether the current object can be filtered by the requested one,
                             a bool indicating whether the current object is linked to the request one.
         """
-        return request_value.DR_type == self.DR_type, request_value == self
+        request_type = request_value.DR_type
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = request_value.DR_type == self.DR_type
+            found = request_value == self
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class ExperimentsGroup(DRObjects):
@@ -184,10 +194,16 @@ class ExperimentsGroup(DRObjects):
                                   elements=kwargs)
 
     def filter_on_request(self, request_value):
-        if request_value.DR_type in ["experiments", ]:
-            return True, request_value in self.get_experiments()
-        else:
-            return super().filter_on_request(request_value=request_value)
+        request_type = request_value.DR_type
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            if request_type in ["experiments", ]:
+                filtered_found = True
+                found = request_value in self.get_experiments()
+            else:
+                filtered_found, found = super().filter_on_request(request_value=request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class Variable(DRObjects):
@@ -211,28 +227,33 @@ class Variable(DRObjects):
 
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
-        if request_type in ["table_identifiers", ]:
-            return True, request_value == self.table_identifier
-        elif request_type in ["temporal_shapes", ]:
-            return True, request_value == self.temporal_shape
-        elif request_type in ["spatial_shapes", ]:
-            return True, request_value == self.spatial_shape
-        elif request_type in ["structures", "structure_titles"]:
-            return True, request_value in self.structure_title
-        elif request_type in ["physical_parameters", ]:
-            return True, request_value == self.physical_parameter
-        elif request_type in ["modelling_realms", ]:
-            return True, request_value in self.modelling_realm
-        elif request_type in ["esm-bcvs", ]:
-            return True, request_value == self.__getattr__("esm-bcv")
-        elif request_type in ["cf_standard_names", ]:
-            return True, request_value == self.physical_parameter.cf_standard_name
-        elif request_type in ["cell_methods", ]:
-            return True, request_value == self.cell_methods
-        elif request_type in ["cell_measures", ]:
-            return True, request_value in self.cell_measures
-        else:
-            return super().filter_on_request(request_value)
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = True
+            if request_type in ["table_identifiers", ]:
+                found = request_value == self.table_identifier
+            elif request_type in ["temporal_shapes", ]:
+                found = request_value == self.temporal_shape
+            elif request_type in ["spatial_shapes", ]:
+                found = request_value == self.spatial_shape
+            elif request_type in ["structures", "structure_titles"]:
+                found = request_value in self.structure_title
+            elif request_type in ["physical_parameters", ]:
+                found = request_value == self.physical_parameter
+            elif request_type in ["modelling_realms", ]:
+                found = request_value in self.modelling_realm
+            elif request_type in ["esm-bcvs", ]:
+                found = request_value == self.__getattr__("esm-bcv")
+            elif request_type in ["cf_standard_names", ]:
+                found = request_value == self.physical_parameter.cf_standard_name
+            elif request_type in ["cell_methods", ]:
+                found = request_value == self.cell_methods
+            elif request_type in ["cell_measures", ]:
+                found = request_value in self.cell_measures
+            else:
+                filtered_found, found = super().filter_on_request(request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class VariablesGroup(DRObjects):
@@ -290,24 +311,29 @@ class VariablesGroup(DRObjects):
 
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
-        if request_type in ["variables", ]:
-            return True, request_value in self.get_variables()
-        elif request_type in ["mips", ]:
-            return True, request_value in self.get_mips()
-        elif request_type in ["max_priority_levels", ]:
-            priority = self.dr.find_element("priority_level", self.get_priority_level().id)
-            req_priority = self.dr.find_element("priority_level", request_value.id)
-            return True, priority.value <= req_priority.value
-        elif request_type in ["priority_levels", ]:
-            _, priority = is_link_id_or_value(self.get_priority_level().id)
-            _, req_priority = is_link_id_or_value(request_value.id)
-            return True, req_priority == priority
-        elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
-                              "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
-                              "cell_measures"]:
-            return True, any(var.filter_on_request(request_value=request_value)[1] for var in self.get_variables())
-        else:
-            return super().filter_on_request(request_value=request_value)
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = True
+            if request_type in ["variables", ]:
+                found = request_value in self.get_variables()
+            elif request_type in ["mips", ]:
+                found = request_value in self.get_mips()
+            elif request_type in ["max_priority_levels", ]:
+                priority = self.dr.find_element("priority_level", self.get_priority_level().id)
+                req_priority = self.dr.find_element("priority_level", request_value.id)
+                found = priority.value <= req_priority.value
+            elif request_type in ["priority_levels", ]:
+                _, priority = is_link_id_or_value(self.get_priority_level().id)
+                _, req_priority = is_link_id_or_value(request_value.id)
+                found = req_priority == priority
+            elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
+                                  "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
+                                  "cell_measures"]:
+                found = any(var.filter_on_request(request_value=request_value)[1] for var in self.get_variables())
+            else:
+                filtered_found, found = super().filter_on_request(request_value=request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class Opportunity(DRObjects):
@@ -398,28 +424,33 @@ class Opportunity(DRObjects):
 
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
-        if request_type in ["data_request_themes", ]:
-            return True, request_value in self.get_data_request_themes()
-        elif request_type in ["experiment_groups", ]:
-            return True, request_value in self.get_experiment_groups()
-        elif request_type in ["variable_groups", ]:
-            return True, request_value in self.get_variable_groups()
-        elif request_type in ["time_subsets", ]:
-            return True, request_value in self.get_time_subsets()
-        elif request_type in ["mips", ]:
-            return True, request_value in self.get_mips() or \
-                         any(var_grp.filter_on_request(request_value=request_value)[1]
-                             for var_grp in self.get_variable_groups())
-        elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
-                              "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
-                              "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
-            return True, any(var_grp.filter_on_request(request_value=request_value)[1]
-                             for var_grp in self.get_variable_groups())
-        elif request_type in ["experiments", ]:
-            return True, any(exp_grp.filter_on_request(request_value=request_value)[1]
-                             for exp_grp in self.get_experiment_groups())
-        else:
-            return super().filter_on_request(request_value=request_value)
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = True
+            if request_type in ["data_request_themes", ]:
+                found = request_value in self.get_data_request_themes()
+            elif request_type in ["experiment_groups", ]:
+                found = request_value in self.get_experiment_groups()
+            elif request_type in ["variable_groups", ]:
+                found = request_value in self.get_variable_groups()
+            elif request_type in ["time_subsets", ]:
+                found = request_value in self.get_time_subsets()
+            elif request_type in ["mips", ]:
+                found = request_value in self.get_mips() or \
+                        any(var_grp.filter_on_request(request_value=request_value)[1]
+                            for var_grp in self.get_variable_groups())
+            elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
+                                  "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
+                                  "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
+                found = any(var_grp.filter_on_request(request_value=request_value)[1]
+                            for var_grp in self.get_variable_groups())
+            elif request_type in ["experiments", ]:
+                found = any(exp_grp.filter_on_request(request_value=request_value)[1]
+                            for exp_grp in self.get_experiment_groups())
+            else:
+                filtered_found, found = super().filter_on_request(request_value=request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class DataRequest(object):
@@ -441,6 +472,7 @@ class DataRequest(object):
         for op in input_database["opportunities"]:
             self.content["opportunities"][op] = self.find_element("opportunities", op)
         self.cache = dict()
+        self.cache_filtering = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: (None, None)))))
 
     def check(self):
         """
@@ -948,7 +980,7 @@ class DataRequest(object):
                     else:
                         new_val = val
                     if new_val is not None:
-                        request_dict[req].append(new_val)
+                        request_dict[new_val.DR_type].append(new_val)
                     elif skip_if_missing:
                         logger.warning(f"Could not find value {val} for element type {req}, skip it.")
                     else:
@@ -968,17 +1000,20 @@ class DataRequest(object):
             for (request, values) in request_dict.items():
                 for val in values:
                     for elt in elements:
-                        filtered_found, found = elt.filter_on_request(val)
-                        if not filtered_found:
-                            filtered_found, found = val.filter_on_request(elt)
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_experiment_groups())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_variables())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_variable_groups())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())
+                        filtered_found, found = self.cache_filtering[request][val.id][elements_to_filter][elt.id]
+                        if filtered_found is None:
+                            filtered_found, found = elt.filter_on_request(val)
+                            if not filtered_found:
+                                filtered_found, found = val.filter_on_request(elt)
+                            if not filtered_found:
+                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_experiment_groups())
+                            if not filtered_found:
+                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_variables())
+                            if not filtered_found:
+                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_variable_groups())
+                            if not filtered_found:
+                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())
+                            self.cache_filtering[request][val.id][elements_to_filter][elt.id] = (filtered_found, found)
                         if not filtered_found:
                             logger.error(f"Could not filter {elements_to_filter} by {request}")
                             raise ValueError(f"Could not filter {elements_to_filter} by {request}")
