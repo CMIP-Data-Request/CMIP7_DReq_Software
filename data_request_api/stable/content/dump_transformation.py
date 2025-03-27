@@ -313,9 +313,10 @@ def tidy_content(content, record_to_uid_index):
     to_remove_entries = defaultdict(list)
     content_string = json.dumps(content, indent=0)
     for (record_id, (uid, subelt)) in record_to_uid_index.items():
-        (content_string, nb) = re.subn(f'"{record_id}"', f'"link::{uid}"', content_string)
-        if nb == 0:
+        tmp_content_string = content_string.split(f'"{record_id}"')
+        if len(tmp_content_string) == 1:
             to_remove_entries[subelt].append((record_id, uid))
+        content_string = f'"link::{uid}"'.join(tmp_content_string)
     for record_id, _ in to_remove_entries["opportunities"]:
         del record_to_uid_index[record_id]
     del to_remove_entries["opportunities"]
@@ -327,14 +328,8 @@ def tidy_content(content, record_to_uid_index):
             del record_to_uid_index[record_id]
     # Tidy the content once again
     content_str = json.dumps(content)
-    to_remove_entries = defaultdict(list)
-    for (record_id, (uid, subelt)) in record_to_uid_index.items():
-        nb = content_str.count(uid)
-        if nb < 2:
-            to_remove_entries[subelt].append(uid)
-    for subelt in to_remove_entries:
-        for uid in to_remove_entries[subelt]:
-            del content[subelt][uid]
+    for (uid, subelt) in [(uid, subelt) for (uid, subelt) in record_to_uid_index.values() if content_str.count(uid) < 2]:
+        del content[subelt][uid]
     return content
 
 
