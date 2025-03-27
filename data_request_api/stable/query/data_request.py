@@ -154,6 +154,16 @@ class DRObjects(object):
             self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
         return filtered_found, found
 
+    @staticmethod
+    def filter_on_request_list(request_values, list_to_check):
+        if not isinstance(request_values, list):
+            request_values = [request_values, ]
+        iter_to_check = iter(list_to_check)
+        found = False
+        while not found and (elt := next(iter_to_check, None)) is not None:
+            found = all(elt.filter_on_request(request_value=request_value)[1] for request_value in request_values)
+        return found
+
 
 class ExperimentsGroup(DRObjects):
     def __init__(self, id, dr, DR_type="experiment_groups", structure=dict(experiments=list()), **attributes):
@@ -329,10 +339,12 @@ class VariablesGroup(DRObjects):
             elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
                                   "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
                                   "cell_measures"]:
-                found = any(var.filter_on_request(request_value=request_value)[1] for var in self.get_variables())
+                found = self.filter_on_request_list(request_values=request_value, list_to_check=self.get_variables())
             else:
                 filtered_found, found = super().filter_on_request(request_value=request_value)
             self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+            if request_type not in ["max_priority_levels", ]:
+                self.dr.cache_filtering[request_type][request_value.id][self.DR_type][self.id] = (filtered_found, found)
         return filtered_found, found
 
 
@@ -437,16 +449,16 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_time_subsets()
             elif request_type in ["mips", ]:
                 found = request_value in self.get_mips() or \
-                        any(var_grp.filter_on_request(request_value=request_value)[1]
-                            for var_grp in self.get_variable_groups())
+                        self.filter_on_request_list(request_values=request_value,
+                                                    list_to_check=self.get_variable_groups())
             elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
                                   "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
-                found = any(var_grp.filter_on_request(request_value=request_value)[1]
-                            for var_grp in self.get_variable_groups())
+                found = self.filter_on_request_list(request_values=request_value,
+                                                    list_to_check=self.get_variable_groups())
             elif request_type in ["experiments", ]:
-                found = any(exp_grp.filter_on_request(request_value=request_value)[1]
-                            for exp_grp in self.get_experiment_groups())
+                found = self.filter_on_request_list(request_values=request_value,
+                                                    list_to_check=self.get_experiment_groups())
             else:
                 filtered_found, found = super().filter_on_request(request_value=request_value)
             self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
@@ -951,9 +963,8 @@ class DataRequest(object):
         filtered_found = filtered_found_1 and filtered_found_2
         found = found_1 and found_2
         if filtered_found and not found:
-            found = any([elt.filter_on_request(filtering_elt_1)[1] and
-                         elt.filter_on_request(filtering_elt_2)[1]
-                         for elt in list_to_filter])
+            found = elt.filter_on_request_list(request_values=[filtering_elt_1, filtering_elt_2],
+                                               list_to_check=list_to_filter[1:])
         return filtered_found, found
 
     def get_filtering_structure(self, DR_type):

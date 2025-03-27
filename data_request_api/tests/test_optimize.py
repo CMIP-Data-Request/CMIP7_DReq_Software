@@ -93,6 +93,9 @@ class TestDataRequest11(unittest.TestCase):
     def test_export_summary(self):
         DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
         DR.export_summary("variables", "opportunities", os.sep.join(["tests", "var_per_op.csv"]))
+        DR.export_summary("variables", "experiments", os.sep.join(["tests", "var_per_exp.csv"]))
+        DR.export_summary("variables", "experiments", os.sep.join(["tests", "var_per_exp_prio1.csv"]),
+                          filtering_requests=dict(max_priority_level="Core"))
 
     @unittest.skip
     @add_profiling
