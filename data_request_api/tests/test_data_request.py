@@ -8,6 +8,7 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 
 import copy
 import os
+import tempfile
 import unittest
 
 
@@ -1224,3 +1225,22 @@ class TestDataRequestFilter(unittest.TestCase):
         var_id = "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
         var = self.dr.find_element("variable", var_id)
         self.assertEqual(self.dr.find_priority_per_variable(var), 1)
+
+    def test_export_summary(self):
+        with tempfile.TemporaryDirectory() as output_dir:
+            self.dr.export_summary("opportunities", "data_request_themes",
+                                   os.sep.join([output_dir, "op_per_th.csv"]))
+            self.dr.export_summary("variables", "opportunities",
+                                   os.sep.join([output_dir, "var_per_op.csv"]))
+            self.dr.export_summary("opportunities", "variables",
+                                   os.sep.join([output_dir, "op_per_var.csv"]))
+            self.dr.export_summary("experiments", "opportunities",
+                                   os.sep.join([output_dir, "exp_per_op.csv"]))
+            self.dr.export_summary("variables", "spatial_shape",
+                                   os.sep.join([output_dir, "var_per_spsh.csv"]))
+
+    def test_export_data(self):
+        with tempfile.TemporaryDirectory() as output_dir:
+            self.dr.export_data("opportunities",
+                                os.sep.join([output_dir, "op.csv"]),
+                                export_columns_request=["name", "lead_theme", "description"])
