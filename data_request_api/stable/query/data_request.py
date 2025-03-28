@@ -1025,20 +1025,17 @@ class DataRequest(object):
                 request_filtering_structure = self.get_filtering_structure(request)
                 for val in values:
                     for elt in elements:
-                        filtered_found, found = self.cache_filtering[request][val.id][elements_to_filter][elt.id]
-                        if filtered_found is None:
-                            filtered_found, found = elt.filter_on_request(val)
-                            if not filtered_found:
-                                filtered_found, found = val.filter_on_request(elt)
-                            if not filtered_found and "experiment_groups" in elements_filtering_structure & request_filtering_structure:
-                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_experiment_groups())
-                            if not filtered_found and "variables" in elements_filtering_structure & request_filtering_structure:
-                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_variables())
-                            if not filtered_found and "variable_groups" in elements_filtering_structure & request_filtering_structure:
-                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_variable_groups())
-                            if not filtered_found:
-                                filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())
-                            self.cache_filtering[request][val.id][elements_to_filter][elt.id] = (filtered_found, found)
+                        filtered_found, found = elt.filter_on_request(val)
+                        if not filtered_found:
+                            filtered_found, found = val.filter_on_request(elt)
+                        if not filtered_found and "experiment_groups" in elements_filtering_structure & request_filtering_structure:
+                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_experiment_groups())
+                        if not filtered_found and "variables" in elements_filtering_structure & request_filtering_structure:
+                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_variables())
+                        if not filtered_found and "variable_groups" in elements_filtering_structure & request_filtering_structure:
+                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_variable_groups())
+                        if not filtered_found:
+                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())
                         if not filtered_found:
                             logger.error(f"Could not filter {elements_to_filter} by {request}")
                             raise ValueError(f"Could not filter {elements_to_filter} by {request}")
