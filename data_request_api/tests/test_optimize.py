@@ -9,6 +9,7 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 import os.path
 import re
 import sys
+import tempfile
 import unittest
 import cProfile
 import codecs
@@ -18,7 +19,8 @@ import pstats
 from data_request_api.stable.query.data_request import DataRequest
 from data_request_api.stable.content.dreq_content import _dreq_res
 from data_request_api.stable.utilities.tools import read_json_input_file_content
-from data_request_api.stable.content.dump_transformation import correct_dictionaries, transform_content_one_base
+from data_request_api.stable.content.dump_transformation import correct_dictionaries, transform_content_one_base, \
+    get_transformed_content
 from data_request_api.tests import filepath
 
 
@@ -92,14 +94,17 @@ class TestDataRequest11(unittest.TestCase):
     @add_profiling
     def test_export_summary(self):
         DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
-        DR.export_summary("variables", "opportunities", os.sep.join(["tests", "var_per_op.csv"]))
-        DR.export_summary("variables", "experiments", os.sep.join(["tests", "var_per_exp.csv"]))
-        DR.export_summary("variables", "experiments", os.sep.join(["tests", "var_per_exp_prio1.csv"]),
-                          filtering_requests=dict(max_priority_level="Core"))
+        with tempfile.TemporaryDirectory() as output_dir:
+            DR.find_variables_per_opportunity(DR.get_opportunities()[0])
+            DR.export_summary("variables", "opportunities", os.sep.join([output_dir, "var_per_op.csv"]))
+            DR.export_summary("variables", "experiments", os.sep.join([output_dir, "var_per_exp.csv"]))
+            DR.export_summary("variables", "experiments", os.sep.join([output_dir, "var_per_exp_prio1.csv"]),
+                              filtering_requests=dict(max_priority_level="Core"))
 
     @unittest.skip
     @add_profiling
     def test_export_data(self):
         DR = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
-        DR.export_data("opportunities", os.sep.join(["tests", "op.csv"]),
-                       export_columns_request=["name", "lead_theme", "description"])
+        with tempfile.TemporaryDirectory() as output_dir:
+            DR.export_data("opportunities", os.sep.join([output_dir, "op.csv"]),
+                           export_columns_request=["name", "lead_theme", "description"])
