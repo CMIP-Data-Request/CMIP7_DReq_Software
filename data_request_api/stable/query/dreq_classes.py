@@ -7,7 +7,7 @@ of the data request "network" (i.e., linked records). While the dict variables f
 the export can be used directly for this, manipulating them is more complex and
 error-prone.
 
-Each record from a table is represented as a dreq_record object.
+Each record from a table is represented as a DreqRecord object.
 The object's attribute names are determined automatically from the Airtable field
 names, which are the names of table columns in Airtable, following simple formatting
 rules (e.g. change space to underscore). Original names of Airtable fields
@@ -25,6 +25,7 @@ if PYTHON_VERSION < (3,9):
 UNIQUE_VAR_NAME = 'compound name'  # method used to uniquely name variables
 
 PRIORITY_LEVELS = ('core', 'high', 'medium', 'low')  # names of priority levels, ordered from highest to lowest priority
+
 
 def format_attribute_name(k):
     '''
@@ -46,12 +47,13 @@ def format_attribute_name(k):
         assert s not in k, f'{s} is invalid character for attribute {k}'
     return k
 
+
 ###############################################################################
 # Generic classes
 # (not specific to different data request tables)
 
 @dataclass
-class dreq_link:
+class DreqLink:
     '''
     Generic class to represent a link to a record in a table.
 
@@ -67,7 +69,7 @@ class dreq_link:
         return f'link: table={self.table_name}, record={self.record_id}'
     
 
-class dreq_record:
+class DreqRecord:
     '''
     Generic class to represent a single record from a table.
     '''
@@ -86,7 +88,7 @@ class dreq_record:
                         'record_id' : record_id,
                         # 'record_name' : '', # fill this in later if desired (finding it here would require access to whole base)
                     }
-                    value[m] = dreq_link(**d)
+                    value[m] = DreqLink(**d)
 
             # Adjust the field name so that it's accessible as an object attribute using the dot syntax (object.attribute)
             key = field_info[field_name]['attribute_name']
@@ -119,7 +121,8 @@ class dreq_record:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-class dreq_table:
+
+class DreqTable:
     '''
     Generic class to represent an table from the data request Airtable raw export json file (dict).
 
@@ -162,7 +165,7 @@ class dreq_table:
                 # print(f'skipping empty record {record_id} in table {self.table_name}')
                 continue
             # Replace record dict with a record object
-            records[record_id] = dreq_record(record, field_info)
+            records[record_id] = DreqRecord(record, field_info)
 
         # attributes for the collection of records (table rows)
         self.records = records
@@ -213,8 +216,8 @@ class dreq_table:
         elif isinstance(m, str):
             # argument is a record id string
             return self.records[m]
-        elif isinstance(m, dreq_link):
-            # argument is dreq_link instance, which contains a record id
+        elif isinstance(m, DreqLink):
+            # argument is DreqLink instance, which contains a record id
             return self.records[m.record_id]
         else:
             raise TypeError(f'Error specifying record to retrieve from table {self.table_name}')
@@ -248,11 +251,12 @@ class dreq_table:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+
 ###############################################################################
 # Non-generic classes, i.e. they have a specific function in the data request
 
 @dataclass
-class expt_request:
+class ExptRequest:
     '''
     Object to store variables requested for an experiment.
     Variable names are stored in seperate sets for different priority levels.
@@ -274,7 +278,7 @@ class expt_request:
 
     def __post_init__(self):
         for p in PRIORITY_LEVELS:
-            assert hasattr(self, p), 'expt_request object missing priority level: ' + p
+            assert hasattr(self, p), 'ExptRequest object missing priority level: ' + p
         self.consistency_check()
 
     def add_vars(self, var_names, priority_level):
@@ -294,7 +298,7 @@ class expt_request:
 
         Returns
         -------
-        expt_request object is updated with the new variables, and any overlaps removed.
+        ExptRequest object is updated with the new variables, and any overlaps removed.
         '''
         priority_level = priority_level.lower()
         current_vars = getattr(self, priority_level)

@@ -27,6 +27,13 @@ def parse_args():
     parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
     parser.add_argument('output_file', help='file to write JSON output to')
     parser.add_argument('--version', action='store_true', help='Return version information and exit')
+    def _var_metadata_check(arg):
+        if arg.endswith('.json') or arg.endswith('.csv'):
+            return arg
+        else:
+            raise ValueError()
+    parser.register('type', 'json_or_csv_file', _var_metadata_check)
+    parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file', help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
     return parser.parse_args()
 
 
@@ -130,6 +137,32 @@ def main():
 
     else:
         print(f'\nFor data request version {use_dreq_version}, no requested variables were found')
+
+    if args.variables_metadata:
+
+        # Get all variable names for all requested experiments
+        all_var_names = set()
+        for expt_name, vars_by_priority in expt_vars['experiment'].items():
+            for priority_level, var_names in vars_by_priority.items():
+                all_var_names.update(var_names)
+
+        # Get metadata for variables
+        all_var_info = dq.get_variables_metadata(
+            base,
+            compound_names=all_var_names,
+            use_dreq_version=use_dreq_version  # TO DEPRECATE
+            )
+
+        # Write output file(s)
+        for filepath in args.variables_metadata:
+            dq.write_variables_metadata(
+                all_var_info,
+                filepath,
+                api_version=data_request_api.version,
+                use_dreq_version=use_dreq_version,
+                content_path = dc._dreq_content_loaded['json_path']
+                )
+
 
 if __name__ == '__main__':
     main()
