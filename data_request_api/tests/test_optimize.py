@@ -56,13 +56,12 @@ class TestDataRequest11(unittest.TestCase):
         self.profiling = True
         self.version = "v1.1"
         export_version = "release"
+        content = get_transformed_content(version=self.version, export=export_version)
+        self.vs_dict = content["VS_input"]
+        self.input_database = content["DR_input"]
         self.single = f"{_dreq_res}/{self.version}/dreq_{export_version}_export.json"
         self.single_content = read_json_input_file_content(self.single)
-        self.single_format = correct_dictionaries((self.single_content))
-        self.vs_file = f"{_dreq_res}/{self.version}/VS_{export_version}_content.json"
-        self.vs_dict = read_json_input_file_content(self.vs_file)
-        self.input_database_file = f"{_dreq_res}/{self.version}/DR_{export_version}_content.json"
-        self.input_database = read_json_input_file_content(self.input_database_file)
+        self.single_format = correct_dictionaries(self.single_content)
 
     @unittest.skip
     @add_profiling
