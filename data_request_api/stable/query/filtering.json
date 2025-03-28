@@ -6,7 +6,7 @@
     "spatial_shapes": ["variables"],
     "structure_titles": ["variables"],
     "physical_parameters": ["variables"],
-    "modelling_realm": ["variables"],
+    "modelling_realms": ["variables"],
     "esm-bcvs": ["variables"],
     "cf_standard_names": ["variables"],
     "cell_methods": ["variables"],

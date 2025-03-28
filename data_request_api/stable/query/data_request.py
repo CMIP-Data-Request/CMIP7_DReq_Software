@@ -46,13 +46,13 @@ class DRObjects(object):
 
     @property
     def id(self):
-        return str(self.attributes["id"])
+        return self.attributes["id"]
 
     @staticmethod
     def transform_content_inner(key, value, dr, force_transform=False):
         if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
             return dr.find_element(key, value)
-        elif isinstance(value, str):
+        elif isinstance(value, str) and key not in ["id", ]:
             return ConstantValueObj(value)
         else:
             return value
@@ -150,7 +150,10 @@ class DRObjects(object):
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
             filtered_found = request_value.DR_type == self.DR_type
-            found = request_value == self
+            if filtered_found:
+                found = request_value == self
+            else:
+                found = False
             self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
         return filtered_found, found
 
@@ -1023,24 +1026,39 @@ class DataRequest(object):
             elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
             for (request, values) in request_dict.items():
                 request_filtering_structure = self.get_filtering_structure(request)
-                for val in values:
-                    for elt in elements:
-                        filtered_found, found = elt.filter_on_request(val)
-                        if not filtered_found:
+                common_filtering_structure = request_filtering_structure & elements_filtering_structure
+                filtered_found = True
+                iter_values = iter(values)
+                iter_elements = iter(elements)
+                if elements_to_filter in request_filtering_structure | {request}:
+                    while filtered_found and (val := next(iter_values, None)) is not None:
+                        while filtered_found and (elt := next(iter_elements, None)) is not None:
+                            filtered_found, found = elt.filter_on_request(val)
+                            if found:
+                                rep[request][val.id].add(elt)
+                elif request in elements_filtering_structure:
+                    while filtered_found and (val := next(iter_values, None)) is not None:
+                        while filtered_found and (elt := next(iter_elements, None)) is not None:
                             filtered_found, found = val.filter_on_request(elt)
-                        if not filtered_found and "experiment_groups" in elements_filtering_structure & request_filtering_structure:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_experiment_groups())
-                        if not filtered_found and "variables" in elements_filtering_structure & request_filtering_structure:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_variables())
-                        if not filtered_found and "variable_groups" in elements_filtering_structure & request_filtering_structure:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_variable_groups())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(val, elt, self.get_opportunities())
-                        if not filtered_found:
-                            logger.error(f"Could not filter {elements_to_filter} by {request}")
-                            raise ValueError(f"Could not filter {elements_to_filter} by {request}")
-                        if found:
-                            rep[request][val.id].add(elt)
+                            if found:
+                                rep[request][val.id].add(elt)
+                else:
+                    if "experiment_groups" in common_filtering_structure:
+                        list_to_filter = self.get_experiment_groups()
+                    elif "variables" in common_filtering_structure:
+                        list_to_filter = self.get_variables()
+                    elif "variable_groups" in common_filtering_structure:
+                        list_to_filter = self.get_variable_groups()
+                    else:
+                        list_to_filter = self.get_opportunities()
+                    while filtered_found and (val := next(iter_values, None)) is not None:
+                        while filtered_found and (elt := next(iter_elements, None)) is not None:
+                            filtered_found, found = self._two_elements_filtering(val, elt, list_to_filter)
+                            if found:
+                                rep[request][val.id].add(elt)
+                if not filtered_found:
+                   logger.error(f"Could not filter {elements_to_filter} by {request}")
+                   raise ValueError(f"Could not filter {elements_to_filter} by {request}")
             if len(rep) == 0:
                 rep_list = set(elements)
             elif operation in ["any", ]:
