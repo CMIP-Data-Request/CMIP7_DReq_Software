@@ -4,3 +4,4 @@ openpyxl
 pooch
 pytest
 requests
+pyyaml
