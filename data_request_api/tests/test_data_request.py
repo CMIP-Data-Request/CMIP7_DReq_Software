@@ -1226,6 +1226,12 @@ class TestDataRequestFilter(unittest.TestCase):
         var = self.dr.find_element("variable", var_id)
         self.assertEqual(self.dr.find_priority_per_variable(var), 1)
 
+    def test_cache_issue(self):
+        with tempfile.TemporaryDirectory() as output_dir:
+            self.dr.find_variables_per_opportunity(self.dr.get_opportunities()[0])
+            self.dr.export_summary("variables", "opportunities",
+                                   os.sep.join([output_dir, "var_per_op.csv"]))
+
     def test_export_summary(self):
         with tempfile.TemporaryDirectory() as output_dir:
             self.dr.export_summary("opportunities", "data_request_themes",
