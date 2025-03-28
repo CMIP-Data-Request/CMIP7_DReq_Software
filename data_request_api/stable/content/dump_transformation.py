@@ -237,7 +237,7 @@ def reshape_useful_keys(content, patterns_to_reshape):
 
 def add_useful_keys(content):
     logger = get_logger()
-    record_to_uid_index = dict()
+    record_to_uid_index = defaultdict(lambda: dict())
     default_count = 0
     default_template = "default_{:d}"
     list_entries = sorted(list(content))
@@ -258,7 +258,7 @@ def add_useful_keys(content):
             if uid.endswith(os.linesep):
                 logger.debug(f"uid of element type {subelt} and record id {record_id} endswith '\\n'.")
                 uid = uid.rstrip(os.linesep)
-            record_to_uid_index[record_id] = (uid, subelt)
+            record_to_uid_index[subelt][record_id] = uid
             content[subelt][uid] = content[subelt].pop(record_id)
     return content, record_to_uid_index
 
@@ -310,26 +310,33 @@ def tidy_content(content, record_to_uid_index):
     logger = get_logger()
     # Replace record_id by uid
     logger.debug("Replace record ids by uids")
-    to_remove_entries = defaultdict(list)
-    content_string = json.dumps(content, indent=0)
-    for (record_id, (uid, subelt)) in record_to_uid_index.items():
-        tmp_content_string = content_string.split(f'"{record_id}"')
-        if len(tmp_content_string) == 1:
-            to_remove_entries[subelt].append((record_id, uid))
-        content_string = f'"link::{uid}"'.join(tmp_content_string)
-    for record_id, _ in to_remove_entries["opportunities"]:
-        del record_to_uid_index[record_id]
-    del to_remove_entries["opportunities"]
-    content = json.loads(content_string)
-    # Remove unused entries
-    for subelt in to_remove_entries:
-        for (record_id, uid) in to_remove_entries[subelt]:
+    to_remove_entries = defaultdict(lambda: defaultdict(lambda: 0))
+    list_content = list(content)
+    len_list_content = len(list_content)
+    for content_subelt in list_content:
+        content_string = json.dumps(content[content_subelt], indent=0)
+        for subelt in record_to_uid_index:
+            for (record_id, uid) in record_to_uid_index[subelt].items():
+                tmp_content_string = content_string.replace(f'"{record_id}"', f'"link::{uid}"')
+                if content_string == tmp_content_string:
+                    to_remove_entries[subelt][(record_id, uid)] += 1
+                content_string = tmp_content_string
+        content[content_subelt] = json.loads(content_string)
+    if "opportunities" in to_remove_entries:
+        to_remove = [elt for (elt, nb) in to_remove_entries["opportunities"].items() if nb == len_list_content]
+        for record_id, _ in to_remove:
+            del record_to_uid_index["opportunities"][record_id]
+        del to_remove_entries["opportunities"]
+    for (subelt, to_remove) in to_remove_entries.items():
+        to_remove = [elt for (elt, nb) in to_remove.items() if nb == len_list_content]
+        for (record_id, uid) in to_remove:
             del content[subelt][uid]
-            del record_to_uid_index[record_id]
+            del record_to_uid_index[subelt][record_id]
     # Tidy the content once again
     content_str = json.dumps(content)
-    for (uid, subelt) in [(uid, subelt) for (uid, subelt) in record_to_uid_index.values() if content_str.count(uid) < 2]:
-        del content[subelt][uid]
+    for subelt in record_to_uid_index:
+        for uid in [uid for uid in record_to_uid_index[subelt].values() if content_str.count(uid) < 2]:
+            del content[subelt][uid]
     return content
 
 
