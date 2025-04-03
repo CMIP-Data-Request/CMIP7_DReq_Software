@@ -5,6 +5,7 @@
 Test dump_transformation.py
 """
 from __future__ import print_function, division, unicode_literals, absolute_import
+from data_request_api.tests import filepath
 
 import copy
 import os
@@ -13,8 +14,7 @@ import unittest
 from data_request_api.stable.utilities.tools import read_json_file, write_json_output_file_content
 from data_request_api.stable.content.dump_transformation import correct_key_string, correct_dictionaries, \
     transform_content_one_base, transform_content_three_bases, transform_content, split_content_one_base
-    transform_content_one_base, transform_content_three_bases, transform_content, split_content_one_base
-from data_request_api.tests import filepath
+transform_content_one_base, transform_content_three_bases, transform_content, split_content_one_base
 
 
 class TestCorrectKeyString(unittest.TestCase):
@@ -23,6 +23,7 @@ class TestCorrectKeyString(unittest.TestCase):
                          "this_is_a_test_and_some_specific_chars.")
         self.assertEqual(correct_key_string("A string with elements to remove. DumMy test", "dummy", "Test"),
                          "a_string_with_elements_to_remove.")
+
     def test_correct(self):
         self.assertEqual(correct_key_string("  This is a test & some specific chars. "),
                          "this_is_a_test_and_some_specific_chars.")
@@ -32,6 +33,7 @@ class TestCorrectKeyString(unittest.TestCase):
     def test_error(self):
         with self.assertRaises(TypeError):
             correct_key_string(4)
+
     def test_error(self):
         with self.assertRaises(TypeError):
             correct_key_string(4)
@@ -52,6 +54,7 @@ class TestCorrectDictionaries(unittest.TestCase):
         dict_1 = {"Test1": "dummy1", "&test2": "Dummy2&"}
         new_dict_1 = {"test1": "dummy1", "andtest2": "Dummy2&"}
         self.assertDictEqual(correct_dictionaries(dict_1), new_dict_1)
+
     def test_correct(self):
         dict_1 = {"Test1": "dummy1", "&test2": "Dummy2&"}
         new_dict_1 = {"test1": "dummy1", "andtest2": "Dummy2&"}
@@ -111,6 +114,7 @@ class TestCorrectDictionaries(unittest.TestCase):
     def test_error(self):
         with self.assertRaises(TypeError):
             correct_dictionaries(4)
+
     def test_error(self):
         with self.assertRaises(TypeError):
             correct_dictionaries(4)
@@ -171,6 +175,7 @@ class TestTransformContent(unittest.TestCase):
         DR_output, VS_output = split_content_one_base(transform_output)
         self.assertDictEqual(DR_output, self.one_base_DR_output_noversion)
         self.assertDictEqual(VS_output, self.one_base_VS_output_noversion)
+
     def test_one_base_correct(self):
         format_output = correct_dictionaries(self.one_base_input)
         self.assertDictEqual(format_output, self.one_base_output_format)
@@ -209,6 +214,7 @@ class TestTransformContent(unittest.TestCase):
     def test_one_base_error(self):
         with self.assertRaises(ValueError):
             transform_content_one_base(self.several_bases_input)
+
     def test_one_base_error(self):
         with self.assertRaises(ValueError):
             transform_content_one_base(self.several_bases_input)
@@ -221,6 +227,7 @@ class TestTransformContent(unittest.TestCase):
     def test_several_bases_error(self):
         with self.assertRaises(ValueError):
             transform_content_three_bases(self.one_base_input)
+
     def test_several_bases_error(self):
         with self.assertRaises(ValueError):
             transform_content_three_bases(self.one_base_input)
@@ -233,6 +240,7 @@ class TestTransformContent(unittest.TestCase):
     def test_all_error(self):
         with self.assertRaises(TypeError):
             transform_content(self.one_base_input)
+
     def test_all_error(self):
         with self.assertRaises(TypeError):
             transform_content(self.one_base_input)

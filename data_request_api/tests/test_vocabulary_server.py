@@ -22,6 +22,7 @@ class TestLinks(unittest.TestCase):
         self.assertEqual(is_link_id_or_value(None), (False, None))
         self.assertEqual(is_link_id_or_value(5), (False, 5))
         self.assertEqual(is_link_id_or_value("link::test"), (True, "test"))
+
     def test_is_link_or_value(self):
         self.assertEqual(is_link_id_or_value("test"), (False, "test"))
         self.assertEqual(is_link_id_or_value(None), (False, None))
@@ -38,6 +39,7 @@ class TestLinks(unittest.TestCase):
         self.assertEqual(build_link_from_id(6), 6)
         self.assertEqual(build_link_from_id("test"), "link::test")
         self.assertEqual(build_link_from_id("link::test"), "link::test")
+
     def test_build_link_from_id(self):
         self.assertEqual(build_link_from_id(None), None)
         self.assertEqual(build_link_from_id(6), 6)
@@ -73,6 +75,7 @@ class TestVocabularyServer(unittest.TestCase):
         self.vs_content = read_json_input_file_content(self.vs_file)
         self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
         self.vs_content_infinite_loop["cell_methods"]["CellMethods::am-tm"]["structure_title"] = "link::default_483"
+
     def setUp(self):
         self.vs_file = filepath("one_base_VS_output.json")
         self.vs_content = read_json_input_file_content(self.vs_file)
@@ -87,6 +90,7 @@ class TestVocabularyServer(unittest.TestCase):
     def test_init(self):
         with self.assertRaises(TypeError):
             VocabularyServer()
+
     def test_init(self):
         with self.assertRaises(TypeError):
             VocabularyServer()

@@ -246,8 +246,7 @@ def map_data(data, mapping_table):
                                 if not intm[attr]["base_copy_of_table"]:
                                     raise ValueError(
                                         "A copy of the table in the same base is required if 'entry_type' is set to 'record_id', "
-                                        f"but 'base_copy_of_table' is set to False: '{mapinfo['source_table']}' - '{attr}'"
-                                    )
+                                        f"but 'base_copy_of_table' is set to False: '{mapinfo['source_table']}' - '{attr}'")
                                 elif not intm[attr]["base"] in data:
                                     raise KeyError(
                                         f"Base '{intm[attr]['base']}' not found in data."

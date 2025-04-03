@@ -35,7 +35,7 @@ jobs:
       # Step 4: Run your two commands
       - name: Pep8ify
         run: |
-          autopep8 data_request_api --recursive --in-place --pep8-passes 2000 --verbose
+          autopep8 data_request_api --max-line-length=120 --experimental --recursive --in-place --pep8-passes 2000 --verbose
 
       - name: Tech documentation generation
         run: |

@@ -28,6 +28,7 @@ class TestDRObjects(unittest.TestCase):
     def test_init(self):
         with self.assertRaises(TypeError):
             DRObjects()
+
     def test_init(self):
         with self.assertRaises(TypeError):
             DRObjects()
@@ -62,6 +63,7 @@ class TestDRObjects(unittest.TestCase):
     def test_from_input(self):
         with self.assertRaises(TypeError):
             DRObjects.from_input()
+
     def test_from_input(self):
         with self.assertRaises(TypeError):
             DRObjects.from_input()
@@ -97,6 +99,7 @@ class TestDRObjects(unittest.TestCase):
     def test_print(self):
         obj = DRObjects(id="link::my_id", dr=self.dr)
         self.assertEqual(str(obj), "undef: undef (id: my_id)")
+
     def test_print(self):
         obj = DRObjects(id="link::my_id", dr=self.dr)
         self.assertEqual(str(obj), "undef: undef (id: my_id)")
@@ -108,6 +111,7 @@ class TestDRObjects(unittest.TestCase):
         obj = DRObjects(id="link::my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
         self.assertEqual(obj, obj2)
+
     def test_eq(self):
         obj = DRObjects(id="link::my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
@@ -137,6 +141,7 @@ class TestDRObjects(unittest.TestCase):
         my_set.add(DRObjects(id="link::my_id_2", dr=self.dr))
         my_set.add(copy.deepcopy(obj))
         self.assertEqual(len(my_set), 2)
+
     def test_hash(self):
         obj = DRObjects(id="link::my_id", dr=self.dr)
         my_set = set()
@@ -166,6 +171,7 @@ class TestExperimentsGroup(unittest.TestCase):
     def test_init(self):
         with self.assertRaises(TypeError):
             ExperimentsGroup()
+
     def test_init(self):
         with self.assertRaises(TypeError):
             ExperimentsGroup()
@@ -201,6 +207,7 @@ class TestExperimentsGroup(unittest.TestCase):
     def test_from_input(self):
         with self.assertRaises(TypeError):
             ExperimentsGroup.from_input()
+
     def test_from_input(self):
         with self.assertRaises(TypeError):
             ExperimentsGroup.from_input()
@@ -236,6 +243,7 @@ class TestExperimentsGroup(unittest.TestCase):
     def test_check(self):
         obj = ExperimentsGroup(id="link::my_id", dr=self.dr)
         obj.check()
+
     def test_check(self):
         obj = ExperimentsGroup(id="link::my_id", dr=self.dr)
         obj.check()
@@ -251,6 +259,7 @@ class TestExperimentsGroup(unittest.TestCase):
         obj = ExperimentsGroup(id="link::my_id", dr=self.dr)
         self.assertEqual(obj.count(), 0)
         self.assertEqual(obj.get_experiments(), list())
+
     def test_methods(self):
         obj = ExperimentsGroup(id="link::my_id", dr=self.dr)
         self.assertEqual(obj.count(), 0)
@@ -304,6 +313,7 @@ class TestExperimentsGroup(unittest.TestCase):
         obj = ExperimentsGroup(id="link::my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
         self.assertEqual(obj, obj2)
+
     def test_eq(self):
         obj = ExperimentsGroup(id="link::my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
@@ -423,6 +433,7 @@ class TestVariablesGroup(unittest.TestCase):
     def test_init(self):
         with self.assertRaises(TypeError):
             VariablesGroup()
+
     def test_init(self):
         with self.assertRaises(TypeError):
             VariablesGroup()
@@ -458,6 +469,7 @@ class TestVariablesGroup(unittest.TestCase):
     def test_from_input(self):
         with self.assertRaises(TypeError):
             VariablesGroup.from_input()
+
     def test_from_input(self):
         with self.assertRaises(TypeError):
             VariablesGroup.from_input()
@@ -500,6 +512,7 @@ class TestVariablesGroup(unittest.TestCase):
     def test_check(self):
         obj = VariablesGroup(id="link::my_id", dr=self.dr)
         obj.check()
+
     def test_check(self):
         obj = VariablesGroup(id="link::my_id", dr=self.dr)
         obj.check()
@@ -539,8 +552,9 @@ class TestVariablesGroup(unittest.TestCase):
                               self.dr.find_element("variables", "link::bab48ce0-e5dd-11e5-8482-ac72891c3257")])
         self.assertEqual(obj.get_mips(), [
                          self.dr.find_element("mips", "link::default_401")])
-        self.assertDictEqual(obj.get_priority_level().attributes, {'name': "High", "notes": "High priority should be used sparingly",
-                                                                   "value": 1, 'id': "default_481"})
+        self.assertDictEqual(
+            obj.get_priority_level().attributes,
+            {'name': "High", "notes": "High priority should be used sparingly", "value": 1, 'id': "default_481"})
 
     def test_print(self):
         obj = VariablesGroup.from_input(id="link::default_575", dr=self.dr, priority_level="Medium",
@@ -566,6 +580,7 @@ class TestVariablesGroup(unittest.TestCase):
         obj = VariablesGroup(id="link::my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
         self.assertEqual(obj, obj2)
+
     def test_eq(self):
         obj = VariablesGroup(id="link::my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
@@ -620,6 +635,7 @@ class TestOpportunity(unittest.TestCase):
     def test_init(self):
         with self.assertRaises(TypeError):
             Opportunity()
+
     def test_init(self):
         with self.assertRaises(TypeError):
             Opportunity()
@@ -658,6 +674,7 @@ class TestOpportunity(unittest.TestCase):
     def test_from_input(self):
         with self.assertRaises(TypeError):
             Opportunity.from_input()
+
     def test_from_input(self):
         with self.assertRaises(TypeError):
             Opportunity.from_input()
@@ -691,15 +708,15 @@ class TestOpportunity(unittest.TestCase):
             obj = Opportunity.from_input(
                 id="my_id", dr=self.dr, variable_groups=["test", ])
 
-        obj = Opportunity.from_input(id="my_id", dr=self.dr,
-                                     variable_groups=[
-                                         "link::default_577", "link::default_578"],
-                                     experiment_groups=["link::default_285", ],
-                                     data_request_themes=["link::default_115", "link::default_116", "link::default_117"])
+        obj = Opportunity.from_input(
+            id="my_id", dr=self.dr, variable_groups=["link::default_577", "link::default_578"],
+            experiment_groups=["link::default_285",],
+            data_request_themes=["link::default_115", "link::default_116", "link::default_117"])
 
     def test_check(self):
         obj = Opportunity(id="my_id", dr=self.dr)
         obj.check()
+
     def test_check(self):
         obj = Opportunity(id="my_id", dr=self.dr)
         obj.check()
@@ -716,6 +733,7 @@ class TestOpportunity(unittest.TestCase):
         self.assertEqual(obj.get_experiment_groups(), list())
         self.assertEqual(obj.get_variable_groups(), list())
         self.assertEqual(obj.get_themes(), list())
+
     def test_methods(self):
         obj = Opportunity(id="my_id", dr=self.dr)
         self.assertEqual(obj.get_experiment_groups(), list())
@@ -727,11 +745,10 @@ class TestOpportunity(unittest.TestCase):
         self.assertEqual(obj.get_variable_groups(), list())
         self.assertEqual(obj.get_themes(), list())
 
-        obj = Opportunity.from_input(id="link::default_425", dr=self.dr,
-                                     variable_groups=[
-                                         "link::default_577", "link::default_578"],
-                                     experiment_groups=["link::default_285", ],
-                                     data_request_themes=["link::default_116", "link::default_117", "link::default_119"])
+        obj = Opportunity.from_input(
+            id="link::default_425", dr=self.dr, variable_groups=["link::default_577", "link::default_578"],
+            experiment_groups=["link::default_285",],
+            data_request_themes=["link::default_116", "link::default_117", "link::default_119"])
         self.assertListEqual(obj.get_experiment_groups(), [
                              self.dr.find_element("experiment_groups", "default_285")])
         self.assertListEqual(obj.get_variable_groups(),
@@ -746,11 +763,11 @@ class TestOpportunity(unittest.TestCase):
                               ])
 
     def test_print(self):
-        obj = Opportunity.from_input(id="link::default_420", dr=self.dr, name="Ocean Extremes",
-                                     variable_groups=[
-                                         "link::default_575", "link::default_576"],
-                                     experiment_groups=["link::default_285", ],
-                                     data_request_themes=["link::default_115", "link::default_117", "link::default_118"])
+        obj = Opportunity.from_input(
+            id="link::default_420", dr=self.dr, name="Ocean Extremes",
+            variable_groups=["link::default_575", "link::default_576"],
+            experiment_groups=["link::default_285",],
+            data_request_themes=["link::default_115", "link::default_117", "link::default_118"])
         ref_str = "opportunity: Ocean Extremes (id: default_420)"
         ref_str_2 = [
             ref_str,
@@ -777,6 +794,7 @@ class TestOpportunity(unittest.TestCase):
         obj = Opportunity(id="my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
         self.assertEqual(obj, obj2)
+
     def test_eq(self):
         obj = Opportunity(id="my_id", dr=self.dr)
         obj2 = copy.deepcopy(obj)
@@ -911,6 +929,7 @@ class TestDataRequest(unittest.TestCase):
     def test_init(self):
         with self.assertRaises(TypeError):
             DataRequest()
+
     def test_init(self):
         with self.assertRaises(TypeError):
             DataRequest()
@@ -948,6 +967,7 @@ class TestDataRequest(unittest.TestCase):
     def test_from_input(self):
         with self.assertRaises(TypeError):
             DataRequest.from_input()
+
     def test_from_input(self):
         with self.assertRaises(TypeError):
             DataRequest.from_input()
@@ -995,6 +1015,7 @@ class TestDataRequest(unittest.TestCase):
     def test_from_separated_inputs(self):
         with self.assertRaises(TypeError):
             DataRequest.from_separated_inputs()
+
     def test_from_separated_inputs(self):
         with self.assertRaises(TypeError):
             DataRequest.from_separated_inputs()
@@ -1055,6 +1076,7 @@ class TestDataRequest(unittest.TestCase):
     def test_split_content_from_input_json(self):
         with self.assertRaises(TypeError):
             DataRequest._split_content_from_input_json()
+
     def test_split_content_from_input_json(self):
         with self.assertRaises(TypeError):
             DataRequest._split_content_from_input_json()
@@ -1097,6 +1119,7 @@ class TestDataRequest(unittest.TestCase):
     def test_check(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         obj.check()
+
     def test_check(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         obj.check()
@@ -1121,9 +1144,12 @@ class TestDataRequest(unittest.TestCase):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         exp_groups = obj.get_experiment_groups()
         self.assertEqual(len(exp_groups), 5)
-        self.assertListEqual(exp_groups,
-                             [obj.find_element("experiment_groups", id)
-                              for id in ["link::default_285", "link::default_286", "link::default_287", "link::default_288", "link::default_289"]])
+        self.assertListEqual(
+            exp_groups,
+            [obj.find_element("experiment_groups", id)
+             for id
+             in
+             ["link::default_285", "link::default_286", "link::default_287", "link::default_288", "link::default_289"]])
 
     def test_get_experiment_group(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
@@ -1132,6 +1158,7 @@ class TestDataRequest(unittest.TestCase):
                          obj.find_element("experiment_groups", "link::default_285"))
         with self.assertRaises(ValueError):
             exp_grp = obj.get_experiment_group("test")
+
     def test_get_experiment_group(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         exp_grp = obj.get_experiment_group("link::default_285")
@@ -1144,9 +1171,10 @@ class TestDataRequest(unittest.TestCase):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         opportunities = obj.get_opportunities()
         self.assertEqual(len(opportunities), 4)
-        self.assertListEqual(opportunities,
-                             [obj.find_element("opportunities", id)
-                              for id in ["link::default_418", "link::default_419", "link::default_420", "link::default_421"]])
+        self.assertListEqual(
+            opportunities,
+            [obj.find_element("opportunities", id)
+             for id in ["link::default_418", "link::default_419", "link::default_420", "link::default_421"]])
 
     def test_get_opportunity(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
@@ -1155,6 +1183,7 @@ class TestDataRequest(unittest.TestCase):
                          obj.find_element("opportunities", "link::default_418"))
         with self.assertRaises(ValueError):
             op = obj.get_opportunity("test")
+
     def test_get_opportunity(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         opportunity = obj.get_opportunity("link::default_418")
@@ -1173,6 +1202,7 @@ class TestDataRequest(unittest.TestCase):
                                          "link::default_572", "link::default_573", "link::default_574",
                                          "link::default_575", "link::default_576", "link::default_577",
                                          "link::default_578", "link::default_579"]])
+
     def test_get_variable_groups(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         var_groups = obj.get_variable_groups()
@@ -1201,6 +1231,7 @@ class TestDataRequest(unittest.TestCase):
                          obj.find_element("variable_groups", "link::default_575"))
         with self.assertRaises(ValueError):
             var_grp = obj.get_variable_group("test")
+
     def test_get_variable_group(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         var_grp = obj.get_variable_group("link::default_575")
@@ -1222,6 +1253,7 @@ class TestDataRequest(unittest.TestCase):
         self.assertListEqual(variables,
                              [obj.find_element("variables", f"link::{nb}")
                               for nb in sorted(list(self.vs.vocabulary_server["variables"]))])
+
     def test_get_variables(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         variables = obj.get_variables()
@@ -1241,6 +1273,7 @@ class TestDataRequest(unittest.TestCase):
         self.assertListEqual(mips,
                              [obj.find_element("mips", f"link::{nb}")
                               for nb in sorted(list(self.vs.vocabulary_server["mips"]))])
+
     def test_get_mips(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         mips = obj.get_mips()
@@ -1260,6 +1293,7 @@ class TestDataRequest(unittest.TestCase):
         self.assertListEqual(experiments,
                              [obj.find_element("experiments", f"link::{nb}")
                               for nb in sorted(list(self.vs.vocabulary_server["experiments"]))])
+
     def test_get_experiments(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         experiments = obj.get_experiments()
@@ -1279,6 +1313,7 @@ class TestDataRequest(unittest.TestCase):
         self.assertListEqual(themes,
                              [obj.find_element("data_request_themes", f"link::{nb}")
                               for nb in sorted(list(self.vs.vocabulary_server["data_request_themes"]))])
+
     def test_get_themes(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         themes = obj.get_data_request_themes()
@@ -1297,10 +1332,12 @@ class TestDataRequest(unittest.TestCase):
         self.assertEqual(obj.get_filtering_structure("opportunities"), set())
         self.assertEqual(obj.get_filtering_structure("variable_groups"), {"opportunities", })
         self.assertEqual(obj.get_filtering_structure("variables"), {"opportunities", "variable_groups"})
-        self.assertEqual(obj.get_filtering_structure("physical_parameters"), {"opportunities", "variable_groups", "variables"})
+        self.assertEqual(obj.get_filtering_structure("physical_parameters"),
+                         {"opportunities", "variable_groups", "variables"})
         self.assertEqual(obj.get_filtering_structure("experiment_groups"), {"opportunities", })
         self.assertEqual(obj.get_filtering_structure("experiments"), {"opportunities", "experiment_groups"})
         self.assertEqual(obj.get_filtering_structure("test"), set())
+
 
 class TestDataRequestFilter(unittest.TestCase):
     def setUp(self):
@@ -1361,6 +1398,7 @@ class TestDataRequestFilter(unittest.TestCase):
     def test_filter_elements_per_request(self):
         with self.assertRaises(TypeError):
             self.dr.filter_elements_per_request()
+
     def test_filter_elements_per_request(self):
         with self.assertRaises(TypeError):
             self.dr.filter_elements_per_request()
@@ -1611,6 +1649,7 @@ class TestDataRequestFilter(unittest.TestCase):
                                                         experiments=[exp_id, ]), list_all)
         self.assertListEqual(self.dr.find_opportunities(operation="any", data_request_themes=theme_id,
                                                         experiments=[exp_id, ]), list_any)
+
     def test_find_opportunities(self):
         theme_id = "link::default_115"
         exp_id = "link::default_294"

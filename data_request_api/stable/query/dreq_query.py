@@ -621,7 +621,8 @@ def get_opp_vars(opp, priority_levels, VarGroups, Vars, PriorityLevel=None, verb
     return opp_vars
 
 
-def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True, check_core_variables=True):
+def get_requested_variables(
+        content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True, check_core_variables=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 

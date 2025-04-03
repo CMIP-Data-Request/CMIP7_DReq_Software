@@ -74,6 +74,7 @@ class VocabularyServer(object):
         """
         content = read_json_file(input_database)
         return cls(content)
+
     @classmethod
     def from_input(cls, input_database):
         """

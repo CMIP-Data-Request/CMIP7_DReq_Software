@@ -22,8 +22,9 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'dreq_version', choices=dc.get_versions(), help="data request version")
-    parser.add_argument('--opportunities_file', type=str,
-                        help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
+    parser.add_argument(
+        '--opportunities_file', type=str,
+        help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
     parser.add_argument('--all_opportunities', action='store_true',
                         help="respond to all opportunities")
     parser.add_argument('--experiments', nargs='+', type=str,
