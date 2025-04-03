@@ -15,43 +15,10 @@ from collections import defaultdict
 from data_request_api.stable.utilities.logger import get_logger, change_log_file, change_log_level
 from data_request_api.stable.content.dump_transformation import transform_content
 from data_request_api.stable.utilities.tools import read_json_file, write_csv_output_file_content
-from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id
+from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
+    to_singular, ConstantValueObj, to_plural
 
-version = "1.0.1"
-
-
-class ConstantValueObj(object):
-    """
-    Constant object which return the same value each time an attribute is asked.
-    It is used to avoid discrepancies between objects and strings.
-    """
-
-    def __init__(self, value="undef"):
-        self.value = value
-
-    def __getattr__(self, item):
-        return str(self)
-
-    def __str__(self):
-        return self.value
-
-    def __hash__(self):
-        return hash(self.value)
-
-    def __copy__(self):
-        return ConstantValueObj(self.value)
-
-    def __eq__(self, other):
-        return str(self) == str(other)
-
-    def __gt__(self, other):
-        return str(self) > str(other)
-
-    def __lt__(self, other):
-        return str(self) < str(other)
-
-    def __deepcopy__(self, memodict={}):
-        return self.__copy__()
+from data_request_api import version
 
 
 class DRObjects(object):
@@ -59,7 +26,6 @@ class DRObjects(object):
     Base object to build the ones used within the DR API.
     Use to define basic information needed.
     """
-
     def __init__(self, id, dr, DR_type="undef", structure=dict(), **attributes):
         """
         Initialisation of the object.
@@ -69,17 +35,29 @@ class DRObjects(object):
         :param dict structure: if needed, elements linked by structure to the current object
         :param dict attributes: attributes of the object coming from vocabulary server
         """
-        self.DR_type = DR_type
-        self.attributes = copy.deepcopy(attributes)
-        _, self.attributes["id"] = is_link_id_or_value(id)
-        self.structure = copy.deepcopy(structure)
+        if DR_type in ["undef", ]:
+            self.DR_type = DR_type
+        else:
+            self.DR_type = to_plural(DR_type)
+        _, attributes["id"] = is_link_id_or_value(id)
         self.dr = dr
-        self.attributes = self.transform_content(self.attributes, dr)
-        self.structure = self.transform_content(
-            self.structure, dr, force_transform=True)
+        self.attributes = self.transform_content(attributes, dr)
+        self.structure = self.transform_content(structure, dr, force_transform=True)
+
+    @property
+    def id(self):
+        return self.attributes["id"]
 
     @staticmethod
-    def transform_content(input_dict, dr, force_transform=False):
+    def transform_content_inner(key, value, dr, force_transform=False):
+        if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
+            return dr.find_element(key, value)
+        elif isinstance(value, str) and key not in ["id", ]:
+            return ConstantValueObj(value)
+        else:
+            return value
+
+    def transform_content(self, input_dict, dr, force_transform=False):
         """
         Transform the input dict to have only elements which are object (either DRObject -for links- or
         ConstantValueObj -for strings-).
@@ -91,15 +69,11 @@ class DRObjects(object):
         """
         for (key, values) in input_dict.items():
             if isinstance(values, list):
-                for (i, value) in enumerate(values):
-                    if isinstance(value, str) and (force_transform or is_link_id_or_value(value)[0]):
-                        input_dict[key][i] = dr.find_element(key, value)
-                    elif isinstance(value, str):
-                        input_dict[key][i] = ConstantValueObj(value)
-            elif isinstance(values, str) and (force_transform or is_link_id_or_value(values)[0]):
-                input_dict[key] = dr.find_element(key, values)
-            elif isinstance(values, str):
-                input_dict[key] = ConstantValueObj(values)
+                input_dict[key] = [self.transform_content_inner(key=key, value=value, dr=dr,
+                                                                force_transform=force_transform) for value in values]
+            else:
+                input_dict[key] = self.transform_content_inner(key=key, value=values, dr=dr,
+                                                               force_transform=force_transform)
         return input_dict
 
     @classmethod
@@ -142,10 +116,10 @@ class DRObjects(object):
             self.structure == other.structure and self.attributes == other.attributes
 
     def __lt__(self, other):
-        return isinstance(other, type(self)) and self.id < other.id
+        return self.id < other.id
 
     def __gt__(self, other):
-        return isinstance(other, type(self)) and self.id > other.id
+        return self.id > other.id
 
     def __copy__(self):
         return type(self).__call__(dr=self.dr, DR_type=copy.deepcopy(self.DR_type),
@@ -200,9 +174,7 @@ class DRObjects(object):
         :return: a list of strings that can be assembled to print the content.
         """
         indent = "    " * level
-        DR_type = copy.deepcopy(self.DR_type)
-        DR_type = self.dr.VS.to_singular(DR_type)
-        return [f"{indent}{DR_type}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
+        return [f"{indent}{to_singular(self.DR_type)}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
 
     def filter_on_request(self, request_value):
         """
@@ -211,7 +183,26 @@ class DRObjects(object):
         :return bool, bool: a bool indicating whether the current object can be filtered by the requested one,
                             a bool indicating whether the current object is linked to the request one.
         """
-        return request_value.DR_type == self.DR_type, request_value == self
+        request_type = request_value.DR_type
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = request_value.DR_type == self.DR_type
+            if filtered_found:
+                found = request_value == self
+            else:
+                found = False
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
+
+    @staticmethod
+    def filter_on_request_list(request_values, list_to_check):
+        if not isinstance(request_values, list):
+            request_values = [request_values, ]
+        iter_to_check = iter(list_to_check)
+        found = False
+        while not found and (elt := next(iter_to_check, None)) is not None:
+            found = all(elt.filter_on_request(request_value=request_value)[1] for request_value in request_values)
+        return found
 
 
 class ExperimentsGroup(DRObjects):
@@ -224,8 +215,7 @@ class ExperimentsGroup(DRObjects):
         super().check()
         logger = get_logger()
         if self.count() == 0:
-            logger.critical(
-                f"No experiment defined for {self.DR_type} id {self.id}")
+            logger.critical(f"No experiment defined for {self.DR_type} id {self.id}")
 
     def count(self):
         """
@@ -280,10 +270,16 @@ class ExperimentsGroup(DRObjects):
                                   elements=kwargs)
 
     def filter_on_request(self, request_value):
-        if request_value.DR_type in ["experiments", ]:
-            return True, request_value in self.get_experiments()
-        else:
-            return super().filter_on_request(request_value=request_value)
+        request_type = request_value.DR_type
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            if request_type in ["experiments", ]:
+                filtered_found = True
+                found = request_value in self.get_experiments()
+            else:
+                filtered_found, found = super().filter_on_request(request_value=request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class Variable(DRObjects):
@@ -307,32 +303,38 @@ class Variable(DRObjects):
         :return: a list of strings that can be assembled to print the content.
         """
         indent = "    " * level
-        return [f"{indent}{self.DR_type.rstrip('s')}: {self.physical_parameter.name} at frequency {self.cmip7_frequency.name} (id: {is_link_id_or_value(self.id)[1]}, title: {self.title})", ]
+        return [f"{indent}{self.DR_type.rstrip('s')}: {self.physical_parameter.name} at frequency "
+                f"{self.cmip7_frequency.name} (id: {is_link_id_or_value(self.id)[1]}, title: {self.title})", ]
 
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
-        if request_type in ["table_identifiers", ]:
-            return True, request_value in self.table
-        elif request_type in ["temporal_shape", ]:
-            return True, request_value == self.temporal_shape
-        elif request_type in ["spatial_shape", ]:
-            return True, request_value == self.spatial_shape
-        elif request_type in ["structure", ]:
-            return True, request_value == self.structure_title
-        elif request_type in ["physical_parameters", ]:
-            return True, request_value == self.physical_parameter
-        elif request_type in ["modelling_realm", ]:
-            return True, request_value in self.modelling_realm
-        elif request_type in ["esm-bcv", ]:
-            return True, request_value == self.esm_bcv
-        elif request_type in ["cf_standard_names", ]:
-            return True, request_value == self.cf_standard_name
-        elif request_type in ["cell_methods", ]:
-            return True, request_value == self.cell_methods
-        elif request_type in ["cell_measures", ]:
-            return True, request_value == self.cell_measures
-        else:
-            return super().filter_on_request(request_value)
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = True
+            if request_type in ["table_identifiers", ]:
+                found = request_value == self.table_identifier
+            elif request_type in ["temporal_shapes", ]:
+                found = request_value == self.temporal_shape
+            elif request_type in ["spatial_shapes", ]:
+                found = request_value == self.spatial_shape
+            elif request_type in ["structures", "structure_titles"]:
+                found = request_value in self.structure_title
+            elif request_type in ["physical_parameters", ]:
+                found = request_value == self.physical_parameter
+            elif request_type in ["modelling_realms", ]:
+                found = request_value in self.modelling_realm
+            elif request_type in ["esm-bcvs", ]:
+                found = request_value == self.__getattr__("esm-bcv")
+            elif request_type in ["cf_standard_names", ]:
+                found = request_value == self.physical_parameter.cf_standard_name
+            elif request_type in ["cell_methods", ]:
+                found = request_value == self.cell_methods
+            elif request_type in ["cell_measures", ]:
+                found = request_value in self.cell_measures
+            else:
+                filtered_found, found = super().filter_on_request(request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class VariablesGroup(DRObjects):
@@ -347,8 +349,7 @@ class VariablesGroup(DRObjects):
         super().check()
         logger = get_logger()
         if self.count() == 0:
-            logger.critical(
-                f"No variable defined for {self.DR_type} id {self.id}")
+            logger.critical(f"No variable defined for {self.DR_type} id {self.id}")
 
     @classmethod
     def from_input(cls, dr, id, variables=list(), mips=list(), priority_level="High", **kwargs):
@@ -430,26 +431,37 @@ class VariablesGroup(DRObjects):
 
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
-        if request_type in ["variables", ]:
-            return True, request_value in self.get_variables()
-        elif request_type in ["mips", ]:
-            return True, request_value in self.get_mips()
-        elif request_type in ["priority_level", ]:
-            _, priority = is_link_id_or_value(self.get_priority_level().id)
-            _, req_priority = is_link_id_or_value(request_value.id)
-            return True, req_priority == priority
-        elif request_type in ["table_identifiers", "temporal_shape", "spatial_shape", "structure",
-                              "physical_parameters", "modelling_realm", "esm-bcv", "cf_standard_names", "cell_methods",
-                              "cell_measures"]:
-            return True, any(var.filter_on_request(request_value=request_value)[1] for var in self.get_variables())
-        else:
-            return super().filter_on_request(request_value=request_value)
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = True
+            if request_type in ["variables", ]:
+                found = request_value in self.get_variables()
+            elif request_type in ["mips", ]:
+                found = request_value in self.get_mips()
+            elif request_type in ["max_priority_levels", ]:
+                priority = self.dr.find_element("priority_level", self.get_priority_level().id)
+                req_priority = self.dr.find_element("priority_level", request_value.id)
+                found = priority.value <= req_priority.value
+            elif request_type in ["priority_levels", ]:
+                _, priority = is_link_id_or_value(self.get_priority_level().id)
+                _, req_priority = is_link_id_or_value(request_value.id)
+                found = req_priority == priority
+            elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
+                                  "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
+                                  "cell_measures"]:
+                found = self.filter_on_request_list(request_values=request_value, list_to_check=self.get_variables())
+            else:
+                filtered_found, found = super().filter_on_request(request_value=request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+            if request_type not in ["max_priority_levels", ]:
+                self.dr.cache_filtering[request_type][request_value.id][self.DR_type][self.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class Opportunity(DRObjects):
     def __init__(self, id, dr, DR_type="opportunities",
-                 structure=dict(experiment_groups=list(), variable_groups=list(
-                 ), data_request_themes=list(), time_subsets=list()),
+                 structure=dict(experiment_groups=list(), variable_groups=list(), data_request_themes=list(),
+                                time_subsets=list()),
                  **attributes):
         super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
 
@@ -457,14 +469,11 @@ class Opportunity(DRObjects):
         super().check()
         logger = get_logger()
         if len(self.get_experiment_groups()) == 0:
-            logger.critical(
-                f"No experiments group defined for {self.DR_type} id {self.id}")
+            logger.critical(f"No experiments group defined for {self.DR_type} id {self.id}")
         if len(self.get_variable_groups()) == 0:
-            logger.critical(
-                f"No variables group defined for {self.DR_type} id {self.id}")
+            logger.critical(f"No variables group defined for {self.DR_type} id {self.id}")
         if len(self.get_data_request_themes()) == 0:
-            logger.critical(
-                f"No theme defined for {self.DR_type} id {self.id}")
+            logger.critical(f"No theme defined for {self.DR_type} id {self.id}")
 
     @classmethod
     def from_input(cls, dr, id, experiment_groups=list(), variable_groups=list(), data_request_themes=list(),
@@ -566,53 +575,53 @@ class Opportunity(DRObjects):
             indent = "    " * (level + 1)
             rep.append(f"{indent}Experiments groups included:")
             for experiments_group in self.get_experiment_groups():
-                rep.extend(experiments_group.print_content(
-                    level=level + 2, add_content=False))
+                rep.extend(experiments_group.print_content(level=level + 2, add_content=False))
             rep.append(f"{indent}Variables groups included:")
             for variables_group in self.get_variable_groups():
-                rep.extend(variables_group.print_content(
-                    level=level + 2, add_content=False))
+                rep.extend(variables_group.print_content(level=level + 2, add_content=False))
             rep.append(f"{indent}Themes included:")
             for theme in self.get_data_request_themes():
-                rep.extend(theme.print_content(
-                    level=level + 2, add_content=False))
+                rep.extend(theme.print_content(level=level + 2, add_content=False))
             rep.append(f"{indent}Time subsets included:")
             for time_subset in self.get_time_subsets():
-                rep.extend(time_subset.print_content(
-                    level=level + 2, add_content=False))
+                rep.extend(time_subset.print_content(level=level + 2, add_content=False))
         return rep
 
     def filter_on_request(self, request_value):
         request_type = request_value.DR_type
-        if request_type in ["data_request_themes", ]:
-            return True, request_value in self.get_data_request_themes()
-        elif request_type in ["experiment_groups", ]:
-            return True, request_value in self.get_experiment_groups()
-        elif request_type in ["variable_groups", ]:
-            return True, request_value in self.get_variable_groups()
-        elif request_type in ["time_subset", ]:
-            return True, request_value in self.get_time_subsets()
-        elif request_type in ["mips", ]:
-            return True, request_value in self.get_mips() or \
-                any(var_grp.filter_on_request(request_value=request_value)[1]
-                    for var_grp in self.get_variable_groups())
-        elif request_type in ["variables", "priority_level", "table_identifiers", "temporal_shape",
-                              "spatial_shape", "structure", "physical_parameters", "modelling_realm", "esm-bcv",
-                              "cf_standard_names", "cell_methods", "cell_measures"]:
-            return True, any(var_grp.filter_on_request(request_value=request_value)[1]
-                             for var_grp in self.get_variable_groups())
-        elif request_type in ["experiments", ]:
-            return True, any(exp_grp.filter_on_request(request_value=request_value)[1]
-                             for exp_grp in self.get_experiment_groups())
-        else:
-            return super().filter_on_request(request_value=request_value)
+        filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
+        if filtered_found is None:
+            filtered_found = True
+            if request_type in ["data_request_themes", ]:
+                found = request_value in self.get_data_request_themes()
+            elif request_type in ["experiment_groups", ]:
+                found = request_value in self.get_experiment_groups()
+            elif request_type in ["variable_groups", ]:
+                found = request_value in self.get_variable_groups()
+            elif request_type in ["time_subsets", ]:
+                found = request_value in self.get_time_subsets()
+            elif request_type in ["mips", ]:
+                found = request_value in self.get_mips() or \
+                        self.filter_on_request_list(request_values=request_value,
+                                                    list_to_check=self.get_variable_groups())
+            elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
+                                  "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
+                                  "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
+                found = self.filter_on_request_list(request_values=request_value,
+                                                    list_to_check=self.get_variable_groups())
+            elif request_type in ["experiments", ]:
+                found = self.filter_on_request_list(request_values=request_value,
+                                                    list_to_check=self.get_experiment_groups())
+            else:
+                filtered_found, found = super().filter_on_request(request_value=request_value)
+            self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
+        return filtered_found, found
 
 
 class DataRequest(object):
     """
     Data Request API object used to navigate among the Data Request and Vocabulary Server contents.
     """
-
     def __init__(self, input_database, VS, **kwargs):
         """
         Initialisation of the Data Request object
@@ -626,8 +635,10 @@ class DataRequest(object):
         self.mapping = defaultdict(lambda: defaultdict(lambda: dict))
         self.content = defaultdict(lambda: defaultdict(lambda: dict))
         for op in input_database["opportunities"]:
-            self.content["opportunities"][op] = self.find_element(
-                "opportunities", op)
+            self.content["opportunities"][op] = self.find_element("opportunities", op)
+        self.cache = dict()
+        self.cache_filtering = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: (None, None)))))
+        self.filtering_structure = read_json_file(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "filtering.json"]))["definition"]
 
     def check(self):
         """
@@ -701,8 +712,7 @@ class DataRequest(object):
         :param dict kwargs: additional parameters
         :return DataRequest: instance of the DataRequest object.
         """
-        DR_content, VS_content = cls._split_content_from_input_json(
-            json_input, version=version)
+        DR_content, VS_content = cls._split_content_from_input_json(json_input, version=version)
         VS = VocabularyServer(VS_content)
         return cls(input_database=DR_content, VS=VS, **kwargs)
 
@@ -721,19 +731,15 @@ class DataRequest(object):
         elif isinstance(DR_input, dict):
             DR = copy.deepcopy(DR_input)
         else:
-            logger.error(
-                "DR_input should be either the name of a json file or a dictionary.")
-            raise TypeError(
-                "DR_input should be either the name of a json file or a dictionary.")
+            logger.error("DR_input should be either the name of a json file or a dictionary.")
+            raise TypeError("DR_input should be either the name of a json file or a dictionary.")
         if isinstance(VS_input, str) and os.path.isfile(VS_input):
             VS = VocabularyServer.from_input(VS_input)
         elif isinstance(VS_input, dict):
             VS = VocabularyServer(copy.deepcopy(VS_input))
         else:
-            logger.error(
-                "VS_input should be either the name of a json file or a dictionary.")
-            raise TypeError(
-                "VS_input should be either the name of a json file or a dictionary.")
+            logger.error("VS_input should be either the name of a json file or a dictionary.")
+            raise TypeError("VS_input should be either the name of a json file or a dictionary.")
         return cls(input_database=DR, VS=VS, **kwargs)
 
     @staticmethod
@@ -746,19 +752,15 @@ class DataRequest(object):
         """
         logger = get_logger()
         if not isinstance(version, str):
-            logger.error(
-                f"Version should be a string, not {type(version).__name__}.")
-            raise TypeError(
-                f"Version should be a string, not {type(version).__name__}.")
+            logger.error(f"Version should be a string, not {type(version).__name__}.")
+            raise TypeError(f"Version should be a string, not {type(version).__name__}.")
         if isinstance(input_json, str) and os.path.isfile(input_json):
             content = read_json_file(input_json)
         elif isinstance(input_json, dict):
             content = input_json
         else:
-            logger.error(
-                "input_json should be either the name of a json file or a dictionary.")
-            raise TypeError(
-                "input_json should be either the name of a json file or a dictionary.")
+            logger.error("input_json should be either the name of a json file or a dictionary.")
+            raise TypeError("input_json should be either the name of a json file or a dictionary.")
         DR, VS = transform_content(content, version=version)
         return DR, VS
 
@@ -790,13 +792,21 @@ class DataRequest(object):
         for elt in self.get_opportunities():
             rep.extend(elt.print_content(level=2))
         return os.linesep.join(rep)
+<<<<<<< HEAD
+=======
+
+    def _get_sorted_list(self, list_id):
+        if self.cache.get(list_id) is None:
+            self.cache[list_id] = [self.content[list_id][key] for key in sorted(list(self.content[list_id]))]
+        return self.cache[list_id]
+>>>>>>> 1701445 (API optimization (#73))
 
     def get_experiment_groups(self):
         """
         Get the ExperimentsGroup of the Data Request.
         :return list of ExperimentsGroup: list of the ExperimentsGroup of the DR content.
         """
-        return [self.content["experiment_groups"][key] for key in sorted(list(self.content["experiment_groups"]))]
+        return self._get_sorted_list("experiment_groups")
 
     def get_experiment_group(self, id):
         """
@@ -808,15 +818,14 @@ class DataRequest(object):
         if rep is not None:
             return rep
         else:
-            raise ValueError(
-                f"Could not find experiments group {id} among {self.get_experiment_groups()}.")
+            raise ValueError(f"Could not find experiments group {id} among {self.get_experiment_groups()}.")
 
     def get_variable_groups(self):
         """
         Get the VariablesGroup of the Data Request.
         :return list of VariablesGroup: list of the VariablesGroup of the DR content.
         """
-        return [self.content["variable_groups"][key] for key in sorted(list(self.content["variable_groups"]))]
+        return self._get_sorted_list("variable_groups")
 
     def get_variable_group(self, id):
         """
@@ -846,7 +855,7 @@ class DataRequest(object):
         Get the Opportunity of the Data Request.
         :return list of Opportunity: list of the Opportunity of the DR content.
         """
-        return [self.content["opportunities"][key] for key in sorted(list(self.content["opportunities"]))]
+        return self._get_sorted_list("opportunities")
 
     def get_opportunity(self, id):
         """
@@ -876,46 +885,59 @@ class DataRequest(object):
         Get the Variable of the Data Request.
         :return list of Variable: list of the Variable of the DR content.
         """
-        rep = set()
-        for var_grp in self.get_variable_groups():
-            rep = rep | set(var_grp.get_variables())
-        rep = sorted(list(rep))
-        return rep
+        if self.cache.get("variables") is None:
+            rep = set()
+            for var_grp in self.get_variable_groups():
+                rep = rep | set(var_grp.get_variables())
+            self.cache["variables"] = sorted(list(rep))
+        return self.cache["variables"]
 
     def get_mips(self):
         """
         Get the MIPs of the Data Request.
         :return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.
         """
-        rep = set()
-        for op in self.get_opportunities():
-            rep = rep | set(op.get_mips())
-        for var_grp in self.get_variable_groups():
-            rep = rep | set(var_grp.get_mips())
-        rep = sorted(list(rep))
-        return rep
+        if self.cache.get("mips") is None:
+            rep = set()
+            for op in self.get_opportunities():
+                rep = rep | set(op.get_mips())
+            for var_grp in self.get_variable_groups():
+                rep = rep | set(var_grp.get_mips())
+            self.cache["mips"] = sorted(list(rep))
+        return self.cache["mips"]
 
     def get_experiments(self):
         """
         Get the experiments of the Data Request.
         :return list of DRObject: list of the experiments of the DR content.
         """
-        rep = set()
-        for exp_grp in self.get_experiment_groups():
-            rep = rep | set(exp_grp.get_experiments())
-        rep = sorted(list(rep))
-        return rep
+        if self.cache.get("experiments") is None:
+            rep = set()
+            for exp_grp in self.get_experiment_groups():
+                rep = rep | set(exp_grp.get_experiments())
+            self.cache["experiments"] = sorted(list(rep))
+        return self.cache["experiments"]
 
     def get_data_request_themes(self):
         """
         Get the themes of the Data Request.
         :return list of DRObject: list of the themes of the DR content.
         """
-        rep = set()
-        for op in self.get_opportunities():
-            rep = rep | set(op.get_themes())
-        rep = sorted(list(rep))
-        return rep
+        if self.cache.get("data_request_themes") is None:
+            rep = set()
+            for op in self.get_opportunities():
+                rep = rep | set(op.get_themes())
+            self.cache["data_request_themes"] = sorted(list(rep))
+        return self.cache["data_request_themes"]
+
+    def find_priority_per_variable(self, variable, **filter_request):
+        logger = get_logger()
+        priorities = self.filter_elements_per_request(elements_to_filter="priority_level",
+                                                      requests={"variable": variable, **filter_request})
+        logger.debug(f"Priorities found: {priorities} ({[int(priority.value) for priority in priorities]})")
+        priority = min(int(priority.value) for priority in priorities)
+        logger.debug(f"Priority_retain {priority}")
+        return priority
 
     def find_variables_per_priority(self, priority):
         """
@@ -923,7 +945,8 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str priority: priority to be considered
         :return list of Variable: list of the variables which have a specified priority.
         """
-        return self.filter_elements_per_request(element_type="variables", requests=dict(priority_level=[priority, ]))
+        return self.filter_elements_per_request(elements_to_filter="variables",
+                                                requests=dict(priority_level=[priority, ]))
 
     def find_opportunities_per_theme(self, theme):
         """
@@ -931,7 +954,8 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str theme: theme to be considered
         :return list of Opportunity: list of the opportunities which are linked to a specified theme.
         """
-        return self.filter_elements_per_request(element_type="opportunities", requests=dict(data_request_themes=[theme, ]))
+        return self.filter_elements_per_request(elements_to_filter="opportunities",
+                                                requests=dict(data_request_themes=[theme, ]))
 
     def find_experiments_per_theme(self, theme):
         """
@@ -939,7 +963,8 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str theme: theme to be considered
         :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.
         """
-        return self.filter_elements_per_request(element_type="experiments", requests=dict(data_request_themes=[theme, ]))
+        return self.filter_elements_per_request(elements_to_filter="experiments",
+                                                requests=dict(data_request_themes=[theme, ]))
 
     def find_variables_per_theme(self, theme):
         """
@@ -947,7 +972,8 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str theme: theme to be considered
         :return list of Variable: list of the variables which are linked to a specified theme.
         """
-        return self.filter_elements_per_request(element_type="variables", requests=dict(data_request_themes=[theme, ]))
+        return self.filter_elements_per_request(elements_to_filter="variables",
+                                                requests=dict(data_request_themes=[theme, ]))
 
     def find_mips_per_theme(self, theme):
         """
@@ -955,7 +981,7 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str theme: theme to be considered
         :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.
         """
-        return self.filter_elements_per_request(element_type="mips", requests=dict(data_request_themes=[theme, ]))
+        return self.filter_elements_per_request(elements_to_filter="mips", requests=dict(data_request_themes=[theme, ]))
 
     def find_themes_per_opportunity(self, opportunity):
         """
@@ -963,15 +989,18 @@ class DataRequest(object):
         :param Opportunity or str opportunity: opportunity to be considered
         :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.
         """
-        return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(opportunities=[opportunity, ]))
+        return self.filter_elements_per_request(elements_to_filter="data_request_themes",
+                                                requests=dict(opportunities=[opportunity, ]))
 
     def find_experiments_per_opportunity(self, opportunity):
         """
         Find all the experiments which are linked to a specified opportunity.
         :param Opportunity or str opportunity: opportunity to be considered
-        :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified opportunity.
+        :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified
+                opportunity.
         """
-        return self.filter_elements_per_request(element_type="experiments", requests=dict(opportunities=[opportunity, ]))
+        return self.filter_elements_per_request(elements_to_filter="experiments",
+                                                requests=dict(opportunities=[opportunity, ]))
 
     def find_variables_per_opportunity(self, opportunity):
         """
@@ -979,7 +1008,8 @@ class DataRequest(object):
         :param Opportunity or str opportunity: opportunity to be considered
         :return list of Variable: list of the variables which are linked to a specified opportunity.
         """
-        return self.filter_elements_per_request(element_type="variables", requests=dict(opportunities=[opportunity, ]))
+        return self.filter_elements_per_request(elements_to_filter="variables",
+                                                requests=dict(opportunities=[opportunity, ]))
 
     def find_mips_per_opportunity(self, opportunity):
         """
@@ -987,7 +1017,7 @@ class DataRequest(object):
         :param Opportunity or str opportunity: opportunity to be considered
         :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.
         """
-        return self.filter_elements_per_request(element_type="mips", requests=dict(opportunities=[opportunity, ]))
+        return self.filter_elements_per_request(elements_to_filter="mips", requests=dict(opportunities=[opportunity, ]))
 
     def find_opportunities_per_variable(self, variable):
         """
@@ -995,7 +1025,8 @@ class DataRequest(object):
         :param Variable or str variable: variable to be considered
         :return list of Opportunity: list of the opportunities which are linked to a specified variable.
         """
-        return self.filter_elements_per_request(element_type="opportunities", requests=dict(variables=[variable, ]))
+        return self.filter_elements_per_request(elements_to_filter="opportunities",
+                                                requests=dict(variables=[variable, ]))
 
     def find_themes_per_variable(self, variable):
         """
@@ -1003,7 +1034,8 @@ class DataRequest(object):
         :param Variable or str variable: variable to be considered
         :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.
         """
-        return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(variables=[variable, ]))
+        return self.filter_elements_per_request(elements_to_filter="data_request_themes",
+                                                requests=dict(variables=[variable, ]))
 
     def find_mips_per_variable(self, variable):
         """
@@ -1011,7 +1043,7 @@ class DataRequest(object):
         :param Variable or str variable: variable to be considered
         :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.
         """
-        return self.filter_elements_per_request(element_type="mips", requests=dict(variables=[variable, ]))
+        return self.filter_elements_per_request(elements_to_filter="mips", requests=dict(variables=[variable, ]))
 
     def find_opportunities_per_experiment(self, experiment):
         """
@@ -1019,7 +1051,8 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
         :return list of Opportunity: list of the opportunities which are linked to a specified experiment.
         """
-        return self.filter_elements_per_request(element_type="opportunities", requests=dict(experiments=[experiment, ]))
+        return self.filter_elements_per_request(elements_to_filter="opportunities",
+                                                requests=dict(experiments=[experiment, ]))
 
     def find_themes_per_experiment(self, experiment):
         """
@@ -1027,7 +1060,8 @@ class DataRequest(object):
         :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
         :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.
         """
-        return self.filter_elements_per_request(element_type="data_request_themes", requests=dict(experiments=[experiment, ]))
+        return self.filter_elements_per_request(elements_to_filter="data_request_themes",
+                                                requests=dict(experiments=[experiment, ]))
 
     def find_element_per_identifier_from_vs(self, element_type, key, value, default=False, **kwargs):
         """
@@ -1037,30 +1071,33 @@ class DataRequest(object):
         :param str value: value to be looked for
         :param default: default value to be used if the value is not found
         :param dict kwargs: additional attributes to be used for vocabulary server search.
-        :return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or default: the element found from vocabulary server or the default value if none is found.
+        :return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or
+                default: the element found from vocabulary server or the default value if none is found.
         """
         if key in ["id", ]:
             value = build_link_from_id(value)
-        rep = self.VS.get_element(
-            element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
-        if rep not in [default, ]:
+        init_element_type = to_plural(element_type)
+        element_type = self.VS.get_element_type(element_type)
+        rep = self.VS.get_element(element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
+        if rep in [value, ]:
+            rep = default
+        elif rep not in [default, ]:
+            structure = self.structure.get(element_type, dict()).get(rep["id"], dict())
             if element_type in ["opportunities", ]:
-                rep = Opportunity.from_input(dr=self, **rep,
-                                             **self.structure.get("opportunities", dict()).get(rep["id"], dict()))
+                rep = Opportunity.from_input(dr=self, **rep, **structure)
             elif element_type in ["variable_groups", ]:
-                rep = VariablesGroup.from_input(dr=self, **rep,
-                                                **self.structure.get("variable_groups", dict()).get(rep["id"], dict()))
+                rep = VariablesGroup.from_input(dr=self, **rep, **structure)
             elif element_type in ["experiment_groups", ]:
-                rep = ExperimentsGroup.from_input(dr=self, **rep,
-                                                  **self.structure.get("experiment_groups", dict()).get(rep["id"], dict()))
+                rep = ExperimentsGroup.from_input(dr=self, **rep, **structure)
             elif element_type in ["variables", ]:
                 rep = Variable.from_input(dr=self, **rep)
+            elif init_element_type in ["max_priority_levels", ]:
+                rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=init_element_type, elements=rep)
             else:
-                rep = DRObjects.from_input(
-                    dr=self, id=rep["id"], DR_type=element_type, elements=rep)
+                rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=element_type, elements=rep)
         return rep
 
-    def find_element_from_vs(self, element_type, value, default=False):
+    def find_element_from_vs(self, element_type, value,key="name", default=False):
         """
         Find an element of a specific type and specified by a value from vocabulary server.
         Update the content and mapping list not to have to ask the vocabulary server again for it.
@@ -1069,19 +1106,21 @@ class DataRequest(object):
         :param default: default value to be returned if no value found
         :return: element corresponding to the specified value of a given type if found, else the default value
         """
-        rep = self.find_element_per_identifier_from_vs(
-            element_type=element_type, value=value, key="id", default=None)
-        if rep is not None:
-            self.content[element_type][rep.id] = rep
+        if key in ["id", ]:
+            init_default = default
         else:
-            rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="name",
+            init_default = None
+        rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id",
+                                                       default=init_default)
+        if rep is None and key not in ["id", ]:
+            rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=key,
                                                            default=default)
-            if rep not in [default, ]:
-                self.content[element_type][rep.id] = rep
-                self.mapping[element_type][rep.name] = rep
+        if rep not in [default, ]:
+            self.content[element_type][rep.id] = rep
+            self.mapping[element_type][rep.name] = rep
         return rep
 
-    def find_element(self, element_type, value, default=False):
+    def find_element(self, element_type, value, default=False, key="name"):
         """
         Find an element of a specific type and specified by a value from mapping/content if existing,
          else from vocabulary server.
@@ -1090,12 +1129,13 @@ class DataRequest(object):
         :param default: value to be returned if non found
         :return: the found element if existing, else the default value
         """
-        if value in self.content[element_type]:
-            return self.content[element_type][value]
-        elif value in self.mapping[element_type]:
-            return self.mapping[element_type][value]
+        check_val = is_link_id_or_value(value)[1]
+        if check_val in self.content[element_type]:
+            return self.content[element_type][check_val]
+        elif check_val in self.mapping[element_type]:
+            return self.mapping[element_type][check_val]
         else:
-            return self.find_element_from_vs(element_type=element_type, value=value, default=default)
+            return self.find_element_from_vs(element_type=element_type, value=value, default=default, key=key)
 
     def get_elements_per_kind(self, element_type):
         """
@@ -1104,26 +1144,28 @@ class DataRequest(object):
         :return list: the list of elements of kind element_type
         """
         logger = get_logger()
-        if element_type in ["opportunities", ]:
+        element_types = to_plural(element_type)
+        if element_types in ["opportunities", ]:
             elements = self.get_opportunities()
-        elif element_type in ["experiment_groups", ]:
+        elif element_types in ["experiment_groups", ]:
             elements = self.get_experiment_groups()
-        elif element_type in ["variable_groups", ]:
+        elif element_types in ["variable_groups", ]:
             elements = self.get_variable_groups()
-        elif element_type in ["variables", ]:
+        elif element_types in ["variables", ]:
             elements = self.get_variables()
-        elif element_type in ["experiments", ]:
+        elif element_types in ["experiments", ]:
             elements = self.get_experiments()
-        elif element_type in ["data_request_themes", ]:
+        elif element_types in ["data_request_themes", ]:
             elements = self.get_data_request_themes()
-        elif element_type in ["mips", ]:
+        elif element_types in ["mips", ]:
             elements = self.get_mips()
+        elif element_types in self.cache:
+            elements = sorted(self.cache[element_types])
         else:
-            logger.debug("Find elements list from vocabulary server.")
-            element_type, elements_ids = self.VS.get_element_type_ids(
-                element_type)
-            elements = [self.find_element(element_type, id)
-                        for id in elements_ids]
+            logger.debug(f"Find elements list of kind {element_type} from vocabulary server.")
+            element_type, elements_ids = self.VS.get_element_type_ids(element_type)
+            elements = [self.find_element(element_type, id) for id in elements_ids]
+            self.cache[element_types] = elements
         return elements
 
     @staticmethod
@@ -1133,8 +1175,9 @@ class DataRequest(object):
         :param filtering_elt_1: first element for filtering
         :param filtering_elt_2: second element for filtering
         :param list list_to_filter: list of elements to be filtered
-        :return bool, bool: a boolean to tell if it relevant to filter list_to_filter by filtering_elt_1 and filtering_elt_2,
-                            a boolean to tell, if relevant, if filtering_elt_1 and filtering_elt_2 are linked to list_to_filter
+        :return bool, bool: a boolean to tell if it relevant to filter list_to_filter by filtering_elt_1 and
+                            filtering_elt_2, a boolean to tell, if relevant, if filtering_elt_1 and filtering_elt_2 are
+                             linked to list_to_filter
         """
         elt = list_to_filter[0]
         filtered_found_1, found_1 = elt.filter_on_request(filtering_elt_1)
@@ -1142,24 +1185,34 @@ class DataRequest(object):
         filtered_found = filtered_found_1 and filtered_found_2
         found = found_1 and found_2
         if filtered_found and not found:
-            found = any([elt.filter_on_request(filtering_elt_1)[1] and
-                         elt.filter_on_request(filtering_elt_2)[1]
-                         for elt in list_to_filter])
+            found = elt.filter_on_request_list(request_values=[filtering_elt_1, filtering_elt_2],
+                                               list_to_check=list_to_filter[1:])
         return filtered_found, found
 
-    def filter_elements_per_request(self, element_type, requests=dict(), operation="all", skip_if_missing=False):
+    def get_filtering_structure(self, DR_type):
+        rep = set(self.filtering_structure.get(DR_type, list()))
+        tmp_rep = copy.deepcopy(rep)
+        while len(tmp_rep) > 0:
+            rep = rep | tmp_rep
+            to_add = set()
+            for elt in tmp_rep:
+                to_add = to_add | set(self.filtering_structure.get(elt, list()))
+            tmp_rep, to_add = to_add, set()
+        return rep
+
+    def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation="all", skip_if_missing=False):
         """
         Filter the elements of kind element_type with a dictionary of requests.
-        :param str element_type: kind of elements to be filtered
+        :param str or list od DRObjects elements_to_filter: kind of elements to be filtered
         :param dict requests: dictionary of the filters to be applied
         :param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
-        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
         :return: list of elements of kind element_type which correspond to the filtering requests
         """
         logger = get_logger()
         if operation not in ["any", "all"]:
-            raise ValueError(
-                f"Operation does not accept {operation} as value: choose among 'any' (match at least one requirement) and 'all' (match all requirements)")
+            raise ValueError(f"Operation does not accept {operation} as value: choose among 'any' (match at least one"
+                             f" requirement) and 'all' (match all requirements)")
         else:
             # Prepare the request dictionary
             request_dict = defaultdict(list)
@@ -1167,50 +1220,64 @@ class DataRequest(object):
                 if not isinstance(values, list):
                     values = [values, ]
                 for val in values:
-                    if isinstance(val, str):
-                        new_val = self.find_element(
-                            element_type=req, value=val, default=None)
+                    if not isinstance(val, DRObjects):
+                        new_val = self.find_element(element_type=req, value=val, default=None)
                     else:
                         new_val = val
                     if new_val is not None:
-                        request_dict[req].append(new_val)
+                        request_dict[new_val.DR_type].append(new_val)
                     elif skip_if_missing:
-                        logger.warning(
-                            f"Could not find value {val} for element type {req}, skip it.")
+                        logger.warning(f"Could not find value {val} for element type {req}, skip it.")
                     else:
-                        logger.error(
-                            f"Could not find value {val} for element type {req}.")
-                        raise ValueError(
-                            f"Could not find value {val} for element type {req}.")
+                        logger.error(f"Could not find value {val} for element type {req}.")
+                        raise ValueError(f"Could not find value {val} for element type {req}.")
             # Get elements corresponding to element_type
-            elements = self.get_elements_per_kind(element_type)
+            if isinstance(elements_to_filter, str):
+                elements = self.get_elements_per_kind(elements_to_filter)
+            else:
+                if not isinstance(elements_to_filter, list):
+                    elements = [elements_to_filter, ]
+                else:
+                    elements = elements_to_filter
+                elements_to_filter = elements[0].DR_type
             # Filter elements
             rep = defaultdict(lambda: defaultdict(set))
+            elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
             for (request, values) in request_dict.items():
-                for val in values:
-                    for elt in elements:
-                        filtered_found, found = elt.filter_on_request(val)
-                        if not filtered_found:
+                request_filtering_structure = self.get_filtering_structure(request)
+                common_filtering_structure = request_filtering_structure & elements_filtering_structure
+                filtered_found = True
+                iter_values = iter(values)
+                iter_elements = iter(elements)
+                if elements_to_filter in request_filtering_structure | {request}:
+                    while filtered_found and (val := next(iter_values, None)) is not None:
+                        while filtered_found and (elt := next(iter_elements, None)) is not None:
+                            filtered_found, found = elt.filter_on_request(val)
+                            if found:
+                                rep[request][val.id].add(elt)
+                elif request in elements_filtering_structure:
+                    while filtered_found and (val := next(iter_values, None)) is not None:
+                        while filtered_found and (elt := next(iter_elements, None)) is not None:
                             filtered_found, found = val.filter_on_request(elt)
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(
-                                val, elt, self.get_experiment_groups())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(
-                                val, elt, self.get_variables())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(
-                                val, elt, self.get_variable_groups())
-                        if not filtered_found:
-                            filtered_found, found = self._two_elements_filtering(
-                                val, elt, self.get_opportunities())
-                        if not filtered_found:
-                            logger.error(
-                                f"Could not filter {element_type} by {request}")
-                            raise ValueError(
-                                f"Could not filter {element_type} by {request}")
-                        if found:
-                            rep[request][val.id].add(elt)
+                            if found:
+                                rep[request][val.id].add(elt)
+                else:
+                    if "experiment_groups" in common_filtering_structure:
+                        list_to_filter = self.get_experiment_groups()
+                    elif "variables" in common_filtering_structure:
+                        list_to_filter = self.get_variables()
+                    elif "variable_groups" in common_filtering_structure:
+                        list_to_filter = self.get_variable_groups()
+                    else:
+                        list_to_filter = self.get_opportunities()
+                    while filtered_found and (val := next(iter_values, None)) is not None:
+                        while filtered_found and (elt := next(iter_elements, None)) is not None:
+                            filtered_found, found = self._two_elements_filtering(val, elt, list_to_filter)
+                            if found:
+                                rep[request][val.id].add(elt)
+                if not filtered_found:
+                   logger.error(f"Could not filter {elements_to_filter} by {request}")
+                   raise ValueError(f"Could not filter {elements_to_filter} by {request}")
             if len(rep) == 0:
                 rep_list = set(elements)
             elif operation in ["any", ]:
@@ -1224,8 +1291,7 @@ class DataRequest(object):
                     for val in rep[req]:
                         rep_list = rep_list & rep[req][val]
             else:
-                raise ValueError(
-                    f"Unknown value {operation} for operation (only 'all' and 'any' are available).")
+                raise ValueError(f"Unknown value {operation} for operation (only 'all' and 'any' are available).")
             rep_list = sorted(list(rep_list))
             return rep_list
 
@@ -1233,34 +1299,34 @@ class DataRequest(object):
         """
         Find the opportunities corresponding to filtering criteria.
         :param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
-        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
         :param dict kwargs: filters to be applied
         :return list of Opportunity: opportunities linked to the filters
         """
-        return self.filter_elements_per_request(element_type="opportunities", operation=operation,
-                                                skip_if_missing=skip_if_missing, requests=kwargs)
+        return self.filter_elements_per_request(elements_to_filter="opportunities", requests=kwargs,
+                                                operation=operation, skip_if_missing=skip_if_missing)
 
     def find_experiments(self, operation="any", skip_if_missing=False, **kwargs):
         """
         Find the experiments corresponding to filtering criteria.
         :param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
-        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
         :param dict kwargs: filters to be applied
         :return list of DRObjects: experiments linked to the filters
         """
-        return self.filter_elements_per_request(element_type="experiments", operation=operation,
-                                                skip_if_missing=skip_if_missing, requests=kwargs)
+        return self.filter_elements_per_request(elements_to_filter="experiments", requests=kwargs, operation=operation,
+                                                skip_if_missing=skip_if_missing)
 
     def find_variables(self, operation="any", skip_if_missing=False, **kwargs):
         """
         Find the variables corresponding to filtering criteria.
         :param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
-        :param bool skip_if_missing: if a request filter is not found, should it be skipped or should an error be raised?
+        :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
         :param dict kwargs: filters to be applied
         :return list of Variable: variables linked to the filters
         """
-        return self.filter_elements_per_request(element_type="variables", operation=operation,
-                                                skip_if_missing=skip_if_missing, requests=kwargs)
+        return self.filter_elements_per_request(elements_to_filter="variables", requests=kwargs, operation=operation,
+                                                skip_if_missing=skip_if_missing)
 
     def sort_func(self, data_list, sorting_request=list()):
         """
@@ -1279,8 +1345,7 @@ class DataRequest(object):
                 sorting_values_dict[data.get(sorting_val)].append(data)
             rep = list()
             for elt in sorted(list(sorting_values_dict)):
-                rep.extend(self.sort_func(
-                    sorting_values_dict[elt], sorting_request))
+                rep.extend(self.sort_func(sorting_values_dict[elt], sorting_request))
             return rep
 
     def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation="all",
@@ -1291,13 +1356,14 @@ class DataRequest(object):
         :param str output_file: name of the output faile (csv)
         :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
         :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
-        :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+        :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
+                                               main_data kind
         :param list export_columns_request: columns to be putted in the output file
         :param list sorting_request: sorting criteria to be applied
         :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
         :return: an output csv file
         """
-        filtered_data = self.filter_elements_per_request(element_type=main_data, requests=filtering_requests,
+        filtered_data = self.filter_elements_per_request(elements_to_filter=main_data, requests=filtering_requests,
                                                          operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
         sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
@@ -1306,8 +1372,7 @@ class DataRequest(object):
         content = list()
         content.append(export_columns_request)
         for data in sorted_filtered_data:
-            content.append([str(data.__getattr__(key))
-                           for key in export_columns_request])
+            content.append([str(data.__getattr__(key)) for key in export_columns_request])
 
         write_csv_output_file_content(output_file, content, **kwargs)
         write_csv_output_file_content(output_file, content, **kwargs)
@@ -1326,50 +1391,51 @@ class DataRequest(object):
         :param str title_column: attribute to be used for range header
         :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
         :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
-        :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of main_data kind
+        :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
+                                               main_data kind
         :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
         :return: a csv output file
         """
         logger = get_logger()
         logger.debug(f"Generate summary for {lines_data}/{columns_data}")
-        filtered_data = self.filter_elements_per_request(element_type=lines_data, requests=filtering_requests,
+        filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
                                                          operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
-        sorted_filtered_data = self.sort_func(
-            filtered_data, sorting_request=[sorting_line, ])
-        columns_datasets = self.filter_elements_per_request(
-            element_type=columns_data)
-        columns_datasets = self.sort_func(
-            columns_datasets, sorting_request=[sorting_column, ])
-        columns_title = [str(elt.__getattr__(title_column))
-                         for elt in columns_datasets]
+        sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
+        columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
+        columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
+        columns_title_list = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
+        columns_title_dict = {elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
         table_title = f"{lines_data} {title_line} / {columns_data} {title_column}"
+        lines_title_list = [elt.__getattr__(title_line) for elt in sorted_filtered_data]
+        lines_title_dict = {elt.id: title for (elt, title) in zip(sorted_filtered_data, lines_title_list)}
 
         nb_lines = len(sorted_filtered_data)
         logger.debug(f"{nb_lines} elements found for {lines_data}")
-        logger.debug(f"{len(columns_title)} found elements for {columns_data}")
+        logger.debug(f"{len(columns_title_list)} found elements for {columns_data}")
 
         logger.debug("Generate summary")
-        content = defaultdict(list)
-        for (i, data) in enumerate(columns_datasets):
-            logger.debug(f"Deal with column {i}/{len(columns_title)}")
-            filter_line_datasets = self.filter_elements_per_request(element_type=lines_data,
-                                                                    requests={
-                                                                        data.DR_type: data},
-                                                                    operation="all")
-            for line_data in filtered_data:
-                line_data_title = line_data.__getattr__(title_line)
-                if line_data in filter_line_datasets:
-                    content[line_data_title].append("x")
-                else:
-                    content[line_data_title].append("")
+        content = defaultdict(lambda: dict())
+        if len(columns_title_list) > len(lines_title_list):
+            DR_type = columns_datasets[0].DR_type
+            for (column_data, column_title) in zip(columns_datasets, columns_title_list):
+                filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
+                                                                        requests={DR_type: column_data}, operation="all")
+                for line in filter_line_datasets:
+                    content[lines_title_dict[line.id]][column_title] = "x"
+        else:
+            DR_type = sorted_filtered_data[0].DR_type
+            for (line_data, line_title) in zip(sorted_filtered_data, lines_title_list):
+                filtered_columns = self.filter_elements_per_request(elements_to_filter=columns_datasets,
+                                                                    requests={DR_type: line_data}, operation="all")
+                content[line_title] = {columns_title_dict[elt.id]: "x" for elt in filtered_columns}
 
         logger.debug("Format summary")
         rep = list()
-        rep.append([table_title, ] + columns_title)
-        for line_data in filtered_data:
-            line_data_title = line_data.__getattr__(title_line)
-            rep.append([line_data_title, ] + content[line_data_title])
+        rep.append([table_title, ] + columns_title_list)
+        for line_data_title in lines_title_list:
+            rep.append([line_data_title, ] +
+                       [content[line_data_title].get(column_title, "") for column_title in columns_title_list])
 
         logger.debug("Write summary")
         write_csv_output_file_content(output_file, rep, **kwargs)
