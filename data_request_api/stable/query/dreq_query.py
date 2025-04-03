@@ -17,11 +17,14 @@ from data_request_api.stable.query.dreq_classes import (
     DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
 from data_request_api.stable.utilities.tools import write_csv_output_file_content
 
+# Version of software (python API):
+from data_request_api import version as api_version
+
 # Version of data request content:
 DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
 
-# Version of software (python API):
-from data_request_api import version as api_version
+# Which compound name field from the database (airtable export) to use as the "compound name" that uniquely identifies a variable
+USE_COMPOUND_NAME = 'cmip6_compound_name'
 
 ###############################################################################
 # Functions to manage data request content input and use it to create python
@@ -193,6 +196,12 @@ def create_dreq_tables_for_request(content, consolidated=True):
         # This check is here because if something changes upstream in Airtable, it might cause
         # the above code to erroneously remove all opportunities.
         raise Exception(' * ERROR *    All Opportunities were removed!')
+
+    if USE_COMPOUND_NAME != 'compound_name':
+        table_name = 'Variables'
+        for rec in base[table_name].records.values():
+            assert not hasattr(rec, 'compound_name')
+            rec.compound_name = getattr(rec, USE_COMPOUND_NAME)
 
     return base
 
@@ -572,11 +581,18 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
         for expt_name, expt_req in requested_vars['experiment'].items():
             assert 'Core' in expt_req, 'Missing Core variables for experiment: ' + expt_name
             vars = set(expt_req['Core'])
-            assert len(vars) > 0, 'Empty Core variables list for experiment: ' + expt_name
+            if len(vars) == 0:
+                msg = 'Empty Core variables list for experiment: ' + expt_name
+                raise ValueError(msg)
+
             if len(core_vars) == 0:
                 core_vars = vars
-            assert vars == core_vars, 'Inconsistent Core variables for experiment: ' + expt_name
- 
+
+            if vars != core_vars:
+                msg = 'Inconsistent Core variables for experiment: ' + expt_name + \
+                    f'\n{len(core_vars)} {len(vars)} {len(core_vars.intersection(vars))}'
+                raise ValueError(msg)
+
     return requested_vars
 
 
