@@ -145,8 +145,8 @@ def transform_content_three_bases(content):
             content_str = re.sub(
                 f'"{id}"', f'"{new_variables_ids[old_variables_ids[id]]}"', content_str)
         for id in sorted(list(old_physical_parameters_ids)):
-            content_str = re.sub(f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"',
-                                 content_str)
+            content_str = re.sub(
+                f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"', content_str)
         new_content = json.loads(content_str)
         # Return the content
         return {"Data Request": new_content}
@@ -379,8 +379,9 @@ def transform_content_one_base(content):
             esm_bcv = esm_bcv[0]
             content["esm-bcv"] = content.pop(esm_bcv)
         for (key, new_key) in [("opportunity", "opportunities"), ("experiment_group", "experiment_groups"),
-                               ("variable_group", "variable_groups"), ("structure", "structure_title"),
-                               ("time_slice", "time_subsets"), ('time_subset', 'time_subsets')]:
+                               ("variable_group", "variable_groups"), ("structure",
+                                                                       "structure_title"),
+                               ("time_slice", "time_subset")]:
             if key in content:
                 content[new_key] = content.pop(key)
                 content[new_key] = content.pop(key)
@@ -441,8 +442,9 @@ def transform_content_one_base(content):
             "mips": [('mip_short_name', "name")],
             "modelling_realm": [("id", "uid")],
             "opportunities": [("title_of_opportunity", "name"), ("comments", "opportunity/variable_group_comments"),
-                              ("ensemble_size", "minimum_ensemble_size"), ("themes", "data_request_themes"),
-                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subsets")],
+                              ("ensemble_size", "minimum_ensemble_size"), ("themes",
+                                                                           "data_request_themes"),
+                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subset")],
             "physical_parameters": [("comments", "physical_parameter_comments"),
                                     ("cf_proposal_github_issue",
                                      "proposal_github_issue"),
@@ -459,6 +461,7 @@ def transform_content_one_base(content):
                           ("table", "table_identifier")],
         }
         to_merge_keys_patterns = {
+            # (".+variable_groups", "variable_groups")]
             "opportunities": [("mips.*", "mips"), ]
         }
         to_sort_keys_content = {
@@ -473,20 +476,201 @@ def transform_content_one_base(content):
             "variables": ["cell_methods", "cmip6_frequency", "cmip7_frequency", "esm-bcv", "physical_parameter",
                           "spatial_shape", "table_identifier", "temporal_shape"]
         }
-        content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
-                                     default_patterns_to_remove=default_patterns_to_remove)
-        content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns,
-                                     esm_bcv_regexp=esm_bcv_regexp)
-        content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
+        for subelt in sorted(list(content)):
+            # Remove everything save records
+            records = content[subelt].pop("records")
+            for subkey in list(content[subelt]):
+                del content[subelt][subkey]
+            content[subelt].update(records)
+            # Find out list of patterns to remove, rename, merge, sort...
+            patterns_to_remove = to_remove_keys_patterns.get(subelt, list())
+            patterns_to_remove.extend(default_patterns_to_remove)
+            patterns_to_remove = [re.compile(elt)
+                                  for elt in patterns_to_remove]
+            patterns_to_rename = to_rename_keys_patterns.get(subelt, list())
+            patterns_to_rename = [(re.compile(elt[0]), elt[1]) if not isinstance(
+                elt[0], list) else elt for elt in patterns_to_rename]
+            patterns_to_merge = to_merge_keys_patterns.get(subelt, list())
+            patterns_to_merge = [(re.compile(elt[0]), elt[1])
+                                 for elt in patterns_to_merge]
+            for record_id in sorted(list(content[subelt])):
+                # Remove unused keys
+                list_keys = sorted(list(content[subelt][record_id]))
+                list_keys_to_remove = [elt for elt in list_keys if
+                                       any(patt.match(elt) is not None for patt in patterns_to_remove)]
+                for key in list_keys_to_remove:
+                    del content[subelt][record_id][key]
+                # Rename needed keys
+                list_keys = sorted(list(content[subelt][record_id]))
+                for (patt, repl) in patterns_to_rename:
+                    if isinstance(patt, list) and len(patt) == 0:
+                        if repl in ["esm-bcv", ]:
+                            to_rename = [
+                                elt for elt in list_keys if esm_bcv_regexp.match(elt) is not None]
+                        else:
+                            raise ValueError(
+                                f"Issue with patt void list with replacement {repl}.")
+                    else:
+                        to_rename = [
+                            elt for elt in list_keys if patt.match(elt) is not None]
+                    if len(to_rename) == 1:
+                        content[subelt][record_id][repl] = content[subelt][record_id].pop(
+                            to_rename[0])
+                    elif len(to_rename) > 1:
+                        raise ValueError(
+                            f"Several keys ({to_rename}) match pattern {patt} in subelt {subelt}.")
+                # Merge needed keys
+                list_keys = sorted(list(content[subelt][record_id]))
+                for (patt, repl) in patterns_to_merge:
+                    to_merge = [
+                        elt for elt in list_keys if patt.match(elt) is not None]
+                    if len(to_merge) > 0:
+                        content[subelt][record_id][repl] = list()
+                        for elts in to_merge:
+                            if isinstance(content[subelt][record_id][elts], list):
+                                content[subelt][record_id][repl].extend(
+                                    content[subelt][record_id].pop(elts))
+                            else:
+                                content[subelt][record_id][repl].append(
+                                    content[subelt][record_id].pop(elts))
+                # Add keys if needed
+                list_keys = sorted(list(set(content[subelt][record_id])))
+                if "name" not in list_keys:
+                    content[subelt][record_id]["name"] = "undef"
         # Filter on status if needed then remove linked keys
-        content = filter_content(content)
-        # Add name and uid if needed, build equivalence dict between record_id and uid
-        content, record_to_uid_index = add_useful_keys(content)
-        # Tidy the content of the dictionary by removing unused entries
-        content = tidy_content(content, record_to_uid_index)
+        variable_groups = set()
+        experiment_groups = set()
+        variables = set()
+        experiments = set()
+        subelt = "opportunities"
+        for record_id in sorted(list(content[subelt])):
+            if content[subelt][record_id].get("status") not in ["Accepted", "Under review", None]:
+                del content[subelt][record_id]
+            else:
+                variable_groups = variable_groups | set(
+                    content[subelt][record_id].get("variable_groups", list()))
+                experiment_groups = experiment_groups | set(
+                    content[subelt][record_id].get("experiment_groups", list()))
+        subelt = "variable_groups"
+        for record_id in sorted(list(content[subelt])):
+            if record_id not in variable_groups:
+                del content[subelt][record_id]
+            else:
+                variables = variables | set(
+                    content[subelt][record_id].get("variables", list()))
+        subelt = "experiment_groups"
+        for record_id in sorted(list(content[subelt])):
+            if record_id not in experiment_groups:
+                del content[subelt][record_id]
+            elif content[subelt][record_id].get("status") in ["Junk", ]:
+                del content[subelt][record_id]
+                for op in list(content["opportunities"]):
+                    if record_id in content["opportunities"][op]["experiment_groups"]:
+                        content["opportunities"][op]["experiment_groups"].remove(
+                            record_id)
+            else:
+                experiments = experiments | set(
+                    content[subelt][record_id].get("experiments", list()))
+        subelt = "variables"
+        for record_id in sorted(list(set(content[subelt]) - variables)):
+            del content[subelt][record_id]
+        subelt = "experiments"
+        for record_id in sorted(list(set(content[subelt]) - experiments)):
+            del content[subelt][record_id]
+        for subelt in list(content):
+            for record_id in list(content[subelt]):
+                for key in [key for key in list(content[subelt][record_id])
+                            if re.compile(r".*status.*").match(key) is not None]:
+                    del content[subelt][record_id][key]
+        # Add uid if needed
+        record_to_uid_index = dict()
+        for subelt in sorted(list(content)):
+            for record_id in sorted(list(content[subelt]),
+                                    key=lambda record_id: "|".join([content[subelt][record_id].get("name"),
+                                                                    content[subelt][record_id].get(
+                                                                        "uid", "undef"),
+                                                                    record_id])):
+                if "uid" not in content[subelt][record_id]:
+                    uid = default_template.format(default_count)
+                    content[subelt][record_id]["uid"] = uid
+                    default_count += 1
+                    logger.debug(
+                        f"Undefined uid for element {os.sep.join([subelt, 'records', record_id])}, set {uid}")
+                uid = content[subelt][record_id].pop("uid")
+                if uid.endswith(os.linesep):
+                    logger.debug(
+                        f"uid of element type {subelt} and record id {record_id} endswith '\\n'.")
+                    uid = uid.rstrip(os.linesep)
+                record_to_uid_index[record_id] = (uid, subelt)
+                content[subelt][uid] = content[subelt].pop(record_id)
+        # Replace record_id by uid
+        logger.debug("Replace record ids by uids")
+        to_remove_entries = defaultdict(list)
+        content_string = json.dumps(content)
+        for (record_id, (uid, subelt)) in record_to_uid_index.items():
+            (content_string, nb) = re.subn(
+                f'"{record_id}"', f'"link::{uid}"', content_string)
+            if nb == 0:
+                to_remove_entries[subelt].append((record_id, uid))
+        for record_id, _ in to_remove_entries["opportunities"]:
+            del record_to_uid_index[record_id]
+        del to_remove_entries["opportunities"]
+        content = json.loads(content_string)
+        # Remove unused entries
+        for subelt in to_remove_entries:
+            for (record_id, uid) in to_remove_entries[subelt]:
+                del content[subelt][uid]
+                del record_to_uid_index[record_id]
+        # Tidy the content once again
+        content_str = json.dumps(content)
+        to_remove_entries = defaultdict(list)
+        for (record_id, (uid, subelt)) in record_to_uid_index.items():
+            nb = content_str.count(uid)
+            if nb < 2:
+                to_remove_entries[subelt].append(uid)
+        for subelt in to_remove_entries:
+            for uid in to_remove_entries[subelt]:
+                del content[subelt][uid]
         # Sort content of needed keys
-        content = sort_useful_keys(content, per_entry_input=to_sort_keys_content)
-        content = reshape_useful_keys(content, per_entry_input=from_list_to_string_keys_content)
+        for subelt in sorted(list(content)):
+            patterns_to_sort = to_sort_keys_content.get(subelt, list())
+            patterns_to_sort = [re.compile(elt) for elt in patterns_to_sort]
+            patterns_to_reshape = from_list_to_string_keys_content.get(
+                subelt, list())
+            patterns_to_reshape = [re.compile(elt)
+                                   for elt in patterns_to_reshape]
+            for uid in sorted(list(content[subelt])):
+                # Sort content of needed keys
+                list_keys = sorted(list(content[subelt][uid]))
+                list_keys_to_sort = [elt for elt in list_keys
+                                     if any(patt.match(elt) is not None for patt in patterns_to_sort)]
+                for key in list_keys_to_sort:
+                    content[subelt][uid][key] = sorted(
+                        list(set(content[subelt][uid][key])))
+                # Reshape content if needed
+                list_keys_to_reshape = [elt for elt in list_keys
+                                        if any(patt.match(elt) is not None for patt in patterns_to_reshape)]
+                for key in list_keys_to_reshape:
+                    if isinstance(content[subelt][uid][key], list):
+                        if len(content[subelt][uid][key]) == 1:
+                            content[subelt][uid][key] = content[subelt][uid][key][0]
+                        elif len(content[subelt][uid][key]) == 0:
+                            logger.warning(
+                                f"Remove void key {key} from id {uid} of element type {subelt}")
+                            del content[subelt][uid][key]
+                        else:
+                            logger.error(
+                                f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
+                            raise ValueError(
+                                f"Could not reshape key {key} from id {uid} of element type {subelt}: contains several elements")
+                    elif isinstance(content[subelt][uid][key], str):
+                        logger.warning(
+                            f"Could not reshape key {key} from id {uid} of element type {subelt}: already a string")
+                    else:
+                        logger.error(
+                            f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")
+                        raise ValueError(
+                            f"Could not reshape key {key} from id {uid} of element type {subelt}: not a list")
         return content
     elif isinstance(content, dict):
         logger.error("Deal with one base content dict.")
@@ -580,7 +764,8 @@ def get_transformed_content(version="latest_stable", export="release", consolida
                             force_retrieve=False, output_dir=None,
                             default_transformed_content_pattern="{kind}_{export_version}_content.json", **kwargs):
     # Download specified version of data request content (if not locally cached)
-    versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
+    versions = dc.retrieve(version, export=export_version,
+                           consolidate=use_consolidation)
 
     # Check that there is only one version associated
     if len(versions) > 1:
@@ -594,8 +779,10 @@ def get_transformed_content(version="latest_stable", export="release", consolida
             output_dir = os.path.dirname(content)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
-        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
+        DR_content = default_transformed_content_pattern.format(
+            kind="DR", export_version=export_version)
+        VS_content = default_transformed_content_pattern.format(
+            kind="VS", export_version=export_version)
         DR_content = os.sep.join([output_dir, DR_content])
         VS_content = os.sep.join([output_dir, VS_content])
         if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
@@ -603,9 +790,11 @@ def get_transformed_content(version="latest_stable", export="release", consolida
                 os.remove(DR_content)
             if os.path.exists(VS_content):
                 os.remove(VS_content)
-        if not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            content = dc.load(version, export=export, consolidate=consolidate)
-            data_request, vocabulary_server = transform_content(content, version)
+        if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+            content = dc.load(version, export=export_version,
+                              consolidate=use_consolidation)
+            data_request, vocabulary_server = transform_content(
+                content, version)
             write_json_output_file_content(DR_content, data_request)
             write_json_output_file_content(VS_content, vocabulary_server)
         return dict(DR_input=DR_content, VS_input=VS_content)

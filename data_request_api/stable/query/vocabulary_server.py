@@ -20,8 +20,6 @@ def is_link_id_or_value(elt):
     :param elt: element to be transformed into a value
     :return: not link version oof elt
     """
-    if isinstance(elt, ConstantValueObj):
-        elt = str(elt)
     if isinstance(elt, str) and elt.startswith("link::"):
         return True, elt.replace("link::", "")
     else:
@@ -34,8 +32,6 @@ def build_link_from_id(elt):
     :param elt: element to be transformed into a link
     :return: link version of elt
     """
-    if isinstance(elt, ConstantValueObj):
-        elt = str(elt)
     if not isinstance(elt, str) or elt.startswith("link::"):
         return elt
     else:
@@ -63,6 +59,7 @@ class VocabularyServer(object):
     """
     Class to generate a Vocabulary Server from a json file.
     """
+
     def __init__(self, input_database, **kwargs):
         self.vocabulary_server = copy.deepcopy(input_database)
         self.version = self.vocabulary_server.pop("version")
@@ -96,13 +93,28 @@ class VocabularyServer(object):
         element_type_dict = dict(
             keyword="glossary",
             lead_theme="data_request_themes",
-            dimension="coordinates_and_dimensions",
-            coordinate="coordinates_and_dimensions",
-            extra_dimension="coordinates_and_dimensions",
-            max_priority_level="priority_level",
-            structure="structure_title"
+            dimensions="coordinates_and_dimensions",
+            coordinates="coordinates_and_dimensions",
+            extra_dimensions="coordinates_and_dimensions"
         )
         return element_type_dict.get(element_type, element_type)
+
+    @staticmethod
+    def to_plural(element_type):
+        if not element_type.endswith("s"):
+            if element_type.endswith("y"):
+                element_type = element_type.rstrip("y") + "ies"
+            else:
+                element_type += "s"
+        return element_type
+
+    @staticmethod
+    def to_singular(element_type):
+        if element_type.endswith("ies"):
+            element_type = element_type.removesuffix("ies") + "y"
+        elif element_type.endswith("s"):
+            element_type = element_type.removesuffix("s")
+        return element_type
 
     def check_infinite_loop(self):
         """
@@ -118,7 +130,7 @@ class VocabularyServer(object):
                     if isinstance(self.vocabulary_server[key][id][elt], list) and \
                             any(is_link_id_or_value(subelt)[0] for subelt in self.vocabulary_server[key][id][elt]):
                         call_dict[key].add(elt)
-                    elif not(isinstance(self.vocabulary_server[key][id][elt], list)) and \
+                    elif not (isinstance(self.vocabulary_server[key][id][elt], list)) and \
                             is_link_id_or_value(self.vocabulary_server[key][id][elt])[0]:
                         call_dict[key].add(elt)
 
@@ -128,30 +140,22 @@ class VocabularyServer(object):
             found = False
             alias_key, _ = self.get_element_type_ids(current_key)
             if alias_key in former_keys:
-                logger.error(f"Infinite loop found: {former_keys + [current_key, ]}")
+                logger.error(
+                    f"Infinite loop found: {former_keys + [current_key, ]}")
                 found = True
             else:
                 for next_key in sorted(list(call_dict[alias_key])):
-                    found = found or follow_loop(next_key, former_keys + [alias_key, ])
+                    found = found or follow_loop(
+                        next_key, former_keys + [alias_key, ])
             return found
 
         # Follow the call dict to check if there is infinite loop
         found = any(follow_loop(key) for key in sorted(list(call_dict)))
         if found:
-            logger.critical("Infinite loop found in vocabulary server, see former error messages.")
-            raise ValueError("Infinite loop found in vocabulary server, see former error messages.")
-
-    def get_element_type(self, element_type):
-        logger = get_logger()
-        element_type = to_singular(element_type)
-        element_type = self.alias(element_type)
-        if element_type not in self.vocabulary_server:
-            element_type = to_plural(element_type)
-        if element_type in self.vocabulary_server:
-            return element_type
-        else:
-            logger.error(f"Could not find element type {element_type} in the vocabulary server.")
-            raise ValueError(f"Could not find element type {element_type} in the vocabulary server.")
+            logger.critical(
+                "Infinite loop found in vocabulary server, see former error messages.")
+            raise ValueError(
+                "Infinite loop found in vocabulary server, see former error messages.")
 
     def get_element_type_ids(self, element_type):
         """
@@ -159,8 +163,17 @@ class VocabularyServer(object):
         :param element_type:
         :return:
         """
-        element_type = self.get_element_type(element_type)
-        return element_type, sorted(list(self.vocabulary_server[element_type]))
+        logger = get_logger()
+        element_type = self.alias(element_type)
+        if element_type not in self.vocabulary_server:
+            element_type = self.to_plural(element_type)
+        if element_type in self.vocabulary_server:
+            return element_type, sorted(list(self.vocabulary_server[element_type]))
+        else:
+            logger.error(
+                f"Could not find element type {element_type} in the vocabulary server.")
+            raise ValueError(
+                f"Could not find element type {element_type} in the vocabulary server.")
 
     def get_element(self, element_type, element_id, element_key=None, default=False, id_type="id"):
         """
@@ -177,7 +190,8 @@ class VocabularyServer(object):
         logger = get_logger()
         is_id, element_id = is_link_id_or_value(element_id)
         if is_id or id_type != "id":
-            element_type, element_type_ids = self.get_element_type_ids(element_type)
+            element_type, element_type_ids = self.get_element_type_ids(
+                element_type)
             found = False
             if id_type in ["id", ] and element_id in element_type_ids:
                 value = self.vocabulary_server[element_type][element_id]
@@ -200,6 +214,7 @@ class VocabularyServer(object):
                     raise ValueError(f"id_type {id_type} provided is not unique for element type {element_type} "
                                      f"and value {element_key}.")
             if found:
+                value = copy.deepcopy(value)
                 if element_key is not None:
                     if element_key in value:
                         value = value.get(element_key)
@@ -225,45 +240,3 @@ class VocabularyServer(object):
             return element_id
         else:
             return element_id
-
-
-class ConstantValueObj(object):
-    """
-    Constant object which return the same value each time an attribute is asked.
-    It is used to avoid discrepancies between objects and strings.
-    """
-    def __init__(self, value="undef"):
-        self.value = value
-
-    def __getattr__(self, item):
-        return self.value
-
-    def __str__(self):
-        return str(self.value)
-
-    def __hash__(self):
-        return hash(self.value)
-
-    def __copy__(self):
-        return ConstantValueObj(self.value)
-
-    def __eq__(self, other):
-        return str(self) == str(other)
-
-    def __gt__(self, other):
-        return str(self) > str(other)
-
-    def __lt__(self, other):
-        return str(self) < str(other)
-
-    def __deepcopy__(self, memodict={}):
-        return self.__copy__()
-
-    def __len__(self):
-        return len(str(self))
-
-    def __iter__(self):
-        return iter(list())
-
-    def __next__(self):
-        raise StopIteration
