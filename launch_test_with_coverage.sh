@@ -16,6 +16,10 @@ coverage run --parallel-mode scripts/database_transformation.py --test --export=
 coverage run --parallel-mode scripts/database_transformation.py --test --export="release" --version="v1.1"
 coverage run --parallel-mode scripts/workflow_example_2.py --test --export="raw" --version="v1.1"
 coverage run --parallel-mode scripts/workflow_example_2.py --test --export="release" --version="v1.1"
+coverage run --parallel-mode scripts/database_transformation.py --test --export="raw" --version="v1.2"
+coverage run --parallel-mode scripts/database_transformation.py --test --export="release" --version="v1.2"
+coverage run --parallel-mode scripts/workflow_example_2.py --test --export="raw" --version="v1.2"
+coverage run --parallel-mode scripts/workflow_example_2.py --test --export="release" --version="v1.2"
 
 coverage combine
 

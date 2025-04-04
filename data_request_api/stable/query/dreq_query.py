@@ -120,7 +120,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
 
     # Content is dict loaded from raw airtable export json file
     if consolidated:
-        base_name = 'Data Request'
+        base_name = version_base_name()
         content_type = 'consolidated'
     else:
         # for backward compatibility
