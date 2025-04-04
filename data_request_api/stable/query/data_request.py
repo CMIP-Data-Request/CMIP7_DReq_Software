@@ -26,6 +26,7 @@ class DRObjects(object):
     Base object to build the ones used within the DR API.
     Use to define basic information needed.
     """
+
     def __init__(self, id, dr, DR_type="undef", structure=dict(), **attributes):
         """
         Initialisation of the object.
@@ -90,8 +91,29 @@ class DRObjects(object):
         elements["id"] = id
         return cls(dr=dr, DR_type=DR_type, structure=structure, **elements)
 
+    @classmethod
+    def from_input(cls, dr, id, DR_type="undef", elements=dict(), structure=dict()):
+        """
+        Create instance of the class using specific arguments.
+        :param DataRequest dr: reference Data Request objects
+        :param str id: id of the object
+        :param str DR_type: type of the object
+        :param dict elements: attributes of the objects (coming from VS)
+        :param dict structure: structure of the object through Data Request
+        :return: instance of the current class.
+        """
+        elements["id"] = id
+        return cls(dr=dr, DR_type=DR_type, structure=structure, **elements)
+
     def __hash__(self):
         return hash(self.id)
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return isinstance(other, type(self)) and self.id == other.id and self.DR_type == other.DR_type and \
+            self.structure == other.structure and self.attributes == other.attributes
 
     def __eq__(self, other):
         return isinstance(other, type(self)) and self.id == other.id and self.DR_type == other.DR_type and \
@@ -107,8 +129,22 @@ class DRObjects(object):
         return type(self).__call__(dr=self.dr, DR_type=copy.deepcopy(self.DR_type),
                                    structure=copy.deepcopy(self.structure), **copy.deepcopy(self.attributes))
 
+    def __copy__(self):
+        return type(self).__call__(dr=self.dr, DR_type=copy.deepcopy(self.DR_type),
+                                   structure=copy.deepcopy(self.structure), **copy.deepcopy(self.attributes))
+
     def __deepcopy__(self, memodict={}):
         return self.__copy__()
+
+    def __deepcopy__(self, memodict={}):
+        return self.__copy__()
+
+    def check(self):
+        """
+        Make checks on the current object.
+        :return:
+        """
+        pass
 
     def check(self):
         """
@@ -120,11 +156,23 @@ class DRObjects(object):
     def __str__(self):
         return os.linesep.join(self.print_content())
 
+    def __str__(self):
+        return os.linesep.join(self.print_content())
+
+    def __repr__(self):
+        return os.linesep.join(self.print_content())
+
     def __repr__(self):
         return os.linesep.join(self.print_content())
 
     def __getattr__(self, item):
         return self.attributes.get(item, ConstantValueObj())
+
+    def __getattr__(self, item):
+        return self.attributes.get(item, ConstantValueObj())
+
+    def get(self, item):
+        return self.__getattr__(item)
 
     def get(self, item):
         return self.__getattr__(item)
@@ -172,6 +220,9 @@ class ExperimentsGroup(DRObjects):
     def __init__(self, id, dr, DR_type="experiment_groups", structure=dict(experiments=list()), **attributes):
         super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
 
+    def __init__(self, id, dr, DR_type="experiment_groups", structure=dict(experiments=list()), **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
     def check(self):
         super().check()
         logger = get_logger()
@@ -184,6 +235,20 @@ class ExperimentsGroup(DRObjects):
         :return int: number of experiments of the ExperimentGroup
         """
         return len(self.get_experiments())
+
+    def count(self):
+        """
+        Return the number of experiments linked to the ExperimentGroup
+        :return int: number of experiments of the ExperimentGroup
+        """
+        return len(self.get_experiments())
+
+    def get_experiments(self):
+        """
+        Return the list of experiments linked to the ExperimentGroup.
+        :return list of DRObjects: list of the experiments linked to the ExperimentGroup
+        """
+        return self.structure["experiments"]
 
     def get_experiments(self):
         """
@@ -200,6 +265,20 @@ class ExperimentsGroup(DRObjects):
             for experiment in self.get_experiments():
                 rep.extend(experiment.print_content(level=level + 2))
         return rep
+
+    def print_content(self, level=0, add_content=True):
+        rep = super().print_content(level=level)
+        if add_content:
+            indent = "    " * (level + 1)
+            rep.append(f"{indent}Experiments included:")
+            for experiment in self.get_experiments():
+                rep.extend(experiment.print_content(level=level + 2))
+        return rep
+
+    @classmethod
+    def from_input(cls, dr, id, experiments=list(), **kwargs):
+        return super().from_input(DR_type="experiment_groups", dr=dr, id=id, structure=dict(experiments=experiments),
+                                  elements=kwargs)
 
     @classmethod
     def from_input(cls, dr, id, experiments=list(), **kwargs):
@@ -222,6 +301,13 @@ class ExperimentsGroup(DRObjects):
 class Variable(DRObjects):
     def __init__(self, id, dr, DR_type="variables", structure=dict(), **attributes):
         super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
+    def __init__(self, id, dr, DR_type="variables", structure=dict(), **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
+    @classmethod
+    def from_input(cls, dr, id, **kwargs):
+        return super().from_input(DR_type="variables", dr=dr, id=id, elements=kwargs, structure=dict())
 
     @classmethod
     def from_input(cls, dr, id, **kwargs):
@@ -274,6 +360,10 @@ class VariablesGroup(DRObjects):
                  structure=dict(variables=list(), mips=list(), priority_level="High"), **attributes):
         super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
 
+    def __init__(self, id, dr, DR_type="variable_groups",
+                 structure=dict(variables=list(), mips=list(), priority_level="High"), **attributes):
+        super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
+
     def check(self):
         super().check()
         logger = get_logger()
@@ -284,6 +374,18 @@ class VariablesGroup(DRObjects):
     def from_input(cls, dr, id, variables=list(), mips=list(), priority_level="High", **kwargs):
         return super().from_input(DR_type="variable_groups", dr=dr, id=id, elements=kwargs,
                                   structure=dict(variables=variables, mips=mips, priority_level=priority_level))
+
+    @classmethod
+    def from_input(cls, dr, id, variables=list(), mips=list(), priority_level="High", **kwargs):
+        return super().from_input(DR_type="variable_groups", dr=dr, id=id, elements=kwargs,
+                                  structure=dict(variables=variables, mips=mips, priority_level=priority_level))
+
+    def count(self):
+        """
+        Count the number of variables linked to the VariablesGroup.
+        :return int: number of variables linked to the VariablesGroup
+        """
+        return len(self.get_variables())
 
     def count(self):
         """
@@ -299,6 +401,20 @@ class VariablesGroup(DRObjects):
         """
         return self.structure["variables"]
 
+    def get_variables(self):
+        """
+        Return the list of Variables linked to the VariablesGroup.
+        :return list of Variable: list of Variable linked to VariablesGroup
+        """
+        return self.structure["variables"]
+
+    def get_mips(self):
+        """
+        Return the list of MIPs linked to the VariablesGroup.
+        :return list of DrObject: list of MIPs linked to VariablesGroup
+        """
+        return self.structure["mips"]
+
     def get_mips(self):
         """
         Return the list of MIPs linked to the VariablesGroup.
@@ -312,6 +428,22 @@ class VariablesGroup(DRObjects):
         :return DrObject: priority level of VariablesGroup
         """
         return self.structure["priority_level"]
+
+    def get_priority_level(self):
+        """
+        Return the priority level of the VariablesGroup.
+        :return DrObject: priority level of VariablesGroup
+        """
+        return self.structure["priority_level"]
+
+    def print_content(self, level=0, add_content=True):
+        rep = super().print_content(level=level)
+        if add_content:
+            indent = "    " * (level + 1)
+            rep.append(f"{indent}Variables included:")
+            for variable in self.get_variables():
+                rep.extend(variable.print_content(level=level + 2))
+        return rep
 
     def print_content(self, level=0, add_content=True):
         rep = super().print_content(level=level)
@@ -372,10 +504,25 @@ class Opportunity(DRObjects):
     def from_input(cls, dr, id, experiment_groups=list(), variable_groups=list(), data_request_themes=list(),
                    time_subsets=list(), mips=list(), **kwargs):
 
+    @classmethod
+    def from_input(cls, dr, id, experiment_groups=list(), variable_groups=list(), data_request_themes=list(),
+                   time_subsets=list(), mips=list(), **kwargs):
+
         return super().from_input(DR_type="opportunities", dr=dr, id=id, elements=kwargs,
                                   structure=dict(experiment_groups=experiment_groups, variable_groups=variable_groups,
                                                  data_request_themes=data_request_themes, time_subsets=time_subsets,
                                                  mips=mips))
+        return super().from_input(DR_type="opportunities", dr=dr, id=id, elements=kwargs,
+                                  structure=dict(experiment_groups=experiment_groups, variable_groups=variable_groups,
+                                                 data_request_themes=data_request_themes, time_subsets=time_subsets,
+                                                 mips=mips))
+
+    def get_experiment_groups(self):
+        """
+        Return the list of ExperimentsGroup linked to the Opportunity.
+        :return list of ExperimentsGroup: list of ExperimentsGroup linked to Opportunity
+        """
+        return self.structure["experiment_groups"]
 
     def get_experiment_groups(self):
         """
@@ -391,6 +538,20 @@ class Opportunity(DRObjects):
         """
         return self.structure["variable_groups"]
 
+    def get_variable_groups(self):
+        """
+        Return the list of VariablesGroup linked to the Opportunity.
+        :return list of VariablesGroup: list of VariablesGroup linked to Opportunity
+        """
+        return self.structure["variable_groups"]
+
+    def get_data_request_themes(self):
+        """
+        Return the list of themes linked to the Opportunity.
+        :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity
+        """
+        return self.structure["data_request_themes"]
+
     def get_data_request_themes(self):
         """
         Return the list of themes linked to the Opportunity.
@@ -405,12 +566,33 @@ class Opportunity(DRObjects):
         """
         return self.get_data_request_themes()
 
+    def get_themes(self):
+        """
+        Return the list of themes linked to the Opportunity.
+        :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity
+        """
+        return self.get_data_request_themes()
+
     def get_time_subsets(self):
         """
         Return the list of time subsets linked to the Opportunity.
         :return list of DRObject: list of time subsets linked to Opportunity
         """
         return self.structure["time_subsets"]
+
+    def get_time_subsets(self):
+        """
+        Return the list of time subsets linked to the Opportunity.
+        :return list of DRObject: list of time subsets linked to Opportunity
+        """
+        return self.structure["time_subsets"]
+
+    def get_mips(self):
+        """
+        Return the list of MIPs linked to the Opportunity.
+        :return list of DRObject: list of MIPs linked to Opportunity
+        """
+        return self.structure["mips"]
 
     def get_mips(self):
         """
@@ -452,8 +634,8 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_time_subsets()
             elif request_type in ["mips", ]:
                 found = request_value in self.get_mips() or \
-                        self.filter_on_request_list(request_values=request_value,
-                                                    list_to_check=self.get_variable_groups())
+                    self.filter_on_request_list(request_values=request_value,
+                                                list_to_check=self.get_variable_groups())
             elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
                                   "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
@@ -472,6 +654,7 @@ class DataRequest(object):
     """
     Data Request API object used to navigate among the Data Request and Vocabulary Server contents.
     """
+
     def __init__(self, input_database, VS, **kwargs):
         """
         Initialisation of the Data Request object
@@ -487,8 +670,27 @@ class DataRequest(object):
         for op in input_database["opportunities"]:
             self.content["opportunities"][op] = self.find_element("opportunities", op)
         self.cache = dict()
-        self.cache_filtering = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: (None, None)))))
-        self.filtering_structure = read_json_file(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "filtering.json"]))["definition"]
+        self.cache_filtering = defaultdict(lambda: defaultdict(
+            lambda: defaultdict(lambda: defaultdict(lambda: (None, None)))))
+        self.filtering_structure = read_json_file(os.sep.join(
+            [os.path.dirname(os.path.abspath(__file__)), "filtering.json"]))["definition"]
+
+    def check(self):
+        """
+        Method to check the content of the Data Request.
+        :return:
+        """
+        logger = get_logger()
+        logger.info("Check data request metadata")
+        logger.info("... Check experiments groups")
+        for elt in self.get_experiment_groups():
+            elt.check()
+        logger.info("... Check variables groups")
+        for elt in self.get_variable_groups():
+            elt.check()
+        logger.info("... Check opportunities")
+        for elt in self.get_opportunities():
+            elt.check()
 
     def check(self):
         """
@@ -514,6 +716,22 @@ class DataRequest(object):
         :return str: version of the software
         """
         return version
+
+    @property
+    def software_version(self):
+        """
+        Method to get the version of the software.
+        :return str: version of the software
+        """
+        return version
+
+    @property
+    def version(self):
+        """
+        Method to get the version of both software and content
+        :return str : formatted version of the software and the content
+        """
+        return f"Software {self.software_version} - Content {self.content_version}"
 
     @property
     def version(self):
@@ -599,10 +817,30 @@ class DataRequest(object):
             rep.extend(elt.print_content(level=2))
         return os.linesep.join(rep)
 
+    def __str__(self):
+        rep = list()
+        indent = "    "
+        rep.append("Data Request content:")
+        rep.append(f"{indent}Experiments groups:")
+        for elt in self.get_experiment_groups():
+            rep.extend(elt.print_content(level=2))
+        rep.append(f"{indent}Variables groups:")
+        for elt in self.get_variable_groups():
+            rep.extend(elt.print_content(level=2))
+        rep.append(f"{indent}Opportunities:")
+        for elt in self.get_opportunities():
+            rep.extend(elt.print_content(level=2))
+        return os.linesep.join(rep)
+
+
+<< << << < HEAD
+== == == =
+
     def _get_sorted_list(self, list_id):
         if self.cache.get(list_id) is None:
             self.cache[list_id] = [self.content[list_id][key] for key in sorted(list(self.content[list_id]))]
         return self.cache[list_id]
+>>>>>> > 1701445 (API optimization(  # 73))
 
     def get_experiment_groups(self):
         """
@@ -617,7 +855,7 @@ class DataRequest(object):
         :param str id: id of the ExperimentsGroup
         :return ExperimentsGroup: the ExperimentsGroup associated with the input id
         """
-        rep = self.find_element("experiment_groups", id, default=None)
+        rep=self.find_element("experiment_groups", id, default=None)
         if rep is not None:
             return rep
         else:
@@ -636,7 +874,18 @@ class DataRequest(object):
         :param str id: id of the VariablesGroup
         :return VariablesGroup: the VariablesGroup associated with the input id
         """
-        rep = self.find_element("variable_groups", id, default=None)
+        rep=self.find_element("variable_groups", id, default=None)
+        if rep is not None:
+            return rep
+        else:
+            raise ValueError(f"Could not find variables group {id}.")
+    def get_variable_group(self, id):
+        """
+        Get the VariablesGroup associated with a specific id.
+        :param str id: id of the VariablesGroup
+        :return VariablesGroup: the VariablesGroup associated with the input id
+        """
+        rep=self.find_element("variable_groups", id, default=None)
         if rep is not None:
             return rep
         else:
@@ -655,7 +904,18 @@ class DataRequest(object):
         :param str id: id of the Opportunity
         :return Opportunity: the Opportunity associated with the input id
         """
-        rep = self.find_element("opportunities", id, default=None)
+        rep=self.find_element("opportunities", id, default=None)
+        if rep is not None:
+            return rep
+        else:
+            raise ValueError(f"Could not find opportunity {id}.")
+    def get_opportunity(self, id):
+        """
+        Get the Opportunity associated with a specific id.
+        :param str id: id of the Opportunity
+        :return Opportunity: the Opportunity associated with the input id
+        """
+        rep=self.find_element("opportunities", id, default=None)
         if rep is not None:
             return rep
         else:
@@ -667,10 +927,10 @@ class DataRequest(object):
         :return list of Variable: list of the Variable of the DR content.
         """
         if self.cache.get("variables") is None:
-            rep = set()
+            rep=set()
             for var_grp in self.get_variable_groups():
-                rep = rep | set(var_grp.get_variables())
-            self.cache["variables"] = sorted(list(rep))
+                rep=rep | set(var_grp.get_variables())
+            self.cache["variables"]=sorted(list(rep))
         return self.cache["variables"]
 
     def get_mips(self):
@@ -679,12 +939,12 @@ class DataRequest(object):
         :return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.
         """
         if self.cache.get("mips") is None:
-            rep = set()
+            rep=set()
             for op in self.get_opportunities():
-                rep = rep | set(op.get_mips())
+                rep=rep | set(op.get_mips())
             for var_grp in self.get_variable_groups():
-                rep = rep | set(var_grp.get_mips())
-            self.cache["mips"] = sorted(list(rep))
+                rep=rep | set(var_grp.get_mips())
+            self.cache["mips"]=sorted(list(rep))
         return self.cache["mips"]
 
     def get_experiments(self):
@@ -693,10 +953,10 @@ class DataRequest(object):
         :return list of DRObject: list of the experiments of the DR content.
         """
         if self.cache.get("experiments") is None:
-            rep = set()
+            rep=set()
             for exp_grp in self.get_experiment_groups():
-                rep = rep | set(exp_grp.get_experiments())
-            self.cache["experiments"] = sorted(list(rep))
+                rep=rep | set(exp_grp.get_experiments())
+            self.cache["experiments"]=sorted(list(rep))
         return self.cache["experiments"]
 
     def get_data_request_themes(self):
@@ -705,18 +965,18 @@ class DataRequest(object):
         :return list of DRObject: list of the themes of the DR content.
         """
         if self.cache.get("data_request_themes") is None:
-            rep = set()
+            rep=set()
             for op in self.get_opportunities():
-                rep = rep | set(op.get_themes())
-            self.cache["data_request_themes"] = sorted(list(rep))
+                rep=rep | set(op.get_themes())
+            self.cache["data_request_themes"]=sorted(list(rep))
         return self.cache["data_request_themes"]
 
     def find_priority_per_variable(self, variable, **filter_request):
-        logger = get_logger()
-        priorities = self.filter_elements_per_request(elements_to_filter="priority_level",
+        logger=get_logger()
+        priorities=self.filter_elements_per_request(elements_to_filter="priority_level",
                                                       requests={"variable": variable, **filter_request})
         logger.debug(f"Priorities found: {priorities} ({[int(priority.value) for priority in priorities]})")
-        priority = min(int(priority.value) for priority in priorities)
+        priority=min(int(priority.value) for priority in priorities)
         logger.debug(f"Priority_retain {priority}")
         return priority
 
@@ -856,29 +1116,29 @@ class DataRequest(object):
                 default: the element found from vocabulary server or the default value if none is found.
         """
         if key in ["id", ]:
-            value = build_link_from_id(value)
-        init_element_type = to_plural(element_type)
-        element_type = self.VS.get_element_type(element_type)
-        rep = self.VS.get_element(element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
+            value=build_link_from_id(value)
+        init_element_type=to_plural(element_type)
+        element_type=self.VS.get_element_type(element_type)
+        rep=self.VS.get_element(element_type=element_type, element_id=value, id_type=key, default=default, **kwargs)
         if rep in [value, ]:
-            rep = default
+            rep=default
         elif rep not in [default, ]:
-            structure = self.structure.get(element_type, dict()).get(rep["id"], dict())
+            structure=self.structure.get(element_type, dict()).get(rep["id"], dict())
             if element_type in ["opportunities", ]:
-                rep = Opportunity.from_input(dr=self, **rep, **structure)
+                rep=Opportunity.from_input(dr=self, **rep, **structure)
             elif element_type in ["variable_groups", ]:
-                rep = VariablesGroup.from_input(dr=self, **rep, **structure)
+                rep=VariablesGroup.from_input(dr=self, **rep, **structure)
             elif element_type in ["experiment_groups", ]:
-                rep = ExperimentsGroup.from_input(dr=self, **rep, **structure)
+                rep=ExperimentsGroup.from_input(dr=self, **rep, **structure)
             elif element_type in ["variables", ]:
-                rep = Variable.from_input(dr=self, **rep)
+                rep=Variable.from_input(dr=self, **rep)
             elif init_element_type in ["max_priority_levels", ]:
-                rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=init_element_type, elements=rep)
+                rep=DRObjects.from_input(dr=self, id=rep["id"], DR_type=init_element_type, elements=rep)
             else:
-                rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=element_type, elements=rep)
+                rep=DRObjects.from_input(dr=self, id=rep["id"], DR_type=element_type, elements=rep)
         return rep
 
-    def find_element_from_vs(self, element_type, value,key="name", default=False):
+    def find_element_from_vs(self, element_type, value, key="name", default=False):
         """
         Find an element of a specific type and specified by a value from vocabulary server.
         Update the content and mapping list not to have to ask the vocabulary server again for it.
@@ -888,17 +1148,17 @@ class DataRequest(object):
         :return: element corresponding to the specified value of a given type if found, else the default value
         """
         if key in ["id", ]:
-            init_default = default
+            init_default=default
         else:
-            init_default = None
-        rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id",
+            init_default=None
+        rep=self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id",
                                                        default=init_default)
         if rep is None and key not in ["id", ]:
-            rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=key,
+            rep=self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key=key,
                                                            default=default)
         if rep not in [default, ]:
-            self.content[element_type][rep.id] = rep
-            self.mapping[element_type][rep.name] = rep
+            self.content[element_type][rep.id]=rep
+            self.mapping[element_type][rep.name]=rep
         return rep
 
     def find_element(self, element_type, value, default=False, key="name"):
@@ -910,7 +1170,7 @@ class DataRequest(object):
         :param default: value to be returned if non found
         :return: the found element if existing, else the default value
         """
-        check_val = is_link_id_or_value(value)[1]
+        check_val=is_link_id_or_value(value)[1]
         if check_val in self.content[element_type]:
             return self.content[element_type][check_val]
         elif check_val in self.mapping[element_type]:
@@ -924,32 +1184,32 @@ class DataRequest(object):
         :param str element_type: the kind of the elements to be found
         :return list: the list of elements of kind element_type
         """
-        logger = get_logger()
-        element_types = to_plural(element_type)
+        logger=get_logger()
+        element_types=to_plural(element_type)
         if element_types in ["opportunities", ]:
-            elements = self.get_opportunities()
+            elements=self.get_opportunities()
         elif element_types in ["experiment_groups", ]:
-            elements = self.get_experiment_groups()
+            elements=self.get_experiment_groups()
         elif element_types in ["variable_groups", ]:
-            elements = self.get_variable_groups()
+            elements=self.get_variable_groups()
         elif element_types in ["variables", ]:
-            elements = self.get_variables()
+            elements=self.get_variables()
         elif element_types in ["experiments", ]:
-            elements = self.get_experiments()
+            elements=self.get_experiments()
         elif element_types in ["data_request_themes", ]:
-            elements = self.get_data_request_themes()
+            elements=self.get_data_request_themes()
         elif element_types in ["mips", ]:
-            elements = self.get_mips()
+            elements=self.get_mips()
         elif element_types in self.cache:
-            elements = sorted(self.cache[element_types])
+            elements=sorted(self.cache[element_types])
         else:
             logger.debug(f"Find elements list of kind {element_type} from vocabulary server.")
-            element_type, elements_ids = self.VS.get_element_type_ids(element_type)
-            elements = [self.find_element(element_type, id) for id in elements_ids]
-            self.cache[element_types] = elements
+            element_type, elements_ids=self.VS.get_element_type_ids(element_type)
+            elements=[self.find_element(element_type, id) for id in elements_ids]
+            self.cache[element_types]=elements
         return elements
 
-    @staticmethod
+    @ staticmethod
     def _two_elements_filtering(filtering_elt_1, filtering_elt_2, list_to_filter):
         """
         Check if a list of elements can be filtered by two values
@@ -960,25 +1220,25 @@ class DataRequest(object):
                             filtering_elt_2, a boolean to tell, if relevant, if filtering_elt_1 and filtering_elt_2 are
                              linked to list_to_filter
         """
-        elt = list_to_filter[0]
-        filtered_found_1, found_1 = elt.filter_on_request(filtering_elt_1)
-        filtered_found_2, found_2 = elt.filter_on_request(filtering_elt_2)
-        filtered_found = filtered_found_1 and filtered_found_2
-        found = found_1 and found_2
+        elt=list_to_filter[0]
+        filtered_found_1, found_1=elt.filter_on_request(filtering_elt_1)
+        filtered_found_2, found_2=elt.filter_on_request(filtering_elt_2)
+        filtered_found=filtered_found_1 and filtered_found_2
+        found=found_1 and found_2
         if filtered_found and not found:
-            found = elt.filter_on_request_list(request_values=[filtering_elt_1, filtering_elt_2],
+            found=elt.filter_on_request_list(request_values=[filtering_elt_1, filtering_elt_2],
                                                list_to_check=list_to_filter[1:])
         return filtered_found, found
 
     def get_filtering_structure(self, DR_type):
-        rep = set(self.filtering_structure.get(DR_type, list()))
-        tmp_rep = copy.deepcopy(rep)
+        rep=set(self.filtering_structure.get(DR_type, list()))
+        tmp_rep=copy.deepcopy(rep)
         while len(tmp_rep) > 0:
-            rep = rep | tmp_rep
-            to_add = set()
+            rep=rep | tmp_rep
+            to_add=set()
             for elt in tmp_rep:
-                to_add = to_add | set(self.filtering_structure.get(elt, list()))
-            tmp_rep, to_add = to_add, set()
+                to_add=to_add | set(self.filtering_structure.get(elt, list()))
+            tmp_rep, to_add=to_add, set()
         return rep
 
     def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation="all", skip_if_missing=False):
@@ -990,21 +1250,21 @@ class DataRequest(object):
         :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
         :return: list of elements of kind element_type which correspond to the filtering requests
         """
-        logger = get_logger()
+        logger=get_logger()
         if operation not in ["any", "all"]:
             raise ValueError(f"Operation does not accept {operation} as value: choose among 'any' (match at least one"
                              f" requirement) and 'all' (match all requirements)")
         else:
             # Prepare the request dictionary
-            request_dict = defaultdict(list)
+            request_dict=defaultdict(list)
             for (req, values) in requests.items():
                 if not isinstance(values, list):
-                    values = [values, ]
+                    values=[values, ]
                 for val in values:
                     if not isinstance(val, DRObjects):
-                        new_val = self.find_element(element_type=req, value=val, default=None)
+                        new_val=self.find_element(element_type=req, value=val, default=None)
                     else:
-                        new_val = val
+                        new_val=val
                     if new_val is not None:
                         request_dict[new_val.DR_type].append(new_val)
                     elif skip_if_missing:
@@ -1014,66 +1274,66 @@ class DataRequest(object):
                         raise ValueError(f"Could not find value {val} for element type {req}.")
             # Get elements corresponding to element_type
             if isinstance(elements_to_filter, str):
-                elements = self.get_elements_per_kind(elements_to_filter)
+                elements=self.get_elements_per_kind(elements_to_filter)
             else:
                 if not isinstance(elements_to_filter, list):
-                    elements = [elements_to_filter, ]
+                    elements=[elements_to_filter, ]
                 else:
-                    elements = elements_to_filter
-                elements_to_filter = elements[0].DR_type
+                    elements=elements_to_filter
+                elements_to_filter=elements[0].DR_type
             # Filter elements
-            rep = defaultdict(lambda: defaultdict(set))
-            elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
+            rep=defaultdict(lambda: defaultdict(set))
+            elements_filtering_structure=self.get_filtering_structure(elements_to_filter)
             for (request, values) in request_dict.items():
-                request_filtering_structure = self.get_filtering_structure(request)
-                common_filtering_structure = request_filtering_structure & elements_filtering_structure
-                filtered_found = True
-                iter_values = iter(values)
-                iter_elements = iter(elements)
+                request_filtering_structure=self.get_filtering_structure(request)
+                common_filtering_structure=request_filtering_structure & elements_filtering_structure
+                filtered_found=True
+                iter_values=iter(values)
+                iter_elements=iter(elements)
                 if elements_to_filter in request_filtering_structure | {request}:
                     while filtered_found and (val := next(iter_values, None)) is not None:
                         while filtered_found and (elt := next(iter_elements, None)) is not None:
-                            filtered_found, found = elt.filter_on_request(val)
+                            filtered_found, found=elt.filter_on_request(val)
                             if found:
                                 rep[request][val.id].add(elt)
                 elif request in elements_filtering_structure:
                     while filtered_found and (val := next(iter_values, None)) is not None:
                         while filtered_found and (elt := next(iter_elements, None)) is not None:
-                            filtered_found, found = val.filter_on_request(elt)
+                            filtered_found, found=val.filter_on_request(elt)
                             if found:
                                 rep[request][val.id].add(elt)
                 else:
                     if "experiment_groups" in common_filtering_structure:
-                        list_to_filter = self.get_experiment_groups()
+                        list_to_filter=self.get_experiment_groups()
                     elif "variables" in common_filtering_structure:
-                        list_to_filter = self.get_variables()
+                        list_to_filter=self.get_variables()
                     elif "variable_groups" in common_filtering_structure:
-                        list_to_filter = self.get_variable_groups()
+                        list_to_filter=self.get_variable_groups()
                     else:
-                        list_to_filter = self.get_opportunities()
+                        list_to_filter=self.get_opportunities()
                     while filtered_found and (val := next(iter_values, None)) is not None:
                         while filtered_found and (elt := next(iter_elements, None)) is not None:
-                            filtered_found, found = self._two_elements_filtering(val, elt, list_to_filter)
+                            filtered_found, found=self._two_elements_filtering(val, elt, list_to_filter)
                             if found:
                                 rep[request][val.id].add(elt)
                 if not filtered_found:
-                   logger.error(f"Could not filter {elements_to_filter} by {request}")
-                   raise ValueError(f"Could not filter {elements_to_filter} by {request}")
+                    logger.error(f"Could not filter {elements_to_filter} by {request}")
+                    raise ValueError(f"Could not filter {elements_to_filter} by {request}")
             if len(rep) == 0:
-                rep_list = set(elements)
+                rep_list=set(elements)
             elif operation in ["any", ]:
-                rep_list = set()
+                rep_list=set()
                 for req in rep:
                     for val in rep[req]:
-                        rep_list = rep_list | rep[req][val]
+                        rep_list=rep_list | rep[req][val]
             elif operation in ["all", ]:
-                rep_list = set(elements)
+                rep_list=set(elements)
                 for req in rep:
                     for val in rep[req]:
-                        rep_list = rep_list & rep[req][val]
+                        rep_list=rep_list & rep[req][val]
             else:
                 raise ValueError(f"Unknown value {operation} for operation (only 'all' and 'any' are available).")
-            rep_list = sorted(list(rep_list))
+            rep_list=sorted(list(rep_list))
             return rep_list
 
     def find_opportunities(self, operation="any", skip_if_missing=False, **kwargs):
@@ -1116,15 +1376,15 @@ class DataRequest(object):
         :param list sorting_request: list of criteria to sort the input list
         :return list: sorted list
         """
-        sorting_request = copy.deepcopy(sorting_request)
+        sorting_request=copy.deepcopy(sorting_request)
         if len(sorting_request) == 0:
             return sorted(data_list, key=lambda x: x.id)
         else:
-            sorting_val = sorting_request.pop(0)
-            sorting_values_dict = defaultdict(list)
+            sorting_val=sorting_request.pop(0)
+            sorting_values_dict=defaultdict(list)
             for data in data_list:
                 sorting_values_dict[data.get(sorting_val)].append(data)
-            rep = list()
+            rep=list()
             for elt in sorted(list(sorting_values_dict)):
                 rep.extend(self.sort_func(sorting_values_dict[elt], sorting_request))
             return rep
@@ -1144,17 +1404,18 @@ class DataRequest(object):
         :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
         :return: an output csv file
         """
-        filtered_data = self.filter_elements_per_request(elements_to_filter=main_data, requests=filtering_requests,
+        filtered_data=self.filter_elements_per_request(elements_to_filter=main_data, requests=filtering_requests,
                                                          operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
-        sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
+        sorted_filtered_data=self.sort_func(filtered_data, sorting_request)
 
         export_columns_request.insert(0, "id")
-        content = list()
+        content=list()
         content.append(export_columns_request)
         for data in sorted_filtered_data:
             content.append([str(data.__getattr__(key)) for key in export_columns_request])
 
+        write_csv_output_file_content(output_file, content, **kwargs)
         write_csv_output_file_content(output_file, content, **kwargs)
 
     def export_summary(self, lines_data, columns_data, output_file, sorting_line="id", title_line="name",
@@ -1176,42 +1437,42 @@ class DataRequest(object):
         :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
         :return: a csv output file
         """
-        logger = get_logger()
+        logger=get_logger()
         logger.debug(f"Generate summary for {lines_data}/{columns_data}")
-        filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
+        filtered_data=self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
                                                          operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
-        sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
-        columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
-        columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
-        columns_title_list = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
-        columns_title_dict = {elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
-        table_title = f"{lines_data} {title_line} / {columns_data} {title_column}"
-        lines_title_list = [elt.__getattr__(title_line) for elt in sorted_filtered_data]
-        lines_title_dict = {elt.id: title for (elt, title) in zip(sorted_filtered_data, lines_title_list)}
+        sorted_filtered_data=self.sort_func(filtered_data, sorting_request=[sorting_line, ])
+        columns_datasets=self.filter_elements_per_request(elements_to_filter=columns_data)
+        columns_datasets=self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
+        columns_title_list=[str(elt.__getattr__(title_column)) for elt in columns_datasets]
+        columns_title_dict={elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
+        table_title=f"{lines_data} {title_line} / {columns_data} {title_column}"
+        lines_title_list=[elt.__getattr__(title_line) for elt in sorted_filtered_data]
+        lines_title_dict={elt.id: title for (elt, title) in zip(sorted_filtered_data, lines_title_list)}
 
-        nb_lines = len(sorted_filtered_data)
+        nb_lines=len(sorted_filtered_data)
         logger.debug(f"{nb_lines} elements found for {lines_data}")
         logger.debug(f"{len(columns_title_list)} found elements for {columns_data}")
 
         logger.debug("Generate summary")
-        content = defaultdict(lambda: dict())
+        content=defaultdict(lambda: dict())
         if len(columns_title_list) > len(lines_title_list):
-            DR_type = columns_datasets[0].DR_type
+            DR_type=columns_datasets[0].DR_type
             for (column_data, column_title) in zip(columns_datasets, columns_title_list):
-                filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
+                filter_line_datasets=self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
                                                                         requests={DR_type: column_data}, operation="all")
                 for line in filter_line_datasets:
-                    content[lines_title_dict[line.id]][column_title] = "x"
+                    content[lines_title_dict[line.id]][column_title]="x"
         else:
-            DR_type = sorted_filtered_data[0].DR_type
+            DR_type=sorted_filtered_data[0].DR_type
             for (line_data, line_title) in zip(sorted_filtered_data, lines_title_list):
-                filtered_columns = self.filter_elements_per_request(elements_to_filter=columns_datasets,
+                filtered_columns=self.filter_elements_per_request(elements_to_filter=columns_datasets,
                                                                     requests={DR_type: line_data}, operation="all")
-                content[line_title] = {columns_title_dict[elt.id]: "x" for elt in filtered_columns}
+                content[line_title]={columns_title_dict[elt.id]: "x" for elt in filtered_columns}
 
         logger.debug("Format summary")
-        rep = list()
+        rep=list()
         rep.append([table_title, ] + columns_title_list)
         for line_data_title in lines_title_list:
             rep.append([line_data_title, ] +
@@ -1219,14 +1480,24 @@ class DataRequest(object):
 
         logger.debug("Write summary")
         write_csv_output_file_content(output_file, rep, **kwargs)
+        logger.debug("Write summary")
+        write_csv_output_file_content(output_file, rep, **kwargs)
 
 
 if __name__ == "__main__":
     change_log_file(default=True)
     change_log_level("debug")
-    parser = argparse.ArgumentParser()
+    parser=argparse.ArgumentParser()
     parser.add_argument("--DR_json", default="DR_request_basic_dump2.json")
     parser.add_argument("--VS_json", default="VS_request_basic_dump2.json")
-    args = parser.parse_args()
-    DR = DataRequest.from_separated_inputs(args.DR_json, args.VS_json)
+    args=parser.parse_args()
+    DR=DataRequest.from_separated_inputs(args.DR_json, args.VS_json)
+    print(DR)
+    change_log_file(default=True)
+    change_log_level("debug")
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--DR_json", default="DR_request_basic_dump2.json")
+    parser.add_argument("--VS_json", default="VS_request_basic_dump2.json")
+    args=parser.parse_args()
+    DR=DataRequest.from_separated_inputs(args.DR_json, args.VS_json)
     print(DR)

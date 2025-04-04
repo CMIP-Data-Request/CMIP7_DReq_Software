@@ -27,6 +27,7 @@ DREQ_VERSION = ''  # if a tagged version is being used, set this in calling scri
 # Functions to manage data request content input and use it to create python
 # objects representing the tables.
 
+
 def get_content_type(content):
     '''
     Internal function to distinguish the type of airtable export we are working with, based on the input dict.
@@ -46,12 +47,13 @@ def get_content_type(content):
         'version' : 1 base containing the content of a tagged data request version.
     '''
     n = len(content)
-    if n in [3,4]:
+    if n in [3, 4]:
         content_type = 'working'
     elif n == 1:
         content_type = 'version'
     else:
-        raise ValueError('Unable to determine type of data request content in the exported json file')
+        raise ValueError(
+            'Unable to determine type of data request content in the exported json file')
     return content_type
 
 
@@ -71,8 +73,9 @@ def get_priority_levels():
     # The 'Core' priority represents the Baseline Climate Variables (BCVs, https://doi.org/10.5194/egusphere-2024-2363).
     # It should be highest priority unless something has been mistakenly modified in dreq_classes.py.
     # Hence this check should NEVER fail, and is done here only to be EXTRA safe.
-    assert priority_levels[0] == 'Core', 'error in PRIORITY_LEVELS: highest priority should be Core (BCVs)'
-    
+    assert priority_levels[
+        0] == 'Core', 'error in PRIORITY_LEVELS: highest priority should be Core (BCVs)'
+
     return priority_levels
 
 
@@ -83,7 +86,7 @@ def get_table_id2name(base):
     table_id2name = {}
     for table in base.values():
         table_id2name.update({
-            table['id'] : table['name']
+            table['id']: table['name']
         })
     assert len(table_id2name) == len(base), 'table ids are not unique!'
     return table_id2name
@@ -93,7 +96,6 @@ def create_dreq_tables_for_request(content, consolidated=True):
     '''
     For the "request" part of the data request content (Opportunities, Variable Groups, etc),
     render raw airtable export content as DreqTable objects.
-    
     For the "data" part of the data request, the corresponding function is create_dreq_tables_for_variables().
 
     Parameters
@@ -116,7 +118,8 @@ def create_dreq_tables_for_request(content, consolidated=True):
     (The base name from the input 'content' dict no longer appears.)
     '''
     if not isinstance(content, dict):
-        raise TypeError('Input should be dict from raw airtable export json file')
+        raise TypeError(
+            'Input should be dict from raw airtable export json file')
 
     # Content is dict loaded from raw airtable export json file
     if consolidated:
@@ -140,16 +143,16 @@ def create_dreq_tables_for_request(content, consolidated=True):
         # print('Creating table object for table: ' + table_name)
         base[table_name] = DreqTable(table, table_id2name)
 
-    # Change names of tables if needed 
+    # Change names of tables if needed
     # (insulates downstream code from upstream name changes that don't affect functionality)
     change_table_names = {}
     if content_type == 'working':
         change_table_names = {
             # old name : new name
-            'Experiment' : 'Experiments',
-            'Priority level' : 'Priority Level'
+            'Experiment': 'Experiments',
+            'Priority level': 'Priority Level'
         }
-    for old,new in change_table_names.items():
+    for old, new in change_table_names.items():
         assert new not in base, 'New table name already exists: ' + new
         if old not in base:
             # print(f'Unavailable table {old}, skipping name change')
@@ -166,7 +169,8 @@ def create_dreq_tables_for_request(content, consolidated=True):
         if 'variable_groups' not in dreq_opps.attr2field:
             # Try alternate names for the latest variable groups
             try_vg_attr = []
-            try_vg_attr.append('working_updated_variable_groups') # takes precendence over originally requested groups
+            # takes precendence over originally requested groups
+            try_vg_attr.append('working_updated_variable_groups')
             try_vg_attr.append('originally_requested_variable_groups')
             for vg_attr in try_vg_attr:
                 if vg_attr in dreq_opps.attr2field:
@@ -176,10 +180,12 @@ def create_dreq_tables_for_request(content, consolidated=True):
     exclude_opps = set()
     for opp_id, opp in dreq_opps.records.items():
         if not hasattr(opp, 'experiment_groups'):
-            print(f' * WARNING *    no experiment groups found for Opportunity: {opp.title}')
+            print(
+                f' * WARNING *    no experiment groups found for Opportunity: {opp.title}')
             exclude_opps.add(opp_id)
         if not hasattr(opp, 'variable_groups'):
-            print(f' * WARNING *    no variable groups found for Opportunity: {opp.title}')
+            print(
+                f' * WARNING *    no variable groups found for Opportunity: {opp.title}')
             exclude_opps.add(opp_id)
     if len(exclude_opps) > 0:
         print('Quality control check is excluding these Opportunities:')
@@ -218,7 +224,8 @@ def create_dreq_tables_for_variables(content, consolidated=True):
 
     '''
     if not isinstance(content, dict):
-        raise TypeError('Input should be dict from raw airtable export json file')
+        raise TypeError(
+            'Input should be dict from raw airtable export json file')
 
     # Content is dict loaded from raw airtable export json file
     if consolidated:
@@ -241,17 +248,17 @@ def create_dreq_tables_for_variables(content, consolidated=True):
         # print('Creating table object for table: ' + table_name)
         base[table_name] = DreqTable(table, table_id2name)
 
-    # Change names of tables if needed 
+    # Change names of tables if needed
     # (insulates downstream code from upstream name changes that don't affect functionality)
     change_table_names = {}
     if content_type == 'working':
         change_table_names = {
             # old name : new name
-            'Variable' : 'Variables',
-            'Coordinate or Dimension' : 'Coordinates and Dimensions',
-            'Physical Parameter' : 'Physical Parameters',
+            'Variable': 'Variables',
+            'Coordinate or Dimension': 'Coordinates and Dimensions',
+            'Physical Parameter': 'Physical Parameters',
         }
-    for old,new in change_table_names.items():
+    for old, new in change_table_names.items():
         assert new not in base, 'New table name already exists: ' + new
         base[new] = base[old]
         base.pop(old)
@@ -283,14 +290,16 @@ def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
         use_opps = sorted(set(use_opps))
         if all([isinstance(s, str) for s in use_opps]):
             # opp_ids = [opp_id for opp_id,opp in records.items() if opp.title in use_opps]
-            title2id = {opp.title : opp_id for opp_id,opp in records.items()}
-            assert len(records) == len(title2id), 'Opportunity titles are not unique'
+            title2id = {opp.title: opp_id for opp_id, opp in records.items()}
+            assert len(records) == len(
+                title2id), 'Opportunity titles are not unique'
             for title in use_opps:
                 if title in title2id:
                     opp_ids.append(title2id[title])
                 else:
                     # print(f'\n* WARNING *    Opportunity not found: {title}\n')
-                    raise Exception(f'\n* ERROR *    The specified Opportunity is not found: {title}\n')
+                    raise Exception(
+                        f'\n* ERROR *    The specified Opportunity is not found: {title}\n')
 
     assert len(set(opp_ids)) == len(opp_ids), 'found repeated opportunity ids'
 
@@ -322,6 +331,7 @@ def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
     return opp_ids
 
 
+
 def get_var_group_priority(var_group, dreq_priorities=None):
     '''
     Returns string stating the priorty level of variable group.
@@ -342,7 +352,8 @@ def get_var_group_priority(var_group, dreq_priorities=None):
         return 'Undefined'
 
     if isinstance(var_group.priority_level, list):
-        assert len(var_group.priority_level) == 1, 'Variable group should have one specified priority level'
+        assert len(
+            var_group.priority_level) == 1, 'Variable group should have one specified priority level'
         link = var_group.priority_level[0]
         assert isinstance(dreq_priorities, DreqTable)
         rec = dreq_priorities.records[link.record_id]
@@ -352,7 +363,8 @@ def get_var_group_priority(var_group, dreq_priorities=None):
     else:
         raise Exception('Unable to determine variable group priority level')
     if not isinstance(priority_level, str):
-        raise TypeError('Priority level should be str, instead got {}'.format(type(priority_level)))
+        raise TypeError(
+            'Priority level should be str, instead got {}'.format(type(priority_level)))
     return priority_level
 
 
@@ -374,7 +386,7 @@ def get_unique_var_name(var):
     if UNIQUE_VAR_NAME == 'compound name':
         return var.compound_name
     else:
-        raise ValueError('Unknown identifier for UNIQUE_VAR_NAME: ' + UNIQUE_VAR_NAME + 
+        raise ValueError('Unknown identifier for UNIQUE_VAR_NAME: ' + UNIQUE_VAR_NAME +
                          '\nHow should the unique variable name be determined?')
 
 
@@ -398,7 +410,7 @@ def get_opp_expts(opp, expt_groups, expts, verbose=False):
     Example: {'historical', 'piControl'}
     '''
     # Follow links to experiment groups to find the names of requested experiments
-    opp_expts = set() # list to store names of experiments requested by this Opportunity
+    opp_expts = set()  # list to store names of experiments requested by this Opportunity
     if verbose:
         print('  Experiment Groups ({}):'.format(len(opp.experiment_groups)))
     for link in opp.experiment_groups:
@@ -408,7 +420,8 @@ def get_opp_expts(opp, expt_groups, expts, verbose=False):
             continue
 
         if verbose:
-            print(f'    {expt_group.name}  ({len(expt_group.experiments)} experiments)')
+            print(
+                f'    {expt_group.name}  ({len(expt_group.experiments)} experiments)')
 
         for link in expt_group.experiments:
             expt = expts.records[link.record_id]
@@ -440,7 +453,7 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
     Example: {'High' : {'Amon.tas', 'day.tas'}, 'Medium' : {'day.ua'}}
     '''
     # Follow links to variable groups to find names of requested variables
-    opp_vars = {p : set() for p in priority_levels}
+    opp_vars = {p: set() for p in priority_levels}
     if verbose:
         print('  Variable Groups ({}):'.format(len(opp.variable_groups)))
     for link in opp.variable_groups:
@@ -451,7 +464,8 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
             continue
 
         if verbose:
-            print(f'    {var_group.name}  ({len(var_group.variables)} variables, {priority_level} priority)')
+            print(
+                f'    {var_group.name}  ({len(var_group.variables)} variables, {priority_level} priority)')
 
         for link in var_group.variables:
             var = dreq_vars.records[link.record_id]
@@ -461,7 +475,8 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
     return opp_vars
 
 
-def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True, check_core_variables=True):
+def get_requested_variables(
+        content, use_opps='all', priority_cutoff='Low', verbose=True, consolidated=True, check_core_variables=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -525,18 +540,20 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
         dreq_tables['priority level'] = base['Priority Level']
         priority_levels_from_table = [rec.name for rec in dreq_tables['priority level'].records.values()]
         assert set(all_priority_levels) == set(priority_levels_from_table), \
-            'inconsistent priority levels:\n  ' + str(all_priority_levels) + '\n  ' + str(priority_levels_from_table)
+            'inconsistent priority levels:\n  ' + \
+            str(all_priority_levels) + '\n  ' + str(priority_levels_from_table)
     else:
         dreq_tables['priority level'] = None
     priority_cutoff = priority_cutoff.capitalize()
     if priority_cutoff not in all_priority_levels:
-        raise ValueError('Invalid priority level cutoff: ' + priority_cutoff + '\nCould not determine priority levels to include.')
+        raise ValueError('Invalid priority level cutoff: ' + priority_cutoff +
+                         '\nCould not determine priority levels to include.')
     m = all_priority_levels.index(priority_cutoff)
     priority_levels = all_priority_levels[:m+1]
     del priority_cutoff
 
     # Loop over Opportunities to get prioritized lists of variables
-    request = {} # dict to hold aggregated request
+    request = {}  # dict to hold aggregated request
     for opp_id in opp_ids:
         opp = dreq_tables['opps'].records[opp_id] # one record from the Opportunity table
 
@@ -567,11 +584,11 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
 
     opp_titles = sorted([dreq_tables['opps'].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {
-        'Header' : {
-            'Opportunities' : opp_titles,
-            'dreq version' : DREQ_VERSION,
+        'Header': {
+            'Opportunities': opp_titles,
+            'dreq version': DREQ_VERSION,
         },
-        'experiment' : {},
+        'experiment': {},
     }
     for expt_name, expt_req in request.items():
         requested_vars['experiment'].update(expt_req.to_dict())
@@ -593,9 +610,8 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
                 msg = 'Inconsistent Core variables for experiment: ' + expt_name + \
                     f'\n{len(core_vars)} {len(vars)} {len(core_vars.intersection(vars))}'
                 raise ValueError(msg)
-
+    
     return requested_vars
-
 
 def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
     '''
@@ -882,15 +898,17 @@ def show_requested_vars_summary(expt_vars, use_dreq_version):
     Display quick summary to stdout of variables requested.
     expt_vars is the output dict from dq.get_requested_variables().
     '''
-    print(f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
-    priority_levels=get_priority_levels()
+    print(
+        f'\nFor data request version {use_dreq_version}, number of requested variables found by experiment:')
+    priority_levels = get_priority_levels()
     for expt, req in sorted(expt_vars['experiment'].items()):
-        d = {p : 0 for p in priority_levels}
+        d = {p: 0 for p in priority_levels}
         for p in priority_levels:
             if p in req:
                 d[p] = len(req[p])
         n_total = sum(d.values())
-        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p,n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
+        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p, n=d[p])
+              for p in priority_levels]) + f', TOTAL={n_total}')
 
 
 def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cutoff, content_path):
@@ -905,7 +923,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     })
 
     # List supported priority levels
-    priority_levels=get_priority_levels()
+    priority_levels = get_priority_levels()
     priority_cutoff = priority_cutoff.capitalize()
     m = priority_levels.index(priority_cutoff)+1
     header.update({
@@ -914,7 +932,8 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     for req in expt_vars['experiment'].values():
         for p in priority_levels[m:]:
             assert req[p] == []
-            req.pop(p) # remove empty lists of unsupported priorities from the output
+            # remove empty lists of unsupported priorities from the output
+            req.pop(p)
 
     # List included experiments
     header.update({
