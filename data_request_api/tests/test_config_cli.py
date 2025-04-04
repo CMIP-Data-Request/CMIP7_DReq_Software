@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 import data_request_api.stable.utilities.config as dreqcfg
 
@@ -74,7 +75,12 @@ def test_init_config_entry_point(temp_config_file, monkeypatch):
         "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
-        ["CMIP7_data_request_api_config", "init", "--cfgfile", str(temp_config_file)],
+        [
+            "CMIP7_data_request_api_config",
+            "init",
+            "--cfgfile",
+            str(temp_config_file),
+        ],
         capture_output=True,
         text=True,
     )
@@ -171,3 +177,25 @@ def test_invalid_command_entry_point(temp_config_file, monkeypatch):
     )
     assert result.returncode == 0
     assert "usage: CMIP7_data_request_api_config <arguments>" in result.stdout
+
+
+def test_config_file_from_env_var(temp_config_file, monkeypatch):
+    # Set the CMIP7_DR_API_CONFIGFILE environment variable
+    monkeypatch.setenv("CMIP7_DR_API_CONFIGFILE", str(temp_config_file))
+
+    # Run your test as usual
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "data_request_api.command_line.config",
+            "init",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert temp_config_file.exists()
+    with open(temp_config_file) as f:
+        config = yaml.safe_load(f)
+    assert config == dreqcfg.DEFAULT_CONFIG
