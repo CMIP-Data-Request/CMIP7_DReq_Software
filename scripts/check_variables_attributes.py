@@ -24,7 +24,7 @@ from data_request_api.stable.utilities.tools import write_json_output_file_conte
 
 
 @append_kwargs_from_config
-def check_variables_attributes(version="latest_stable", **kwargs):
+def check_variables_attributes(version="v1.1", **kwargs):
 	change_log_file(logfile="check_attributes.log")
 	change_log_level("info")
 	logger = get_logger()
@@ -55,6 +55,7 @@ def check_variables_attributes(version="latest_stable", **kwargs):
 		all_right = list()
 		several = list()
 		missing = list()
+		overall_test = True
 		for attr in sorted(list(rep[param])):
 			val = rep[param][attr]
 			val = sorted(list(val))
@@ -67,8 +68,9 @@ def check_variables_attributes(version="latest_stable", **kwargs):
 				test = False
 			if test:
 				all_right.append(attr)
+			overall_test = overall_test and test
 			rep[param][attr] = val
-		if test:
+		if overall_test:
 			logger.info(f"... all attributes are unique and no missing value found: {rep[param]}")
 			del rep[param]
 		else:
