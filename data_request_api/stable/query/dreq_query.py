@@ -17,11 +17,11 @@ from data_request_api.stable.query.dreq_classes import (
     DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
 from data_request_api.stable.utilities.tools import write_csv_output_file_content
 
-# Version of data request content:
-DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
-
 # Version of software (python API):
 from data_request_api import version as api_version
+
+# Version of data request content:
+DREQ_VERSION = ''  # if a tagged version is being used, set this in calling script
 
 ###############################################################################
 # Functions to manage data request content input and use it to create python
@@ -193,6 +193,18 @@ def create_dreq_tables_for_request(content, consolidated=True):
         # This check is here because if something changes upstream in Airtable, it might cause
         # the above code to erroneously remove all opportunities.
         raise Exception(' * ERROR *    All Opportunities were removed!')
+
+    # Determine which compound name to use based on dreq content version
+    USE_COMPOUND_NAME = 'compound_name'
+    version = tuple(map(int, DREQ_VERSION.strip('v').split('.')))  # e.g. 'v1.2' --> (1,2)
+    if version[:2] >= (1,2):
+        USE_COMPOUND_NAME = 'cmip6_compound_name'
+    if USE_COMPOUND_NAME != 'compound_name':
+        table_name = 'Variables'
+        for rec in base[table_name].records.values():
+            if hasattr(rec, 'compound_name'):
+                raise Exception(f'compound_name attribute is already defined for table "{table_name}"')
+            rec.compound_name = getattr(rec, USE_COMPOUND_NAME)
 
     return base
 
@@ -572,11 +584,16 @@ def get_requested_variables(content, use_opps='all', priority_cutoff='Low', verb
         for expt_name, expt_req in requested_vars['experiment'].items():
             assert 'Core' in expt_req, 'Missing Core variables for experiment: ' + expt_name
             vars = set(expt_req['Core'])
-            assert len(vars) > 0, 'Empty Core variables list for experiment: ' + expt_name
+            if len(vars) == 0:
+                msg = 'Empty Core variables list for experiment: ' + expt_name
+                raise ValueError(msg)
             if len(core_vars) == 0:
                 core_vars = vars
-            assert vars == core_vars, 'Inconsistent Core variables for experiment: ' + expt_name
- 
+            if vars != core_vars:
+                msg = 'Inconsistent Core variables for experiment: ' + expt_name + \
+                    f'\n{len(core_vars)} {len(vars)} {len(core_vars.intersection(vars))}'
+                raise ValueError(msg)
+
     return requested_vars
 
 
@@ -655,7 +672,8 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
             dreq_tables['frequency'] = base[freq_table_name]
         found_freq = True
         break
-    assert found_freq, 'Which airtable field gives the frequency?'
+    if not found_freq:
+        raise ValueError('Which airtable field gives the frequency?')
 
     # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
     dreq_tables.update({
@@ -664,13 +682,23 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         'temporal shape' : base['Temporal Shape'],
         'cell methods' : base['Cell Methods'],
         'physical parameters' : base['Physical Parameters'],
-        'CMOR tables' : base['Table Identifiers'],
         'realm' : base['Modelling Realm'],
         'cell measures' : base['Cell Measures'],
         'CF standard name' : None,
     })
     if 'CF Standard Names' in base:
         dreq_tables['CF standard name'] = base['CF Standard Names']
+
+    if 'Table Identifiers' in base:
+        dreq_tables['CMOR tables'] = base['Table Identifiers']
+        attr_table = 'table'
+        attr_realm = 'modelling_realm'
+    elif 'CMIP6 Table Identifiers (legacy)' in base:
+        dreq_tables['CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
+        attr_table = 'cmip6_table_legacy'
+        attr_realm = 'modelling_realm___primary'
+    else:
+        raise ValueError('Which table contains CMOR table identifiers?')
 
     if use_dreq_version in dreq_versions_substitute_cmip6_freq:
         # needed for corrections below
@@ -699,8 +727,10 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
             if var.compound_name not in compound_names:
                 continue
 
-        assert len(var.table) == 1
-        table_id = dreq_tables['CMOR tables'].get_record(var.table[0]).name
+        link_table = getattr(var, attr_table)
+        if len(link_table) != 1:
+            raise Exception(f'variable {var.compound_name} should have one table link, found: ' + str(link_table))
+        table_id = dreq_tables['CMOR tables'].get_record(link_table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
             if table_id not in cmor_tables:
@@ -776,7 +806,8 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         else:
             standard_name_proposed = phys_param.proposed_cf_standard_name
 
-        modeling_realm = [dreq_tables['realm'].get_record(link).id for link in var.modelling_realm]
+        link_realm = getattr(var, attr_realm)
+        modeling_realm = [dreq_tables['realm'].get_record(link).id for link in link_realm]
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):

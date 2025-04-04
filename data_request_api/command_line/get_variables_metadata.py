@@ -49,6 +49,7 @@ def main():
     content = dc.load(use_dreq_version)
 
     # Get metadata for variables
+    dq.DREQ_VERSION = use_dreq_version
     all_var_info = dq.get_variables_metadata(
         content,
         compound_names=args.compound_names,
