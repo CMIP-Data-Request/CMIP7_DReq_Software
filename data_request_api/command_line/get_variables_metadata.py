@@ -11,6 +11,7 @@ import data_request_api.stable.content.dreq_content as dc
 import data_request_api.stable.query.dreq_query as dq
 from data_request_api import version as api_version
 
+
 def parse_args():
     '''
     Parse command-line arguments
@@ -49,6 +50,7 @@ def main():
     content = dc.load(use_dreq_version)
 
     # Get metadata for variables
+    dq.DREQ_VERSION = use_dreq_version
     all_var_info = dq.get_variables_metadata(
         content,
         compound_names=args.compound_names,
