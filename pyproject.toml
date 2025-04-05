@@ -52,8 +52,7 @@ command_line = "-m pytest"
 source = [
     "data_request_api/stable",
     "data_request_api/command_line",
-    "scripts",
-    "notebooks"
+    "scripts"
     ]
 data_file = "data_request_api/tests/.coverage"
 
