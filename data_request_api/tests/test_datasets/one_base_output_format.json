@@ -10660,6 +10660,44 @@
             "id": "tbltLmSqDq1DrY4vE",
             "name": "Experiment Group",
             "records": {
+                "rec3SrBJdcuNy1bH9": {
+                    "size_(years,_minimum)_rollup_(from_experiments)": 0
+                },
+                "rec4U0NGFyARAPRaK": {
+                    "complete_experiment_list": true,
+                    "experiments": [
+                        "rec8X0SfL3q8VhMCF",
+                        "recqDPhDFycGVChnQ"
+                    ],
+                    "name": "picontrol",
+                    "opportunity": [
+                        "rec3U47ELkPaIiEvu",
+                        "recyI7yEg9NmgvMUo",
+                        "reciPQYJFSDkLwYSn",
+                        "recXHnqqCJb3C3N4i",
+                        "rece5Aa0WhZkhDgto",
+                        "recJmq09H5o2grrrJ",
+                        "recMasC9RHT5Y9uig",
+                        "recnGMElkrvRENv8H",
+                        "recl1iYsYYSsmeUBW",
+                        "rechatwG2VhChE8jQ",
+                        "recdVRfwH1q2xKQX3"
+                    ],
+                    "size_(years,_minimum)_rollup_(from_experiments)": 200
+                },
+                "recJgPQACaIUot61r": {
+                    "experiments": [
+                        "recGU6a4CEd19iasC",
+                        "rec57B5t6CTmhA5cM",
+                        "recmoQVU8PtR8u8yH"
+                    ],
+                    "name": "firemip_deck_subset",
+                    "opportunity": [
+                        "rece5Aa0WhZkhDgto"
+                    ],
+                    "size_(years,_minimum)_rollup_(from_experiments)": 300,
+                    "title": "Subset of deck experiments for FireMIP opportunity"
+                },
                 "recMVTajdWaMkfpnn": {
                     "comments": [
                         "rec1orgtGlDcVtYB8",
@@ -10732,44 +10770,6 @@
                         "recFqsmTUcjkSidif",
                         "recDzqIaoi3250AlF"
                     ],
-                    "rec3srbjdcuny1bh9": {
-                        "size_(years,_minimum)_rollup_(from_experiments)": 0
-                    },
-                    "rec4u0ngfyaraprak": {
-                        "complete_experiment_list": true,
-                        "experiments": [
-                            "rec8X0SfL3q8VhMCF",
-                            "recqDPhDFycGVChnQ"
-                        ],
-                        "name": "picontrol",
-                        "opportunity": [
-                            "rec3U47ELkPaIiEvu",
-                            "recyI7yEg9NmgvMUo",
-                            "reciPQYJFSDkLwYSn",
-                            "recXHnqqCJb3C3N4i",
-                            "rece5Aa0WhZkhDgto",
-                            "recJmq09H5o2grrrJ",
-                            "recMasC9RHT5Y9uig",
-                            "recnGMElkrvRENv8H",
-                            "recl1iYsYYSsmeUBW",
-                            "rechatwG2VhChE8jQ",
-                            "recdVRfwH1q2xKQX3"
-                        ],
-                        "size_(years,_minimum)_rollup_(from_experiments)": 200
-                    },
-                    "recjgpqacaiuot61r": {
-                        "experiments": [
-                            "recGU6a4CEd19iasC",
-                            "rec57B5t6CTmhA5cM",
-                            "recmoQVU8PtR8u8yH"
-                        ],
-                        "name": "firemip_deck_subset",
-                        "opportunity": [
-                            "rece5Aa0WhZkhDgto"
-                        ],
-                        "size_(years,_minimum)_rollup_(from_experiments)": 300,
-                        "title": "Subset of deck experiments for FireMIP opportunity"
-                    },
                     "size_(years,_minimum)_rollup_(from_experiments)": 2850
                 },
                 "recOsk6MOclhnbrwf": {

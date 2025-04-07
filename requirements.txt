@@ -3,4 +3,6 @@ coverage
 openpyxl
 pooch
 pytest
+pyyaml
 requests
+pyyaml

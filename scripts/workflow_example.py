@@ -29,9 +29,10 @@ Usage examples:
     ./export_dreq_lists_json.py v1.0 dreq_list.json --opportunities_file opps.json
 
 '''
-import sys
 import os
+import sys
 
+# add repo top-level dir to system path so that data_request_api imports work from scripts/
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -40,8 +41,7 @@ from data_request_api.stable.query import dreq_query as dq
 from importlib import reload
 reload(dq)
 
-
-use_dreq_version = 'v1.1'
+use_dreq_version = 'v1.2'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)
