@@ -340,9 +340,9 @@ def get_var_group_priority(var_group, dreq_priorities=None):
     ----------
     var_group : DreqRecord
         Object representing a variable group
-        Its "priority_level" attribute specifies the priority as either string or link to dreq_priorities table 
+        Its "priority_level" attribute specifies the priority as either string or link to dreq_priorities table
     dreq_priorities : DreqTable
-        Required if var_group.priority_level is link to dreq_priorities table 
+        Required if var_group.priority_level is link to dreq_priorities table
 
     Returns
     -------
@@ -445,7 +445,7 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
     dreq_vars : DreqTable
         Variables table
     dreq_priorities : DreqTable
-        Required if var_group.priority_level is link to dreq_priorities table 
+        Required if var_group.priority_level is link to dreq_priorities table
 
     Returns
     -------
@@ -549,7 +549,7 @@ def get_requested_variables(
         raise ValueError('Invalid priority level cutoff: ' + priority_cutoff +
                          '\nCould not determine priority levels to include.')
     m = all_priority_levels.index(priority_cutoff)
-    priority_levels = all_priority_levels[:m+1]
+    priority_levels = all_priority_levels[:m + 1]
     del priority_cutoff
 
     # Loop over Opportunities to get prioritized lists of variables
@@ -614,7 +614,8 @@ def get_requested_variables(
     return requested_vars
 
 
-def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
+def get_variables_metadata(content, compound_names=None, cmor_tables=None,
+                           cmor_variables=None, consolidated=True, use_dreq_version=None):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
 
@@ -673,7 +674,8 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
 
     # Choose which table to use for freqency
     try_freq_table_name = []
-    try_freq_table_name.append('Frequency')  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
+    # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
+    try_freq_table_name.append('Frequency')
     try_freq_table_name.append('CMIP7 Frequency')
     try_freq_table_name.append('CMIP6 Frequency (legacy)')
 
@@ -724,7 +726,8 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     # Compound names will be used to uniquely identify variables.
     # Check here that this is indeed a unique name as expected.
     var_name_map = {record.compound_name: record_id for record_id, record in dreq_tables['variables'].records.items()}
-    assert len(var_name_map) == len(dreq_tables['variables'].records), 'compound names do not uniquely map to variable record ids'
+    assert len(var_name_map) == len(
+        dreq_tables['variables'].records), 'compound names do not uniquely map to variable record ids'
 
     if cmor_tables:
         print('Retaining only these CMOR tables: ' + ', '.join(cmor_tables))
@@ -926,7 +929,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     # List supported priority levels
     priority_levels = get_priority_levels()
     priority_cutoff = priority_cutoff.capitalize()
-    m = priority_levels.index(priority_cutoff)+1
+    m = priority_levels.index(priority_cutoff) + 1
     header.update({
         'Priority levels supported': priority_levels[:m]
     })

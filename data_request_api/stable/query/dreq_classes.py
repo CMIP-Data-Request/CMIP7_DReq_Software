@@ -95,7 +95,8 @@ class DreqRecord:
                     }
                     value[m] = DreqLink(**d)
 
-            # Adjust the field name so that it's accessible as an object attribute using the dot syntax (object.attribute)
+            # Adjust the field name so that it's accessible as an object attribute
+            # using the dot syntax (object.attribute)
             key = field_info[field_name]['attribute_name']
             assert not hasattr(
                 self, key), f'for field {field_name}, key already exists: {key}'
@@ -110,7 +111,7 @@ class DreqRecord:
             if isinstance(v, list):
                 # If attribute is a list of links, show only show_list_entries of them.
                 # This makes it easier to view records that contain very long lists of links.
-                indent = ' '*len(s)
+                indent = ' ' * len(s)
                 n = len(v)
                 s += f'{v[0]}'
                 for m in range(1, min(show_list_entries, n)):
@@ -361,7 +362,7 @@ class ExptRequest:
                 continue
             n = len(req)
             s = f'  {p} ({n}): '
-            indent = ' '*len(s)
+            indent = ' ' * len(s)
             sortby = str.lower
             req = sorted(req, key=sortby)
             if break_up_compound_name and UNIQUE_VAR_NAME == 'compound name':

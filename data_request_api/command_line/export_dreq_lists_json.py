@@ -41,8 +41,12 @@ def parse_args():
         else:
             raise ValueError()
     parser.register('type', 'json_or_csv_file', _var_metadata_check)
-    parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file',
-                        help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
+    parser.add_argument(
+        '-vm',
+        '--variables_metadata',
+        nargs='+',
+        type='json_or_csv_file',
+        help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
 
     return parser.parse_args()
 

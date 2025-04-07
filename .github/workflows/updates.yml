@@ -28,7 +28,7 @@ jobs:
 
       - name: Pep8ify
         run: |
-          autopep8 data_request_api --max-line-length=120 --experimental --recursive --in-place --pep8-passes 2000 --verbose
+          autopep8 data_request_api --max-line-length=120 --experimental --recursive --in-place --pep8-passes 2000 --aggressive --verbose
 
       - name: Tech documentation generation
         run: |

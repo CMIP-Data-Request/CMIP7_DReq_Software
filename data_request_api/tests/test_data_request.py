@@ -155,8 +155,6 @@ class TestDRObjects(unittest.TestCase):
         self.assertEqual(len(my_set), 2)
 
 
-
-
 def test_filter_on_request(self):
     obj1 = DRObjects(id="my_id", DR_type="test", dr=self.dr)
     obj2 = copy.deepcopy(obj1)

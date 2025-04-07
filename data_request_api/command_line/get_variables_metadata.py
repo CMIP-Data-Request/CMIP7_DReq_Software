@@ -30,10 +30,12 @@ def parse_args():
             raise ValueError()
     parser.register('type', 'json_or_csv_file', _var_metadata_check)
     required_named_args = parser.add_argument_group('required named arguments')
-    required_named_args.add_argument('-o', '--outfile', nargs='+', type='json_or_csv_file', required=True,
-                                     help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
-    parser.add_argument('-cn', '--compound_names', nargs='+', type=str,
-                        help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
+    required_named_args.add_argument(
+        '-o', '--outfile', nargs='+', type='json_or_csv_file', required=True,
+        help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
+    parser.add_argument(
+        '-cn', '--compound_names', nargs='+', type=str,
+        help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
     parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
                         help='include only the specified CMOR tables (aka MIP tables, examples: "Amon", "Omon")')
     parser.add_argument('-v', '--cmor_variables', nargs='+', type=str,
