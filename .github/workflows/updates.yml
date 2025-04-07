@@ -11,71 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      #  Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # Adjust Python version if needed
+          python-version: '3.11'
 
-      # Install dependencies (pdoc and autopep8)
       - name: Install dependencies
         run: |
-<<<<<<< HEAD
-          pip install pdoc3 autopep8
-=======
           pip install pdoc autopep8
->>>>>>> c719f33 (documentation)
+          pip install -e .
 
-      # Step 4: Run your two commands
       - name: Pep8ify
         run: |
           autopep8 data_request_api --max-line-length=120 --experimental --recursive --in-place --pep8-passes 2000 --verbose
 
       - name: Tech documentation generation
         run: |
-          pip install -e . 
-<<<<<<< HEAD
-          pdoc --html data_request_api/stable  --output-dir docs/ --force
-
-      # # Step 5: Commit and push changes (if any)
-      # - name: Commit and push changes
-      #   run: |
-      #     git config --global user.name 'cmip-ipo'
-      #     git config --global user.email 'cmip-ipo@users.noreply.github.com'
-      #     git add .
-      #     git diff --staged --quiet || git commit -m "Automation: Updating formatting and documentation."
-      #     git push
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pdoc --html data_request_api/stable --output-dir docs/ --force
 
       - name: Commit All
         uses: WCRP-CMIP/CMIP-LD/actions/commit-all@main
         with:
           message: "Automated Content Update"
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Push Changes
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/CMIP-Data-Request/CMIP7_DReq_Software.git
-          git push 
-=======
-          pdoc --force --html data_request_api/stable  --output-dir docs/
-
-      # Step 5: Commit and push changes (if any)
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'cmip-ipo'
-          git config --global user.email 'cmip-ipo@users.noreply.github.com'
-          git add .
-          git diff --staged --quiet || git commit -m "Automation: Updating formatting and documentation."
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
->>>>>>> c719f33 (documentation)
