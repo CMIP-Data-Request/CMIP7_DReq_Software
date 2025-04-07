@@ -13,10 +13,10 @@ from collections import OrderedDict
 
 parser = argparse.ArgumentParser(
     description='Write json file of variables metadata organized by CF standard name'
-    )
+)
 parser.add_argument('infile', type=str,
                     help='json file with variables metadata produced by get_variables_metadata.py')
-parser.add_argument('outfile', type=str, #default='all_var_info_by_cfsn.json',
+parser.add_argument('outfile', type=str,  # default='all_var_info_by_cfsn.json',
                     help='output json file')
 args = parser.parse_args()
 
@@ -27,8 +27,8 @@ with open(args.infile, 'r') as f:
     use_dreq_version = out['Header']['dreq content version']
 
 name_in_file = {
-    'standard_name' : 'CF Standard Name',
-    'standard_name_proposed' : 'CF Standard Name (Proposed)',
+    'standard_name': 'CF Standard Name',
+    'standard_name_proposed': 'CF Standard Name (Proposed)',
 }
 n = 0
 for sn_type in ['standard_name', 'standard_name_proposed']:

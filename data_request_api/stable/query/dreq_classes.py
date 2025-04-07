@@ -29,7 +29,6 @@ UNIQUE_VAR_NAME = 'compound name'  # method used to uniquely name variables
 PRIORITY_LEVELS = ('core', 'high', 'medium', 'low')
 
 
-
 def format_attribute_name(k):
     '''
     Adjust input string so that it's suitable for use as an object attribute name using the dot syntax (object.attribute).

@@ -34,6 +34,7 @@ def parse_args():
     parser.add_argument('output_file', help='file to write JSON output to')
     parser.add_argument('--version', action='store_true',
                         help='Return version information and exit')
+
     def _var_metadata_check(arg):
         if arg.endswith('.json') or arg.endswith('.csv'):
             return arg
@@ -160,7 +161,6 @@ def main():
         print(
             f'\nFor data request version {use_dreq_version}, no requested variables were found')
 
-
     if args.variables_metadata:
 
         # Get all variable names for all requested experiments
@@ -174,7 +174,7 @@ def main():
             base,
             compound_names=all_var_names,
             use_dreq_version=use_dreq_version  # TO DEPRECATE
-            )
+        )
 
         # Write output file(s)
         for filepath in args.variables_metadata:
@@ -183,8 +183,8 @@ def main():
                 filepath,
                 api_version=data_request_api.version,
                 use_dreq_version=use_dreq_version,
-                content_path = dc._dreq_content_loaded['json_path']
-                )
+                content_path=dc._dreq_content_loaded['json_path']
+            )
 
 
 if __name__ == '__main__':

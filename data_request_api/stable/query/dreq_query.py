@@ -162,7 +162,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
 
     # Make some adjustments that are specific to the Opportunity table
     dreq_opps = base['Opportunity']
-    dreq_opps.rename_attr('title_of_opportunity', 'title') # rename title attribute for brevity in downstream code
+    dreq_opps.rename_attr('title_of_opportunity', 'title')  # rename title attribute for brevity in downstream code
     for opp in dreq_opps.records.values():
         opp.title = opp.title.strip()
     if content_type == 'working':
@@ -203,7 +203,7 @@ def create_dreq_tables_for_request(content, consolidated=True):
     # Determine which compound name to use based on dreq content version
     USE_COMPOUND_NAME = 'compound_name'
     version = tuple(map(int, DREQ_VERSION.strip('v').split('.')))  # e.g. 'v1.2' --> (1,2)
-    if version[:2] >= (1,2):
+    if version[:2] >= (1, 2):
         USE_COMPOUND_NAME = 'cmip6_compound_name'
     if USE_COMPOUND_NAME != 'compound_name':
         table_name = 'Variables'
@@ -269,6 +269,7 @@ def create_dreq_tables_for_variables(content, consolidated=True):
 # Functions to interrogate the data request, e.g. get variables requested for
 # each experiment.
 
+
 def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
     '''
     Return list of unique opportunity identifiers.
@@ -329,7 +330,6 @@ def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
             print('No Opportunities found')
 
     return opp_ids
-
 
 
 def get_var_group_priority(var_group, dreq_priorities=None):
@@ -524,11 +524,11 @@ def get_requested_variables(
         raise TypeError('Expect dict as input')
 
     dreq_tables = {
-        'opps' : base['Opportunity'],
-        'expt groups' : base['Experiment Group'],
-        'expts' : base['Experiments'],
-        'var groups' : base['Variable Group'],
-        'vars' : base['Variables']
+        'opps': base['Opportunity'],
+        'expt groups': base['Experiment Group'],
+        'expts': base['Experiments'],
+        'var groups': base['Variable Group'],
+        'vars': base['Variables']
     }
     opp_ids = get_opp_ids(use_opps, dreq_tables['opps'], verbose=verbose)
 
@@ -555,21 +555,21 @@ def get_requested_variables(
     # Loop over Opportunities to get prioritized lists of variables
     request = {}  # dict to hold aggregated request
     for opp_id in opp_ids:
-        opp = dreq_tables['opps'].records[opp_id] # one record from the Opportunity table
+        opp = dreq_tables['opps'].records[opp_id]  # one record from the Opportunity table
 
         if verbose:
             print(f'Opportunity: {opp.title}')
 
-        opp_expts = get_opp_expts(opp, 
-                                  dreq_tables['expt groups'], 
-                                  dreq_tables['expts'], 
+        opp_expts = get_opp_expts(opp,
+                                  dreq_tables['expt groups'],
+                                  dreq_tables['expts'],
                                   verbose=verbose)
-        
-        opp_vars = get_opp_vars(opp, 
-                                priority_levels, 
-                                dreq_tables['var groups'], 
-                                dreq_tables['vars'], 
-                                dreq_tables['priority level'], 
+
+        opp_vars = get_opp_vars(opp,
+                                priority_levels,
+                                dreq_tables['var groups'],
+                                dreq_tables['vars'],
+                                dreq_tables['priority level'],
                                 verbose=verbose)
 
         # Aggregate this Opportunity's request into the master list of requests
@@ -610,8 +610,9 @@ def get_requested_variables(
                 msg = 'Inconsistent Core variables for experiment: ' + expt_name + \
                     f'\n{len(core_vars)} {len(vars)} {len(core_vars.intersection(vars))}'
                 raise ValueError(msg)
-    
+
     return requested_vars
+
 
 def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
     '''
@@ -654,7 +655,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
             base = create_dreq_tables_for_request(content, consolidated=consolidated)
     else:
         raise TypeError('Expect dict as input')
-    
+
     # Some variables in these dreq versions lack a 'frequency' attribute; use the legacy CMIP6 frequency for them
     dreq_versions_substitute_cmip6_freq = ['v1.0', 'v1.1']
     if not use_dreq_version:
@@ -664,7 +665,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     # Mostly this would be the same as simply using base[table name], but in some cases there's a choice
     # of which table to use. Using dreq_tables as a mapping makes this choice explicit.
     dreq_tables = {
-        'variables' : base['Variables']
+        'variables': base['Variables']
     }
     # The Variables table is the master list of variables in the data request.
     # Each entry (row) is a CMOR variable, containing the variable's metadata.
@@ -672,7 +673,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
 
     # Choose which table to use for freqency
     try_freq_table_name = []
-    try_freq_table_name.append('Frequency') # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
+    try_freq_table_name.append('Frequency')  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
     try_freq_table_name.append('CMIP7 Frequency')
     try_freq_table_name.append('CMIP6 Frequency (legacy)')
 
@@ -682,7 +683,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         if freq_attr_name not in dreq_tables['variables'].attr2field:
             continue
         if 'frequency' not in dreq_tables['variables'].attr2field:
-            # code below assumes a variable's frequency is given by its "frequency" 
+            # code below assumes a variable's frequency is given by its "frequency"
             dreq_tables['variables'].rename_attr(freq_attr_name, 'frequency')
         if freq_table_name in base:
             dreq_tables['frequency'] = base[freq_table_name]
@@ -693,14 +694,14 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
 
     # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
     dreq_tables.update({
-        'spatial shape' : base['Spatial Shape'],
-        'coordinates and dimensions' : base['Coordinates and Dimensions'],
-        'temporal shape' : base['Temporal Shape'],
-        'cell methods' : base['Cell Methods'],
-        'physical parameters' : base['Physical Parameters'],
-        'realm' : base['Modelling Realm'],
-        'cell measures' : base['Cell Measures'],
-        'CF standard name' : None,
+        'spatial shape': base['Spatial Shape'],
+        'coordinates and dimensions': base['Coordinates and Dimensions'],
+        'temporal shape': base['Temporal Shape'],
+        'cell methods': base['Cell Methods'],
+        'physical parameters': base['Physical Parameters'],
+        'realm': base['Modelling Realm'],
+        'cell measures': base['Cell Measures'],
+        'CF standard name': None,
     })
     if 'CF Standard Names' in base:
         dreq_tables['CF standard name'] = base['CF Standard Names']
@@ -722,7 +723,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
 
     # Compound names will be used to uniquely identify variables.
     # Check here that this is indeed a unique name as expected.
-    var_name_map = {record.compound_name : record_id for record_id, record in dreq_tables['variables'].records.items()}
+    var_name_map = {record.compound_name: record_id for record_id, record in dreq_tables['variables'].records.items()}
     assert len(var_name_map) == len(dreq_tables['variables'].records), 'compound names do not uniquely map to variable record ids'
 
     if cmor_tables:
@@ -734,7 +735,7 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
-        '_' : ['\\_']
+        '_': ['\\_']
     }
     all_var_info = {}
     for var in dreq_tables['variables'].records.values():
@@ -840,37 +841,37 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
         var_info = OrderedDict()
         # Insert fields in order given by CMIP6 cmor tables (https://github.com/PCMDI/cmip6-cmor-tables)
         var_info.update({
-            'frequency' : frequency,
-            'modeling_realm' : ' '.join(modeling_realm),
+            'frequency': frequency,
+            'modeling_realm': ' '.join(modeling_realm),
         })
         if standard_name != '':
             var_info['standard_name'] = standard_name
         else:
             var_info['standard_name_proposed'] = standard_name_proposed
         var_info.update({
-            'units' : phys_param.units,
-            'cell_methods' : cell_methods,
-            'cell_measures' : ' '.join(cell_measures),
+            'units': phys_param.units,
+            'cell_methods': cell_methods,
+            'cell_measures': ' '.join(cell_measures),
 
-            'long_name' : var.title,
-            'comment' : comment,
+            'long_name': var.title,
+            'comment': comment,
 
-            'dimensions' : ' '.join(dims_list),
-            'out_name' : out_name,
-            'type' : var.type,
-            'positive' : positive,
+            'dimensions': ' '.join(dims_list),
+            'out_name': out_name,
+            'type': var.type,
+            'positive': positive,
 
-            'spatial_shape' : spatial_shape.name,
-            'temporal_shape' : temporal_shape.name,
+            'spatial_shape': spatial_shape.name,
+            'temporal_shape': temporal_shape.name,
 
             # 'temporalLabelDD' : temporal_shape.brand,
             # 'verticalLabelDD' : spatial_shape.vertical_label_dd,
             # 'horizontalLabelDD' : spatial_shape.hor_label_dd,
             # 'areaLabelDD' : area_label_dd,  # this comes from cell methods
 
-            'table' : table_id,
+            'table': table_id,
         })
-        for k,v in var_info.items():
+        for k, v in var_info.items():
             v = v.strip()
             for replacement in substitute:
                 for s in substitute[replacement]:
@@ -918,8 +919,8 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     '''
 
     header = OrderedDict({
-        'Description' : 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
-        'Opportunities supported' : sorted(expt_vars['Header']['Opportunities'], key=str.lower)
+        'Description': 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
+        'Opportunities supported': sorted(expt_vars['Header']['Opportunities'], key=str.lower)
     })
 
     # List supported priority levels
@@ -927,7 +928,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     priority_cutoff = priority_cutoff.capitalize()
     m = priority_levels.index(priority_cutoff)+1
     header.update({
-        'Priority levels supported' : priority_levels[:m]
+        'Priority levels supported': priority_levels[:m]
     })
     for req in expt_vars['experiment'].values():
         for p in priority_levels[m:]:
@@ -937,7 +938,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
 
     # List included experiments
     header.update({
-        'Experiments included' : sorted(expt_vars['experiment'].keys(), key=str.lower)
+        'Experiments included': sorted(expt_vars['experiment'].keys(), key=str.lower)
     })
 
     # Get provenance of content to include in the header
@@ -945,15 +946,15 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
     with open(content_path, 'rb') as f:
         content_hash = hashlib.sha256(f.read()).hexdigest()
     header.update({
-        'dreq content version' : use_dreq_version,
-        'dreq content file' : os.path.basename(os.path.normpath(content_path)),
-        'dreq content sha256 hash' : content_hash,
-        'dreq api version' : api_version,
+        'dreq content version': use_dreq_version,
+        'dreq content file': os.path.basename(os.path.normpath(content_path)),
+        'dreq content sha256 hash': content_hash,
+        'dreq api version': api_version,
     })
 
     out = {
-        'Header' : header,
-        'experiment' : OrderedDict(),
+        'Header': header,
+        'experiment': OrderedDict(),
     }
     expt_names = sorted(expt_vars['experiment'].keys(), key=str.lower)
     for expt_name in expt_names:
@@ -971,7 +972,7 @@ def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cut
 
 
 def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None):
- 
+
     ext = os.path.splitext(filepath)[-1]
 
     if not api_version:
@@ -988,15 +989,15 @@ def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_
 
         # Create output dict
         out = OrderedDict({
-            'Header' : OrderedDict({
-                'Description' : 'Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.',
-                'no. of variables' : len(all_var_info),
+            'Header': OrderedDict({
+                'Description': 'Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.',
+                'no. of variables': len(all_var_info),
                 'dreq content version': use_dreq_version,
-                'dreq content file' : os.path.basename(os.path.normpath(content_path)),
-                'dreq content sha256 hash' : content_hash,
-                'dreq api version' : api_version,
+                'dreq content file': os.path.basename(os.path.normpath(content_path)),
+                'dreq content sha256 hash': content_hash,
+                'dreq api version': api_version,
             }),
-            'Compound Name' : all_var_info,
+            'Compound Name': all_var_info,
         })
 
         # Write variables metadata to json
