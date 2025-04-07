@@ -833,14 +833,11 @@ class DataRequest(object):
         return os.linesep.join(rep)
 
 
-<< << << < HEAD
-== == == =
 
     def _get_sorted_list(self, list_id):
         if self.cache.get(list_id) is None:
             self.cache[list_id] = [self.content[list_id][key] for key in sorted(list(self.content[list_id]))]
         return self.cache[list_id]
->>>>>> > 1701445 (API optimization(  # 73))
 
     def get_experiment_groups(self):
         """

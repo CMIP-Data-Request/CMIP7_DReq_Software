@@ -155,8 +155,6 @@ class TestDRObjects(unittest.TestCase):
         self.assertEqual(len(my_set), 2)
 
 
-<< << << < HEAD
-== == == =
 
 
 def test_filter_on_request(self):
