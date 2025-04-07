@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "coverage", "pytest","setuptools_scm"]
+requires = ["setuptools>=61.0", "coverage", "pytest", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,11 +8,10 @@ dependencies = [
     "pooch",
     "openpyxl",
     "requests",
-    "beautifulsoup4",  # Use the correct package name for `bs4`
+    "beautifulsoup4",
     "pyyaml",
 ]
-# version is dynamically set from the tag on the github repo
-dynamic = ["version"]  # Let setuptools_scm handle versioning
+dynamic = ["version"]
 authors = [
   { name="James Anstey"},
   { name="Gaëlle Rigoudy"},
@@ -22,25 +21,32 @@ authors = [
   { name="Elisabeth Dingley"},
   { name="Marie-Pierre Moine"},
 ]
-description = "A programatic interface to the CMIP7 Data Request"
+description = "A programmatic interface to the CMIP7 Data Request"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+license = "MIT"
 
 [project.urls]
 Homepage = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software"
 Issues = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/issues"
 
 [project.scripts]
-# modules and functions that act as command line utilities to be specified here
-# use pip install -e . from the root directory of the repository to set up the entry points
 export_dreq_lists_json = "data_request_api.command_line.export_dreq_lists_json:main"
 get_variables_metadata = "data_request_api.command_line.get_variables_metadata:main"
 CMIP7_data_request_api_config = "data_request_api.command_line.config:main"
+
+[tool.setuptools]
+package-dir = {"" = "data_request_api"}  # 🔍 Tell setuptools that packages are under src/
+
+[tool.setuptools.packages.find]
+where = ["data_request_api"]             # 🔍 Discover packages from this directory
+
+[tool.setuptools_scm]
+write_to = "data_request_api/version.py"  # updated path for version file
 
 [tool.pytest.ini_options]
 cache_dir = "data_request_api/tests/.pytest_cache"
@@ -53,14 +59,14 @@ source = [
     "data_request_api/stable",
     "data_request_api/command_line",
     "scripts"
-    ]
+]
 data_file = "data_request_api/tests/.coverage"
 
 [tool.coverage.report]
 fail_under = 50
 exclude_lines = [
     'if __name__ == "__main__":'
-    ]
+]
 
 [tool.coverage.html]
 directory = "data_request_api/tests/htmlcov"
@@ -72,10 +78,7 @@ output = "data_request_api/tests/coverage.xml"
 output = "data_request_api/tests/coverage.json"
 
 [tool.coverage.lcov]
-output = "data_request_api/tests.coverage.lcov"
+output = "data_request_api/tests/coverage.lcov"
 
-[tool.setuptools_scm]
-write_to = "data_request_api/version.py"
-
-[tools.setuptools.package-data]
-'src' = ['data_request_api/tests/test_datasets/*.json']
+[tool.setuptools.package-data]
+"data_request_api" = ["tests/test_datasets/*.json"]
