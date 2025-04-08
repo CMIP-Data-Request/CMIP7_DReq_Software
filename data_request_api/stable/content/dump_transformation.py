@@ -571,12 +571,12 @@ def get_transformed_content(version="latest_stable", export="release", consolida
         VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
         DR_content = os.sep.join([output_dir, DR_content])
         VS_content = os.sep.join([output_dir, VS_content])
-        if force_retrieve or not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+        if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
             if os.path.exists(DR_content):
                 os.remove(DR_content)
             if os.path.exists(VS_content):
                 os.remove(VS_content)
-        if not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+        if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
             content = dc.load(version, export=export, consolidate=consolidate)
             data_request, vocabulary_server = transform_content(content, version)
             write_json_output_file_content(DR_content, data_request)

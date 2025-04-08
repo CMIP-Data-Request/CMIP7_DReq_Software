@@ -27,6 +27,7 @@ def parse_args():
     parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
     parser.add_argument('output_file', help='file to write JSON output to')
     parser.add_argument('--version', action='store_true', help='Return version information and exit')
+
     def _var_metadata_check(arg):
         if arg.endswith('.json') or arg.endswith('.csv'):
             return arg
@@ -63,12 +64,12 @@ def main():
             # create opportunities file template
             use_opps = sorted([opp.title for opp in Opps.records.values()], key=str.lower)
             default_opportunity_dict = OrderedDict({
-                'Header' : OrderedDict({
-                    'Description' : 'Opportunities template file for use with export_dreq_lists_json. Set supported/unsupported Opportunities to true/false.',
+                'Header': OrderedDict({
+                    'Description': 'Opportunities template file for use with export_dreq_lists_json. Set supported/unsupported Opportunities to true/false.',
                     'dreq content version': use_dreq_version,
-                    'dreq api version' : data_request_api.version,
+                    'dreq api version': data_request_api.version,
                 }),
-                'Opportunity' : OrderedDict({title : True for title in use_opps})
+                'Opportunity': OrderedDict({title: True for title in use_opps})
             })
             with open(opportunities_file, 'w') as fh:
                 json.dump(default_opportunity_dict, fh, indent=4)
@@ -78,11 +79,11 @@ def main():
             # load existing opportunities file
             with open(opportunities_file, 'r') as fh:
                 opportunity_dict = json.load(fh)
-            
+
             dreq_version = opportunity_dict['Header']['dreq content version']
             if dreq_version != use_dreq_version:
-                raise ValueError('Data request version mismatch!' + \
-                                 f'\nOpportunities file was generated for data request version {dreq_version}' + \
+                raise ValueError('Data request version mismatch!' +
+                                 f'\nOpportunities file was generated for data request version {dreq_version}' +
                                  f'\nPlease regenerate the file using version {use_dreq_version}')
 
             opportunity_dict = opportunity_dict['Opportunity']
@@ -109,15 +110,15 @@ def main():
 
     # filter output by requested experiments
     if args.experiments:
-        experiments = list(expt_vars['experiment'].keys()) # names of experiments requested by opportunities in use_opps
+        experiments = list(expt_vars['experiment'].keys())  # names of experiments requested by opportunities in use_opps
 
         # validate the requested experiment names
         Expts = base['Experiments']
-        valid_experiments = [expt.experiment for expt in Expts.records.values()] # all valid experiment names in data request
+        valid_experiments = [expt.experiment for expt in Expts.records.values()]  # all valid experiment names in data request
         invalid_experiments = [entry for entry in args.experiments if entry not in valid_experiments]
         if invalid_experiments:
-            raise ValueError('\nInvalid experiments: ' + ', '.join(sorted(invalid_experiments, key=str.lower)) + \
-                '\nValid experiment names: ' + ', '.join(sorted(valid_experiments, key=str.lower)))
+            raise ValueError('\nInvalid experiments: ' + ', '.join(sorted(invalid_experiments, key=str.lower)) +
+                             '\nValid experiment names: ' + ', '.join(sorted(valid_experiments, key=str.lower)))
 
         # discard experiments that aren't requested
         for entry in experiments:
@@ -151,7 +152,7 @@ def main():
             base,
             compound_names=all_var_names,
             use_dreq_version=use_dreq_version  # TO DEPRECATE
-            )
+        )
 
         # Write output file(s)
         for filepath in args.variables_metadata:
@@ -160,8 +161,8 @@ def main():
                 filepath,
                 api_version=data_request_api.version,
                 use_dreq_version=use_dreq_version,
-                content_path = dc._dreq_content_loaded['json_path']
-                )
+                content_path=dc._dreq_content_loaded['json_path']
+            )
 
 
 if __name__ == '__main__':

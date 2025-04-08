@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>data_request_api.stable.content.consolidate_export API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>data_request_api.stable.content.consolidate_export</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="data_request_api.stable.content.consolidate_export.map_data"><code class="name flex">
+<span>def <span class="ident">map_data</span></span>(<span>data, mapping_table)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def map_data(data, mapping_table):
+    &#34;&#34;&#34;
+    Maps the data to the one-base structure using the mapping table.
+
+    Parameters
+    ----------
+    data : dict
+        Three-base or one-base Airtable export.
+    mapping_table dict
+        The mapping table to apply to map to one base.
+
+    Returns
+    -------
+    dict
+        Mapped data with one-base structure.
+
+    Note
+    ----
+        Returns the input dict if the data is already one-base.
+    &#34;&#34;&#34;
+    logger = get_logger()
+    missing_bases = []
+    missing_tables = []
+    mapped_data = {&#34;Data Request&#34;: {}}
+
+    # Reset filtered records
+    global filtered_records
+    if filtered_records:
+        filtered_records = []
+
+    if len(data.keys()) in [3, 4]:
+
+        # Get filtered records
+        for table, mapinfo in mapping_table.items():
+            if (
+                mapinfo[&#34;source_base&#34;] in data
+                and mapinfo[&#34;source_table&#34;] in data[mapinfo[&#34;source_base&#34;]]
+            ):
+                if &#34;internal_filters&#34; in mapinfo:
+                    for record_id, record in data[mapinfo[&#34;source_base&#34;]][
+                        mapinfo[&#34;source_table&#34;]
+                    ][&#34;records&#34;].items():
+                        filter_results = []
+                        for filter_key, filter_val in mapinfo[
+                            &#34;internal_filters&#34;
+                        ].items():
+                            if filter_key not in record:
+                                filter_results.append(False)
+                            elif filter_val[&#34;operator&#34;] == &#34;nonempty&#34;:
+                                filter_results.append(bool(record[filter_key]))
+                            elif filter_val[&#34;operator&#34;] == &#34;in&#34;:
+                                if isinstance(record[filter_key], list):
+                                    filter_results.append(
+                                        any(
+                                            fj in filter_val[&#34;values&#34;]
+                                            for fj in record[filter_key]
+                                        )
+                                    )
+                                else:
+                                    filter_results.append(
+                                        record[filter_key] in filter_val[&#34;values&#34;]
+                                    )
+                            elif filter_val[&#34;operator&#34;] == &#34;not in&#34;:
+                                if isinstance(record[filter_key], list):
+                                    filter_results.append(
+                                        any(
+                                            fj not in filter_val[&#34;values&#34;]
+                                            for fj in record[filter_key]
+                                        )
+                                    )
+                                else:
+                                    filter_results.append(
+                                        record[filter_key] not in filter_val[&#34;values&#34;]
+                                    )
+                        if not all(filter_results):
+                            logger.debug(
+                                f&#34;Filtered out record &#39;{record_id}&#39; {&#39;(&#39;+record[&#39;name&#39;]+&#39;)&#39; if &#39;name&#39; in record else &#39;&#39;} from &#39;{table}&#39;.&#34;
+                            )
+                            filtered_records.append(record_id)
+        logger.info(f&#34;Filtered {len(filtered_records)} records.&#34;)
+
+        # Perform mapping in case of three-base structure
+        for table, mapinfo in mapping_table.items():
+            intm = mapinfo[&#34;internal_mapping&#34;]
+            if (
+                mapinfo[&#34;source_base&#34;] in data
+                and mapinfo[&#34;source_table&#34;] in data[mapinfo[&#34;source_base&#34;]]
+            ):
+                # Copy the selected data to the one-base structure
+                logger.debug(f&#34;Mapping &#39;{mapinfo[&#39;source_base&#39;]}&#39; -&gt; &#39;{table}&#39;&#34;)
+                mapped_data[&#34;Data Request&#34;][table] = {
+                    **data[mapinfo[&#34;source_base&#34;]][mapinfo[&#34;source_table&#34;]],
+                    &#34;records&#34;: {
+                        record_id: record
+                        for record_id, record in data[mapinfo[&#34;source_base&#34;]][
+                            mapinfo[&#34;source_table&#34;]
+                        ][&#34;records&#34;].items()
+                        if record_id not in filtered_records
+                    },
+                }
+
+                # If record attributes require mapping
+                if intm != {}:
+                    # for each attribute that requires mapping
+                    for attr in intm.keys():
+                        for record_id, record in data[mapinfo[&#34;source_base&#34;]][
+                            mapinfo[&#34;source_table&#34;]
+                        ][&#34;records&#34;].items():
+                            if (
+                                attr not in record
+                                or record[attr] is None
+                                or record[attr] == &#34;&#34;
+                                or record[attr] == []
+                            ):
+                                logger.debug(
+                                    f&#34;{table}: Attribute &#39;{attr}&#39; not found for record &#39;{record_id}&#39;.&#34;
+                                )
+                                continue
+                            attr_vals = record[attr]
+
+                            # operation
+                            if intm[attr][&#34;operation&#34;] == &#34;split&#34;:
+                                attr_vals = re.split(r&#34;\s*,\s*&#34;, attr_vals)
+                            elif intm[attr][&#34;operation&#34;] == &#34;&#34;:
+                                if isinstance(attr_vals, str):
+                                    attr_vals = [attr_vals]
+                            else:
+                                raise ValueError(
+                                    f&#34;Unknown internal mapping operation for attribute &#39;{attr}&#39; (&#39;{mapinfo[&#39;source_table&#39;]}&#39;): &#39;{intm[attr][&#39;operation&#39;]}&#39;&#34;
+                                )
+
+                            # Get mapped record_ids
+                            # entry_type - single record_id or list of record_ids
+                            # - map by record_id
+                            if intm[attr][&#34;entry_type&#34;] == &#34;record_id&#34;:
+                                if not intm[attr][&#34;base_copy_of_table&#34;]:
+                                    raise ValueError(
+                                        &#34;A copy of the table in the same base is required if &#39;entry_type&#39; is set to &#39;record_id&#39;, &#34;
+                                        f&#34;but &#39;base_copy_of_table&#39; is set to False: &#39;{mapinfo[&#39;source_table&#39;]}&#39; - &#39;{attr}&#39;&#34;
+                                    )
+                                elif not intm[attr][&#34;base&#34;] in data:
+                                    raise KeyError(
+                                        f&#34;Base &#39;{intm[attr][&#39;base&#39;]}&#39; not found in data.&#34;
+                                    )
+                                elif (
+                                    intm[attr][&#34;base_copy_of_table&#34;]
+                                    not in data[mapinfo[&#34;source_base&#34;]]
+                                ):
+                                    raise KeyError(
+                                        f&#34;Table &#39;{intm[attr][&#39;table&#39;]}&#39; not found in base &#39;{intm[attr][&#39;base_copy&#39;]}&#39;.&#34;
+                                    )
+                                recordIDs_new = []
+                                for attr_val in attr_vals:
+                                    # The record copy in the current base
+                                    record_copy = data[mapinfo[&#34;source_base&#34;]][
+                                        intm[attr][&#34;base_copy_of_table&#34;]
+                                    ][&#34;records&#34;][attr_val]
+                                    # The entire list of records in the base of origin
+                                    recordlist = data[intm[attr][&#34;base&#34;]][
+                                        intm[attr][&#34;table&#34;]
+                                    ][&#34;records&#34;]
+                                    recordID_new = _map_record_id(
+                                        record_copy,
+                                        recordlist,
+                                        intm[attr][&#34;map_by_key&#34;],
+                                    )
+                                    if recordID_new:
+                                        recordIDs_new.append(recordID_new)
+                            # entry_type - name (eg. unique label or similar)
+                            # - map by attribute value
+                            elif intm[attr][&#34;entry_type&#34;] == &#34;name&#34;:
+                                recordIDs_new = []
+                                for attr_val in attr_vals:
+                                    recordID_new = _map_attribute(
+                                        attr_val,
+                                        data[intm[attr][&#34;base&#34;]][intm[attr][&#34;table&#34;]][
+                                            &#34;records&#34;
+                                        ],
+                                        (
+                                            intm[attr][&#34;map_by_key&#34;]
+                                            if isinstance(intm[attr][&#34;map_by_key&#34;], str)
+                                            else intm[attr][&#34;map_by_key&#34;][0]
+                                        ),
+                                    )
+                                    if recordID_new:
+                                        recordIDs_new.append(recordID_new)
+                            else:
+                                raise ValueError(
+                                    f&#34;Unknown &#39;entry_type&#39; specified for attribute &#39;{attr}&#39; (&#39;{mapinfo[&#39;source_table&#39;]}&#39;): &#39;{intm[attr][&#39;entry_type&#39;]}&#39;&#34;
+                                )
+                            if not recordIDs_new:
+                                raise KeyError(
+                                    f&#34;{table} (record &#39;{record_id}&#39;): For attribute &#39;{attr}&#39; no records could be mapped.&#34;
+                                )
+                            mapped_data[&#34;Data Request&#34;][table][&#34;records&#34;][record_id][
+                                attr
+                            ] = recordIDs_new
+
+            else:
+                if mapinfo[&#34;source_base&#34;] not in data:
+                    missing_tables.append(mapinfo[&#34;source_base&#34;])
+                elif mapinfo[&#34;source_table&#34;] not in data[mapinfo[&#34;source_base&#34;]]:
+                    missing_bases.append(mapinfo[&#34;source_table&#34;])
+        if len(missing_bases) &gt; 0:
+            warnings.warn(
+                f&#34;Encountered missing bases when consolidating the data: {set(missing_bases)}&#34;
+            )
+        if len(missing_tables) &gt; 0:
+            warnings.warn(
+                f&#34;Encountered missing tables when consolidating the data: {missing_tables}&#34;
+            )
+        return mapped_data
+    # Return the data if it is already one-base
+    elif len(data.keys()) == 1:
+        version = next(iter(data.keys())).replace(&#34;Data Request &#34;, &#34;&#34;)
+        mapped_data = next(iter(data.values()))
+        if version in version_consistency:
+            for tfrom, tto in version_consistency[version].items():
+                logger.debug(
+                    f&#34;Consistency across versions - renaming table: {tfrom} -&gt; {tto}&#34;
+                )
+                mapped_data[tto] = mapped_data.pop(tfrom)
+        return {&#34;Data Request&#34;: mapped_data}
+    else:
+        raise ValueError(&#34;The loaded Data Request has an unexpected data structure.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Maps the data to the one-base structure using the mapping table.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Three-base or one-base Airtable export.</dd>
+</dl>
+<p>mapping_table dict
+The mapping table to apply to map to one base.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Mapped data with one-base structure.</dd>
+</dl>
+<h2 id="note">Note</h2>
+<pre><code>Returns the input dict if the data is already one-base.
+</code></pre></div>
+</dd>
+<dt id="data_request_api.stable.content.consolidate_export.transform_content"><code class="name flex">
+<span>def <span class="ident">transform_content</span></span>(<span>data)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transform_content(data):
+    &#34;&#34;&#34;
+    Transform the data request content into a tidy format.
+
+    This function takes the data request content as input, tidies it up by removing
+    unnecessary keys and renaming others, and returns the transformed data request
+    and vocabulary server.
+
+    Parameters:
+    data (dict): The data request content to be transformed.
+
+    Returns:
+    tuple: A tuple containing the transformed data request and vocabulary server.
+    &#34;&#34;&#34;
+    logger = get_logger()
+    global default_count
+
+    # Create an index to map record IDs to UIDs
+    record_to_uid_index = dict()
+    # Separate dreq and vocabulary information
+    data_request = dict()
+    vocabulary_server = dict()
+    # Get the content of the Data Request
+    content = data[&#34;Data Request&#34;]
+
+    # Define the keys to remove from each table
+    to_remove_keys = {}
+
+    # Iterate over each table in the content
+    for subelt in sorted(list(content)):
+        for record_id in sorted(list(content[subelt][&#34;records&#34;])):
+            # Get the keys to remove for this table
+            if subelt in to_remove_keys:
+                keys_to_remove = to_remove_keys[subelt]
+            else:
+                keys_to_remove = list()
+
+            # Get the list of keys for this record
+            list_keys = list(content[subelt][&#34;records&#34;][record_id])
+
+            # Add keys that match certain patterns to the list of keys to remove
+            keys_to_remove.extend(
+                [
+                    key
+                    for key in list_keys
+                    if &#34;(MJ)&#34; in key
+                    or &#34;test&#34; in key.lower()
+                    or (&#34;last&#34; in key.lower() and &#34;modified&#34; in key.lower())
+                    or &#34;count&#34; in key.lower()
+                ]
+            )
+
+            # Remove the keys that should be removed
+            for key in set(keys_to_remove) &amp; set(list_keys):
+                del content[subelt][&#34;records&#34;][record_id][key]
+
+            # Rename the &#34;UID&#34; key to &#34;uid&#34; if it exists
+            if &#34;UID&#34; in list_keys:
+                content[subelt][&#34;records&#34;][record_id][&#34;uid&#34;] = content[subelt][
+                    &#34;records&#34;
+                ][record_id].pop(&#34;UID&#34;)
+            elif &#34;uid&#34; not in list_keys:
+                # If no &#34;uid&#34; key exists, create a default one
+                uid = default_template.format(default_count)
+                content[subelt][&#34;records&#34;][record_id][&#34;uid&#34;] = uid
+                default_count += 1
+                logger.debug(
+                    f&#34;Undefined uid for element {os.sep.join([subelt, &#39;records&#39;, record_id])}, set {uid}&#34;
+                )
+
+            # Add the record ID to UID mapping to the index
+            record_to_uid_index[record_id] = content[subelt][&#34;records&#34;][record_id][
+                &#34;uid&#34;
+            ]
+            if (
+                subelt
+                in [
+                    &#34;Opportunity&#34;,
+                ]
+                and &#34;Title of Opportunity&#34; in list_keys
+            ):
+                content[subelt][&#34;records&#34;][record_id][&#34;name&#34;] = content[subelt][
+                    &#34;records&#34;
+                ][record_id].pop(&#34;Title of Opportunity&#34;)
+            elif &#34;name&#34; not in list_keys and &#34;Name&#34; not in list_keys:
+                content[subelt][&#34;records&#34;][record_id][&#34;name&#34;] = &#34;undef&#34;
+
+    # Replace record_id by uid
+    logger.debug(&#34;Replace record ids by uids&#34;)
+    content_string = json.dumps(content)
+    for record_id, uid in record_to_uid_index.items():
+        content_string = content_string.replace(f&#39;&#34;{record_id}&#34;&#39;, f&#39;&#34;{uid}&#34;&#39;)
+    content = json.loads(content_string)
+
+    # Alternative
+    # for key, value in content.items():
+    #    if isinstance(value, dict):
+    #        content[key] = {record_to_uid_index.get(k, k): v for k, v in value.items()}
+    #    elif isinstance(value, list):
+    #        content[key] = [{record_to_uid_index.get(k, k): v for k, v in item.items()} if isinstance(item, dict) else item for item in value]
+
+    # Build the data request
+    logger.debug(&#34;Build DR and VS&#34;)
+    for subelt in sorted(list(content)):
+        if subelt in [
+            &#34;Opportunity&#34;,
+        ]:
+            new_subelt = &#34;opportunities&#34;
+            data_request[new_subelt] = dict()
+            vocabulary_server[new_subelt] = dict()
+            for uid in content[subelt][&#34;records&#34;]:
+                value = content[subelt][&#34;records&#34;][uid]
+                data_request[new_subelt][uid] = dict(
+                    experiments_groups=value.pop(&#34;Experiment Groups&#34;, list()),
+                    variables_groups=value.pop(&#34;Variable Groups&#34;, list()),
+                    themes=value.pop(&#34;Themes&#34;, list()),
+                    ensemble_size=value.pop(&#34;Ensemble Size&#34;, 1),
+                )
+                vocabulary_server[new_subelt][uid] = value
+        elif subelt in [
+            &#34;Variable Group&#34;,
+        ]:
+            new_subelt = &#34;variable_groups&#34;
+            data_request[new_subelt] = dict()
+            vocabulary_server[new_subelt] = dict()
+            for uid in content[subelt][&#34;records&#34;]:
+                value = content[subelt][&#34;records&#34;][uid]
+                data_request[new_subelt][uid] = dict(
+                    variables=value.pop(&#34;Variables&#34;, list()),
+                    mips=value.pop(&#34;MIPs&#34;, list()),
+                    priority=value.pop(&#34;Priority Level&#34;, None),
+                )
+                vocabulary_server[new_subelt][uid] = value
+        elif subelt in [
+            &#34;Experiment Group&#34;,
+        ]:
+            new_subelt = &#34;experiment_groups&#34;
+            data_request[new_subelt] = dict()
+            vocabulary_server[new_subelt] = dict()
+            for uid in content[subelt][&#34;records&#34;]:
+                value = content[subelt][&#34;records&#34;][uid]
+                data_request[new_subelt][uid] = dict(
+                    experiments=value.pop(&#34;Experiments&#34;, list())
+                )
+                vocabulary_server[new_subelt][uid] = value
+        else:
+            vocabulary_server[subelt] = content[subelt][&#34;records&#34;]
+    return data_request, vocabulary_server</code></pre>
+</details>
+<div class="desc"><p>Transform the data request content into a tidy format.</p>
+<p>This function takes the data request content as input, tidies it up by removing
+unnecessary keys and renaming others, and returns the transformed data request
+and vocabulary server.</p>
+<p>Parameters:
+data (dict): The data request content to be transformed.</p>
+<p>Returns:
+tuple: A tuple containing the transformed data request and vocabulary server.</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="data_request_api.stable.content" href="index.html">data_request_api.stable.content</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.stable.content.consolidate_export.map_data" href="#data_request_api.stable.content.consolidate_export.map_data">map_data</a></code></li>
+<li><code><a title="data_request_api.stable.content.consolidate_export.transform_content" href="#data_request_api.stable.content.consolidate_export.transform_content">transform_content</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

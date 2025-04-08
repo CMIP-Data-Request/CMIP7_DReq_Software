@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>data_request_api.stable.query.dreq_classes API documentation</title>
+<meta name="description" content="Flexible classes to represent tables, records &amp; links in the data request,
+as obtained from the Airtable json &#34;raw export&#34; of data request content …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>data_request_api.stable.query.dreq_classes</code></h1>
+</header>
+<section id="section-intro">
+<p>Flexible classes to represent tables, records &amp; links in the data request,
+as obtained from the Airtable json "raw export" of data request content.</p>
+<p>The purpose is to create generic objects allowing intuitive navigation/coding
+of the data request "network" (i.e., linked records). While the dict variables from
+the export can be used directly for this, manipulating them is more complex and
+error-prone.</p>
+<p>Each record from a table is represented as a DreqRecord object.
+The object's attribute names are determined automatically from the Airtable field
+names, which are the names of table columns in Airtable, following simple formatting
+rules (e.g. change space to underscore). Original names of Airtable fields
+are stored as well, allowing unambiguous comparison with Airtable content.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="data_request_api.stable.query.dreq_classes.format_attribute_name"><code class="name flex">
+<span>def <span class="ident">format_attribute_name</span></span>(<span>k)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_attribute_name(k):
+    &#39;&#39;&#39;
+    Adjust input string so that it&#39;s suitable for use as an object attribute name using the dot syntax (object.attribute).
+    &#39;&#39;&#39;
+    k = k.strip()
+    k = k.lower()
+    substitute = {
+        # replacement character(s) : [characters to replace with the replacement character]
+        &#39;_&#39;: list(&#39; .-+=?!@#$%^*:;&#39;) + [&#39;_&amp;_&#39;, &#39;/&#39;, &#39;\\&#39;],
+        &#39;&#39;: list(&#39;(){}[]&lt;&gt;|,&#34;~&#39;),
+        # Note: list(str) = [single chars in the string], example: list(&#39;ab&#39;) = [&#39;a&#39;, &#39;b&#39;]
+    }
+    for replacement in substitute:
+        for s in substitute[replacement]:
+            k = k.replace(s, replacement)
+    check_for_invalid_chars = [&#39;&amp;&#39;, &#39;/&#39;, &#39;-&#39;]
+    for s in check_for_invalid_chars:
+        assert s not in k, f&#39;{s} is invalid character for attribute {k}&#39;
+    return k</code></pre>
+</details>
+<div class="desc"><p>Adjust input string so that it's suitable for use as an object attribute name using the dot syntax (object.attribute).</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="data_request_api.stable.query.dreq_classes.DreqLink"><code class="flex name class">
+<span>class <span class="ident">DreqLink</span></span>
+<span>(</span><span>table_id: str, record_id: str, table_name: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class DreqLink:
+    &#39;&#39;&#39;
+    Generic class to represent a link to a record in a table.
+
+    The table_id, record_id reference the record. They are used to locate a record.
+    &#39;&#39;&#39;
+    table_id: str
+    record_id: str
+    table_name: str  # useful as a human-readable lable
+    # record_name : str  # not all tables have a &#34;name&#34; attribute, so would need to choose this based on table
+
+    def __repr__(self):
+        # return self.record_id
+        return f&#39;link: table={self.table_name}, record={self.record_id}&#39;</code></pre>
+</details>
+<div class="desc"><p>Generic class to represent a link to a record in a table.</p>
+<p>The table_id, record_id reference the record. They are used to locate a record.</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="data_request_api.stable.query.dreq_classes.DreqLink.record_id"><code class="name">var <span class="ident">record_id</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqLink.table_id"><code class="name">var <span class="ident">table_id</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqLink.table_name"><code class="name">var <span class="ident">table_name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqRecord"><code class="flex name class">
+<span>class <span class="ident">DreqRecord</span></span>
+<span>(</span><span>record, field_info)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DreqRecord:
+    &#39;&#39;&#39;
+    Generic class to represent a single record from a table.
+    &#39;&#39;&#39;
+
+    def __init__(self, record, field_info):
+        # Loop over fields in the record
+        for field_name, value in record.items():
+
+            # Check if the field contains links to records in other tables
+            if &#39;linked_table_id&#39; in field_info[field_name]:
+                assert isinstance(value, list), &#39;links should be a list of record identifiers&#39;
+                for m, record_id in enumerate(value):
+                    # Change the record_id str into a more informative object representing the link
+                    d = {
+                        &#39;table_id&#39;: field_info[field_name][&#39;linked_table_id&#39;],
+                        &#39;table_name&#39;: field_info[field_name][&#39;linked_table_name&#39;],
+                        &#39;record_id&#39;: record_id,
+                        # &#39;record_name&#39; : &#39;&#39;, # fill this in later if desired (finding it here would require access to whole base)
+                    }
+                    value[m] = DreqLink(**d)
+
+            # Adjust the field name so that it&#39;s accessible as an object attribute using the dot syntax (object.attribute)
+            key = field_info[field_name][&#39;attribute_name&#39;]
+            assert not hasattr(self, key), f&#39;for field {field_name}, key already exists: {key}&#39;
+            setattr(self, key, value)
+
+    def __repr__(self):
+        # return pprint.pformat(vars(self))
+        l = []
+        show_list_entries = 2
+        for k, v in self.__dict__.items():
+            s = f&#39;  {k}: &#39;
+            if isinstance(v, list):
+                # If attribute is a list of links, show only show_list_entries of them.
+                # This makes it easier to view records that contain very long lists of links.
+                indent = &#39; &#39; * len(s)
+                n = len(v)
+                s += f&#39;{v[0]}&#39;
+                for m in range(1, min(show_list_entries, n)):
+                    s += &#39;\n&#39; + indent + f&#39;{v[m]}&#39;
+                if n &gt; show_list_entries:
+                    # s += &#39;\n&#39; + indent + f&#39;... ({n} entries)&#39;
+                    s += &#39;\n&#39; + indent + f&#39;... ({n} in list, first {show_list_entries} shown)&#39;
+            else:
+                # Attribute is just a regular string or number.
+                s = f&#39;{s}{v}&#39;
+            l.append(s)
+        return &#39;\n&#39; + &#39;\n&#39;.join(l)
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__</code></pre>
+</details>
+<div class="desc"><p>Generic class to represent a single record from a table.</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqTable"><code class="flex name class">
+<span>class <span class="ident">DreqTable</span></span>
+<span>(</span><span>table, table_id2name)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DreqTable:
+    &#39;&#39;&#39;
+    Generic class to represent an table from the data request Airtable raw export json file (dict).
+
+    Here both &#34;field&#34; and &#34;attribute&#34; are used to refer to the columns in the table.
+    &#34;field&#34;  refers to the name of a column as it appears in Airtable.
+    &#34;attribute&#34; refers to the name of the column converted to the name of a record object attribute.
+    &#39;&#39;&#39;
+
+    def __init__(self, table, table_id2name):
+
+        # Set attributes that describe the table
+        self.table_id = table[&#39;id&#39;]
+        self.table_name = table[&#39;name&#39;]
+        self.base_id = table[&#39;base_id&#39;]
+        self.base_name = table[&#39;base_name&#39;]
+        self.description = table[&#39;description&#39;]
+
+        # Get info about fields (columns) in the table records, which are used below when creating record objects
+        fields = table[&#39;fields&#39;]  # dict giving info on each field, keyed by field_id (example: &#39;fld61d8b5mzI45H8F&#39;)
+        field_info = {field[&#39;name&#39;]: field for field in fields.values()}  # as fields dict, but use field name as the key
+        assert len(fields) == len(field_info), &#39;field names are not unique!&#39;
+        # (since field names are keys in record dicts, their names should be unique)
+        attr2field = {}
+        links = {}
+        for field_name, field in field_info.items():
+            # Determine an attribute name for the field.
+            # The field name is the name from Airtable, but it may include spaces or other forbidden characters.
+            attr = format_attribute_name(field_name)
+            field[&#39;attribute_name&#39;] = attr
+            attr2field[attr] = field_name  # remember the Airtable name, in case useful later
+            # If field is a link, add the name of the linked table to field_info.
+            if &#39;linked_table_id&#39; in field:
+                field[&#39;linked_table_name&#39;] = table_id2name[field[&#39;linked_table_id&#39;]]
+                links[attr] = field[&#39;linked_table_name&#39;]
+
+        # Loop over records to create a record object representing each one
+        records = table[&#39;records&#39;]  # dict giving info on each record, keyed by record_id (example: &#39;reczyxsKbAseqCisA&#39;)
+        for record_id, record in records.items():
+            if len(record) == 0:
+                # don&#39;t allow empty records!
+                # print(f&#39;skipping empty record {record_id} in table {self.table_name}&#39;)
+                continue
+            # Replace record dict with a record object
+            records[record_id] = DreqRecord(record, field_info)
+
+        # attributes for the collection of records (table rows)
+        self.records = records
+        self.record_ids = sorted(self.records.keys(), key=str.lower)
+        self.nrec = len(self.record_ids)
+
+        # attributes describing the attributes (columns) in each individual record
+        self.field_info = field_info
+        self.attr2field = attr2field
+        self.links = links
+
+    def rename_attr(self, old, new):
+        if old in self.attr2field:
+            assert new not in self.attr2field, &#39;Record attribute already exists: &#39; + new
+
+            field_name = self.attr2field[old]
+            self.field_info[field_name][&#39;attribute_name&#39;] = new
+
+            self.attr2field[new] = self.attr2field[old]
+            self.attr2field.pop(old)
+
+            if old in self.links:
+                self.links[new] = self.links[old]
+                self.links.pop(old)
+
+            for record in self.records.values():
+                if not hasattr(record, old):
+                    continue
+                setattr(record, new, getattr(record, old))
+                delattr(record, old)
+
+    def __repr__(self):
+        # return f&#39;Table: {self.table_name}, records: {self.nrec}&#39;
+        s = f&#39;table: {self.table_name}&#39;
+        s += f&#39;\ndescription: {self.description}&#39;
+        s += f&#39;\nrecords (rows): {self.nrec}&#39;
+        s += &#39;\nattributes (columns): &#39; + &#39;, &#39;.join(sorted(self.attr2field))
+        if len(self.links) &gt; 0:
+            s += &#39;\nlinks to other tables:&#39;  # ({}):&#39;.format(len(self.links))
+            for attr, target in sorted(self.links.items()):
+                s += f&#39;\n  {attr} -&gt; {target}&#39;
+        return s
+
+    def get_record(self, m):
+        if isinstance(m, int):
+            # argument is index of the record in the list of record_ids
+            return self.records[self.record_ids[m]]
+        elif isinstance(m, str):
+            # argument is a record id string
+            return self.records[m]
+        elif isinstance(m, DreqLink):
+            # argument is DreqLink instance, which contains a record id
+            return self.records[m.record_id]
+        else:
+            raise TypeError(f&#39;Error specifying record to retrieve from table {self.table_name}&#39;)
+
+    def get_attr_record(self, attr, value, unique=True):
+        if attr in self.attr2field:
+            records = [record for record in self.records.values() if getattr(record, attr) == value]
+            if len(records) == 0:
+                raise Exception(f&#39;No record found for {attr}={value}&#39;)
+            if unique:
+                return records[0]
+            else:
+                return records
+        else:
+            raise Exception(f&#39;Record attribute does not exist: {attr}&#39;)
+
+    def get_record_id(self, record):
+        # In case we need to get a record_id when we only have the record.
+        # For example, to use delete_record() to remove the record.
+        l = [record_id for record_id, rec in self.records.items() if rec == record]
+        if len(l) == 1:
+            return l[0]
+        else:
+            raise Exception(&#39;Could not find record_id matching the record&#39;)
+
+    def delete_record(self, record_id):
+        self.records.pop(record_id)
+        self.record_ids.remove(record_id)
+        self.nrec -= 1
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__</code></pre>
+</details>
+<div class="desc"><p>Generic class to represent an table from the data request Airtable raw export json file (dict).</p>
+<p>Here both "field" and "attribute" are used to refer to the columns in the table.
+"field"
+refers to the name of a column as it appears in Airtable.
+"attribute" refers to the name of the column converted to the name of a record object attribute.</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.stable.query.dreq_classes.DreqTable.delete_record"><code class="name flex">
+<span>def <span class="ident">delete_record</span></span>(<span>self, record_id)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_record(self, record_id):
+    self.records.pop(record_id)
+    self.record_ids.remove(record_id)
+    self.nrec -= 1</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqTable.get_attr_record"><code class="name flex">
+<span>def <span class="ident">get_attr_record</span></span>(<span>self, attr, value, unique=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_attr_record(self, attr, value, unique=True):
+    if attr in self.attr2field:
+        records = [record for record in self.records.values() if getattr(record, attr) == value]
+        if len(records) == 0:
+            raise Exception(f&#39;No record found for {attr}={value}&#39;)
+        if unique:
+            return records[0]
+        else:
+            return records
+    else:
+        raise Exception(f&#39;Record attribute does not exist: {attr}&#39;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqTable.get_record"><code class="name flex">
+<span>def <span class="ident">get_record</span></span>(<span>self, m)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_record(self, m):
+    if isinstance(m, int):
+        # argument is index of the record in the list of record_ids
+        return self.records[self.record_ids[m]]
+    elif isinstance(m, str):
+        # argument is a record id string
+        return self.records[m]
+    elif isinstance(m, DreqLink):
+        # argument is DreqLink instance, which contains a record id
+        return self.records[m.record_id]
+    else:
+        raise TypeError(f&#39;Error specifying record to retrieve from table {self.table_name}&#39;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqTable.get_record_id"><code class="name flex">
+<span>def <span class="ident">get_record_id</span></span>(<span>self, record)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_record_id(self, record):
+    # In case we need to get a record_id when we only have the record.
+    # For example, to use delete_record() to remove the record.
+    l = [record_id for record_id, rec in self.records.items() if rec == record]
+    if len(l) == 1:
+        return l[0]
+    else:
+        raise Exception(&#39;Could not find record_id matching the record&#39;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.DreqTable.rename_attr"><code class="name flex">
+<span>def <span class="ident">rename_attr</span></span>(<span>self, old, new)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rename_attr(self, old, new):
+    if old in self.attr2field:
+        assert new not in self.attr2field, &#39;Record attribute already exists: &#39; + new
+
+        field_name = self.attr2field[old]
+        self.field_info[field_name][&#39;attribute_name&#39;] = new
+
+        self.attr2field[new] = self.attr2field[old]
+        self.attr2field.pop(old)
+
+        if old in self.links:
+            self.links[new] = self.links[old]
+            self.links.pop(old)
+
+        for record in self.records.values():
+            if not hasattr(record, old):
+                continue
+            setattr(record, new, getattr(record, old))
+            delattr(record, old)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest"><code class="flex name class">
+<span>class <span class="ident">ExptRequest</span></span>
+<span>(</span><span>experiment: str,<br>core: set[str] = &lt;factory&gt;,<br>high: set[str] = &lt;factory&gt;,<br>medium: set[str] = &lt;factory&gt;,<br>low: set[str] = &lt;factory&gt;)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class ExptRequest:
+    &#39;&#39;&#39;
+    Object to store variables requested for an experiment.
+    Variable names are stored in seperate sets for different priority levels.
+    &#39;&#39;&#39;
+    experiment: str
+    if PYTHON_VERSION &lt; (3, 9):
+        # Required for python versions before 3.9, see:
+        #   https://stackoverflow.com/questions/75202610/typeerror-type-object-is-not-subscriptable-python
+        # Should remove this if we decide not to support versions before 3.9.
+        core: Set[str] = dataclass_field(default_factory=set)
+        high: Set[str] = dataclass_field(default_factory=set)
+        medium: Set[str] = dataclass_field(default_factory=set)
+        low: Set[str] = dataclass_field(default_factory=set)
+    else:
+        core: set[str] = dataclass_field(default_factory=set)
+        high: set[str] = dataclass_field(default_factory=set)
+        medium: set[str] = dataclass_field(default_factory=set)
+        low: set[str] = dataclass_field(default_factory=set)
+
+    def __post_init__(self):
+        for p in PRIORITY_LEVELS:
+            assert hasattr(self, p), &#39;ExptRequest object missing priority level: &#39; + p
+        self.consistency_check()
+
+    def add_vars(self, var_names, priority_level):
+        &#39;&#39;&#39;
+        Add variables to output from the experiment, at the specified priority level.
+        Removes overlaps between priority levels (e.g., if adding a variable at high
+        priority that is already requested at medium priority, it is removed from the
+        medium priority list).
+
+        Parameters
+        ----------
+        var_names : set
+            Set of unique variable names to be added.
+        priority_level : str
+            Priority level at which to add them.
+            Not case sensitive (will be rendered as lower case).
+
+        Returns
+        -------
+        ExptRequest object is updated with the new variables, and any overlaps removed.
+        &#39;&#39;&#39;
+        priority_level = priority_level.lower()
+        current_vars = getattr(self, priority_level)
+        current_vars.update(var_names)
+        # Remove any overlaps by ensuring a variable only appears at its highest
+        # requested priority level.
+        self.high = self.high.difference(self.core)
+
+        self.medium = self.medium.difference(self.core)
+        self.medium = self.medium.difference(self.high)  # remove any high priority vars from medium priority group
+
+        self.low = self.low.difference(self.core)
+        self.low = self.low.difference(self.high)  # remove any high priority vars from low priority group
+        self.low = self.low.difference(self.medium)  # remove any medium priority vars from low priority group
+
+        self.consistency_check()
+
+    def consistency_check(self):
+        # Confirm that priority sets don&#39;t overlap
+        # assert self.high.intersection(self.medium.union(self.low)) == set()
+        # assert self.medium.intersection(self.high.union(self.low)) == set()
+        # assert self.low.intersection(self.high.union(self.medium)) == set()
+        for this_p in PRIORITY_LEVELS:
+            other_p = [p for p in PRIORITY_LEVELS if p != this_p]
+            for p in other_p:
+                assert getattr(self, this_p).intersection(getattr(self, p)) == set()
+
+        # Also confirm object contains the expected priority levels
+        pl = list(vars(self))
+        pl.remove(&#39;experiment&#39;)
+        assert set(pl) == set(PRIORITY_LEVELS)
+
+    def __repr__(self):
+        self.consistency_check()
+        break_up_compound_name = not True
+        l = [f&#39;Variables (by priority) for experiment: {self.experiment}&#39;]
+        for p in PRIORITY_LEVELS:
+            req = getattr(self, p)
+            if len(req) == 0:
+                continue
+            n = len(req)
+            s = f&#39;  {p} ({n}): &#39;
+            indent = &#39; &#39; * len(s)
+            sortby = str.lower
+            req = sorted(req, key=sortby)
+            if break_up_compound_name and UNIQUE_VAR_NAME == &#39;compound name&#39;:
+                # for better readability, show all vars in each cmor table on one line
+                separator = &#39;.&#39;
+                lt = [tuple(varname.split(separator)) for varname in req]
+                tables = sorted(set([t[0] for t in lt]), key=sortby)
+                req = []
+                for table in tables:
+                    varnames = sorted(set([t[1] for t in lt if t[0] == table]), key=sortby)
+                    n = len(varnames)
+                    req.append(f&#39;{table} ({n}): &#39; + &#39;, &#39;.join(varnames))
+            s += req[0]
+            for varname in req[1:]:
+                s += &#39;\n&#39; + indent + varname
+            l.append(s)
+        return &#39;\n&#39;.join(l)
+
+    def to_dict(self):
+        &#39;&#39;&#39;
+        Return dict equivalent of the object, suitable to write to json.
+        &#39;&#39;&#39;
+        sortby = str.lower
+        return {
+            self.experiment: {
+                &#39;Core&#39;: sorted(self.core, key=sortby),
+                &#39;High&#39;: sorted(self.high, key=sortby),
+                &#39;Medium&#39;: sorted(self.medium, key=sortby),
+                &#39;Low&#39;: sorted(self.low, key=sortby),
+            }
+        }</code></pre>
+</details>
+<div class="desc"><p>Object to store variables requested for an experiment.
+Variable names are stored in seperate sets for different priority levels.</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.core"><code class="name">var <span class="ident">core</span> : set[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.experiment"><code class="name">var <span class="ident">experiment</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.high"><code class="name">var <span class="ident">high</span> : set[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.low"><code class="name">var <span class="ident">low</span> : set[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.medium"><code class="name">var <span class="ident">medium</span> : set[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.add_vars"><code class="name flex">
+<span>def <span class="ident">add_vars</span></span>(<span>self, var_names, priority_level)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_vars(self, var_names, priority_level):
+    &#39;&#39;&#39;
+    Add variables to output from the experiment, at the specified priority level.
+    Removes overlaps between priority levels (e.g., if adding a variable at high
+    priority that is already requested at medium priority, it is removed from the
+    medium priority list).
+
+    Parameters
+    ----------
+    var_names : set
+        Set of unique variable names to be added.
+    priority_level : str
+        Priority level at which to add them.
+        Not case sensitive (will be rendered as lower case).
+
+    Returns
+    -------
+    ExptRequest object is updated with the new variables, and any overlaps removed.
+    &#39;&#39;&#39;
+    priority_level = priority_level.lower()
+    current_vars = getattr(self, priority_level)
+    current_vars.update(var_names)
+    # Remove any overlaps by ensuring a variable only appears at its highest
+    # requested priority level.
+    self.high = self.high.difference(self.core)
+
+    self.medium = self.medium.difference(self.core)
+    self.medium = self.medium.difference(self.high)  # remove any high priority vars from medium priority group
+
+    self.low = self.low.difference(self.core)
+    self.low = self.low.difference(self.high)  # remove any high priority vars from low priority group
+    self.low = self.low.difference(self.medium)  # remove any medium priority vars from low priority group
+
+    self.consistency_check()</code></pre>
+</details>
+<div class="desc"><p>Add variables to output from the experiment, at the specified priority level.
+Removes overlaps between priority levels (e.g., if adding a variable at high
+priority that is already requested at medium priority, it is removed from the
+medium priority list).</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>var_names</code></strong> :&ensp;<code>set</code></dt>
+<dd>Set of unique variable names to be added.</dd>
+<dt><strong><code>priority_level</code></strong> :&ensp;<code>str</code></dt>
+<dd>Priority level at which to add them.
+Not case sensitive (will be rendered as lower case).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>ExptRequest object is updated with the new variables, and any overlaps removed.</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.consistency_check"><code class="name flex">
+<span>def <span class="ident">consistency_check</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def consistency_check(self):
+    # Confirm that priority sets don&#39;t overlap
+    # assert self.high.intersection(self.medium.union(self.low)) == set()
+    # assert self.medium.intersection(self.high.union(self.low)) == set()
+    # assert self.low.intersection(self.high.union(self.medium)) == set()
+    for this_p in PRIORITY_LEVELS:
+        other_p = [p for p in PRIORITY_LEVELS if p != this_p]
+        for p in other_p:
+            assert getattr(self, this_p).intersection(getattr(self, p)) == set()
+
+    # Also confirm object contains the expected priority levels
+    pl = list(vars(self))
+    pl.remove(&#39;experiment&#39;)
+    assert set(pl) == set(PRIORITY_LEVELS)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_classes.ExptRequest.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self):
+    &#39;&#39;&#39;
+    Return dict equivalent of the object, suitable to write to json.
+    &#39;&#39;&#39;
+    sortby = str.lower
+    return {
+        self.experiment: {
+            &#39;Core&#39;: sorted(self.core, key=sortby),
+            &#39;High&#39;: sorted(self.high, key=sortby),
+            &#39;Medium&#39;: sorted(self.medium, key=sortby),
+            &#39;Low&#39;: sorted(self.low, key=sortby),
+        }
+    }</code></pre>
+</details>
+<div class="desc"><p>Return dict equivalent of the object, suitable to write to json.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="data_request_api.stable.query" href="index.html">data_request_api.stable.query</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.stable.query.dreq_classes.format_attribute_name" href="#data_request_api.stable.query.dreq_classes.format_attribute_name">format_attribute_name</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="data_request_api.stable.query.dreq_classes.DreqLink" href="#data_request_api.stable.query.dreq_classes.DreqLink">DreqLink</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqLink.record_id" href="#data_request_api.stable.query.dreq_classes.DreqLink.record_id">record_id</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqLink.table_id" href="#data_request_api.stable.query.dreq_classes.DreqLink.table_id">table_id</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqLink.table_name" href="#data_request_api.stable.query.dreq_classes.DreqLink.table_name">table_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data_request_api.stable.query.dreq_classes.DreqRecord" href="#data_request_api.stable.query.dreq_classes.DreqRecord">DreqRecord</a></code></h4>
+</li>
+<li>
+<h4><code><a title="data_request_api.stable.query.dreq_classes.DreqTable" href="#data_request_api.stable.query.dreq_classes.DreqTable">DreqTable</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqTable.delete_record" href="#data_request_api.stable.query.dreq_classes.DreqTable.delete_record">delete_record</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqTable.get_attr_record" href="#data_request_api.stable.query.dreq_classes.DreqTable.get_attr_record">get_attr_record</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqTable.get_record" href="#data_request_api.stable.query.dreq_classes.DreqTable.get_record">get_record</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqTable.get_record_id" href="#data_request_api.stable.query.dreq_classes.DreqTable.get_record_id">get_record_id</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.DreqTable.rename_attr" href="#data_request_api.stable.query.dreq_classes.DreqTable.rename_attr">rename_attr</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest" href="#data_request_api.stable.query.dreq_classes.ExptRequest">ExptRequest</a></code></h4>
+<ul class="two-column">
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.add_vars" href="#data_request_api.stable.query.dreq_classes.ExptRequest.add_vars">add_vars</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.consistency_check" href="#data_request_api.stable.query.dreq_classes.ExptRequest.consistency_check">consistency_check</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.core" href="#data_request_api.stable.query.dreq_classes.ExptRequest.core">core</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.experiment" href="#data_request_api.stable.query.dreq_classes.ExptRequest.experiment">experiment</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.high" href="#data_request_api.stable.query.dreq_classes.ExptRequest.high">high</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.low" href="#data_request_api.stable.query.dreq_classes.ExptRequest.low">low</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.medium" href="#data_request_api.stable.query.dreq_classes.ExptRequest.medium">medium</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_classes.ExptRequest.to_dict" href="#data_request_api.stable.query.dreq_classes.ExptRequest.to_dict">to_dict</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

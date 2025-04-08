@@ -871,6 +871,7 @@ class TestDataRequest(unittest.TestCase):
         self.assertEqual(obj.get_filtering_structure("experiments"), {"opportunities", "experiment_groups"})
         self.assertEqual(obj.get_filtering_structure("test"), set())
 
+
 class TestDataRequestFilter(unittest.TestCase):
     def setUp(self):
         self.vs_file = filepath("one_base_VS_output.json")

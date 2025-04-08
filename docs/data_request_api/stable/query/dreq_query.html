@@ -1,0 +1,1385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>data_request_api.stable.query.dreq_query API documentation</title>
+<meta name="description" content="Functions to extract information from the data request.
+E.g., get variables requested for each experiment …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>data_request_api.stable.query.dreq_query</code></h1>
+</header>
+<section id="section-intro">
+<p>Functions to extract information from the data request.
+E.g., get variables requested for each experiment.</p>
+<p>The module has two basic sections:</p>
+<p>1) Functions that take the data request content and convert it to python objects.
+2) Functions that interrogate the data request, usually using output from (1) as their input.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="data_request_api.stable.query.dreq_query.create_dreq_tables_for_request"><code class="name flex">
+<span>def <span class="ident">create_dreq_tables_for_request</span></span>(<span>content, consolidated=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_dreq_tables_for_request(content, consolidated=True):
+    &#39;&#39;&#39;
+    For the &#34;request&#34; part of the data request content (Opportunities, Variable Groups, etc),
+    render raw airtable export content as DreqTable objects.
+
+    For the &#34;data&#34; part of the data request, the corresponding function is create_dreq_tables_for_variables().
+
+    Parameters
+    ----------
+    content : dict
+        Raw airtable export. Dict is keyed by base name, for example:
+        {&#39;Data Request Opportunities (Public)&#39; : {
+            &#39;Opportunity&#39; : {...},
+            ...
+            },
+         &#39;Data Request Variables (Public)&#39; : {
+            &#39;Variables&#39; : {...}
+            ...
+            }
+        }
+
+    Returns
+    -------
+    Dict whose keys are table names and values are DreqTable objects.
+    (The base name from the input &#39;content&#39; dict no longer appears.)
+    &#39;&#39;&#39;
+    if not isinstance(content, dict):
+        raise TypeError(&#39;Input should be dict from raw airtable export json file&#39;)
+
+    # Content is dict loaded from raw airtable export json file
+    if consolidated:
+        base_name = &#39;Data Request&#39;
+        content_type = &#39;consolidated&#39;
+    else:
+        # for backward compatibility
+        content_type = get_content_type(content)
+        if content_type == &#39;working&#39;:
+            base_name = &#39;Data Request Opportunities (Public)&#39;
+        elif content_type == &#39;version&#39;:
+            base_name = version_base_name()
+        else:
+            raise ValueError(&#39;Unknown content type: &#39; + content_type)
+    # base_name = &#39;Data Request&#39;
+    base = content[base_name]
+
+    # Create objects representing data request tables
+    table_id2name = get_table_id2name(base)
+    for table_name, table in base.items():
+        # print(&#39;Creating table object for table: &#39; + table_name)
+        base[table_name] = DreqTable(table, table_id2name)
+
+    # Change names of tables if needed
+    # (insulates downstream code from upstream name changes that don&#39;t affect functionality)
+    change_table_names = {}
+    if content_type == &#39;working&#39;:
+        change_table_names = {
+            # old name : new name
+            &#39;Experiment&#39;: &#39;Experiments&#39;,
+            &#39;Priority level&#39;: &#39;Priority Level&#39;
+        }
+    for old, new in change_table_names.items():
+        assert new not in base, &#39;New table name already exists: &#39; + new
+        if old not in base:
+            # print(f&#39;Unavailable table {old}, skipping name change&#39;)
+            continue
+        base[new] = base[old]
+        base.pop(old)
+
+    # Make some adjustments that are specific to the Opportunity table
+    dreq_opps = base[&#39;Opportunity&#39;]
+    dreq_opps.rename_attr(&#39;title_of_opportunity&#39;, &#39;title&#39;)  # rename title attribute for brevity in downstream code
+    for opp in dreq_opps.records.values():
+        opp.title = opp.title.strip()
+    if content_type == &#39;working&#39;:
+        if &#39;variable_groups&#39; not in dreq_opps.attr2field:
+            # Try alternate names for the latest variable groups
+            try_vg_attr = []
+            try_vg_attr.append(&#39;working_updated_variable_groups&#39;)  # takes precendence over originally requested groups
+            try_vg_attr.append(&#39;originally_requested_variable_groups&#39;)
+            for vg_attr in try_vg_attr:
+                if vg_attr in dreq_opps.attr2field:
+                    dreq_opps.rename_attr(vg_attr, &#39;variable_groups&#39;)
+                    break
+            assert &#39;variable_groups&#39; in dreq_opps.attr2field, f&#39;unable to determine variable groups attribute for opportunity: {opp.title}&#39;
+    exclude_opps = set()
+    for opp_id, opp in dreq_opps.records.items():
+        if not hasattr(opp, &#39;experiment_groups&#39;):
+            print(f&#39; * WARNING *    no experiment groups found for Opportunity: {opp.title}&#39;)
+            exclude_opps.add(opp_id)
+        if not hasattr(opp, &#39;variable_groups&#39;):
+            print(f&#39; * WARNING *    no variable groups found for Opportunity: {opp.title}&#39;)
+            exclude_opps.add(opp_id)
+    if len(exclude_opps) &gt; 0:
+        print(&#39;Quality control check is excluding these Opportunities:&#39;)
+        for opp_id in exclude_opps:
+            opp = dreq_opps.records[opp_id]
+            print(f&#39;  {opp.title}&#39;)
+            dreq_opps.delete_record(opp_id)
+        print()
+    if len(dreq_opps.records) == 0:
+        # If there are no opportunities left, there&#39;s no point in continuing!
+        # This check is here because if something changes upstream in Airtable, it might cause
+        # the above code to erroneously remove all opportunities.
+        raise Exception(&#39; * ERROR *    All Opportunities were removed!&#39;)
+
+    # Determine which compound name to use based on dreq content version
+    USE_COMPOUND_NAME = &#39;compound_name&#39;
+    version = tuple(map(int, DREQ_VERSION.strip(&#39;v&#39;).split(&#39;.&#39;)))  # e.g. &#39;v1.2&#39; --&gt; (1,2)
+    if version[:2] &gt;= (1, 2):
+        USE_COMPOUND_NAME = &#39;cmip6_compound_name&#39;
+    if USE_COMPOUND_NAME != &#39;compound_name&#39;:
+        table_name = &#39;Variables&#39;
+        for rec in base[table_name].records.values():
+            if hasattr(rec, &#39;compound_name&#39;):
+                raise Exception(f&#39;compound_name attribute is already defined for table &#34;{table_name}&#34;&#39;)
+            rec.compound_name = getattr(rec, USE_COMPOUND_NAME)
+
+    return base</code></pre>
+</details>
+<div class="desc"><p>For the "request" part of the data request content (Opportunities, Variable Groups, etc),
+render raw airtable export content as DreqTable objects.</p>
+<p>For the "data" part of the data request, the corresponding function is create_dreq_tables_for_variables().</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>content</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Raw airtable export. Dict is keyed by base name, for example:
+{'Data Request Opportunities (Public)' : {
+'Opportunity' : {&hellip;},
+&hellip;
+},
+'Data Request Variables (Public)' : {
+'Variables' : {&hellip;}
+&hellip;
+}
+}</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Dict whose keys are table names and values are DreqTable objects.
+(The base name from the input 'content' dict no longer appears.)</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.create_dreq_tables_for_variables"><code class="name flex">
+<span>def <span class="ident">create_dreq_tables_for_variables</span></span>(<span>content, consolidated=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_dreq_tables_for_variables(content, consolidated=True):
+    &#39;&#39;&#39;
+    For the &#34;data&#34; part of the data request content (Variables, Cell Methods etc),
+    render raw airtable export content as DreqTable objects.
+
+    For the &#34;request&#34; part of the data request, the corresponding function is create_dreq_tables_for_request().
+
+    &#39;&#39;&#39;
+    if not isinstance(content, dict):
+        raise TypeError(&#39;Input should be dict from raw airtable export json file&#39;)
+
+    # Content is dict loaded from raw airtable export json file
+    if consolidated:
+        base_name = &#39;Data Request&#39;
+        content_type = &#39;consolidated&#39;
+    else:
+        # for backward compatibility
+        content_type = get_content_type(content)
+        if content_type == &#39;working&#39;:
+            base_name = &#39;Data Request Variables (Public)&#39;
+        elif content_type == &#39;version&#39;:
+            base_name = version_base_name()
+        else:
+            raise ValueError(&#39;Unknown content type: &#39; + content_type)
+    base = content[base_name]
+
+    # Create objects representing data request tables
+    table_id2name = get_table_id2name(base)
+    for table_name, table in base.items():
+        # print(&#39;Creating table object for table: &#39; + table_name)
+        base[table_name] = DreqTable(table, table_id2name)
+
+    # Change names of tables if needed
+    # (insulates downstream code from upstream name changes that don&#39;t affect functionality)
+    change_table_names = {}
+    if content_type == &#39;working&#39;:
+        change_table_names = {
+            # old name : new name
+            &#39;Variable&#39;: &#39;Variables&#39;,
+            &#39;Coordinate or Dimension&#39;: &#39;Coordinates and Dimensions&#39;,
+            &#39;Physical Parameter&#39;: &#39;Physical Parameters&#39;,
+        }
+    for old, new in change_table_names.items():
+        assert new not in base, &#39;New table name already exists: &#39; + new
+        base[new] = base[old]
+        base.pop(old)
+
+    return base</code></pre>
+</details>
+<div class="desc"><p>For the "data" part of the data request content (Variables, Cell Methods etc),
+render raw airtable export content as DreqTable objects.</p>
+<p>For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_content_type"><code class="name flex">
+<span>def <span class="ident">get_content_type</span></span>(<span>content)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_content_type(content):
+    &#39;&#39;&#39;
+    Internal function to distinguish the type of airtable export we are working with, based on the input dict.
+
+    Parameters
+    ----------
+    content : dict
+        Dict containing data request content exported from airtable.
+
+    Returns
+    -------
+    str indicating type of content:
+
+        &#39;working&#39; : 3 bases containing the latest working version of data request content,
+                    or 4 bases if the Schema table has been added to the export.
+
+        &#39;version&#39; : 1 base containing the content of a tagged data request version.
+    &#39;&#39;&#39;
+    n = len(content)
+    if n in [3, 4]:
+        content_type = &#39;working&#39;
+    elif n == 1:
+        content_type = &#39;version&#39;
+    else:
+        raise ValueError(&#39;Unable to determine type of data request content in the exported json file&#39;)
+    return content_type</code></pre>
+</details>
+<div class="desc"><p>Internal function to distinguish the type of airtable export we are working with, based on the input dict.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>content</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dict containing data request content exported from airtable.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str indicating type</code> of <code>content:</code></dt>
+<dd>
+<p>'working' : 3 bases containing the latest working version of data request content,
+or 4 bases if the Schema table has been added to the export.</p>
+<p>'version' : 1 base containing the content of a tagged data request version.</p>
+</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_opp_expts"><code class="name flex">
+<span>def <span class="ident">get_opp_expts</span></span>(<span>opp, expt_groups, expts, verbose=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_opp_expts(opp, expt_groups, expts, verbose=False):
+    &#39;&#39;&#39;
+    For one Opportunity, get its requested experiments.
+    Input parameters are not modified.
+
+    Parameters
+    ----------
+    opp : DreqRecord
+        One record from the Opportunity table
+    expt_groups : DreqTable
+        Experiment Group table
+    expts : DreqTable
+        Experiments table
+
+    Returns
+    -------
+    Set giving names of experiments from which the Opportunity requests output.
+    Example: {&#39;historical&#39;, &#39;piControl&#39;}
+    &#39;&#39;&#39;
+    # Follow links to experiment groups to find the names of requested experiments
+    opp_expts = set()  # list to store names of experiments requested by this Opportunity
+    if verbose:
+        print(&#39;  Experiment Groups ({}):&#39;.format(len(opp.experiment_groups)))
+    for link in opp.experiment_groups:
+        expt_group = expt_groups.records[link.record_id]
+
+        if not hasattr(expt_group, &#39;experiments&#39;):
+            continue
+
+        if verbose:
+            print(f&#39;    {expt_group.name}  ({len(expt_group.experiments)} experiments)&#39;)
+
+        for link in expt_group.experiments:
+            expt = expts.records[link.record_id]
+            opp_expts.add(expt.experiment)
+    return opp_expts</code></pre>
+</details>
+<div class="desc"><p>For one Opportunity, get its requested experiments.
+Input parameters are not modified.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>opp</code></strong> :&ensp;<code>DreqRecord</code></dt>
+<dd>One record from the Opportunity table</dd>
+<dt><strong><code>expt_groups</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Experiment Group table</dd>
+<dt><strong><code>expts</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Experiments table</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt>Set giving names of experiments from which the Opportunity requests output.</dt>
+<dt><strong><code>Example</code></strong> :&ensp;<code>{'historical', 'piControl'}</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_opp_ids"><code class="name flex">
+<span>def <span class="ident">get_opp_ids</span></span>(<span>use_opps, dreq_opps, verbose=False, quality_control=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
+    &#39;&#39;&#39;
+    Return list of unique opportunity identifiers.
+
+    Parameters
+    ----------
+    use_opps : str or list
+        &#34;all&#34; : return all available ids
+        list of str : return ids for with the listed opportunity titles
+    dreq_opps : DreqTable
+        table object representing the opportunities table
+    &#39;&#39;&#39;
+    opp_ids = []
+    records = dreq_opps.records
+    if use_opps == &#39;all&#39;:
+        # Include all opportunities
+        opp_ids = list(records.keys())
+    elif isinstance(use_opps, list):
+        use_opps = sorted(set(use_opps))
+        if all([isinstance(s, str) for s in use_opps]):
+            # opp_ids = [opp_id for opp_id,opp in records.items() if opp.title in use_opps]
+            title2id = {opp.title: opp_id for opp_id, opp in records.items()}
+            assert len(records) == len(title2id), &#39;Opportunity titles are not unique&#39;
+            for title in use_opps:
+                if title in title2id:
+                    opp_ids.append(title2id[title])
+                else:
+                    # print(f&#39;\n* WARNING *    Opportunity not found: {title}\n&#39;)
+                    raise Exception(f&#39;\n* ERROR *    The specified Opportunity is not found: {title}\n&#39;)
+
+    assert len(set(opp_ids)) == len(opp_ids), &#39;found repeated opportunity ids&#39;
+
+    if quality_control:
+        valid_opp_status = [&#39;Accepted&#39;, &#39;Under review&#39;]
+        discard_opp_id = set()
+        for opp_id in opp_ids:
+            opp = dreq_opps.get_record(opp_id)
+            # print(opp)
+            # if len(opp) == 0:
+            #     # discard empty opportunities
+            #     discard_opp_id.add(opp_id)
+            if hasattr(opp, &#39;status&#39;) and opp.status not in valid_opp_status:
+                discard_opp_id.add(opp_id)
+        for opp_id in discard_opp_id:
+            dreq_opps.delete_record(opp_id)
+            opp_ids.remove(opp_id)
+        del discard_opp_id
+
+    if verbose:
+        if len(opp_ids) &gt; 0:
+            print(&#39;Found {} Opportunities:&#39;.format(len(opp_ids)))
+            for opp_id in opp_ids:
+                opp = records[opp_id]
+                print(&#39;  &#39; + opp.title)
+        else:
+            print(&#39;No Opportunities found&#39;)
+
+    return opp_ids</code></pre>
+</details>
+<div class="desc"><p>Return list of unique opportunity identifiers.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>use_opps</code></strong> :&ensp;<code>str</code> or <code>list</code></dt>
+<dd>"all" : return all available ids
+list of str : return ids for with the listed opportunity titles</dd>
+<dt><strong><code>dreq_opps</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>table object representing the opportunities table</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_opp_vars"><code class="name flex">
+<span>def <span class="ident">get_opp_vars</span></span>(<span>opp, priority_levels, var_groups, dreq_vars, dreq_priorities=None, verbose=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=None, verbose=False):
+    &#39;&#39;&#39;
+    For one Opportunity, get its requested variables grouped by priority level.
+    Input parameters are not modified.
+
+    Parameters
+    ----------
+    opp : DreqRecord
+        One record from the Opportunity table
+    priority_levels : list[str]
+        Priority levels to get, example: [&#39;High&#39;, &#39;Medium&#39;]
+    var_groups : DreqTable
+        Variable Group table
+    dreq_vars : DreqTable
+        Variables table
+    dreq_priorities : DreqTable
+        Required if var_group.priority_level is link to dreq_priorities table
+
+    Returns
+    -------
+    Dict giving set of variables requested at each specified priority level
+    Example: {&#39;High&#39; : {&#39;Amon.tas&#39;, &#39;day.tas&#39;}, &#39;Medium&#39; : {&#39;day.ua&#39;}}
+    &#39;&#39;&#39;
+    # Follow links to variable groups to find names of requested variables
+    opp_vars = {p: set() for p in priority_levels}
+    if verbose:
+        print(&#39;  Variable Groups ({}):&#39;.format(len(opp.variable_groups)))
+    for link in opp.variable_groups:
+        var_group = var_groups.records[link.record_id]
+
+        priority_level = get_var_group_priority(var_group, dreq_priorities)
+        if priority_level not in priority_levels:
+            continue
+
+        if verbose:
+            print(f&#39;    {var_group.name}  ({len(var_group.variables)} variables, {priority_level} priority)&#39;)
+
+        for link in var_group.variables:
+            var = dreq_vars.records[link.record_id]
+            var_name = get_unique_var_name(var)
+            # Add this variable to the list of requested variables at the specified priority
+            opp_vars[priority_level].add(var_name)
+    return opp_vars</code></pre>
+</details>
+<div class="desc"><p>For one Opportunity, get its requested variables grouped by priority level.
+Input parameters are not modified.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>opp</code></strong> :&ensp;<code>DreqRecord</code></dt>
+<dd>One record from the Opportunity table</dd>
+<dt><strong><code>priority_levels</code></strong> :&ensp;<code>list[str]</code></dt>
+<dd>Priority levels to get, example: ['High', 'Medium']</dd>
+<dt><strong><code>var_groups</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Variable Group table</dd>
+<dt><strong><code>dreq_vars</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Variables table</dd>
+<dt><strong><code>dreq_priorities</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Required if var_group.priority_level is link to dreq_priorities table</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict giving set</code> of <code>variables requested at each specified priority level</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>Example</code></strong> :&ensp;<code>{'High' : {'Amon.tas', 'day.tas'}, 'Medium' : {'day.ua'}}</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_priority_levels"><code class="name flex">
+<span>def <span class="ident">get_priority_levels</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_priority_levels():
+    &#39;&#39;&#39;
+    Return list of all valid priority levels (str) in the data request.
+    List is ordered from highest to lowest priority.
+    &#39;&#39;&#39;
+    priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
+
+    # The priorities are specified in PRIORITY_LEVELS from dreq_classes.
+    # Check here that &#39;Core&#39; is highest priority.
+    # The &#39;Core&#39; priority represents the Baseline Climate Variables (BCVs, https://doi.org/10.5194/egusphere-2024-2363).
+    # It should be highest priority unless something has been mistakenly modified in dreq_classes.py.
+    # Hence this check should NEVER fail, and is done here only to be EXTRA safe.
+    assert priority_levels[0] == &#39;Core&#39;, &#39;error in PRIORITY_LEVELS: highest priority should be Core (BCVs)&#39;
+
+    return priority_levels</code></pre>
+</details>
+<div class="desc"><p>Return list of all valid priority levels (str) in the data request.
+List is ordered from highest to lowest priority.</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_requested_variables"><code class="name flex">
+<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>use_opps='all',<br>priority_cutoff='Low',<br>verbose=True,<br>consolidated=True,<br>check_core_variables=True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_requested_variables(content, use_opps=&#39;all&#39;, priority_cutoff=&#39;Low&#39;, verbose=True, consolidated=True, check_core_variables=True):
+    &#39;&#39;&#39;
+    Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
+
+    Parameters
+    ----------
+    content : dict
+        Dict containing either:
+        - data request content as exported from airtable
+        OR
+        - DreqTable objects representing tables (dict keys are table names)
+    use_opp : str or list of str/int
+        Identifies the opportunities being supported. Options:
+            &#39;all&#39; : include all available opportunities
+            integers : include opportunities identified by their integer IDs
+            strings : include opportunities identified by their titles
+    priority_cutoff : str
+        Only return variables of equal or higher priority level than priority_cutoff.
+        E.g., priority_cutoff=&#39;Low&#39; means all priority levels are returned.
+    check_core_variables : bool
+        True ==&gt; check that all experiments contain a non-empty list of Core variables,
+        and that it&#39;s the same list for all experiments.
+
+    Returns
+    -------
+    Dict keyed by experiment name, giving prioritized variables for each experiment.
+    Example:
+    {   &#39;Header&#39; : ... (Header contains info about where this request comes from)
+        &#39;experiment&#39; : {
+            &#39;historical&#39; :
+                &#39;High&#39; : [&#39;Amon.tas&#39;, &#39;day.tas&#39;, ...],
+                &#39;Medium&#39; : ...
+            }
+            ...
+        }
+    }
+    &#39;&#39;&#39;
+    if isinstance(content, dict):
+        if all([isinstance(table, DreqTable) for table in content.values()]):
+            # tables have already been rendered as DreqTable objects
+            base = content
+        else:
+            # render tables as DreqTable objects
+            base = create_dreq_tables_for_request(content, consolidated=consolidated)
+    else:
+        raise TypeError(&#39;Expect dict as input&#39;)
+
+    dreq_tables = {
+        &#39;opps&#39;: base[&#39;Opportunity&#39;],
+        &#39;expt groups&#39;: base[&#39;Experiment Group&#39;],
+        &#39;expts&#39;: base[&#39;Experiments&#39;],
+        &#39;var groups&#39;: base[&#39;Variable Group&#39;],
+        &#39;vars&#39;: base[&#39;Variables&#39;]
+    }
+    opp_ids = get_opp_ids(use_opps, dreq_tables[&#39;opps&#39;], verbose=verbose)
+
+    # all_priority_levels = [&#39;Core&#39;, &#39;High&#39;, &#39;Medium&#39;, &#39;Low&#39;]
+    # all_priority_levels = [s.capitalize() for s in PRIORITY_LEVELS]
+    all_priority_levels = get_priority_levels()
+
+    if &#39;Priority Level&#39; in base:
+        dreq_tables[&#39;priority level&#39;] = base[&#39;Priority Level&#39;]
+        priority_levels_from_table = [rec.name for rec in dreq_tables[&#39;priority level&#39;].records.values()]
+        assert set(all_priority_levels) == set(priority_levels_from_table), \
+            &#39;inconsistent priority levels:\n  &#39; + str(all_priority_levels) + &#39;\n  &#39; + str(priority_levels_from_table)
+    else:
+        dreq_tables[&#39;priority level&#39;] = None
+    priority_cutoff = priority_cutoff.capitalize()
+    if priority_cutoff not in all_priority_levels:
+        raise ValueError(&#39;Invalid priority level cutoff: &#39; + priority_cutoff + &#39;\nCould not determine priority levels to include.&#39;)
+    m = all_priority_levels.index(priority_cutoff)
+    priority_levels = all_priority_levels[:m + 1]
+    del priority_cutoff
+
+    # Loop over Opportunities to get prioritized lists of variables
+    request = {}  # dict to hold aggregated request
+    for opp_id in opp_ids:
+        opp = dreq_tables[&#39;opps&#39;].records[opp_id]  # one record from the Opportunity table
+
+        if verbose:
+            print(f&#39;Opportunity: {opp.title}&#39;)
+
+        opp_expts = get_opp_expts(opp,
+                                  dreq_tables[&#39;expt groups&#39;],
+                                  dreq_tables[&#39;expts&#39;],
+                                  verbose=verbose)
+
+        opp_vars = get_opp_vars(opp,
+                                priority_levels,
+                                dreq_tables[&#39;var groups&#39;],
+                                dreq_tables[&#39;vars&#39;],
+                                dreq_tables[&#39;priority level&#39;],
+                                verbose=verbose)
+
+        # Aggregate this Opportunity&#39;s request into the master list of requests
+        for expt_name in opp_expts:
+            if expt_name not in request:
+                # If we haven&#39;t encountered this experiment yet, initialize an ExptRequest object for it
+                request[expt_name] = ExptRequest(expt_name)
+
+            # Add this Opportunity&#39;s variables request to the ExptRequest object
+            for priority_level, var_names in opp_vars.items():
+                request[expt_name].add_vars(var_names, priority_level)
+
+    opp_titles = sorted([dreq_tables[&#39;opps&#39;].get_record(opp_id).title for opp_id in opp_ids])
+    requested_vars = {
+        &#39;Header&#39;: {
+            &#39;Opportunities&#39;: opp_titles,
+            &#39;dreq version&#39;: DREQ_VERSION,
+        },
+        &#39;experiment&#39;: {},
+    }
+    for expt_name, expt_req in request.items():
+        requested_vars[&#39;experiment&#39;].update(expt_req.to_dict())
+
+    if check_core_variables:
+        # Confirm that &#39;Core&#39; priority level variables are included, and identical for each experiment.
+        # The setting of priority_levels list, above, should guarantee this.
+        # Putting this extra check here just to be extra sure.
+        core_vars = set()
+        for expt_name, expt_req in requested_vars[&#39;experiment&#39;].items():
+            assert &#39;Core&#39; in expt_req, &#39;Missing Core variables for experiment: &#39; + expt_name
+            vars = set(expt_req[&#39;Core&#39;])
+            if len(vars) == 0:
+                msg = &#39;Empty Core variables list for experiment: &#39; + expt_name
+                raise ValueError(msg)
+            if len(core_vars) == 0:
+                core_vars = vars
+            if vars != core_vars:
+                msg = &#39;Inconsistent Core variables for experiment: &#39; + expt_name + \
+                    f&#39;\n{len(core_vars)} {len(vars)} {len(core_vars.intersection(vars))}&#39;
+                raise ValueError(msg)
+
+    return requested_vars</code></pre>
+</details>
+<div class="desc"><p>Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>content</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Dict containing either:
+- data request content as exported from airtable
+OR
+- DreqTable objects representing tables (dict keys are table names)</dd>
+<dt><strong><code>use_opp</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str/int</code></dt>
+<dd>Identifies the opportunities being supported. Options:
+'all' : include all available opportunities
+integers : include opportunities identified by their integer IDs
+strings : include opportunities identified by their titles</dd>
+<dt><strong><code>priority_cutoff</code></strong> :&ensp;<code>str</code></dt>
+<dd>Only return variables of equal or higher priority level than priority_cutoff.
+E.g., priority_cutoff='Low' means all priority levels are returned.</dd>
+<dt><strong><code>check_core_variables</code></strong> :&ensp;<code>bool</code></dt>
+<dd>True ==&gt; check that all experiments contain a non-empty list of Core variables,
+and that it's the same list for all experiments.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt>Dict keyed by experiment name, giving prioritized variables for each experiment.</dt>
+<dt><code>Example:</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>{
+'Header' : &hellip; (Header contains info about where this request comes from)
+'experiment' : {
+'historical' :
+'High' : ['Amon.tas', 'day.tas', &hellip;],
+'Medium' : &hellip;
+}
+&hellip;
+}
+}</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_table_id2name"><code class="name flex">
+<span>def <span class="ident">get_table_id2name</span></span>(<span>base)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_table_id2name(base):
+    &#39;&#39;&#39;
+    Get a mapping from table id to table name
+    &#39;&#39;&#39;
+    table_id2name = {}
+    for table in base.values():
+        table_id2name.update({
+            table[&#39;id&#39;]: table[&#39;name&#39;]
+        })
+    assert len(table_id2name) == len(base), &#39;table ids are not unique!&#39;
+    return table_id2name</code></pre>
+</details>
+<div class="desc"><p>Get a mapping from table id to table name</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_unique_var_name"><code class="name flex">
+<span>def <span class="ident">get_unique_var_name</span></span>(<span>var)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_unique_var_name(var):
+    &#39;&#39;&#39;
+    Return name that uniquely identifies a variable.
+    Reason to make this a function is to control this choice in one place.
+    E.g., if compound_name is used initially, but something else chosen later.
+
+    Parameters
+    ----------
+    var : DreqRecord
+        Object representing a variable
+
+    Returns
+    -------
+    str that uniquely identifes a variable in the data request
+    &#39;&#39;&#39;
+    if UNIQUE_VAR_NAME == &#39;compound name&#39;:
+        return var.compound_name
+    else:
+        raise ValueError(&#39;Unknown identifier for UNIQUE_VAR_NAME: &#39; + UNIQUE_VAR_NAME +
+                         &#39;\nHow should the unique variable name be determined?&#39;)</code></pre>
+</details>
+<div class="desc"><p>Return name that uniquely identifies a variable.
+Reason to make this a function is to control this choice in one place.
+E.g., if compound_name is used initially, but something else chosen later.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>var</code></strong> :&ensp;<code>DreqRecord</code></dt>
+<dd>Object representing a variable</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str that uniquely identifes a variable in the data request</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_var_group_priority"><code class="name flex">
+<span>def <span class="ident">get_var_group_priority</span></span>(<span>var_group, dreq_priorities=None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_var_group_priority(var_group, dreq_priorities=None):
+    &#39;&#39;&#39;
+    Returns string stating the priorty level of variable group.
+
+    Parameters
+    ----------
+    var_group : DreqRecord
+        Object representing a variable group
+        Its &#34;priority_level&#34; attribute specifies the priority as either string or link to dreq_priorities table
+    dreq_priorities : DreqTable
+        Required if var_group.priority_level is link to dreq_priorities table
+
+    Returns
+    -------
+    str that states the priority level, e.g. &#34;High&#34;
+    &#39;&#39;&#39;
+    if not hasattr(var_group, &#39;priority_level&#39;):
+        return &#39;Undefined&#39;
+
+    if isinstance(var_group.priority_level, list):
+        assert len(var_group.priority_level) == 1, &#39;Variable group should have one specified priority level&#39;
+        link = var_group.priority_level[0]
+        assert isinstance(dreq_priorities, DreqTable)
+        rec = dreq_priorities.records[link.record_id]
+        priority_level = rec.name
+    elif isinstance(var_group.priority_level, str):
+        priority_level = var_group.priority_level
+    else:
+        raise Exception(&#39;Unable to determine variable group priority level&#39;)
+    if not isinstance(priority_level, str):
+        raise TypeError(&#39;Priority level should be str, instead got {}&#39;.format(type(priority_level)))
+    return priority_level</code></pre>
+</details>
+<div class="desc"><p>Returns string stating the priorty level of variable group.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>var_group</code></strong> :&ensp;<code>DreqRecord</code></dt>
+<dd>Object representing a variable group
+Its "priority_level" attribute specifies the priority as either string or link to dreq_priorities table</dd>
+<dt><strong><code>dreq_priorities</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Required if var_group.priority_level is link to dreq_priorities table</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str that states the priority level, e.g. "High"</code></dt>
+<dd>&nbsp;</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.get_variables_metadata"><code class="name flex">
+<span>def <span class="ident">get_variables_metadata</span></span>(<span>content,<br>compound_names=None,<br>cmor_tables=None,<br>cmor_variables=None,<br>consolidated=True,<br>use_dreq_version=None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
+    &#39;&#39;&#39;
+    Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
+
+    Parameters:
+    -----------
+    content : dict
+        Dict containing either:
+        - data request content as exported from airtable
+        OR
+        - DreqTable objects representing tables (dict keys are table names)
+    compound_names : list[str]
+        Compound names of variables to include. If not given, all are included.
+        Example: [&#39;Amon.tas&#39;, &#39;Omon.sos&#39;]
+    cmor_tables : list[str]
+        Names of CMOR tables to include. If not given, all are included.
+        Example: [&#39;Amon&#39;, &#39;Omon&#39;]
+    cmor_variables : list[str]
+        Names of CMOR variables to include. If not given, all are included.
+        Here the out_name is used as the CMOR variable name.
+        Example: [&#39;tas&#39;, &#39;siconc&#39;]
+
+    Returns:
+    --------
+    all_var_info : dict
+        Dictionary indexed by unique variable name, giving metadata for each variable.
+        Also includes a header giving info on provenance of the info (data request version used, etc).
+
+    Notes:
+    ------
+    TO DEPRECATE: use_dreq_version as input should be removed once CMIP6 frequency issue fixed.
+    &#39;&#39;&#39;
+    if isinstance(content, dict):
+        if all([isinstance(table, DreqTable) for table in content.values()]):
+            # tables have already been rendered as DreqTable objects
+            base = content
+        else:
+            # render tables as DreqTable objects
+            base = create_dreq_tables_for_request(content, consolidated=consolidated)
+    else:
+        raise TypeError(&#39;Expect dict as input&#39;)
+
+    # Some variables in these dreq versions lack a &#39;frequency&#39; attribute; use the legacy CMIP6 frequency for them
+    dreq_versions_substitute_cmip6_freq = [&#39;v1.0&#39;, &#39;v1.1&#39;]
+    if not use_dreq_version:
+        raise ValueError(&#39;\n(TO DEPRECATE) use_dreq_version is required to set frequencies\n&#39;)
+
+    # Use dict dreq_tables to store instances of the DreqTable class that are used in this function.
+    # Mostly this would be the same as simply using base[table name], but in some cases there&#39;s a choice
+    # of which table to use. Using dreq_tables as a mapping makes this choice explicit.
+    dreq_tables = {
+        &#39;variables&#39;: base[&#39;Variables&#39;]
+    }
+    # The Variables table is the master list of variables in the data request.
+    # Each entry (row) is a CMOR variable, containing the variable&#39;s metadata.
+    # Many of these entries are links to other tables in the database (see below).
+
+    # Choose which table to use for freqency
+    try_freq_table_name = []
+    try_freq_table_name.append(&#39;Frequency&#39;)  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
+    try_freq_table_name.append(&#39;CMIP7 Frequency&#39;)
+    try_freq_table_name.append(&#39;CMIP6 Frequency (legacy)&#39;)
+
+    found_freq = False
+    for freq_table_name in try_freq_table_name:
+        freq_attr_name = format_attribute_name(freq_table_name)
+        if freq_attr_name not in dreq_tables[&#39;variables&#39;].attr2field:
+            continue
+        if &#39;frequency&#39; not in dreq_tables[&#39;variables&#39;].attr2field:
+            # code below assumes a variable&#39;s frequency is given by its &#34;frequency&#34;
+            dreq_tables[&#39;variables&#39;].rename_attr(freq_attr_name, &#39;frequency&#39;)
+        if freq_table_name in base:
+            dreq_tables[&#39;frequency&#39;] = base[freq_table_name]
+        found_freq = True
+        break
+    if not found_freq:
+        raise ValueError(&#39;Which airtable field gives the frequency?&#39;)
+
+    # Get other tables from the database that are required to find all of a variable&#39;s metadata used by CMOR.
+    dreq_tables.update({
+        &#39;spatial shape&#39;: base[&#39;Spatial Shape&#39;],
+        &#39;coordinates and dimensions&#39;: base[&#39;Coordinates and Dimensions&#39;],
+        &#39;temporal shape&#39;: base[&#39;Temporal Shape&#39;],
+        &#39;cell methods&#39;: base[&#39;Cell Methods&#39;],
+        &#39;physical parameters&#39;: base[&#39;Physical Parameters&#39;],
+        &#39;realm&#39;: base[&#39;Modelling Realm&#39;],
+        &#39;cell measures&#39;: base[&#39;Cell Measures&#39;],
+        &#39;CF standard name&#39;: None,
+    })
+    if &#39;CF Standard Names&#39; in base:
+        dreq_tables[&#39;CF standard name&#39;] = base[&#39;CF Standard Names&#39;]
+
+    if &#39;Table Identifiers&#39; in base:
+        dreq_tables[&#39;CMOR tables&#39;] = base[&#39;Table Identifiers&#39;]
+        attr_table = &#39;table&#39;
+        attr_realm = &#39;modelling_realm&#39;
+    elif &#39;CMIP6 Table Identifiers (legacy)&#39; in base:
+        dreq_tables[&#39;CMOR tables&#39;] = base[&#39;CMIP6 Table Identifiers (legacy)&#39;]
+        attr_table = &#39;cmip6_table_legacy&#39;
+        attr_realm = &#39;modelling_realm___primary&#39;
+    else:
+        raise ValueError(&#39;Which table contains CMOR table identifiers?&#39;)
+
+    if use_dreq_version in dreq_versions_substitute_cmip6_freq:
+        # needed for corrections below
+        dreq_tables[&#39;CMIP6 frequency&#39;] = base[&#39;CMIP6 Frequency (legacy)&#39;]
+
+    # Compound names will be used to uniquely identify variables.
+    # Check here that this is indeed a unique name as expected.
+    var_name_map = {record.compound_name: record_id for record_id, record in dreq_tables[&#39;variables&#39;].records.items()}
+    assert len(var_name_map) == len(dreq_tables[&#39;variables&#39;].records), &#39;compound names do not uniquely map to variable record ids&#39;
+
+    if cmor_tables:
+        print(&#39;Retaining only these CMOR tables: &#39; + &#39;, &#39;.join(cmor_tables))
+    if cmor_variables:
+        print(&#39;Retaining only these CMOR variables: &#39; + &#39;, &#39;.join(cmor_variables))
+    if compound_names:
+        print(&#39;Retaining only these compound names: &#39; + &#39;, &#39;.join(compound_names))
+
+    substitute = {
+        # replacement character(s) : [characters to replace with the replacement character]
+        &#39;_&#39;: [&#39;\\_&#39;]
+    }
+    all_var_info = {}
+    for var in dreq_tables[&#39;variables&#39;].records.values():
+
+        if compound_names:
+            if var.compound_name not in compound_names:
+                continue
+
+        link_table = getattr(var, attr_table)
+        if len(link_table) != 1:
+            raise Exception(f&#39;variable {var.compound_name} should have one table link, found: &#39; + str(link_table))
+        table_id = dreq_tables[&#39;CMOR tables&#39;].get_record(link_table[0]).name
+        if cmor_tables:
+            # Filter by CMOR table name
+            if table_id not in cmor_tables:
+                continue
+
+        if not hasattr(var, &#39;frequency&#39;) and use_dreq_version in dreq_versions_substitute_cmip6_freq:
+            # seems to be an error for some vars in v1.0, so instead use their CMIP6 frequency
+            assert len(var.cmip6_frequency_legacy) == 1
+            link = var.cmip6_frequency_legacy[0]
+            var.frequency = [dreq_tables[&#39;CMIP6 frequency&#39;].get_record(link).name]
+            # print(&#39;using CMIP6 frequency for &#39; + var.compound_name)
+
+        if isinstance(var.frequency[0], str):
+            # retain this option for non-consolidated raw export?
+            assert isinstance(var.frequency, list)
+            frequency = var.frequency[0]
+        else:
+            link = var.frequency[0]
+            freq = dreq_tables[&#39;frequency&#39;].get_record(link)
+            frequency = freq.name
+
+        link = var.temporal_shape[0]
+        temporal_shape = dreq_tables[&#39;temporal shape&#39;].get_record(link)
+
+        cell_methods = &#39;&#39;
+        area_label_dd = &#39;&#39;
+        if hasattr(var, &#39;cell_methods&#39;):
+            assert len(var.cell_methods) == 1
+            link = var.cell_methods[0]
+            cm = dreq_tables[&#39;cell methods&#39;].get_record(link)
+            cell_methods = cm.cell_methods
+            if hasattr(cm, &#39;brand_id&#39;):
+                area_label_dd = cm.brand_id
+
+        # get the &#39;Spatial Shape&#39; record, which contains info about dimensions
+        assert len(var.spatial_shape) == 1
+        link = var.spatial_shape[0]
+        spatial_shape = dreq_tables[&#39;spatial shape&#39;].get_record(link)
+
+        dims_list = []
+        dims = None
+        if hasattr(spatial_shape, &#39;dimensions&#39;):
+            for link in spatial_shape.dimensions:
+                dims = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
+                dims_list.append(dims.name)
+        dims_list.append(temporal_shape.name)
+        if hasattr(var, &#39;coordinates&#39;):
+            for link in var.coordinates:
+                coordinate = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
+                dims_list.append(coordinate.name)
+
+        # Get physical parameter record and out_name
+        link = var.physical_parameter[0]
+        phys_param = dreq_tables[&#39;physical parameters&#39;].get_record(link)
+        out_name = phys_param.name
+
+        if cmor_variables:
+            # Filter by CMOR variable name
+            if out_name not in cmor_variables:
+                continue
+
+        # Get CF standard name, if it exists
+        standard_name = &#39;&#39;
+        standard_name_proposed = &#39;&#39;
+        if hasattr(phys_param, &#39;cf_standard_name&#39;):
+            if isinstance(phys_param.cf_standard_name, str):
+                # retain this option for non-consolidated raw export?
+                standard_name = phys_param.cf_standard_name
+            else:
+                link = phys_param.cf_standard_name[0]
+                cfsn = dreq_tables[&#39;CF standard name&#39;].get_record(link)
+                standard_name = cfsn.name
+        else:
+            standard_name_proposed = phys_param.proposed_cf_standard_name
+
+        link_realm = getattr(var, attr_realm)
+        modeling_realm = [dreq_tables[&#39;realm&#39;].get_record(link).id for link in link_realm]
+
+        cell_measures = &#39;&#39;
+        if hasattr(var, &#39;cell_measures&#39;):
+            cell_measures = [dreq_tables[&#39;cell measures&#39;].get_record(link).name for link in var.cell_measures]
+
+        positive = &#39;&#39;
+        if hasattr(var, &#39;positive_direction&#39;):
+            positive = var.positive_direction
+
+        comment = &#39;&#39;
+        if hasattr(var, &#39;description&#39;):
+            comment = var.description
+
+        var_info = OrderedDict()
+        # Insert fields in order given by CMIP6 cmor tables (https://github.com/PCMDI/cmip6-cmor-tables)
+        var_info.update({
+            &#39;frequency&#39;: frequency,
+            &#39;modeling_realm&#39;: &#39; &#39;.join(modeling_realm),
+        })
+        if standard_name != &#39;&#39;:
+            var_info[&#39;standard_name&#39;] = standard_name
+        else:
+            var_info[&#39;standard_name_proposed&#39;] = standard_name_proposed
+        var_info.update({
+            &#39;units&#39;: phys_param.units,
+            &#39;cell_methods&#39;: cell_methods,
+            &#39;cell_measures&#39;: &#39; &#39;.join(cell_measures),
+
+            &#39;long_name&#39;: var.title,
+            &#39;comment&#39;: comment,
+
+            &#39;dimensions&#39;: &#39; &#39;.join(dims_list),
+            &#39;out_name&#39;: out_name,
+            &#39;type&#39;: var.type,
+            &#39;positive&#39;: positive,
+
+            &#39;spatial_shape&#39;: spatial_shape.name,
+            &#39;temporal_shape&#39;: temporal_shape.name,
+
+            # &#39;temporalLabelDD&#39; : temporal_shape.brand,
+            # &#39;verticalLabelDD&#39; : spatial_shape.vertical_label_dd,
+            # &#39;horizontalLabelDD&#39; : spatial_shape.hor_label_dd,
+            # &#39;areaLabelDD&#39; : area_label_dd,  # this comes from cell methods
+
+            &#39;table&#39;: table_id,
+        })
+        for k, v in var_info.items():
+            v = v.strip()
+            for replacement in substitute:
+                for s in substitute[replacement]:
+                    if s in v:
+                        v = v.replace(s, replacement)
+            var_info[k] = v
+        var_name = var.compound_name
+        assert var_name not in all_var_info, &#39;non-unique variable name: &#39; + var_name
+        all_var_info[var_name] = var_info
+
+        del var_info, var_name
+
+    # Sort the all-variables dict
+    d = OrderedDict()
+    for var_name in sorted(all_var_info, key=str.lower):
+        d[var_name] = all_var_info[var_name]
+    all_var_info = d
+    del d
+
+    return all_var_info</code></pre>
+</details>
+<div class="desc"><p>Get metadata for CMOR variables (dimensions, cell_methods, out_name, &hellip;).</p>
+<h2 id="parameters">Parameters:</h2>
+<p>content : dict
+Dict containing either:
+- data request content as exported from airtable
+OR
+- DreqTable objects representing tables (dict keys are table names)
+compound_names : list[str]
+Compound names of variables to include. If not given, all are included.
+Example: ['Amon.tas', 'Omon.sos']
+cmor_tables : list[str]
+Names of CMOR tables to include. If not given, all are included.
+Example: ['Amon', 'Omon']
+cmor_variables : list[str]
+Names of CMOR variables to include. If not given, all are included.
+Here the out_name is used as the CMOR variable name.
+Example: ['tas', 'siconc']</p>
+<h2 id="returns">Returns:</h2>
+<p>all_var_info : dict
+Dictionary indexed by unique variable name, giving metadata for each variable.
+Also includes a header giving info on provenance of the info (data request version used, etc).</p>
+<h2 id="notes">Notes:</h2>
+<p>TO DEPRECATE: use_dreq_version as input should be removed once CMIP6 frequency issue fixed.</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.show_requested_vars_summary"><code class="name flex">
+<span>def <span class="ident">show_requested_vars_summary</span></span>(<span>expt_vars, use_dreq_version)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def show_requested_vars_summary(expt_vars, use_dreq_version):
+    &#39;&#39;&#39;
+    Display quick summary to stdout of variables requested.
+    expt_vars is the output dict from dq.get_requested_variables().
+    &#39;&#39;&#39;
+    print(f&#39;\nFor data request version {use_dreq_version}, number of requested variables found by experiment:&#39;)
+    priority_levels = get_priority_levels()
+    for expt, req in sorted(expt_vars[&#39;experiment&#39;].items()):
+        d = {p: 0 for p in priority_levels}
+        for p in priority_levels:
+            if p in req:
+                d[p] = len(req[p])
+        n_total = sum(d.values())
+        print(f&#39;  {expt} : &#39; + &#39; ,&#39;.join([&#39;{p}={n}&#39;.format(p=p, n=d[p]) for p in priority_levels]) + f&#39;, TOTAL={n_total}&#39;)</code></pre>
+</details>
+<div class="desc"><p>Display quick summary to stdout of variables requested.
+expt_vars is the output dict from dq.get_requested_variables().</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.version_base_name"><code class="name flex">
+<span>def <span class="ident">version_base_name</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def version_base_name():
+    return f&#39;Data Request {DREQ_VERSION}&#39;</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.write_requested_vars_json"><code class="name flex">
+<span>def <span class="ident">write_requested_vars_json</span></span>(<span>outfile, expt_vars, use_dreq_version, priority_cutoff, content_path)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cutoff, content_path):
+    &#39;&#39;&#39;
+    Write a nicely formatted json file with lists of requested variables by experiment.
+    expt_vars is the output dict from dq.get_requested_variables().
+    &#39;&#39;&#39;
+
+    header = OrderedDict({
+        &#39;Description&#39;: &#39;This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.&#39;,
+        &#39;Opportunities supported&#39;: sorted(expt_vars[&#39;Header&#39;][&#39;Opportunities&#39;], key=str.lower)
+    })
+
+    # List supported priority levels
+    priority_levels = get_priority_levels()
+    priority_cutoff = priority_cutoff.capitalize()
+    m = priority_levels.index(priority_cutoff) + 1
+    header.update({
+        &#39;Priority levels supported&#39;: priority_levels[:m]
+    })
+    for req in expt_vars[&#39;experiment&#39;].values():
+        for p in priority_levels[m:]:
+            assert req[p] == []
+            req.pop(p)  # remove empty lists of unsupported priorities from the output
+
+    # List included experiments
+    header.update({
+        &#39;Experiments included&#39;: sorted(expt_vars[&#39;experiment&#39;].keys(), key=str.lower)
+    })
+
+    # Get provenance of content to include in the header
+    # content_path = dc._dreq_content_loaded[&#39;json_path&#39;]
+    with open(content_path, &#39;rb&#39;) as f:
+        content_hash = hashlib.sha256(f.read()).hexdigest()
+    header.update({
+        &#39;dreq content version&#39;: use_dreq_version,
+        &#39;dreq content file&#39;: os.path.basename(os.path.normpath(content_path)),
+        &#39;dreq content sha256 hash&#39;: content_hash,
+        &#39;dreq api version&#39;: api_version,
+    })
+
+    out = {
+        &#39;Header&#39;: header,
+        &#39;experiment&#39;: OrderedDict(),
+    }
+    expt_names = sorted(expt_vars[&#39;experiment&#39;].keys(), key=str.lower)
+    for expt_name in expt_names:
+        out[&#39;experiment&#39;][expt_name] = OrderedDict()
+        req = expt_vars[&#39;experiment&#39;][expt_name]
+        for p in priority_levels:
+            if p in req:
+                out[&#39;experiment&#39;][expt_name][p] = req[p]
+
+    # Write the results to json
+    with open(outfile, &#39;w&#39;) as f:
+        # json.dump(expt_vars, f, indent=4, sort_keys=True)
+        json.dump(out, f, indent=4)
+        print(&#39;\nWrote requested variables to &#39; + outfile)</code></pre>
+</details>
+<div class="desc"><p>Write a nicely formatted json file with lists of requested variables by experiment.
+expt_vars is the output dict from dq.get_requested_variables().</p></div>
+</dd>
+<dt id="data_request_api.stable.query.dreq_query.write_variables_metadata"><code class="name flex">
+<span>def <span class="ident">write_variables_metadata</span></span>(<span>all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None):
+
+    ext = os.path.splitext(filepath)[-1]
+
+    if not api_version:
+        raise ValueError(f&#39;Must provide API version, received: {api_version}&#39;)
+    if not use_dreq_version:
+        raise ValueError(f&#39;Must provide data request content version, received: {use_dreq_version}&#39;)
+    if not content_path:
+        raise ValueError(f&#39;Must provide path to data request content, received: {content_path}&#39;)
+
+    if ext == &#39;.json&#39;:
+        # Get provenance of content to include in the header
+        with open(content_path, &#39;rb&#39;) as f:
+            content_hash = hashlib.sha256(f.read()).hexdigest()
+
+        # Create output dict
+        out = OrderedDict({
+            &#39;Header&#39;: OrderedDict({
+                &#39;Description&#39;: &#39;Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.&#39;,
+                &#39;no. of variables&#39;: len(all_var_info),
+                &#39;dreq content version&#39;: use_dreq_version,
+                &#39;dreq content file&#39;: os.path.basename(os.path.normpath(content_path)),
+                &#39;dreq content sha256 hash&#39;: content_hash,
+                &#39;dreq api version&#39;: api_version,
+            }),
+            &#39;Compound Name&#39;: all_var_info,
+        })
+
+        # Write variables metadata to json
+        with open(filepath, &#39;w&#39;) as f:
+            json.dump(out, f, indent=4)
+            print(f&#39;Wrote {filepath} for {len(all_var_info)} variables, dreq version = {use_dreq_version}&#39;)
+
+    elif ext == &#39;.csv&#39;:
+        # Write variables metadata to csv
+        var_info = next(iter(all_var_info.values()))
+        attrs = list(var_info.keys())
+        columns = [&#39;Compound Name&#39;]
+        columns.append(&#39;standard_name&#39;)
+        columns.append(&#39;standard_name_proposed&#39;)
+        columns += [s for s in attrs if s not in columns]
+        rows = [columns]  # column header line
+        # Add each variable as a row
+        for var_name, var_info in all_var_info.items():
+            row = []
+            for col in columns:
+                if col == &#39;Compound Name&#39;:
+                    val = var_name
+                elif col in var_info:
+                    val = var_info[col]
+                else:
+                    val = &#39;&#39;
+                row.append(val)
+            rows.append(row)
+        write_csv_output_file_content(filepath, rows)
+        n = len(all_var_info)
+        print(f&#39;Wrote {filepath} for {n} variables, dreq version = {use_dreq_version}&#39;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="data_request_api.stable.query" href="index.html">data_request_api.stable.query</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.stable.query.dreq_query.create_dreq_tables_for_request" href="#data_request_api.stable.query.dreq_query.create_dreq_tables_for_request">create_dreq_tables_for_request</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.create_dreq_tables_for_variables" href="#data_request_api.stable.query.dreq_query.create_dreq_tables_for_variables">create_dreq_tables_for_variables</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_content_type" href="#data_request_api.stable.query.dreq_query.get_content_type">get_content_type</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_opp_expts" href="#data_request_api.stable.query.dreq_query.get_opp_expts">get_opp_expts</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_opp_ids" href="#data_request_api.stable.query.dreq_query.get_opp_ids">get_opp_ids</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_opp_vars" href="#data_request_api.stable.query.dreq_query.get_opp_vars">get_opp_vars</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_priority_levels" href="#data_request_api.stable.query.dreq_query.get_priority_levels">get_priority_levels</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_requested_variables" href="#data_request_api.stable.query.dreq_query.get_requested_variables">get_requested_variables</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_table_id2name" href="#data_request_api.stable.query.dreq_query.get_table_id2name">get_table_id2name</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_unique_var_name" href="#data_request_api.stable.query.dreq_query.get_unique_var_name">get_unique_var_name</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_var_group_priority" href="#data_request_api.stable.query.dreq_query.get_var_group_priority">get_var_group_priority</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.get_variables_metadata" href="#data_request_api.stable.query.dreq_query.get_variables_metadata">get_variables_metadata</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.show_requested_vars_summary" href="#data_request_api.stable.query.dreq_query.show_requested_vars_summary">show_requested_vars_summary</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.version_base_name" href="#data_request_api.stable.query.dreq_query.version_base_name">version_base_name</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.write_requested_vars_json" href="#data_request_api.stable.query.dreq_query.write_requested_vars_json">write_requested_vars_json</a></code></li>
+<li><code><a title="data_request_api.stable.query.dreq_query.write_variables_metadata" href="#data_request_api.stable.query.dreq_query.write_variables_metadata">write_variables_metadata</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

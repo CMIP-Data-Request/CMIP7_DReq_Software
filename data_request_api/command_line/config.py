@@ -2,7 +2,7 @@
 
 import argparse
 
-import data_request_api.stable.utilities.config as dreqcfg
+from ..stable.utilities import config as dreqcfg
 
 
 def main():

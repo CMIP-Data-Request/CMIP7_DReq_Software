@@ -26,6 +26,7 @@ class DRObjects(object):
     Base object to build the ones used within the DR API.
     Use to define basic information needed.
     """
+
     def __init__(self, id, dr, DR_type="undef", structure=dict(), **attributes):
         """
         Initialisation of the object.
@@ -452,8 +453,8 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_time_subsets()
             elif request_type in ["mips", ]:
                 found = request_value in self.get_mips() or \
-                        self.filter_on_request_list(request_values=request_value,
-                                                    list_to_check=self.get_variable_groups())
+                    self.filter_on_request_list(request_values=request_value,
+                                                list_to_check=self.get_variable_groups())
             elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
                                   "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
@@ -472,6 +473,7 @@ class DataRequest(object):
     """
     Data Request API object used to navigate among the Data Request and Vocabulary Server contents.
     """
+
     def __init__(self, input_database, VS, **kwargs):
         """
         Initialisation of the Data Request object
@@ -878,7 +880,7 @@ class DataRequest(object):
                 rep = DRObjects.from_input(dr=self, id=rep["id"], DR_type=element_type, elements=rep)
         return rep
 
-    def find_element_from_vs(self, element_type, value,key="name", default=False):
+    def find_element_from_vs(self, element_type, value, key="name", default=False):
         """
         Find an element of a specific type and specified by a value from vocabulary server.
         Update the content and mapping list not to have to ask the vocabulary server again for it.
@@ -1057,8 +1059,8 @@ class DataRequest(object):
                             if found:
                                 rep[request][val.id].add(elt)
                 if not filtered_found:
-                   logger.error(f"Could not filter {elements_to_filter} by {request}")
-                   raise ValueError(f"Could not filter {elements_to_filter} by {request}")
+                    logger.error(f"Could not filter {elements_to_filter} by {request}")
+                    raise ValueError(f"Could not filter {elements_to_filter} by {request}")
             if len(rep) == 0:
                 rep_list = set(elements)
             elif operation in ["any", ]:
