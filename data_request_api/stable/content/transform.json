@@ -1,0 +1,248 @@
+{
+  "common": {
+    "default": {
+      "tables_to_rename": {
+        "opportunity$": "opportunities",
+        "experiment_group": "experiment_groups",
+        "variable_group": "variable_groups",
+        "structure": "structure_title",
+        "time_.*": "time_subsets",
+        "esm-bcv_.*": "esm-bcv",
+        "(.+)(_\\(legacy\\))": "\\1"
+      },
+      "tables_to_delete": [".*rank.*"],
+      "default_keys_to_delete": [
+        ".*\\(from.*\\).*", ".*proposed.*", ".*review.*", ".*--.*", ".*created.*", ".*rank.*", ".*count.*", ".*alert.*",
+        ".*tagged.*", ".*unique.*", "last_modified.*", ".*validation.*", ".*number.*", ".*mj.*", ".*proposal.*", ".*included.*"
+      ],
+      "keys_to_delete": {
+        "cell_measures": ["variables", "structure"],
+        "cell_methods": ["structure", "variables"],
+        "cf_standard_names": ["physical_parameters.*", "esm-bcv.*"],
+        "cmip6_frequency": ["table_identifiers.*", "variables.*"],
+        "cmip7_frequency": ["table_identifiers.*", "variables.*"],
+        "coordinates_and_dimensions": ["spatial_shape", "structure", "temporal_shape", "variables", "size"],
+        "data_request_themes": ["experiment_group.*", ".*opportunit.*", "variable_group.*"],
+        "esm-bcv": ["v\\d.*", "cf_standard_name", ".*variables"],
+        "experiment_groups": ["opportunit.*", "theme.*", "comments.+"],
+        "experiments": ["experiment_group.*", "opportunit.*", "variables", "mip"],
+        "glossary": ["opportunit.*", "related_terms"],
+        "mips": ["variable_group.*", "experiments.*", ".*opportunit.*", "variables"],
+        "modelling_realm": ["variables"],
+        "opportunities": [".*data_volume_estimate", "opportunity_id", "originally_requested_variable_groups"],
+        "opportunity/variable_group_comments": ["experiment_groups", "opportunities", "theme", "variable_groups"],
+        "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
+        "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names", "physical_parameters"],
+        "priority_level": ["variable_group"],
+        "spatial_shape": ["structure.*", ".*variables.*", "hor.*", "vert.*"],
+        "structure_title": ["variables.*", "brand_.*", "calculation.*"],
+        "table_identifiers": ["variables"],
+        "temporal_shape": ["variables", "structure"],
+        "time_subsets": ["uid.+", "opportunit.*"],
+        "variable_comments": ["variable.*", "spatial_shape", "temporal_shape", "coordinates_and_dimensions",
+          "cell_methods", "cell_measures"],
+        "variable_groups": [".*opportunit.*", "theme", "size.*", "mip_ownership"],
+        "variables": ["priority.*", ".*variable_group.*", ".*experiment.*", "size", "vertical_dimension",
+          "temporal_sampling_rate", "horizontal_mesh", "brand.*\\[link\\]", "structure_label", "table_section.*",
+          "theme"]
+      },
+      "keys_to_rename": {
+        "cell_methods": {
+          "comments": "variable_comments",
+          "label": "name"
+        },
+        "cf_standard_names": {
+          "comments": "physical_parameter_comments"
+        },
+        "cmip7_frequency": {
+          "cmip6_frequency.*": "cmip6_frequency"
+        },
+        "coordinates_and_dimensions": {
+          "requested_bounds.+": "requested_bounds",
+          "comments": "variable_comments",
+          "value.+": "value"
+        },
+        "data_request_themes": {
+          "comments": "opportunity/variable_group_comments",
+          "uid.+": "uid"
+        },
+        "experiments": {
+          "experiment": "name"
+        },
+        "experiment_groups": {
+          "comments": "opportunity/variable_group_comments"
+        },
+        "mips": {
+          "mip_short_name": "name"
+        },
+        "modelling_realm": {
+          "id": "uid"
+        },
+        "opportunities": {
+          "title_of_opportunity": "name",
+          "comments": "opportunity/variable_group_comments",
+          "ensemble_size": "minimum_ensemble_size",
+          "themes": "data_request_themes",
+          "working/updated_variable_groups": "variable_groups",
+          "time_slice": "time_subsets"
+        },
+        "physical_parameters": {
+          "comments": "physical_parameter_comments",
+          "cf_proposal_github_issue": "proposal_github_issue",
+          "flag.*change.*": "flag_change_since_cmip6"
+        },
+        "spatial_shape": {
+          "comments": "variable_comments"
+        },
+        "temporal_shape": {
+          "comments": "variable_comments"
+        },
+        "structure_title": {
+          "label": "name"
+        },
+        "table_identifiers": {
+          "comment": "notes",
+          "frequency": "cmip6_frequency"
+        },
+        "time_subsets": {
+          "label": "name"
+        },
+        "variable_groups": {
+          ".*mips.*": "mips",
+          "comments": "opportunity/variable_group_comments"
+        },
+        "variables": {
+          "compound_name": "name",
+          "cmip6_frequency.+": "cmip6_frequency",
+          "^frequency": "cmip7_frequency",
+          "esm-bcv.*": "esm-bcv",
+          "comments": "variable_comments",
+          "table": "table_identifier"
+        }
+      },
+      "keys_to_merge": {
+        "opportunities": {
+          "mips.*": "mips"
+        },
+        "variables": {
+          "modeling_realm": "modelling_realm"
+        }
+      },
+      "keys_to_sort": {
+        "opportunities": ["variable_groups", "data_request_themes", "experiment_groups", "time_slice"],
+        "experiment_groups": ["experiments"],
+        "variable_groups": ["variables", "mips"]
+      },
+      "keys_to_format": {
+        "list_to_string": {
+          "opportunities": ["lead_theme"],
+          "physical_parameters": ["cf_standard_name"],
+          "table_identifiers": ["cmip7_frequency"],
+          "variables": ["cell_methods", ".*frequency", "esm-bcv", "physical_parameter",
+            "spatial_shape", "table_identifier", "temporal_shape"]
+        },
+        "string_to_list": {
+          "opportunities": ["keyword"]
+        }
+      }
+    },
+    "v1.0": {},
+    "v1.1": {},
+    "v1.2": {}
+  },
+  "one_to_transform": {
+    "default": {},
+    "v1.0": {},
+    "v1.1": {},
+    "v1.2": {}
+  },
+  "several_to_transform": {
+    "default": {
+      "several_bases_name": {
+        "schema": "cmip7_data_request_schema_source",
+        "opportunity": "data_request_opportunities_(public)",
+        "physical parameter": "data_request_physical_parameters_(public)",
+        "variable": "data_request_variables_(public)"
+      },
+      "several_bases_link": {
+        "variable": [
+          ["opportunity", "variables", "compound_name"],
+          ["variable", "variable", "compound_name"]
+        ],
+        "physical Parameter": [
+          ["variable", "physical_parameter", "name"],
+          ["physical parameter", "physical_parameter", "name"]
+        ]
+      },
+      "tables_provenance": {
+        "cf_standard_names": ["physical parameter", "cf_standard_name"],
+        "cell_measures": ["variable", "cell_measures"],
+        "cell_methods": ["variable", "cell_methods"],
+        "coordinates_and_dimensions": ["variable", "coordinate_or_dimension"],
+        "docs_for_opportunities": ["opportunity", "docs_for_opportunities"],
+        "experiment_group": ["opportunity", "experiment_group"],
+        "experiments": ["opportunity", "experiment"],
+        "mips": ["opportunity", "mip"],
+        "opportunity": ["opportunity", "opportunity"],
+        "physical_parameters": ["physical parameter", "physical_parameter"],
+        "spatial_shape": ["variable", "spatial_shape"],
+        "temporal_shape": ["variable", "temporal_shape"],
+        "variable_group": ["opportunity", "variable_group"],
+        "variables": ["variable", "variable"],
+        "variable_comments": ["variable", "comment"],
+        "physical_parameter_comments": ["physical parameter", "comment"],
+        "opportunity/variable_group_comments": ["opportunity", "comment"]
+      }
+    },
+    "test": {
+      "tables_provenance": {
+        "esm-bcv_1.3": ["variable", "esm-bcv_1.3"],
+        "structure": ["variable", "structure"],
+        "time_slice": ["opportunity", "time_slice"]
+      }
+    },
+    "v1.0": {
+      "tables_provenance": {
+        "esm-bcv_1.3": ["variable", "esm-bcv_1.3"],
+        "priority_level": ["opportunity", "priority_level"],
+        "data_request_themes": ["opportunity", "data_request_themes"],
+        "glossary": ["opportunity", "glossary"],
+        "modelling_realm": ["variable", "modeling_realm"],
+        "cmip6_frequency_(legacy)": ["variable", "cmip6_frequency_(legacy)"],
+        "cmip7_frequency": ["variable", "cmip7_frequency"],
+        "ranking": ["variable", "ranking_synced"],
+        "structure": ["variable", "structure"],
+        "table_identifiers": ["variable", "table_identifiers"],
+        "time_slice": ["opportunity", "time_slice"]
+      }
+    },
+    "v1.1": {
+      "tables_provenance": {
+        "priority_level": ["opportunity", "priority_level"],
+        "data_request_themes": ["opportunity", "data_request_themes"],
+        "glossary": ["opportunity", "glossary"],
+        "modelling_realm": ["variable", "modeling_realm"],
+        "cmip6_frequency_(legacy)": ["variable", "cmip6_frequency_(legacy)"],
+        "cmip7_frequency": ["variable", "cmip7_frequency"],
+        "ranking": ["variable", "ranking_synced"],
+        "structure": ["variable", "structure"],
+        "table_identifiers": ["variable", "table_identifiers"],
+        "time_slice": ["opportunity", "time_subset"]
+      }
+    },
+    "v1.2": {
+      "tables_provenance": {
+        "esm-bcv_1.4": ["variable", "esm-bcv_1.4"],
+        "priority_level": ["opportunity", "priority_level"],
+        "data_request_themes": ["opportunity", "data_request_themes"],
+        "glossary": ["opportunity", "glossary"],
+        "modelling_realm": ["variable", "modeling_realm"],
+        "cmip6_frequency_(legacy)": ["variable", "cmip6_frequency_(legacy)"],
+        "cmip7_frequency": ["variable", "cmip7_frequency"],
+        "ranking": ["variable", "ranking_synced"],
+        "cmip6_table_identifiers_(legacy)": ["variable", "cmip6_table_identifiers_(legacy)"],
+        "time_subset": ["opportunity", "time_subset"]
+      }
+    }
+  }
+}

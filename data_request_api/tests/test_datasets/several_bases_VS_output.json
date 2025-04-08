@@ -2077,7 +2077,9 @@
             "description": "The \u201cOcean Extremes\u201d project aims to investigate and address the impacts of extreme ocean conditions such as marine heatwaves, hypoxic zones, extreme salinities, sea level extremes and storm surges, ocean acidification, and compound events. As climate change accelerates, these extreme conditions are becoming more frequent and severe, posing significant risks to marine ecosystems and coastal communities. This opportunity will collect the high-frequency multidisciplinary approach to analyze these phenomena, their causes, and their effects, ultimately contributing to better management strategies and mitigation efforts. \u00a0Extreme sea levels are primarily caused by storm surges often in combination with astronomical tides, waves and/or river overflow, which requires climate-scale forcing data at the appropriate spatial and temporal scales to be combined with other resources offline. This opportunity is particularly relevant to revealing differences between eddy-permitting and coarse-resolution models.\n\nLong-term assessment of ocean extremes important for identifying vulnerable regions, designing coastal protection to appropriate levels, and assessing infrastructure and ecosystem viability. It also enables various adaptation measures to be considered and tested via sensitivity testing. In the coming decades, ocean extremes and associated floods are likely to remain a leading cause of natural disasters due to the combined effects of the increasing frequency and intensity of extremes combined with increased coastal development associated with greater exposure.\n",
             "expected_impacts": "This project will look at intense, short-lived events in the upper ocean and euphotic zones.\u00a0 These phenomena have direct impacts on ecosystems and coastal communities, and AR6 assessed that they are changing in frequency.\u00a0 These will inform studies of vulnerability, protection measures, ecosystem persistence and geographic shifts.\n",
             "justification_of_resources": "Very few levels of near surface high-frequency variables, combined with monthly climatological ocean variables, are critical for assessment of high-resolution models and ocean extremes understanding and projections. These are the same values chosen in literature studies of extremes (e.g., Gruber, N., Boyd, P.W., Fr\u00f6licher, T.L. and Vogt, M., 2021. Biogeochemical extremes and compound events in the ocean. Nature, 600(7889), pp.395-407) and storm surges (Bernier, N.B., Hemer, M., Mori, N., Appendini, C.M., Breivik, O., de Camargo, R., Casas-Prat, M., Duong, T.M., Haigh, I.D., Howard, T. and Hernaman, V., 2024. Storm surges and extreme sea levels: Review, establishment of model intercomparison and coordination of surge climate projection efforts (SurgeMIP). Weather and Climate Extremes, 45, p.100689).\n\nThese variables are critical to: coastal hazard assessment; understanding vulnerable regions, communities, infrastructure and ecosystems; better understand and test adaptation measures, both man-made (e.g., coastal protection structures) and natural (e.g., oyster reefs, mangroves).\n",
-            "keyword": "Extremes",
+            "keyword": [
+                "Extremes"
+            ],
             "lead_theme": "Ocean & Sea-Ice",
             "minimum_ensemble_size": 1,
             "name": "Ocean Extremes"
@@ -3943,11 +3945,9 @@
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Prognostic z-ward velocity component resolved by the model.\n",
             "esm-bcv": "link::default_220",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -3962,18 +3962,15 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water Vertical Velocity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "527f5ccc-8c97-11ef-944e-41a8eb05f654": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "description": "Global Average Thermosteric Sea Level Change\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -3990,14 +3987,12 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "This is the relative humidity with respect to liquid water for T> 0 C, and with respect to ice for T<0 C.\n",
             "esm-bcv": "link::default_237",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4012,19 +4007,16 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Relative Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "6a35d178-aa6a-11e6-9736-5404a60d96b5": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amna-tpt",
+            "cmip7_frequency": "6hrPt",
             "description": "Air Temperature\n",
             "esm-bcv": "link::default_111",
-            "frequency": [
-                "6hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4039,19 +4031,16 @@
             "table_identifier": "6hrPlevPt",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Air Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "711075e2-faa7-11e6-bfb7-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "mon",
             "description": "Report surface temperature of snow where snow covers the sea ice.\n",
             "esm-bcv": "link::default_229",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4065,19 +4054,16 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Temperature of Sea Ice",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "71237944-faa7-11e6-bfb7-ac72891c3257": {
             "cell_measures": [
                 "link::default_0"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "mon",
             "description": "The y-velocity of ice on native model grid\n",
             "esm-bcv": "link::default_233",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4091,19 +4077,16 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Y-Component of Sea-Ice Velocity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "714344cc-faa7-11e6-bfb7-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Fraction of time steps of the averaging period during which sea ice is present (siconc >0 ) in a grid cell\n",
             "esm-bcv": "link::default_231",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4117,19 +4100,16 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Fraction of Time Steps with Sea Ice",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "7147b8fe-faa7-11e6-bfb7-ac72891c3257": {
             "cell_measures": [
                 "link::default_0"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "mon",
             "description": "The x-velocity of ice on native model grid\n",
             "esm-bcv": "link::default_232",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4143,19 +4123,16 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "X-Component of Sea-Ice Velocity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "714b603a-faa7-11e6-bfb7-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "(in OImon, sim included snow and sea ice mass)\n",
             "esm-bcv": "link::default_227",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4169,19 +4146,16 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea-Ice Mass per Area",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "714eec6e-faa7-11e6-bfb7-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amsnsi-tmn",
+            "cmip7_frequency": "mon",
             "description": "(in OImon, snd was volume per entire cell area)\n",
             "esm-bcv": "link::default_228",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4195,18 +4169,15 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Snow Thickness",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "83bbfb69-7f07-11ef-9308-b1dd71e64bec": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "This is the dynamic sea level, so should have zero global area mean. zos is the effective sea level as if sea ice (and snow) at a grid cell were converted to liquid seawater (Campin et al., 2008). For OMIP, do _not _record inverse barometer responses from sea-ice (and snow) loading in zos. See (Griffies et al, 2016, https://doi.org/10.5194/gmd-9-3231-2016).\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4223,10 +4194,8 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "Diagnostic should be contributed even for models using conservative temperature as prognostic field.\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4244,10 +4213,8 @@
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation.\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4265,10 +4232,8 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "negative log10 of hydrogen ion concentration with the concentration expressed as mol H kg-1.\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4286,10 +4251,8 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "'Mole concentration' means number of moles per unit volume, also called \"molarity\", and is used in the construction mole\\_concentration\\_of\\_X\\_in\\_Y, where X is a material constituent of Y. A chemical or biological species denoted by X may be described by a single term such as 'nitrogen' or a phrase such as 'nox\\_expressed\\_as\\_nitrogen'.\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4307,10 +4270,8 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "Sum of chlorophyll from all phytoplankton group concentrations. In most models this is equal to chldiat+chlmisc, that is the sum of Diatom Chlorophyll Mass Concentration and Other Phytoplankton Chlorophyll Mass Concentration\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4328,10 +4289,8 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::apt",
+            "cmip7_frequency": "1hr",
             "description": "**vas:** Northward component\u00a0of wind at 10 meters above the surface. It measures wind speed in the north-south direction (positive values indicate wind blowing toward the north).\n",
-            "frequency": [
-                "1hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4349,10 +4308,8 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::apt",
+            "cmip7_frequency": "1hr",
             "description": "**uas:** eastward component\u00a0of wind at 10 meters above the surface. It measures wind speed in the east-west direction (positive values indicate wind blowing toward the east).\n",
-            "frequency": [
-                "1hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4370,10 +4327,8 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "3hr",
             "description": "In response to the opportunity \"Accurate assessment of land-atmosphere coupling\", I'm proposing a soil moisture for multiple layers in a frequency of 3hr.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -4390,13 +4345,11 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:depth0m"
             ],
             "description": "This is just vo for comparison of high-res vs. coarse models and for compound extremes.\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4414,13 +4367,11 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:depth0m"
             ],
             "description": "This is just uo at high frequency so as to compute KE and vorticity.\t\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4438,6 +4389,7 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "3hrPt",
             "coordinates": [
                 "link::dim:depth0m"
             ],
@@ -4445,9 +4397,6 @@
             "extra_dimensions": [
                 "link::dim:latitude",
                 "link::dim:longitude"
-            ],
-            "frequency": [
-                "3hrPt"
             ],
             "modelling_realm": [
                 "land",
@@ -4466,14 +4415,12 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:typesi"
             ],
             "description": "Percentage of grid cell covered by sea ice\n",
             "esm-bcv": "link::default_225",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4487,22 +4434,19 @@
             "table_identifier": "SIday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea-Ice Area Percentage (Ocean Grid)",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "86119ff6-357c-11e7-8257-5404a60d96b5": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:typesi"
             ],
             "description": "Percentage of grid cell covered by sea ice\n",
             "esm-bcv": "link::default_226",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4516,19 +4460,16 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea-Ice Area Percentage (Ocean Grid)",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8b8fbf42-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Geopotential is the sum of the specific gravitational potential energy relative to the geoid and the specific centripetal potential energy. Geopotential height is the geopotential divided by the standard acceleration due to gravity. It is numerically similar to the altitude (or geometric height) and not to the quantity with standard name height, which is relative to the surface.\n",
             "esm-bcv": "link::default_173",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4542,19 +4483,16 @@
             "table_identifier": "Eday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Geopotential Height",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8b9817e6-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "These are standard variables from CMIP5.\n",
             "esm-bcv": "link::default_170",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4568,19 +4506,16 @@
             "table_identifier": "Eday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Specific Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8bae00ba-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Zonal wind (positive in a eastward direction).\n",
             "esm-bcv": "link::default_171",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4594,19 +4529,16 @@
             "table_identifier": "Eday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Eastward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8bae05ec-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Meridional wind (positive in a northward direction).\n",
             "esm-bcv": "link::default_172",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4620,19 +4552,16 @@
             "table_identifier": "Eday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Northward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8bae55ba-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amna-tpt",
+            "cmip7_frequency": "6hrPt",
             "description": "Zonal wind (positive in a eastward direction).\n",
             "esm-bcv": "link::default_112",
-            "frequency": [
-                "6hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4647,19 +4576,16 @@
             "table_identifier": "6hrPlevPt",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Eastward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8bae5aba-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amna-tpt",
+            "cmip7_frequency": "6hrPt",
             "description": "Meridional wind (positive in a northward direction).\n",
             "esm-bcv": "link::default_113",
-            "frequency": [
-                "6hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4674,19 +4600,16 @@
             "table_identifier": "6hrPlevPt",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Northward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8baebea6-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "1hr",
             "description": "Total precipitation flux\n",
             "esm-bcv": "link::default_168",
-            "frequency": [
-                "1hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4700,18 +4623,15 @@
             "table_identifier": "E1hr",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Precipitation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "8bb11ef8-4a5b-11e6-9cd2-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "1hrPt",
             "description": "Sea level pressure\n",
-            "frequency": [
-                "1hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4732,14 +4652,12 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "6hr",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "The relative humidity with respect to liquid water for T> 0 C, and with respect to ice for T<0 C.\n",
             "esm-bcv": "link::default_110",
-            "frequency": [
-                "6hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -4753,18 +4671,15 @@
             "table_identifier": "6hrPlev",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Relative Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "b811a784-7c00-11e6-bcdf-ac72891c3257": {
             "cell_measures": [
                 "link::default_0"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "day",
             "description": "The x-velocity of ice on native model grid\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4785,10 +4700,8 @@
                 "link::default_0"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "day",
             "description": "The y-velocity of ice on native model grid\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "seaIce"
             ],
@@ -4809,10 +4722,8 @@
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Dissolved inorganic carbon (CO3+HCO3+H2CO3) concentration\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4834,10 +4745,8 @@
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "sum of particulate calcite component concentrations (e.g. Phytoplankton, Detrital, etc.)\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4859,10 +4768,8 @@
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "sum of particulate aragonite components (e.g. Phytoplankton, Detrital, etc.)\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4884,10 +4791,8 @@
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "total alkalinity equivalent concentration (including carbonate, borate, phosphorus, silicon, and nitrogen components)\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -4909,11 +4814,9 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amns-fx",
+            "cmip7_frequency": "fx",
             "description": "Ocean bathymetry. Reported here is the sea floor depth for present day relative to z=0 geoid. Reported as missing for land grid cells.\n",
             "esm-bcv": "link::default_197",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4928,19 +4831,16 @@
             "table_identifier": "Ofx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Sea Floor Depth Below Geoid",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa3ea2a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::asum-fx",
+            "cmip7_frequency": "fx",
             "description": "Tracer grid-cell mass per unit area used for computing tracer budgets. For Boussinesq models with static ocean grid cell thickness, masscello = rhozero\\*thickcello, where thickcello is static cell thickness and rhozero is constant Boussinesq reference density. More generally, masscello is time dependent and reported as part of Omon.\n",
             "esm-bcv": "link::default_199",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4958,16 +4858,13 @@
             "type": "real",
             "variable_comments": [
                 "link::default_517"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "baa3ee94-e5dd-11e5-8482-ac72891c3257": {
             "cell_methods": "link::CellMethods::asum-fx",
+            "cmip7_frequency": "fx",
             "description": "Cell areas for any grid used to report ocean variables and variables which are requested as used on the model ocean grid (e.g. hfsso, which is a downward heat flux from the atmosphere interpolated onto the ocean grid). These cell areas should be defined to enable exact calculation of global integrals (e.g., of vertical fluxes of energy at the surface and top of the atmosphere).\n",
             "esm-bcv": "link::default_195",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -4982,18 +4879,15 @@
             "table_identifier": "Ofx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Grid-Cell Area for Ocean Variables",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa3f2e0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_2"
             ],
+            "cmip7_frequency": "fx",
             "description": "This is the area fraction at the ocean surface.\n",
             "esm-bcv": "link::default_200",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5008,19 +4902,16 @@
             "table_identifier": "Ofx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Sea Area Percentage",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa3f718-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "fx",
             "description": "A variable with the standard name of region contains strings which indicate geographical regions. These strings must be chosen from the standard region list.\n",
             "esm-bcv": "link::default_196",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5038,19 +4929,16 @@
             "type": "integer",
             "variable_comments": [
                 "link::default_530"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "baa3fb50-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amns-fx",
+            "cmip7_frequency": "fx",
             "description": "Upward geothermal heat flux per unit area on the sea floor\n",
             "esm-bcv": "link::default_198",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5066,18 +4954,15 @@
             "table_identifier": "Ofx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Upward Geothermal Heat Flux at Sea Floor",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa4e07e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "yr",
             "description": "Depth integrated impacts on kinetic energy arising from parameterized eddy-induced advection. For CMIP5, this diagnostic was 3d, whereas the CMIP6 depth integrated diagnostic is sufficient for many purposes and reduces archive requirements.\n",
-            "frequency": [
-                "yr"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5099,11 +4984,9 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "This is the dynamic sea level, so should have zero global area mean. It should not include inverse barometer depressions from sea ice.\n",
             "esm-bcv": "link::default_222",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5118,18 +5001,15 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Surface Height Above Geoid",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa50c2a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Surface ocean geoid defines z=0.\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5148,11 +5028,9 @@
         },
         "baa51058-e5dd-11e5-8482-ac72891c3257": {
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "There is no CMIP6 request for zosga nor zossga.\n",
             "esm-bcv": "link::default_221",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5166,19 +5044,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Global Average Thermosteric Sea Level Change",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa5147c-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::asm-tmn",
+            "cmip7_frequency": "mon",
             "description": "For Boussinesq models, report this diagnostic as Boussinesq reference density times grid celll volume.\n",
             "esm-bcv": "link::default_205",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5196,19 +5071,16 @@
             "type": "real",
             "variable_comments": [
                 "link::default_517"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "baa518c8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "\"Thickness\" means the vertical extent of a layer. \"Cell\" refers to a model grid-cell.\n",
             "esm-bcv": "link::default_212",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5223,19 +5095,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Ocean Model Cell Thickness",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa51d00-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Diagnostic should be contributed even for models using conservative temperature as prognostic field.\n",
             "esm-bcv": "link::default_211",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5250,19 +5119,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water Potential Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa5255c-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Diagnostic should be contributed only for models using conservative temperature as prognostic field.\n",
             "esm-bcv": "link::default_203",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5276,19 +5142,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water Conservative Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa52de0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "This may differ from \"surface temperature\" in regions of sea ice or floating ice shelves. For models using conservative temperature as the prognostic field, they should report the top ocean layer as surface potential temperature, which is the same as surface in situ temperature.\n",
             "esm-bcv": "link::default_213",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5303,19 +5166,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Surface Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa5491a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation. The units of salinity are dimensionless and the units attribute should normally be given as 1e-3 or 0.001 i.e. parts per thousand. \n",
             "esm-bcv": "link::default_208",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5333,19 +5193,16 @@
             "type": "real",
             "variable_comments": [
                 "link::default_531"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "baa557f2-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation. The units of salinity are dimensionless and the units attribute should normally be given as 1e-3 or 0.001 i.e. parts per thousand. \n",
             "esm-bcv": "link::default_207",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5360,19 +5217,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Surface Salinity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa57688-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Sigma T is potential density referenced to ocean surface.\n",
             "esm-bcv": "link::default_206",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5390,19 +5244,16 @@
             "type": "real",
             "variable_comments": [
                 "link::default_518"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "baa586e6-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Prognostic x-ward velocity component resolved by the model.\n",
             "esm-bcv": "link::default_215",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5417,19 +5268,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water X Velocity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa58b1e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Prognostic y-ward velocity component resolved by the model.\n",
             "esm-bcv": "link::default_218",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5444,19 +5292,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water Y Velocity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa58f74-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::asm-tmn",
+            "cmip7_frequency": "mon",
             "description": "Upward mass transport from residual mean (resolved plus parameterized) advective transport.\n",
             "esm-bcv": "link::default_219",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5471,19 +5316,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Upward Ocean Mass Transport",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa5942e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "X-ward mass transport from residual mean (resolved plus parameterized) advective transport.\n",
             "esm-bcv": "link::default_214",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5498,19 +5340,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Ocean Mass X Transport",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa598c0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "Y-ward mass transport from residual mean (resolved plus parameterized) advective transport.\n",
             "esm-bcv": "link::default_216",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5525,19 +5364,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Ocean Mass Y Transport",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa6c33a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "This is the net flux of heat entering the liquid water column through its upper surface (excluding any \"flux adjustment\") .\n",
             "esm-bcv": "link::default_204",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5553,19 +5389,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Downward Heat Flux at Sea Water Surface",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa6cf38-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_1"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "This is the stress on the liquid ocean from overlying atmosphere, sea ice, ice shelf, etc.\n",
             "esm-bcv": "link::default_209",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5581,19 +5414,16 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water Surface Downward X Stress",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa6d366-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_1"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "This is the stress on the liquid ocean from overlying atmosphere, sea ice, ice shelf, etc.\n",
             "esm-bcv": "link::default_210",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5609,18 +5439,15 @@
             "table_identifier": "Omon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Water Surface Downward Y Stress",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa71c7c-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "description": "Square of temperature of liquid ocean, averaged over the day.\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5642,11 +5469,9 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "description": "This may differ from \"surface temperature\" in regions of sea ice or floating ice shelves. For models using conservative temperature as the prognostic field, they should report the top ocean layer as surface potential temperature, which is the same as surface in situ temperature.\n",
             "esm-bcv": "link::default_194",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5661,19 +5486,16 @@
             "table_identifier": "Oday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Surface Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa72514-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "day",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation. The units of salinity are dimensionless and the units attribute should normally be given as 1e-3 or 0.001 i.e. parts per thousand. \n",
             "esm-bcv": "link::default_193",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -5688,16 +5510,13 @@
             "table_identifier": "Oday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Surface Salinity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baa83a12-e5dd-11e5-8482-ac72891c3257": {
             "cell_methods": "link::CellMethods::asum-fx",
+            "cmip7_frequency": "fx",
             "description": "Cell areas for any grid used to report atmospheric variables and any other variable using that grid (e.g., soil moisture content). These cell areas should be defined to enable exact calculation of global integrals (e.g., of vertical fluxes of energy at the surface and top of the atmosphere).\n",
             "esm-bcv": "link::default_257",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "atmos",
                 "land"
@@ -5713,19 +5532,16 @@
             "table_identifier": "fx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Grid-Cell Area for Atmospheric Grid Variables",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaa4302-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Includes both large-scale and convective cloud.\n",
             "esm-bcv": "link::default_119",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5740,19 +5556,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Percentage Cloud Cover",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaa8326-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Includes both large-scale and convective cloud.  This is calculated as the mass of cloud ice in the grid cell divided by the mass of air (including the water in all phases) in the grid cell. It includes precipitating hydrometeors ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.\n",
             "esm-bcv": "link::default_115",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5767,19 +5580,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Mass Fraction of Cloud Ice",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaa9852-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "mass of ice water in the column divided by the area of the column (not just the area of the cloudy portion of the column). Includes precipitating frozen hydrometeors ONLY if the precipitating hydrometeor affects the calculation of radiative transfer in model.\n",
             "esm-bcv": "link::default_114",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5793,19 +5603,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Ice Water Path",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaace4e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "for the whole atmospheric column, as seen from the surface or the top of the atmosphere. Includes both large-scale and convective cloud.\n",
             "esm-bcv": "link::default_234",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5819,19 +5626,16 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Total Cloud Cover Percentage",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaad7e0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "for the whole atmospheric column, as seen from the surface or the top of the atmosphere. Include both large-scale and convective cloud.\n",
             "esm-bcv": "link::default_116",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5845,19 +5649,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Total Cloud Cover Percentage",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baab0382-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Includes both large-scale and convective cloud.  Calculate as the mass of cloud liquid water in the grid cell divided by the mass of air (including the water in all phases) in the grid cells. Precipitating hydrometeors are included ONLY if the precipitating hydrometeors affect the calculation of radiative transfer in model.\n",
             "esm-bcv": "link::default_118",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5872,19 +5673,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Mass Fraction of Cloud Liquid Water",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baab1818-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "mass of condensed (liquid + ice) water in the column divided by the area of the column (not just the area of the cloudy portion of the column). Includes precipitating hydrometeors ONLY if the precipitating hydrometeor affects the calculation of radiative transfer in model.\n",
             "esm-bcv": "link::default_117",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5898,19 +5696,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Condensed Water Path",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baad45c0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at surface; flux of water into the atmosphere due to conversion of both liquid and solid phases to vapor (from underlying surface and vegetation)\n",
             "esm-bcv": "link::default_120",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -5924,19 +5719,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Evaporation Including Sublimation and Transpiration",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baad5d9e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "includes sublimation.\n",
             "esm-bcv": "link::default_185",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -5950,19 +5742,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Water Evaporation from Soil",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baad6596-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "the canopy evaporation+sublimation (if present in model).\n",
             "esm-bcv": "link::default_186",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -5976,18 +5765,15 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Evaporation from Canopy",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaefbcc-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "This is the 3-hour mean flux.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6009,11 +5795,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "includes both evaporation and sublimation\n",
             "esm-bcv": "link::default_121",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6028,18 +5812,15 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Upward Latent Heat Flux",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaf8452-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "This is the 3-hour mean flux.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6061,11 +5842,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "The surface sensible heat flux, also called turbulent heat flux, is the exchange of heat between the surface and the air by motion of air.\n",
             "esm-bcv": "link::default_122",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6080,19 +5859,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Upward Sensible Heat Flux",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baafe578-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "This is the relative humidity with respect to liquid water for T> 0 C, and with respect to ice for T<0 C.\n",
             "esm-bcv": "link::default_124",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6106,19 +5882,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Relative Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baafec80-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "This is the relative humidity with respect to liquid water for T> 0 C, and with respect to ice for T<0 C.\n",
             "esm-bcv": "link::default_238",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6132,22 +5905,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Relative Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "baaff41e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "This is the relative humidity with respect to liquid water for T> 0 C, and with respect to ice for T<0 C.\n",
             "esm-bcv": "link::default_123",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6162,19 +5932,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Relative Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab00b98-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "Specific humidity is the mass fraction of water vapor in (moist) air.\n",
             "esm-bcv": "link::default_126",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6188,19 +5955,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Specific Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab0135e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Specific humidity is the mass fraction of water vapor in (moist) air.\n",
             "esm-bcv": "link::default_240",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6214,22 +5978,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Specific Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab01dfe-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "Near-surface (usually, 2 meter) specific humidity.\n",
             "esm-bcv": "link::default_125",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6244,22 +6005,19 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Specific Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab0238a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "Near-surface (usually, 2 meter) specific humidity.\n",
             "esm-bcv": "link::default_239",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6274,22 +6032,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Specific Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab034a6-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "3hrPt",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "This is sampled synoptically.\n",
             "esm-bcv": "link::default_105",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6304,19 +6059,16 @@
             "table_identifier": "3hr",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Specific Humidity",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab0919e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "A ratio obtained by dividing the total upper leaf surface area of vegetation by the (horizontal) surface area of the land on which it grows.\n",
             "esm-bcv": "link::default_187",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6331,19 +6083,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Leaf Area Index",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab1688a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "the mass (summed over all all layers) of frozen water.\n",
             "esm-bcv": "link::default_188",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land",
                 "landIce"
@@ -6358,19 +6107,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Soil Frozen Water Content",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab17a6e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "the total runoff (including \"drainage\" through the base of the soil model) leaving the land portion of the grid cell.\n",
             "esm-bcv": "link::default_190",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6384,19 +6130,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Total Runoff",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab19ff8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "the total surface runoff leaving the land portion of the grid cell.\n",
             "esm-bcv": "link::default_189",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6410,19 +6153,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Runoff",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab1a782-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "the mass per unit area  (summed over all soil layers) of water in all phases.\n",
             "esm-bcv": "link::default_192",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6436,19 +6176,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Total Soil Moisture Content",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab1c08c-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amla",
+            "cmip7_frequency": "fx",
             "description": "reported \"where land\": divide the total water holding capacity of all the soil in the grid cell by the land area in the grid cell;  reported as \"missing\" where the land fraction is 0.\n",
             "esm-bcv": "link::default_259",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6466,21 +6203,18 @@
             "variable_comments": [
                 "link::default_527",
                 "link::default_522"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab1c668-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tpt",
+            "cmip7_frequency": "3hrPt",
             "coordinates": [
                 "link::dim:sdepth1"
             ],
             "description": "the mass of water in all phases in a thin surface soil layer.\n",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6502,14 +6236,12 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:sdepth1"
             ],
             "description": "the mass of water in all phases in a thin surface soil layer.\n",
             "esm-bcv": "link::default_191",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6524,19 +6256,16 @@
             "table_identifier": "Lmon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Moisture in Upper Portion of Soil Column",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab2f9d4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "fx",
             "description": "height above the geoid; as defined here, \"the geoid\" is a surface of constant geopotential that, if the ocean were at rest, would coincide with mean sea level. Under this definition, the geoid changes as the mean volume of the ocean changes (e.g., due to glacial melt, or global warming of the ocean).  Reported here is the height above the present-day geoid (0.0 over ocean).\n",
             "esm-bcv": "link::default_260",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -6550,19 +6279,16 @@
             "table_identifier": "fx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Surface Altitude",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab3c904-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "at surface; includes both liquid and solid phases.  This is the 3-hour mean precipitation flux.\n",
             "esm-bcv": "link::default_106",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6576,19 +6302,16 @@
             "table_identifier": "3hr",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Precipitation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab3cb52-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at surface; includes both liquid and solid phases from all types of clouds (both large-scale and convective)\n",
             "esm-bcv": "link::default_130",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6602,19 +6325,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Precipitation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab3d692-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "at surface; includes both liquid and solid phases from all types of clouds (both large-scale and convective)\n",
             "esm-bcv": "link::default_241",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6628,19 +6348,16 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Precipitation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab3f8a2-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at surface; includes both liquid and solid phases.\n",
             "esm-bcv": "link::default_127",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6654,19 +6371,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Convective Precipitation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab42b88-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at surface; includes precipitation of all forms of water in the solid phase\n",
             "esm-bcv": "link::default_128",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6680,19 +6394,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Snowfall Flux",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab45df6-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "vertically integrated through the atmospheric column\n",
             "esm-bcv": "link::default_129",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6706,19 +6417,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Water Vapor Path",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab46db4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "surface pressure (not mean sea-level pressure), 2-D field to calculate the 3-D pressure field from hybrid coordinates\n",
             "esm-bcv": "link::default_162",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6732,18 +6440,15 @@
             "table_identifier": "CFday",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Air Pressure",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab47354-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "3hrPt",
             "description": "sampled synoptically to diagnose atmospheric tides, this is better than mean sea level pressure.\n",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6764,11 +6469,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "not, in general, the same as mean sea-level pressure\n",
             "esm-bcv": "link::default_132",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6782,19 +6485,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Air Pressure",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab48ce0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "not, in general, the same as surface pressure\n",
             "esm-bcv": "link::default_131",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6808,19 +6508,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Level Pressure",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab491f4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "Sea Level Pressure\n",
             "esm-bcv": "link::default_242",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6834,18 +6531,15 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Level Pressure",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab52b5a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "This is the 3-hour mean flux.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6867,11 +6561,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "The surface called \"surface\" means the lower boundary of the atmosphere. \"longwave\" means longwave radiation. Downwelling radiation is radiation from above. It does not mean \"net downward\". When thought of as being incident on a surface, a radiative flux is sometimes called \"irradiance\". In addition, it is identical with the quantity measured by a cosine-collector light-meter and sometimes called \"vector irradiance\". In accordance with common usage in geophysical disciplines, \"flux\" implies per unit area, called \"flux density\" in physics.\n",
             "esm-bcv": "link::default_134",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6886,19 +6578,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downwelling Longwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab5540e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Surface downwelling clear-sky longwave radiation\n",
             "esm-bcv": "link::default_133",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6913,19 +6602,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downwelling Clear-Sky Longwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab578d0-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "The surface called \"surface\" means the lower boundary of the atmosphere. \"longwave\" means longwave radiation. Upwelling radiation is radiation from below. It does not mean \"net upward\". When thought of as being incident on a surface, a radiative flux is sometimes called \"irradiance\". In addition, it is identical with the quantity measured by a cosine-collector light-meter and sometimes called \"vector irradiance\". In accordance with common usage in geophysical disciplines, \"flux\" implies per unit area, called \"flux density\" in physics.\n",
             "esm-bcv": "link::default_135",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6940,18 +6626,15 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Upwelling Longwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab59202-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "This is the 3-hour mean flux.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6973,11 +6656,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at the top of the atmosphere (to be compared with satellite measurements)\n",
             "esm-bcv": "link::default_137",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -6992,19 +6673,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "TOA Outgoing Longwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab5bcdc-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Upwelling clear-sky longwave radiation at top of atmosphere\n",
             "esm-bcv": "link::default_136",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7019,19 +6697,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "TOA Outgoing Clear-Sky Longwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab5c7fe-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "fx",
             "description": "report the maximum soil depth reachable by plant roots (if defined in model), i.e., the maximum soil depth from which they can extract moisture; report as \"missing\" where the land fraction is 0.\n",
             "esm-bcv": "link::default_261",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -7045,18 +6720,15 @@
             "table_identifier": "fx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Maximum Root Depth",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab5df78-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "This is the 3-hour mean flux.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7078,11 +6750,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Surface solar irradiance for UV calculations.\n",
             "esm-bcv": "link::default_139",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7097,19 +6767,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downwelling Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab5ecd4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "description": "Surface solar irradiance for UV calculations.\n",
             "esm-bcv": "link::default_246",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7124,19 +6791,16 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downwelling Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab607c8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Surface solar irradiance clear sky for UV calculations\n",
             "esm-bcv": "link::default_138",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7151,19 +6815,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downwelling Clear-Sky Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab6219a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at the top of the atmosphere\n",
             "esm-bcv": "link::default_140",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7178,18 +6839,15 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "TOA Incident Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab65138-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "3hr",
             "description": "This is the 3-hour mean flux.\n",
-            "frequency": [
-                "3hr"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7211,11 +6869,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "The surface called \"surface\" means the lower boundary of the atmosphere. \"shortwave\" means shortwave radiation. Upwelling radiation is radiation from below. It does not mean \"net upward\". When thought of as being incident on a surface, a radiative flux is sometimes called \"irradiance\". In addition, it is identical with the quantity measured by a cosine-collector light-meter and sometimes called \"vector irradiance\". In accordance with common usage in geophysical disciplines, \"flux\" implies per unit area, called \"flux density\" in physics.\n",
             "esm-bcv": "link::default_142",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7230,19 +6886,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Upwelling Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab670b4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Surface Upwelling Clear-sky Shortwave Radiation\n",
             "esm-bcv": "link::default_141",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7257,19 +6910,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Upwelling Clear-Sky Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab68ebe-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "at the top of the atmosphere\n",
             "esm-bcv": "link::default_144",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7284,19 +6934,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "TOA Outgoing Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab69c06-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Calculated in the absence of clouds.\n",
             "esm-bcv": "link::default_143",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7311,22 +6958,19 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "TOA Outgoing Clear-Sky Shortwave Radiation",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab6f494-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "This is the mean of the speed, not the speed computed from the mean u and v components of wind\n",
             "esm-bcv": "link::default_145",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7341,22 +6985,19 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Wind Speed",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab6fe58-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "near-surface (usually, 10 meters) wind speed.\n",
             "esm-bcv": "link::default_247",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7374,19 +7015,16 @@
             "type": "real",
             "variable_comments": [
                 "link::default_524"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab73a76-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "fx",
             "description": "fraction of grid cell occupied by \"permanent\" ice (i.e., glaciers).\n",
             "esm-bcv": "link::default_262",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -7401,19 +7039,16 @@
             "table_identifier": "fx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Land Ice Area Percentage",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab742c8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "fx",
             "description": "Percentage of horizontal area occupied by land.\n",
             "esm-bcv": "link::default_263",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7428,19 +7063,16 @@
             "table_identifier": "fx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Percentage of the Grid Cell Occupied by Land (Including Lakes)",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab7c2d4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Fraction of each grid cell that is occupied by snow that rests on land portion of cell.\n",
             "esm-bcv": "link::default_182",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "landIce",
                 "land"
@@ -7455,19 +7087,16 @@
             "table_identifier": "LImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Snow Area Percentage",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab81e50-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnla-tmn",
+            "cmip7_frequency": "mon",
             "description": "Computed as the mass of surface snow on the land portion of the grid cell divided by the land area in the grid cell; reported as missing where the land fraction is 0; excluded is snow on vegetation canopy or on sea ice.\n",
             "esm-bcv": "link::default_184",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "landIce",
                 "land"
@@ -7482,19 +7111,16 @@
             "table_identifier": "LImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Snow Amount",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab8fa0a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "Air Temperature\n",
             "esm-bcv": "link::default_151",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7512,19 +7138,16 @@
             "variable_comments": [
                 "link::default_520",
                 "link::default_521"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab902e8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Air Temperature\n",
             "esm-bcv": "link::default_251",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7538,22 +7161,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Air Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab91b20-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "3hrPt",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "This is sampled synoptically.\n",
             "esm-bcv": "link::default_107",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7568,22 +7188,19 @@
             "table_identifier": "3hr",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Near-Surface Air Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab9237c-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "near-surface (usually, 2 meter) air temperature\n",
             "esm-bcv": "link::default_148",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7601,22 +7218,19 @@
             "type": "real",
             "variable_comments": [
                 "link::default_519"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab928ae-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "near-surface (usually, 2 meter) air temperature\n",
             "esm-bcv": "link::default_250",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7636,22 +7250,19 @@
                 "link::default_528",
                 "link::default_519",
                 "link::default_523"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab942a8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::dmax",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "monthly mean of the daily-maximum near-surface air temperature.\n",
             "esm-bcv": "link::default_146",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7669,22 +7280,19 @@
             "type": "real",
             "variable_comments": [
                 "link::default_525"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab94a50-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmax",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "maximum near-surface (usually, 2 meter) air temperature (add cell\\_method attribute \"time: max\")\n",
             "esm-bcv": "link::default_248",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7702,22 +7310,19 @@
             "type": "real",
             "variable_comments": [
                 "link::default_528"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab955ea-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::dmin",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "monthly mean of the daily-minimum near-surface air temperature.\n",
             "esm-bcv": "link::default_147",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7735,22 +7340,19 @@
             "type": "real",
             "variable_comments": [
                 "link::default_525"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab95fae-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmin",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height2m"
             ],
             "description": "minimum near-surface (usually, 2 meter) air temperature (add cell\\_method attribute \"time: min\")\n",
             "esm-bcv": "link::default_249",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7768,19 +7370,16 @@
             "type": "real",
             "variable_comments": [
                 "link::default_528"
-            ],
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            ]
         },
         "bab96cc4-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Downward eastward wind stress at the surface\n",
             "esm-bcv": "link::default_149",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7795,19 +7394,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downward Eastward Wind Stress",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab9888a-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Downward northward wind stress at the surface\n",
             "esm-bcv": "link::default_150",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7822,19 +7418,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Downward Northward Wind Stress",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "bab9bd00-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_4"
             ],
             "cell_methods": "link::CellMethods::amn-fx",
+            "cmip7_frequency": "fx",
             "description": "\"Thickness\" means the vertical extent of a layer. \"Cell\" refers to a model grid-cell.\n",
             "esm-bcv": "link::default_201",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -7849,19 +7442,16 @@
             "table_identifier": "Ofx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Ocean Model Cell Thickness",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babaef0e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "description": "Surface temperature (skin for open ocean)\n",
             "esm-bcv": "link::default_152",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7875,18 +7465,15 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Surface Temperature",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babb12ae-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amnlsi-tpt",
+            "cmip7_frequency": "3hrPt",
             "description": "Surface temperature of all surfaces except open ocean, sampled synoptically.\n",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -7907,10 +7494,8 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tpt",
+            "cmip7_frequency": "3hrPt",
             "description": "temperature of surface of open ocean, sampled synoptically.\n",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "ocean"
             ],
@@ -7931,11 +7516,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "Zonal wind (positive in a eastward direction).\n",
             "esm-bcv": "link::default_154",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7949,19 +7532,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Eastward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babb5084-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Zonal wind (positive in a eastward direction).\n",
             "esm-bcv": "link::default_253",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -7975,22 +7555,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Eastward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babb5db8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "3hrPt",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "This is sampled synoptically.\n",
             "esm-bcv": "link::default_108",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8004,22 +7581,19 @@
             "table_identifier": "3hr",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Eastward Near-Surface Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babb67c2-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "Eastward component of the near-surface (usually, 10 meters)  wind\n",
             "esm-bcv": "link::default_153",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8034,22 +7608,19 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Eastward Near-Surface Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babb6cea-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "Eastward component of the near-surface (usually, 10 meters)  wind\n",
             "esm-bcv": "link::default_252",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8064,19 +7635,16 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Eastward Near-Surface Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babbb25e-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "Meridional wind (positive in a northward direction).\n",
             "esm-bcv": "link::default_156",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8090,19 +7658,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Northward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babbbbe6-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "Meridional wind (positive in a northward direction).\n",
             "esm-bcv": "link::default_255",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8116,22 +7681,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Northward Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babbcd34-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "mon",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "Northward component of the near surface wind\n",
             "esm-bcv": "link::default_155",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8146,22 +7708,19 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Northward Near-Surface Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babbd25c-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::am-tm",
+            "cmip7_frequency": "day",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "Northward component of the near surface wind\n",
             "esm-bcv": "link::default_254",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8176,22 +7735,19 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Northward Near-Surface Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babbdec8-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amn-tpt",
+            "cmip7_frequency": "3hrPt",
             "coordinates": [
                 "link::dim:height10m"
             ],
             "description": "This is sampled synoptically.\n",
             "esm-bcv": "link::default_109",
-            "frequency": [
-                "3hrPt"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8205,19 +7761,16 @@
             "table_identifier": "3hr",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
             "title": "Northward Near-Surface Wind",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babd0906-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "commonly referred to as \"omega\", this represents the vertical component of velocity in pressure coordinates (positive down)\n",
             "esm-bcv": "link::default_157",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8231,19 +7784,16 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Omega (=dp/dt)",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babd0e56-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "day",
             "description": "commonly referred to as \"omega\", this represents the vertical component of velocity in pressure coordinates (positive down)\n",
             "esm-bcv": "link::default_256",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8257,19 +7807,16 @@
             "table_identifier": "day",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Omega (=dp/dt)",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "babd9ace-e5dd-11e5-8482-ac72891c3257": {
             "cell_measures": [
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::tmean",
+            "cmip7_frequency": "mon",
             "description": "Geopotential is the sum of the specific gravitational potential energy relative to the geoid and the specific centripetal potential energy. Geopotential height is the geopotential divided by the standard acceleration due to gravity. It is numerically similar to the altitude (or geometric height) and not to the quantity with standard name height, which is relative to the surface.\n",
             "esm-bcv": "link::default_158",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "atmos"
             ],
@@ -8283,18 +7830,15 @@
             "table_identifier": "Amon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Geopotential Height",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "c9180bae-c5e8-11e6-84e6-5404a60d96b5": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "sum of particulate calcite component concentrations (e.g. Phytoplankton, Detrital, etc.)\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -8315,10 +7859,8 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amse-tmn",
+            "cmip7_frequency": "mon",
             "description": "sum of particulate aragonite components (e.g. Phytoplankton, Detrital, etc.)\n",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "ocnBgchem"
             ],
@@ -8339,11 +7881,9 @@
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "mon",
             "description": "(in OImon, sit was volume per entire cell area)\n",
             "esm-bcv": "link::default_230",
-            "frequency": [
-                "mon"
-            ],
             "modelling_realm": [
                 "seaIce",
                 "ocean"
@@ -8358,18 +7898,15 @@
             "table_identifier": "SImon",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
             "title": "Sea Ice Thickness",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         },
         "d243ba76-4a9f-11e6-b84e-ac72891c3257": {
             "cell_measures": [
                 "link::default_5"
             ],
             "cell_methods": "link::CellMethods::amnsi-twm",
+            "cmip7_frequency": "day",
             "description": "Actual (floe) thickness of sea ice (NOT volume divided by grid area as was done in CMIP5)\n",
-            "frequency": [
-                "day"
-            ],
             "modelling_realm": [
                 "seaIce",
                 "ocean"
@@ -8391,11 +7928,9 @@
                 "link::default_3"
             ],
             "cell_methods": "link::CellMethods::amla",
+            "cmip7_frequency": "fx",
             "description": "Thickness of Soil Layers\n",
             "esm-bcv": "link::default_180",
-            "frequency": [
-                "fx"
-            ],
             "modelling_realm": [
                 "land"
             ],
@@ -8409,8 +7944,7 @@
             "table_identifier": "Efx",
             "temporal_shape": "link::7a96eb30-8042-11e6-97ee-ac72891c3257",
             "title": "Thickness of Soil Layers",
-            "type": "real",
-            "variable_is_included_in_esm-bcv_v1.3": "1 checked out of 1"
+            "type": "real"
         }
     },
     "version": "test"
