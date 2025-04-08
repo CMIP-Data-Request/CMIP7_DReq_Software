@@ -1,4 +1,4 @@
-data_request_api/version.py
+data_request_api/data_request_api/version.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
