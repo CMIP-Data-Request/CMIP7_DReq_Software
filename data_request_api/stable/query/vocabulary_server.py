@@ -63,6 +63,7 @@ class VocabularyServer(object):
     """
     Class to generate a Vocabulary Server from a json file.
     """
+
     def __init__(self, input_database, **kwargs):
         self.vocabulary_server = copy.deepcopy(input_database)
         self.version = self.vocabulary_server.pop("version")
@@ -112,7 +113,7 @@ class VocabularyServer(object):
                     if isinstance(self.vocabulary_server[key][id][elt], list) and \
                             any(is_link_id_or_value(subelt)[0] for subelt in self.vocabulary_server[key][id][elt]):
                         call_dict[key].add(elt)
-                    elif not(isinstance(self.vocabulary_server[key][id][elt], list)) and \
+                    elif not (isinstance(self.vocabulary_server[key][id][elt], list)) and \
                             is_link_id_or_value(self.vocabulary_server[key][id][elt])[0]:
                         call_dict[key].add(elt)
 
@@ -226,6 +227,7 @@ class ConstantValueObj(object):
     Constant object which return the same value each time an attribute is asked.
     It is used to avoid discrepancies between objects and strings.
     """
+
     def __init__(self, value="undef"):
         self.value = value
 

@@ -1,0 +1,47 @@
+name: Update Content
+
+on:
+  push:
+    branches:
+      - main
+      - docs_II
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pdoc3 autopep8 pytest
+          pip install .
+
+      - name: Pep8ify
+        run: |
+          autopep8 data_request_api --aggressive --max-line-length=240 --experimental --recursive --in-place --pep8-passes 4000 --verbose
+
+      - name: Tech documentation generation
+        run: |
+          pdoc --html data_request_api/ --output-dir docs/ --force
+
+      - name: Commit All
+        uses: WCRP-CMIP/CMIP-LD/actions/commit-all@main
+        with:
+          message: "Automated Content Update"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/CMIP-Data-Request/CMIP7_DReq_Software.git
+          git push

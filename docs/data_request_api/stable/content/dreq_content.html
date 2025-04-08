@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>data_request_api.stable.content.dreq_content API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>data_request_api.stable.content.dreq_content</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="data_request_api.stable.content.dreq_content.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>version='all', keep_latest=False, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@append_kwargs_from_config
+def delete(version=&#34;all&#34;, keep_latest=False, **kwargs):
+    &#34;&#34;&#34;Delete one or all cached versions with option to keep latest versions.
+
+    Parameters
+    ----------
+    version : str, optional
+        The version to delete. Can be &#39;all&#39; or a specific version,
+        eg. &#39;1.0.0&#39; (default is &#39;all&#39;).
+    keep_latest : bool, optional
+        If True, keep the latest stable, prerelease and &#34;dev&#34; versions.
+        If False, delete all locally cached versions (default is False).
+    **kwargs
+        export : {&#39;raw&#39;, &#39;release&#39;}, optional
+            Export type. Defaults to &#39;release&#39;.
+        dryrun : bool, optional
+            Whether to only list the files that would be removed instead of actually
+            removing them. Defaults to False.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        If the known kwargs have an invalid value.
+    Warning
+        If &#39;keep_latest&#39; option is active when &#39;version&#39; is not &#39;all&#39;.
+    &#34;&#34;&#34;
+    logger = get_logger()
+    # Get locally cached versions
+    local_versions = get_cached(**kwargs)
+
+    if version == &#34;all&#34;:
+        if keep_latest:
+            # Identify the latest stable and prerelease versions
+            valid_versions = [v for v in local_versions if _version_pattern.match(v)]
+            valid_sversions = [
+                v for v in valid_versions if &#34;a&#34; not in v and &#34;b&#34; not in v
+            ]
+            latest = False
+            latest_stable = False
+            if valid_versions:
+                latest = max(valid_versions, key=_parse_version)
+            if valid_sversions:
+                latest_stable = max(valid_sversions, key=_parse_version)
+            to_keep = [v for v in [&#34;dev&#34;, latest, latest_stable] if v]
+            local_versions = [v for v in local_versions if v not in to_keep]
+    else:
+        if keep_latest:
+            warnings.warn(
+                &#34;&#39;keep_latest&#39; option is ignored when &#39;version&#39; is not &#39;all&#39;.&#34;
+            )
+        local_versions = [version] if version in local_versions else []
+
+    # Deletion
+    if local_versions:
+        logger.info(&#34;Deleting the following version(s):&#34;)
+        logger.info(local_versions)
+    else:
+        logger.info(&#34;No version(s) found to delete.&#34;)
+        return
+
+    # Compile file paths
+    if kwargs[&#34;export&#34;] == &#34;raw&#34;:
+        cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
+    elif kwargs[&#34;export&#34;] == &#34;release&#34;:
+        cached_files = [
+            os.path.join(_dreq_res, v, _json_release) for v in local_versions
+        ]
+    else:
+        # Since files are to be deleted, not defaulting to &#34;release&#34; but rather
+        #  raising a ValueError
+        raise ValueError(f&#34;Unknown export type &#39;{kwargs[&#39;export&#39;]}&#39;.&#34;)
+
+    # Delete files
+    for f in cached_files:
+        if os.path.isfile(f):
+            if &#34;dryrun&#34; in kwargs and kwargs[&#34;dryrun&#34;]:
+                logger.info(f&#34;Dryrun: would delete &#39;{f}&#39;.&#34;)
+            else:
+                os.remove(f)</code></pre>
+</details>
+<div class="desc"><p>Delete one or all cached versions with option to keep latest versions.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The version to delete. Can be 'all' or a specific version,
+eg. '1.0.0' (default is 'all').</dd>
+<dt><strong><code>keep_latest</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>If True, keep the latest stable, prerelease and "dev" versions.
+If False, delete all locally cached versions (default is False).</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>export : {'raw', 'release'}, optional
+Export type. Defaults to 'release'.
+dryrun : bool, optional
+Whether to only list the files that would be removed instead of actually
+removing them. Defaults to False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>None</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If the known kwargs have an invalid value.</dd>
+<dt><code>Warning</code></dt>
+<dd>If 'keep_latest' option is active when 'version' is not 'all'.</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.content.dreq_content.get_cached"><code class="name flex">
+<span>def <span class="ident">get_cached</span></span>(<span>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@append_kwargs_from_config
+def get_cached(**kwargs):
+    &#34;&#34;&#34;Get list of cached versions.
+
+    Parameters
+    ----------
+    **kwargs
+        export : {&#39;raw&#39;, &#39;release&#39;}, optional
+            Export type. Defaults to &#34;release&#34;.
+
+    Returns
+    -------
+    list
+        The list of cached versions.
+
+    Raises
+    ------
+    Warning
+        If known kwargs have an invalid value.
+    &#34;&#34;&#34;
+    local_versions = []
+    if os.path.isdir(_dreq_res):
+        # List all subdirectories in the dreq_res directory that include both dreq.json files
+        #   - the subdirectory name is the tag name
+        if &#34;export&#34; in kwargs:
+            if kwargs[&#34;export&#34;] == &#34;raw&#34;:
+                json_export = _json_raw
+            elif kwargs[&#34;export&#34;] == &#34;release&#34;:
+                json_export = _json_release
+            else:
+                warnings.warn(
+                    f&#34;Unknown export type &#39;{kwargs[&#39;export&#39;]}&#39;. Defaulting to &#39;release&#39;.&#34;
+                )
+                json_export = _json_release
+        local_versions = [
+            name
+            for name in os.listdir(_dreq_res)
+            if os.path.isfile(os.path.join(_dreq_res, name, json_export))
+        ]
+    return local_versions</code></pre>
+</details>
+<div class="desc"><p>Get list of cached versions.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>export : {'raw', 'release'}, optional
+Export type. Defaults to "release".</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>The list of cached versions.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Warning</code></dt>
+<dd>If known kwargs have an invalid value.</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.content.dreq_content.get_versions"><code class="name flex">
+<span>def <span class="ident">get_versions</span></span>(<span>target='tags', **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@append_kwargs_from_config
+def get_versions(target=&#34;tags&#34;, **kwargs):
+    &#34;&#34;&#34;Fetch list of tags from the GitHub repository using the GitHub API.
+
+    Args:
+        target (str): The target to send the request for, either &#39;tags&#39; or &#39;branches&#39;.
+                      The default is &#39;tags&#39;.
+
+    Parameters
+    ----------
+    target : str, optional
+        The target to send the request for, either &#39;tags&#39; or &#39;branches&#39; (default is &#39;tags&#39;).
+        Please note that the main development branch is excluded from the list of branches
+        and is included in the list of tags.
+    **kwargs
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
+
+    Returns
+    -------
+    list
+        A list of tags or branches.
+
+    Raises
+    ------
+    ValueError
+        If target is not &#39;tags&#39; or &#39;branches&#39;.
+    &#34;&#34;&#34;
+    global versions
+    global _versions_retrieved_last
+
+    if target not in [&#34;tags&#34;, &#34;branches&#34;]:
+        raise ValueError(&#34;target must be &#39;tags&#39; or &#39;branches&#39;.&#34;)
+
+    if &#34;offline&#34; in kwargs and kwargs[&#34;offline&#34;]:
+        lversions = get_cached(**kwargs)
+        if target == &#34;tags&#34;:
+            versions[target] = [
+                lv
+                for lv in lversions
+                if lv == &#34;dev&#34; or _parse_version(lv) != (0, 0, 0, &#34;&#34;, 0)
+            ]
+        else:
+            versions[target] = [
+                lv
+                for lv in lversions
+                if lv != &#34;dev&#34; and _parse_version(lv) == (0, 0, 0, &#34;&#34;, 0)
+            ]
+    else:
+        # Retrieve the list of tags or branches from the GitHub API
+        if (
+            not versions[target]
+            or _versions_retrieved_last[target] - time.time() &gt; 60 * 60
+        ):
+            versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
+
+            # Update the last time the tags/branches were retrieved
+            _versions_retrieved_last[target] = time.time()
+
+        if target == &#34;tags&#34; and &#34;dev&#34; not in versions[target]:
+            versions[target].append(&#34;dev&#34;)
+
+    # List tags hosted on GitHub
+    return versions[target]</code></pre>
+</details>
+<div class="desc"><p>Fetch list of tags from the GitHub repository using the GitHub API.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>target</code></strong> :&ensp;<code>str</code></dt>
+<dd>The target to send the request for, either 'tags' or 'branches'.
+The default is 'tags'.</dd>
+</dl>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>target</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The target to send the request for, either 'tags' or 'branches' (default is 'tags').
+Please note that the main development branch is excluded from the list of branches
+and is included in the list of tags.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>offline : bool, optional
+Whether to disable online requests / retrievals. Defaults to False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>A list of tags or branches.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If target is not 'tags' or 'branches'.</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.content.dreq_content.load"><code class="name flex">
+<span>def <span class="ident">load</span></span>(<span>version='latest_stable', **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@append_kwargs_from_config
+def load(version=&#34;latest_stable&#34;, **kwargs):
+    &#34;&#34;&#34;Load the JSON file for the specified version.
+
+    Args:
+        version (str): The version to load.
+                 Can be &#39;latest&#39;, &#39;latest_stable&#39;, &#39;dev&#39;,
+                 or a specific version, eg. &#39;1.0.0&#39;.
+                 The default is &#39;latest_stable&#39;.
+    **kwargs
+        export : {&#39;raw&#39;, &#39;release&#39;}, optional
+            Export type. Defaults to &#39;release&#39;.
+        consolidate: bool, optional
+            Whether to consolidate the data request dictionary after loading it.
+            Experimental feature. Defaults to False.
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
+
+    Returns:
+        dict: of the loaded JSON file.
+    &#34;&#34;&#34;
+    _dreq_content_loaded[&#34;json_path&#34;] = &#34;&#34;
+    logger = get_logger()
+    if version == &#34;all&#34;:
+        raise ValueError(&#34;Cannot load &#39;all&#39; versions.&#34;)
+
+    version_dict = retrieve(version, **kwargs)
+    if version_dict == {}:
+        logger.info(f&#34;Version &#39;{version}&#39; could not be loaded.&#34;)
+        return {}
+    else:
+        json_path = next(iter(version_dict.values()))
+        logger.info(f&#34;Loading version {next(iter(version_dict.keys()))}&#39;.&#34;)
+
+    _dreq_content_loaded[&#34;json_path&#34;] = json_path
+    with open(json_path) as f:
+        if &#34;consolidate&#34; in kwargs:
+            if kwargs[&#34;consolidate&#34;]:
+                return ce.map_data(json.load(f), mapping_table)
+            else:
+                return json.load(f)
+        else:
+            return json.load(f)</code></pre>
+</details>
+<div class="desc"><p>Load the JSON file for the specified version.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>The version to load.
+Can be 'latest', 'latest_stable', 'dev',
+or a specific version, eg. '1.0.0'.
+The default is 'latest_stable'.</dd>
+</dl>
+<p>**kwargs
+export : {'raw', 'release'}, optional
+Export type. Defaults to 'release'.
+consolidate: bool, optional
+Whether to consolidate the data request dictionary after loading it.
+Experimental feature. Defaults to False.
+offline : bool, optional
+Whether to disable online requests / retrievals. Defaults to False.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>of the loaded JSON file.</dd>
+</dl></div>
+</dd>
+<dt id="data_request_api.stable.content.dreq_content.retrieve"><code class="name flex">
+<span>def <span class="ident">retrieve</span></span>(<span>version='latest_stable', **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@append_kwargs_from_config
+def retrieve(version=&#34;latest_stable&#34;, **kwargs):
+    &#34;&#34;&#34;Retrieve the JSON file for the specified version
+
+    Parameters
+    ----------
+    version: str, optional
+        The version to retrieve. Can be &#39;latest&#39;, &#39;latest_stable&#39;,
+        &#39;dev&#39;, or &#39;all&#39; or a specific version, eg. &#39;1.0.0&#39;.
+        (default is &#39;latest_stable&#39;).
+    **kwargs
+        export : {&#39;raw&#39;, &#39;release&#39;}, optional
+            Export type. Defaults to &#39;release&#39;.
+        offline : bool, optional
+            Whether to disable online requests / retrievals. Defaults to False.
+
+    Returns
+    -------
+    dict
+        The path to the retrieved JSON file.
+
+    Raises
+    ------
+    ValueError
+        If the specified version is not found.
+    Warning
+        If the specified version does not have the specified export type.
+    Warning
+        If the known kwargs have an invalid value.
+    Warning
+        If the specified version could not be downloaded or (if applicable) updated.
+    &#34;&#34;&#34;
+    logger = get_logger()
+    if version == &#34;latest&#34;:
+        versions = [_get_latest_version(stable=False, **kwargs)]
+    elif version == &#34;latest_stable&#34;:
+        versions = [_get_latest_version(stable=True, **kwargs)]
+    elif version == &#34;dev&#34;:
+        versions = [&#34;dev&#34;]
+    elif version == &#34;all&#34;:
+        versions = get_versions(**kwargs)
+    else:
+        if version not in get_versions(**kwargs) + get_versions(
+            target=&#34;branches&#34;, **kwargs
+        ):
+            if version not in get_cached(**kwargs):
+                raise ValueError(f&#34;Version &#39;{version}&#39; not found.&#34;)
+        versions = [version]
+
+    if versions == [None] or not versions:
+        raise ValueError(f&#34;Version &#39;{version}&#39; not found.&#34;)
+    elif version in [&#34;v1.0alpha&#34;] and &#34;export&#34; in kwargs and kwargs[&#34;export&#34;] == &#34;raw&#34;:
+        warnings.warn(f&#34;For version &#39;{version}&#39; no raw export exists.&#34;)
+
+    json_paths = dict()
+    for version in versions:
+        # Define the path for storing the dreq.json in the installation directory
+        #  Store it as path_to_api/content/dreq_res/version/{_json_raw/release}
+        retrieve_to_dir = os.path.join(_dreq_res, version)
+        # Decide whether to download release or raw json file
+        if &#34;export&#34; in kwargs:
+            if kwargs[&#34;export&#34;] == &#34;release&#34; or version == &#34;v1.0alpha&#34;:
+                json_export = _json_release
+            elif kwargs[&#34;export&#34;] == &#34;raw&#34;:
+                json_export = _json_raw
+            else:
+                warnings.warn(f&#34;Unknown export type &#39;{kwargs[&#39;export&#39;]}&#39;.&#34;)
+        elif _version_pattern.match(version):
+            json_export = _json_release
+        else:
+            json_export = _json_raw
+        json_path = os.path.join(retrieve_to_dir, json_export)
+
+        if &#34;offline&#34; in kwargs and kwargs[&#34;offline&#34;]:
+            if os.path.isfile(json_path):
+                json_paths[version] = json_path
+        else:
+            os.makedirs(retrieve_to_dir, exist_ok=True)
+
+            # If not already cached download with POOCH
+            if not os.path.isfile(json_path):
+                # Download with pooch - use &#34;main&#34; branch for &#34;dev&#34;
+                try:
+                    json_path = pooch.retrieve(
+                        path=retrieve_to_dir,
+                        url=REPO_RAW_URL.format(
+                            version=_dev_branch if version == &#34;dev&#34; else version,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                        ),
+                        known_hash=None,
+                        fname=json_export,
+                    )
+                except Exception as e:
+                    warnings.warn(f&#34;Could not retrieve version &#39;{version}&#39;: {e}&#34;)
+                    continue
+                logger.info(f&#34;Retrieved version &#39;{version}&#39;.&#34;)
+
+            # or if the version is &#34;dev&#34; or a branch rather than a tag
+            elif version == &#34;dev&#34; or version not in get_versions():
+                # Download with pooch to temporary file and compare to cached version
+                json_path_temp = json_path + &#34;.tmp&#34;
+                try:
+                    # Delete temp file if it exists
+                    if os.path.exists(json_path_temp):
+                        os.remove(json_path_temp)
+                    # Retrieve
+                    json_path_temp = pooch.retrieve(
+                        path=retrieve_to_dir,
+                        url=REPO_RAW_URL.format(
+                            version=_dev_branch if version == &#34;dev&#34; else version,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                        ),
+                        known_hash=None,
+                        fname=json_export + &#34;.tmp&#34;,
+                    )
+                    # Compare files
+                    if not cmp(json_path, json_path_temp, shallow=False):
+                        move(json_path_temp, json_path)
+                        logger.info(f&#34;Updated version &#39;{version}&#39;.&#34;)
+                    else:
+                        os.remove(json_path_temp)
+                except Exception as e:
+                    warnings.warn(
+                        f&#34;Potential update for version &#39;{version}&#39; failed: {e}&#34;
+                    )
+
+            # Store the path to the dreq.json in the json_paths dictionary
+            json_paths[version] = json_path
+
+    # Capture no correct export found for cached versions (offline mode)
+    if not json_paths or json_paths == {}:
+        raise ValueError(
+            &#34;The version(s) you requested are not cached. Please deactivate offline mode and try again.&#34;
+        )
+
+    return json_paths</code></pre>
+</details>
+<div class="desc"><p>Retrieve the JSON file for the specified version</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The version to retrieve. Can be 'latest', 'latest_stable',
+'dev', or 'all' or a specific version, eg. '1.0.0'.
+(default is 'latest_stable').</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>export : {'raw', 'release'}, optional
+Export type. Defaults to 'release'.
+offline : bool, optional
+Whether to disable online requests / retrievals. Defaults to False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>The path to the retrieved JSON file.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If the specified version is not found.</dd>
+<dt><code>Warning</code></dt>
+<dd>If the specified version does not have the specified export type.</dd>
+<dt><code>Warning</code></dt>
+<dd>If the known kwargs have an invalid value.</dd>
+<dt><code>Warning</code></dt>
+<dd>If the specified version could not be downloaded or (if applicable) updated.</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="data_request_api.stable.content" href="index.html">data_request_api.stable.content</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.stable.content.dreq_content.delete" href="#data_request_api.stable.content.dreq_content.delete">delete</a></code></li>
+<li><code><a title="data_request_api.stable.content.dreq_content.get_cached" href="#data_request_api.stable.content.dreq_content.get_cached">get_cached</a></code></li>
+<li><code><a title="data_request_api.stable.content.dreq_content.get_versions" href="#data_request_api.stable.content.dreq_content.get_versions">get_versions</a></code></li>
+<li><code><a title="data_request_api.stable.content.dreq_content.load" href="#data_request_api.stable.content.dreq_content.load">load</a></code></li>
+<li><code><a title="data_request_api.stable.content.dreq_content.retrieve" href="#data_request_api.stable.content.dreq_content.retrieve">retrieve</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

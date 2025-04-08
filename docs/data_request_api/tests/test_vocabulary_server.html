@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>data_request_api.tests.test_vocabulary_server API documentation</title>
+<meta name="description" content="Test vocabulary_server.py">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>data_request_api.tests.test_vocabulary_server</code></h1>
+</header>
+<section id="section-intro">
+<p>Test vocabulary_server.py</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="data_request_api.tests.test_vocabulary_server.TestChangeNumber"><code class="flex name class">
+<span>class <span class="ident">TestChangeNumber</span></span>
+<span>(</span><span>methodName='runTest')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TestChangeNumber(unittest.TestCase):
+    def setUp(self):
+        self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
+
+    def test_to_singular(self):
+        vs = VocabularyServer.from_input(self.vs_file)
+        self.assertEqual(to_singular(&#34;opportunities&#34;), &#34;opportunity&#34;)
+        self.assertEqual(to_singular(&#34;variables_groups&#34;), &#34;variables_group&#34;)
+        self.assertEqual(to_singular(&#34;variables_group&#34;), &#34;variables_group&#34;)
+
+    def test_to_plural(self):
+        vs = VocabularyServer.from_input(self.vs_file)
+        self.assertEqual(to_plural(&#34;opportunity&#34;), &#34;opportunities&#34;)
+        self.assertEqual(to_plural(&#34;variables_groups&#34;), &#34;variables_groups&#34;)
+        self.assertEqual(to_plural(&#34;variables_group&#34;), &#34;variables_groups&#34;)</code></pre>
+</details>
+<div class="desc"><p>A class whose instances are single test cases.</p>
+<p>By default, the test code itself should be placed in a method named
+'runTest'.</p>
+<p>If the fixture may be used for many test cases, create as
+many test methods as are needed. When instantiating such a TestCase
+subclass, specify in the constructor arguments the name of the test method
+that the instance is to execute.</p>
+<p>Test authors should subclass TestCase for their own tests. Construction
+and deconstruction of the test's environment ('fixture') can be
+implemented by overriding the 'setUp' and 'tearDown' methods respectively.</p>
+<p>If it is necessary to override the <strong>init</strong> method, the base class
+<strong>init</strong> method must always be called. It is important that subclasses
+should not change the signature of their <strong>init</strong> method, since instances
+of the classes are instantiated automatically by parts of the framework
+in order to be run.</p>
+<p>When subclassing TestCase, you can set these attributes:
+* failureException: determines which exception will be raised when
+the instance's assertion methods fail; test methods raising this
+exception will be deemed to have 'failed' rather than 'errored'.
+* longMessage: determines whether long messages (including repr of
+objects used in assert methods) will be printed on failure in <em>addition</em>
+to any explicit message passed.
+* maxDiff: sets the maximum length of a diff in failure messages
+by assert methods using difflib. It is looked up as an instance
+attribute so can be configured by individual tests if required.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>unittest.case.TestCase</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_vocabulary_server.TestChangeNumber.setUp"><code class="name flex">
+<span>def <span class="ident">setUp</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setUp(self):
+    self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)</code></pre>
+</details>
+<div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestChangeNumber.test_to_plural"><code class="name flex">
+<span>def <span class="ident">test_to_plural</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_to_plural(self):
+    vs = VocabularyServer.from_input(self.vs_file)
+    self.assertEqual(to_plural(&#34;opportunity&#34;), &#34;opportunities&#34;)
+    self.assertEqual(to_plural(&#34;variables_groups&#34;), &#34;variables_groups&#34;)
+    self.assertEqual(to_plural(&#34;variables_group&#34;), &#34;variables_groups&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestChangeNumber.test_to_singular"><code class="name flex">
+<span>def <span class="ident">test_to_singular</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_to_singular(self):
+    vs = VocabularyServer.from_input(self.vs_file)
+    self.assertEqual(to_singular(&#34;opportunities&#34;), &#34;opportunity&#34;)
+    self.assertEqual(to_singular(&#34;variables_groups&#34;), &#34;variables_group&#34;)
+    self.assertEqual(to_singular(&#34;variables_group&#34;), &#34;variables_group&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestLinks"><code class="flex name class">
+<span>class <span class="ident">TestLinks</span></span>
+<span>(</span><span>methodName='runTest')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TestLinks(unittest.TestCase):
+
+    def test_is_link_or_value(self):
+        self.assertEqual(is_link_id_or_value(&#34;test&#34;), (False, &#34;test&#34;))
+        self.assertEqual(is_link_id_or_value(None), (False, None))
+        self.assertEqual(is_link_id_or_value(5), (False, 5))
+        self.assertEqual(is_link_id_or_value(&#34;link::test&#34;), (True, &#34;test&#34;))
+
+    def test_build_link_from_id(self):
+        self.assertEqual(build_link_from_id(None), None)
+        self.assertEqual(build_link_from_id(6), 6)
+        self.assertEqual(build_link_from_id(&#34;test&#34;), &#34;link::test&#34;)
+        self.assertEqual(build_link_from_id(&#34;link::test&#34;), &#34;link::test&#34;)</code></pre>
+</details>
+<div class="desc"><p>A class whose instances are single test cases.</p>
+<p>By default, the test code itself should be placed in a method named
+'runTest'.</p>
+<p>If the fixture may be used for many test cases, create as
+many test methods as are needed. When instantiating such a TestCase
+subclass, specify in the constructor arguments the name of the test method
+that the instance is to execute.</p>
+<p>Test authors should subclass TestCase for their own tests. Construction
+and deconstruction of the test's environment ('fixture') can be
+implemented by overriding the 'setUp' and 'tearDown' methods respectively.</p>
+<p>If it is necessary to override the <strong>init</strong> method, the base class
+<strong>init</strong> method must always be called. It is important that subclasses
+should not change the signature of their <strong>init</strong> method, since instances
+of the classes are instantiated automatically by parts of the framework
+in order to be run.</p>
+<p>When subclassing TestCase, you can set these attributes:
+* failureException: determines which exception will be raised when
+the instance's assertion methods fail; test methods raising this
+exception will be deemed to have 'failed' rather than 'errored'.
+* longMessage: determines whether long messages (including repr of
+objects used in assert methods) will be printed on failure in <em>addition</em>
+to any explicit message passed.
+* maxDiff: sets the maximum length of a diff in failure messages
+by assert methods using difflib. It is looked up as an instance
+attribute so can be configured by individual tests if required.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>unittest.case.TestCase</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_vocabulary_server.TestLinks.test_build_link_from_id"><code class="name flex">
+<span>def <span class="ident">test_build_link_from_id</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_build_link_from_id(self):
+    self.assertEqual(build_link_from_id(None), None)
+    self.assertEqual(build_link_from_id(6), 6)
+    self.assertEqual(build_link_from_id(&#34;test&#34;), &#34;link::test&#34;)
+    self.assertEqual(build_link_from_id(&#34;link::test&#34;), &#34;link::test&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestLinks.test_is_link_or_value"><code class="name flex">
+<span>def <span class="ident">test_is_link_or_value</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_is_link_or_value(self):
+    self.assertEqual(is_link_id_or_value(&#34;test&#34;), (False, &#34;test&#34;))
+    self.assertEqual(is_link_id_or_value(None), (False, None))
+    self.assertEqual(is_link_id_or_value(5), (False, 5))
+    self.assertEqual(is_link_id_or_value(&#34;link::test&#34;), (True, &#34;test&#34;))</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestVocabularyServer"><code class="flex name class">
+<span>class <span class="ident">TestVocabularyServer</span></span>
+<span>(</span><span>methodName='runTest')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TestVocabularyServer(unittest.TestCase):
+    def setUp(self):
+        self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
+        self.vs_content = read_json_input_file_content(self.vs_file)
+        self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
+        self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;CellMethods::am-tm&#34;][&#34;structure_title&#34;] = &#34;link::default_483&#34;
+
+    def test_init(self):
+        with self.assertRaises(TypeError):
+            VocabularyServer()
+
+        content_no_version = copy.deepcopy(self.vs_content)
+        del content_no_version[&#34;version&#34;]
+        with self.assertRaises(KeyError):
+            VocabularyServer(content_no_version)
+
+        obj = VocabularyServer(self.vs_content)
+        obj = VocabularyServer(self.vs_content, an_attrib=&#34;a_value&#34;)
+
+        with self.assertRaises(ValueError):
+            VocabularyServer(self.vs_content_infinite_loop)
+
+        with self.assertRaises(TypeError):
+            VocabularyServer.from_input(self.vs_content)
+
+        obj = VocabularyServer.from_input(self.vs_file)
+
+    def test_get_element(self):
+        vs = VocabularyServer.from_input(self.vs_file)
+
+        elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=&#34;test&#34;)
+        self.assertEqual(elt, &#34;test&#34;)
+        elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=&#34;???&#34;)
+        self.assertEqual(elt, &#34;???&#34;)
+        elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=None)
+        self.assertEqual(elt, None)
+
+        with self.assertRaises(ValueError):
+            elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=&#34;test&#34;, id_type=&#34;type&#34;)
+        with self.assertRaises(ValueError):
+            elt = vs.get_element(element_type=&#34;variable_comment&#34;, element_id=&#34;test&#34;, id_type=&#34;type&#34;)
+
+        elt = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;TIPMIP&#34;, id_type=&#34;name&#34;)
+        target_dict = {
+            &#34;mip_abstract&#34;: &#34;TIPMIP is an international intercomparison project that aims to systematically advance our&#34;
+                            &#34; understanding of nonlinear dynamics in various Earth system components, and assess the &#34;
+                            &#34;associated uncertainties and risks. At present, no MIP exists which focuses specifically &#34;
+                            &#34;on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling &#34;
+                            &#34;this gap, TIPMIP will shed light on critical processes currently underrepresented in other&#34;
+                            &#34; MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are &#34;
+                            &#34;components of the Earth system highly susceptible to reaching a critical threshold \u2013 &#34;
+                            &#34;a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or &#34;
+                            &#34;irreversible changes in response to anthropogenic climate change. Crossing a tipping point&#34;
+                            &#34; can lead the systems to transition to an alternative state, often with reduced resilience&#34;
+                            &#34; to perturbations and recovery. Once triggered, the tipping of one of these elements can &#34;
+                            &#34;have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, &#34;
+                            &#34;understanding the dynamics of tipping elements and associated risks is crucial for &#34;
+                            &#34;developing effective strategies to mitigate and adapt to the impacts of global &#34;
+                            &#34;environmental change.\n\nWhy is this project important?\nOur current scientific knowledge &#34;
+                            &#34;of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) &#34;
+                            &#34;which components of the climate system and biosphere might show tipping behaviour, (ii) if&#34;
+                            &#34; so, at which forcing levels the critical thresholds are located, (iii) which feedback &#34;
+                            &#34;processes they are associated with, and (iv) if and how potential tipping cascades might &#34;
+                            &#34;evolve. These uncertainties have numerous sources, for instance connected to:\n-finding &#34;
+                            &#34;the \u201cright\u201d level of complexity regarding certain processes within and between &#34;
+                            &#34;Earth system components; \n-the representation of all relevant biophysical processes on &#34;
+                            &#34;the required timescales in Earth system models (in part, so far limited due to &#34;
+                            &#34;computational constraints);\n-the implementation of certain processes and feedbacks in the&#34;
+                            &#34; models; and\n-the limitations on observational data availability for long time horizons.&#34;
+                            &#34;\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is &#34;
+                            &#34;the risk of crossing potential tipping points in the cryosphere, biosphere and core &#34;
+                            &#34;circulation systems at different levels of ongoing climate and land-use change?\n-What are&#34;
+                            &#34; the key biophysical processes and feedbacks associated with these risks?\n-What are the &#34;
+                            &#34;characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping&#34;
+                            &#34; elements?\n-How does the forcing rate affect short- and long-term impacts of changes in &#34;
+                            &#34;the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the &#34;
+                            &#34;respective impacts reversible, and if so, on which timescales?\n-How do interactions &#34;
+                            &#34;between elements affect the overall stability of the Earth system?\n\nTypes of experiments&#34;
+                            &#34; \nInitially, we envision three major types of experiments for TIPMIP, all of which will &#34;
+                            &#34;be designed for the assessment of potential key tipping elements including the Greenland &#34;
+                            &#34;Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), &#34;
+                            &#34;tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as &#34;
+                            &#34;stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze &#34;
+                            &#34;the historical and projected response of potential tipping elements to different climate &#34;
+                            &#34;change scenarios;\n-Commitment experiments to assess the long-term consequences of &#34;
+                            &#34;surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe &#34;
+                            &#34;potential hysteresis behaviour;\n-Rate experiments to assess the impact of different &#34;
+                            &#34;forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be &#34;
+                            &#34;complemented by an additional set of \u2018make it happen\u2019-experiments, which apply &#34;
+                            &#34;additional forcings (e.g., land-use change, freshwater input etc.) tailored to the &#34;
+                            &#34;individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, &#34;
+                            &#34;in which the impact of fully collapsed tipping elements can be studied.&#34;,
+            &#34;mip_long_name&#34;: &#34;Tipping Point Modelling Intercomparison Project&#34;,
+            &#34;name&#34;: &#34;TIPMIP&#34;,
+            &#34;mip_website&#34;: &#34;https://www.tipmip.org&#34;,
+            &#34;id&#34;: &#34;default_417&#34;
+        }
+        self.assertDictEqual(elt, target_dict)
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;)
+        self.assertDictEqual(elt, target_dict)
+
+        with self.assertRaises(ValueError):
+            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;)
+
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;, default=None)
+        self.assertIsNone(obj)
+
+        with self.assertRaises(ValueError):
+            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=None, id_type=&#34;name&#34;)
+
+        with self.assertRaises(ValueError):
+            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;undef&#34;, id_type=&#34;name&#34;)
+
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;mip_long_name&#34;)
+        self.assertEqual(obj, &#34;Tipping Point Modelling Intercomparison Project&#34;)
+
+        with self.assertRaises(ValueError):
+            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;long_name&#34;)</code></pre>
+</details>
+<div class="desc"><p>A class whose instances are single test cases.</p>
+<p>By default, the test code itself should be placed in a method named
+'runTest'.</p>
+<p>If the fixture may be used for many test cases, create as
+many test methods as are needed. When instantiating such a TestCase
+subclass, specify in the constructor arguments the name of the test method
+that the instance is to execute.</p>
+<p>Test authors should subclass TestCase for their own tests. Construction
+and deconstruction of the test's environment ('fixture') can be
+implemented by overriding the 'setUp' and 'tearDown' methods respectively.</p>
+<p>If it is necessary to override the <strong>init</strong> method, the base class
+<strong>init</strong> method must always be called. It is important that subclasses
+should not change the signature of their <strong>init</strong> method, since instances
+of the classes are instantiated automatically by parts of the framework
+in order to be run.</p>
+<p>When subclassing TestCase, you can set these attributes:
+* failureException: determines which exception will be raised when
+the instance's assertion methods fail; test methods raising this
+exception will be deemed to have 'failed' rather than 'errored'.
+* longMessage: determines whether long messages (including repr of
+objects used in assert methods) will be printed on failure in <em>addition</em>
+to any explicit message passed.
+* maxDiff: sets the maximum length of a diff in failure messages
+by assert methods using difflib. It is looked up as an instance
+attribute so can be configured by individual tests if required.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>unittest.case.TestCase</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_vocabulary_server.TestVocabularyServer.setUp"><code class="name flex">
+<span>def <span class="ident">setUp</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setUp(self):
+    self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
+    self.vs_content = read_json_input_file_content(self.vs_file)
+    self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
+    self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;CellMethods::am-tm&#34;][&#34;structure_title&#34;] = &#34;link::default_483&#34;</code></pre>
+</details>
+<div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestVocabularyServer.test_get_element"><code class="name flex">
+<span>def <span class="ident">test_get_element</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_element(self):
+    vs = VocabularyServer.from_input(self.vs_file)
+
+    elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=&#34;test&#34;)
+    self.assertEqual(elt, &#34;test&#34;)
+    elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=&#34;???&#34;)
+    self.assertEqual(elt, &#34;???&#34;)
+    elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=None)
+    self.assertEqual(elt, None)
+
+    with self.assertRaises(ValueError):
+        elt = vs.get_element(element_type=&#34;my_type&#34;, element_id=&#34;test&#34;, id_type=&#34;type&#34;)
+    with self.assertRaises(ValueError):
+        elt = vs.get_element(element_type=&#34;variable_comment&#34;, element_id=&#34;test&#34;, id_type=&#34;type&#34;)
+
+    elt = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;TIPMIP&#34;, id_type=&#34;name&#34;)
+    target_dict = {
+        &#34;mip_abstract&#34;: &#34;TIPMIP is an international intercomparison project that aims to systematically advance our&#34;
+                        &#34; understanding of nonlinear dynamics in various Earth system components, and assess the &#34;
+                        &#34;associated uncertainties and risks. At present, no MIP exists which focuses specifically &#34;
+                        &#34;on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling &#34;
+                        &#34;this gap, TIPMIP will shed light on critical processes currently underrepresented in other&#34;
+                        &#34; MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are &#34;
+                        &#34;components of the Earth system highly susceptible to reaching a critical threshold \u2013 &#34;
+                        &#34;a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or &#34;
+                        &#34;irreversible changes in response to anthropogenic climate change. Crossing a tipping point&#34;
+                        &#34; can lead the systems to transition to an alternative state, often with reduced resilience&#34;
+                        &#34; to perturbations and recovery. Once triggered, the tipping of one of these elements can &#34;
+                        &#34;have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, &#34;
+                        &#34;understanding the dynamics of tipping elements and associated risks is crucial for &#34;
+                        &#34;developing effective strategies to mitigate and adapt to the impacts of global &#34;
+                        &#34;environmental change.\n\nWhy is this project important?\nOur current scientific knowledge &#34;
+                        &#34;of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) &#34;
+                        &#34;which components of the climate system and biosphere might show tipping behaviour, (ii) if&#34;
+                        &#34; so, at which forcing levels the critical thresholds are located, (iii) which feedback &#34;
+                        &#34;processes they are associated with, and (iv) if and how potential tipping cascades might &#34;
+                        &#34;evolve. These uncertainties have numerous sources, for instance connected to:\n-finding &#34;
+                        &#34;the \u201cright\u201d level of complexity regarding certain processes within and between &#34;
+                        &#34;Earth system components; \n-the representation of all relevant biophysical processes on &#34;
+                        &#34;the required timescales in Earth system models (in part, so far limited due to &#34;
+                        &#34;computational constraints);\n-the implementation of certain processes and feedbacks in the&#34;
+                        &#34; models; and\n-the limitations on observational data availability for long time horizons.&#34;
+                        &#34;\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is &#34;
+                        &#34;the risk of crossing potential tipping points in the cryosphere, biosphere and core &#34;
+                        &#34;circulation systems at different levels of ongoing climate and land-use change?\n-What are&#34;
+                        &#34; the key biophysical processes and feedbacks associated with these risks?\n-What are the &#34;
+                        &#34;characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping&#34;
+                        &#34; elements?\n-How does the forcing rate affect short- and long-term impacts of changes in &#34;
+                        &#34;the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the &#34;
+                        &#34;respective impacts reversible, and if so, on which timescales?\n-How do interactions &#34;
+                        &#34;between elements affect the overall stability of the Earth system?\n\nTypes of experiments&#34;
+                        &#34; \nInitially, we envision three major types of experiments for TIPMIP, all of which will &#34;
+                        &#34;be designed for the assessment of potential key tipping elements including the Greenland &#34;
+                        &#34;Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), &#34;
+                        &#34;tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as &#34;
+                        &#34;stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze &#34;
+                        &#34;the historical and projected response of potential tipping elements to different climate &#34;
+                        &#34;change scenarios;\n-Commitment experiments to assess the long-term consequences of &#34;
+                        &#34;surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe &#34;
+                        &#34;potential hysteresis behaviour;\n-Rate experiments to assess the impact of different &#34;
+                        &#34;forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be &#34;
+                        &#34;complemented by an additional set of \u2018make it happen\u2019-experiments, which apply &#34;
+                        &#34;additional forcings (e.g., land-use change, freshwater input etc.) tailored to the &#34;
+                        &#34;individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, &#34;
+                        &#34;in which the impact of fully collapsed tipping elements can be studied.&#34;,
+        &#34;mip_long_name&#34;: &#34;Tipping Point Modelling Intercomparison Project&#34;,
+        &#34;name&#34;: &#34;TIPMIP&#34;,
+        &#34;mip_website&#34;: &#34;https://www.tipmip.org&#34;,
+        &#34;id&#34;: &#34;default_417&#34;
+    }
+    self.assertDictEqual(elt, target_dict)
+    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;)
+    self.assertDictEqual(elt, target_dict)
+
+    with self.assertRaises(ValueError):
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;)
+
+    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;, default=None)
+    self.assertIsNone(obj)
+
+    with self.assertRaises(ValueError):
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=None, id_type=&#34;name&#34;)
+
+    with self.assertRaises(ValueError):
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;undef&#34;, id_type=&#34;name&#34;)
+
+    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;mip_long_name&#34;)
+    self.assertEqual(obj, &#34;Tipping Point Modelling Intercomparison Project&#34;)
+
+    with self.assertRaises(ValueError):
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;long_name&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_vocabulary_server.TestVocabularyServer.test_init"><code class="name flex">
+<span>def <span class="ident">test_init</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_init(self):
+    with self.assertRaises(TypeError):
+        VocabularyServer()
+
+    content_no_version = copy.deepcopy(self.vs_content)
+    del content_no_version[&#34;version&#34;]
+    with self.assertRaises(KeyError):
+        VocabularyServer(content_no_version)
+
+    obj = VocabularyServer(self.vs_content)
+    obj = VocabularyServer(self.vs_content, an_attrib=&#34;a_value&#34;)
+
+    with self.assertRaises(ValueError):
+        VocabularyServer(self.vs_content_infinite_loop)
+
+    with self.assertRaises(TypeError):
+        VocabularyServer.from_input(self.vs_content)
+
+    obj = VocabularyServer.from_input(self.vs_file)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="data_request_api.tests" href="index.html">data_request_api.tests</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="data_request_api.tests.test_vocabulary_server.TestChangeNumber" href="#data_request_api.tests.test_vocabulary_server.TestChangeNumber">TestChangeNumber</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestChangeNumber.setUp" href="#data_request_api.tests.test_vocabulary_server.TestChangeNumber.setUp">setUp</a></code></li>
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestChangeNumber.test_to_plural" href="#data_request_api.tests.test_vocabulary_server.TestChangeNumber.test_to_plural">test_to_plural</a></code></li>
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestChangeNumber.test_to_singular" href="#data_request_api.tests.test_vocabulary_server.TestChangeNumber.test_to_singular">test_to_singular</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data_request_api.tests.test_vocabulary_server.TestLinks" href="#data_request_api.tests.test_vocabulary_server.TestLinks">TestLinks</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestLinks.test_build_link_from_id" href="#data_request_api.tests.test_vocabulary_server.TestLinks.test_build_link_from_id">test_build_link_from_id</a></code></li>
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestLinks.test_is_link_or_value" href="#data_request_api.tests.test_vocabulary_server.TestLinks.test_is_link_or_value">test_is_link_or_value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data_request_api.tests.test_vocabulary_server.TestVocabularyServer" href="#data_request_api.tests.test_vocabulary_server.TestVocabularyServer">TestVocabularyServer</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestVocabularyServer.setUp" href="#data_request_api.tests.test_vocabulary_server.TestVocabularyServer.setUp">setUp</a></code></li>
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestVocabularyServer.test_get_element" href="#data_request_api.tests.test_vocabulary_server.TestVocabularyServer.test_get_element">test_get_element</a></code></li>
+<li><code><a title="data_request_api.tests.test_vocabulary_server.TestVocabularyServer.test_init" href="#data_request_api.tests.test_vocabulary_server.TestVocabularyServer.test_init">test_init</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

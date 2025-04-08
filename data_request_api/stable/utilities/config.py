@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 import yaml
 
 # Config file location in the user's home directory
 PACKAGE_NAME = "CMIP7_data_request_api"
-CONFIG_FILE = os.environ.get("CMIP7_DR_API_CONFIGFILE", Path.home() / f".{PACKAGE_NAME}_config")
+CONFIG_FILE = os.environ.get(
+    "CMIP7_DR_API_CONFIGFILE", Path.home() / f".{PACKAGE_NAME}_config"
+)
 
 # Default config dictionary
 DEFAULT_CONFIG = {
@@ -85,9 +88,6 @@ def load_config() -> dict:
                 CONFIG = yaml.safe_load(f)
         except FileNotFoundError:
             pass
-        except yaml.YAMLError as e:
-            print(f"Error parsing config file: {e}")
-            raise
 
         # Read configuration must be a dict - if no or an empty file is read,
         #  assign DEFAULT_CONFIG
@@ -96,14 +96,18 @@ def load_config() -> dict:
                 yaml.dump(DEFAULT_CONFIG, f)
             CONFIG = DEFAULT_CONFIG.copy()
         elif not isinstance(CONFIG, dict):
-            raise TypeError(f"Config file ('{CONFIG_FILE}') must contain a dictionary")
+            raise TypeError(
+                f"Config file ('{CONFIG_FILE}') must contain a dictionary"
+            )
 
         # Sanity test for allowed types and values
         for key, value in CONFIG.items():
             _sanity_check(key, value)
 
         # Ensure all required keys are present and update config file if necessary
-        missing_keys = {k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG}
+        missing_keys = {
+            k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG
+        }
         for key, value in missing_keys.items():
             update_config(key, value)
 

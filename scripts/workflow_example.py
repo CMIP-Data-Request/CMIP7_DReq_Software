@@ -41,7 +41,7 @@ from data_request_api.stable.query import dreq_query as dq
 from importlib import reload
 reload(dq)
 
-use_dreq_version = 'v1.1'
+use_dreq_version = 'v1.2'
 
 # Download specified version of data request content (if not locally cached)
 dc.retrieve(use_dreq_version)

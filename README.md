@@ -61,7 +61,19 @@ During development, the Software and Content repositories reside in the github o
 Stable releases will eventually be migrated into the https://github.com/WCRP-CMIP organisation.
 
 
+## Technical Documentation 
+https://cmip-data-request.github.io/CMIP7_DReq_Software/data_request_api/
+
+
 ## Quick Start
+
+```bash
+pip install CMIP7-data-request-api
+```
+
+
+
+## Manual
 
 To get started by cloning from github, in a shell session clone the Software and navigate to the `scripts/` directory:
 ```bash
