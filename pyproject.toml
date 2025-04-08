@@ -46,7 +46,7 @@ package-dir = {"" = "data_request_api"}  # 🔍 Tell setuptools that packages ar
 where = ["data_request_api"]             # 🔍 Discover packages from this directory
 
 [tool.setuptools_scm]
-write_to = "data_request_api/version.py"  # updated path for version file
+write_to = "data_request_api/data_request_api/version.py"  # updated path for version file
 
 [tool.pytest.ini_options]
 cache_dir = "data_request_api/tests/.pytest_cache"
