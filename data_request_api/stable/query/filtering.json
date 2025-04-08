@@ -1,7 +1,7 @@
 {
   "definition": {
     "experiments": ["experiment_groups"],
-    "table_identifiers": ["variables"],
+    "cmip6_tables_identifiers": ["variables"],
     "temporal_shapes": ["variables"],
     "spatial_shapes": ["variables"],
     "structure_titles": ["variables"],
@@ -22,7 +22,7 @@
   "filtering": {
     "default": ["opportunities"],
     "experiments": ["opportunities", "experiment_groups"],
-    "table_identifiers": ["opportunities", "variable_groups", "variables"],
+    "cmip6_tables_identifiers": ["opportunities", "variable_groups", "variables"],
     "temporal_shapes": ["opportunities", "variable_groups", "variables"],
     "spatial_shapes": ["opportunities", "variable_groups", "variables"],
     "structures": ["opportunities", "variable_groups", "variables"],

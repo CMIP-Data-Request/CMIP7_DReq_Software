@@ -6,7 +6,6 @@ Script to check consistency of attributes for variables derived from the same ph
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 
-import pprint
 import sys
 import os
 import argparse
@@ -21,17 +20,27 @@ from data_request_api.stable.query.data_request import DataRequest
 from data_request_api.stable.utilities.logger import change_log_file, change_log_level, get_logger
 from data_request_api.stable.utilities.decorators import append_kwargs_from_config
 from data_request_api.stable.utilities.tools import write_json_output_file_content
+from data_request_api.stable.utilities.parser import append_arguments_to_parser
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--version", default="latest_stable", help="Version to be used")
+parser = append_arguments_to_parser(parser)
+subparser = parser.add_mutually_exclusive_group()
+subparser.add_argument("--output_dir", default=None, help="Dedicated output directory to use")
+subparser.add_argument("--test", action="store_true", help="Is the launch a test? If so, launch in temporary directory.")
+args = parser.parse_args()
 
 
 @append_kwargs_from_config
-def check_variables_attributes(version="v1.1", **kwargs):
-	change_log_file(logfile="check_attributes.log")
+def check_variables_attributes(version, output_dir, **kwargs):
+	change_log_file(logfile=os.path.sep.join([output_dir, version, f"check_attributes_{kwargs['export']}.log"]))
 	change_log_level("info")
 	logger = get_logger()
 	content = get_transformed_content(version=version, **kwargs)
 	DR = DataRequest.from_separated_inputs(**content)
 
-	rep = defaultdict(lambda: dict(cell_measures=set(), cell_methods=set(), frequencies=set(), descriptions=set(),
+	rep = defaultdict(lambda: dict(cell_measures=set(), cell_methods=set(), cmip7_frequencies=set(), descriptions=set(),
 	                               modelling_realms=set(), spatial_shapes=set(), structure_titles=set(),
 	                               temporal_shapes=set(), titles=set(), names=set()))
 	for variable in DR.get_variables():
@@ -39,7 +48,7 @@ def check_variables_attributes(version="v1.1", **kwargs):
 		rep[physical_parameter]["cell_measures"] = \
 			rep[physical_parameter]["cell_measures"] | set(str(elt.name) for elt in variable.cell_measures)
 		rep[physical_parameter]["cell_methods"].add(str(variable.cell_methods.name))
-		rep[physical_parameter]["frequencies"].add(str(variable.cmip7_frequency.name))
+		rep[physical_parameter]["cmip7_frequencies"].add(str(variable.cmip7_frequency.name))
 		rep[physical_parameter]["descriptions"].add(str(variable.description))
 		rep[physical_parameter]["modelling_realms"] = \
 			rep[physical_parameter]["modelling_realms"] | set(str(elt.name) for elt in variable.modelling_realm)
@@ -83,8 +92,14 @@ def check_variables_attributes(version="v1.1", **kwargs):
 				logger.info(f"... the following attributes have missing values {missing}.")
 			logger.info("... see output file.")
 
-	write_json_output_file_content("check_attributes.json", content=rep)
+	write_json_output_file_content(os.path.sep.join([output_dir, version, f"check_attributes_{kwargs['export']}.json"]), content=rep)
 
 
-if __name__ == "__main__":
-	check_variables_attributes()
+kwargs = args.__dict__
+
+if args.test:
+	with tempfile.TemporaryDirectory() as output_dir:
+		kwargs["output_dir"] = output_dir
+		check_variables_attributes(**kwargs)
+else:
+	check_variables_attributes(**kwargs)

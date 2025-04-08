@@ -158,8 +158,8 @@ def sort_useful_keys(content, patterns_to_sort=list()):
     patterns_to_sort = [re.compile(elt) for elt in patterns_to_sort]
     for uid in content:
         # Sort content of needed keys
-        list_keys_to_sort = [elt for elt in content[uid]
-                             if any(patt.match(elt) is not None for patt in patterns_to_sort)]
+        list_keys_to_sort = [elt for (elt, val) in content[uid].items()
+                             if any(patt.match(elt) is not None and isinstance(val, list) for patt in patterns_to_sort)]
         for key in list_keys_to_sort:
             content[uid][key] = sorted(list(set(content[uid][key])))
     return content
@@ -481,7 +481,7 @@ def get_transformed_content(version="latest_stable", export="release", consolida
                 os.remove(VS_content)
         if not(all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
             content = dc.load(version, export=export, consolidate=consolidate)
-            data_request, vocabulary_server = transform_content(content, version, transformed_content=os.sep.join([output_dir, f"dreq_{export}_export_to_one.json"]))
+            data_request, vocabulary_server = transform_content(content, version)
             write_json_output_file_content(DR_content, data_request)
             write_json_output_file_content(VS_content, vocabulary_server)
         return dict(DR_input=DR_content, VS_input=VS_content)
