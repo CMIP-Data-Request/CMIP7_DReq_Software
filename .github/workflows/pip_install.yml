@@ -12,7 +12,7 @@ jobs:
   test-install:
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, macos-latest, windows-latest]
+        os: [ubuntu-22.04, macos-latest, windows-latest]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
     
     runs-on: ${{ matrix.os }}
