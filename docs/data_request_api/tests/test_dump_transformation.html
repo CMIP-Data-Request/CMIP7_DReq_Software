@@ -315,8 +315,6 @@ not have a method with the specified name.</p></div>
         self.one_base_DR_output_noversion = copy.deepcopy(self.one_base_DR_output)
         del self.one_base_DR_output_noversion[&#34;version&#34;]
         self.several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
-        self.several_bases_output_transform_to_one = \
-            read_json_file(filepath(&#34;several_bases_output_transform_to_one.json&#34;))
         self.several_bases_output_format = read_json_file(filepath(&#34;several_bases_output_format.json&#34;))
         self.several_bases_output_transform = read_json_file(filepath(&#34;several_bases_output_transform.json&#34;))
         self.several_bases_VS_output = read_json_file(filepath(&#34;several_bases_VS_output.json&#34;))
@@ -325,11 +323,12 @@ not have a method with the specified name.</p></div>
         del self.several_bases_VS_output_noversion[&#34;version&#34;]
         self.several_bases_DR_output_noversion = copy.deepcopy(self.several_bases_DR_output)
         del self.several_bases_DR_output_noversion[&#34;version&#34;]
+        self.transform_settings = get_transform_settings(self.version)
 
     def test_one_base_correct(self):
         format_output = correct_dictionaries(self.one_base_input)
         self.assertDictEqual(format_output, self.one_base_output_format)
-        transform_output = transform_content_one_base(format_output)
+        transform_output = transform_content_inner(format_output, get_transform_settings(self.version)[&#34;one_to_transform&#34;])
         self.assertDictEqual(transform_output, self.one_base_output_transform)
         DR_output, VS_output = split_content_one_base(transform_output)
         self.assertDictEqual(DR_output, self.one_base_DR_output_noversion)
@@ -341,11 +340,9 @@ not have a method with the specified name.</p></div>
         self.assertDictEqual(VS_output, self.one_base_VS_output)
 
     def test_several_bases_correct(self):
-        transform_input = transform_content_three_bases(self.several_bases_input)
-        self.assertDictEqual(transform_input, self.several_bases_output_transform_to_one)
-        format_output = correct_dictionaries(transform_input)
+        format_output = correct_dictionaries(self.several_bases_input)
         self.assertDictEqual(format_output, self.several_bases_output_format)
-        transform_output = transform_content_one_base(format_output)
+        transform_output = transform_content_inner(format_output, self.transform_settings[&#34;several_to_transform&#34;], change_tables=True)
         self.assertDictEqual(transform_output, self.several_bases_output_transform)
         DR_output, VS_output = split_content_one_base(transform_output)
         self.assertDictEqual(DR_output, self.several_bases_DR_output_noversion)
@@ -356,19 +353,27 @@ not have a method with the specified name.</p></div>
         self.assertDictEqual(DR_output, self.several_bases_DR_output)
         self.assertDictEqual(VS_output, self.several_bases_VS_output)
 
-    def test_one_base_error(self):
-        with self.assertRaises(ValueError):
-            transform_content_one_base(self.several_bases_input)
+    def test_transform_inner_error(self):
+        with self.assertRaises(TypeError):
+            transform_content_inner(self.several_bases_input)
 
         with self.assertRaises(TypeError):
-            transform_content_one_base([&#34;dummy&#34;, &#34;test&#34;])
-
-    def test_several_bases_error(self):
-        with self.assertRaises(ValueError):
-            transform_content_three_bases(self.one_base_input)
+            transform_content_inner(self.one_base_input)
 
         with self.assertRaises(TypeError):
-            transform_content_three_bases([&#34;dummy&#34;, &#34;test&#34;])
+            transform_content_inner([&#34;dummy&#34;, &#34;test&#34;])
+
+        with self.assertRaises(ValueError):
+            transform_content_inner(self.several_bases_input, self.transform_settings[&#34;one_to_transform&#34;])
+
+        with self.assertRaises(TypeError):
+            transform_content_inner([&#34;dummy&#34;, &#34;test&#34;], self.transform_settings[&#34;one_to_transform&#34;])
+
+        with self.assertRaises(ValueError):
+            transform_content_inner(self.several_bases_input, self.transform_settings[&#34;several_to_transform&#34;])
+
+        with self.assertRaises(TypeError):
+            transform_content_inner([&#34;dummy&#34;, &#34;test&#34;], self.transform_settings[&#34;several_to_transform&#34;])
 
     def test_all_error(self):
         with self.assertRaises(TypeError):
@@ -434,8 +439,6 @@ not have a method with the specified name.</p></div>
     self.one_base_DR_output_noversion = copy.deepcopy(self.one_base_DR_output)
     del self.one_base_DR_output_noversion[&#34;version&#34;]
     self.several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
-    self.several_bases_output_transform_to_one = \
-        read_json_file(filepath(&#34;several_bases_output_transform_to_one.json&#34;))
     self.several_bases_output_format = read_json_file(filepath(&#34;several_bases_output_format.json&#34;))
     self.several_bases_output_transform = read_json_file(filepath(&#34;several_bases_output_transform.json&#34;))
     self.several_bases_VS_output = read_json_file(filepath(&#34;several_bases_VS_output.json&#34;))
@@ -443,7 +446,8 @@ not have a method with the specified name.</p></div>
     self.several_bases_VS_output_noversion = copy.deepcopy(self.several_bases_VS_output)
     del self.several_bases_VS_output_noversion[&#34;version&#34;]
     self.several_bases_DR_output_noversion = copy.deepcopy(self.several_bases_DR_output)
-    del self.several_bases_DR_output_noversion[&#34;version&#34;]</code></pre>
+    del self.several_bases_DR_output_noversion[&#34;version&#34;]
+    self.transform_settings = get_transform_settings(self.version)</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -508,28 +512,11 @@ not have a method with the specified name.</p></div>
 <pre><code class="python">def test_one_base_correct(self):
     format_output = correct_dictionaries(self.one_base_input)
     self.assertDictEqual(format_output, self.one_base_output_format)
-    transform_output = transform_content_one_base(format_output)
+    transform_output = transform_content_inner(format_output, get_transform_settings(self.version)[&#34;one_to_transform&#34;])
     self.assertDictEqual(transform_output, self.one_base_output_transform)
     DR_output, VS_output = split_content_one_base(transform_output)
     self.assertDictEqual(DR_output, self.one_base_DR_output_noversion)
     self.assertDictEqual(VS_output, self.one_base_VS_output_noversion)</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.tests.test_dump_transformation.TestTransformContent.test_one_base_error"><code class="name flex">
-<span>def <span class="ident">test_one_base_error</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def test_one_base_error(self):
-    with self.assertRaises(ValueError):
-        transform_content_one_base(self.several_bases_input)
-
-    with self.assertRaises(TypeError):
-        transform_content_one_base([&#34;dummy&#34;, &#34;test&#34;])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -542,11 +529,9 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_several_bases_correct(self):
-    transform_input = transform_content_three_bases(self.several_bases_input)
-    self.assertDictEqual(transform_input, self.several_bases_output_transform_to_one)
-    format_output = correct_dictionaries(transform_input)
+    format_output = correct_dictionaries(self.several_bases_input)
     self.assertDictEqual(format_output, self.several_bases_output_format)
-    transform_output = transform_content_one_base(format_output)
+    transform_output = transform_content_inner(format_output, self.transform_settings[&#34;several_to_transform&#34;], change_tables=True)
     self.assertDictEqual(transform_output, self.several_bases_output_transform)
     DR_output, VS_output = split_content_one_base(transform_output)
     self.assertDictEqual(DR_output, self.several_bases_DR_output_noversion)
@@ -554,20 +539,35 @@ not have a method with the specified name.</p></div>
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.tests.test_dump_transformation.TestTransformContent.test_several_bases_error"><code class="name flex">
-<span>def <span class="ident">test_several_bases_error</span></span>(<span>self)</span>
+<dt id="data_request_api.tests.test_dump_transformation.TestTransformContent.test_transform_inner_error"><code class="name flex">
+<span>def <span class="ident">test_transform_inner_error</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_several_bases_error(self):
-    with self.assertRaises(ValueError):
-        transform_content_three_bases(self.one_base_input)
+<pre><code class="python">def test_transform_inner_error(self):
+    with self.assertRaises(TypeError):
+        transform_content_inner(self.several_bases_input)
 
     with self.assertRaises(TypeError):
-        transform_content_three_bases([&#34;dummy&#34;, &#34;test&#34;])</code></pre>
+        transform_content_inner(self.one_base_input)
+
+    with self.assertRaises(TypeError):
+        transform_content_inner([&#34;dummy&#34;, &#34;test&#34;])
+
+    with self.assertRaises(ValueError):
+        transform_content_inner(self.several_bases_input, self.transform_settings[&#34;one_to_transform&#34;])
+
+    with self.assertRaises(TypeError):
+        transform_content_inner([&#34;dummy&#34;, &#34;test&#34;], self.transform_settings[&#34;one_to_transform&#34;])
+
+    with self.assertRaises(ValueError):
+        transform_content_inner(self.several_bases_input, self.transform_settings[&#34;several_to_transform&#34;])
+
+    with self.assertRaises(TypeError):
+        transform_content_inner([&#34;dummy&#34;, &#34;test&#34;], self.transform_settings[&#34;several_to_transform&#34;])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -610,9 +610,8 @@ not have a method with the specified name.</p></div>
 <li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_all_correct_from_several" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_all_correct_from_several">test_all_correct_from_several</a></code></li>
 <li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_all_error" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_all_error">test_all_error</a></code></li>
 <li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_one_base_correct" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_one_base_correct">test_one_base_correct</a></code></li>
-<li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_one_base_error" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_one_base_error">test_one_base_error</a></code></li>
 <li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_several_bases_correct" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_several_bases_correct">test_several_bases_correct</a></code></li>
-<li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_several_bases_error" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_several_bases_error">test_several_bases_error</a></code></li>
+<li><code><a title="data_request_api.tests.test_dump_transformation.TestTransformContent.test_transform_inner_error" href="#data_request_api.tests.test_dump_transformation.TestTransformContent.test_transform_inner_error">test_transform_inner_error</a></code></li>
 </ul>
 </li>
 </ul>

@@ -30,6 +30,9 @@ def change_log_file(logfile=log_file, default=False):
         new_hdlr = logging.StreamHandler(sys.stdout)
     else:
         log_file = logfile
+        log_dir = os.path.dirname(os.path.abspath(log_file))
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
         logger = logging.getLogger()
         for hdlr in logger.handlers[:]:
             hdlr.flush()

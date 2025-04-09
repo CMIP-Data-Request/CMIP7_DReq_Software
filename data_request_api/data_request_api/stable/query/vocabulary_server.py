@@ -92,7 +92,10 @@ class VocabularyServer(object):
             coordinate="coordinates_and_dimensions",
             extra_dimension="coordinates_and_dimensions",
             max_priority_level="priority_level",
-            structure="structure_title"
+            structure="structure_title",
+            table="cmip6_tables_identifier",
+            table_identifier="cmip6_tables_identifier",
+            reference="docs_for_opportunity"
         )
         return element_type_dict.get(element_type, element_type)
 

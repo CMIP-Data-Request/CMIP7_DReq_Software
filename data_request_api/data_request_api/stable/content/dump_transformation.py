@@ -66,91 +66,53 @@ def correct_dictionaries(input_dict, is_record_ids=False):
         raise TypeError(f"Deal with dict types, not {type(input_dict).__name__}")
 
 
-def transform_content_three_bases(content):
-    """
-    Transform the several bases export content into something similar to a one base export content.
-    To do that, the content of the different entries of the input dictionary are copied to a single dictionary.
-    The record ids are also harmonised through the different bases.
-    :param dict content: input dictionary containing the different databases
-    :return dict: dictionary containing the content of the different databases
-    """
-    logger = get_logger()
-    if isinstance(content, dict) and len(content) > 2:
-        new_content = dict()
-        opportunity_table = [elt for elt in list(content) if "opportunities" in elt.lower()][0]
-        variables_table = [elt for elt in list(content) if "variables" in elt.lower()][0]
-        physical_parameters_table = [elt for elt in list(content) if "parameters" in elt.lower()][0]
-        # Copy the bases
-        old_variables_content = content[opportunity_table].pop("Variables")
-        old_physical_parameters_content = content[variables_table].pop("Physical Parameter")
-        new_content["Opportunity/variable Group Comments"] = content[opportunity_table].pop("Comment")
-        new_content["Experiments"] = content[opportunity_table].pop("Experiment")
-        new_content["MIPs"] = content[opportunity_table].pop("MIP")
-        for elt in list(content[opportunity_table]):
-            new_content[elt] = content[opportunity_table].pop(elt)
-        new_content["Variables"] = content[variables_table].pop("Variable")
-        new_content["Coordinates and Dimensions"] = content[variables_table].pop("Coordinate or Dimension")
-        new_content["Variable Comments"] = content[variables_table].pop("Comment")
-        if "Modeling Realm" in content[variables_table]:
-            new_content["Modelling Realm"] = content[variables_table].pop("Modeling Realm")
-        for elt in list(content[variables_table]):
-            new_content[elt] = content[variables_table].pop(elt)
-        new_content["Physical Parameter Comments"] = content[physical_parameters_table].pop("Comment")
-        new_content["Physical Parameters"] = content[physical_parameters_table].pop("Physical Parameter")
-        new_content["CF Standard Names"] = content[physical_parameters_table].pop("CF Standard Name")
-        for elt in list(content[physical_parameters_table]):
-            new_content[elt] = content[physical_parameters_table].pop(elt)
-        # Correct record id through several bases
-        old_variables_ids = {record_id: value["Compound Name"] for (record_id, value) in
-                             old_variables_content["records"].items()}
-        new_variables_ids = {value["Compound Name"]: record_id for (record_id, value) in
-                             new_content["Variables"]["records"].items()}
-        for var_group_id in list(new_content["Variable Group"]["records"]):
-            new_content["Variable Group"]["records"][var_group_id]["Variables"] = \
-                [new_variables_ids[old_variables_ids[elt]] for elt in
-                 new_content["Variable Group"]["records"][var_group_id]["Variables"]]
-        old_physical_parameters_ids = {record_id: value["Name"] for (record_id, value) in
-                                       old_physical_parameters_content["records"].items()}
-        new_physical_parameters_ids = {value["Name"]: record_id for (record_id, value) in
-                                       new_content["Physical Parameters"]["records"].items()}
-        for var_id in list(new_content["Variables"]["records"]):
-            if "Physical Parameter" not in new_content["Variables"]["records"][var_id]:
-                logger.debug(f"Remove Variables record ID {var_id}, no 'Physical Parameter' field defined.")
-                del new_content["Variables"]["records"][var_id]
+def get_transform_settings(version):
+    def update_dict(elt_1, elt_2):
+        rep = copy.deepcopy(elt_1)
+        for (elt, value) in elt_2.items():
+            if isinstance(value, dict):
+                val = rep.get(elt, dict())
+                for (subelt, subvalue) in value.items():
+                    if isinstance(subvalue, dict):
+                        val[subelt] = val.get(subelt, dict())
+                        val[subelt].update(subvalue)
+                    else:
+                        val[subelt] = subvalue
+                rep[elt] = val
+            elif isinstance(value, list):
+                rep[elt] = rep.get(elt, list()) + value
             else:
-                new_content["Variables"]["records"][var_id]["Physical Parameter"] = \
-                    [new_physical_parameters_ids[old_physical_parameters_ids[elt]] for elt in
-                     new_content["Variables"]["records"][var_id]["Physical Parameter"]]
-        # Harmonise record ids through bases
-        logger.info("Harmonise bases content record ids")
-        content_str = json.dumps(new_content)
-        for id in sorted(list(old_variables_ids)):
-            content_str = re.sub(f'"{id}"', f'"{new_variables_ids[old_variables_ids[id]]}"', content_str)
-        for id in sorted(list(old_physical_parameters_ids)):
-            content_str = re.sub(f'"{id}"', f'"{new_physical_parameters_ids[old_physical_parameters_ids[id]]}"',
-                                 content_str)
-        new_content = json.loads(content_str)
-        # Return the content
-        return {"Data Request": new_content}
-    elif isinstance(content, dict):
-        logger.error(f"Deal with several bases dict.")
-        raise ValueError(f"Deal with several bases dict.")
+                rep[elt] = value
+        return rep
+
+    transform = read_json_input_file_content(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "transform.json"]))
+    common = transform.pop("common", dict())
+    if version not in ["default", ]:
+        common = update_dict(common["default"], common.get(version, dict()))
     else:
-        logger.error(f"Deal with dict types, not {type(content).__name__}")
-        raise TypeError(f"Deal with dict types, not {type(content).__name__}")
+        common = common["default"]
+    for (elt, content) in transform.items():
+        default_content = update_dict(common, content["default"])
+        if version not in ["default", ]:
+            default_content = update_dict(default_content, content.get(version, dict()))
+        transform[elt] = default_content
+    return transform
 
 
 def distribute_on_entry(func):
     def distribute(content, per_entry_input, **common_inputs):
         for (key, value) in content.items():
-            content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+            list_args = [value, ]
+            if key in per_entry_input:
+                list_args.append(per_entry_input[key])
+            content[key] = func(*list_args, **copy.deepcopy(common_inputs))
         return content
 
     return distribute
 
 
 @distribute_on_entry
-def remove_unused_keys(content, patterns_to_remove, default_patterns_to_remove):
+def remove_unused_keys(content, patterns_to_remove=list(), default_patterns_to_remove=list()):
     content = content["records"]
     patterns_to_remove.extend(default_patterns_to_remove)
     patterns_to_remove = [re.compile(elt) for elt in patterns_to_remove]
@@ -163,18 +125,11 @@ def remove_unused_keys(content, patterns_to_remove, default_patterns_to_remove):
 
 
 @distribute_on_entry
-def rename_useful_keys(content, patterns_to_rename, esm_bcv_regexp):
-    patterns_to_rename = [(re.compile(elt[0]), elt[1]) if not isinstance(elt[0], list) else elt for elt in
-                          patterns_to_rename]
+def rename_useful_keys(content, patterns_to_rename=dict()):
     for record_id in content:
-        for (patt, repl) in patterns_to_rename:
-            if isinstance(patt, list) and len(patt) == 0:
-                if repl in ["esm-bcv", ]:
-                    to_rename = [elt for elt in content[record_id] if esm_bcv_regexp.match(elt) is not None]
-                else:
-                    raise ValueError(f"Issue with patt void list with replacement {repl}.")
-            else:
-                to_rename = [elt for elt in content[record_id] if patt.match(elt) is not None]
+        for (patt, repl) in patterns_to_rename.items():
+            patt = re.compile(patt)
+            to_rename = [elt for elt in content[record_id] if patt.match(elt) is not None]
             if len(to_rename) == 1:
                 content[record_id][repl] = content[record_id].pop(to_rename[0])
             elif len(to_rename) > 1:
@@ -183,10 +138,10 @@ def rename_useful_keys(content, patterns_to_rename, esm_bcv_regexp):
 
 
 @distribute_on_entry
-def merge_useful_keys(content, patterns_to_merge):
-    patterns_to_merge = [(re.compile(elt[0]), elt[1]) for elt in patterns_to_merge]
+def merge_useful_keys(content, patterns_to_merge=dict()):
     for record_id in content:
-        for (patt, repl) in patterns_to_merge:
+        for (patt, repl) in patterns_to_merge.items():
+            patt = re.compile(patt)
             to_merge = [elt for elt in content[record_id] if patt.match(elt) is not None]
             if len(to_merge) > 0:
                 content[record_id][repl] = list()
@@ -199,39 +154,52 @@ def merge_useful_keys(content, patterns_to_merge):
 
 
 @distribute_on_entry
-def sort_useful_keys(content, patterns_to_sort):
+def sort_useful_keys(content, patterns_to_sort=list()):
     patterns_to_sort = [re.compile(elt) for elt in patterns_to_sort]
     for uid in content:
         # Sort content of needed keys
-        list_keys_to_sort = [elt for elt in content[uid]
-                             if any(patt.match(elt) is not None for patt in patterns_to_sort)]
+        list_keys_to_sort = [elt for (elt, val) in content[uid].items()
+                             if any(patt.match(elt) is not None and isinstance(val, list) for patt in patterns_to_sort)]
         for key in list_keys_to_sort:
             content[uid][key] = sorted(list(set(content[uid][key])))
     return content
 
 
 @distribute_on_entry
-def reshape_useful_keys(content, patterns_to_reshape):
+def reshape_useful_keys(content, patterns_to_reshape=list(), reshape_style=None):
     logger = get_logger()
     patterns_to_reshape = [re.compile(elt) for elt in patterns_to_reshape]
     for uid in content:
         list_keys_to_reshape = [elt for elt in content[uid]
                                 if any(patt.match(elt) is not None for patt in patterns_to_reshape)]
         for key in list_keys_to_reshape:
-            if isinstance(content[uid][key], list):
-                if len(content[uid][key]) == 1:
-                    content[uid][key] = content[uid][key][0]
-                elif len(content[uid][key]) == 0:
-                    logger.warning(f"Remove void key {key} from id {uid}")
-                    del content[uid][key]
+            val = content[uid][key]
+            if reshape_style in ["list_to_string", ]:
+                if isinstance(val, list):
+                    if len(val) == 1:
+                        content[uid][key] = val[0]
+                    elif len(val) == 0:
+                        logger.warning(f"Remove void key {key} from id {uid}")
+                        del content[uid][key]
+                    else:
+                        logger.error(f"Could not reshape key {key} from id {uid}: contains several elements")
+                        raise ValueError(f"Could not reshape key {key} from id {uid}: contains several elements")
+                elif isinstance(val, str):
+                    logger.warning(f"Could not reshape key {key} from id {uid}: already a string")
                 else:
-                    logger.error(f"Could not reshape key {key} from id {uid}: contains several elements")
-                    raise ValueError(f"Could not reshape key {key} from id {uid}: contains several elements")
-            elif isinstance(content[uid][key], str):
-                logger.warning(f"Could not reshape key {key} from id {uid}: already a string")
+                    logger.error(f"Could not reshape key {key} from id {uid}: not a list")
+                    raise ValueError(f"Could not reshape key {key} from id {uid}: not a list")
+            elif reshape_style in ["string_to_list", ]:
+                if isinstance(val, str):
+                    content[uid][key] = [val, ]
+                elif isinstance(val, list):
+                    logger.warning(f"Could not reshape key {key} from id {uid}: already a list")
+                else:
+                    logger.error(f"Could not reshape key {key} from id {uid}: not a string")
+                    raise ValueError(f"Could not reshape key {key} from id {uid}: not a string")
             else:
-                logger.error(f"Could not reshape key {key} from id {uid}: not a list")
-                raise ValueError(f"Could not reshape key {key} from id {uid}: not a list")
+                logger.error(f"Unknown value for reshaping: {reshape_style}")
+                raise ValueError(f"Unknown value for reshaping: {reshape_style}")
     return content
 
 
@@ -340,7 +308,7 @@ def tidy_content(content, record_to_uid_index):
     return content
 
 
-def transform_content_one_base(content):
+def transform_content_inner(content, settings, change_tables=False):
     """
     Transform a one base export content to:
     - remove unused keys which could create circle import later
@@ -352,109 +320,45 @@ def transform_content_one_base(content):
     :return dict: the transform content
     """
     logger = get_logger()
-    if isinstance(content, dict) and len(content) == 1:
-        content = content[list(content)[0]]
+    if isinstance(content, dict) and len(content) == 1 and change_tables:
+        logger.error("For one base dict, change_tables must be False.")
+        raise ValueError("For one base dict, change_tables must be False.")
+    elif isinstance(content, dict) and len(content) > 1 and not change_tables:
+        logger.error("For several bases dict, changes_tables must be True.")
+        raise ValueError("For several bases dict, changes_tables must be True.")
+    elif isinstance(content, dict):
+        # If needed, deal with one base creation
+        if change_tables:
+            new_content = dict()
+            for (elt, (base, table)) in settings["tables_provenance"].items():
+                new_content[elt] = content[settings["several_bases_name"][base]][table]
+            logger.info("Harmonise bases content record ids")
+            content_str = json.dumps(new_content)
+            for ((base_old, table_old, key_old), (base_new, table_new, key_new)) in settings["several_bases_link"].values():
+                old_table = content[settings["several_bases_name"][base_old]][table_old]["records"]
+                new_table = content[settings["several_bases_name"][base_new]][table_new]["records"]
+                old_dict = {record_id: value[key_old] for (record_id, value) in old_table.items()}
+                new_dict = {value[key_new]: record_id for (record_id, value) in new_table.items()}
+                for (id, val) in old_dict.items():
+                    content_str = content_str.replace(f'"{id}"', f'"{new_dict[val]}"')
+            content = json.loads(content_str)
+        else:
+            content = content[list(content)[0]]
         # Rename some elements
-        esm_bcv_regexp = re.compile(r"esm-bcv.*")
-        esm_bcv = [elt for elt in list(content) if esm_bcv_regexp.match(elt)]
-        if len(esm_bcv) == 1:
-            esm_bcv = esm_bcv[0]
-            content["esm-bcv"] = content.pop(esm_bcv)
-        for (key, new_key) in [("opportunity", "opportunities"), ("experiment_group", "experiment_groups"),
-                               ("variable_group", "variable_groups"), ("structure", "structure_title"),
-                               ("time_slice", "time_subsets"), ('time_subset', 'time_subsets')]:
-            if key in content:
-                content[new_key] = content.pop(key)
-        for pattern in [".*rank.*", ]:
-            elts = [elt for elt in list(content) if re.compile(pattern).match(elt)]
-            for elt in elts:
-                del content[elt]
-        for pattern in ["(legacy)", ]:
-            for elt in [elt for elt in list(content) if pattern in elt]:
-                new_elt = elt.replace(pattern, "").strip("_")
-                content[new_elt] = content.pop(elt)
+        for (patt, repl) in settings["tables_to_rename"].items():
+            for key in [key for key in content if re.compile(patt).match(key) is not None]:
+                content[re.sub(patt, repl, key)] = content.pop(key)
+        for elt in [elt for elt in list(content) if any(re.compile(patt).match(elt) for patt in settings["tables_to_delete"])]:
+            del content[elt]
         # Tidy the content of the export file
-        default_patterns_to_remove = [r".*\(from.*\).*", r".*proposed.*", r".*review.*", r".*--.*",
-                                      r".*created.*", r".*rank.*", ".*count.*", ".*alert.*", ".*tagged.*", ".*unique.*",
-                                      "last_modified.*", ".*validation.*", ".*number.*", ".*mj.*", r".*proposal.*"]
-        to_remove_keys_patterns = {
-            "cell_measures": [r"variables", "structure"],
-            "cell_methods": [r"structure", r"variables"],
-            "cf_standard_names": [r"physical_parameters.*", "esm-bcv.*"],
-            "cmip6_frequency": [r"table_identifiers.*", r"variables.*"],
-            "cmip7_frequency": [r"table_identifiers.*", r"variables.*"],
-            "coordinates_and_dimensions": [r"spatial_shape", r"structure", "temporal_shape", "variables", "size"],
-            "data_request_themes": [r"experiment_group.*", r".*opportunit.*", r"variable_group.*"],
-            "esm-bcv": [r"v\d.*", "cf_standard_name", ".*variables"],
-            "experiment_groups": [r"opportunit.*", r"theme.*", "comments.+"],
-            "experiments": [r"experiment_group.*", r"opportunit.*", "variables", "mip"],
-            "glossary": ["opportunit.*", ],
-            "mips": ["variable_group.*", "experiments.*", ".*opportunit.*", "variables"],
-            "modelling_realm": ["variables", ],
-            "opportunities": [".*data_volume_estimate", "opportunity_id", "originally_requested_variable_groups"],
-            "opportunity/variable_group_comments": ["experiment_groups", "opportunities", "theme", "variable_groups"],
-            "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
-            "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names",
-                                            "physical_parameters"],
-            "priority_level": ["variable_group", ],
-            "spatial_shape": [r"structure.*", r".*variables.*", "hor.*", "vert.*"],
-            "structure_title": [r"variables.*", "brand_.*", "calculation.*"],
-            "table_identifiers": ["variables", ],
-            "temporal_shape": ["variables", "structure"],
-            "time_subsets": ["uid.+", "opportunit.*"],
-            "variable_comments": ["variable.*", "spatial_shape", "temporal_shape", "coordinates_and_dimensions",
-                                  "cell_methods", "cell_measures"],
-            "variable_groups": [".*opportunit.*", "theme", r"size.*", "mip_ownership"],
-            "variables": [r"priority.*", r".*variable_group.*", ".*experiment.*", "size", "vertical_dimension",
-                          "temporal_sampling_rate", "horizontal_mesh", r"brand.*\[link\]", "structure_label",
-                          "table_section.*", "theme"],
-        }
-        to_rename_keys_patterns = {
-            "cell_methods": [("comments", "variable_comments"), ("label", "name")],
-            "cf_standard_names": [("comments", "physical_parameter_comments")],
-            "cmip7_frequency": [("cmip6_frequency.*", "cmip6_frequency")],
-            "coordinates_and_dimensions": [("requested_bounds.+", "requested_bounds"),
-                                           ("comments", "variable_comments"), ("value.+", "value")],
-            "data_request_themes": [("comments", "opportunity/variable_group_comments"), ("uid.+", "uid")],
-            "experiments": [("experiment", "name")],
-            "experiment_groups": [("comments", "opportunity/variable_group_comments")],
-            "mips": [('mip_short_name', "name")],
-            "modelling_realm": [("id", "uid")],
-            "opportunities": [("title_of_opportunity", "name"), ("comments", "opportunity/variable_group_comments"),
-                              ("ensemble_size", "minimum_ensemble_size"), ("themes", "data_request_themes"),
-                              ("working/updated_variable_groups", "variable_groups"), ("time_slice", "time_subsets")],
-            "physical_parameters": [("comments", "physical_parameter_comments"),
-                                    ("cf_proposal_github_issue", "proposal_github_issue"),
-                                    ("flag.*change.*", "flag_change_since_cmip6")],
-            "spatial_shape": [("comments", "variable_comments")],
-            "temporal_shape": [("comments", "variable_comments")],
-            "structure_title": [("label", "name")],
-            "table_identifiers": [("comment", "notes"), ("frequency", "cmip6_frequency")],
-            "time_subsets": [("label", "name")],
-            "variable_groups": [(".*mips.*", "mips"), ("comments", "opportunity/variable_group_comments")],
-            "variables": [("compound_name", "name"), ("cmip6_frequency.+", "cmip6_frequency"), (esm_bcv, "esm-bcv"),
-                          ("modeling_realm", "modelling_realm"), ("comments", "variable_comments"),
-                          ("table", "table_identifier")],
-        }
-        to_merge_keys_patterns = {
-            "opportunities": [("mips.*", "mips"), ]
-        }
-        to_sort_keys_content = {
-            "opportunities": ["variable_groups", "data_request_themes", "experiment_groups", "time_slice"],
-            "experiment_groups": ["experiments", ],
-            "variable_groups": ["variables", "mips"]
-        }
-        from_list_to_string_keys_content = {
-            "opportunities": ["lead_theme", ],
-            "physical_parameters": ["cf_standard_name", ],
-            "table_identifiers": ["cmip7_frequency", ],
-            "variables": ["cell_methods", "cmip6_frequency", "cmip7_frequency", "esm-bcv", "physical_parameter",
-                          "spatial_shape", "table_identifier", "temporal_shape"]
-        }
+        default_patterns_to_remove = settings["default_keys_to_delete"]
+        to_remove_keys_patterns = settings["keys_to_delete"]
+        to_rename_keys_patterns = settings["keys_to_rename"]
+        to_merge_keys_patterns = settings["keys_to_merge"]
+        to_sort_keys_content = settings["keys_to_sort"]
         content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
                                      default_patterns_to_remove=default_patterns_to_remove)
-        content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns,
-                                     esm_bcv_regexp=esm_bcv_regexp)
+        content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns)
         content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
         # Filter on status if needed then remove linked keys
         content = filter_content(content)
@@ -464,11 +368,10 @@ def transform_content_one_base(content):
         content = tidy_content(content, record_to_uid_index)
         # Sort content of needed keys
         content = sort_useful_keys(content, per_entry_input=to_sort_keys_content)
-        content = reshape_useful_keys(content, per_entry_input=from_list_to_string_keys_content)
+        for (reshape_style, from_list_to_string_keys_content) in settings["keys_to_format"].items():
+            content = reshape_useful_keys(content, per_entry_input=from_list_to_string_keys_content,
+                                          reshape_style=reshape_style)
         return content
-    elif isinstance(content, dict):
-        logger.error("Deal with one base content dict.")
-        raise ValueError("Deal with one base content dict.")
     else:
         logger.error(f"Deal with dict types, not {type(content).__name__}")
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
@@ -525,19 +428,19 @@ def transform_content(content, version):
     :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
     """
     logger = get_logger()
+    transform_settings = get_transform_settings(version)
     if isinstance(content, dict):
+        # Correct dictionaries
+        content = correct_dictionaries(content)
         # Get back to one database case if needed
         if len(content) == 1:
             logger.info("Single database case - no structure transformation needed")
+            content = transform_content_inner(content, transform_settings["one_to_transform"])
         elif len(content) in [3, 4]:
             logger.info("Several databases case - structure transformation needed")
-            content = transform_content_three_bases(content)
+            content = transform_content_inner(content, transform_settings["several_to_transform"], change_tables=True)
         else:
             raise ValueError(f"Could not manage the {len(content):d} bases export file.")
-        # Correct dictionaries
-        content = correct_dictionaries(content)
-        # Change several attributes
-        content = transform_content_one_base(content)
         # Separate DR and VS files
         data_request, vocabulary_server = split_content_one_base(content)
         data_request["version"] = version

@@ -19,8 +19,8 @@ import pstats
 from data_request_api.stable.query.data_request import DataRequest
 from data_request_api.stable.content.dreq_content import _dreq_res
 from data_request_api.stable.utilities.tools import read_json_input_file_content
-from data_request_api.stable.content.dump_transformation import correct_dictionaries, transform_content_one_base, \
-    get_transformed_content
+from data_request_api.stable.content.dump_transformation import correct_dictionaries, transform_content_inner, \
+    get_transformed_content, get_transform_settings
 from data_request_api.tests import filepath
 
 
@@ -81,7 +81,7 @@ class TestDataRequest11(unittest.TestCase):
     @unittest.skip
     @add_profiling
     def test_transform_to_one(self):
-        content = transform_content_one_base(self.single_format)
+        content = transform_content_inner(self.single_format, get_transform_settings(self.version))
 
     @unittest.skip
     @add_profiling

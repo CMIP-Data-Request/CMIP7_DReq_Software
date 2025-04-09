@@ -2574,7 +2574,7 @@ Use to define basic information needed.</p>
                 found = request_value in self.get_mips() or \
                     self.filter_on_request_list(request_values=request_value,
                                                 list_to_check=self.get_variable_groups())
-            elif request_type in [&#34;variables&#34;, &#34;priority_levels&#34;, &#34;table_identifiers&#34;, &#34;temporal_shapes&#34;,
+            elif request_type in [&#34;variables&#34;, &#34;priority_levels&#34;, &#34;cmip6_tables_identifiers&#34;, &#34;temporal_shapes&#34;,
                                   &#34;spatial_shapes&#34;, &#34;structure_titles&#34;, &#34;physical_parameters&#34;, &#34;modelling_realms&#34;, &#34;esm-bcvs&#34;,
                                   &#34;cf_standard_names&#34;, &#34;cell_methods&#34;, &#34;cell_measures&#34;, &#34;max_priority_levels&#34;]:
                 found = self.filter_on_request_list(request_values=request_value,
@@ -2756,8 +2756,8 @@ Use to define basic information needed.</p>
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
             filtered_found = True
-            if request_type in [&#34;table_identifiers&#34;, ]:
-                found = request_value == self.table_identifier
+            if request_type in [&#34;cmip6_tables_identifiers&#34;, ]:
+                found = request_value == self.cmip6_tables_identifier
             elif request_type in [&#34;temporal_shapes&#34;, ]:
                 found = request_value == self.temporal_shape
             elif request_type in [&#34;spatial_shapes&#34;, ]:
@@ -2885,7 +2885,7 @@ Use to define basic information needed.</p>
                 _, priority = is_link_id_or_value(self.get_priority_level().id)
                 _, req_priority = is_link_id_or_value(request_value.id)
                 found = req_priority == priority
-            elif request_type in [&#34;table_identifiers&#34;, &#34;temporal_shapes&#34;, &#34;spatial_shapes&#34;, &#34;structures&#34;, &#34;structure_titles&#34;,
+            elif request_type in [&#34;cmip6_tables_identifiers&#34;, &#34;temporal_shapes&#34;, &#34;spatial_shapes&#34;, &#34;structures&#34;, &#34;structure_titles&#34;,
                                   &#34;physical_parameters&#34;, &#34;modelling_realms&#34;, &#34;esm-bcvs&#34;, &#34;cf_standard_names&#34;, &#34;cell_methods&#34;,
                                   &#34;cell_measures&#34;]:
                 found = self.filter_on_request_list(request_values=request_value, list_to_check=self.get_variables())
