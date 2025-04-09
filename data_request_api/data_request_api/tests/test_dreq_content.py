@@ -150,11 +150,10 @@ def test_load_consolidate(tmp_path):
         jsondict = dc.load(" invalid-version ")
 
     # Load multi-base export with consolidation
-    with pytest.raises(KeyError):
-        jsondict = dc.load("dev", consolidate=True, export="raw")
-    # assert isinstance(jsondict, dict)
-    # assert os.path.isfile(tmp_path / "dev" / dc._json_raw)
-    # assert not os.path.isfile(tmp_path / "dev" / dc._json_release)
+    jsondict = dc.load("dev", consolidate=True, export="raw")
+    assert isinstance(jsondict, dict)
+    assert os.path.isfile(tmp_path / "dev" / dc._json_raw)
+    assert not os.path.isfile(tmp_path / "dev" / dc._json_release)
 
     # Load release export with consolidation
     jsondict = dc.load("dev", consolidate=True, export="release")

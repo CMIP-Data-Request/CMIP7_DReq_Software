@@ -110,7 +110,7 @@ mapping_table = {
         ],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": [],
+        "drop_keys": ["New Names", "Status"],
         "internal_consistency": {
             "Comment": "Notes",
         },
@@ -146,15 +146,22 @@ mapping_table = {
         "source_table": ["Cell Methods"],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": ["Comments"],
-        "internal_consistency": {"Structure": "Structures", "uid": "UID"},
+        "drop_keys": [
+            "Brand ID",
+            "Brand tag",
+            "Cell Methods Rollup (from Comments)",
+            "Comments",
+            "Structure",
+            "Structures",
+        ],
+        "internal_consistency": {"uid": "UID"},
     },
     "Coordinates and Dimensions": {
         "source_base": "Data Request Variables (Public)",
         "source_table": ["Coordinate or Dimension"],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": ["Variables (from Spatial shape)"],
+        "drop_keys": ["Structure", "Variables (from Spatial shape)"],
         "internal_consistency": {
             "Requested Bounds]": "Requested Bounds",
             "Spatial shape": "Spatial Shape",
@@ -182,17 +189,16 @@ mapping_table = {
     },
     "ESM-BCV 1.4": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": ["ESM-BCV 1.4", "Grid view"],
+        "source_table": ["ESM-BCV 1.4", "Grid view", "ESM-BCV 1.3"],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": ["Modeling Realm (from CMOR Variables)", "V1.1"],
+        "drop_keys": ["Modeling Realm (from CMOR Variables)", "Structure Title (from CMOR Variables)", "V1.1"],
         "internal_consistency": {
             "CF Standard Name (from MIP Variables) 2 (from CMOR Variables)": (
                 "CF Standard Name (from Physical Parameter) (from Variables)"
             ),
-            "MIP Variables (from CMOR Variables)": (
-                "Physical Parameter (from Variables)"
-            ),
+            "CMOR Variables": "Variables",
+            "MIP Variables (from CMOR Variables)": ("Physical Parameter (from Variables)"),
             "Title (from CMOR Variables)": "Title (from Variables)",
             "Units": "Units (from Physical Parameter) (from Variables)",
         },
@@ -231,9 +237,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": [],
         "internal_consistency": {
-            "Unique list of variables attached to Opportunity (linked) (from Opportunity)": (
-                "Variables"
-            )
+            "Unique list of variables attached to Opportunity (linked) (from Opportunity)": ("Variables")
         },
     },
     "Glossary": {
@@ -241,7 +245,7 @@ mapping_table = {
         "source_table": ["Glossary"],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": [],
+        "drop_keys": ["Opportunity"],
         "internal_consistency": {},
     },
     "MIPs": {
@@ -283,6 +287,7 @@ mapping_table = {
             "Earth system review comments",
             "Impacts & adaptation author team review",
             "Impacts & adaptation review comments",
+            "Keyword",
             "Land & land-ice author team review",
             "Land & land-ice review comments",
             "Ocean & sea-ice author team review",
@@ -294,12 +299,13 @@ mapping_table = {
         "internal_consistency": {
             "Ensemble Size": "Minimum ensemble Size",
             "Minimum Ensemble Size": "Minimum ensemble Size",
+            "Notes": "Technical Notes",
+            "Opportunity data volume estimate": "Data volume estimate",
+            "Time Slice": "Time Subset",
             "Unique list of experiments (for volume calculation)": (
                 "Unique list of experiments (from Experiment Groups)"
             ),
-            "Opportunity data volume estimate": "Data volume estimate",
             "Working/Updated Variable Groups": "Variable Groups",
-            "Notes": "Technical Notes",
         },
     },
     "Physical Parameters": {
@@ -315,17 +321,19 @@ mapping_table = {
         "drop_keys": [
             "Atmosphere review comments",
             "Atmosphere team review status",
+            "CF Proposal Github Issue",
+            "CF Standard Name Proposal Accepted",
             "Comments",
             "Cross-thematic review comments",
             "Earth system team review status",
             "Impacts & adaptation team review status",
             "Land & land-ice team review status",
             "Ocean & sea-ice team review status",
+            "Proposal github issue",
+            "Proposed CF Standard Name",
             "Tagged author team",
         ],
-        "internal_consistency": {
-            "Proposal github issue": "CF Proposal Github Issue"
-        },
+        "internal_consistency": {},
     },
     "Priority Level": {
         "source_base": "Data Request Opportunities (Public)",
@@ -348,7 +356,7 @@ mapping_table = {
         "source_table": ["Spatial Shape"],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": ["Comments"],
+        "drop_keys": ["Comments", "Structure"],
         "internal_consistency": {},
     },
     "Temporal Shape": {
@@ -356,7 +364,7 @@ mapping_table = {
         "source_table": ["Temporal Shape"],
         "internal_mapping": {},
         "internal_filters": {},
-        "drop_keys": ["Comments"],
+        "drop_keys": ["Comments", "Structure"],
         "internal_consistency": {},
     },
     "Time Subset": {
@@ -456,6 +464,8 @@ mapping_table = {
         "drop_keys": [
             "Atmosphere author team review",
             "Atmosphere review comment",
+            "Brand (DR) [link]",
+            "Brand (WIP) [link]",
             "Comments",
             "Created",
             "Cross-thematic group review comment",
@@ -472,13 +482,14 @@ mapping_table = {
             "Rank by File Count",
             "Rank by Submissions",
             "Rank by Volume",
+            "Structure Title",
             "Theme",
+            "Variable is included in ESM-BCV v1.3",
         ],
         "internal_consistency": {
-            "CF Standard Name (from MIP Variables)": (
-                "CF Standard Name (from Physical Parameter)"
-            ),
+            "CF Standard Name (from MIP Variables)": "CF Standard Name (from Physical Parameter)",
             "Compound name": "CMIP6 Compound Name",
+            "Compound Name": "CMIP6 Compound Name",
             "ESM-BCV 1.3": "ESM-BCV 1.4",
             "Min Rank": "Min Rank in CMIP6 download statistics",
             "Modeling Realm": "Modelling Realm - Primary",
@@ -499,6 +510,7 @@ mapping_table = {
 # Renaming of certain tables dependent on the release version
 #  table_name_old : table_name_new
 version_consistency = {
+    "ESM-BCV 1.3": "ESM-BCV 1.4",
     "Frequency": "CMIP7 Frequency",
     "Ranking Synced": "Ranking",
     "Table Identifiers": "CMIP6 Table Identifiers (legacy)",
@@ -511,22 +523,30 @@ version_consistency_drop_tables = [
 # Renaming of certain fields dependent on the release version
 #  {table_name_new :{field_name_old : field_name_new}}
 version_consistency_fields = {
+    "CF Standard Name": {
+        "ESM-BCV 1.3": "ESM-BCV 1.4",
+    },
     "CMIP6 Frequency (legacy)": {
         "CMIP6 Frequency (legacy) 2": "CMIP6 Frequency",
     },
     "CMIP7 Frequency": {
-        "CMIP6 Frequency 2": "CMIP6 Frequency (legacy)",
+        "CMIP6 Frequency (legacy) 2": "CMIP6 Frequency (legacy)",
     },
     "Data Request Themes": {
         "UID 2": "UID",
     },
+    "ESM-BCV 1.4": {
+        "CF Standard Name": "CF Standard Name (from Physical Parameter) (from Variables)",
+        "Physical parameters (from Variables)": "Physical Parameter (from Variables)",
+        "Title (from CMOR Variables)": "Title (from Variables)",
+    },
     "MIPs": {
         "Variable Group": "Variable Groups of interest",
     },
-    "Modeling Realm": {
+    "Modelling Realm": {
         "Variables": "Variables - primary realm",
     },
-    "Opportunities": {
+    "Opportunity": {
         "Time Slice": "Time Subset",
         "Notes": "Technical Notes",
     },
@@ -538,12 +558,42 @@ version_consistency_fields = {
         "MIPs": "Of interest to MIPs",
     },
     "Variables": {
-        "Modelling Realm": "Modelling Realm - Primary",
-        "Compound name": "CMIP6 Compound Name",
-        "Table": "CMIP6 Table (legacy)",
         "Contitional": "Conditional",
+        "Compound name": "CMIP6 Compound Name",
+        "Compound Name": "CMIP6 Compound Name",
+        "ESM-BCV 1.3": "ESM-BCV 1.4",
+        "Modelling Realm": "Modelling Realm - Primary",
+        "Table": "CMIP6 Table (legacy)",
     },
 }
 # Drop the following fields for tables
 #  {table: [field1, field2], ...}
-version_consistency_drop_fields = {}
+version_consistency_drop_fields = {
+    "CF Standard Names": ["ESM-BCV 1.3"],
+    "CMIP6 Table Identifiers (legacy)": ["New Names", "Status", "Structure"],
+    "Cell Measures": ["Structure"],
+    "Cell Methods": ["Brand ID", "Brand tag", "Structures"],
+    "Coordinates and Dimensions": ["Structure"],
+    "Data Request Themes": ["Last Modified By"],
+    "ESM-BCV 1.4": [
+        "Modeling Realm (from CMOR Variables)",
+        "Structure Title (from CMOR Variables)",
+        "Structure Title (from Variables)",
+        "V1.1",
+    ],
+    "Glossary": ["Opportunity"],
+    "MIPs": ["MIP feedback"],
+    "Modelling Realm": ["UID 2"],
+    "Opportunity": ["Keyword"],
+    "Physical Parameters": [
+        "CF Proposal Github Issue",
+        "CF Standard Name Proposal Accepted",
+        "Does a CF standard name exist for this parameter?",
+        "Name Validation",
+        "Proposed CF Standard Name",
+    ],
+    "Priority Level": ["Last Modified By"],
+    "Spatial Shape": ["Hor Label DD", "Structure", "Vertical Label DD", "Vertical Label MM"],
+    "Temporal Shape": ["Brand", "Structure"],
+    "Variables": ["Proposed CF Standard Name (for new Physical Parameters)", "Structure Label", "Structure Title"],
+}
