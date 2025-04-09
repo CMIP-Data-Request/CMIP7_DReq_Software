@@ -16,12 +16,12 @@ def append_kwargs_from_config(func):
     def decorator(*args, **kwargs):
         logger = get_logger()
         logger.debug(
-            "Function '{func.__qualname__}': Passing **kwargs from config file."
+            f"Function '{func.__qualname__}': Passing **kwargs from config file."
         )
 
         # Get function args
         sig = inspect.signature(func)
-        bound_args = sig.bind(*args)
+        bound_args = sig.bind_partial(*args, **kwargs)
         params = sig.parameters
 
         config = dreqcfg.load_config()
