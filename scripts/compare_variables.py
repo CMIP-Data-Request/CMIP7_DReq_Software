@@ -161,6 +161,11 @@ def main():
         if len(var_diff) > 0:
             diffs[var_name] = var_diff
 
+    missing = OrderedDict()
+    for version in compare_versions:
+        missing[f'not in {version}'] = sorted(missing_vars[version], key=str.lower)
+
+    # Write output file summarizing the differences, organized by variable name
     print()
     out = OrderedDict({
         'Header' : {
@@ -172,7 +177,8 @@ def main():
             # 'cmor tables version' : table_header0,
             # 'tables checked' : tables_checked,
         },
-        'Compound Name' : diffs
+        'Missing' : missing,
+        'Compound Name' : diffs,
     })
     outfile = outfile_name
     with open(outfile, 'w') as f:
