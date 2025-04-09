@@ -1,3 +1,6 @@
+##########################################
+# Consistency for raw export versions
+##########################################
 """
 Mapping Table
 
@@ -53,7 +56,7 @@ Internal renaming of keys to achieve consistency across content versions ("inter
     to be renamed and the value containing the new name. This is required as some attributes have
     been renamed in newer content versions or are renamed when setting up releases with airtable.
 
-Attributes to remove ("rm_keys"):
+Attributes to remove ("drop_keys"):
     List of record attributes that are not needed in the one-base (=release) structure.
 
 
@@ -80,7 +83,9 @@ mapping_table = {
                 },
                 "internal_filters": {
                     "Status": {"operator": "not in", "values": ["Junk"]},
-                }
+                },
+                "internal_consistency": {"OldFieldName": "NewFieldName"},
+                "drop_keys": ["Field1", "Field2"],
       },
 }
 """
@@ -88,67 +93,80 @@ mapping_table = {
 mapping_table = {
     "CF Standard Names": {
         "source_base": "Data Request Physical Parameters (Public)",
-        "source_table": "CF Standard Name",
+        "source_table": ["CF Standard Name"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Comments"],
+        "drop_keys": ["Comments"],
         "internal_consistency": {
             "name": "Name",
             "Physical parameters 2": "Physical parameters",
         },
     },
-    "CMIP6 Frequency (legacy)": {
+    "CMIP6 Table Identifiers (legacy)": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "CMIP6 Frequency (legacy)",
+        "source_table": [
+            "CMIP6 Table Identifiers (legacy)",
+            "Table Identifiers",
+        ],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
+        "internal_consistency": {
+            "Comment": "Notes",
+        },
+    },
+    "CMIP6 Frequency (legacy)": {
+        "source_base": "Data Request Variables (Public)",
+        "source_table": ["CMIP6 Frequency (legacy)", "Frequency"],
+        "internal_mapping": {},
+        "internal_filters": {},
+        "drop_keys": [],
         "internal_consistency": {},
     },
     "CMIP7 Frequency": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "CMIP7 Frequency",
+        "source_table": ["CMIP7 Frequency"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
         "internal_consistency": {
-            "CMIP6 Frequency": "CMIP6 Frequency (legacy) 2"
+            "CMIP6 Frequency": "CMIP6 Frequency (legacy)",
         },
     },
-    "Cell Measures": {  # missing: Structure, UID
+    "Cell Measures": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Cell Measures",
+        "source_table": ["Cell Measures"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Variables comments"],
+        "drop_keys": ["Variables comments"],
         "internal_consistency": {},
     },
     "Cell Methods": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Cell Methods",
+        "source_table": ["Cell Methods"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Comments"],
+        "drop_keys": ["Comments"],
         "internal_consistency": {"Structure": "Structures", "uid": "UID"},
     },
-    "Coordinates and Dimensions": {  # missing: Notes, Size, Variables
+    "Coordinates and Dimensions": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Coordinate or Dimension",
+        "source_table": ["Coordinate or Dimension"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Variables (from Spatial shape)"],
+        "drop_keys": ["Variables (from Spatial shape)"],
         "internal_consistency": {
-            "Temporal shape": "Temporal Shape",
-            "Spatial shape": "Spatial Shape",
             "Requested Bounds]": "Requested Bounds",
+            "Spatial shape": "Spatial Shape",
+            "Temporal shape": "Temporal Shape",
         },
     },
-    "Data Request Themes": {  # missing: "UID 2"
+    "Data Request Themes": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Data Request Themes",
+        "source_table": ["Data Request Themes"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Comments", "Experiment Group"],
+        "drop_keys": ["Comments", "Experiment Group"],
         "internal_consistency": {
             "Opportunities led": "Lead theme for Opportunity",
             "Opportunity": "Tagged for Opportunity",
@@ -156,18 +174,18 @@ mapping_table = {
     },
     "Docs for Opportunities": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Docs for Opportunities",
+        "source_table": ["Docs for Opportunities"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Base"],
+        "drop_keys": ["Base"],
         "internal_consistency": {"language identifier": "Language Identifier"},
     },
-    "ESM-BCV 1.4": {  # missing: "Structure Title (from Variables)"
+    "ESM-BCV 1.4": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Grid view",
+        "source_table": ["ESM-BCV 1.4", "Grid view"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Fixed", "Frequency", "Version 1.3", "Version 1.4"],
+        "drop_keys": ["Modeling Realm (from CMOR Variables)", "V1.1"],
         "internal_consistency": {
             "CF Standard Name (from MIP Variables) 2 (from CMOR Variables)": (
                 "CF Standard Name (from Physical Parameter) (from Variables)"
@@ -181,16 +199,17 @@ mapping_table = {
     },
     "Experiment Group": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Experiment Group",
+        "source_table": ["Experiment Group"],
         "internal_mapping": {},
         "internal_filters": {
-            "Status": {"operator": "not in", "values": ["Junk"]},
+            "Status": {"aliases": [], "operator": "not in", "values": ["Junk"]},
             "Status (from Opportunities)": {
+                "aliases": [],
                 "operator": "in",
                 "values": ["New", "Under review", "Accepted"],
             },
         },
-        "rm_keys": [
+        "drop_keys": [
             "Atmosphere author team review",
             "Comments",
             "Comments 2",
@@ -205,12 +224,12 @@ mapping_table = {
         ],
         "internal_consistency": {},
     },
-    "Experiments": {  # missing: Variables
+    "Experiments": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Experiment",
+        "source_table": ["Experiment"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
         "internal_consistency": {
             "Unique list of variables attached to Opportunity (linked) (from Opportunity)": (
                 "Variables"
@@ -219,39 +238,42 @@ mapping_table = {
     },
     "Glossary": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Glossary",
+        "source_table": ["Glossary"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
         "internal_consistency": {},
     },
-    "MIPs": {  # missing: 'MIP abstract', 'MIP feedback', UID
+    "MIPs": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "MIP",
+        "source_table": ["MIP"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
         "internal_consistency": {},
     },
-    "Modelling Realm": {  # missing: 'UID 2'
+    "Modelling Realm": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Modeling Realm",
+        "source_table": ["Modeling Realm"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
-        "internal_consistency": {},
+        "drop_keys": [],
+        "internal_consistency": {
+            "Variables": "Variables - primary realm",
+        },
     },
-    "Opportunity": {  # missing: 'Data volume estimate', 'Variable Groups'
+    "Opportunity": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Opportunity",
+        "source_table": ["Opportunity"],
         "internal_mapping": {},
         "internal_filters": {
             "Status": {
+                "aliases": [],
                 "operator": "in",
                 "values": ["Under review", "Accepted"],
             },
         },
-        "rm_keys": [
+        "drop_keys": [
             "Atmosphere author team review",
             "Atmosphere review comments",
             "Comments",
@@ -265,33 +287,32 @@ mapping_table = {
             "Land & land-ice review comments",
             "Ocean & sea-ice author team review",
             "Ocean & sea-ice review comments",
-            "Opportunity data volume estimate",
             "Originally Requested Variable Groups",
             "Status",
             "Unique list of variables attached to Opportunity (linked)",
-            "Working/Updated Variable Groups",
         ],
         "internal_consistency": {
             "Ensemble Size": "Minimum ensemble Size",
+            "Minimum Ensemble Size": "Minimum ensemble Size",
             "Unique list of experiments (for volume calculation)": (
                 "Unique list of experiments (from Experiment Groups)"
             ),
+            "Opportunity data volume estimate": "Data volume estimate",
+            "Working/Updated Variable Groups": "Variable Groups",
+            "Notes": "Technical Notes",
         },
     },
-    "Physical Parameters": {  # missing: 'Conditional',
-        # 'Does a CF standard name exist for this parameter?',
-        # 'Name Validation', 'Variables',
-        # 'is alias (from CF Standard Name)
+    "Physical Parameters": {
         "source_base": "Data Request Physical Parameters (Public)",
-        "source_table": "Physical Parameter",
+        "source_table": ["Physical Parameter"],
         "internal_mapping": {},
         "internal_filters": {},
-        #    "Opportunity Status (from CMIP7 Variable Groups) (from Variables) (from Link to back sync)": {
-        #        "operator": "in",
-        #        "values": ["Under review", "Accepted"],
-        #    },
+        # "Opportunity Status (from CMIP7 Variable Groups) (from Variables) (from Link to back sync)": {
+        #    "aliases": [],
+        #    "operator": "in",
+        #    "values": ["Under review", "Accepted"],
         # },
-        "rm_keys": [
+        "drop_keys": [
             "Atmosphere review comments",
             "Atmosphere team review status",
             "Comments",
@@ -308,75 +329,51 @@ mapping_table = {
     },
     "Priority Level": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Priority level",
+        "source_table": ["Priority level"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
         "internal_consistency": {},
     },
     "Ranking": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Ranking Synced",
+        "source_table": ["Ranking Synced"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
+        "drop_keys": [],
         "internal_consistency": {"Name": "ID"},
     },
-    "Spatial Shape": {  # missing: 'Hor Label DD',
-        # 'Horizontal mesh size', 'Notes', 'UID',
-        # 'Vertical Label DD', 'Vertical Label MM',
-        # 'Vertical Mesh'
+    "Spatial Shape": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Spatial Shape",
+        "source_table": ["Spatial Shape"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["Comments"],
+        "drop_keys": ["Comments"],
         "internal_consistency": {},
     },
-    "Structure": {  # missing: 'Brand Area DD',
-        # 'Brand T tag', 'Brand c',
-        # 'Brand t', 'Brand xy', 'Brand z',
-        # 'Calculation 2', 'Summary', 'UID'
+    "Temporal Shape": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Structure",
+        "source_table": ["Temporal Shape"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": [],
-        "internal_consistency": {
-            "Spatial shape": "Spatial Shape",
-            "Temporal shape": "Temporal Shape",
-            "description": "Description",
-            "label": "Label",
-        },
-    },
-    "Table Identifiers": {  # missing: Notes
-        "source_base": "Data Request Variables (Public)",
-        "source_table": "Table Identifiers",
-        "internal_mapping": {},
-        "internal_filters": {},
-        "rm_keys": ["Comment"],
-        "internal_consistency": {},
-    },
-    "Temporal Shape": {  # missing: Brand, UID
-        "source_base": "Data Request Variables (Public)",
-        "source_table": "Temporal Shape",
-        "internal_mapping": {},
-        "internal_filters": {},
-        "rm_keys": ["Comments"],
+        "drop_keys": ["Comments"],
         "internal_consistency": {},
     },
     "Time Subset": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Time Subset",
+        "source_table": ["Time Subset", "Time Slice"],
         "internal_mapping": {},
         "internal_filters": {},
-        "rm_keys": ["uid copy"],
-        "internal_consistency": {"uid": "UID"},
+        "drop_keys": ["uid copy"],
+        "internal_consistency": {
+            "SliceLen": "SubsetLen",
+            "sliceLenUnit": "subsetLenUnit",
+            "uid": "UID",
+        },
     },
-    "Variable Group": {  # missing: 'Experiment Groups (from Opportunity)',
-        # 'Size (millions of data points)'
+    "Variable Group": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": "Variable Group",
+        "source_table": ["Variable Group"],
         "internal_mapping": {
             "Variables": {
                 "base_copy_of_table": "Variables",
@@ -388,14 +385,17 @@ mapping_table = {
             }
         },
         "internal_filters": {
-            "Final Opportunity selection": {"operator": "nonempty"},
-            # "Status (from Final Opportunity selection)": {
+            "Final Opportunity selection": {
+                "aliases": [],
+                "operator": "nonempty",
+            },
             "Opportunity Status": {
+                "aliases": ["Status (from Final Opportunity selection)"],
                 "operator": "in",
                 "values": ["Under review", "Accepted"],
             },
         },
-        "rm_keys": [
+        "drop_keys": [
             "Atmosphere author review Status",
             "Atmosphere author review comments",
             "Comments",
@@ -412,21 +412,13 @@ mapping_table = {
         ],
         "internal_consistency": {
             "Count (Variables)": "Number of variables in group",
+            "Experiment Groups (from Final Opportunity selection)": "Experiment Groups (from Opportunity)",
             "Final Opportunity selection": "Opportunity",
         },
     },
-    "Variables": {  # missing: 'CF Standard Name (from Coordinates)',
-        # 'Contitional', 'Disambiguation',
-        # 'Experiment Groups (from Opportunity)',
-        # 'Horizontal Mesh', 'List of Experiments',
-        # 'Opportunity (from CMIP7 Variable Groups)',
-        # 'Physical Parameter Status',
-        # 'Proposed CF Standard Name (for new Physical Parameters)',
-        # 'Structure Label', 'Table Section (CMIP6)',
-        # 'Temporal Sampling Rate', 'Variable Status',
-        # 'Vertical Dimension'
+    "Variables": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": "Variable",
+        "source_table": ["Variable"],
         "internal_mapping": {
             "CMIP7 Variable Groups": {
                 "base_copy_of_table": False,
@@ -454,13 +446,14 @@ mapping_table = {
             },
         },
         "internal_filters": {
-            "CMIP7 Variable Groups": {"operator": "nonempty"},
+            "CMIP7 Variable Groups": {"aliases": [], "operator": "nonempty"},
             "Opportunity Status (from CMIP7 Variable Groups)": {
+                "aliases": [],
                 "operator": "in",
                 "values": ["Under review", "Accepted"],
             },
         },
-        "rm_keys": [
+        "drop_keys": [
             "Atmosphere author team review",
             "Atmosphere review comment",
             "Comments",
@@ -479,35 +472,78 @@ mapping_table = {
             "Rank by File Count",
             "Rank by Submissions",
             "Rank by Volume",
-            "Status",
             "Theme",
         ],
         "internal_consistency": {
-            "ESM-BCV 1.3": "ESM-BCV 1.4",
-            "Modeling Realm": "Modelling Realm",
-            "Min Rank": "Min Rank in CMIP6 download statistics",
             "CF Standard Name (from MIP Variables)": (
                 "CF Standard Name (from Physical Parameter)"
             ),
+            "Compound name": "CMIP6 Compound Name",
+            "ESM-BCV 1.3": "ESM-BCV 1.4",
+            "Min Rank": "Min Rank in CMIP6 download statistics",
+            "Modeling Realm": "Modelling Realm - Primary",
+            "Modeling Realm - Primary": "Modelling Realm - Primary",
+            "Modeling Realm - Secondary": "Modelling Realm - Secondary",
+            "Status": "Variable Status",
+            "Status (from Physical Parameter)": "Physical Parameter Status",
+            "Table": "CMIP6 Table (legacy)",
         },
     },
 }
 
+
+##########################################
+# Consistency for release export versions
+##########################################
+
 # Renaming of certain tables dependent on the release version
-#  version : {table_name_old : table_name_new}
+#  table_name_old : table_name_new
 version_consistency = {
-    "v1.0alpha": {
-        "Frequency": "CMIP7 Frequency",
-        "Ranking": "Ranking Synced",
-        "Time Slice": "Time Subset",
+    "Frequency": "CMIP7 Frequency",
+    "Ranking Synced": "Ranking",
+    "Table Identifiers": "CMIP6 Table Identifiers (legacy)",
+    "Time Slice": "Time Subset",
+}
+# Drop the following tables (list of table names)
+version_consistency_drop_tables = [
+    "Structure",
+]
+# Renaming of certain fields dependent on the release version
+#  {table_name_new :{field_name_old : field_name_new}}
+version_consistency_fields = {
+    "CMIP6 Frequency (legacy)": {
+        "CMIP6 Frequency (legacy) 2": "CMIP6 Frequency",
     },
-    "v1.0beta": {
-        "Frequency": "CMIP7 Frequency",
-        "Ranking": "Ranking Synced",
-        "Time Slice": "Time Subset",
+    "CMIP7 Frequency": {
+        "CMIP6 Frequency 2": "CMIP6 Frequency (legacy)",
     },
-    "v1.0": {
-        "Ranking": "Ranking Synced",
+    "Data Request Themes": {
+        "UID 2": "UID",
+    },
+    "MIPs": {
+        "Variable Group": "Variable Groups of interest",
+    },
+    "Modeling Realm": {
+        "Variables": "Variables - primary realm",
+    },
+    "Opportunities": {
         "Time Slice": "Time Subset",
+        "Notes": "Technical Notes",
+    },
+    "Time Subset": {
+        "SliceLen": "SubsetLen",
+        "sliceLenUnit": "subsetLenUnit",
+    },
+    "Variable Group": {
+        "MIPs": "Of interest to MIPs",
+    },
+    "Variables": {
+        "Modelling Realm": "Modelling Realm - Primary",
+        "Compound name": "CMIP6 Compound Name",
+        "Table": "CMIP6 Table (legacy)",
+        "Contitional": "Conditional",
     },
 }
+# Drop the following fields for tables
+#  {table: [field1, field2], ...}
+version_consistency_drop_fields = {}
