@@ -53,6 +53,8 @@ def main():
     dc.retrieve(use_dreq_version)
     # Load content into python dict
     content = dc.load(use_dreq_version)
+    # Set DREQ_VERSION variable
+    dq.DREQ_VERSION = use_dreq_version
     # Render data request tables as dreq_table objects
     base = dq.create_dreq_tables_for_request(content)
 
@@ -105,7 +107,6 @@ def main():
         sys.exit(1)
 
     # Get consolidated list of requested variables that supports these opportunities
-    dq.DREQ_VERSION = use_dreq_version
     expt_vars = dq.get_requested_variables(base, use_opps, priority_cutoff=args.priority_cutoff, verbose=False)
 
     # filter output by requested experiments
