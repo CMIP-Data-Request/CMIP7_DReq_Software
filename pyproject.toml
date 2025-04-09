@@ -56,7 +56,7 @@ branch = true
 parallel = true
 command_line = "-m pytest"
 source = [
-    "data_request_api/data_request_api/stable",
+    "data_request_api/data_request_api",
     "data_request_api/data_request_api/command_line",
     "scripts"
 ]

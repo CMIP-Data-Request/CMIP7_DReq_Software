@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import data_request_api.stable.utilities.config as dreqcfg
+import data_request_api.utilities.config as dreqcfg
 
 
 def append_arguments_to_parser(parser):

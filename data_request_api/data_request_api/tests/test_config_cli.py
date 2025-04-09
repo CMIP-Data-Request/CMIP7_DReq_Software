@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-import data_request_api.stable.utilities.config as dreqcfg
+import data_request_api.utilities.config as dreqcfg
 
 
 @pytest.fixture(scope="function")
@@ -27,7 +27,7 @@ def monkeypatch(monkeypatch):
 
 def test_init_config(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
         [
@@ -50,7 +50,7 @@ def test_init_config(temp_config_file, monkeypatch):
 
 def test_init_config_no_argument(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
         [
@@ -72,7 +72,7 @@ def test_init_config_no_argument(temp_config_file, monkeypatch):
 
 def test_init_config_entry_point(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
         [
@@ -93,7 +93,7 @@ def test_init_config_entry_point(temp_config_file, monkeypatch):
 
 def test_reset_config(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     dreqcfg.update_config("offline", True)
     dreqcfg.CONFIG = {}  # reset to allow reloading below
@@ -117,7 +117,7 @@ def test_reset_config(temp_config_file, monkeypatch):
 
 def test_update_config(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
         [
@@ -140,7 +140,7 @@ def test_update_config(temp_config_file, monkeypatch):
 
 def test_invalid_command(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
         [
@@ -163,7 +163,7 @@ def test_invalid_command(temp_config_file, monkeypatch):
 
 def test_invalid_command_entry_point(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     result = subprocess.run(
         [

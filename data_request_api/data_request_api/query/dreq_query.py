@@ -13,9 +13,9 @@ import json
 import os
 from collections import OrderedDict
 
-from data_request_api.stable.query.dreq_classes import (
+from data_request_api.query.dreq_classes import (
     DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
-from data_request_api.stable.utilities.tools import write_csv_output_file_content
+from data_request_api.utilities.tools import write_csv_output_file_content
 
 # Version of software (python API):
 from data_request_api import version as api_version

@@ -16,10 +16,10 @@ import codecs
 import io
 import pstats
 
-from data_request_api.stable.query.data_request import DataRequest
-from data_request_api.stable.content.dreq_content import _dreq_res
-from data_request_api.stable.utilities.tools import read_json_input_file_content
-from data_request_api.stable.content.dump_transformation import correct_dictionaries, transform_content_inner, \
+from data_request_api.query.data_request import DataRequest
+from data_request_api.content.dreq_content import _dreq_res
+from data_request_api.utilities.tools import read_json_input_file_content
+from data_request_api.content.dump_transformation import correct_dictionaries, transform_content_inner, \
     get_transformed_content, get_transform_settings
 from data_request_api.tests import filepath
 
