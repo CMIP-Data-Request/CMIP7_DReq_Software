@@ -14,10 +14,10 @@ import argparse
 import re
 from collections import defaultdict
 
-from data_request_api.stable.utilities.decorators import append_kwargs_from_config
-from data_request_api.stable.utilities.logger import get_logger, change_log_level, change_log_file
-from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
-from data_request_api.stable.content import dreq_content as dc
+from data_request_api.utilities.decorators import append_kwargs_from_config
+from data_request_api.utilities.logger import get_logger, change_log_level, change_log_file
+from data_request_api.utilities.tools import read_json_input_file_content, write_json_output_file_content
+from data_request_api.content import dreq_content as dc
 
 
 def correct_key_string(input_string, *to_remove_strings):

@@ -1,11 +1,9 @@
-import inspect
-
 import pytest
 
-from data_request_api.stable.utilities.decorators import (
+from data_request_api.utilities.decorators import (
     append_kwargs_from_config,
 )
-from data_request_api.stable.utilities.logger import (
+from data_request_api.utilities.logger import (
     change_log_file,
     change_log_level,
 )
@@ -23,7 +21,7 @@ def test_append_kwargs_from_config(monkeypatch):
         return config
 
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.load_config", mock_load_config
+        "data_request_api.utilities.config.load_config", mock_load_config
     )
 
     # Set up a test function with the decorator
@@ -59,7 +57,7 @@ def test_append_kwargs_from_config_args(monkeypatch, recwarn):
         return config
 
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.load_config", mock_load_config
+        "data_request_api.utilities.config.load_config", mock_load_config
     )
 
     # Set up a test function with the decorator that has

@@ -73,7 +73,7 @@ branches = dc.get_versions('branches')
 print(branches)
 
 # Retrieve the latest stable version
-version_dict = dc.retrieve() # or dc.retrieve("latest_stable")
+version_dict = dc.retrieve()  # or dc.retrieve("latest_stable")
 print(version_dict)
 
 # Retrieve a certain branch/tag
@@ -85,7 +85,7 @@ version_dict = dc.retrieve("all")
 print(version_dict)
 
 # Load the latest stable version
-dreq = dc.load() # or dc.load("latest_stable")
+dreq = dc.load()  # or dc.load("latest_stable")
 
 # Load the latest version
 dreq = dc.load("latest")

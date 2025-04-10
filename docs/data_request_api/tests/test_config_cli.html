@@ -119,7 +119,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_init_config(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     result = subprocess.run(
         [
@@ -151,7 +151,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_init_config_entry_point(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     result = subprocess.run(
         [
@@ -181,7 +181,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_init_config_no_argument(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     result = subprocess.run(
         [
@@ -212,7 +212,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_invalid_command(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     result = subprocess.run(
         [
@@ -244,7 +244,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_invalid_command_entry_point(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     result = subprocess.run(
         [
@@ -271,7 +271,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_reset_config(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     dreqcfg.update_config(&#34;offline&#34;, True)
     dreqcfg.CONFIG = {}  # reset to allow reloading below
@@ -304,7 +304,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_update_config(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     result = subprocess.run(
         [

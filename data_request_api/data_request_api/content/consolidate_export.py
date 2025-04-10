@@ -3,7 +3,7 @@ import os
 import re
 import warnings
 
-from data_request_api.stable.utilities.logger import get_logger  # noqa
+from data_request_api.utilities.logger import get_logger  # noqa
 from .mapping_table import version_consistency
 
 # UID generation

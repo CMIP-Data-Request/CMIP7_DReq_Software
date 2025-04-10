@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.tests.test_decorator API documentation</title>
+<title>data_request_api.utilities API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,136 +33,38 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.tests.test_decorator</code></h1>
+<h1 class="title">Module <code>data_request_api.utilities</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt id="data_request_api.tests.test_decorator.test_append_kwargs_from_config"><code class="name flex">
-<span>def <span class="ident">test_append_kwargs_from_config</span></span>(<span>monkeypatch)</span>
-</code></dt>
+<dt><code class="name"><a title="data_request_api.utilities.config" href="config.html">data_request_api.utilities.config</a></code></dt>
 <dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def test_append_kwargs_from_config(monkeypatch):
-    # Mock the load_config function to return a config dictionary
-    config = {&#34;key1&#34;: &#34;value1&#34;, &#34;key2&#34;: &#34;value2&#34;}
-
-    def mock_load_config():
-        return config
-
-    monkeypatch.setattr(
-        &#34;data_request_api.utilities.config.load_config&#34;, mock_load_config
-    )
-
-    # Set up a test function with the decorator
-    @append_kwargs_from_config
-    def test_function(**kwargs):
-        return kwargs
-
-    # Call the decorated function with no kwargs
-    result = test_function()
-    assert result == config
-
-    # Call the decorated function with some kwargs
-    result = test_function(key3=&#34;value3&#34;)
-    assert result == {&#34;key1&#34;: &#34;value1&#34;, &#34;key2&#34;: &#34;value2&#34;, &#34;key3&#34;: &#34;value3&#34;}
-
-    # Call the decorated function with a kwarg that overrides a config value
-    result = test_function(key1=&#34;override_value&#34;)
-    assert result == {&#34;key1&#34;: &#34;override_value&#34;, &#34;key2&#34;: &#34;value2&#34;}</code></pre>
-</details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.tests.test_decorator.test_append_kwargs_from_config_args"><code class="name flex">
-<span>def <span class="ident">test_append_kwargs_from_config_args</span></span>(<span>monkeypatch, recwarn)</span>
-</code></dt>
+<dt><code class="name"><a title="data_request_api.utilities.decorators" href="decorators.html">data_request_api.utilities.decorators</a></code></dt>
 <dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def test_append_kwargs_from_config_args(monkeypatch, recwarn):
-    # Mock the load_config function to return a config dictionary
-    config = {
-        &#34;cache_dir&#34;: &#34;value1&#34;,
-        &#34;consolidate&#34;: True,
-        &#34;offline&#34;: True,
-        &#34;export&#34;: &#34;raw&#34;,
-        &#34;log_level&#34;: &#34;info&#34;,
-        &#34;log_file&#34;: &#34;default&#34;,
-    }
-
-    def mock_load_config():
-        return config
-
-    monkeypatch.setattr(
-        &#34;data_request_api.utilities.config.load_config&#34;, mock_load_config
-    )
-
-    # Set up a test function with the decorator that has
-    # parameters with the same name as config keys
-    @append_kwargs_from_config
-    def test_function(
-        arg1, arg2, offline, arg4=&#34;value4&#34;, export=&#34;value5&#34;, **kwargs
-    ):
-        return locals()
-
-    # Make sure that:
-    # 1) A warning is issued for specifying a config-key as function parameter name incl. default value
-    # 2) Function parameters that are also kwargs are kept as function parameters
-    # 2.1) They keep the value as passed to the function
-    # 2.2) Default values are overridden by the config dictionary
-    # 3) kwargs are set as expected
-
-    # 1st test case
-    result = test_function(&#34;a&#34;, &#34;b&#34;, False)
-    config_mod = {
-        i: config[i] for i in config if i not in [&#34;offline&#34;, &#34;export&#34;]
-    }
-    result_dict = {
-        &#34;arg1&#34;: &#34;a&#34;,
-        &#34;arg2&#34;: &#34;b&#34;,
-        &#34;offline&#34;: False,
-        &#34;arg4&#34;: &#34;value4&#34;,
-        &#34;export&#34;: &#34;raw&#34;,
-        &#34;kwargs&#34;: config_mod,
-    }
-    assert len(recwarn.list) == 1
-    assert str(recwarn.list[0].message).startswith(
-        &#34;Parameter &#39;export&#39; of function &#34;
-    )
-    assert result == result_dict
-
-    # 2nd test case
-    result = test_function(0, 1, False, &#34;value&#34;, &#34;release&#34;, log_level=&#34;warning&#34;)
-    assert result == {
-        &#34;arg1&#34;: 0,
-        &#34;arg2&#34;: 1,
-        &#34;offline&#34;: False,
-        &#34;arg4&#34;: &#34;value&#34;,
-        &#34;export&#34;: &#34;release&#34;,
-        &#34;kwargs&#34;: {**config_mod, &#34;log_level&#34;: &#34;warning&#34;},
-    }
-
-    # 3rd test case
-    #  ensure that _sanity_check raises an error
-    #  for an illegal type/value of a function argument
-    #  that is also a config-key
-    with pytest.raises(TypeError):
-        result = test_function(&#34;a&#34;, &#34;b&#34;, &#34;c&#34;)</code></pre>
-</details>
 <div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="data_request_api.utilities.logger" href="logger.html">data_request_api.utilities.logger</a></code></dt>
+<dd>
+<div class="desc"><p>Logger.</p></div>
+</dd>
+<dt><code class="name"><a title="data_request_api.utilities.parser" href="parser.html">data_request_api.utilities.parser</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="data_request_api.utilities.tools" href="tools.html">data_request_api.utilities.tools</a></code></dt>
+<dd>
+<div class="desc"><p>Tools for data request.</p></div>
 </dd>
 </dl>
+</section>
+<section>
+</section>
+<section>
 </section>
 <section>
 </section>
@@ -174,13 +76,16 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.tests" href="index.html">data_request_api.tests</a></code></li>
+<li><code><a title="data_request_api" href="../index.html">data_request_api</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="data_request_api.tests.test_decorator.test_append_kwargs_from_config" href="#data_request_api.tests.test_decorator.test_append_kwargs_from_config">test_append_kwargs_from_config</a></code></li>
-<li><code><a title="data_request_api.tests.test_decorator.test_append_kwargs_from_config_args" href="#data_request_api.tests.test_decorator.test_append_kwargs_from_config_args">test_append_kwargs_from_config_args</a></code></li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="data_request_api.utilities.config" href="config.html">data_request_api.utilities.config</a></code></li>
+<li><code><a title="data_request_api.utilities.decorators" href="decorators.html">data_request_api.utilities.decorators</a></code></li>
+<li><code><a title="data_request_api.utilities.logger" href="logger.html">data_request_api.utilities.logger</a></code></li>
+<li><code><a title="data_request_api.utilities.parser" href="parser.html">data_request_api.utilities.parser</a></code></li>
+<li><code><a title="data_request_api.utilities.tools" href="tools.html">data_request_api.utilities.tools</a></code></li>
 </ul>
 </li>
 </ul>

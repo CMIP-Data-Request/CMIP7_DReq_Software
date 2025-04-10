@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 import yaml
 
-import data_request_api.stable.utilities.config as dreqcfg
-from data_request_api.stable.utilities.config import (
+import data_request_api.utilities.config as dreqcfg
+from data_request_api.utilities.config import (
     DEFAULT_CONFIG,
     _sanity_check,
     load_config,
@@ -32,7 +32,7 @@ def test_load_config_file_exists(temp_config_file, monkeypatch):
     with open(temp_config_file, "w") as f:
         yaml.dump(DEFAULT_CONFIG, f)
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     assert temp_config_file.exists()
     dreqcfg.CONFIG = {}
@@ -43,7 +43,7 @@ def test_load_config_file_exists(temp_config_file, monkeypatch):
 
 def test_load_config_file_does_not_exist(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     assert not temp_config_file.exists()
     assert dreqcfg.CONFIG == {}
@@ -54,7 +54,7 @@ def test_load_config_file_does_not_exist(temp_config_file, monkeypatch):
 
 def test_load_config_invalid_yaml(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     with open(temp_config_file, "w") as f:
         f.write("Just a string not proper yaml")
@@ -64,7 +64,7 @@ def test_load_config_invalid_yaml(temp_config_file, monkeypatch):
 
 def test_load_config_non_dict_yaml(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     with open(temp_config_file, "w") as f:
         f.write("['list', 'instead', 'of', 'dict']")
@@ -74,7 +74,7 @@ def test_load_config_non_dict_yaml(temp_config_file, monkeypatch):
 
 def test_update_config_valid_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     update_config("offline", True)
     with open(temp_config_file) as f:
@@ -84,7 +84,7 @@ def test_update_config_valid_key(temp_config_file, monkeypatch):
 
 def test_update_config_invalid_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     with pytest.raises(KeyError):
         update_config("invalid_key", True)
@@ -92,7 +92,7 @@ def test_update_config_invalid_key(temp_config_file, monkeypatch):
 
 def test_update_config_invalid_type_or_value(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     with pytest.raises(TypeError):
         update_config("offline", "invalid_value")
@@ -102,7 +102,7 @@ def test_update_config_invalid_type_or_value(temp_config_file, monkeypatch):
 
 def test_load_custom_config_file(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
 
     # 1 - Illegal value
@@ -125,7 +125,7 @@ def test_load_custom_config_file(temp_config_file, monkeypatch):
 
 def test_update_custom_config_file(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     custom_config = {"offline": True, "export": "raw"}
     with open(temp_config_file, "w") as f:
@@ -143,7 +143,7 @@ def test_update_custom_config_file(temp_config_file, monkeypatch):
 
 def test_update_config_update_existing_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     update_config("offline", True)
     assert dreqcfg.CONFIG["offline"] is True
@@ -176,7 +176,7 @@ def test_sanity_checks():
 
 def test_caching(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        "data_request_api.stable.utilities.config.CONFIG_FILE", temp_config_file
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
     )
     config1 = load_config()
     config2 = load_config()

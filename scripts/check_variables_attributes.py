@@ -15,12 +15,12 @@ from collections import defaultdict
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-from data_request_api.stable.content.dump_transformation import get_transformed_content
-from data_request_api.stable.query.data_request import DataRequest
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level, get_logger
-from data_request_api.stable.utilities.decorators import append_kwargs_from_config
-from data_request_api.stable.utilities.tools import write_json_output_file_content
-from data_request_api.stable.utilities.parser import append_arguments_to_parser
+from data_request_api.content.dump_transformation import get_transformed_content
+from data_request_api.query.data_request import DataRequest
+from data_request_api.utilities.logger import change_log_file, change_log_level, get_logger
+from data_request_api.utilities.decorators import append_kwargs_from_config
+from data_request_api.utilities.tools import write_json_output_file_content
+from data_request_api.utilities.parser import append_arguments_to_parser
 
 
 parser = argparse.ArgumentParser()

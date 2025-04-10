@@ -14,9 +14,9 @@ import os
 import re
 from collections import OrderedDict
 
-from data_request_api.stable.query.dreq_classes import (
+from data_request_api.query.dreq_classes import (
     DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
-from data_request_api.stable.utilities.tools import write_csv_output_file_content
+from data_request_api.utilities.tools import write_csv_output_file_content
 
 # Version of software (python API):
 from data_request_api import version as api_version
@@ -139,7 +139,7 @@ def create_dreq_tables_for_request(content, dreq_version, consolidated=True):
 
     # Content is dict loaded from raw airtable export json file
     if consolidated:
-        base_name = 'Data Request'
+        base_name = version_base_name()
         content_type = 'consolidated'
     else:
         # for backward compatibility

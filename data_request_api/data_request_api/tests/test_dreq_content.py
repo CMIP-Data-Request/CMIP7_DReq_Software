@@ -1,13 +1,12 @@
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level
-from data_request_api.stable.content import dreq_content as dc
+from data_request_api.utilities.logger import change_log_file, change_log_level
+from data_request_api.content import dreq_content as dc
 import os
 import pathlib
-import sys
 import tempfile
 
 import pytest
 
-import data_request_api.stable.utilities.config as dreqcfg
+import data_request_api.utilities.config as dreqcfg
 
 # Set up temporary config file with default config
 temp_config_file = tempfile.NamedTemporaryFile(delete=False, suffix=".yaml")

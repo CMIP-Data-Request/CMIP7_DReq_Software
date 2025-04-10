@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.tests.test_decorator API documentation</title>
-<meta name="description" content="">
+<title>data_request_api.content.mapping_table API documentation</title>
+<meta name="description" content="Mapping Table …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,136 +33,79 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.tests.test_decorator</code></h1>
+<h1 class="title">Module <code>data_request_api.content.mapping_table</code></h1>
 </header>
 <section id="section-intro">
+<p>Mapping Table</p>
+<p>The mapping_table dictionary defines how to map the three-base structure to the one-base structure.
+Each entry in the dictionary represents a table in the one-base structure and includes the information
+how to obtain it from the three-base structure.</p>
+<p>Explanation of the dictionary keys:</p>
+<p>Base ("source_base"):
+The base containing the table to be selected.</p>
+<p>Table ("source_table"):
+The table to be selected from the "source_base".</p>
+<p>Internal Mapping of record attributes ("internal_mapping"):
+Record attributes may point to records of other tables.
+However, there is no cross-linkage between the three bases,
+so these links need to be mapped as well.
+"internal_mapping" is a dictionary with the key corresponding
+to the record attributes to be mapped and the values containing
+the actual mapping information.</p>
+<pre><code>The mapping information is again a dictionary with the following keys:
+- base_copy_of_table:
+    If a copy of table corresponding to the record attribute exists in the current base,
+    provide the name; otherwise, set to False.
+- base:
+    The base containing the original table the record attribute points to.
+- table:
+    The original table the record attribute points to.
+- operation:
+    The operation to perform on the attribute value (either "split" or "", if it is
+    already provided as list or a string without comma separated values).
+- map_by_key:
+    A list of keys to map by.
+- entry_type:
+    The type of entry (either "record_id" or "name").
+</code></pre>
+<p>(Internal) Filters of record attributes ("internal_filters"):
+Not all records of the raw export shall be included since they may be
+labeled as junk or not be approved by the community. The filters are applied on all records
+and also internally on links to other records. "internal_filters" is a dictionary
+with the key corresponding to the record attributes used for filtering and the value
+another dictionary with the following possible keys:
+- operator: Can be one of "nonempty", "in", "not in"
+- values:
+A list of values, not necessary for "nonempty" operator.</p>
+<p>Example Configuration</p>
+<p>Suppose we want to map the "CMIP7 Variable Groups" key in the "Variables" table of the "Data Request Variables (Public)"
+base to a list of record IDs of "Variable Group" records in the "Data Request Opportunities (Public)" base.</p>
+<p>We would define the mapping_table as follows:
+mapping_table = {
+"Variables": {
+"base": "Data Request Variables (Public)",
+"source_table": "Variables",
+"internal_mapping": {
+"CMIP7 Variable Groups": {
+"base_copy_of_table": False,
+"base": "Data Request Opportunities (Public)",
+"table": "Variable Group",
+"operation": "split",
+"map_by_key": ["Name"],
+"entry_type": "name",
+},
+},
+"internal_filters": {
+"Status": {"operator": "not in", "values": ["Junk"]},
+}
+},
+}</p>
 </section>
 <section>
 </section>
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="data_request_api.tests.test_decorator.test_append_kwargs_from_config"><code class="name flex">
-<span>def <span class="ident">test_append_kwargs_from_config</span></span>(<span>monkeypatch)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def test_append_kwargs_from_config(monkeypatch):
-    # Mock the load_config function to return a config dictionary
-    config = {&#34;key1&#34;: &#34;value1&#34;, &#34;key2&#34;: &#34;value2&#34;}
-
-    def mock_load_config():
-        return config
-
-    monkeypatch.setattr(
-        &#34;data_request_api.utilities.config.load_config&#34;, mock_load_config
-    )
-
-    # Set up a test function with the decorator
-    @append_kwargs_from_config
-    def test_function(**kwargs):
-        return kwargs
-
-    # Call the decorated function with no kwargs
-    result = test_function()
-    assert result == config
-
-    # Call the decorated function with some kwargs
-    result = test_function(key3=&#34;value3&#34;)
-    assert result == {&#34;key1&#34;: &#34;value1&#34;, &#34;key2&#34;: &#34;value2&#34;, &#34;key3&#34;: &#34;value3&#34;}
-
-    # Call the decorated function with a kwarg that overrides a config value
-    result = test_function(key1=&#34;override_value&#34;)
-    assert result == {&#34;key1&#34;: &#34;override_value&#34;, &#34;key2&#34;: &#34;value2&#34;}</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.tests.test_decorator.test_append_kwargs_from_config_args"><code class="name flex">
-<span>def <span class="ident">test_append_kwargs_from_config_args</span></span>(<span>monkeypatch, recwarn)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def test_append_kwargs_from_config_args(monkeypatch, recwarn):
-    # Mock the load_config function to return a config dictionary
-    config = {
-        &#34;cache_dir&#34;: &#34;value1&#34;,
-        &#34;consolidate&#34;: True,
-        &#34;offline&#34;: True,
-        &#34;export&#34;: &#34;raw&#34;,
-        &#34;log_level&#34;: &#34;info&#34;,
-        &#34;log_file&#34;: &#34;default&#34;,
-    }
-
-    def mock_load_config():
-        return config
-
-    monkeypatch.setattr(
-        &#34;data_request_api.utilities.config.load_config&#34;, mock_load_config
-    )
-
-    # Set up a test function with the decorator that has
-    # parameters with the same name as config keys
-    @append_kwargs_from_config
-    def test_function(
-        arg1, arg2, offline, arg4=&#34;value4&#34;, export=&#34;value5&#34;, **kwargs
-    ):
-        return locals()
-
-    # Make sure that:
-    # 1) A warning is issued for specifying a config-key as function parameter name incl. default value
-    # 2) Function parameters that are also kwargs are kept as function parameters
-    # 2.1) They keep the value as passed to the function
-    # 2.2) Default values are overridden by the config dictionary
-    # 3) kwargs are set as expected
-
-    # 1st test case
-    result = test_function(&#34;a&#34;, &#34;b&#34;, False)
-    config_mod = {
-        i: config[i] for i in config if i not in [&#34;offline&#34;, &#34;export&#34;]
-    }
-    result_dict = {
-        &#34;arg1&#34;: &#34;a&#34;,
-        &#34;arg2&#34;: &#34;b&#34;,
-        &#34;offline&#34;: False,
-        &#34;arg4&#34;: &#34;value4&#34;,
-        &#34;export&#34;: &#34;raw&#34;,
-        &#34;kwargs&#34;: config_mod,
-    }
-    assert len(recwarn.list) == 1
-    assert str(recwarn.list[0].message).startswith(
-        &#34;Parameter &#39;export&#39; of function &#34;
-    )
-    assert result == result_dict
-
-    # 2nd test case
-    result = test_function(0, 1, False, &#34;value&#34;, &#34;release&#34;, log_level=&#34;warning&#34;)
-    assert result == {
-        &#34;arg1&#34;: 0,
-        &#34;arg2&#34;: 1,
-        &#34;offline&#34;: False,
-        &#34;arg4&#34;: &#34;value&#34;,
-        &#34;export&#34;: &#34;release&#34;,
-        &#34;kwargs&#34;: {**config_mod, &#34;log_level&#34;: &#34;warning&#34;},
-    }
-
-    # 3rd test case
-    #  ensure that _sanity_check raises an error
-    #  for an illegal type/value of a function argument
-    #  that is also a config-key
-    with pytest.raises(TypeError):
-        result = test_function(&#34;a&#34;, &#34;b&#34;, &#34;c&#34;)</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -174,13 +117,7 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.tests" href="index.html">data_request_api.tests</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="data_request_api.tests.test_decorator.test_append_kwargs_from_config" href="#data_request_api.tests.test_decorator.test_append_kwargs_from_config">test_append_kwargs_from_config</a></code></li>
-<li><code><a title="data_request_api.tests.test_decorator.test_append_kwargs_from_config_args" href="#data_request_api.tests.test_decorator.test_append_kwargs_from_config_args">test_append_kwargs_from_config_args</a></code></li>
+<li><code><a title="data_request_api.content" href="index.html">data_request_api.content</a></code></li>
 </ul>
 </li>
 </ul>

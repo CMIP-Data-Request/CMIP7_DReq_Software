@@ -10,7 +10,7 @@ import json
 import os
 import csv
 
-from data_request_api.stable.utilities.logger import get_logger
+from data_request_api.utilities.logger import get_logger
 
 
 def read_json_file(filename):

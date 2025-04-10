@@ -88,7 +88,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_caching(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     config1 = load_config()
     config2 = load_config()
@@ -106,7 +106,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_load_config_file_does_not_exist(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     assert not temp_config_file.exists()
     assert dreqcfg.CONFIG == {}
@@ -128,7 +128,7 @@ def temp_config_file(tmp_path_factory):
     with open(temp_config_file, &#34;w&#34;) as f:
         yaml.dump(DEFAULT_CONFIG, f)
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     assert temp_config_file.exists()
     dreqcfg.CONFIG = {}
@@ -148,7 +148,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_load_config_invalid_yaml(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     with open(temp_config_file, &#34;w&#34;) as f:
         f.write(&#34;Just a string not proper yaml&#34;)
@@ -167,7 +167,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_load_config_non_dict_yaml(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     with open(temp_config_file, &#34;w&#34;) as f:
         f.write(&#34;[&#39;list&#39;, &#39;instead&#39;, &#39;of&#39;, &#39;dict&#39;]&#34;)
@@ -186,7 +186,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_load_custom_config_file(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
 
     # 1 - Illegal value
@@ -250,7 +250,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_update_config_invalid_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     with pytest.raises(KeyError):
         update_config(&#34;invalid_key&#34;, True)</code></pre>
@@ -267,7 +267,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_update_config_invalid_type_or_value(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     with pytest.raises(TypeError):
         update_config(&#34;offline&#34;, &#34;invalid_value&#34;)
@@ -286,7 +286,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_update_config_update_existing_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     update_config(&#34;offline&#34;, True)
     assert dreqcfg.CONFIG[&#34;offline&#34;] is True
@@ -305,7 +305,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_update_config_valid_key(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     update_config(&#34;offline&#34;, True)
     with open(temp_config_file) as f:
@@ -324,7 +324,7 @@ def temp_config_file(tmp_path_factory):
 </summary>
 <pre><code class="python">def test_update_custom_config_file(temp_config_file, monkeypatch):
     monkeypatch.setattr(
-        &#34;data_request_api.stable.utilities.config.CONFIG_FILE&#34;, temp_config_file
+        &#34;data_request_api.utilities.config.CONFIG_FILE&#34;, temp_config_file
     )
     custom_config = {&#34;offline&#34;: True, &#34;export&#34;: &#34;raw&#34;}
     with open(temp_config_file, &#34;w&#34;) as f:
