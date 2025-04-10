@@ -36,15 +36,20 @@ pip install CMIP7-data-request-api
 If an environment first needs to be created, you can do:
 
 ```bash
-python -m venv my_dreq_env_dir
-source my_dreq_env_dir/bin/activate
+python -m venv my_dreq_env
+source my_dreq_env/bin/activate
 pip install --upgrade pip
+wget https://raw.githubusercontent.com/CMIP-Data-Request/CMIP7_DReq_Software/refs/heads/main/requirements.txt
 pip install -r requirements.txt 
 pip install CMIP7-data-request-api
 ```
 
-where `requirements.txt`, which lists the dependencies, is found in the top-level directory of this repository. 
-If a conda environment is preferred instead of `venv`, an `env.yml` file is also provided (example usage: `conda env create -n my_dreq_env --file env.yml`).
+using the `requirements.txt` file from the top-level directory of this repository, which lists the package dependencies, and `my_dreq_env` can be changed to whatever environment name is preferred.
+If a conda environment is preferred instead of `venv`, an `env.yml` file with the dependencies is also provided and a conda environment can be created by doing:
+```
+wget https://raw.githubusercontent.com/CMIP-Data-Request/CMIP7_DReq_Software/refs/heads/main/env.yml
+conda env create -n my_dreq_env --file env.yml
+```
 
 If installation is successful you should be able to run the command
 ```bash
