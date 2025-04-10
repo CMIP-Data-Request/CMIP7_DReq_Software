@@ -125,7 +125,7 @@ el.replaceWith(d);
     @unittest.skip
     @add_profiling
     def test_transform_to_one(self):
-        content = transform_content_one_base(self.single_format)
+        content = transform_content_inner(self.single_format, get_transform_settings(self.version))
 
     @unittest.skip
     @add_profiling

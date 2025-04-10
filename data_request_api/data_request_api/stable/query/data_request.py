@@ -244,8 +244,8 @@ class Variable(DRObjects):
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
             filtered_found = True
-            if request_type in ["table_identifiers", ]:
-                found = request_value == self.table_identifier
+            if request_type in ["cmip6_tables_identifiers", ]:
+                found = request_value == self.cmip6_tables_identifier
             elif request_type in ["temporal_shapes", ]:
                 found = request_value == self.temporal_shape
             elif request_type in ["spatial_shapes", ]:
@@ -340,7 +340,7 @@ class VariablesGroup(DRObjects):
                 _, priority = is_link_id_or_value(self.get_priority_level().id)
                 _, req_priority = is_link_id_or_value(request_value.id)
                 found = req_priority == priority
-            elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
+            elif request_type in ["cmip6_tables_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
                                   "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
                                   "cell_measures"]:
                 found = self.filter_on_request_list(request_values=request_value, list_to_check=self.get_variables())
@@ -455,7 +455,7 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_mips() or \
                     self.filter_on_request_list(request_values=request_value,
                                                 list_to_check=self.get_variable_groups())
-            elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
+            elif request_type in ["variables", "priority_levels", "cmip6_tables_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
                                   "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
                 found = self.filter_on_request_list(request_values=request_value,
