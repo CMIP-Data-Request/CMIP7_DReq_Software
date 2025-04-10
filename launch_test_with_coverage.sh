@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
+set -e
 
 coverage erase
 
 coverage run
-# To be moved before once tests are fixed
-set -e
+
 coverage run --parallel-mode scripts/workflow_example.py
-rm -f "requested_v1.1.json" "requested_raw.json"
+rm -f "requested_v1.2.json" "requested_raw.json"
 
 coverage run --parallel-mode scripts/database_transformation.py --test --export="raw" --version="v1.0"
 coverage run --parallel-mode scripts/database_transformation.py --test --export="release" --version="v1.0"

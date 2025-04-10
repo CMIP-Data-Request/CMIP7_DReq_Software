@@ -1,13 +1,12 @@
 import os
 import pathlib
-import sys
 import tempfile
 
 import pytest
 
-import data_request_api.stable.utilities.config as dreqcfg
-from data_request_api.stable.content import dreq_content as dc
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level
+import data_request_api.utilities.config as dreqcfg
+from data_request_api.content import dreq_content as dc
+from data_request_api.utilities.logger import change_log_file, change_log_level
 
 # Set up temporary config file with default config
 temp_config_file = tempfile.NamedTemporaryFile(delete=False, suffix=".yaml")
@@ -47,7 +46,9 @@ def test_get_versions_list_branches():
 
 def test_get_latest_version(monkeypatch):
     "Test the _get_latest_version function."
-    monkeypatch.setattr(dc, "get_versions", lambda **kwargs: ["1.0.0", "2.0.2b", "2.0.2a"])
+    monkeypatch.setattr(
+        dc, "get_versions", lambda **kwargs: ["1.0.0", "2.0.2b", "2.0.2a"]
+    )
     assert dc._get_latest_version() == "1.0.0"
     assert dc._get_latest_version(stable=False) == "2.0.2b"
 
@@ -103,7 +104,9 @@ def test_api_and_html_request(recwarn):
     "Test the _send_api_request and _send_html_request functions."
     tags1 = set(dc._send_api_request(dc.REPO_API_URL, "", "tags"))
     for warning in recwarn.list:
-        if str(warning.message).startswith("A HTTP error occurred when retrieving 'tags' via the GitHub API "):
+        if str(warning.message).startswith(
+            "A HTTP error occurred when retrieving 'tags' via the GitHub API "
+        ):
             pytest.xfail("GitHub API not accessible.")
     tags2 = set(dc._send_html_request(dc.REPO_PAGE_URL, "tags"))
     recwarn.clear()
@@ -111,7 +114,9 @@ def test_api_and_html_request(recwarn):
 
     branches1 = set(dc._send_api_request(dc.REPO_API_URL, "", "branches"))
     for warning in recwarn.list:
-        if str(warning.message).startswith("A HTTP error occurred when retrieving 'branches' via the GitHub API "):
+        if str(warning.message).startswith(
+            "A HTTP error occurred when retrieving 'branches' via the GitHub API "
+        ):
             pytest.xfail("GitHub API not accessible.")
     branches2 = set(dc._send_html_request(dc.REPO_PAGE_URL, "branches"))
     assert branches1 == branches2
@@ -209,7 +214,10 @@ class TestDreqContent:
         assert len(caplog.text.splitlines()) == 5
         assert "Deleting the following version(s):" in caplog.text
         for b in self.branches:
-            assert f"Dryrun: would delete '{dc._dreq_res / b / dc._json_raw}'." in caplog.text
+            assert (
+                f"Dryrun: would delete '{dc._dreq_res / b / dc._json_raw}'."
+                in caplog.text
+            )
 
         # Delete all but latest
         dc.delete(keep_latest=True)
@@ -238,7 +246,9 @@ class TestDreqContent:
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception("Network request detected despite active offline mode.")
+            raise Exception(
+                "Network request detected despite active offline mode."
+            )
 
         monkeypatch.setattr("requests.get", mock_requests_get)
 

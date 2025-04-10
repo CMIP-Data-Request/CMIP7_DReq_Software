@@ -13,14 +13,11 @@ import pooch
 import requests
 from bs4 import BeautifulSoup
 
-import data_request_api.stable.utilities.config as dreqcfg
-from data_request_api.stable.content.mapping_table import mapping_table
-from data_request_api.stable.utilities.decorators import (
-    append_kwargs_from_config,
-)
-from data_request_api.stable.utilities.logger import get_logger  # noqa
-
-from . import consolidate_export as ce
+import data_request_api.utilities.config as dreqcfg
+from data_request_api.content import consolidate_export as ce
+from data_request_api.content.mapping_table import mapping_table
+from data_request_api.utilities.decorators import append_kwargs_from_config
+from data_request_api.utilities.logger import get_logger  # noqa
 
 # Suppress pooch info output
 pooch.get_logger().setLevel("WARNING")

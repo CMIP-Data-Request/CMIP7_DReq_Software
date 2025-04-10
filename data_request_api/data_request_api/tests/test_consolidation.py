@@ -1,13 +1,13 @@
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level
-from data_request_api.stable.content import dreq_content as dc
-from data_request_api.stable.utilities.tools import read_json_file, write_json_output_file_content
+from data_request_api.utilities.logger import change_log_file, change_log_level
+from data_request_api.content import dreq_content as dc
+from data_request_api.utilities.tools import read_json_file, write_json_output_file_content
 from data_request_api.tests import filepath
-from data_request_api.stable.content.consolidate_export import map_data, _map_record_id, _map_attribute, _apply_consistency_fixes, _filter_references
-from data_request_api.stable.content.mapping_table import version_consistency_fields, version_consistency_drop_fields
+from data_request_api.content.consolidate_export import map_data, _map_record_id, _map_attribute, _apply_consistency_fixes, _filter_references
+from data_request_api.content.mapping_table import version_consistency_fields, version_consistency_drop_fields
 
 import pytest
 
-import data_request_api.stable.utilities.config as dreqcfg
+import data_request_api.utilities.config as dreqcfg
 
 def test_map_record_id():
     # Read 3-base export
