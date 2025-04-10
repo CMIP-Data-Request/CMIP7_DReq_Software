@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 '''
 Extract metadata of CMOR variables and write them to a json file.
-Example output file: scripts/variable_info/all_var_info.json
-Output file names (filepath) are set below.
 '''
 
 import argparse
