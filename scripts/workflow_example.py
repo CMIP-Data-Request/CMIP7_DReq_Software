@@ -57,9 +57,8 @@ use_opps.append('Synoptic systems')
 use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
-dq.DREQ_VERSION = use_dreq_version
 priority_cutoff = 'Low'
-expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff=priority_cutoff, verbose=False)
+expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps, priority_cutoff=priority_cutoff, verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:

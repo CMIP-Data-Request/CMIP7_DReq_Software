@@ -53,10 +53,8 @@ def main():
     dc.retrieve(use_dreq_version)
     # Load content into python dict
     content = dc.load(use_dreq_version)
-    # Set DREQ_VERSION variable
-    dq.DREQ_VERSION = use_dreq_version
     # Render data request tables as dreq_table objects
-    base = dq.create_dreq_tables_for_request(content)
+    base = dq.create_dreq_tables_for_request(content, use_dreq_version)
 
     # Deal with opportunities
     if args.opportunities_file:
