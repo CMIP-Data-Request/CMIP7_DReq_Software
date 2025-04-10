@@ -1125,7 +1125,7 @@ class DataRequest(object):
             sorting_val = sorting_request.pop(0)
             sorting_values_dict = defaultdict(list)
             for data in data_list:
-                sorting_values_dict[data.get(sorting_val)].append(data)
+                sorting_values_dict[str(data.get(sorting_val))].append(data)
             rep = list()
             for elt in sorted(list(sorting_values_dict)):
                 rep.extend(self.sort_func(sorting_values_dict[elt], sorting_request))
@@ -1161,7 +1161,7 @@ class DataRequest(object):
 
     def export_summary(self, lines_data, columns_data, output_file, sorting_line="id", title_line="name",
                        sorting_column="id", title_column="name", filtering_requests=dict(), filtering_operation="all",
-                       filtering_skip_if_missing=False, **kwargs):
+                       filtering_skip_if_missing=False, regroup=False, **kwargs):
         """
         Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
         :param str lines_data: kind of data to be put in row
@@ -1175,6 +1175,7 @@ class DataRequest(object):
         :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
         :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
                                                main_data kind
+        :param bool regroup: should lines/columns be regrouped by similarities
         :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
         :return: a csv output file
         """
@@ -1183,9 +1184,13 @@ class DataRequest(object):
         filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
                                                          operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
-        sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
+        if not isinstance(sorting_line, list):
+            sorting_line = [sorting_line, ]
+        sorted_filtered_data = self.sort_func(filtered_data, sorting_request=sorting_line)
         columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
-        columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
+        if not isinstance(sorting_column, list):
+            sorting_column = [sorting_column, ]
+        columns_datasets = self.sort_func(columns_datasets, sorting_request=sorting_column)
         columns_title_list = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
         columns_title_dict = {elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
         table_title = f"{lines_data} {title_line} / {columns_data} {title_column}"
@@ -1218,6 +1223,17 @@ class DataRequest(object):
         for line_data_title in lines_title_list:
             rep.append([line_data_title, ] +
                        [content[line_data_title].get(column_title, "") for column_title in columns_title_list])
+
+        if regroup:
+            new_rep = list()
+            new_rep.append(rep.pop(0))
+            similarity_dict = defaultdict(list)
+            for line in rep:
+                similarity_dict[tuple(line[1:])].append(line)
+            for elt in sorted(list(similarity_dict), reverse=True):
+                new_rep.extend(similarity_dict[elt])
+            rep = new_rep
+
 
         logger.debug("Write summary")
         write_csv_output_file_content(output_file, rep, **kwargs)
