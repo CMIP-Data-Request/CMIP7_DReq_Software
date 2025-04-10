@@ -11,6 +11,7 @@ The module has two basic sections:
 import hashlib
 import json
 import os
+import re
 from collections import OrderedDict
 
 from data_request_api.stable.query.dreq_classes import (
@@ -26,6 +27,24 @@ DREQ_VERSION = ''  # if a tagged version is being used, set this in calling scri
 ###############################################################################
 # Functions to manage data request content input and use it to create python
 # objects representing the tables.
+
+def get_dreq_version_tuple(version:str):
+    '''
+    Parse version string to return tuple giving version major, minor (etc) numbers.
+    Examples:
+        get_dreq_version_tuple('v1.2') --> (1,2)
+        get_dreq_version_tuple('v1.0beta') --> (1,0)
+    '''
+    if version == 'dev':
+        # Is a tuple needed/useful for 'dev' versions? Set one just in case.
+        return (0,)
+    else:
+        patt = '[0-9.]*[0-9]'
+        ver_num = re.findall(patt, version)
+        if len(ver_num) != 1:
+            raise ValueError('Ambiguous version string: ' + version)
+        ver_num_str = ver_num[0]
+        return tuple(map(int, ver_num_str.split('.')))
 
 
 def get_content_type(content):
@@ -197,8 +216,8 @@ def create_dreq_tables_for_request(content, consolidated=True):
 
     # Determine which compound name to use based on dreq content version
     USE_COMPOUND_NAME = 'compound_name'
-    version = tuple(map(int, DREQ_VERSION.strip('v').split('.')))  # e.g. 'v1.2' --> (1,2)
-    if version[:2] >= (1, 2):
+    version_tuple = get_dreq_version_tuple(DREQ_VERSION)
+    if version_tuple[:2] >= (1, 2):
         USE_COMPOUND_NAME = 'cmip6_compound_name'
     if USE_COMPOUND_NAME != 'compound_name':
         table_name = 'Variables'
@@ -656,26 +675,22 @@ def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_
     # Each entry (row) is a CMOR variable, containing the variable's metadata.
     # Many of these entries are links to other tables in the database (see below).
 
-    # Choose which table to use for freqency
-    try_freq_table_name = []
-    try_freq_table_name.append('Frequency')  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
-    try_freq_table_name.append('CMIP7 Frequency')
-    try_freq_table_name.append('CMIP6 Frequency (legacy)')
-
-    found_freq = False
-    for freq_table_name in try_freq_table_name:
+    # Set frequency table and (if necessary) frequency attribute of variables table
+    freq_table_name = 'CMIP7 Frequency'
+    dreq_tables['frequency'] = base[freq_table_name]
+    if 'frequency' not in dreq_tables['variables'].attr2field:
+        # The code below assumes each variable has an attribute called 'frequency'.
+        # Here adjust for the possibility that the variables table may not yet have an attribute with this name.
         freq_attr_name = format_attribute_name(freq_table_name)
-        if freq_attr_name not in dreq_tables['variables'].attr2field:
-            continue
-        if 'frequency' not in dreq_tables['variables'].attr2field:
-            # code below assumes a variable's frequency is given by its "frequency"
+        if freq_attr_name in dreq_tables['variables'].attr2field:
+            # If the attribute name corresponding to this table name is available, rename it as 'frequency'
             dreq_tables['variables'].rename_attr(freq_attr_name, 'frequency')
-        if freq_table_name in base:
-            dreq_tables['frequency'] = base[freq_table_name]
-        found_freq = True
-        break
-    if not found_freq:
-        raise ValueError('Which airtable field gives the frequency?')
+        else:
+            raise ValueError(f'Expected attribute {freq_attr_name} linking to table {freq_table_name}')
+        # Confirm that the 'frequency' attribute points to the correct table
+        # (this is checking if the above change was made self-consistently).
+        assert dreq_tables['variables'].links['frequency'] == freq_table_name, \
+            'inconsistent table link for frequency attribute'
 
     # Get other tables from the database that are required to find all of a variable's metadata used by CMOR.
     dreq_tables.update({
