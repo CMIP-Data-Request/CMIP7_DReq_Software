@@ -4,7 +4,13 @@ import re
 import warnings
 
 from data_request_api.utilities.logger import get_logger  # noqa
-from .mapping_table import version_consistency
+
+from .mapping_table import (
+    version_consistency,
+    version_consistency_drop_fields,
+    version_consistency_drop_tables,
+    version_consistency_fields,
+)
 
 # UID generation
 default_count = 0
@@ -14,96 +20,181 @@ default_template = "default_{:d}"
 filtered_records = []
 
 
-def _correct_key_string(input_string, *to_remove_strings):
-    """
-    Corrects a string by removing certain strings, stripping, and replacing some characters.
-
-    Parameters
-    ----------
-    input_string : str
-        The string to be corrected
-    *to_remove_strings : str
-      The strings to be removed from the input string
-
-    Returns
-    -------
-    str
-        The corrected string
-    """
-    # Convert the input string to lowercase
-    input_string = input_string.lower()
-    # Remove the specified strings from the input string
-    for to_remove_string in to_remove_strings:
-        input_string = input_string.replace(to_remove_string, "")
-    # Strip leading and trailing whitespace from the input string
-    input_string = input_string.strip()
-    # Replace '&' with 'and' and ' ' with '_' in the input string
-    input_string = input_string.replace("&", "and").replace(" ", "_")
-    return input_string
-
-
-def _correct_dictionaries(input_dict):
-    """
-    Corrects the keys in a dictionary.
-    """
-    rep = dict()
-    for key, value in input_dict.items():
-        # Correct the key using the correct_key_string function
-        new_key = _correct_key_string(key)
-        # If the value is a dictionary, recursively correct its keys
-        if isinstance(value, dict):
-            for elt in value:
-                value[elt] = _correct_dictionaries(value[elt])
-            rep[new_key] = value
-        # If the value is not a dictionary, simply assign it to the corrected key
-        else:
-            rep[new_key] = value
-    return rep
-
-
 def _map_record_id(record, records, keys):
     """
     Identifies a record_id in list of records using key.
     """
-    global filtered_records
     matches = []
-    # For each of the specified "keys", check if there is an entry in "records" that matches with "record"
+    # For each of the specified "keys", check if there is an entry in "records"
+    #   that matches with "record"
     for key in keys:
         if key in record:
             recval = record[key]
-            matches_tmp = [
+            matches = [
                 r for r, v in records.items() if key in v and v[key] == recval
             ]
-            matches = [m for m in matches_tmp if m not in filtered_records]
             if len(matches) == 1:
                 break
-    if len(matches) == 1:
-        return matches[0]
-    elif len(matches) == 0:
-        if len(matches_tmp) == 0:
-            raise KeyError(f"No matches when consolidating '{record}' via '{keys}'.")
-    else:
-        raise KeyError(f"Multiple matches when consolidating '{record}'.")
+    return matches
 
 
 def _map_attribute(attr, records, key):
     """
     Identifies a record_id in list of records using key and matching with the attribute value.
     """
+    # For the specified "key", check if there is an entry in "records"
+    #   that matches with "attr"
+    matches = [r for r, v in records.items() if key in v and v[key] == attr]
+    return matches
+
+
+def _apply_consistency_fixes(data):
+    """
+    Modifies the table names to be consistent with the data request current software version.
+    """
+    logger = get_logger()
+
+    # Table names
+    for tfrom, tto in version_consistency.items():
+        if tfrom in data:
+            logger.debug(
+                f"Consistency across versions / releases - renaming table: {tfrom} -> {tto}"
+            )
+            data[tto] = data.pop(tfrom)
+    for tfrom in version_consistency_drop_tables:
+        if tfrom in data:
+            logger.debug(
+                f"Consistency across versions / releases - dropping table: {tfrom}"
+            )
+            data.pop(tfrom)
+    # Field names
+    for tfrom, fnm in version_consistency_fields.items():
+        if tfrom in data:
+            field_names = {
+                j["name"]: i for i, j in data[tfrom]["fields"].items()
+            }
+            for keyold, keynew in fnm.items():
+                if keyold in field_names:
+                    logger.debug(
+                        f"Consistency across versions / releases - renaming field in table '{tfrom}': '{keyold}' -> '{keynew}'"
+                    )
+                    data[tfrom]["fields"][field_names[keyold]]["name"] = keynew
+                    for r, v in data[tfrom]["records"].items():
+                        if keyold in v:
+                            data[tfrom]["records"][r][keynew] = data[tfrom][
+                                "records"
+                            ][r].pop(keyold)
+    for tfrom in version_consistency_drop_fields:
+        if tfrom in data:
+            field_names = {
+                j["name"]: i for i, j in data[tfrom]["fields"].items()
+            }
+            for key in version_consistency_drop_fields[tfrom]:
+                if key in field_names:
+                    logger.debug(
+                        f"Consistency across versions / releases - dropping field in table '{tfrom}': '{key}'"
+                    )
+                    data[tfrom]["fields"].pop(field_names[key])
+                    for r, v in data[tfrom]["records"].items():
+                        if key in v:
+                            data[tfrom]["records"][r].pop(key)
+    return data
+
+
+def _apply_hard_fixes(data):
+    """
+    Applies hard-coded fixes to the data request dictionary, such as merging or deletion of records.
+    """
+    if data["Data Request"]["version"] == "v1.2":
+        logger = get_logger()
+        logger.debug(
+            f"Consistency across versions / releases - applying hard fixes for version '{data['Data Request']['version']}'"
+        )
+        # v1.2 raw: MIPs - merge recC5TLtnrU7SVcas into recdHS1Xys1I97ju4
+        for k, v in data["Data Request"]["MIPs"]["records"][
+            "recC5TLtnrU7SVcas"
+        ].items():
+            if k != "MIP Short Name":
+                data["Data Request"]["MIPs"]["records"]["recdHS1Xys1I97ju4"][
+                    k
+                ] = v
+        data["Data Request"]["MIPs"]["records"].pop("recC5TLtnrU7SVcas")
+        # v1.2 raw: Table Identifiers - delete recWXLdtRuQkdcTqC
+        data["Data Request"]["CMIP6 Table Identifiers (legacy)"]["records"].pop(
+            "recWXLdtRuQkdcTqC"
+        )
+        # v1.2 raw: Table Identifiers - alter recWX81OMKJSjRjS7 (80ac3145-a698-11ef-914a-613c0433d878)
+        chdict = {
+            "UID": "80ab73f5-a698-11ef-914a-613c0433d878",
+            "Title": "6-hourly surface data",
+            "Frequency": ["rectxxiQQwBXUszgx"],
+            "Description": (
+                "New in CMIP7. Contains surface or 2D data from any modelling realm.\n\n"
+                "Justification: Existing 6hr tables (6hrLev, 6hrPlev &…evels) with the request"
+                " for 6 hourly ocean surface variables requested for wind-wave coupled modelling [Opportunity ID 68]."
+            ),
+            "Alternative Label": "6hrOcean",
+        }
+        for k, v in chdict.items():
+            data["Data Request"]["CMIP6 Table Identifiers (legacy)"]["records"][
+                "recWX81OMKJSjRjS7"
+            ][k] = v
+    return data
+
+
+def _filter_references(val, key, table, rid):
+    """
+    Filters lists of or strings with comma-separated references to other records.
+    """
     global filtered_records
-    # For the specified "key", check if there is an entry in "records" that matches with "attr"
-    matches_tmp = [r for r, v in records.items() if key in v and v[key] == attr]
-    matches = [m for m in matches_tmp if m not in filtered_records]
-    if len(matches) == 1:
-        return matches[0]
-    elif len(matches) == 0:
-        if len(matches_tmp) == 0:
-            raise KeyError(f"No matches when consolidating '{attr}' via '{key}'.")
+    logger = get_logger()
+
+    if isinstance(val, list):
+        filtered = [v for v in val if v not in filtered_records]
+        if len(filtered) != len(val):
+            if filtered == []:
+                if len(val) == 1:
+                    logger.warning(
+                        f"'{table}': Filtered the only reference for '{key}' of record '{rid}'."
+                    )
+                else:
+                    logger.warning(
+                        f"'{table}': Filtered all {len(val)} references for '{key}' of record '{rid}'."
+                    )
+            else:
+                logger.debug(
+                    f"'{table}': Filtered {len(val) - len(filtered)} of {len(val)}"
+                    f"references for '{key}' of record '{rid}'."
+                )
+        return filtered
+    elif isinstance(val, str) and "rec" in val:
+        if "," in val:
+            vallist = [v.strip() for v in val.split(",")]
+            filtered = [v for v in vallist if v not in filtered_records]
+            if len(filtered) != len(vallist):
+                if filtered == []:
+                    logger.warning(
+                        f"'{table}': Filtered all {len(vallist)} references for"
+                        f" '{key}' of record '{rid}'."
+                    )
+                else:
+                    logger.debug(
+                        f"'{table}': Filtered {len(vallist) - len(filtered)} of"
+                        f" {len(vallist)} references for '{key}' of record '{rid}'."
+                    )
+            return ",".join(filtered)
+        elif val.strip() in filtered_records:
+            logger.warning(
+                f"'{table}': Filtered the only reference for '{key}' of record '{rid}'."
+            )
+            return ""
+        else:
+            return val.strip()
     else:
-        raise KeyError(f"Multiple matches when consolidating '{attr}' via '{key}'.")
+        return val
 
 
-def map_data(data, mapping_table):
+def map_data(data, mapping_table, version):
     """
     Maps the data to the one-base structure using the mapping table.
 
@@ -132,73 +223,141 @@ def map_data(data, mapping_table):
     global filtered_records
     if filtered_records:
         filtered_records = []
+    filtered_records_dict = dict()
 
+    # Check if data is already one-base
     if len(data.keys()) in [3, 4]:
+
+        # Set version
+        mapped_data["Data Request"]["version"] = version
 
         # Get filtered records
         for table, mapinfo in mapping_table.items():
-            if (
-                mapinfo["source_base"] in data
-                and mapinfo["source_table"] in data[mapinfo["source_base"]]
+            if mapinfo["source_base"] in data and any(
+                [
+                    st in data[mapinfo["source_base"]]
+                    for st in mapinfo["source_table"]
+                ]
             ):
+                source_table = [
+                    st
+                    for st in mapinfo["source_table"]
+                    if st in data[mapinfo["source_base"]]
+                ][0]
                 if "internal_filters" in mapinfo:
                     for record_id, record in data[mapinfo["source_base"]][
-                        mapinfo["source_table"]
+                        source_table
                     ]["records"].items():
                         filter_results = []
                         for filter_key, filter_val in mapinfo[
                             "internal_filters"
                         ].items():
-                            if filter_key not in record:
+                            if all(
+                                [
+                                    filter_alias not in record
+                                    for filter_alias in [filter_key]
+                                    + filter_val["aliases"]
+                                ]
+                            ):
                                 filter_results.append(False)
                             elif filter_val["operator"] == "nonempty":
-                                filter_results.append(bool(record[filter_key]))
+                                filter_results.append(
+                                    any(
+                                        [
+                                            bool(record[fk])
+                                            for fk in [filter_key]
+                                            + filter_val["aliases"]
+                                            if fk in record
+                                        ]
+                                    )
+                                )
                             elif filter_val["operator"] == "in":
-                                if isinstance(record[filter_key], list):
-                                    filter_results.append(
-                                        any(
-                                            fj in filter_val["values"]
-                                            for fj in record[filter_key]
-                                        )
-                                    )
-                                else:
-                                    filter_results.append(
-                                        record[filter_key] in filter_val["values"]
-                                    )
+                                for fk in [filter_key] + filter_val["aliases"]:
+                                    if fk in record:
+                                        if isinstance(record[filter_key], list):
+                                            filter_results.append(
+                                                any(
+                                                    fj in filter_val["values"]
+                                                    for fj in record[filter_key]
+                                                )
+                                            )
+                                            break
+                                        else:
+                                            filter_results.append(
+                                                record[filter_key]
+                                                in filter_val["values"]
+                                            )
                             elif filter_val["operator"] == "not in":
-                                if isinstance(record[filter_key], list):
-                                    filter_results.append(
-                                        any(
-                                            fj not in filter_val["values"]
-                                            for fj in record[filter_key]
-                                        )
-                                    )
+                                for fk in [filter_key] + filter_val["aliases"]:
+                                    if fk in record:
+                                        if isinstance(record[filter_key], list):
+                                            filter_results.append(
+                                                any(
+                                                    fj
+                                                    not in filter_val["values"]
+                                                    for fj in record[filter_key]
+                                                )
+                                            )
+                                        break
                                 else:
                                     filter_results.append(
-                                        record[filter_key] not in filter_val["values"]
+                                        record[filter_key]
+                                        not in filter_val["values"]
                                     )
                         if not all(filter_results):
                             logger.debug(
-                                f"Filtered out record '{record_id}' {'('+record['name']+')' if 'name' in record else ''} from '{table}'."
+                                f"Filtered record '{record_id}'"
+                                f" {'(' + record['name'] + ')' if 'name' in record else ''}"
+                                f" from '{table}'."
                             )
                             filtered_records.append(record_id)
-        logger.info(f"Filtered {len(filtered_records)} records.")
+                            if table in filtered_records_dict:
+                                filtered_records_dict[table].append(record_id)
+                            else:
+                                filtered_records_dict[table] = [record_id]
+        for key in filtered_records_dict:
+            logger.debug(
+                f"Filtered {len(filtered_records_dict[key])} records for '{key}'."
+            )
+        logger.debug(f"Filtered {len(filtered_records)} records in total.")
 
         # Perform mapping in case of three-base structure
         for table, mapinfo in mapping_table.items():
             intm = mapinfo["internal_mapping"]
-            if (
-                mapinfo["source_base"] in data
-                and mapinfo["source_table"] in data[mapinfo["source_base"]]
+            if mapinfo["source_base"] in data and any(
+                [
+                    st in data[mapinfo["source_base"]]
+                    for st in mapinfo["source_table"]
+                ]
             ):
                 # Copy the selected data to the one-base structure
-                logger.debug(f"Mapping '{mapinfo['source_base']}' -> '{table}'")
+                # - skip filtered records
+                # - rename record attributes according to
+                #   "internal_consistency" settings
+                # - filter references to records for fields that are not
+                #   internally mapped below
+                source_table = [
+                    st
+                    for st in mapinfo["source_table"]
+                    if st in data[mapinfo["source_base"]]
+                ][0]
+                logger.debug(
+                    f"Mapping '{mapinfo['source_base']}' : '{source_table}' -> '{table}'"
+                )
                 mapped_data["Data Request"][table] = {
-                    **data[mapinfo["source_base"]][mapinfo["source_table"]],
+                    **data[mapinfo["source_base"]][source_table],
                     "records": {
-                        record_id: record
+                        record_id: {
+                            mapinfo["internal_consistency"].get(
+                                reckey, reckey
+                            ): _filter_references(
+                                recvalue, reckey, table, record_id
+                            )
+                            for reckey, recvalue in record.items()
+                            if reckey not in mapinfo["drop_keys"]
+                        }
                         for record_id, record in data[mapinfo["source_base"]][
-                            mapinfo["source_table"]
+                            source_table
                         ]["records"].items()
                         if record_id not in filtered_records
                     },
@@ -209,9 +368,11 @@ def map_data(data, mapping_table):
                     # for each attribute that requires mapping
                     for attr in intm.keys():
                         for record_id, record in data[mapinfo["source_base"]][
-                            mapinfo["source_table"]
+                            source_table
                         ]["records"].items():
-                            if (
+                            if record_id in filtered_records:
+                                continue
+                            elif (
                                 attr not in record
                                 or record[attr] is None
                                 or record[attr] == ""
@@ -223,37 +384,46 @@ def map_data(data, mapping_table):
                                 continue
                             attr_vals = record[attr]
 
-                            # operation
+                            # Get list of record-keys of the attribute (eg. "Variables")
+                            #   that is connected to the current record of the "source_table
+                            #   (eg. "Variable Groups") by the specified "operation"
                             if intm[attr]["operation"] == "split":
                                 attr_vals = re.split(r"\s*,\s*", attr_vals)
                             elif intm[attr]["operation"] == "":
                                 if isinstance(attr_vals, str):
                                     attr_vals = [attr_vals]
                             else:
-                                raise ValueError(
-                                    f"Unknown internal mapping operation for attribute '{attr}' ('{mapinfo['source_table']}'): '{intm[attr]['operation']}'"
+                                errmsg = (
+                                    f"Unknown internal mapping operation for attribute '{attr}'"
+                                    f" ('{source_table}'): '{intm[attr]['operation']}'"
                                 )
+                                logger.error("ValueError:", errmsg)
+                                raise ValueError(errmsg)
 
-                            # Get mapped record_ids
+                            # Get mapped record_ids for this list of record-keys
                             # entry_type - single record_id or list of record_ids
                             # - map by record_id
                             if intm[attr]["entry_type"] == "record_id":
                                 if not intm[attr]["base_copy_of_table"]:
-                                    raise ValueError(
-                                        "A copy of the table in the same base is required if 'entry_type' is set to 'record_id', "
-                                        f"but 'base_copy_of_table' is set to False: '{mapinfo['source_table']}' - '{attr}'"
+                                    errmsg = (
+                                        "A copy of the table in the same base is required if 'entry_type'"
+                                        " is set to 'record_id', but 'base_copy_of_table' is set to"
+                                        f" False: '{source_table}' - '{attr}'"
                                     )
+                                    logger.error("ValueError:", errmsg)
+                                    raise ValueError(errmsg)
                                 elif not intm[attr]["base"] in data:
-                                    raise KeyError(
-                                        f"Base '{intm[attr]['base']}' not found in data."
-                                    )
+                                    errmsg = f"Base '{intm[attr]['base']}' not found in data."
+                                    logger.error("KeyError:", errmsg)
+                                    raise KeyError(errmsg)
                                 elif (
                                     intm[attr]["base_copy_of_table"]
                                     not in data[mapinfo["source_base"]]
                                 ):
-                                    raise KeyError(
-                                        f"Table '{intm[attr]['table']}' not found in base '{intm[attr]['base_copy']}'."
-                                    )
+                                    errmsg = f"Table '{intm[attr]['table']}' not found in base '{intm[attr]['base_copy']}'."
+                                    logger.error("KeyError:", errmsg)
+                                    raise KeyError(errmsg)
+
                                 recordIDs_new = []
                                 for attr_val in attr_vals:
                                     # The record copy in the current base
@@ -269,8 +439,31 @@ def map_data(data, mapping_table):
                                         recordlist,
                                         intm[attr]["map_by_key"],
                                     )
-                                    if recordID_new:
-                                        recordIDs_new.append(recordID_new)
+                                    recordID_filtered = [
+                                        r
+                                        for r in recordID_new
+                                        if r not in filtered_records
+                                    ]
+                                    if len(recordID_filtered) == 0:
+                                        if len(recordID_new) == 0:
+                                            logger.debug(
+                                                f"Consolidation of {table}@{intm[attr]['table']}: No matching"
+                                                f" record found for attribute '{attr}' with value '{attr_val}'."
+                                            )
+                                    elif len(recordID_filtered) > 1:
+                                        logger.warning(
+                                            f"Consolidation of {table}@{intm[attr]['table']}:"
+                                            f" Multiple matching records found for attribute '{attr}' with"
+                                            f" value '{attr_val}': {recordID_new}. Using first match."
+                                        )
+                                        recordIDs_new.append(
+                                            recordID_filtered[0]
+                                        )
+                                    else:
+                                        recordIDs_new.append(
+                                            recordID_filtered[0]
+                                        )
+
                             # entry_type - name (eg. unique label or similar)
                             # - map by attribute value
                             elif intm[attr]["entry_type"] == "name":
@@ -278,211 +471,106 @@ def map_data(data, mapping_table):
                                 for attr_val in attr_vals:
                                     recordID_new = _map_attribute(
                                         attr_val,
-                                        data[intm[attr]["base"]][intm[attr]["table"]][
-                                            "records"
-                                        ],
+                                        data[intm[attr]["base"]][
+                                            intm[attr]["table"]
+                                        ]["records"],
                                         (
                                             intm[attr]["map_by_key"]
-                                            if isinstance(intm[attr]["map_by_key"], str)
+                                            if isinstance(
+                                                intm[attr]["map_by_key"], str
+                                            )
                                             else intm[attr]["map_by_key"][0]
                                         ),
                                     )
-                                    if recordID_new:
-                                        recordIDs_new.append(recordID_new)
+                                    recordID_filtered = [
+                                        r
+                                        for r in recordID_new
+                                        if r not in filtered_records
+                                    ]
+                                    if len(recordID_filtered) == 0:
+                                        if len(recordID_new) == 0:
+                                            logger.debug(
+                                                f"Consolidation of {table}@{intm[attr]['table']}: No matching"
+                                                f" record found for attribute '{attr}' with value '{attr_val}'."
+                                            )
+                                    elif len(recordID_filtered) > 1:
+                                        logger.debug(
+                                            "Consolidation of"
+                                            f" {table}@{intm[attr]['table']}: Multiple matching records found"
+                                            f" for attribute '{attr}' with value '{attr_val}': {recordID_new}"
+                                        )
+                                        recordIDs_new.append(
+                                            recordID_filtered[0]
+                                        )
+                                    else:
+                                        recordIDs_new.append(
+                                            recordID_filtered[0]
+                                        )
                             else:
-                                raise ValueError(
-                                    f"Unknown 'entry_type' specified for attribute '{attr}' ('{mapinfo['source_table']}'): '{intm[attr]['entry_type']}'"
+                                errmsg = (
+                                    f"Unknown 'entry_type' specified for attribute '{attr}'"
+                                    f" ('{source_table}'): '{intm[attr]['entry_type']}'"
                                 )
+                                logger.error("ValueError:", errmsg)
+                                raise ValueError(errmsg)
                             if not recordIDs_new:
-                                raise KeyError(
-                                    f"{table} (record '{record_id}'): For attribute '{attr}' no records could be mapped."
+                                errmsg = (
+                                    f"{table} (record '{record_id}'): For attribute"
+                                    f" '{attr}' no records could be mapped."
                                 )
-                            mapped_data["Data Request"][table]["records"][record_id][
-                                attr
-                            ] = recordIDs_new
-
+                                logger.error(errmsg)
+                                raise KeyError(errmsg)
+                            try:
+                                mapped_data["Data Request"][table]["records"][
+                                    record_id
+                                ][
+                                    mapinfo["internal_consistency"].get(
+                                        attr, attr
+                                    )
+                                ] = recordIDs_new
+                            except KeyError:
+                                logger.debug(
+                                    f"Consolidation of {table}@{intm[attr]['table']}:"
+                                    f" '{record_id}' not found when adding"
+                                    f" Attribute '{attr}': {recordIDs_new}"
+                                )
             else:
                 if mapinfo["source_base"] not in data:
-                    missing_tables.append(mapinfo["source_base"])
-                elif mapinfo["source_table"] not in data[mapinfo["source_base"]]:
-                    missing_bases.append(mapinfo["source_table"])
+                    missing_bases.append(mapinfo["source_base"])
+                elif all(
+                    [
+                        st not in data[mapinfo["source_base"]]
+                        for st in mapinfo["source_table"]
+                    ]
+                ):
+                    missing_tables.append(mapinfo["source_table"][0])
         if len(missing_bases) > 0:
-            warnings.warn(
-                f"Encountered missing bases when consolidating the data: {set(missing_bases)}"
+            errmsg = (
+                "Encountered missing bases when consolidating the data:"
+                f" {set(missing_bases)}"
             )
+            logger.critical(errmsg)
+            raise KeyError(errmsg)
         if len(missing_tables) > 0:
-            warnings.warn(
-                f"Encountered missing tables when consolidating the data: {missing_tables}"
+            logger.warning(
+                "Encountered missing tables when consolidating the data (not"
+                f" necessarily problematic): {missing_tables}"
             )
-        return mapped_data
+        return _apply_hard_fixes(mapped_data)
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
-        version = next(iter(data.keys())).replace("Data Request ", "")
+        l_version = next(iter(data.keys())).replace("Data Request", "").strip()
+        if l_version != version and version != "dev":
+            logger.warning(
+                "The Data Request version inferred from the content dictionary"
+                f" ({l_version}) is different than the requested version ({version})."
+            )
+        # Consistency fixes
         mapped_data = next(iter(data.values()))
-        if version in version_consistency:
-            for tfrom, tto in version_consistency[version].items():
-                logger.debug(
-                    f"Consistency across versions - renaming table: {tfrom} -> {tto}"
-                )
-                mapped_data[tto] = mapped_data.pop(tfrom)
+        mapped_data = _apply_consistency_fixes(mapped_data)
+        mapped_data["version"] = version
         return {"Data Request": mapped_data}
     else:
-        raise ValueError("The loaded Data Request has an unexpected data structure.")
-
-
-def transform_content(data):
-    """
-    Transform the data request content into a tidy format.
-
-    This function takes the data request content as input, tidies it up by removing
-    unnecessary keys and renaming others, and returns the transformed data request
-    and vocabulary server.
-
-    Parameters:
-    data (dict): The data request content to be transformed.
-
-    Returns:
-    tuple: A tuple containing the transformed data request and vocabulary server.
-    """
-    logger = get_logger()
-    global default_count
-
-    # Create an index to map record IDs to UIDs
-    record_to_uid_index = dict()
-    # Separate dreq and vocabulary information
-    data_request = dict()
-    vocabulary_server = dict()
-    # Get the content of the Data Request
-    content = data["Data Request"]
-
-    # Define the keys to remove from each table
-    to_remove_keys = {}
-
-    # Iterate over each table in the content
-    for subelt in sorted(list(content)):
-        for record_id in sorted(list(content[subelt]["records"])):
-            # Get the keys to remove for this table
-            if subelt in to_remove_keys:
-                keys_to_remove = to_remove_keys[subelt]
-            else:
-                keys_to_remove = list()
-
-            # Get the list of keys for this record
-            list_keys = list(content[subelt]["records"][record_id])
-
-            # Add keys that match certain patterns to the list of keys to remove
-            keys_to_remove.extend(
-                [
-                    key
-                    for key in list_keys
-                    if "(MJ)" in key
-                    or "test" in key.lower()
-                    or ("last" in key.lower() and "modified" in key.lower())
-                    or "count" in key.lower()
-                ]
-            )
-
-            # Remove the keys that should be removed
-            for key in set(keys_to_remove) & set(list_keys):
-                del content[subelt]["records"][record_id][key]
-
-            # Rename the "UID" key to "uid" if it exists
-            if "UID" in list_keys:
-                content[subelt]["records"][record_id]["uid"] = content[subelt][
-                    "records"
-                ][record_id].pop("UID")
-            elif "uid" not in list_keys:
-                # If no "uid" key exists, create a default one
-                uid = default_template.format(default_count)
-                content[subelt]["records"][record_id]["uid"] = uid
-                default_count += 1
-                logger.debug(
-                    f"Undefined uid for element {os.sep.join([subelt, 'records', record_id])}, set {uid}"
-                )
-
-            # Add the record ID to UID mapping to the index
-            record_to_uid_index[record_id] = content[subelt]["records"][record_id][
-                "uid"
-            ]
-            if (
-                subelt
-                in [
-                    "Opportunity",
-                ]
-                and "Title of Opportunity" in list_keys
-            ):
-                content[subelt]["records"][record_id]["name"] = content[subelt][
-                    "records"
-                ][record_id].pop("Title of Opportunity")
-            elif "name" not in list_keys and "Name" not in list_keys:
-                content[subelt]["records"][record_id]["name"] = "undef"
-
-    # Replace record_id by uid
-    logger.debug("Replace record ids by uids")
-    content_string = json.dumps(content)
-    for record_id, uid in record_to_uid_index.items():
-        content_string = content_string.replace(f'"{record_id}"', f'"{uid}"')
-    content = json.loads(content_string)
-
-    # Alternative
-    # for key, value in content.items():
-    #    if isinstance(value, dict):
-    #        content[key] = {record_to_uid_index.get(k, k): v for k, v in value.items()}
-    #    elif isinstance(value, list):
-    #        content[key] = [{record_to_uid_index.get(k, k): v for k, v in item.items()} if isinstance(item, dict) else item for item in value]
-
-    # Build the data request
-    logger.debug("Build DR and VS")
-    for subelt in sorted(list(content)):
-        if subelt in [
-            "Opportunity",
-        ]:
-            new_subelt = "opportunities"
-            data_request[new_subelt] = dict()
-            vocabulary_server[new_subelt] = dict()
-            for uid in content[subelt]["records"]:
-                value = content[subelt]["records"][uid]
-                data_request[new_subelt][uid] = dict(
-                    experiments_groups=value.pop("Experiment Groups", list()),
-                    variables_groups=value.pop("Variable Groups", list()),
-                    themes=value.pop("Themes", list()),
-                    ensemble_size=value.pop("Ensemble Size", 1),
-                )
-                vocabulary_server[new_subelt][uid] = value
-        elif subelt in [
-            "Variable Group",
-        ]:
-            new_subelt = "variable_groups"
-            data_request[new_subelt] = dict()
-            vocabulary_server[new_subelt] = dict()
-            for uid in content[subelt]["records"]:
-                value = content[subelt]["records"][uid]
-                data_request[new_subelt][uid] = dict(
-                    variables=value.pop("Variables", list()),
-                    mips=value.pop("MIPs", list()),
-                    priority=value.pop("Priority Level", None),
-                )
-                vocabulary_server[new_subelt][uid] = value
-        elif subelt in [
-            "Experiment Group",
-        ]:
-            new_subelt = "experiment_groups"
-            data_request[new_subelt] = dict()
-            vocabulary_server[new_subelt] = dict()
-            for uid in content[subelt]["records"]:
-                value = content[subelt]["records"][uid]
-                data_request[new_subelt][uid] = dict(
-                    experiments=value.pop("Experiments", list())
-                )
-                vocabulary_server[new_subelt][uid] = value
-        else:
-            vocabulary_server[subelt] = content[subelt]["records"]
-    return data_request, vocabulary_server
-
-
-# def write_json_output_file_content(filename, content):
-#    with open(filename, "w") as fic:
-#        json.dump(content, fic, indent=4, allow_nan=True, sort_keys=True)
-# data_request, vocabulary_server = transform_content(content, args.version)
-# write_json_output_file_content(os.path.sep.join([output_directory, "DR_content.json"]), data_request)
-# write_json_output_file_content(os.path.sep.join([output_directory, "VS_content.json"]), vocabulary_server)
+        errmsg = "The loaded Data Request has an unexpected data structure."
+        logger.error(errmsg)
+        raise ValueError(errmsg)

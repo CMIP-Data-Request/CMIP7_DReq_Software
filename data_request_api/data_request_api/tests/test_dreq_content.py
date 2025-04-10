@@ -1,5 +1,3 @@
-from data_request_api.utilities.logger import change_log_file, change_log_level
-from data_request_api.content import dreq_content as dc
 import os
 import pathlib
 import tempfile
@@ -7,6 +5,8 @@ import tempfile
 import pytest
 
 import data_request_api.utilities.config as dreqcfg
+from data_request_api.content import dreq_content as dc
+from data_request_api.utilities.logger import change_log_file, change_log_level
 
 # Set up temporary config file with default config
 temp_config_file = tempfile.NamedTemporaryFile(delete=False, suffix=".yaml")
@@ -149,15 +149,16 @@ def test_load_consolidate(tmp_path):
         jsondict = dc.load(" invalid-version ")
 
     # Load multi-base export with consolidation
-    with pytest.raises(KeyError):
-        jsondict = dc.load("dev", consolidate=True, export="raw")
-    # assert isinstance(jsondict, dict)
-    # assert os.path.isfile(tmp_path / "dev" / dc._json_raw)
-    # assert not os.path.isfile(tmp_path / "dev" / dc._json_release)
+    jsondict = dc.load("dev", consolidate=True, export="raw")
+    assert isinstance(jsondict, dict)
+    assert os.path.isfile(tmp_path / "dev" / dc._json_raw)
+    assert not os.path.isfile(tmp_path / "dev" / dc._json_release)
 
     # Load release export with consolidation
     jsondict = dc.load("dev", consolidate=True, export="release")
     assert isinstance(jsondict, dict)
+    assert "Data Request" in jsondict
+    assert jsondict["Data Request"]["version"] == "dev"
     assert os.path.isfile(tmp_path / "dev" / dc._json_release)
 
 
@@ -245,7 +246,9 @@ class TestDreqContent:
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception("Network request detected despite active offline mode.")
+            raise Exception(
+                "Network request detected despite active offline mode."
+            )
 
         monkeypatch.setattr("requests.get", mock_requests_get)
 
