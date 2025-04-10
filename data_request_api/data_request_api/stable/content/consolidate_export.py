@@ -5,7 +5,12 @@ import warnings
 
 from data_request_api.stable.utilities.logger import get_logger  # noqa
 
-from .mapping_table import version_consistency, version_consistency_drop_tables, version_consistency_fields, version_consistency_drop_fields
+from .mapping_table import (
+    version_consistency,
+    version_consistency_drop_fields,
+    version_consistency_drop_tables,
+    version_consistency_fields,
+)
 
 # UID generation
 default_count = 0
@@ -41,7 +46,7 @@ def _map_attribute(attr, records, key):
     return matches
 
 
-def _apply_consistency_fixes(data, version=""):
+def _apply_consistency_fixes(data):
     """
     Modifies the table names to be consistent with the data request current software version.
     """
@@ -50,40 +55,68 @@ def _apply_consistency_fixes(data, version=""):
     # Table names
     for tfrom, tto in version_consistency.items():
         if tfrom in data:
-            logger.debug(
-                f"Consistency across versions - renaming table: {tfrom} -> {tto}"
-            )
+            logger.debug(f"Consistency across versions / releases - renaming table: {tfrom} -> {tto}")
             data[tto] = data.pop(tfrom)
     for tfrom in version_consistency_drop_tables:
         if tfrom in data:
-            logger.debug(
-                f"Consistency across versions - dropping table: {tfrom}"
-            )
+            logger.debug(f"Consistency across versions / releases - dropping table: {tfrom}")
             data.pop(tfrom)
     # Field names
     for tfrom, fnm in version_consistency_fields.items():
         if tfrom in data:
-            field_names = [j["name"] for i,j in data[tfrom]["fields"].items()]
+            field_names = {j["name"]: i for i, j in data[tfrom]["fields"].items()}
             for keyold, keynew in fnm.items():
                 if keyold in field_names:
                     logger.debug(
-                        f"Consistency across versions - renaming field in table '{tfrom}': '{keyold}' -> '{keynew}'"
+                        f"Consistency across versions / releases - renaming field in table '{tfrom}': '{keyold}' -> '{keynew}'"
                     )
+                    data[tfrom]["fields"][field_names[keyold]]["name"] = keynew
                     for r, v in data[tfrom]["records"].items():
                         if keyold in v:
                             data[tfrom]["records"][r][keynew] = data[tfrom]["records"][r].pop(keyold)
     for tfrom in version_consistency_drop_fields:
         if tfrom in data:
-            field_names = {j["name"]: i for i,j in data[tfrom]["fields"].items()}
+            field_names = {j["name"]: i for i, j in data[tfrom]["fields"].items()}
             for key in version_consistency_drop_fields[tfrom]:
                 if key in field_names:
-                    logger.debug(
-                        f"Consistency across versions - dropping field in table '{tfrom}': '{key}'"
-                    )
+                    logger.debug(f"Consistency across versions / releases - dropping field in table '{tfrom}': '{key}'")
                     data[tfrom]["fields"].pop(field_names[key])
                     for r, v in data[tfrom]["records"].items():
                         if key in v:
                             data[tfrom]["records"][r].pop(key)
+    return data
+
+
+def _apply_hard_fixes(data):
+    """
+    Applies hard-coded fixes to the data request dictionary, such as merging or deletion of records.
+    """
+    if data["Data Request"]["version"] == "v1.2":
+        logger = get_logger()
+        logger.debug(
+            f"Consistency across versions / releases - applying hard fixes for version '{data['Data Request']['version']}'"
+        )
+        # v1.2 raw: MIPs - merge recC5TLtnrU7SVcas into recdHS1Xys1I97ju4
+        for k, v in data["Data Request"]["MIPs"]["records"]["recC5TLtnrU7SVcas"].items():
+            if k != "MIP Short Name":
+                data["Data Request"]["MIPs"]["records"]["recdHS1Xys1I97ju4"][k] = v
+        data["Data Request"]["MIPs"]["records"].pop("recC5TLtnrU7SVcas")
+        # v1.2 raw: Table Identifiers - delete recWXLdtRuQkdcTqC
+        data["Data Request"]["CMIP6 Table Identifiers (legacy)"]["records"].pop("recWXLdtRuQkdcTqC")
+        # v1.2 raw: Table Identifiers - alter recWX81OMKJSjRjS7 (80ac3145-a698-11ef-914a-613c0433d878)
+        chdict = {
+            "UID": "80ab73f5-a698-11ef-914a-613c0433d878",
+            "Title": "6-hourly surface data",
+            "Frequency": ["rectxxiQQwBXUszgx"],
+            "Description": (
+                "New in CMIP7. Contains surface or 2D data from any modelling realm.\n\n"
+                "Justification: Existing 6hr tables (6hrLev, 6hrPlev &…evels) with the request"
+                " for 6 hourly ocean surface variables requested for wind-wave coupled modelling [Opportunity ID 68]."
+            ),
+            "Alternative Label": "6hrOcean",
+        }
+        for k, v in chdict.items():
+            data["Data Request"]["CMIP6 Table Identifiers (legacy)"]["records"]["recWX81OMKJSjRjS7"][k] = v
     return data
 
 
@@ -99,13 +132,9 @@ def _filter_references(val, key, table, rid):
         if len(filtered) != len(val):
             if filtered == []:
                 if len(val) == 1:
-                    logger.warning(
-                        f"'{table}': Filtered the only reference for '{key}' of record '{rid}'."
-                    )
+                    logger.warning(f"'{table}': Filtered the only reference for '{key}' of record '{rid}'.")
                 else:
-                    logger.warning(
-                        f"'{table}': Filtered all {len(val)} references for '{key}' of record '{rid}'."
-                    )
+                    logger.warning(f"'{table}': Filtered all {len(val)} references for '{key}' of record '{rid}'.")
             else:
                 logger.debug(
                     f"'{table}': Filtered {len(val) - len(filtered)} of {len(val)}"
@@ -119,8 +148,7 @@ def _filter_references(val, key, table, rid):
             if len(filtered) != len(vallist):
                 if filtered == []:
                     logger.warning(
-                        f"'{table}': Filtered all {len(vallist)} references for"
-                        f" '{key}' of record '{rid}'."
+                        f"'{table}': Filtered all {len(vallist)} references for" f" '{key}' of record '{rid}'."
                     )
                 else:
                     logger.debug(
@@ -129,9 +157,7 @@ def _filter_references(val, key, table, rid):
                     )
             return ",".join(filtered)
         elif val.strip() in filtered_records:
-            logger.warning(
-                f"'{table}': Filtered the only reference for '{key}' of record '{rid}'."
-            )
+            logger.warning(f"'{table}': Filtered the only reference for '{key}' of record '{rid}'.")
             return ""
         else:
             return val.strip()
@@ -174,30 +200,28 @@ def map_data(data, mapping_table, version):
     if len(data.keys()) in [3, 4]:
 
         # Set version
-        mapped_data["version"] = version
+        mapped_data["Data Request"]["version"] = version
 
         # Get filtered records
         for table, mapinfo in mapping_table.items():
             if mapinfo["source_base"] in data and any(
-                [
-                    st in data[mapinfo["source_base"]]
-                    for st in mapinfo["source_table"]
-                ]
+                [st in data[mapinfo["source_base"]] for st in mapinfo["source_table"]]
             ):
                 source_table = [st for st in mapinfo["source_table"] if st in data[mapinfo["source_base"]]][0]
                 if "internal_filters" in mapinfo:
                     for record_id, record in data[mapinfo["source_base"]][source_table]["records"].items():
                         filter_results = []
                         for filter_key, filter_val in mapinfo["internal_filters"].items():
-                            if all([filter_alias not in record for filter_alias in [filter_key] + filter_val["aliases"]]):
+                            if all(
+                                [filter_alias not in record for filter_alias in [filter_key] + filter_val["aliases"]]
+                            ):
                                 filter_results.append(False)
                             elif filter_val["operator"] == "nonempty":
                                 filter_results.append(
                                     any(
                                         [
                                             bool(record[fk])
-                                            for fk in [filter_key]
-                                            + filter_val["aliases"]
+                                            for fk in [filter_key] + filter_val["aliases"]
                                             if fk in record
                                         ]
                                     )
@@ -207,34 +231,21 @@ def map_data(data, mapping_table, version):
                                     if fk in record:
                                         if isinstance(record[filter_key], list):
                                             filter_results.append(
-                                                any(
-                                                    fj in filter_val["values"]
-                                                    for fj in record[filter_key]
-                                                )
+                                                any(fj in filter_val["values"] for fj in record[filter_key])
                                             )
                                             break
                                         else:
-                                            filter_results.append(
-                                                record[filter_key]
-                                                in filter_val["values"]
-                                            )
+                                            filter_results.append(record[filter_key] in filter_val["values"])
                             elif filter_val["operator"] == "not in":
                                 for fk in [filter_key] + filter_val["aliases"]:
                                     if fk in record:
                                         if isinstance(record[filter_key], list):
                                             filter_results.append(
-                                                any(
-                                                    fj
-                                                    not in filter_val["values"]
-                                                    for fj in record[filter_key]
-                                                )
+                                                any(fj not in filter_val["values"] for fj in record[filter_key])
                                             )
                                         break
                                 else:
-                                    filter_results.append(
-                                        record[filter_key]
-                                        not in filter_val["values"]
-                                    )
+                                    filter_results.append(record[filter_key] not in filter_val["values"])
                         if not all(filter_results):
                             logger.debug(
                                 f"Filtered record '{record_id}'"
@@ -247,19 +258,14 @@ def map_data(data, mapping_table, version):
                             else:
                                 filtered_records_dict[table] = [record_id]
         for key in filtered_records_dict:
-            logger.debug(
-                f"Filtered {len(filtered_records_dict[key])} records for '{key}'."
-            )
+            logger.debug(f"Filtered {len(filtered_records_dict[key])} records for '{key}'.")
         logger.debug(f"Filtered {len(filtered_records)} records in total.")
 
         # Perform mapping in case of three-base structure
         for table, mapinfo in mapping_table.items():
             intm = mapinfo["internal_mapping"]
             if mapinfo["source_base"] in data and any(
-                [
-                    st in data[mapinfo["source_base"]]
-                    for st in mapinfo["source_table"]
-                ]
+                [st in data[mapinfo["source_base"]] for st in mapinfo["source_table"]]
             ):
                 # Copy the selected data to the one-base structure
                 # - skip filtered records
@@ -273,17 +279,13 @@ def map_data(data, mapping_table, version):
                     **data[mapinfo["source_base"]][source_table],
                     "records": {
                         record_id: {
-                            mapinfo["internal_consistency"].get(
-                                reckey, reckey
-                            ): _filter_references(
+                            mapinfo["internal_consistency"].get(reckey, reckey): _filter_references(
                                 recvalue, reckey, table, record_id
                             )
                             for reckey, recvalue in record.items()
                             if reckey not in mapinfo["drop_keys"]
                         }
-                        for record_id, record in data[mapinfo["source_base"]][
-                            source_table
-                        ]["records"].items()
+                        for record_id, record in data[mapinfo["source_base"]][source_table]["records"].items()
                         if record_id not in filtered_records
                     },
                 }
@@ -295,12 +297,7 @@ def map_data(data, mapping_table, version):
                         for record_id, record in data[mapinfo["source_base"]][source_table]["records"].items():
                             if record_id in filtered_records:
                                 continue
-                            elif (
-                                attr not in record
-                                or record[attr] is None
-                                or record[attr] == ""
-                                or record[attr] == []
-                            ):
+                            elif attr not in record or record[attr] is None or record[attr] == "" or record[attr] == []:
                                 logger.debug(f"{table}: Attribute '{attr}' not found for record '{record_id}'.")
                                 continue
                             attr_vals = record[attr]
@@ -334,9 +331,7 @@ def map_data(data, mapping_table, version):
                                     logger.error("ValueError:", errmsg)
                                     raise ValueError(errmsg)
                                 elif not intm[attr]["base"] in data:
-                                    errmsg = (
-                                        f"Base '{intm[attr]['base']}' not found in data."
-                                    )
+                                    errmsg = f"Base '{intm[attr]['base']}' not found in data."
                                     logger.error("KeyError:", errmsg)
                                     raise KeyError(errmsg)
                                 elif intm[attr]["base_copy_of_table"] not in data[mapinfo["source_base"]]:
@@ -349,9 +344,9 @@ def map_data(data, mapping_table, version):
                                 recordIDs_new = []
                                 for attr_val in attr_vals:
                                     # The record copy in the current base
-                                    record_copy = data[mapinfo["source_base"]][
-                                        intm[attr]["base_copy_of_table"]
-                                    ]["records"][attr_val]
+                                    record_copy = data[mapinfo["source_base"]][intm[attr]["base_copy_of_table"]][
+                                        "records"
+                                    ][attr_val]
                                     # The entire list of records in the base of origin
                                     recordlist = data[intm[attr]["base"]][intm[attr]["table"]]["records"]
                                     recordID_new = _map_record_id(
@@ -359,11 +354,7 @@ def map_data(data, mapping_table, version):
                                         recordlist,
                                         intm[attr]["map_by_key"],
                                     )
-                                    recordID_filtered = [
-                                        r
-                                        for r in recordID_new
-                                        if r not in filtered_records
-                                    ]
+                                    recordID_filtered = [r for r in recordID_new if r not in filtered_records]
                                     if len(recordID_filtered) == 0:
                                         if len(recordID_new) == 0:
                                             logger.debug(
@@ -371,7 +362,7 @@ def map_data(data, mapping_table, version):
                                                 f" record found for attribute '{attr}' with value '{attr_val}'."
                                             )
                                     elif len(recordID_filtered) > 1:
-                                        logger.debug(
+                                        logger.warning(
                                             f"Consolidation of {table}@{intm[attr]['table']}:"
                                             f" Multiple matching records found for attribute '{attr}' with"
                                             f" value '{attr_val}': {recordID_new}. Using first match."
@@ -394,11 +385,7 @@ def map_data(data, mapping_table, version):
                                             else intm[attr]["map_by_key"][0]
                                         ),
                                     )
-                                    recordID_filtered = [
-                                        r
-                                        for r in recordID_new
-                                        if r not in filtered_records
-                                    ]
+                                    recordID_filtered = [r for r in recordID_new if r not in filtered_records]
                                     if len(recordID_filtered) == 0:
                                         if len(recordID_new) == 0:
                                             logger.debug(
@@ -429,12 +416,8 @@ def map_data(data, mapping_table, version):
                                 logger.error(errmsg)
                                 raise KeyError(errmsg)
                             try:
-                                mapped_data["Data Request"][table]["records"][
-                                    record_id
-                                ][
-                                    mapinfo["internal_consistency"].get(
-                                        attr, attr
-                                    )
+                                mapped_data["Data Request"][table]["records"][record_id][
+                                    mapinfo["internal_consistency"].get(attr, attr)
                                 ] = recordIDs_new
                             except KeyError:
                                 logger.debug(
@@ -445,18 +428,10 @@ def map_data(data, mapping_table, version):
             else:
                 if mapinfo["source_base"] not in data:
                     missing_bases.append(mapinfo["source_base"])
-                elif all(
-                    [
-                        st not in data[mapinfo["source_base"]]
-                        for st in mapinfo["source_table"]
-                    ]
-                ):
+                elif all([st not in data[mapinfo["source_base"]] for st in mapinfo["source_table"]]):
                     missing_tables.append(mapinfo["source_table"][0])
         if len(missing_bases) > 0:
-            errmsg = (
-                "Encountered missing bases when consolidating the data:"
-                f" {set(missing_bases)}"
-            )
+            errmsg = "Encountered missing bases when consolidating the data:" f" {set(missing_bases)}"
             logger.critical(errmsg)
             raise KeyError(errmsg)
         if len(missing_tables) > 0:
@@ -464,21 +439,20 @@ def map_data(data, mapping_table, version):
                 "Encountered missing tables when consolidating the data (not"
                 f" necessarily problematic): {missing_tables}"
             )
-        return mapped_data
+        return _apply_hard_fixes(mapped_data)
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
-        l_version = next(iter(data.keys())).replace("Data Request ", "")
-        if l_version != version:
+        l_version = next(iter(data.keys())).replace("Data Request", "").strip()
+        if l_version != version and version != "dev":
             logger.warning(
                 "The Data Request version inferred from the content dictionary"
-                f" ({l_version}) is different than the requested version"
-                f" ({version}). This warning can be ignored if not loading a"
-                " tagged version of the Data Request."
+                f" ({l_version}) is different than the requested version ({version})."
             )
         # Consistency fixes
-        mapped_data = next(iter(data.values()))        
-        mapped_data = _apply_consistency_fixes(mapped_data, version)
-        return {"Data Request": mapped_data, "version": version}
+        mapped_data = next(iter(data.values()))
+        mapped_data = _apply_consistency_fixes(mapped_data)
+        mapped_data["version"] = version
+        return {"Data Request": mapped_data}
     else:
         errmsg = "The loaded Data Request has an unexpected data structure."
         logger.error(errmsg)
