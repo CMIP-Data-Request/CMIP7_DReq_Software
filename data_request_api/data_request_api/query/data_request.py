@@ -453,8 +453,8 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_time_subsets()
             elif request_type in ["mips", ]:
                 found = request_value in self.get_mips() or \
-                        self.filter_on_request_list(request_values=request_value,
-                                                    list_to_check=self.get_variable_groups())
+                    self.filter_on_request_list(request_values=request_value,
+                                                list_to_check=self.get_variable_groups())
             elif request_type in ["variables", "priority_levels", "cmip6_tables_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
                                   "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:

@@ -164,7 +164,10 @@ It also removes others specified strings.
 <pre><code class="python">def distribute_on_entry(func):
     def distribute(content, per_entry_input, **common_inputs):
         for (key, value) in content.items():
-            content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+            list_args = [value, ]
+            if key in per_entry_input:
+                list_args.append(per_entry_input[key])
+            content[key] = func(*list_args, **copy.deepcopy(common_inputs))
         return content
 
     return distribute</code></pre>
@@ -223,6 +226,48 @@ It also removes others specified strings.
 </details>
 <div class="desc"></div>
 </dd>
+<dt id="data_request_api.stable.content.dump_transformation.get_transform_settings"><code class="name flex">
+<span>def <span class="ident">get_transform_settings</span></span>(<span>version)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_transform_settings(version):
+    def update_dict(elt_1, elt_2):
+        rep = copy.deepcopy(elt_1)
+        for (elt, value) in elt_2.items():
+            if isinstance(value, dict):
+                val = rep.get(elt, dict())
+                for (subelt, subvalue) in value.items():
+                    if isinstance(subvalue, dict):
+                        val[subelt] = val.get(subelt, dict())
+                        val[subelt].update(subvalue)
+                    else:
+                        val[subelt] = subvalue
+                rep[elt] = val
+            elif isinstance(value, list):
+                rep[elt] = rep.get(elt, list()) + value
+            else:
+                rep[elt] = value
+        return rep
+
+    transform = read_json_input_file_content(os.sep.join([os.path.dirname(os.path.abspath(__file__)), &#34;transform.json&#34;]))
+    common = transform.pop(&#34;common&#34;, dict())
+    if version not in [&#34;default&#34;, ]:
+        common = update_dict(common[&#34;default&#34;], common.get(version, dict()))
+    else:
+        common = common[&#34;default&#34;]
+    for (elt, content) in transform.items():
+        default_content = update_dict(common, content[&#34;default&#34;])
+        if version not in [&#34;default&#34;, ]:
+            default_content = update_dict(default_content, content.get(version, dict()))
+        transform[elt] = default_content
+    return transform</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
 <dt id="data_request_api.stable.content.dump_transformation.get_transformed_content"><code class="name flex">
 <span>def <span class="ident">get_transformed_content</span></span>(<span>version='latest_stable',<br>export='release',<br>consolidate=False,<br>force_retrieve=False,<br>output_dir=None,<br>default_transformed_content_pattern='{kind}_{export_version}_content.json',<br>**kwargs)</span>
 </code></dt>
@@ -278,7 +323,10 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
     for (key, value) in content.items():
-        content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+        list_args = [value, ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -293,7 +341,10 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
     for (key, value) in content.items():
-        content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+        list_args = [value, ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -308,7 +359,10 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
     for (key, value) in content.items():
-        content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+        list_args = [value, ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -323,7 +377,10 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
     for (key, value) in content.items():
-        content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+        list_args = [value, ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -338,7 +395,10 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
     for (key, value) in content.items():
-        content[key] = func(value, per_entry_input.get(key, list()), **copy.deepcopy(common_inputs))
+        list_args = [value, ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -458,19 +518,19 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
     :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
     &#34;&#34;&#34;
     logger = get_logger()
+    transform_settings = get_transform_settings(version)
     if isinstance(content, dict):
+        # Correct dictionaries
+        content = correct_dictionaries(content)
         # Get back to one database case if needed
         if len(content) == 1:
             logger.info(&#34;Single database case - no structure transformation needed&#34;)
+            content = transform_content_inner(content, transform_settings[&#34;one_to_transform&#34;])
         elif len(content) in [3, 4]:
             logger.info(&#34;Several databases case - structure transformation needed&#34;)
-            content = transform_content_three_bases(content)
+            content = transform_content_inner(content, transform_settings[&#34;several_to_transform&#34;], change_tables=True)
         else:
             raise ValueError(f&#34;Could not manage the {len(content):d} bases export file.&#34;)
-        # Correct dictionaries
-        content = correct_dictionaries(content)
-        # Change several attributes
-        content = transform_content_one_base(content)
         # Separate DR and VS files
         data_request, vocabulary_server = split_content_one_base(content)
         data_request[&#34;version&#34;] = version
@@ -486,15 +546,15 @@ The key "version" is added to the DR and VS dictionaries.
 :param str version: string containing the version of the export content
 :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)</p></div>
 </dd>
-<dt id="data_request_api.stable.content.dump_transformation.transform_content_one_base"><code class="name flex">
-<span>def <span class="ident">transform_content_one_base</span></span>(<span>content)</span>
+<dt id="data_request_api.stable.content.dump_transformation.transform_content_inner"><code class="name flex">
+<span>def <span class="ident">transform_content_inner</span></span>(<span>content, settings, change_tables=False)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def transform_content_one_base(content):
+<pre><code class="python">def transform_content_inner(content, settings, change_tables=False):
     &#34;&#34;&#34;
     Transform a one base export content to:
     - remove unused keys which could create circle import later
@@ -506,109 +566,45 @@ The key "version" is added to the DR and VS dictionaries.
     :return dict: the transform content
     &#34;&#34;&#34;
     logger = get_logger()
-    if isinstance(content, dict) and len(content) == 1:
-        content = content[list(content)[0]]
+    if isinstance(content, dict) and len(content) == 1 and change_tables:
+        logger.error(&#34;For one base dict, change_tables must be False.&#34;)
+        raise ValueError(&#34;For one base dict, change_tables must be False.&#34;)
+    elif isinstance(content, dict) and len(content) &gt; 1 and not change_tables:
+        logger.error(&#34;For several bases dict, changes_tables must be True.&#34;)
+        raise ValueError(&#34;For several bases dict, changes_tables must be True.&#34;)
+    elif isinstance(content, dict):
+        # If needed, deal with one base creation
+        if change_tables:
+            new_content = dict()
+            for (elt, (base, table)) in settings[&#34;tables_provenance&#34;].items():
+                new_content[elt] = content[settings[&#34;several_bases_name&#34;][base]][table]
+            logger.info(&#34;Harmonise bases content record ids&#34;)
+            content_str = json.dumps(new_content)
+            for ((base_old, table_old, key_old), (base_new, table_new, key_new)) in settings[&#34;several_bases_link&#34;].values():
+                old_table = content[settings[&#34;several_bases_name&#34;][base_old]][table_old][&#34;records&#34;]
+                new_table = content[settings[&#34;several_bases_name&#34;][base_new]][table_new][&#34;records&#34;]
+                old_dict = {record_id: value[key_old] for (record_id, value) in old_table.items()}
+                new_dict = {value[key_new]: record_id for (record_id, value) in new_table.items()}
+                for (id, val) in old_dict.items():
+                    content_str = content_str.replace(f&#39;&#34;{id}&#34;&#39;, f&#39;&#34;{new_dict[val]}&#34;&#39;)
+            content = json.loads(content_str)
+        else:
+            content = content[list(content)[0]]
         # Rename some elements
-        esm_bcv_regexp = re.compile(r&#34;esm-bcv.*&#34;)
-        esm_bcv = [elt for elt in list(content) if esm_bcv_regexp.match(elt)]
-        if len(esm_bcv) == 1:
-            esm_bcv = esm_bcv[0]
-            content[&#34;esm-bcv&#34;] = content.pop(esm_bcv)
-        for (key, new_key) in [(&#34;opportunity&#34;, &#34;opportunities&#34;), (&#34;experiment_group&#34;, &#34;experiment_groups&#34;),
-                               (&#34;variable_group&#34;, &#34;variable_groups&#34;), (&#34;structure&#34;, &#34;structure_title&#34;),
-                               (&#34;time_slice&#34;, &#34;time_subsets&#34;), (&#39;time_subset&#39;, &#39;time_subsets&#39;)]:
-            if key in content:
-                content[new_key] = content.pop(key)
-        for pattern in [&#34;.*rank.*&#34;, ]:
-            elts = [elt for elt in list(content) if re.compile(pattern).match(elt)]
-            for elt in elts:
-                del content[elt]
-        for pattern in [&#34;(legacy)&#34;, ]:
-            for elt in [elt for elt in list(content) if pattern in elt]:
-                new_elt = elt.replace(pattern, &#34;&#34;).strip(&#34;_&#34;)
-                content[new_elt] = content.pop(elt)
+        for (patt, repl) in settings[&#34;tables_to_rename&#34;].items():
+            for key in [key for key in content if re.compile(patt).match(key) is not None]:
+                content[re.sub(patt, repl, key)] = content.pop(key)
+        for elt in [elt for elt in list(content) if any(re.compile(patt).match(elt) for patt in settings[&#34;tables_to_delete&#34;])]:
+            del content[elt]
         # Tidy the content of the export file
-        default_patterns_to_remove = [r&#34;.*\(from.*\).*&#34;, r&#34;.*proposed.*&#34;, r&#34;.*review.*&#34;, r&#34;.*--.*&#34;,
-                                      r&#34;.*created.*&#34;, r&#34;.*rank.*&#34;, &#34;.*count.*&#34;, &#34;.*alert.*&#34;, &#34;.*tagged.*&#34;, &#34;.*unique.*&#34;,
-                                      &#34;last_modified.*&#34;, &#34;.*validation.*&#34;, &#34;.*number.*&#34;, &#34;.*mj.*&#34;, r&#34;.*proposal.*&#34;]
-        to_remove_keys_patterns = {
-            &#34;cell_measures&#34;: [r&#34;variables&#34;, &#34;structure&#34;],
-            &#34;cell_methods&#34;: [r&#34;structure&#34;, r&#34;variables&#34;],
-            &#34;cf_standard_names&#34;: [r&#34;physical_parameters.*&#34;, &#34;esm-bcv.*&#34;],
-            &#34;cmip6_frequency&#34;: [r&#34;table_identifiers.*&#34;, r&#34;variables.*&#34;],
-            &#34;cmip7_frequency&#34;: [r&#34;table_identifiers.*&#34;, r&#34;variables.*&#34;],
-            &#34;coordinates_and_dimensions&#34;: [r&#34;spatial_shape&#34;, r&#34;structure&#34;, &#34;temporal_shape&#34;, &#34;variables&#34;, &#34;size&#34;],
-            &#34;data_request_themes&#34;: [r&#34;experiment_group.*&#34;, r&#34;.*opportunit.*&#34;, r&#34;variable_group.*&#34;],
-            &#34;esm-bcv&#34;: [r&#34;v\d.*&#34;, &#34;cf_standard_name&#34;, &#34;.*variables&#34;],
-            &#34;experiment_groups&#34;: [r&#34;opportunit.*&#34;, r&#34;theme.*&#34;, &#34;comments.+&#34;],
-            &#34;experiments&#34;: [r&#34;experiment_group.*&#34;, r&#34;opportunit.*&#34;, &#34;variables&#34;, &#34;mip&#34;],
-            &#34;glossary&#34;: [&#34;opportunit.*&#34;, ],
-            &#34;mips&#34;: [&#34;variable_group.*&#34;, &#34;experiments.*&#34;, &#34;.*opportunit.*&#34;, &#34;variables&#34;],
-            &#34;modelling_realm&#34;: [&#34;variables&#34;, ],
-            &#34;opportunities&#34;: [&#34;.*data_volume_estimate&#34;, &#34;opportunity_id&#34;, &#34;originally_requested_variable_groups&#34;],
-            &#34;opportunity/variable_group_comments&#34;: [&#34;experiment_groups&#34;, &#34;opportunities&#34;, &#34;theme&#34;, &#34;variable_groups&#34;],
-            &#34;physical_parameters&#34;: [&#34;variables&#34;, &#34;conditional&#34;, &#34;does_a_cf.*&#34;],
-            &#34;physical_parameter_comments&#34;: [&#34;physical_parameters&#34;, &#34;does_a.*&#34;, &#34;cf_standard_names&#34;,
-                                            &#34;physical_parameters&#34;],
-            &#34;priority_level&#34;: [&#34;variable_group&#34;, ],
-            &#34;spatial_shape&#34;: [r&#34;structure.*&#34;, r&#34;.*variables.*&#34;, &#34;hor.*&#34;, &#34;vert.*&#34;],
-            &#34;structure_title&#34;: [r&#34;variables.*&#34;, &#34;brand_.*&#34;, &#34;calculation.*&#34;],
-            &#34;table_identifiers&#34;: [&#34;variables&#34;, ],
-            &#34;temporal_shape&#34;: [&#34;variables&#34;, &#34;structure&#34;],
-            &#34;time_subsets&#34;: [&#34;uid.+&#34;, &#34;opportunit.*&#34;],
-            &#34;variable_comments&#34;: [&#34;variable.*&#34;, &#34;spatial_shape&#34;, &#34;temporal_shape&#34;, &#34;coordinates_and_dimensions&#34;,
-                                  &#34;cell_methods&#34;, &#34;cell_measures&#34;],
-            &#34;variable_groups&#34;: [&#34;.*opportunit.*&#34;, &#34;theme&#34;, r&#34;size.*&#34;, &#34;mip_ownership&#34;],
-            &#34;variables&#34;: [r&#34;priority.*&#34;, r&#34;.*variable_group.*&#34;, &#34;.*experiment.*&#34;, &#34;size&#34;, &#34;vertical_dimension&#34;,
-                          &#34;temporal_sampling_rate&#34;, &#34;horizontal_mesh&#34;, r&#34;brand.*\[link\]&#34;, &#34;structure_label&#34;,
-                          &#34;table_section.*&#34;, &#34;theme&#34;],
-        }
-        to_rename_keys_patterns = {
-            &#34;cell_methods&#34;: [(&#34;comments&#34;, &#34;variable_comments&#34;), (&#34;label&#34;, &#34;name&#34;)],
-            &#34;cf_standard_names&#34;: [(&#34;comments&#34;, &#34;physical_parameter_comments&#34;)],
-            &#34;cmip7_frequency&#34;: [(&#34;cmip6_frequency.*&#34;, &#34;cmip6_frequency&#34;)],
-            &#34;coordinates_and_dimensions&#34;: [(&#34;requested_bounds.+&#34;, &#34;requested_bounds&#34;),
-                                           (&#34;comments&#34;, &#34;variable_comments&#34;), (&#34;value.+&#34;, &#34;value&#34;)],
-            &#34;data_request_themes&#34;: [(&#34;comments&#34;, &#34;opportunity/variable_group_comments&#34;), (&#34;uid.+&#34;, &#34;uid&#34;)],
-            &#34;experiments&#34;: [(&#34;experiment&#34;, &#34;name&#34;)],
-            &#34;experiment_groups&#34;: [(&#34;comments&#34;, &#34;opportunity/variable_group_comments&#34;)],
-            &#34;mips&#34;: [(&#39;mip_short_name&#39;, &#34;name&#34;)],
-            &#34;modelling_realm&#34;: [(&#34;id&#34;, &#34;uid&#34;)],
-            &#34;opportunities&#34;: [(&#34;title_of_opportunity&#34;, &#34;name&#34;), (&#34;comments&#34;, &#34;opportunity/variable_group_comments&#34;),
-                              (&#34;ensemble_size&#34;, &#34;minimum_ensemble_size&#34;), (&#34;themes&#34;, &#34;data_request_themes&#34;),
-                              (&#34;working/updated_variable_groups&#34;, &#34;variable_groups&#34;), (&#34;time_slice&#34;, &#34;time_subsets&#34;)],
-            &#34;physical_parameters&#34;: [(&#34;comments&#34;, &#34;physical_parameter_comments&#34;),
-                                    (&#34;cf_proposal_github_issue&#34;, &#34;proposal_github_issue&#34;),
-                                    (&#34;flag.*change.*&#34;, &#34;flag_change_since_cmip6&#34;)],
-            &#34;spatial_shape&#34;: [(&#34;comments&#34;, &#34;variable_comments&#34;)],
-            &#34;temporal_shape&#34;: [(&#34;comments&#34;, &#34;variable_comments&#34;)],
-            &#34;structure_title&#34;: [(&#34;label&#34;, &#34;name&#34;)],
-            &#34;table_identifiers&#34;: [(&#34;comment&#34;, &#34;notes&#34;), (&#34;frequency&#34;, &#34;cmip6_frequency&#34;)],
-            &#34;time_subsets&#34;: [(&#34;label&#34;, &#34;name&#34;)],
-            &#34;variable_groups&#34;: [(&#34;.*mips.*&#34;, &#34;mips&#34;), (&#34;comments&#34;, &#34;opportunity/variable_group_comments&#34;)],
-            &#34;variables&#34;: [(&#34;compound_name&#34;, &#34;name&#34;), (&#34;cmip6_frequency.+&#34;, &#34;cmip6_frequency&#34;), (esm_bcv, &#34;esm-bcv&#34;),
-                          (&#34;modeling_realm&#34;, &#34;modelling_realm&#34;), (&#34;comments&#34;, &#34;variable_comments&#34;),
-                          (&#34;table&#34;, &#34;table_identifier&#34;)],
-        }
-        to_merge_keys_patterns = {
-            &#34;opportunities&#34;: [(&#34;mips.*&#34;, &#34;mips&#34;), ]
-        }
-        to_sort_keys_content = {
-            &#34;opportunities&#34;: [&#34;variable_groups&#34;, &#34;data_request_themes&#34;, &#34;experiment_groups&#34;, &#34;time_slice&#34;],
-            &#34;experiment_groups&#34;: [&#34;experiments&#34;, ],
-            &#34;variable_groups&#34;: [&#34;variables&#34;, &#34;mips&#34;]
-        }
-        from_list_to_string_keys_content = {
-            &#34;opportunities&#34;: [&#34;lead_theme&#34;, ],
-            &#34;physical_parameters&#34;: [&#34;cf_standard_name&#34;, ],
-            &#34;table_identifiers&#34;: [&#34;cmip7_frequency&#34;, ],
-            &#34;variables&#34;: [&#34;cell_methods&#34;, &#34;cmip6_frequency&#34;, &#34;cmip7_frequency&#34;, &#34;esm-bcv&#34;, &#34;physical_parameter&#34;,
-                          &#34;spatial_shape&#34;, &#34;table_identifier&#34;, &#34;temporal_shape&#34;]
-        }
+        default_patterns_to_remove = settings[&#34;default_keys_to_delete&#34;]
+        to_remove_keys_patterns = settings[&#34;keys_to_delete&#34;]
+        to_rename_keys_patterns = settings[&#34;keys_to_rename&#34;]
+        to_merge_keys_patterns = settings[&#34;keys_to_merge&#34;]
+        to_sort_keys_content = settings[&#34;keys_to_sort&#34;]
         content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
                                      default_patterns_to_remove=default_patterns_to_remove)
-        content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns,
-                                     esm_bcv_regexp=esm_bcv_regexp)
+        content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns)
         content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
         # Filter on status if needed then remove linked keys
         content = filter_content(content)
@@ -618,11 +614,10 @@ The key "version" is added to the DR and VS dictionaries.
         content = tidy_content(content, record_to_uid_index)
         # Sort content of needed keys
         content = sort_useful_keys(content, per_entry_input=to_sort_keys_content)
-        content = reshape_useful_keys(content, per_entry_input=from_list_to_string_keys_content)
+        for (reshape_style, from_list_to_string_keys_content) in settings[&#34;keys_to_format&#34;].items():
+            content = reshape_useful_keys(content, per_entry_input=from_list_to_string_keys_content,
+                                          reshape_style=reshape_style)
         return content
-    elif isinstance(content, dict):
-        logger.error(&#34;Deal with one base content dict.&#34;)
-        raise ValueError(&#34;Deal with one base content dict.&#34;)
     else:
         logger.error(f&#34;Deal with dict types, not {type(content).__name__}&#34;)
         raise TypeError(f&#34;Deal with dict types, not {type(content).__name__}&#34;)</code></pre>
@@ -633,95 +628,8 @@ The key "version" is added to the DR and VS dictionaries.
 - reshape entries if needed
 - remove elements which are not used
 - filter content on status
-:param dict content: one base content export (direct export or created from <code><a title="data_request_api.stable.content.dump_transformation.transform_content_three_bases" href="#data_request_api.stable.content.dump_transformation.transform_content_three_bases">transform_content_three_bases()</a></code>
+:param dict content: one base content export (direct export or created from <code>transform_content_three_bases</code>
 :return dict: the transform content</p></div>
-</dd>
-<dt id="data_request_api.stable.content.dump_transformation.transform_content_three_bases"><code class="name flex">
-<span>def <span class="ident">transform_content_three_bases</span></span>(<span>content)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def transform_content_three_bases(content):
-    &#34;&#34;&#34;
-    Transform the several bases export content into something similar to a one base export content.
-    To do that, the content of the different entries of the input dictionary are copied to a single dictionary.
-    The record ids are also harmonised through the different bases.
-    :param dict content: input dictionary containing the different databases
-    :return dict: dictionary containing the content of the different databases
-    &#34;&#34;&#34;
-    logger = get_logger()
-    if isinstance(content, dict) and len(content) &gt; 2:
-        new_content = dict()
-        opportunity_table = [elt for elt in list(content) if &#34;opportunities&#34; in elt.lower()][0]
-        variables_table = [elt for elt in list(content) if &#34;variables&#34; in elt.lower()][0]
-        physical_parameters_table = [elt for elt in list(content) if &#34;parameters&#34; in elt.lower()][0]
-        # Copy the bases
-        old_variables_content = content[opportunity_table].pop(&#34;Variables&#34;)
-        old_physical_parameters_content = content[variables_table].pop(&#34;Physical Parameter&#34;)
-        new_content[&#34;Opportunity/variable Group Comments&#34;] = content[opportunity_table].pop(&#34;Comment&#34;)
-        new_content[&#34;Experiments&#34;] = content[opportunity_table].pop(&#34;Experiment&#34;)
-        new_content[&#34;MIPs&#34;] = content[opportunity_table].pop(&#34;MIP&#34;)
-        for elt in list(content[opportunity_table]):
-            new_content[elt] = content[opportunity_table].pop(elt)
-        new_content[&#34;Variables&#34;] = content[variables_table].pop(&#34;Variable&#34;)
-        new_content[&#34;Coordinates and Dimensions&#34;] = content[variables_table].pop(&#34;Coordinate or Dimension&#34;)
-        new_content[&#34;Variable Comments&#34;] = content[variables_table].pop(&#34;Comment&#34;)
-        if &#34;Modeling Realm&#34; in content[variables_table]:
-            new_content[&#34;Modelling Realm&#34;] = content[variables_table].pop(&#34;Modeling Realm&#34;)
-        for elt in list(content[variables_table]):
-            new_content[elt] = content[variables_table].pop(elt)
-        new_content[&#34;Physical Parameter Comments&#34;] = content[physical_parameters_table].pop(&#34;Comment&#34;)
-        new_content[&#34;Physical Parameters&#34;] = content[physical_parameters_table].pop(&#34;Physical Parameter&#34;)
-        new_content[&#34;CF Standard Names&#34;] = content[physical_parameters_table].pop(&#34;CF Standard Name&#34;)
-        for elt in list(content[physical_parameters_table]):
-            new_content[elt] = content[physical_parameters_table].pop(elt)
-        # Correct record id through several bases
-        old_variables_ids = {record_id: value[&#34;Compound Name&#34;] for (record_id, value) in
-                             old_variables_content[&#34;records&#34;].items()}
-        new_variables_ids = {value[&#34;Compound Name&#34;]: record_id for (record_id, value) in
-                             new_content[&#34;Variables&#34;][&#34;records&#34;].items()}
-        for var_group_id in list(new_content[&#34;Variable Group&#34;][&#34;records&#34;]):
-            new_content[&#34;Variable Group&#34;][&#34;records&#34;][var_group_id][&#34;Variables&#34;] = \
-                [new_variables_ids[old_variables_ids[elt]] for elt in
-                 new_content[&#34;Variable Group&#34;][&#34;records&#34;][var_group_id][&#34;Variables&#34;]]
-        old_physical_parameters_ids = {record_id: value[&#34;Name&#34;] for (record_id, value) in
-                                       old_physical_parameters_content[&#34;records&#34;].items()}
-        new_physical_parameters_ids = {value[&#34;Name&#34;]: record_id for (record_id, value) in
-                                       new_content[&#34;Physical Parameters&#34;][&#34;records&#34;].items()}
-        for var_id in list(new_content[&#34;Variables&#34;][&#34;records&#34;]):
-            if &#34;Physical Parameter&#34; not in new_content[&#34;Variables&#34;][&#34;records&#34;][var_id]:
-                logger.debug(f&#34;Remove Variables record ID {var_id}, no &#39;Physical Parameter&#39; field defined.&#34;)
-                del new_content[&#34;Variables&#34;][&#34;records&#34;][var_id]
-            else:
-                new_content[&#34;Variables&#34;][&#34;records&#34;][var_id][&#34;Physical Parameter&#34;] = \
-                    [new_physical_parameters_ids[old_physical_parameters_ids[elt]] for elt in
-                     new_content[&#34;Variables&#34;][&#34;records&#34;][var_id][&#34;Physical Parameter&#34;]]
-        # Harmonise record ids through bases
-        logger.info(&#34;Harmonise bases content record ids&#34;)
-        content_str = json.dumps(new_content)
-        for id in sorted(list(old_variables_ids)):
-            content_str = re.sub(f&#39;&#34;{id}&#34;&#39;, f&#39;&#34;{new_variables_ids[old_variables_ids[id]]}&#34;&#39;, content_str)
-        for id in sorted(list(old_physical_parameters_ids)):
-            content_str = re.sub(f&#39;&#34;{id}&#34;&#39;, f&#39;&#34;{new_physical_parameters_ids[old_physical_parameters_ids[id]]}&#34;&#39;,
-                                 content_str)
-        new_content = json.loads(content_str)
-        # Return the content
-        return {&#34;Data Request&#34;: new_content}
-    elif isinstance(content, dict):
-        logger.error(f&#34;Deal with several bases dict.&#34;)
-        raise ValueError(f&#34;Deal with several bases dict.&#34;)
-    else:
-        logger.error(f&#34;Deal with dict types, not {type(content).__name__}&#34;)
-        raise TypeError(f&#34;Deal with dict types, not {type(content).__name__}&#34;)</code></pre>
-</details>
-<div class="desc"><p>Transform the several bases export content into something similar to a one base export content.
-To do that, the content of the different entries of the input dictionary are copied to a single dictionary.
-The record ids are also harmonised through the different bases.
-:param dict content: input dictionary containing the different databases
-:return dict: dictionary containing the content of the different databases</p></div>
 </dd>
 </dl>
 </section>
@@ -745,6 +653,7 @@ The record ids are also harmonised through the different bases.
 <li><code><a title="data_request_api.stable.content.dump_transformation.correct_key_string" href="#data_request_api.stable.content.dump_transformation.correct_key_string">correct_key_string</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.distribute_on_entry" href="#data_request_api.stable.content.dump_transformation.distribute_on_entry">distribute_on_entry</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.filter_content" href="#data_request_api.stable.content.dump_transformation.filter_content">filter_content</a></code></li>
+<li><code><a title="data_request_api.stable.content.dump_transformation.get_transform_settings" href="#data_request_api.stable.content.dump_transformation.get_transform_settings">get_transform_settings</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.get_transformed_content" href="#data_request_api.stable.content.dump_transformation.get_transformed_content">get_transformed_content</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.merge_useful_keys" href="#data_request_api.stable.content.dump_transformation.merge_useful_keys">merge_useful_keys</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.remove_unused_keys" href="#data_request_api.stable.content.dump_transformation.remove_unused_keys">remove_unused_keys</a></code></li>
@@ -754,8 +663,7 @@ The record ids are also harmonised through the different bases.
 <li><code><a title="data_request_api.stable.content.dump_transformation.split_content_one_base" href="#data_request_api.stable.content.dump_transformation.split_content_one_base">split_content_one_base</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.tidy_content" href="#data_request_api.stable.content.dump_transformation.tidy_content">tidy_content</a></code></li>
 <li><code><a title="data_request_api.stable.content.dump_transformation.transform_content" href="#data_request_api.stable.content.dump_transformation.transform_content">transform_content</a></code></li>
-<li><code><a title="data_request_api.stable.content.dump_transformation.transform_content_one_base" href="#data_request_api.stable.content.dump_transformation.transform_content_one_base">transform_content_one_base</a></code></li>
-<li><code><a title="data_request_api.stable.content.dump_transformation.transform_content_three_bases" href="#data_request_api.stable.content.dump_transformation.transform_content_three_bases">transform_content_three_bases</a></code></li>
+<li><code><a title="data_request_api.stable.content.dump_transformation.transform_content_inner" href="#data_request_api.stable.content.dump_transformation.transform_content_inner">transform_content_inner</a></code></li>
 </ul>
 </li>
 </ul>
