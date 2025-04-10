@@ -228,8 +228,10 @@ class DreqTable:
         if attr in self.attr2field:
             records = [record for record in self.records.values() if getattr(record, attr) == value]
             if len(records) == 0:
-                raise Exception(f'No record found for {attr}={value}')
+                raise ValueError(f'No record found for {attr}={value}')
             if unique:
+                if len(records) != 1:
+                    raise ValueError(f'{attr}={value} is not unique (identified {len(records)} records)')
                 return records[0]
             else:
                 return records

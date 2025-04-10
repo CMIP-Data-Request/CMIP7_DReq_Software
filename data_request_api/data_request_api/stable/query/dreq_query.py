@@ -147,7 +147,7 @@ def create_dreq_tables_for_request(content, dreq_version, consolidated=True):
         if content_type == 'working':
             base_name = 'Data Request Opportunities (Public)'
         elif content_type == 'version':
-            base_name = version_base_name()
+            base_name = version_base_name(dreq_version)
         else:
             raise ValueError('Unknown content type: ' + content_type)
     # base_name = 'Data Request'
@@ -228,7 +228,7 @@ def create_dreq_tables_for_request(content, dreq_version, consolidated=True):
     return base
 
 
-def create_dreq_tables_for_variables(content, consolidated=True):
+def create_dreq_tables_for_variables(content, dreq_version, consolidated=True):
     '''
     For the "data" part of the data request content (Variables, Cell Methods etc),
     render raw airtable export content as DreqTable objects.
@@ -249,7 +249,7 @@ def create_dreq_tables_for_variables(content, consolidated=True):
         if content_type == 'working':
             base_name = 'Data Request Variables (Public)'
         elif content_type == 'version':
-            base_name = version_base_name()
+            base_name = version_base_name(dreq_version)
         else:
             raise ValueError('Unknown content type: ' + content_type)
     base = content[base_name]
