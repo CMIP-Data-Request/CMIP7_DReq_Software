@@ -7,7 +7,7 @@ Output file names (filepath) are set below.
 
 import argparse
 
-import data_request_api.stable.content.dreq_content as dc
+import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 from data_request_api import version as api_version
 

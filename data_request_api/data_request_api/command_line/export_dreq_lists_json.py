@@ -10,7 +10,7 @@ import argparse
 from collections import OrderedDict
 
 import data_request_api
-import data_request_api.stable.content.dreq_content as dc
+import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 
 
