@@ -77,38 +77,8 @@ def get_table_id2name(base):
     return table_id2name
 
 
-def _determine_content_type(content):
-    '''
-    * LIKELY TO DEPRECATE, SINCE CONFIG FILE SHOULD NOW TAKE CARE OF THIS *
-
-    Internal function to distinguish the type of airtable export we are working with, based on the input dict.
-
-    Parameters
-    ----------
-    content : dict
-        Dict containing data request content exported from airtable.
-
-    Returns
-    -------
-    str indicating type of content:
-
-        'raw': 3 bases containing the latest working version of data request content,
-               or 4 bases if the Schema table has been added to the export.
-
-        'release': 1 base containing the content of a tagged data request version.
-    '''
-    n = len(content)
-    if n in [3, 4]:
-        content_type = 'raw'
-    elif n == 1:
-        content_type = 'release'
-    else:
-        raise ValueError('Unable to determine type of data request content in the exported json file')
-    return content_type
-
-
 @append_kwargs_from_config
-def _get_base(content, dreq_version, consolidate=True, purpose='request', export='release', **kwargs):
+def _get_base_dict(content, dreq_version, purpose='request', **kwargs):
     '''
     Return the appropriate entry from the 'content' input dict, which is a dict
     representing the content from an airtable base.
@@ -134,25 +104,37 @@ def _get_base(content, dreq_version, consolidate=True, purpose='request', export
     Dict 'base' whose keys are table names and values are dicts with table content.
     (The base name from the input 'content' dict no longer appears.)
     '''
+    # defaults
+    CONFIG = {'consolidate' : True, 'export' : 'release'}
+    # override with input args, if given
+    CONFIG.update(kwargs)
+    consolidate = CONFIG['consolidate']
+    export = CONFIG['export']
+
     if not isinstance(content, dict):
         raise TypeError('Input should be dict from airtable export json file')
     if consolidate:
+        # For the consolidated export, there's only one base.
+        # This is because 1) a release base is already just one base, and 2) a raw base
+        # is 3 or 4 bases that have been turned into one base by the consolidation.
         base_name = 'Data Request'
         content_type = 'consolidated'
     else:
         # This is for backward compatibility, from before consolidation was available,
-        # or in case there is an issue with the consolidation.
-        # content_type = _determine_content_type(content)
+        # but may be useful if it's necessary to turn off the consolidation.
         content_type = export
-        if content_type == 'raw':
+        if content_type == 'release':
+            # For the release export, there's only one base.
+            base_name = f'Data Request {dreq_version}'
+        elif content_type == 'raw':
+            # For the raw export, there is more than one base.
+            # Which one we return depends on the intention.
             if purpose == 'request':
                 base_name = 'Data Request Opportunities (Public)'
             elif purpose == 'variables':
                 base_name = 'Data Request Variables (Public)'
             else:
                 raise ValueError(f'What kind of raw base is needed? Received: {purpose}')
-        elif content_type == 'release':
-            base_name = f'Data Request {dreq_version}'
         else:
             raise ValueError('Unknown content type: ' + content_type)
     base = content[base_name]
@@ -186,7 +168,8 @@ def create_dreq_tables_for_request(content, dreq_version):
     -------
     Dict 'base' whose keys are table names and values are DreqTable objects.
     '''
-    base, content_type = _get_base(content, dreq_version, purpose='request')
+    base, content_type = _get_base_dict(content, dreq_version, purpose='request')
+    # base, content_type = _get_base_dict(content, dreq_version)
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -197,7 +180,7 @@ def create_dreq_tables_for_request(content, dreq_version):
     # Change names of tables if needed
     # (insulates downstream code from upstream name changes that don't affect functionality)
     change_table_names = {}
-    if content_type == 'working':
+    if content_type == 'raw':
         change_table_names = {
             # old name : new name
             'Experiment': 'Experiments',
@@ -216,7 +199,7 @@ def create_dreq_tables_for_request(content, dreq_version):
     dreq_opps.rename_attr('title_of_opportunity', 'title')  # rename title attribute for brevity in downstream code
     for opp in dreq_opps.records.values():
         opp.title = opp.title.strip()
-    if content_type == 'working':
+    if content_type == 'raw':
         if 'variable_groups' not in dreq_opps.attr2field:
             # Try alternate names for the latest variable groups
             try_vg_attr = []
@@ -263,7 +246,7 @@ def create_dreq_tables_for_request(content, dreq_version):
     return base
 
 
-def create_dreq_tables_for_variables(content, dreq_version, consolidated=True):
+def create_dreq_tables_for_variables(content, dreq_version):
     '''
     For the "data" part of the data request content (Variables, Cell Methods etc),
     render airtable export content as DreqTable objects.
@@ -271,7 +254,7 @@ def create_dreq_tables_for_variables(content, dreq_version, consolidated=True):
     For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().
 
     '''
-    base, content_type = _get_base(content, dreq_version, purpose='variables')
+    base, content_type = _get_base_dict(content, dreq_version, purpose='variables')
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -282,7 +265,7 @@ def create_dreq_tables_for_variables(content, dreq_version, consolidated=True):
     # Change names of tables if needed
     # (insulates downstream code from upstream name changes that don't affect functionality)
     change_table_names = {}
-    if content_type == 'working':
+    if content_type == 'raw':
         change_table_names = {
             # old name : new name
             'Variable': 'Variables',
@@ -499,9 +482,26 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
     return opp_vars
 
 
+def _get_base_dreq_tables(content, dreq_version, purpose='request'):
+    if isinstance(content, dict):
+        if all([isinstance(table, DreqTable) for table in content.values()]):
+            # tables have already been rendered as DreqTable objects
+            base = content
+        else:
+            # render tables as DreqTable objects
+            if purpose == 'request':
+                base = create_dreq_tables_for_request(content, dreq_version)
+            # elif purpose == 'variables':  # only needed for raw export?
+            #     base = create_dreq_tables_for_variables(content, dreq_version)
+            else:
+                raise ValueError(f'What kind of dreq tables are needed? Received: {purpose}')
+    else:
+        raise TypeError('Expect dict as input')
+    return base
+
 def get_requested_variables(content, dreq_version,
                             use_opps='all', priority_cutoff='Low',
-                            verbose=True, consolidated=True, check_core_variables=True):
+                            verbose=True, check_core_variables=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -540,15 +540,7 @@ def get_requested_variables(content, dreq_version,
         }
     }
     '''
-    if isinstance(content, dict):
-        if all([isinstance(table, DreqTable) for table in content.values()]):
-            # tables have already been rendered as DreqTable objects
-            base = content
-        else:
-            # render tables as DreqTable objects
-            base = create_dreq_tables_for_request(content, dreq_version)
-    else:
-        raise TypeError('Expect dict as input')
+    base = _get_base_dreq_tables(content, dreq_version, purpose='request')
 
     dreq_tables = {
         'opps': base['Opportunity'],
@@ -640,8 +632,7 @@ def get_requested_variables(content, dreq_version,
 
 
 def get_variables_metadata(content, dreq_version,
-                           compound_names=None, cmor_tables=None, cmor_variables=None,
-                           consolidated=True):
+                           compound_names=None, cmor_tables=None, cmor_variables=None):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
 
@@ -671,15 +662,7 @@ def get_variables_metadata(content, dreq_version,
         Dictionary indexed by unique variable name, giving metadata for each variable.
         Also includes a header giving info on provenance of the info (data request version used, etc).
     '''
-    if isinstance(content, dict):
-        if all([isinstance(table, DreqTable) for table in content.values()]):
-            # tables have already been rendered as DreqTable objects
-            base = content
-        else:
-            # render tables as DreqTable objects
-            base = create_dreq_tables_for_request(content, dreq_version, consolidated=consolidated)
-    else:
-        raise TypeError('Expect dict as input')
+    base = _get_base_dreq_tables(content, dreq_version, purpose='request')
 
     # Some variables in these dreq versions lack a 'frequency' attribute; use the legacy CMIP6 frequency for them
     dreq_versions_substitute_cmip6_freq = ['v1.0', 'v1.1']
