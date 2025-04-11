@@ -13,12 +13,12 @@ First create an environment with the required dependencies:
 (replacing my_dreq_env with your preferred env name). Then activate it and run the script:
 
     conda activate my_dreq_env
-    python workflow_example.py
+    python workflow_example2.py
 
 will load the data request content and save a json file of requested variables in the current dir.
 To run interactively in ipython:
 
-    run -i workflow_example.py
+    run -i workflow_example2.py
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 

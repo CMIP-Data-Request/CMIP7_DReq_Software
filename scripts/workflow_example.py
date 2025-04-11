@@ -18,7 +18,7 @@ To run interactively in ipython:
 
     run -i workflow_example.py
 
-Note that a command-line equivalent of this script is also available in the scripts/ folder.
+Note that a command-line equivalent of this script is also available in the command_line/ folder.
 For usage info, do:
 
     ./export_dreq_lists_json.py -h    
@@ -43,17 +43,18 @@ reload(dq)
 use_dreq_version = 'v1.2'
 
 # Download specified version of data request content (if not locally cached)
-dc.retrieve(use_dreq_version)
+#MPM_not_needed dc.retrieve(use_dreq_version)
 # Load content into python dict
 content = dc.load(use_dreq_version)
 
 # Specify opportunities that modelling group chooses to support
 # This can be a subset:
 use_opps = []
-use_opps.append('Baseline Climate Variables for Earth System Modelling')
-use_opps.append('Synoptic systems')
+#use_opps.append('Baseline Climate Variables for Earth System Modelling')
+#use_opps.append('Synoptic systems')
+use_opps.append('Energy System Impacts')
 # Or, to support all opportunities in the data request:
-use_opps = 'all'
+#use_opps = 'all'
 
 # Get consolidated list of requested variables that supports these opportunities
 dq.DREQ_VERSION = use_dreq_version
