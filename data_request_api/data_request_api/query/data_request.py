@@ -10,7 +10,7 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 import argparse
 import copy
 import os
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 from data_request_api.utilities.logger import get_logger, change_log_file, change_log_level
 from data_request_api.content.dump_transformation import transform_content
@@ -1218,22 +1218,29 @@ class DataRequest(object):
                 content[line_title] = {columns_title_dict[elt.id]: "x" for elt in filtered_columns}
 
         logger.debug("Format summary")
+        if regroup:
+            similar_columns = defaultdict(list)
+            for column_data_title in columns_title_list:
+                similar_columns[tuple([content[line_title].get(column_data_title, "")
+                                       for line_title in lines_title_list])].append(column_data_title)
+            new_columns_title_list = list()
+            for similar_column in sorted(list(similar_columns), reverse=True, key=lambda x: (x.count("x"), x)):
+                new_columns_title_list.extend(similar_columns[similar_column])
+            columns_title_list = new_columns_title_list
+            similar_lines = defaultdict(list)
+            for line_data_title in lines_title_list:
+                similar_lines[tuple([content[line_data_title].get(column_title, "")
+                                     for column_title in columns_title_list])].append(line_data_title)
+            new_lines_title_list = list()
+            for similar_line in sorted(list(similar_lines), reverse=True, key=lambda x: (x.count("x"), x)):
+                new_lines_title_list.extend(similar_lines[similar_line])
+            lines_title_list = new_lines_title_list
+
         rep = list()
         rep.append([table_title, ] + columns_title_list)
         for line_data_title in lines_title_list:
             rep.append([line_data_title, ] +
                        [content[line_data_title].get(column_title, "") for column_title in columns_title_list])
-
-        if regroup:
-            new_rep = list()
-            new_rep.append(rep.pop(0))
-            similarity_dict = defaultdict(list)
-            for line in rep:
-                similarity_dict[tuple(line[1:])].append(line)
-            for elt in sorted(list(similarity_dict), reverse=True):
-                new_rep.extend(similarity_dict[elt])
-            rep = new_rep
-
 
         logger.debug("Write summary")
         write_csv_output_file_content(output_file, rep, **kwargs)

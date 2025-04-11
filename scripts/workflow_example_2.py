@@ -94,15 +94,27 @@ def get_information_from_data_request(version, output_dir, **kwargs):
                       filtering_requests={"max_priority_level": "High"},
                       sorting_line=["physical_parameter", "frequency", "name"],
                       output_file=os.sep.join([output_dir, "var_per_op_regrouped_filtered.csv"]), regroup=True)
+    DR.export_summary(lines_data="variables", columns_data="opportunities",
+                      filtering_requests={"max_priority_level": "High"},
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      output_file=os.sep.join([output_dir, "var_per_op_filtered.csv"]))
     DR.export_summary(lines_data="variables", columns_data="experiments",
                       sorting_line=["physical_parameter", "frequency", "name"],
                       filtering_requests={"max_priority_level": "High"},
                       output_file=os.sep.join([output_dir, "var_per_exp_regrouped_filtered.csv"]), regroup=True)
+    DR.export_summary(lines_data="variables", columns_data="experiments",
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      filtering_requests={"max_priority_level": "High"},
+                      output_file=os.sep.join([output_dir, "var_per_exp_filtered.csv"]))
     DR.export_summary("experiments", "opportunities", os.sep.join([output_dir, "exp_per_op.csv"]))
     DR.export_summary(lines_data="experiments", columns_data="opportunities",
                       sorting_line=["physical_parameter", "frequency", "name"],
                       filtering_requests={"max_priority_level": "High"},
                       output_file=os.sep.join([output_dir, "exp_per_op_regrouped_filtered.csv"]), regroup=True)
+    DR.export_summary(lines_data="experiments", columns_data="opportunities",
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      filtering_requests={"max_priority_level": "High"},
+                      output_file=os.sep.join([output_dir, "exp_per_op_filtered.csv"]))
     DR.export_summary("variables", "spatial_shape", os.sep.join([output_dir, "var_per_spsh.csv"]))
     DR.export_data("opportunities", os.sep.join([output_dir, "op.csv"]),
                    export_columns_request=["name", "lead_theme", "description"])
