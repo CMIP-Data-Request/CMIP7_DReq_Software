@@ -1242,17 +1242,6 @@ class DataRequest(object):
             rep.append([line_data_title, ] +
                        [content[line_data_title].get(column_title, "") for column_title in columns_title_list])
 
-        if regroup:
-            new_rep = list()
-            new_rep.append(rep.pop(0))
-            similarity_dict = defaultdict(list)
-            for line in rep:
-                similarity_dict[tuple(line[1:])].append(line)
-            for elt in sorted(list(similarity_dict), reverse=True):
-                new_rep.extend(similarity_dict[elt])
-            rep = new_rep
-
-
         logger.debug("Write summary")
         write_csv_output_file_content(output_file, rep, **kwargs)
 
