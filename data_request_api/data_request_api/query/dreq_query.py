@@ -4,7 +4,9 @@ E.g., get variables requested for each experiment.
 
 The module has two basic sections:
 
-1) Functions that take the data request content and convert it to python objects.
+1) Functions that take the data request content and convert it to python objects
+   (instances of classes defined in dreq_classes.py).
+
 2) Functions that interrogate the data request, usually using output from (1) as their input.
 
 '''
@@ -16,6 +18,7 @@ from collections import OrderedDict
 
 from data_request_api.query.dreq_classes import (
     DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
+from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.tools import write_csv_output_file_content
 
 # Version of software (python API):
@@ -42,38 +45,6 @@ def get_dreq_version_tuple(version:str):
             raise ValueError('Ambiguous version string: ' + version)
         ver_num_str = ver_num[0]
         return tuple(map(int, ver_num_str.split('.')))
-
-
-def get_content_type(content):
-    '''
-    Internal function to distinguish the type of airtable export we are working with, based on the input dict.
-
-    Parameters
-    ----------
-    content : dict
-        Dict containing data request content exported from airtable.
-
-    Returns
-    -------
-    str indicating type of content:
-
-        'working' : 3 bases containing the latest working version of data request content,
-                    or 4 bases if the Schema table has been added to the export.
-
-        'version' : 1 base containing the content of a tagged data request version.
-    '''
-    n = len(content)
-    if n in [3, 4]:
-        content_type = 'working'
-    elif n == 1:
-        content_type = 'version'
-    else:
-        raise ValueError('Unable to determine type of data request content in the exported json file')
-    return content_type
-
-
-def version_base_name(dreq_version):
-    return f'Data Request {dreq_version}'
 
 
 def get_priority_levels():
@@ -106,17 +77,99 @@ def get_table_id2name(base):
     return table_id2name
 
 
-def create_dreq_tables_for_request(content, dreq_version, consolidated=True):
+def _determine_content_type(content):
+    '''
+    * LIKELY TO DEPRECATE, SINCE CONFIG FILE SHOULD NOW TAKE CARE OF THIS *
+
+    Internal function to distinguish the type of airtable export we are working with, based on the input dict.
+
+    Parameters
+    ----------
+    content : dict
+        Dict containing data request content exported from airtable.
+
+    Returns
+    -------
+    str indicating type of content:
+
+        'raw': 3 bases containing the latest working version of data request content,
+               or 4 bases if the Schema table has been added to the export.
+
+        'release': 1 base containing the content of a tagged data request version.
+    '''
+    n = len(content)
+    if n in [3, 4]:
+        content_type = 'raw'
+    elif n == 1:
+        content_type = 'release'
+    else:
+        raise ValueError('Unable to determine type of data request content in the exported json file')
+    return content_type
+
+
+@append_kwargs_from_config
+def _get_base(content, dreq_version, consolidate=True, purpose='request', export='release', **kwargs):
+    '''
+    Return the appropriate entry from the 'content' input dict, which is a dict
+    representing the content from an airtable base.
+
+    Parameters
+    ----------
+    content : dict
+        Airtable export (from json file). Dict is keyed by base name, for example:
+        {'Data Request Opportunities (Public)' : {
+            'Opportunity' : {...},
+            ...
+            },
+         'Data Request Variables (Public)' : {
+            'Variables' : {...}
+            ...
+            }
+        }
+    dreq_version : str
+        Version string identifier for Data Request Content
+    
+    Returns
+    -------
+    Dict 'base' whose keys are table names and values are dicts with table content.
+    (The base name from the input 'content' dict no longer appears.)
+    '''
+    if not isinstance(content, dict):
+        raise TypeError('Input should be dict from airtable export json file')
+    if consolidate:
+        base_name = 'Data Request'
+        content_type = 'consolidated'
+    else:
+        # This is for backward compatibility, from before consolidation was available,
+        # or in case there is an issue with the consolidation.
+        # content_type = _determine_content_type(content)
+        content_type = export
+        if content_type == 'raw':
+            if purpose == 'request':
+                base_name = 'Data Request Opportunities (Public)'
+            elif purpose == 'variables':
+                base_name = 'Data Request Variables (Public)'
+            else:
+                raise ValueError(f'What kind of raw base is needed? Received: {purpose}')
+        elif content_type == 'release':
+            base_name = f'Data Request {dreq_version}'
+        else:
+            raise ValueError('Unknown content type: ' + content_type)
+    base = content[base_name]
+    return base, content_type
+
+
+def create_dreq_tables_for_request(content, dreq_version):
     '''
     For the "request" part of the data request content (Opportunities, Variable Groups, etc),
-    render raw airtable export content as DreqTable objects.
+    render airtable export content as DreqTable objects.
 
     For the "data" part of the data request, the corresponding function is create_dreq_tables_for_variables().
 
     Parameters
     ----------
     content : dict
-        Raw airtable export. Dict is keyed by base name, for example:
+        Airtable export (from json file). Dict is keyed by base name, for example:
         {'Data Request Opportunities (Public)' : {
             'Opportunity' : {...},
             ...
@@ -131,27 +184,9 @@ def create_dreq_tables_for_request(content, dreq_version, consolidated=True):
 
     Returns
     -------
-    Dict whose keys are table names and values are DreqTable objects.
-    (The base name from the input 'content' dict no longer appears.)
+    Dict 'base' whose keys are table names and values are DreqTable objects.
     '''
-    if not isinstance(content, dict):
-        raise TypeError('Input should be dict from raw airtable export json file')
-
-    # Content is dict loaded from raw airtable export json file
-    if consolidated:
-        base_name = version_base_name(dreq_version)
-        content_type = 'consolidated'
-    else:
-        # for backward compatibility
-        content_type = get_content_type(content)
-        if content_type == 'working':
-            base_name = 'Data Request Opportunities (Public)'
-        elif content_type == 'version':
-            base_name = version_base_name(dreq_version)
-        else:
-            raise ValueError('Unknown content type: ' + content_type)
-    # base_name = 'Data Request'
-    base = content[base_name]
+    base, content_type = _get_base(content, dreq_version, purpose='request')
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -231,28 +266,12 @@ def create_dreq_tables_for_request(content, dreq_version, consolidated=True):
 def create_dreq_tables_for_variables(content, dreq_version, consolidated=True):
     '''
     For the "data" part of the data request content (Variables, Cell Methods etc),
-    render raw airtable export content as DreqTable objects.
+    render airtable export content as DreqTable objects.
 
     For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().
 
     '''
-    if not isinstance(content, dict):
-        raise TypeError('Input should be dict from raw airtable export json file')
-
-    # Content is dict loaded from raw airtable export json file
-    if consolidated:
-        base_name = 'Data Request'
-        content_type = 'consolidated'
-    else:
-        # for backward compatibility
-        content_type = get_content_type(content)
-        if content_type == 'working':
-            base_name = 'Data Request Variables (Public)'
-        elif content_type == 'version':
-            base_name = version_base_name(dreq_version)
-        else:
-            raise ValueError('Unknown content type: ' + content_type)
-    base = content[base_name]
+    base, content_type = _get_base(content, dreq_version, purpose='variables')
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -278,8 +297,7 @@ def create_dreq_tables_for_variables(content, dreq_version, consolidated=True):
     return base
 
 ###############################################################################
-# Functions to interrogate the data request, e.g. get variables requested for
-# each experiment.
+# Functions to query the data request, e.g. get variables requested for each experiment.
 
 
 def get_opp_ids(use_opps, dreq_opps, verbose=False, quality_control=True):
@@ -528,7 +546,7 @@ def get_requested_variables(content, dreq_version,
             base = content
         else:
             # render tables as DreqTable objects
-            base = create_dreq_tables_for_request(content, dreq_version, consolidated=consolidated)
+            base = create_dreq_tables_for_request(content, dreq_version)
     else:
         raise TypeError('Expect dict as input')
 
@@ -762,7 +780,7 @@ def get_variables_metadata(content, dreq_version,
             # print('using CMIP6 frequency for ' + var.compound_name)
 
         if isinstance(var.frequency[0], str):
-            # retain this option for non-consolidated raw export?
+            # retain this option for non-consolidated airtable export?
             assert isinstance(var.frequency, list)
             frequency = var.frequency[0]
         else:
@@ -815,7 +833,7 @@ def get_variables_metadata(content, dreq_version,
         standard_name_proposed = ''
         if hasattr(phys_param, 'cf_standard_name'):
             if isinstance(phys_param.cf_standard_name, str):
-                # retain this option for non-consolidated raw export?
+                # retain this option for non-consolidated airtable export?
                 standard_name = phys_param.cf_standard_name
             else:
                 link = phys_param.cf_standard_name[0]
