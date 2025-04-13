@@ -11,7 +11,7 @@ from data_request_api.utilities.logger import (
 )
 
 # Print consolidation log and full list of unmatched records
-long_summary = False
+long_summary = True
 
 change_log_file(default=True)
 if long_summary:
@@ -114,6 +114,7 @@ if long_summary:
     print(f"{dete}")
     if dete:
         print()
+
 
 def compare_dicts(raw, rel):
     print()

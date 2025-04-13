@@ -93,7 +93,7 @@ mapping_table = {
 mapping_table = {
     "CF Standard Names": {
         "source_base": "Data Request Physical Parameters (Public)",
-        "source_table": ["CF Standard Name"],
+        "source_table": ["CF Standard Names", "CF Standard Name"],
         "internal_mapping": {},
         "internal_filters": {},
         "drop_keys": ["Comments"],
@@ -158,8 +158,17 @@ mapping_table = {
     },
     "Coordinates and Dimensions": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": ["Coordinate or Dimension"],
-        "internal_mapping": {},
+        "source_table": ["Coordinates and Dimensions", "Coordinate or Dimension"],
+        "internal_mapping": {
+            "Variables": {
+                "base_copy_of_table": False,
+                "base": "Data Request Variables (Public)",
+                "table": "Variables",
+                "operation": "split",
+                "map_by_key": ["CMIP6 Compound Name", "Compound Name", "Compound name"],
+                "entry_type": "name",
+            },
+        },
         "internal_filters": {},
         "drop_keys": ["Structure", "Variables (from Spatial shape)"],
         "internal_consistency": {
@@ -190,7 +199,24 @@ mapping_table = {
     "ESM-BCV 1.4": {
         "source_base": "Data Request Variables (Public)",
         "source_table": ["ESM-BCV 1.4", "Grid view", "ESM-BCV 1.3"],
-        "internal_mapping": {},
+        "internal_mapping": {
+            "CF Standard Name (from Physical Parameter) (from Variables)": {
+                "base_copy_of_table": False,
+                "base": "Data Request Physical Parameters (Public)",
+                "table": "CF Standard Names",
+                "operation": "split",
+                "map_by_key": ["name"],
+                "entry_type": "name",
+            },
+            "Physical Parameter (from Variables)": {
+                "base_copy_of_table": False,
+                "base": "Data Request Physical Parameters (Public)",
+                "table": "Physical Parameters",
+                "operation": "split",
+                "map_by_key": ["Name"],
+                "entry_type": "name",
+            },
+        },
         "internal_filters": {},
         "drop_keys": ["Modeling Realm (from CMOR Variables)", "Structure Title (from CMOR Variables)", "V1.1"],
         "internal_consistency": {
@@ -232,8 +258,17 @@ mapping_table = {
     },
     "Experiments": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": ["Experiment"],
-        "internal_mapping": {},
+        "source_table": ["Experiments", "Experiment"],
+        "internal_mapping": {
+            "Unique list of variables attached to Opportunity (linked) (from Opportunity)": {
+                "base_copy_of_table": False,
+                "base": "Data Request Variables (Public)",
+                "table": "Variables",
+                "operation": "split",
+                "map_by_key": ["CMIP6 Compound Name", "Compound Name", "Compound name"],
+                "entry_type": "name",
+            }
+        },
         "internal_filters": {},
         "drop_keys": [],
         "internal_consistency": {
@@ -250,7 +285,7 @@ mapping_table = {
     },
     "MIPs": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": ["MIP"],
+        "source_table": ["MIPs", "MIP"],
         "internal_mapping": {},
         "internal_filters": {},
         "drop_keys": [],
@@ -258,7 +293,7 @@ mapping_table = {
     },
     "Modelling Realm": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": ["Modeling Realm"],
+        "source_table": ["Modelling Realm", "Modeling Realm"],
         "internal_mapping": {},
         "internal_filters": {},
         "drop_keys": [],
@@ -310,8 +345,17 @@ mapping_table = {
     },
     "Physical Parameters": {
         "source_base": "Data Request Physical Parameters (Public)",
-        "source_table": ["Physical Parameter"],
-        "internal_mapping": {},
+        "source_table": ["Physical Parameters", "Physical Parameter"],
+        "internal_mapping": {
+            "Variables": {
+                "base_copy_of_table": False,
+                "base": "Data Request Variables (Public)",
+                "table": "Variables",
+                "operation": "split",
+                "map_by_key": ["CMIP6 Compound Name", "Compound Name", "Compound name"],
+                "entry_type": "name",
+            }
+        },
         "internal_filters": {},
         # "Opportunity Status (from CMIP7 Variable Groups) (from Variables) (from Link to back sync)": {
         #    "aliases": [],
@@ -337,7 +381,7 @@ mapping_table = {
     },
     "Priority Level": {
         "source_base": "Data Request Opportunities (Public)",
-        "source_table": ["Priority level"],
+        "source_table": ["Priority Level", "Priority level"],
         "internal_mapping": {},
         "internal_filters": {},
         "drop_keys": [],
@@ -345,7 +389,7 @@ mapping_table = {
     },
     "Ranking": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": ["Ranking Synced"],
+        "source_table": ["Ranking", "Ranking Synced"],
         "internal_mapping": {},
         "internal_filters": {},
         "drop_keys": [],
@@ -383,14 +427,22 @@ mapping_table = {
         "source_base": "Data Request Opportunities (Public)",
         "source_table": ["Variable Group"],
         "internal_mapping": {
+            "Experiment Groups (from Final Opportunity selection)": {
+                "base_copy_of_table": False,
+                "base": "Data Request Opportunities (Public)",
+                "table": "Experiment Group",
+                "operation": "split",
+                "map_by_key": ["Name"],
+                "entry_type": "name",
+            },
             "Variables": {
                 "base_copy_of_table": "Variables",
                 "base": "Data Request Variables (Public)",
-                "table": "Variable",
+                "table": "Variables",
                 "operation": "",
                 "map_by_key": ["UID", "Compound Name"],
                 "entry_type": "record_id",
-            }
+            },
         },
         "internal_filters": {
             "Final Opportunity selection": {
@@ -426,8 +478,16 @@ mapping_table = {
     },
     "Variables": {
         "source_base": "Data Request Variables (Public)",
-        "source_table": ["Variable"],
+        "source_table": ["Variable", "Variables"],
         "internal_mapping": {
+            "ESM-BCV 1.4": {
+                "base_copy_of_table": False,
+                "base": "Data Request Variables (Public)",
+                "table": "ESM-BCV 1.4",
+                "operation": "split",
+                "map_by_key": ["Name"],
+                "entry_type": "name",
+            },
             "CMIP7 Variable Groups": {
                 "base_copy_of_table": False,
                 "base": "Data Request Opportunities (Public)",
@@ -439,7 +499,7 @@ mapping_table = {
             "Physical Parameter": {
                 "base_copy_of_table": "Physical Parameter",
                 "base": "Data Request Physical Parameters (Public)",
-                "table": "Physical Parameter",
+                "table": "Physical Parameters",
                 "operation": "",
                 "map_by_key": ["UID", "Name"],
                 "entry_type": "record_id",
@@ -447,9 +507,33 @@ mapping_table = {
             "CF Standard Name (from MIP Variables)": {
                 "base_copy_of_table": False,
                 "base": "Data Request Physical Parameters (Public)",
-                "table": "CF Standard Name",
+                "table": "CF Standard Names",
                 "operation": "",
                 "map_by_key": ["name"],
+                "entry_type": "name",
+            },
+            "List of Experiments": {
+                "base_copy_of_table": False,
+                "base": "Data Request Opportunities (Public)",
+                "table": "Experiments",
+                "operation": "split",
+                "map_by_key": [" Experiment", "Experiment"],
+                "entry_type": "name",
+            },
+            "Experiment Groups (from Opportunity)": {
+                "base_copy_of_table": False,
+                "base": "Data Request Opportunities (Public)",
+                "table": "Experiment Group",
+                "operation": "split",
+                "map_by_key": ["Name"],
+                "entry_type": "name",
+            },
+            "Opportunity (from CMIP7 Variable Groups)": {
+                "base_copy_of_table": False,
+                "base": "Data Request Opportunities (Public)",
+                "table": "Opportunity",
+                "operation": "split",
+                "map_by_key": ["Title of Opportunity"],
                 "entry_type": "name",
             },
         },

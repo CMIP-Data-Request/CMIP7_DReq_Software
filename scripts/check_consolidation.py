@@ -24,7 +24,7 @@ offlineREL = version in dc.get_cached(export="release")
 
 rel = dc.load(version, export="release", consolidate=True, offline=offlineREL)
 rel["Data Request"].pop("version")
-raw = dc.load(version, export="raw", consolidate=True, offline=offlineRAW)
+raw = dc.load(version, export="raw", consolidate=True, offline=offlineRAW, force=True)
 raw["Data Request"].pop("version")
 
 print()
