@@ -2,14 +2,15 @@
 '''
 Compare CMOR variable metadata between different data request versions or to CMOR tables.
 '''
+import argparse
 import json
 import os
+import yaml
 from collections import OrderedDict, defaultdict
 
 import sys
 sys.path.append('..')
 
-import argparse
 
 def parse_args():
 
@@ -19,6 +20,8 @@ def parse_args():
 
     parser.add_argument('compare', nargs=2,
                         help='versions of variables to compare: json file or cmor tables')
+    parser.add_argument('-c', '--config_attributes', default='attributes.yaml',
+                        help='yaml file specifying metadata attributes to compare (will be created if it doesn\'t exist)')
 
     return parser.parse_args()
 
@@ -27,39 +30,44 @@ def main():
     args = parse_args()
     compare_versions = list(args.compare)
 
+    filepath = args.config_attributes
+    if not os.path.exists(filepath) or True:
+        # If config file doesn't exist, create it
+        config = {
+            'compare_attributes': [
+                'frequency',
+                'modeling_realm',
+                'standard_name',
+                'units',
+                'cell_methods',
+                'cell_measures',
+                'long_name',
+                'comment',
+                'dimensions',
+                'out_name',
+                'type',
+                'positive',
+            ],
+            'repos': {
+                'cmip6' : {
+                    'url': 'https://github.com/PCMDI/cmip6-cmor-tables',
+                }
+            }
+        }
+        with open(filepath, 'w') as f:
+            yaml.dump(config, f, default_flow_style=False)
+            print('Wrote ' + filepath)
 
-    compare_attributes = [
-        'frequency', 
-        'modeling_realm', 
-        'standard_name', 
-        'units', 
-        'cell_methods', 
-        'cell_measures', 
-        'long_name', 
-        # 'comment', 
-        'dimensions', 
-        # 'out_name', 
-        'type', 
-        'positive',     
-    ]
-    # compare_attributes = ['standard_name']
-    # compare_attributes = ['units']
-    # compare_attributes = ['dimensions']
-    # compare_attributes = ['cell_methods']
-    # compare_attributes = ['frequency']
-
-    compare_attributes = sorted(compare_attributes, key=str.lower)
+    # Load config file
+    with open(filepath, 'r') as f:
+        config = yaml.safe_load(f)
+        compare_attributes = sorted(config['compare_attributes'], key=str.lower)
+        repos = config['repos']
 
     # Name of output file to write with the diffs
-    outfile_name = 'diffs_by_variable_name.json'
-    outfile_attr = 'diffs_by_metadata_attribute.json'
-
-
-    repos = {
-        'cmip6' : {
-            'url': 'https://github.com/PCMDI/cmip6-cmor-tables',
-        }
-    }
+    outfile_vars = 'diffs_by_variable.json'
+    outfile_attr = 'diffs_by_attribute.json'
+    outfile_missing = 'missing_variables.json'
 
     # If comparing against existing CMOR tables, get variables from them
     for kc, version in enumerate(compare_versions):
@@ -170,17 +178,11 @@ def main():
     out = OrderedDict({
         'Header' : {
             'Description': f'Comparison of variable metadata between {ver0} and {ver1}',
-            # 'dreq content version': dreq_header['dreq content version'],
-            # 'dreq content file' : dreq_header['dreq content file'],
-            # 'dreq content sha256 hash' : dreq_header['dreq content sha256 hash'],
-            # 'cmor tables source' : repo_tables,
-            # 'cmor tables version' : table_header0,
-            # 'tables checked' : tables_checked,
         },
         'Missing' : missing,
         'Compound Name' : diffs,
     })
-    outfile = outfile_name
+    outfile = outfile_vars
     with open(outfile, 'w') as f:
         json.dump(out, f, indent=4)
         print('Wrote ' + outfile)
