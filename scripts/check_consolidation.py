@@ -19,9 +19,12 @@ else:
     print("python", sys.argv[0], "<version>")
     sys.exit(1)
 
-rel = dc.load(version, export="release", consolidate=True, offline=True)
+offlineRAW = version in dc.get_cached(export="raw")
+offlineREL = version in dc.get_cached(export="release")
+
+rel = dc.load(version, export="release", consolidate=True, offline=offlineREL)
 rel["Data Request"].pop("version")
-raw = dc.load(version, export="raw", consolidate=True, offline=True)
+raw = dc.load(version, export="raw", consolidate=True, offline=offlineRAW)
 raw["Data Request"].pop("version")
 
 print()
