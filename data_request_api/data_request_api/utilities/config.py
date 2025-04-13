@@ -32,6 +32,16 @@ DEFAULT_CONFIG_TYPES = {
     "cache_dir": str,
 }
 
+# Valid types and values for each key
+DEFAULT_CONFIG_HELP = {
+    "offline": "Should the script be launched offline?",
+    "export": "Version of the export to be used (i.e. raw or release)",
+    "consolidate": "Should consolidation be done?",
+    "log_level": "Log level to use",
+    "log_file": "Log file to use",
+    "cache_dir": "Cache directory to use",
+}
+
 DEFAULT_CONFIG_VALID_VALUES = {
     "export": ["release", "raw"],
     "log_level": ["debug", "info", "warning", "error", "critical"],

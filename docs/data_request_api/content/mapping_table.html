@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.stable.utilities.logger API documentation</title>
-<meta name="description" content="Logger.">
+<title>data_request_api.content.mapping_table API documentation</title>
+<meta name="description" content="Mapping Table …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,119 +33,79 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.stable.utilities.logger</code></h1>
+<h1 class="title">Module <code>data_request_api.content.mapping_table</code></h1>
 </header>
 <section id="section-intro">
-<p>Logger.</p>
+<p>Mapping Table</p>
+<p>The mapping_table dictionary defines how to map the three-base structure to the one-base structure.
+Each entry in the dictionary represents a table in the one-base structure and includes the information
+how to obtain it from the three-base structure.</p>
+<p>Explanation of the dictionary keys:</p>
+<p>Base ("source_base"):
+The base containing the table to be selected.</p>
+<p>Table ("source_table"):
+The table to be selected from the "source_base".</p>
+<p>Internal Mapping of record attributes ("internal_mapping"):
+Record attributes may point to records of other tables.
+However, there is no cross-linkage between the three bases,
+so these links need to be mapped as well.
+"internal_mapping" is a dictionary with the key corresponding
+to the record attributes to be mapped and the values containing
+the actual mapping information.</p>
+<pre><code>The mapping information is again a dictionary with the following keys:
+- base_copy_of_table:
+    If a copy of table corresponding to the record attribute exists in the current base,
+    provide the name; otherwise, set to False.
+- base:
+    The base containing the original table the record attribute points to.
+- table:
+    The original table the record attribute points to.
+- operation:
+    The operation to perform on the attribute value (either "split" or "", if it is
+    already provided as list or a string without comma separated values).
+- map_by_key:
+    A list of keys to map by.
+- entry_type:
+    The type of entry (either "record_id" or "name").
+</code></pre>
+<p>(Internal) Filters of record attributes ("internal_filters"):
+Not all records of the raw export shall be included since they may be
+labeled as junk or not be approved by the community. The filters are applied on all records
+and also internally on links to other records. "internal_filters" is a dictionary
+with the key corresponding to the record attributes used for filtering and the value
+another dictionary with the following possible keys:
+- operator: Can be one of "nonempty", "in", "not in"
+- values:
+A list of values, not necessary for "nonempty" operator.</p>
+<p>Example Configuration</p>
+<p>Suppose we want to map the "CMIP7 Variable Groups" key in the "Variables" table of the "Data Request Variables (Public)"
+base to a list of record IDs of "Variable Group" records in the "Data Request Opportunities (Public)" base.</p>
+<p>We would define the mapping_table as follows:
+mapping_table = {
+"Variables": {
+"base": "Data Request Variables (Public)",
+"source_table": "Variables",
+"internal_mapping": {
+"CMIP7 Variable Groups": {
+"base_copy_of_table": False,
+"base": "Data Request Opportunities (Public)",
+"table": "Variable Group",
+"operation": "split",
+"map_by_key": ["Name"],
+"entry_type": "name",
+},
+},
+"internal_filters": {
+"Status": {"operator": "not in", "values": ["Junk"]},
+}
+},
+}</p>
 </section>
 <section>
 </section>
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="data_request_api.stable.utilities.logger.change_log_file"><code class="name flex">
-<span>def <span class="ident">change_log_file</span></span>(<span>logfile='/home/runner/work/CMIP7_DReq_Software/CMIP7_DReq_Software/log.out',<br>default=False)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def change_log_file(logfile=log_file, default=False):
-    global log_file, logger
-    if default:
-        logger = get_logger()
-        for hdlr in logger.handlers[:]:
-            hdlr.flush()
-            hdlr.close()
-            logger.removeHandler(hdlr)
-        new_hdlr = logging.StreamHandler(sys.stdout)
-    else:
-        log_file = logfile
-        log_dir = os.path.dirname(os.path.abspath(log_file))
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-        logger = logging.getLogger()
-        for hdlr in logger.handlers[:]:
-            hdlr.flush()
-            hdlr.close()
-            logger.removeHandler(hdlr)
-        new_hdlr = logging.FileHandler(log_file)
-    new_hdlr.setFormatter(logging.Formatter(fmt=&#39;%(levelname)s: %(message)s&#39;))
-    logger.addHandler(new_hdlr)
-    return logger</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.stable.utilities.logger.change_log_level"><code class="name flex">
-<span>def <span class="ident">change_log_level</span></span>(<span>level='info')</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def change_log_level(level=log_level):
-    global logger, log_level
-    log_level = level
-    logger.setLevel(log_level_to_int(level))</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.stable.utilities.logger.get_logger"><code class="name flex">
-<span>def <span class="ident">get_logger</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_logger():
-    return logger</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.stable.utilities.logger.log_level_to_int"><code class="name flex">
-<span>def <span class="ident">log_level_to_int</span></span>(<span>level)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def log_level_to_int(level):
-    if isinstance(level, str):
-        if level.lower() in [&#39;debug&#39;, ]:
-            return logging.DEBUG
-        elif level.lower() in [&#39;critical&#39;, ]:
-            return logging.CRITICAL
-        elif level.lower() in [&#39;info&#39;, ]:
-            return logging.INFO
-        elif level.lower() in [&#39;warning&#39;, ]:
-            return logging.WARNING
-        elif level.lower() in [&#39;error&#39;, ]:
-            return logging.ERROR
-    else:
-        return level</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.stable.utilities.logger.log_msg"><code class="name flex">
-<span>def <span class="ident">log_msg</span></span>(<span>level, *args, **kwargs)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def log_msg(level, *args, **kwargs):
-    logger.log(log_level_to_int(level), *args, **kwargs)</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -157,16 +117,7 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.stable.utilities" href="index.html">data_request_api.stable.utilities</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="data_request_api.stable.utilities.logger.change_log_file" href="#data_request_api.stable.utilities.logger.change_log_file">change_log_file</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.change_log_level" href="#data_request_api.stable.utilities.logger.change_log_level">change_log_level</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.get_logger" href="#data_request_api.stable.utilities.logger.get_logger">get_logger</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.log_level_to_int" href="#data_request_api.stable.utilities.logger.log_level_to_int">log_level_to_int</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.log_msg" href="#data_request_api.stable.utilities.logger.log_msg">log_msg</a></code></li>
+<li><code><a title="data_request_api.content" href="index.html">data_request_api.content</a></code></li>
 </ul>
 </li>
 </ul>

@@ -12,10 +12,10 @@ import tempfile
 import unittest
 
 
-from data_request_api.stable.utilities.tools import read_json_input_file_content, write_json_output_file_content
-from data_request_api.stable.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, \
-    DataRequest, version, Variable
-from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, ConstantValueObj
+from data_request_api.utilities.tools import read_json_input_file_content
+from data_request_api.query.data_request import DRObjects, ExperimentsGroup, VariablesGroup, Opportunity, \
+    DataRequest, version
+from data_request_api.query.vocabulary_server import VocabularyServer, ConstantValueObj
 from data_request_api.tests import filepath
 
 

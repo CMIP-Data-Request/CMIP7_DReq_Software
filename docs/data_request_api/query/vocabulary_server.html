@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.stable.query.vocabulary_server API documentation</title>
+<title>data_request_api.query.vocabulary_server API documentation</title>
 <meta name="description" content="Vocabulary server.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.stable.query.vocabulary_server</code></h1>
+<h1 class="title">Module <code>data_request_api.query.vocabulary_server</code></h1>
 </header>
 <section id="section-intro">
 <p>Vocabulary server.</p>
@@ -45,7 +45,7 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="data_request_api.stable.query.vocabulary_server.build_link_from_id"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.build_link_from_id"><code class="name flex">
 <span>def <span class="ident">build_link_from_id</span></span>(<span>elt)</span>
 </code></dt>
 <dd>
@@ -70,7 +70,7 @@ el.replaceWith(d);
 :param elt: element to be transformed into a link
 :return: link version of elt</p></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.is_link_id_or_value"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.is_link_id_or_value"><code class="name flex">
 <span>def <span class="ident">is_link_id_or_value</span></span>(<span>elt)</span>
 </code></dt>
 <dd>
@@ -95,7 +95,7 @@ el.replaceWith(d);
 :param elt: element to be transformed into a value
 :return: not link version oof elt</p></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.to_plural"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.to_plural"><code class="name flex">
 <span>def <span class="ident">to_plural</span></span>(<span>element_type)</span>
 </code></dt>
 <dd>
@@ -113,7 +113,7 @@ el.replaceWith(d);
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.to_singular"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.to_singular"><code class="name flex">
 <span>def <span class="ident">to_singular</span></span>(<span>element_type)</span>
 </code></dt>
 <dd>
@@ -135,7 +135,7 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="data_request_api.stable.query.vocabulary_server.ConstantValueObj"><code class="flex name class">
+<dt id="data_request_api.query.vocabulary_server.ConstantValueObj"><code class="flex name class">
 <span>class <span class="ident">ConstantValueObj</span></span>
 <span>(</span><span>value='undef')</span>
 </code></dt>
@@ -189,7 +189,7 @@ el.replaceWith(d);
 <div class="desc"><p>Constant object which return the same value each time an attribute is asked.
 It is used to avoid discrepancies between objects and strings.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer"><code class="flex name class">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer"><code class="flex name class">
 <span>class <span class="ident">VocabularyServer</span></span>
 <span>(</span><span>input_database, **kwargs)</span>
 </code></dt>
@@ -363,7 +363,7 @@ It is used to avoid discrepancies between objects and strings.</p></div>
 <div class="desc"><p>Class to generate a Vocabulary Server from a json file.</p></div>
 <h3>Static methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer.from_input"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer.from_input"><code class="name flex">
 <span>def <span class="ident">from_input</span></span>(<span>input_database)</span>
 </code></dt>
 <dd>
@@ -374,7 +374,7 @@ It is used to avoid discrepancies between objects and strings.</p></div>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer.alias"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer.alias"><code class="name flex">
 <span>def <span class="ident">alias</span></span>(<span>self, element_type)</span>
 </code></dt>
 <dd>
@@ -406,7 +406,7 @@ It is used to avoid discrepancies between objects and strings.</p></div>
 :param element_type: input kind of element
 :return:</p></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer.check_infinite_loop"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer.check_infinite_loop"><code class="name flex">
 <span>def <span class="ident">check_infinite_loop</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -454,7 +454,7 @@ It is used to avoid discrepancies between objects and strings.</p></div>
 <div class="desc"><p>Check that there is no infinite loop in the vocabulary server.
 Raise an error if at least one is found.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer.get_element"><code class="name flex">
 <span>def <span class="ident">get_element</span></span>(<span>self, element_type, element_id, element_key=None, default=False, id_type='id')</span>
 </code></dt>
 <dd>
@@ -536,7 +536,7 @@ If no element found, return default.
 :param id_type:
 :return:</p></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element_type"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer.get_element_type"><code class="name flex">
 <span>def <span class="ident">get_element_type</span></span>(<span>self, element_type)</span>
 </code></dt>
 <dd>
@@ -558,7 +558,7 @@ If no element found, return default.
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element_type_ids"><code class="name flex">
+<dt id="data_request_api.query.vocabulary_server.VocabularyServer.get_element_type_ids"><code class="name flex">
 <span>def <span class="ident">get_element_type_ids</span></span>(<span>self, element_type)</span>
 </code></dt>
 <dd>
@@ -591,31 +591,31 @@ If no element found, return default.
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.stable.query" href="index.html">data_request_api.stable.query</a></code></li>
+<li><code><a title="data_request_api.query" href="index.html">data_request_api.query</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.vocabulary_server.build_link_from_id" href="#data_request_api.stable.query.vocabulary_server.build_link_from_id">build_link_from_id</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.is_link_id_or_value" href="#data_request_api.stable.query.vocabulary_server.is_link_id_or_value">is_link_id_or_value</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.to_plural" href="#data_request_api.stable.query.vocabulary_server.to_plural">to_plural</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.to_singular" href="#data_request_api.stable.query.vocabulary_server.to_singular">to_singular</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.build_link_from_id" href="#data_request_api.query.vocabulary_server.build_link_from_id">build_link_from_id</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.is_link_id_or_value" href="#data_request_api.query.vocabulary_server.is_link_id_or_value">is_link_id_or_value</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.to_plural" href="#data_request_api.query.vocabulary_server.to_plural">to_plural</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.to_singular" href="#data_request_api.query.vocabulary_server.to_singular">to_singular</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="data_request_api.stable.query.vocabulary_server.ConstantValueObj" href="#data_request_api.stable.query.vocabulary_server.ConstantValueObj">ConstantValueObj</a></code></h4>
+<h4><code><a title="data_request_api.query.vocabulary_server.ConstantValueObj" href="#data_request_api.query.vocabulary_server.ConstantValueObj">ConstantValueObj</a></code></h4>
 </li>
 <li>
-<h4><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer">VocabularyServer</a></code></h4>
+<h4><code><a title="data_request_api.query.vocabulary_server.VocabularyServer" href="#data_request_api.query.vocabulary_server.VocabularyServer">VocabularyServer</a></code></h4>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer.alias" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer.alias">alias</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer.check_infinite_loop" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer.check_infinite_loop">check_infinite_loop</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer.from_input" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element">get_element</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element_type" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element_type">get_element_type</a></code></li>
-<li><code><a title="data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element_type_ids" href="#data_request_api.stable.query.vocabulary_server.VocabularyServer.get_element_type_ids">get_element_type_ids</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.VocabularyServer.alias" href="#data_request_api.query.vocabulary_server.VocabularyServer.alias">alias</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.VocabularyServer.check_infinite_loop" href="#data_request_api.query.vocabulary_server.VocabularyServer.check_infinite_loop">check_infinite_loop</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.VocabularyServer.from_input" href="#data_request_api.query.vocabulary_server.VocabularyServer.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.VocabularyServer.get_element" href="#data_request_api.query.vocabulary_server.VocabularyServer.get_element">get_element</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.VocabularyServer.get_element_type" href="#data_request_api.query.vocabulary_server.VocabularyServer.get_element_type">get_element_type</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server.VocabularyServer.get_element_type_ids" href="#data_request_api.query.vocabulary_server.VocabularyServer.get_element_type_ids">get_element_type_ids</a></code></li>
 </ul>
 </li>
 </ul>

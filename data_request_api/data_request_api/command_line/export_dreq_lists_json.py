@@ -10,8 +10,8 @@ import argparse
 from collections import OrderedDict
 
 import data_request_api
-import data_request_api.stable.content.dreq_content as dc
-import data_request_api.stable.query.dreq_query as dq
+import data_request_api.content.dreq_content as dc
+import data_request_api.query.dreq_query as dq
 
 
 def parse_args():
@@ -54,7 +54,7 @@ def main():
     # Load content into python dict
     content = dc.load(use_dreq_version)
     # Render data request tables as dreq_table objects
-    base = dq.create_dreq_tables_for_request(content)
+    base = dq.create_dreq_tables_for_request(content, use_dreq_version)
 
     # Deal with opportunities
     if args.opportunities_file:
@@ -104,8 +104,8 @@ def main():
         print("Please use one of the opportunities arguments")
         sys.exit(1)
 
-    # Get consolidated list of requested variables that supports these opportunities
-    dq.DREQ_VERSION = use_dreq_version
+    # Get the requested variables for each opportunity and aggregate them into variable lists by experiment
+    # (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
     expt_vars = dq.get_requested_variables(base, use_opps, priority_cutoff=args.priority_cutoff, verbose=False)
 
     # filter output by requested experiments

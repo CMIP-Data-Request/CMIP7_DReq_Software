@@ -12,10 +12,10 @@ import copy
 import os
 from collections import defaultdict
 
-from data_request_api.stable.utilities.logger import get_logger, change_log_file, change_log_level
-from data_request_api.stable.content.dump_transformation import transform_content
-from data_request_api.stable.utilities.tools import read_json_file, write_csv_output_file_content
-from data_request_api.stable.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
+from data_request_api.utilities.logger import get_logger, change_log_file, change_log_level
+from data_request_api.content.dump_transformation import transform_content
+from data_request_api.utilities.tools import read_json_file, write_csv_output_file_content
+from data_request_api.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
     to_singular, ConstantValueObj, to_plural
 
 from data_request_api import version
@@ -244,8 +244,8 @@ class Variable(DRObjects):
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
             filtered_found = True
-            if request_type in ["table_identifiers", ]:
-                found = request_value == self.table_identifier
+            if request_type in ["cmip6_tables_identifiers", ]:
+                found = request_value == self.cmip6_tables_identifier
             elif request_type in ["temporal_shapes", ]:
                 found = request_value == self.temporal_shape
             elif request_type in ["spatial_shapes", ]:
@@ -340,7 +340,7 @@ class VariablesGroup(DRObjects):
                 _, priority = is_link_id_or_value(self.get_priority_level().id)
                 _, req_priority = is_link_id_or_value(request_value.id)
                 found = req_priority == priority
-            elif request_type in ["table_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
+            elif request_type in ["cmip6_tables_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
                                   "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
                                   "cell_measures"]:
                 found = self.filter_on_request_list(request_values=request_value, list_to_check=self.get_variables())
@@ -455,7 +455,7 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_mips() or \
                     self.filter_on_request_list(request_values=request_value,
                                                 list_to_check=self.get_variable_groups())
-            elif request_type in ["variables", "priority_levels", "table_identifiers", "temporal_shapes",
+            elif request_type in ["variables", "priority_levels", "cmip6_tables_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
                                   "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
                 found = self.filter_on_request_list(request_values=request_value,

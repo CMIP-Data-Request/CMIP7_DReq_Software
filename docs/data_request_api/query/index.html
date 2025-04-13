@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.stable.utilities.logger API documentation</title>
-<meta name="description" content="Logger.">
+<title>data_request_api.query API documentation</title>
+<meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,119 +33,36 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.stable.utilities.logger</code></h1>
+<h1 class="title">Module <code>data_request_api.query</code></h1>
 </header>
 <section id="section-intro">
-<p>Logger.</p>
 </section>
 <section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt id="data_request_api.stable.utilities.logger.change_log_file"><code class="name flex">
-<span>def <span class="ident">change_log_file</span></span>(<span>logfile='/home/runner/work/CMIP7_DReq_Software/CMIP7_DReq_Software/log.out',<br>default=False)</span>
-</code></dt>
+<dt><code class="name"><a title="data_request_api.query.data_request" href="data_request.html">data_request_api.query.data_request</a></code></dt>
 <dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def change_log_file(logfile=log_file, default=False):
-    global log_file, logger
-    if default:
-        logger = get_logger()
-        for hdlr in logger.handlers[:]:
-            hdlr.flush()
-            hdlr.close()
-            logger.removeHandler(hdlr)
-        new_hdlr = logging.StreamHandler(sys.stdout)
-    else:
-        log_file = logfile
-        log_dir = os.path.dirname(os.path.abspath(log_file))
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-        logger = logging.getLogger()
-        for hdlr in logger.handlers[:]:
-            hdlr.flush()
-            hdlr.close()
-            logger.removeHandler(hdlr)
-        new_hdlr = logging.FileHandler(log_file)
-    new_hdlr.setFormatter(logging.Formatter(fmt=&#39;%(levelname)s: %(message)s&#39;))
-    logger.addHandler(new_hdlr)
-    return logger</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Data request.</p></div>
 </dd>
-<dt id="data_request_api.stable.utilities.logger.change_log_level"><code class="name flex">
-<span>def <span class="ident">change_log_level</span></span>(<span>level='info')</span>
-</code></dt>
+<dt><code class="name"><a title="data_request_api.query.dreq_classes" href="dreq_classes.html">data_request_api.query.dreq_classes</a></code></dt>
 <dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def change_log_level(level=log_level):
-    global logger, log_level
-    log_level = level
-    logger.setLevel(log_level_to_int(level))</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Flexible classes to represent tables, records &amp; links in the data request,
+as obtained from the Airtable json "raw export" of data request content …</p></div>
 </dd>
-<dt id="data_request_api.stable.utilities.logger.get_logger"><code class="name flex">
-<span>def <span class="ident">get_logger</span></span>(<span>)</span>
-</code></dt>
+<dt><code class="name"><a title="data_request_api.query.dreq_query" href="dreq_query.html">data_request_api.query.dreq_query</a></code></dt>
 <dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_logger():
-    return logger</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Functions to extract information from the data request.
+E.g., get variables requested for each experiment …</p></div>
 </dd>
-<dt id="data_request_api.stable.utilities.logger.log_level_to_int"><code class="name flex">
-<span>def <span class="ident">log_level_to_int</span></span>(<span>level)</span>
-</code></dt>
+<dt><code class="name"><a title="data_request_api.query.vocabulary_server" href="vocabulary_server.html">data_request_api.query.vocabulary_server</a></code></dt>
 <dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def log_level_to_int(level):
-    if isinstance(level, str):
-        if level.lower() in [&#39;debug&#39;, ]:
-            return logging.DEBUG
-        elif level.lower() in [&#39;critical&#39;, ]:
-            return logging.CRITICAL
-        elif level.lower() in [&#39;info&#39;, ]:
-            return logging.INFO
-        elif level.lower() in [&#39;warning&#39;, ]:
-            return logging.WARNING
-        elif level.lower() in [&#39;error&#39;, ]:
-            return logging.ERROR
-    else:
-        return level</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
-<dt id="data_request_api.stable.utilities.logger.log_msg"><code class="name flex">
-<span>def <span class="ident">log_msg</span></span>(<span>level, *args, **kwargs)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def log_msg(level, *args, **kwargs):
-    logger.log(log_level_to_int(level), *args, **kwargs)</code></pre>
-</details>
-<div class="desc"></div>
+<div class="desc"><p>Vocabulary server.</p></div>
 </dd>
 </dl>
+</section>
+<section>
+</section>
+<section>
 </section>
 <section>
 </section>
@@ -157,16 +74,15 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.stable.utilities" href="index.html">data_request_api.stable.utilities</a></code></li>
+<li><code><a title="data_request_api" href="../index.html">data_request_api</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="data_request_api.stable.utilities.logger.change_log_file" href="#data_request_api.stable.utilities.logger.change_log_file">change_log_file</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.change_log_level" href="#data_request_api.stable.utilities.logger.change_log_level">change_log_level</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.get_logger" href="#data_request_api.stable.utilities.logger.get_logger">get_logger</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.log_level_to_int" href="#data_request_api.stable.utilities.logger.log_level_to_int">log_level_to_int</a></code></li>
-<li><code><a title="data_request_api.stable.utilities.logger.log_msg" href="#data_request_api.stable.utilities.logger.log_msg">log_msg</a></code></li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="data_request_api.query.data_request" href="data_request.html">data_request_api.query.data_request</a></code></li>
+<li><code><a title="data_request_api.query.dreq_classes" href="dreq_classes.html">data_request_api.query.dreq_classes</a></code></li>
+<li><code><a title="data_request_api.query.dreq_query" href="dreq_query.html">data_request_api.query.dreq_query</a></code></li>
+<li><code><a title="data_request_api.query.vocabulary_server" href="vocabulary_server.html">data_request_api.query.vocabulary_server</a></code></li>
 </ul>
 </li>
 </ul>

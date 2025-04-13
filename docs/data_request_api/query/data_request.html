@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.stable.query.data_request API documentation</title>
+<title>data_request_api.query.data_request API documentation</title>
 <meta name="description" content="Data request.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.stable.query.data_request</code></h1>
+<h1 class="title">Module <code>data_request_api.query.data_request</code></h1>
 </header>
 <section id="section-intro">
 <p>Data request.</p>
@@ -47,7 +47,7 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DRObjects"><code class="flex name class">
+<dt id="data_request_api.query.data_request.DRObjects"><code class="flex name class">
 <span>class <span class="ident">DRObjects</span></span>
 <span>(</span><span>id, dr, DR_type='undef', structure={}, **attributes)</span>
 </code></dt>
@@ -213,14 +213,14 @@ Use to define basic information needed.</p>
 :param dict attributes: attributes of the object coming from vocabulary server</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="data_request_api.stable.query.data_request.ExperimentsGroup" href="#data_request_api.stable.query.data_request.ExperimentsGroup">ExperimentsGroup</a></li>
-<li><a title="data_request_api.stable.query.data_request.Opportunity" href="#data_request_api.stable.query.data_request.Opportunity">Opportunity</a></li>
-<li><a title="data_request_api.stable.query.data_request.Variable" href="#data_request_api.stable.query.data_request.Variable">Variable</a></li>
-<li><a title="data_request_api.stable.query.data_request.VariablesGroup" href="#data_request_api.stable.query.data_request.VariablesGroup">VariablesGroup</a></li>
+<li><a title="data_request_api.query.data_request.ExperimentsGroup" href="#data_request_api.query.data_request.ExperimentsGroup">ExperimentsGroup</a></li>
+<li><a title="data_request_api.query.data_request.Opportunity" href="#data_request_api.query.data_request.Opportunity">Opportunity</a></li>
+<li><a title="data_request_api.query.data_request.Variable" href="#data_request_api.query.data_request.Variable">Variable</a></li>
+<li><a title="data_request_api.query.data_request.VariablesGroup" href="#data_request_api.query.data_request.VariablesGroup">VariablesGroup</a></li>
 </ul>
 <h3>Static methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DRObjects.filter_on_request_list"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.filter_on_request_list"><code class="name flex">
 <span>def <span class="ident">filter_on_request_list</span></span>(<span>request_values, list_to_check)</span>
 </code></dt>
 <dd>
@@ -240,7 +240,7 @@ def filter_on_request_list(request_values, list_to_check):
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DRObjects.from_input"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.from_input"><code class="name flex">
 <span>def <span class="ident">from_input</span></span>(<span>dr, id, DR_type='undef', elements={}, structure={})</span>
 </code></dt>
 <dd>
@@ -252,7 +252,7 @@ def filter_on_request_list(request_values, list_to_check):
 :param dict structure: structure of the object through Data Request
 :return: instance of the current class.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DRObjects.transform_content_inner"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.transform_content_inner"><code class="name flex">
 <span>def <span class="ident">transform_content_inner</span></span>(<span>key, value, dr, force_transform=False)</span>
 </code></dt>
 <dd>
@@ -274,7 +274,7 @@ def transform_content_inner(key, value, dr, force_transform=False):
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DRObjects.id"><code class="name">prop <span class="ident">id</span></code></dt>
+<dt id="data_request_api.query.data_request.DRObjects.id"><code class="name">prop <span class="ident">id</span></code></dt>
 <dd>
 <details class="source">
 <summary>
@@ -289,7 +289,7 @@ def id(self):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DRObjects.check"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.check"><code class="name flex">
 <span>def <span class="ident">check</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -307,7 +307,7 @@ def id(self):
 <div class="desc"><p>Make checks on the current object.
 :return:</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DRObjects.filter_on_request"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.filter_on_request"><code class="name flex">
 <span>def <span class="ident">filter_on_request</span></span>(<span>self, request_value)</span>
 </code></dt>
 <dd>
@@ -338,7 +338,7 @@ def id(self):
 :return bool, bool: a bool indicating whether the current object can be filtered by the requested one,
 a bool indicating whether the current object is linked to the request one.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DRObjects.get"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, item)</span>
 </code></dt>
 <dd>
@@ -351,7 +351,7 @@ a bool indicating whether the current object is linked to the request one.</p></
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DRObjects.print_content"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.print_content"><code class="name flex">
 <span>def <span class="ident">print_content</span></span>(<span>self, level=0, add_content=True)</span>
 </code></dt>
 <dd>
@@ -374,7 +374,7 @@ a bool indicating whether the current object is linked to the request one.</p></
 :param add_content: should inner content be added?
 :return: a list of strings that can be assembled to print the content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DRObjects.transform_content"><code class="name flex">
+<dt id="data_request_api.query.data_request.DRObjects.transform_content"><code class="name flex">
 <span>def <span class="ident">transform_content</span></span>(<span>self, input_dict, dr, force_transform=False)</span>
 </code></dt>
 <dd>
@@ -411,7 +411,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
 </dd>
 </dl>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest"><code class="flex name class">
+<dt id="data_request_api.query.data_request.DataRequest"><code class="flex name class">
 <span>class <span class="ident">DataRequest</span></span>
 <span>(</span><span>input_database, VS, **kwargs)</span>
 </code></dt>
@@ -1180,7 +1180,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
 :param dict kwargs: additional parameters</p></div>
 <h3>Static methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DataRequest.from_input"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.from_input"><code class="name flex">
 <span>def <span class="ident">from_input</span></span>(<span>json_input, version, **kwargs)</span>
 </code></dt>
 <dd>
@@ -1190,7 +1190,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
 :param dict kwargs: additional parameters
 :return DataRequest: instance of the DataRequest object.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.from_separated_inputs"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.from_separated_inputs"><code class="name flex">
 <span>def <span class="ident">from_separated_inputs</span></span>(<span>DR_input, VS_input, **kwargs)</span>
 </code></dt>
 <dd>
@@ -1203,7 +1203,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DataRequest.software_version"><code class="name">prop <span class="ident">software_version</span></code></dt>
+<dt id="data_request_api.query.data_request.DataRequest.software_version"><code class="name">prop <span class="ident">software_version</span></code></dt>
 <dd>
 <details class="source">
 <summary>
@@ -1220,7 +1220,7 @@ def software_version(self):
 <div class="desc"><p>Method to get the version of the software.
 :return str: version of the software</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.version"><code class="name">prop <span class="ident">version</span></code></dt>
+<dt id="data_request_api.query.data_request.DataRequest.version"><code class="name">prop <span class="ident">version</span></code></dt>
 <dd>
 <details class="source">
 <summary>
@@ -1240,7 +1240,7 @@ def version(self):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.DataRequest.check"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.check"><code class="name flex">
 <span>def <span class="ident">check</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1268,7 +1268,7 @@ def version(self):
 <div class="desc"><p>Method to check the content of the Data Request.
 :return:</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.export_data"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.export_data"><code class="name flex">
 <span>def <span class="ident">export_data</span></span>(<span>self,<br>main_data,<br>output_file,<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>export_columns_request=[],<br>sorting_request=[],<br>**kwargs)</span>
 </code></dt>
 <dd>
@@ -1316,7 +1316,7 @@ main_data kind
 :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
 :return: an output csv file</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.export_summary"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.export_summary"><code class="name flex">
 <span>def <span class="ident">export_summary</span></span>(<span>self,<br>lines_data,<br>columns_data,<br>output_file,<br>sorting_line='id',<br>title_line='name',<br>sorting_column='id',<br>title_column='name',<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>**kwargs)</span>
 </code></dt>
 <dd>
@@ -1402,7 +1402,7 @@ main_data kind
 :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
 :return: a csv output file</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.filter_elements_per_request"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.filter_elements_per_request"><code class="name flex">
 <span>def <span class="ident">filter_elements_per_request</span></span>(<span>self, elements_to_filter, requests={}, operation='all', skip_if_missing=False)</span>
 </code></dt>
 <dd>
@@ -1512,7 +1512,7 @@ main_data kind
 :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
 :return: list of elements of kind element_type which correspond to the filtering requests</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_element"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_element"><code class="name flex">
 <span>def <span class="ident">find_element</span></span>(<span>self, element_type, value, default=False, key='name')</span>
 </code></dt>
 <dd>
@@ -1544,7 +1544,7 @@ else from vocabulary server.
 :param default: value to be returned if non found
 :return: the found element if existing, else the default value</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_element_from_vs"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_element_from_vs"><code class="name flex">
 <span>def <span class="ident">find_element_from_vs</span></span>(<span>self, element_type, value, key='name', default=False)</span>
 </code></dt>
 <dd>
@@ -1582,7 +1582,7 @@ Update the content and mapping list not to have to ask the vocabulary server aga
 :param default: default value to be returned if no value found
 :return: element corresponding to the specified value of a given type if found, else the default value</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_element_per_identifier_from_vs"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_element_per_identifier_from_vs"><code class="name flex">
 <span>def <span class="ident">find_element_per_identifier_from_vs</span></span>(<span>self, element_type, key, value, default=False, **kwargs)</span>
 </code></dt>
 <dd>
@@ -1633,7 +1633,7 @@ Update the content and mapping list not to have to ask the vocabulary server aga
 :return Opportunity or VariablesGroup or ExperimentsGroup or Variables or DRObjects or ConstantValueObj or
 default: the element found from vocabulary server or the default value if none is found.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_experiments"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_experiments"><code class="name flex">
 <span>def <span class="ident">find_experiments</span></span>(<span>self, operation='any', skip_if_missing=False, **kwargs)</span>
 </code></dt>
 <dd>
@@ -1658,7 +1658,7 @@ default: the element found from vocabulary server or the default value if none i
 :param dict kwargs: filters to be applied
 :return list of DRObjects: experiments linked to the filters</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_experiments_per_opportunity"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_experiments_per_opportunity"><code class="name flex">
 <span>def <span class="ident">find_experiments_per_opportunity</span></span>(<span>self, opportunity)</span>
 </code></dt>
 <dd>
@@ -1681,7 +1681,7 @@ default: the element found from vocabulary server or the default value if none i
 :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified
 opportunity.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_experiments_per_theme"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_experiments_per_theme"><code class="name flex">
 <span>def <span class="ident">find_experiments_per_theme</span></span>(<span>self, theme)</span>
 </code></dt>
 <dd>
@@ -1702,7 +1702,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str theme: theme to be considered
 :return list of DRObjects or ConstantValueObj: list of the experiments which are linked to a specified theme.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_mips_per_opportunity"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_mips_per_opportunity"><code class="name flex">
 <span>def <span class="ident">find_mips_per_opportunity</span></span>(<span>self, opportunity)</span>
 </code></dt>
 <dd>
@@ -1722,7 +1722,7 @@ opportunity.</p></div>
 :param Opportunity or str opportunity: opportunity to be considered
 :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified opportunity.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_mips_per_theme"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_mips_per_theme"><code class="name flex">
 <span>def <span class="ident">find_mips_per_theme</span></span>(<span>self, theme)</span>
 </code></dt>
 <dd>
@@ -1742,7 +1742,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str theme: theme to be considered
 :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified theme.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_mips_per_variable"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_mips_per_variable"><code class="name flex">
 <span>def <span class="ident">find_mips_per_variable</span></span>(<span>self, variable)</span>
 </code></dt>
 <dd>
@@ -1762,7 +1762,7 @@ opportunity.</p></div>
 :param Variable or str variable: variable to be considered
 :return list of DRObjects or ConstantValueObj: list of the MIPs which are linked to a specified variable.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_opportunities"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_opportunities"><code class="name flex">
 <span>def <span class="ident">find_opportunities</span></span>(<span>self, operation='any', skip_if_missing=False, **kwargs)</span>
 </code></dt>
 <dd>
@@ -1787,7 +1787,7 @@ opportunity.</p></div>
 :param dict kwargs: filters to be applied
 :return list of Opportunity: opportunities linked to the filters</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_experiment"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_opportunities_per_experiment"><code class="name flex">
 <span>def <span class="ident">find_opportunities_per_experiment</span></span>(<span>self, experiment)</span>
 </code></dt>
 <dd>
@@ -1808,7 +1808,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
 :return list of Opportunity: list of the opportunities which are linked to a specified experiment.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_theme"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_opportunities_per_theme"><code class="name flex">
 <span>def <span class="ident">find_opportunities_per_theme</span></span>(<span>self, theme)</span>
 </code></dt>
 <dd>
@@ -1829,7 +1829,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str theme: theme to be considered
 :return list of Opportunity: list of the opportunities which are linked to a specified theme.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_variable"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_opportunities_per_variable"><code class="name flex">
 <span>def <span class="ident">find_opportunities_per_variable</span></span>(<span>self, variable)</span>
 </code></dt>
 <dd>
@@ -1850,7 +1850,7 @@ opportunity.</p></div>
 :param Variable or str variable: variable to be considered
 :return list of Opportunity: list of the opportunities which are linked to a specified variable.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_priority_per_variable"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_priority_per_variable"><code class="name flex">
 <span>def <span class="ident">find_priority_per_variable</span></span>(<span>self, variable, **filter_request)</span>
 </code></dt>
 <dd>
@@ -1869,7 +1869,7 @@ opportunity.</p></div>
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_themes_per_experiment"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_themes_per_experiment"><code class="name flex">
 <span>def <span class="ident">find_themes_per_experiment</span></span>(<span>self, experiment)</span>
 </code></dt>
 <dd>
@@ -1890,7 +1890,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str experiment: experiment to be considered
 :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified experiment.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_themes_per_opportunity"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_themes_per_opportunity"><code class="name flex">
 <span>def <span class="ident">find_themes_per_opportunity</span></span>(<span>self, opportunity)</span>
 </code></dt>
 <dd>
@@ -1911,7 +1911,7 @@ opportunity.</p></div>
 :param Opportunity or str opportunity: opportunity to be considered
 :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified opportunity.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_themes_per_variable"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_themes_per_variable"><code class="name flex">
 <span>def <span class="ident">find_themes_per_variable</span></span>(<span>self, variable)</span>
 </code></dt>
 <dd>
@@ -1932,7 +1932,7 @@ opportunity.</p></div>
 :param Variable or str variable: variable to be considered
 :return list of DRObjects or ConstantValueObj: list of the themes which are linked to a specified variable.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_variables"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_variables"><code class="name flex">
 <span>def <span class="ident">find_variables</span></span>(<span>self, operation='any', skip_if_missing=False, **kwargs)</span>
 </code></dt>
 <dd>
@@ -1957,7 +1957,7 @@ opportunity.</p></div>
 :param dict kwargs: filters to be applied
 :return list of Variable: variables linked to the filters</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_variables_per_opportunity"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_variables_per_opportunity"><code class="name flex">
 <span>def <span class="ident">find_variables_per_opportunity</span></span>(<span>self, opportunity)</span>
 </code></dt>
 <dd>
@@ -1978,7 +1978,7 @@ opportunity.</p></div>
 :param Opportunity or str opportunity: opportunity to be considered
 :return list of Variable: list of the variables which are linked to a specified opportunity.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_variables_per_priority"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_variables_per_priority"><code class="name flex">
 <span>def <span class="ident">find_variables_per_priority</span></span>(<span>self, priority)</span>
 </code></dt>
 <dd>
@@ -1999,7 +1999,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str priority: priority to be considered
 :return list of Variable: list of the variables which have a specified priority.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.find_variables_per_theme"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.find_variables_per_theme"><code class="name flex">
 <span>def <span class="ident">find_variables_per_theme</span></span>(<span>self, theme)</span>
 </code></dt>
 <dd>
@@ -2020,7 +2020,7 @@ opportunity.</p></div>
 :param DRObjects or ConstantValueObj or str theme: theme to be considered
 :return list of Variable: list of the variables which are linked to a specified theme.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_data_request_themes"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_data_request_themes"><code class="name flex">
 <span>def <span class="ident">get_data_request_themes</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2043,7 +2043,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the themes of the Data Request.
 :return list of DRObject: list of the themes of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_elements_per_kind"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_elements_per_kind"><code class="name flex">
 <span>def <span class="ident">get_elements_per_kind</span></span>(<span>self, element_type)</span>
 </code></dt>
 <dd>
@@ -2086,7 +2086,7 @@ opportunity.</p></div>
 :param str element_type: the kind of the elements to be found
 :return list: the list of elements of kind element_type</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_experiment_group"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_experiment_group"><code class="name flex">
 <span>def <span class="ident">get_experiment_group</span></span>(<span>self, id)</span>
 </code></dt>
 <dd>
@@ -2110,7 +2110,7 @@ opportunity.</p></div>
 :param str id: id of the ExperimentsGroup
 :return ExperimentsGroup: the ExperimentsGroup associated with the input id</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_experiment_groups"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_experiment_groups"><code class="name flex">
 <span>def <span class="ident">get_experiment_groups</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2128,7 +2128,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the ExperimentsGroup of the Data Request.
 :return list of ExperimentsGroup: list of the ExperimentsGroup of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_experiments"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_experiments"><code class="name flex">
 <span>def <span class="ident">get_experiments</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2151,7 +2151,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the experiments of the Data Request.
 :return list of DRObject: list of the experiments of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_filtering_structure"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_filtering_structure"><code class="name flex">
 <span>def <span class="ident">get_filtering_structure</span></span>(<span>self, DR_type)</span>
 </code></dt>
 <dd>
@@ -2172,7 +2172,7 @@ opportunity.</p></div>
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_mips"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_mips"><code class="name flex">
 <span>def <span class="ident">get_mips</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2197,7 +2197,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the MIPs of the Data Request.
 :return list of DRObject or ConstantValueObj: list of the MIPs of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_opportunities"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_opportunities"><code class="name flex">
 <span>def <span class="ident">get_opportunities</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2215,7 +2215,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the Opportunity of the Data Request.
 :return list of Opportunity: list of the Opportunity of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_opportunity"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_opportunity"><code class="name flex">
 <span>def <span class="ident">get_opportunity</span></span>(<span>self, id)</span>
 </code></dt>
 <dd>
@@ -2239,7 +2239,7 @@ opportunity.</p></div>
 :param str id: id of the Opportunity
 :return Opportunity: the Opportunity associated with the input id</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_variable_group"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_variable_group"><code class="name flex">
 <span>def <span class="ident">get_variable_group</span></span>(<span>self, id)</span>
 </code></dt>
 <dd>
@@ -2263,7 +2263,7 @@ opportunity.</p></div>
 :param str id: id of the VariablesGroup
 :return VariablesGroup: the VariablesGroup associated with the input id</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_variable_groups"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_variable_groups"><code class="name flex">
 <span>def <span class="ident">get_variable_groups</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2281,7 +2281,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the VariablesGroup of the Data Request.
 :return list of VariablesGroup: list of the VariablesGroup of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.get_variables"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.get_variables"><code class="name flex">
 <span>def <span class="ident">get_variables</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2304,7 +2304,7 @@ opportunity.</p></div>
 <div class="desc"><p>Get the Variable of the Data Request.
 :return list of Variable: list of the Variable of the DR content.</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.DataRequest.sort_func"><code class="name flex">
+<dt id="data_request_api.query.data_request.DataRequest.sort_func"><code class="name flex">
 <span>def <span class="ident">sort_func</span></span>(<span>self, data_list, sorting_request=[])</span>
 </code></dt>
 <dd>
@@ -2339,7 +2339,7 @@ opportunity.</p></div>
 </dd>
 </dl>
 </dd>
-<dt id="data_request_api.stable.query.data_request.ExperimentsGroup"><code class="flex name class">
+<dt id="data_request_api.query.data_request.ExperimentsGroup"><code class="flex name class">
 <span>class <span class="ident">ExperimentsGroup</span></span>
 <span>(</span><span>id, dr, DR_type='experiment_groups', structure={'experiments': []}, **attributes)</span>
 </code></dt>
@@ -2408,11 +2408,11 @@ Use to define basic information needed.</p>
 :param dict attributes: attributes of the object coming from vocabulary server</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></li>
+<li><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.ExperimentsGroup.count"><code class="name flex">
+<dt id="data_request_api.query.data_request.ExperimentsGroup.count"><code class="name flex">
 <span>def <span class="ident">count</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2430,7 +2430,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the number of experiments linked to the ExperimentGroup
 :return int: number of experiments of the ExperimentGroup</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.ExperimentsGroup.get_experiments"><code class="name flex">
+<dt id="data_request_api.query.data_request.ExperimentsGroup.get_experiments"><code class="name flex">
 <span>def <span class="ident">get_experiments</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2451,18 +2451,18 @@ Use to define basic information needed.</p>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<li><code><b><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></b></code>:
 <ul class="hlist">
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.check" href="#data_request_api.stable.query.data_request.DRObjects.check">check</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.filter_on_request" href="#data_request_api.stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.from_input" href="#data_request_api.stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.print_content" href="#data_request_api.stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.transform_content" href="#data_request_api.stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.check" href="#data_request_api.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.filter_on_request" href="#data_request_api.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.from_input" href="#data_request_api.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.print_content" href="#data_request_api.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.transform_content" href="#data_request_api.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
 </ul>
 </li>
 </ul>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Opportunity"><code class="flex name class">
+<dt id="data_request_api.query.data_request.Opportunity"><code class="flex name class">
 <span>class <span class="ident">Opportunity</span></span>
 <span>(</span><span>id,<br>dr,<br>DR_type='opportunities',<br>structure={'experiment_groups': [], 'variable_groups': [], 'data_request_themes': [], 'time_subsets': []},<br>**attributes)</span>
 </code></dt>
@@ -2597,11 +2597,11 @@ Use to define basic information needed.</p>
 :param dict attributes: attributes of the object coming from vocabulary server</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></li>
+<li><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.Opportunity.get_data_request_themes"><code class="name flex">
+<dt id="data_request_api.query.data_request.Opportunity.get_data_request_themes"><code class="name flex">
 <span>def <span class="ident">get_data_request_themes</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2619,7 +2619,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the list of themes linked to the Opportunity.
 :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Opportunity.get_experiment_groups"><code class="name flex">
+<dt id="data_request_api.query.data_request.Opportunity.get_experiment_groups"><code class="name flex">
 <span>def <span class="ident">get_experiment_groups</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2637,7 +2637,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the list of ExperimentsGroup linked to the Opportunity.
 :return list of ExperimentsGroup: list of ExperimentsGroup linked to Opportunity</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Opportunity.get_mips"><code class="name flex">
+<dt id="data_request_api.query.data_request.Opportunity.get_mips"><code class="name flex">
 <span>def <span class="ident">get_mips</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2655,7 +2655,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the list of MIPs linked to the Opportunity.
 :return list of DRObject: list of MIPs linked to Opportunity</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Opportunity.get_themes"><code class="name flex">
+<dt id="data_request_api.query.data_request.Opportunity.get_themes"><code class="name flex">
 <span>def <span class="ident">get_themes</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2673,7 +2673,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the list of themes linked to the Opportunity.
 :return list of DRObject or ConstantValueObj: list of themes linked to Opportunity</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Opportunity.get_time_subsets"><code class="name flex">
+<dt id="data_request_api.query.data_request.Opportunity.get_time_subsets"><code class="name flex">
 <span>def <span class="ident">get_time_subsets</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2691,7 +2691,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the list of time subsets linked to the Opportunity.
 :return list of DRObject: list of time subsets linked to Opportunity</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Opportunity.get_variable_groups"><code class="name flex">
+<dt id="data_request_api.query.data_request.Opportunity.get_variable_groups"><code class="name flex">
 <span>def <span class="ident">get_variable_groups</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2712,18 +2712,18 @@ Use to define basic information needed.</p>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<li><code><b><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></b></code>:
 <ul class="hlist">
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.check" href="#data_request_api.stable.query.data_request.DRObjects.check">check</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.filter_on_request" href="#data_request_api.stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.from_input" href="#data_request_api.stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.print_content" href="#data_request_api.stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.transform_content" href="#data_request_api.stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.check" href="#data_request_api.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.filter_on_request" href="#data_request_api.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.from_input" href="#data_request_api.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.print_content" href="#data_request_api.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.transform_content" href="#data_request_api.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
 </ul>
 </li>
 </ul>
 </dd>
-<dt id="data_request_api.stable.query.data_request.Variable"><code class="flex name class">
+<dt id="data_request_api.query.data_request.Variable"><code class="flex name class">
 <span>class <span class="ident">Variable</span></span>
 <span>(</span><span>id, dr, DR_type='variables', structure={}, **attributes)</span>
 </code></dt>
@@ -2791,22 +2791,22 @@ Use to define basic information needed.</p>
 :param dict attributes: attributes of the object coming from vocabulary server</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></li>
+<li><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<li><code><b><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></b></code>:
 <ul class="hlist">
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.check" href="#data_request_api.stable.query.data_request.DRObjects.check">check</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.filter_on_request" href="#data_request_api.stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.from_input" href="#data_request_api.stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.print_content" href="#data_request_api.stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.transform_content" href="#data_request_api.stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.check" href="#data_request_api.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.filter_on_request" href="#data_request_api.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.from_input" href="#data_request_api.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.print_content" href="#data_request_api.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.transform_content" href="#data_request_api.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
 </ul>
 </li>
 </ul>
 </dd>
-<dt id="data_request_api.stable.query.data_request.VariablesGroup"><code class="flex name class">
+<dt id="data_request_api.query.data_request.VariablesGroup"><code class="flex name class">
 <span>class <span class="ident">VariablesGroup</span></span>
 <span>(</span><span>id,<br>dr,<br>DR_type='variable_groups',<br>structure={'variables': [], 'mips': [], 'priority_level': 'High'},<br>**attributes)</span>
 </code></dt>
@@ -2906,11 +2906,11 @@ Use to define basic information needed.</p>
 :param dict attributes: attributes of the object coming from vocabulary server</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></li>
+<li><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="data_request_api.stable.query.data_request.VariablesGroup.count"><code class="name flex">
+<dt id="data_request_api.query.data_request.VariablesGroup.count"><code class="name flex">
 <span>def <span class="ident">count</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2928,7 +2928,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Count the number of variables linked to the VariablesGroup.
 :return int: number of variables linked to the VariablesGroup</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.VariablesGroup.get_mips"><code class="name flex">
+<dt id="data_request_api.query.data_request.VariablesGroup.get_mips"><code class="name flex">
 <span>def <span class="ident">get_mips</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2946,7 +2946,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the list of MIPs linked to the VariablesGroup.
 :return list of DrObject: list of MIPs linked to VariablesGroup</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.VariablesGroup.get_priority_level"><code class="name flex">
+<dt id="data_request_api.query.data_request.VariablesGroup.get_priority_level"><code class="name flex">
 <span>def <span class="ident">get_priority_level</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2964,7 +2964,7 @@ Use to define basic information needed.</p>
 <div class="desc"><p>Return the priority level of the VariablesGroup.
 :return DrObject: priority level of VariablesGroup</p></div>
 </dd>
-<dt id="data_request_api.stable.query.data_request.VariablesGroup.get_variables"><code class="name flex">
+<dt id="data_request_api.query.data_request.VariablesGroup.get_variables"><code class="name flex">
 <span>def <span class="ident">get_variables</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -2985,13 +2985,13 @@ Use to define basic information needed.</p>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></b></code>:
+<li><code><b><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></b></code>:
 <ul class="hlist">
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.check" href="#data_request_api.stable.query.data_request.DRObjects.check">check</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.filter_on_request" href="#data_request_api.stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.from_input" href="#data_request_api.stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.print_content" href="#data_request_api.stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.transform_content" href="#data_request_api.stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.check" href="#data_request_api.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.filter_on_request" href="#data_request_api.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.from_input" href="#data_request_api.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.print_content" href="#data_request_api.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.transform_content" href="#data_request_api.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3006,100 +3006,100 @@ Use to define basic information needed.</p>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.stable.query" href="index.html">data_request_api.stable.query</a></code></li>
+<li><code><a title="data_request_api.query" href="index.html">data_request_api.query</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="data_request_api.stable.query.data_request.DRObjects" href="#data_request_api.stable.query.data_request.DRObjects">DRObjects</a></code></h4>
+<h4><code><a title="data_request_api.query.data_request.DRObjects" href="#data_request_api.query.data_request.DRObjects">DRObjects</a></code></h4>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.check" href="#data_request_api.stable.query.data_request.DRObjects.check">check</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.filter_on_request" href="#data_request_api.stable.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.filter_on_request_list" href="#data_request_api.stable.query.data_request.DRObjects.filter_on_request_list">filter_on_request_list</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.from_input" href="#data_request_api.stable.query.data_request.DRObjects.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.get" href="#data_request_api.stable.query.data_request.DRObjects.get">get</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.id" href="#data_request_api.stable.query.data_request.DRObjects.id">id</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.print_content" href="#data_request_api.stable.query.data_request.DRObjects.print_content">print_content</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.transform_content" href="#data_request_api.stable.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DRObjects.transform_content_inner" href="#data_request_api.stable.query.data_request.DRObjects.transform_content_inner">transform_content_inner</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.check" href="#data_request_api.query.data_request.DRObjects.check">check</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.filter_on_request" href="#data_request_api.query.data_request.DRObjects.filter_on_request">filter_on_request</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.filter_on_request_list" href="#data_request_api.query.data_request.DRObjects.filter_on_request_list">filter_on_request_list</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.from_input" href="#data_request_api.query.data_request.DRObjects.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.get" href="#data_request_api.query.data_request.DRObjects.get">get</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.id" href="#data_request_api.query.data_request.DRObjects.id">id</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.print_content" href="#data_request_api.query.data_request.DRObjects.print_content">print_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.transform_content" href="#data_request_api.query.data_request.DRObjects.transform_content">transform_content</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DRObjects.transform_content_inner" href="#data_request_api.query.data_request.DRObjects.transform_content_inner">transform_content_inner</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="data_request_api.stable.query.data_request.DataRequest" href="#data_request_api.stable.query.data_request.DataRequest">DataRequest</a></code></h4>
+<h4><code><a title="data_request_api.query.data_request.DataRequest" href="#data_request_api.query.data_request.DataRequest">DataRequest</a></code></h4>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.check" href="#data_request_api.stable.query.data_request.DataRequest.check">check</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.export_data" href="#data_request_api.stable.query.data_request.DataRequest.export_data">export_data</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.export_summary" href="#data_request_api.stable.query.data_request.DataRequest.export_summary">export_summary</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.filter_elements_per_request" href="#data_request_api.stable.query.data_request.DataRequest.filter_elements_per_request">filter_elements_per_request</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_element" href="#data_request_api.stable.query.data_request.DataRequest.find_element">find_element</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_element_from_vs" href="#data_request_api.stable.query.data_request.DataRequest.find_element_from_vs">find_element_from_vs</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_element_per_identifier_from_vs" href="#data_request_api.stable.query.data_request.DataRequest.find_element_per_identifier_from_vs">find_element_per_identifier_from_vs</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_experiments" href="#data_request_api.stable.query.data_request.DataRequest.find_experiments">find_experiments</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_experiments_per_opportunity" href="#data_request_api.stable.query.data_request.DataRequest.find_experiments_per_opportunity">find_experiments_per_opportunity</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_experiments_per_theme" href="#data_request_api.stable.query.data_request.DataRequest.find_experiments_per_theme">find_experiments_per_theme</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_mips_per_opportunity" href="#data_request_api.stable.query.data_request.DataRequest.find_mips_per_opportunity">find_mips_per_opportunity</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_mips_per_theme" href="#data_request_api.stable.query.data_request.DataRequest.find_mips_per_theme">find_mips_per_theme</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_mips_per_variable" href="#data_request_api.stable.query.data_request.DataRequest.find_mips_per_variable">find_mips_per_variable</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_opportunities" href="#data_request_api.stable.query.data_request.DataRequest.find_opportunities">find_opportunities</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_experiment" href="#data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_experiment">find_opportunities_per_experiment</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_theme" href="#data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_theme">find_opportunities_per_theme</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_variable" href="#data_request_api.stable.query.data_request.DataRequest.find_opportunities_per_variable">find_opportunities_per_variable</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_priority_per_variable" href="#data_request_api.stable.query.data_request.DataRequest.find_priority_per_variable">find_priority_per_variable</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_themes_per_experiment" href="#data_request_api.stable.query.data_request.DataRequest.find_themes_per_experiment">find_themes_per_experiment</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_themes_per_opportunity" href="#data_request_api.stable.query.data_request.DataRequest.find_themes_per_opportunity">find_themes_per_opportunity</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_themes_per_variable" href="#data_request_api.stable.query.data_request.DataRequest.find_themes_per_variable">find_themes_per_variable</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_variables" href="#data_request_api.stable.query.data_request.DataRequest.find_variables">find_variables</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_variables_per_opportunity" href="#data_request_api.stable.query.data_request.DataRequest.find_variables_per_opportunity">find_variables_per_opportunity</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_variables_per_priority" href="#data_request_api.stable.query.data_request.DataRequest.find_variables_per_priority">find_variables_per_priority</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.find_variables_per_theme" href="#data_request_api.stable.query.data_request.DataRequest.find_variables_per_theme">find_variables_per_theme</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.from_input" href="#data_request_api.stable.query.data_request.DataRequest.from_input">from_input</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.from_separated_inputs" href="#data_request_api.stable.query.data_request.DataRequest.from_separated_inputs">from_separated_inputs</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_data_request_themes" href="#data_request_api.stable.query.data_request.DataRequest.get_data_request_themes">get_data_request_themes</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_elements_per_kind" href="#data_request_api.stable.query.data_request.DataRequest.get_elements_per_kind">get_elements_per_kind</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_experiment_group" href="#data_request_api.stable.query.data_request.DataRequest.get_experiment_group">get_experiment_group</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_experiment_groups" href="#data_request_api.stable.query.data_request.DataRequest.get_experiment_groups">get_experiment_groups</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_experiments" href="#data_request_api.stable.query.data_request.DataRequest.get_experiments">get_experiments</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_filtering_structure" href="#data_request_api.stable.query.data_request.DataRequest.get_filtering_structure">get_filtering_structure</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_mips" href="#data_request_api.stable.query.data_request.DataRequest.get_mips">get_mips</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_opportunities" href="#data_request_api.stable.query.data_request.DataRequest.get_opportunities">get_opportunities</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_opportunity" href="#data_request_api.stable.query.data_request.DataRequest.get_opportunity">get_opportunity</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_variable_group" href="#data_request_api.stable.query.data_request.DataRequest.get_variable_group">get_variable_group</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_variable_groups" href="#data_request_api.stable.query.data_request.DataRequest.get_variable_groups">get_variable_groups</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.get_variables" href="#data_request_api.stable.query.data_request.DataRequest.get_variables">get_variables</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.software_version" href="#data_request_api.stable.query.data_request.DataRequest.software_version">software_version</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.sort_func" href="#data_request_api.stable.query.data_request.DataRequest.sort_func">sort_func</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.DataRequest.version" href="#data_request_api.stable.query.data_request.DataRequest.version">version</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.check" href="#data_request_api.query.data_request.DataRequest.check">check</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.export_data" href="#data_request_api.query.data_request.DataRequest.export_data">export_data</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.export_summary" href="#data_request_api.query.data_request.DataRequest.export_summary">export_summary</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.filter_elements_per_request" href="#data_request_api.query.data_request.DataRequest.filter_elements_per_request">filter_elements_per_request</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_element" href="#data_request_api.query.data_request.DataRequest.find_element">find_element</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_element_from_vs" href="#data_request_api.query.data_request.DataRequest.find_element_from_vs">find_element_from_vs</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_element_per_identifier_from_vs" href="#data_request_api.query.data_request.DataRequest.find_element_per_identifier_from_vs">find_element_per_identifier_from_vs</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_experiments" href="#data_request_api.query.data_request.DataRequest.find_experiments">find_experiments</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_experiments_per_opportunity" href="#data_request_api.query.data_request.DataRequest.find_experiments_per_opportunity">find_experiments_per_opportunity</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_experiments_per_theme" href="#data_request_api.query.data_request.DataRequest.find_experiments_per_theme">find_experiments_per_theme</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_mips_per_opportunity" href="#data_request_api.query.data_request.DataRequest.find_mips_per_opportunity">find_mips_per_opportunity</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_mips_per_theme" href="#data_request_api.query.data_request.DataRequest.find_mips_per_theme">find_mips_per_theme</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_mips_per_variable" href="#data_request_api.query.data_request.DataRequest.find_mips_per_variable">find_mips_per_variable</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_opportunities" href="#data_request_api.query.data_request.DataRequest.find_opportunities">find_opportunities</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_opportunities_per_experiment" href="#data_request_api.query.data_request.DataRequest.find_opportunities_per_experiment">find_opportunities_per_experiment</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_opportunities_per_theme" href="#data_request_api.query.data_request.DataRequest.find_opportunities_per_theme">find_opportunities_per_theme</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_opportunities_per_variable" href="#data_request_api.query.data_request.DataRequest.find_opportunities_per_variable">find_opportunities_per_variable</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_priority_per_variable" href="#data_request_api.query.data_request.DataRequest.find_priority_per_variable">find_priority_per_variable</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_themes_per_experiment" href="#data_request_api.query.data_request.DataRequest.find_themes_per_experiment">find_themes_per_experiment</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_themes_per_opportunity" href="#data_request_api.query.data_request.DataRequest.find_themes_per_opportunity">find_themes_per_opportunity</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_themes_per_variable" href="#data_request_api.query.data_request.DataRequest.find_themes_per_variable">find_themes_per_variable</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_variables" href="#data_request_api.query.data_request.DataRequest.find_variables">find_variables</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_variables_per_opportunity" href="#data_request_api.query.data_request.DataRequest.find_variables_per_opportunity">find_variables_per_opportunity</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_variables_per_priority" href="#data_request_api.query.data_request.DataRequest.find_variables_per_priority">find_variables_per_priority</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.find_variables_per_theme" href="#data_request_api.query.data_request.DataRequest.find_variables_per_theme">find_variables_per_theme</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.from_input" href="#data_request_api.query.data_request.DataRequest.from_input">from_input</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.from_separated_inputs" href="#data_request_api.query.data_request.DataRequest.from_separated_inputs">from_separated_inputs</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_data_request_themes" href="#data_request_api.query.data_request.DataRequest.get_data_request_themes">get_data_request_themes</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_elements_per_kind" href="#data_request_api.query.data_request.DataRequest.get_elements_per_kind">get_elements_per_kind</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_experiment_group" href="#data_request_api.query.data_request.DataRequest.get_experiment_group">get_experiment_group</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_experiment_groups" href="#data_request_api.query.data_request.DataRequest.get_experiment_groups">get_experiment_groups</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_experiments" href="#data_request_api.query.data_request.DataRequest.get_experiments">get_experiments</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_filtering_structure" href="#data_request_api.query.data_request.DataRequest.get_filtering_structure">get_filtering_structure</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_mips" href="#data_request_api.query.data_request.DataRequest.get_mips">get_mips</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_opportunities" href="#data_request_api.query.data_request.DataRequest.get_opportunities">get_opportunities</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_opportunity" href="#data_request_api.query.data_request.DataRequest.get_opportunity">get_opportunity</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_variable_group" href="#data_request_api.query.data_request.DataRequest.get_variable_group">get_variable_group</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_variable_groups" href="#data_request_api.query.data_request.DataRequest.get_variable_groups">get_variable_groups</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.get_variables" href="#data_request_api.query.data_request.DataRequest.get_variables">get_variables</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.software_version" href="#data_request_api.query.data_request.DataRequest.software_version">software_version</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.sort_func" href="#data_request_api.query.data_request.DataRequest.sort_func">sort_func</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.version" href="#data_request_api.query.data_request.DataRequest.version">version</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="data_request_api.stable.query.data_request.ExperimentsGroup" href="#data_request_api.stable.query.data_request.ExperimentsGroup">ExperimentsGroup</a></code></h4>
+<h4><code><a title="data_request_api.query.data_request.ExperimentsGroup" href="#data_request_api.query.data_request.ExperimentsGroup">ExperimentsGroup</a></code></h4>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.data_request.ExperimentsGroup.count" href="#data_request_api.stable.query.data_request.ExperimentsGroup.count">count</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.ExperimentsGroup.get_experiments" href="#data_request_api.stable.query.data_request.ExperimentsGroup.get_experiments">get_experiments</a></code></li>
+<li><code><a title="data_request_api.query.data_request.ExperimentsGroup.count" href="#data_request_api.query.data_request.ExperimentsGroup.count">count</a></code></li>
+<li><code><a title="data_request_api.query.data_request.ExperimentsGroup.get_experiments" href="#data_request_api.query.data_request.ExperimentsGroup.get_experiments">get_experiments</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="data_request_api.stable.query.data_request.Opportunity" href="#data_request_api.stable.query.data_request.Opportunity">Opportunity</a></code></h4>
+<h4><code><a title="data_request_api.query.data_request.Opportunity" href="#data_request_api.query.data_request.Opportunity">Opportunity</a></code></h4>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.data_request.Opportunity.get_data_request_themes" href="#data_request_api.stable.query.data_request.Opportunity.get_data_request_themes">get_data_request_themes</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.Opportunity.get_experiment_groups" href="#data_request_api.stable.query.data_request.Opportunity.get_experiment_groups">get_experiment_groups</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.Opportunity.get_mips" href="#data_request_api.stable.query.data_request.Opportunity.get_mips">get_mips</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.Opportunity.get_themes" href="#data_request_api.stable.query.data_request.Opportunity.get_themes">get_themes</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.Opportunity.get_time_subsets" href="#data_request_api.stable.query.data_request.Opportunity.get_time_subsets">get_time_subsets</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.Opportunity.get_variable_groups" href="#data_request_api.stable.query.data_request.Opportunity.get_variable_groups">get_variable_groups</a></code></li>
+<li><code><a title="data_request_api.query.data_request.Opportunity.get_data_request_themes" href="#data_request_api.query.data_request.Opportunity.get_data_request_themes">get_data_request_themes</a></code></li>
+<li><code><a title="data_request_api.query.data_request.Opportunity.get_experiment_groups" href="#data_request_api.query.data_request.Opportunity.get_experiment_groups">get_experiment_groups</a></code></li>
+<li><code><a title="data_request_api.query.data_request.Opportunity.get_mips" href="#data_request_api.query.data_request.Opportunity.get_mips">get_mips</a></code></li>
+<li><code><a title="data_request_api.query.data_request.Opportunity.get_themes" href="#data_request_api.query.data_request.Opportunity.get_themes">get_themes</a></code></li>
+<li><code><a title="data_request_api.query.data_request.Opportunity.get_time_subsets" href="#data_request_api.query.data_request.Opportunity.get_time_subsets">get_time_subsets</a></code></li>
+<li><code><a title="data_request_api.query.data_request.Opportunity.get_variable_groups" href="#data_request_api.query.data_request.Opportunity.get_variable_groups">get_variable_groups</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="data_request_api.stable.query.data_request.Variable" href="#data_request_api.stable.query.data_request.Variable">Variable</a></code></h4>
+<h4><code><a title="data_request_api.query.data_request.Variable" href="#data_request_api.query.data_request.Variable">Variable</a></code></h4>
 </li>
 <li>
-<h4><code><a title="data_request_api.stable.query.data_request.VariablesGroup" href="#data_request_api.stable.query.data_request.VariablesGroup">VariablesGroup</a></code></h4>
+<h4><code><a title="data_request_api.query.data_request.VariablesGroup" href="#data_request_api.query.data_request.VariablesGroup">VariablesGroup</a></code></h4>
 <ul class="">
-<li><code><a title="data_request_api.stable.query.data_request.VariablesGroup.count" href="#data_request_api.stable.query.data_request.VariablesGroup.count">count</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.VariablesGroup.get_mips" href="#data_request_api.stable.query.data_request.VariablesGroup.get_mips">get_mips</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.VariablesGroup.get_priority_level" href="#data_request_api.stable.query.data_request.VariablesGroup.get_priority_level">get_priority_level</a></code></li>
-<li><code><a title="data_request_api.stable.query.data_request.VariablesGroup.get_variables" href="#data_request_api.stable.query.data_request.VariablesGroup.get_variables">get_variables</a></code></li>
+<li><code><a title="data_request_api.query.data_request.VariablesGroup.count" href="#data_request_api.query.data_request.VariablesGroup.count">count</a></code></li>
+<li><code><a title="data_request_api.query.data_request.VariablesGroup.get_mips" href="#data_request_api.query.data_request.VariablesGroup.get_mips">get_mips</a></code></li>
+<li><code><a title="data_request_api.query.data_request.VariablesGroup.get_priority_level" href="#data_request_api.query.data_request.VariablesGroup.get_priority_level">get_priority_level</a></code></li>
+<li><code><a title="data_request_api.query.data_request.VariablesGroup.get_variables" href="#data_request_api.query.data_request.VariablesGroup.get_variables">get_variables</a></code></li>
 </ul>
 </li>
 </ul>

@@ -172,7 +172,8 @@ dreq_res
 !all_var_info.json
 !requested_v1.0beta_all_opportunities.json
 !data_request_api/tests/test_datasets/*.json
-!data_request_api/stable/query/filtering.json
+!data_request_api/query/filtering.json
+!data_request_api/content/transform.json
 # assume spreadsheets are also content of some kind, which we don't want in this repo
 *.xlsx
 *.csv

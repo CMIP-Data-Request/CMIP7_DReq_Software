@@ -10,8 +10,8 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 import copy
 from collections import defaultdict
 
-from data_request_api.stable.utilities.logger import get_logger
-from data_request_api.stable.utilities.tools import read_json_file
+from data_request_api.utilities.logger import get_logger
+from data_request_api.utilities.tools import read_json_file
 
 
 def is_link_id_or_value(elt):
@@ -92,7 +92,10 @@ class VocabularyServer(object):
             coordinate="coordinates_and_dimensions",
             extra_dimension="coordinates_and_dimensions",
             max_priority_level="priority_level",
-            structure="structure_title"
+            structure="structure_title",
+            table="cmip6_tables_identifier",
+            table_identifier="cmip6_tables_identifier",
+            reference="docs_for_opportunity"
         )
         return element_type_dict.get(element_type, element_type)
 

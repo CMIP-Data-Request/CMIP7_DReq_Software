@@ -1,32 +1,15 @@
 #!/usr/bin/env python
 '''
-Example script for basic use of CMIP7 data request content
+Example script for basic use of CMIP7 data request content.
 
-Getting started
----------------
-First create an environment with the required dependencies:
-
-    conda env create -n my_dreq_env --file env.yml
-
-(replacing my_dreq_env with your preferred env name). Then activate it and run the script:
-
-    conda activate my_dreq_env
+See main repo README or docs for how to create an environment with the required dependencies.
+To run the script at the shell prompt:
     python workflow_example.py
-
-will load the data request content and save a json file of requested variables in the current dir.
-To run interactively in ipython:
-
+or in ipython:
     run -i workflow_example.py
-
-Note that a command-line equivalent of this script is also available in the scripts/ folder.
-For usage info, do:
-
-    ./export_dreq_lists_json.py -h    
-
-Usage examples:
-
-    ./export_dreq_lists_json.py v1.0 dreq_list.json --all_opportunities
-    ./export_dreq_lists_json.py v1.0 dreq_list.json --opportunities_file opps.json
+A command-line equivalent of this script is available after pip installing the package.
+For usage info:
+    export_dreq_lists_json -h
 
 '''
 import os
@@ -35,9 +18,8 @@ import sys
 # add repo top-level dir to system path so that data_request_api imports work from scripts/
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
-from data_request_api.stable.content import dreq_content as dc
-from data_request_api.stable.query import dreq_query as dq
+from data_request_api.content import dreq_content as dc
+from data_request_api.query import dreq_query as dq
 from importlib import reload
 reload(dq)
 
@@ -56,10 +38,10 @@ use_opps.append('Synoptic systems')
 # Or, to support all opportunities in the data request:
 use_opps = 'all'
 
-# Get consolidated list of requested variables that supports these opportunities
-dq.DREQ_VERSION = use_dreq_version
+# Get the requested variables for each opportunity and aggregate them into variable lists by experiment
+# (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
 priority_cutoff = 'Low'
-expt_vars = dq.get_requested_variables(content, use_opps, priority_cutoff=priority_cutoff, verbose=False)
+expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps, priority_cutoff=priority_cutoff, verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:

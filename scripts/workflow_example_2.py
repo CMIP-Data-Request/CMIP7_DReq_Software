@@ -32,25 +32,28 @@ from collections import defaultdict
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-from data_request_api.stable.content.dump_transformation import get_transformed_content
-from data_request_api.stable.query.data_request import DataRequest
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level
+from data_request_api.content.dump_transformation import get_transformed_content
+from data_request_api.query.data_request import DataRequest
+from data_request_api.utilities.logger import change_log_file, change_log_level
+from data_request_api.utilities.parser import append_arguments_to_parser
+from data_request_api.utilities.decorators import append_kwargs_from_config
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--log_level", default="info", help="Log level")
-parser.add_argument("--dreq_version", default="latest_stable", help="Version to be used")
-parser.add_argument("--dreq_export_version", default="release", help="Export version to be used")
-parser.add_argument("--use_consolidation", default=False, help="Should content consolidation be used?")
-parser.add_argument("--output_dir", default="default",
-                    help="Output directory to be used ('default', 'test' or a specify output directory)")
+parser.add_argument("--version", default="latest_stable", help="Version to be used")
+parser = append_arguments_to_parser(parser)
+subparser = parser.add_mutually_exclusive_group()
+subparser.add_argument("--output_dir", default=None, help="Dedicated output directory to use")
+subparser.add_argument("--test", action="store_true", help="Is the launch a test? If so, launch in temporary directory.")
 args = parser.parse_args()
 
 
-def get_information_from_data_request(dreq_version, dreq_export_version, use_consolidation, output_dir):
+@append_kwargs_from_config
+def get_information_from_data_request(version, output_dir, **kwargs):
+    change_log_file(default=True, logfile=kwargs["log_file"])
+    change_log_level(kwargs["log_level"])
     ### Step 1: Get the data request content
-    content_dict = get_transformed_content(version=dreq_version, export_version=dreq_export_version,
-                                           use_consolidation=use_consolidation, output_dir=output_dir)
+    content_dict = get_transformed_content(version=version, output_dir=output_dir, **kwargs)
     DR = DataRequest.from_separated_inputs(**content_dict)
 
     ### Step 2: Get information from the DR
@@ -93,20 +96,11 @@ def get_information_from_data_request(dreq_version, dreq_export_version, use_con
                    export_columns_request=["name", "lead_theme", "description"])
 
 
-# Set up log file (default to stdout) and log level
-change_log_file(default=True)
-change_log_level(args.log_level)
+kwargs = args.__dict__
 
-if args.output_dir in ["test", ]:
+if args.test:
     with tempfile.TemporaryDirectory() as output_dir:
-        get_information_from_data_request(output_dir=output_dir, dreq_version=args.dreq_version,
-                                          dreq_export_version=args.dreq_export_version,
-                                          use_consolidation=args.use_consolidation)
-elif args.output_dir in ["default", ]:
-    get_information_from_data_request(output_dir=None, dreq_version=args.dreq_version,
-                                      dreq_export_version=args.dreq_export_version,
-                                      use_consolidation=args.use_consolidation)
+        kwargs["output_dir"] = output_dir
+        get_information_from_data_request(**kwargs)
 else:
-    get_information_from_data_request(output_dir=args.output_dir, dreq_version=args.dreq_version,
-                                      dreq_export_version=args.dreq_export_version,
-                                      use_consolidation=args.use_consolidation)
+    get_information_from_data_request(**kwargs)

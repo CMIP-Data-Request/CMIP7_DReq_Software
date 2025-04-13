@@ -4,9 +4,9 @@ import functools
 import inspect
 import warnings
 
-import data_request_api.stable.utilities.config as dreqcfg
-from data_request_api.stable.utilities.config import _sanity_check
-from data_request_api.stable.utilities.logger import get_logger
+import data_request_api.utilities.config as dreqcfg
+from data_request_api.utilities.config import _sanity_check
+from data_request_api.utilities.logger import get_logger
 
 
 def append_kwargs_from_config(func):
@@ -21,7 +21,7 @@ def append_kwargs_from_config(func):
 
         # Get function args
         sig = inspect.signature(func)
-        bound_args = sig.bind(*args)
+        bound_args = sig.bind_partial(*args, **kwargs)
         params = sig.parameters
 
         config = dreqcfg.load_config()

@@ -15,37 +15,41 @@ import tempfile
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-import data_request_api.stable.content.dreq_content as dc
-from data_request_api.stable.content.dump_transformation import transform_content
-from data_request_api.stable.utilities.tools import write_json_output_file_content
-from data_request_api.stable.utilities.logger import change_log_file, change_log_level
-from data_request_api.stable.query.data_request import DataRequest
+import data_request_api.content.dreq_content as dc
+from data_request_api.content.dump_transformation import transform_content
+from data_request_api.utilities.tools import write_json_output_file_content
+from data_request_api.utilities.logger import change_log_file, change_log_level
+from data_request_api.query.data_request import DataRequest
+from data_request_api.utilities.parser import append_arguments_to_parser
+from data_request_api.utilities.decorators import append_kwargs_from_config
+
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--log_level", default="info", help="Log level")
-parser.add_argument("--dreq_version", default="latest_stable", help="Version to be used")
-parser.add_argument("--dreq_export_version", default="release", help="Export version to be used")
-parser.add_argument("--use_consolidation", default=False, help="Should content consolidation be used?")
-parser.add_argument("--output_dir", default="default",
-                    help="Output directory to be used ('default', 'test' or a specify output directory)")
+parser.add_argument("--version", default="latest_stable", help="Version to be used")
+parser = append_arguments_to_parser(parser)
+subparser = parser.add_mutually_exclusive_group()
+subparser.add_argument("--output_dir", default=None, help="Dedicated output directory to use")
+subparser.add_argument("--test", action="store_true", help="Is the launch a test? If so, launch in temporary directory.")
 args = parser.parse_args()
 
 
-def database_transformation(output_dir, dreq_version="latest_stable", dreq_export_version="release",
-                            use_consolidation=False):
+@append_kwargs_from_config
+def database_transformation(version, output_dir, **kwargs):
+    change_log_file(default=True, logfile=kwargs["log_file"])
+    change_log_level(kwargs["log_level"])
     # Download specified version of data request content (if not locally cached)
-    versions = dc.retrieve(dreq_version, export=dreq_export_version, consolidate=use_consolidation)
+    versions = dc.retrieve(version, **kwargs)
 
     for (version, content) in versions.items():
         # Load the content
-        content = dc.load(version, export=dreq_export_version, consolidate=use_consolidation)
+        content = dc.load(version, **kwargs)
 
         # Transform content into DR and VS
-        data_request, vocabulary_server = transform_content(content, version=dreq_version)
+        data_request, vocabulary_server = transform_content(content, version=version)
 
         # Write down the two files
-        DR_file = os.path.sep.join([output_dir, version, f"DR_{dreq_export_version}_content.json"])
-        VS_file = os.path.sep.join([output_dir, version, f"VS_{dreq_export_version}_content.json"])
+        DR_file = os.path.sep.join([output_dir, version, f"DR_{kwargs['export']}_content.json"])
+        VS_file = os.path.sep.join([output_dir, version, f"VS_{kwargs['export']}_content.json"])
         write_json_output_file_content(DR_file, data_request)
         write_json_output_file_content(VS_file, vocabulary_server)
 
@@ -53,17 +57,11 @@ def database_transformation(output_dir, dreq_version="latest_stable", dreq_expor
         DR = DataRequest.from_separated_inputs(DR_input=DR_file, VS_input=VS_file)
 
 
-# Set up log file (default to stdout) and log level
-change_log_file(default=True)
-change_log_level(args.log_level)
+kwargs = args.__dict__
 
-if args.output_dir in ["test", ]:
+if args.test:
     with tempfile.TemporaryDirectory() as output_dir:
-        database_transformation(output_dir=output_dir, dreq_version=args.dreq_version,
-                                dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
-elif args.output_dir in ["default", ]:
-    database_transformation(output_dir=dc._dreq_res, dreq_version=args.dreq_version,
-                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
+        kwargs["output_dir"] = output_dir
+        database_transformation(**kwargs)
 else:
-    database_transformation(output_dir=args.output_dir, dreq_version=args.dreq_version,
-                            dreq_export_version=args.dreq_export_version, use_consolidation=args.use_consolidation)
+    database_transformation(**kwargs)
