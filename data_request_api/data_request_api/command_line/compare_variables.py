@@ -8,9 +8,6 @@ import os
 import yaml
 from collections import OrderedDict, defaultdict
 
-import sys
-sys.path.append('..')
-
 
 def parse_args():
 
