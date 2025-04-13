@@ -17,21 +17,25 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Compare variables metadata between data request versions'
     )
-
     parser.add_argument('compare', nargs=2,
                         help='versions of variables to compare: json file or cmor tables')
     parser.add_argument('-c', '--config_attributes', default='attributes.yaml',
                         help='yaml file specifying metadata attributes to compare (will be created if it doesn\'t exist)')
-
     return parser.parse_args()
+
 
 def main():
 
     args = parse_args()
     compare_versions = list(args.compare)
 
+    # Output file names
+    outfile_vars = 'diffs_by_variable.json'
+    outfile_attr = 'diffs_by_attribute.json'
+    outfile_missing = 'missing_variables.json'
+
     filepath = args.config_attributes
-    if not os.path.exists(filepath) or True:
+    if not os.path.exists(filepath):
         # If config file doesn't exist, create it
         config = {
             'compare_attributes': [
@@ -63,11 +67,6 @@ def main():
         config = yaml.safe_load(f)
         compare_attributes = sorted(config['compare_attributes'], key=str.lower)
         repos = config['repos']
-
-    # Name of output file to write with the diffs
-    outfile_vars = 'diffs_by_variable.json'
-    outfile_attr = 'diffs_by_attribute.json'
-    outfile_missing = 'missing_variables.json'
 
     # If comparing against existing CMOR tables, get variables from them
     for kc, version in enumerate(compare_versions):
@@ -140,7 +139,7 @@ def main():
 
     # Go variable-by-variable to compare metadata
     missing_vars = defaultdict(set)
-    diffs = OrderedDict()
+    diffs_by_name = OrderedDict()
     attr_diffs = set()
     for var_name in all_var_names:
         missing = False
@@ -167,50 +166,95 @@ def main():
                 })
                 attr_diffs.add(attr)
         if len(var_diff) > 0:
-            diffs[var_name] = var_diff
+            diffs_by_name[var_name] = var_diff
 
-    missing = OrderedDict()
-    for version in compare_versions:
-        missing[f'not in {version}'] = sorted(missing_vars[version], key=str.lower)
-
-    # Write output file summarizing the differences, organized by variable name
-    print()
-    out = OrderedDict({
-        'Header' : {
-            'Description': f'Comparison of variable metadata between {ver0} and {ver1}',
-        },
-        'Missing' : missing,
-        'Compound Name' : diffs,
-    })
-    outfile = outfile_vars
-    with open(outfile, 'w') as f:
-        json.dump(out, f, indent=4)
-        print('Wrote ' + outfile)
-
-    # Write another output file with the same info but instead organized by attribute as the top-level dict key
+    # Create another dict with the same info, but organized by attribute name instead of variable name
     diffs_by_attr = OrderedDict()
     attr_diffs = sorted(attr_diffs, key=str.lower)
     for attr in attr_diffs:
         diffs_by_attr[attr] = OrderedDict()
-    for var_name, var_diff in diffs.items():
+    for var_name, var_diff in diffs_by_name.items():
         for attr in var_diff:
             diffs_by_attr[attr][var_name] = var_diff[attr]
-    del out['Compound Name']
-    out['Metadata Attribute'] = diffs_by_attr
-    outfile = outfile_attr
-    with open(outfile, 'w') as f:
-        json.dump(out, f, indent=4)
-        print('Wrote ' + outfile)
 
-    # Summarize what was fond
-    print(f'\nTotal number of variables with differences: {len(diffs)}')
-    if len(diffs) > 0:
+    # Show summary on stdout 
+    print(f'Total number of variables with differences: {len(diffs_by_name)}')
+    if len(diffs_by_name) > 0:
         print(f'Number of variables with differences in each metadata attribute:')
         m = max([len(s) for s in attr_diffs])
         fmt = f'%-{m}s'
         for attr in attr_diffs:
             n = len(diffs_by_attr[attr])
             print(f'  {fmt % attr}  {n}')
+
+    # Write output file summarizing missing variables
+    # (i.e., differences in the variables list between the two compared versions)
+    ver0, ver1 = compare_versions
+    common_vars = set(dreq_vars[ver0].keys()).intersection(set(dreq_vars[ver1].keys()))
+    missing = OrderedDict({
+        f'Variables in {ver0} not found in {ver1}': OrderedDict({
+            'no. of variables': len(missing_vars[ver1]),
+            'Compound Name': sorted(missing_vars[ver1], key=str.lower),
+        }),
+        f'Variables in {ver1} not found in {ver0}': OrderedDict({
+            'no. of variables': len(missing_vars[ver0]),
+            'Compound Name': sorted(missing_vars[ver0], key=str.lower),
+        }),
+        f'Variables found in both {ver0} and {ver1}': OrderedDict({
+            'no. of variables': len(common_vars),
+            'Compound Name': sorted(common_vars, key=str.lower),
+        })
+    })
+    out = OrderedDict({
+        'Header' : OrderedDict({
+            'Description': f'Comparison of variable lists between {ver0} and {ver1}',
+            f'No. of variables in {ver0}': len(dreq_vars[ver0]),
+            f'No. of variables in {ver1}': len(dreq_vars[ver1]),
+            'No. of variables in both': len(common_vars)
+            }),
+        'Missing' : missing,
+    })
+    outfile = outfile_missing
+    with open(outfile, 'w') as f:
+        json.dump(out, f, indent=4)
+        print('Wrote ' + outfile)
+
+    # Write output files summarizing the differences between variables
+    count_attr_diffs = OrderedDict()
+    for attr in attr_diffs:
+        count_attr_diffs[attr] = len(diffs_by_attr[attr])
+    diff_count_summary = OrderedDict({
+        f'No. of variables in {ver0}': len(dreq_vars[ver0]),
+        f'No. of variables in {ver1}': len(dreq_vars[ver1]),
+        'No. of variables with differences': len(diffs_by_name),
+        'No. of variables with differences in each metadata attribute': count_attr_diffs
+        })
+    # Write output file organized by variable name
+    out = OrderedDict({
+        'Header' : OrderedDict({
+            'Description': f'Comparison of variable metadata between {ver0} and {ver1}, ' + 
+                            'arranged by variable',
+            }),
+        'Compound Name' : diffs_by_name,
+    })
+    out['Header'].update(diff_count_summary)
+    outfile = outfile_vars
+    with open(outfile, 'w') as f:
+        json.dump(out, f, indent=4)
+        print('Wrote ' + outfile)
+    # Write output file organized by metadata attribute name
+    out = OrderedDict({
+        'Header': OrderedDict({
+            'Description': f'Comparison of variable metadata between {ver0} and {ver1}, ' + 
+                            'arranged by metadata attribute',
+        }),
+        'Attribute': diffs_by_attr,
+    })
+    out['Header'].update(diff_count_summary)
+    outfile = outfile_attr
+    with open(outfile, 'w') as f:
+        json.dump(out, f, indent=4)
+        print('Wrote ' + outfile)
 
 
 if __name__ == '__main__':
