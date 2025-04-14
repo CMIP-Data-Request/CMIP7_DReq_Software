@@ -7,18 +7,19 @@ import sys
 import yaml
 from collections import OrderedDict
 
-import data_request_api
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 
+# Set block size to use for converting bytes to larger units that are more easily readable (KB, MB, etc).
+# BLOCK_SIZE = 1024 seems to give results closer to what bash shell 'du -h' produces.
+BLOCK_SIZE = 1024  # 1 KB = 1024 B, 1 MB = 1024 KB, etc
+# BLOCK_SIZE = 1000  # 1 KB = 1000 B, 1 MB = 1000 KB, etc
 
 def file_size_str(size):
     '''
     Given file size in bytes, return string giving the size in nice
     human-readable units (like ls -h does at the shell prompt).
     '''
-    BLOCK_SIZE = 1024.  # 1 MB = 1024 KB, 1 GB = 1024 MB, etc
-    # BLOCK_SIZE = 1000.  # 1 MB = 1000 KB, 1 GB = 1000 MB, etc
     SIZE_SUFFIX = {
         'B' : 1,
         'KB': BLOCK_SIZE,
@@ -160,7 +161,7 @@ years: 1
         with open(config_file, 'w') as f:
             f.write(w)
             print('Created default config file: ' + config_file +
-                  '\nEdit as needed with model-specific settings needed for data volume estimate and re-run.')
+                  '\nRe-run after editing size.yaml with model-specific settings needed for data volume estimate.')
             sys.exit()
 
     # Get config file settings
@@ -237,6 +238,10 @@ years: 1
     for expt in expts:
         expt_rec = expt_records[expt]
         # print('%-5s' % expt_rec.size_years_minimum, expt)
+
+        num_years = expt_rec.size_years_minimum
+        num_ensem = 1  # TO DO: ADD ENSEMBLE MEMBER INFO FROM OPPORTUNITY
+
         request_size = OrderedDict()
         for priority, var_list in vars_by_expt[expt].items():
             if args.variables:
@@ -244,7 +249,7 @@ years: 1
                 var_list = [var_name for var_name in var_list if var_name in args.variables]
             request_size[priority] = OrderedDict({
                 'no. of vars': len(var_list),
-                'size': 0, 
+                'size (bytes)': 0,
                 })
             for var_name in var_list:
                 var_info = variables[var_name]
@@ -255,22 +260,24 @@ years: 1
                 # ALSO NEED TO HANDLE CLIMATOLOGIES
                 else:
                     # Multiply the 1-year size by the minimum number of request years for this experiment
-                    size *= expt_rec.size_years_minimum
+                    size *= num_years
+                # Multiply by number of ensemble members
+                size *= num_ensem
                 # Increment size tally for this experiment at this priority level
-                request_size[priority]['size'] += size
+                request_size[priority]['size (bytes)'] += size
 
         priority = 'TOTAL'    
         assert priority not in request_size
         request_size[priority] = OrderedDict({
             'no of vars': sum([d['no. of vars'] for d in request_size.values()]),
-            'size': sum([d['size'] for d in request_size.values()]),
+            'size (bytes)': sum([d['size (bytes)'] for d in request_size.values()]),
             })
         for d in request_size.values():
-            d['size_str'] = file_size_str(d['size'])
+            d['size (human readable)'] = file_size_str(d['size (bytes)'])
 
         expt_size[expt] = OrderedDict({
-            'no. of years': expt_rec.size_years_minimum,
-            'no. of ensemble members': 1,  # ADD ENSEMBLE MEMBER INFO LATER!
+            'no. of years': num_years,
+            'no. of ensemble members': num_ensem,
         })
         expt_size[expt].update({
             'total request size (all priorities)': request_size['TOTAL'],
@@ -284,6 +291,7 @@ years: 1
             'dreq content version': use_dreq_version,
             'requested experiments and variables': args.requested_variables,
             'model-specific size options': args.config_size,
+            'block size for converting bytes to human-readable units': BLOCK_SIZE,
         }),
         'volume by experiment': expt_size,
     })
