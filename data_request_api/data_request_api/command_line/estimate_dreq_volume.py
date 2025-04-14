@@ -132,6 +132,38 @@ def main():
     args = parse_args()
 
     config_file = args.config_size
+    if not os.path.exists(config_file):
+        # If config file is not found, create default verison in the current dir
+        config_file = 'size.yaml'
+        if os.path.exists(config_file):
+            # Be careful not to accidentally overwrite an existing size.yaml file
+            print(f'Default config file found in current directory: {config_file}' +
+                  '\nRe-run without -c argument to use this file, or use -c to specify an existing config file.')
+            sys.exit()
+        # Settings for the default config file
+        w = '''# Data sizes config file for estimate_volume.py
+
+# Model-specific dimension sizes (edit as needed)
+dimensions:
+  longitude: 360
+  latitude: 180
+  alevel: 80
+  olevel: 80
+  sdepth: 20
+
+bytes_per_float: 4
+scale_file_size: 1
+
+# No. of years to use if showing size of single variables (-vso option)
+years: 1
+'''
+        with open(config_file, 'w') as f:
+            f.write(w)
+            print('Created default config file: ' + config_file +
+                  '\nEdit as needed with model-specific settings needed for data volume estimate and re-run.')
+            sys.exit()
+
+    # Get config file settings
     with open(config_file, 'r') as f:
         config = yaml.safe_load(f)
         print('Loaded ' + config_file)
@@ -222,7 +254,7 @@ def main():
                     pass
                 # ALSO NEED TO HANDLE CLIMATOLOGIES
                 else:
-                    # Multiply by minimum number of request years for this experiment
+                    # Multiply the 1-year size by the minimum number of request years for this experiment
                     size *= expt_rec.size_years_minimum
                 # Increment size tally for this experiment at this priority level
                 request_size[priority]['size'] += size
@@ -240,8 +272,6 @@ def main():
             'no. of years': expt_rec.size_years_minimum,
             'no. of ensemble members': 1,  # ADD ENSEMBLE MEMBER INFO LATER!
         })
-        # if args.variables:
-        #     expt_size[expt]['variables subset of request'] = args.variables
         expt_size[expt].update({
             'total request size (all priorities)': request_size['TOTAL'],
             'request size by priority level': OrderedDict(),
