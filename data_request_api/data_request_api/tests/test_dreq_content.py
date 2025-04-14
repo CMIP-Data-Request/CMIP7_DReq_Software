@@ -141,9 +141,19 @@ def test_load_dont_consolidate(tmp_path):
     assert os.path.isfile(tmp_path / "dev" / dc._json_release)
 
 
-def test_load_consolidate(tmp_path):
+def test_load_consolidate(tmp_path, monkeypatch):
     "Test the load function."
     dc._dreq_res = str(tmp_path)
+
+    # Alter mapping table - skip time consuming bits of consolidation
+    import data_request_api.content.mapping_table as mt
+
+    original_mapping_table = mt.mapping_table
+    updated_mapping_table = original_mapping_table.copy()
+    for key in updated_mapping_table:
+        if key != "Variables":
+            updated_mapping_table[key]["internal_mapping"] = {}
+    monkeypatch.setattr(mt, "mapping_table", updated_mapping_table)
 
     with pytest.raises(ValueError):
         jsondict = dc.load(" invalid-version ")
