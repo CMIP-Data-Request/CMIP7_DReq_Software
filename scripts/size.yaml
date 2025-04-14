@@ -1,3 +1,4 @@
+# Data sizes config file for estimate_volume.py
 
 # Model-specific dimension sizes (edit as needed)
 dimensions:
@@ -7,8 +8,8 @@ dimensions:
   olevel: 80
   sdepth: 20
 
-# No. of years to use if showing size of single variables (-v option)
-years: 1
-
 bytes_per_float: 4
 scale_file_size: 1
+
+# No. of years to use if showing size of single variables (-vso option)
+years: 1
