@@ -575,6 +575,9 @@ def load(version="latest_stable", **kwargs):
             Experimental feature. Defaults to True.
         offline : bool, optional
             Whether to disable online requests / retrievals. Defaults to False.
+        force_consolidate : bool, optional
+            Whether to force consolidation of the data request dictionary for raw exports
+            of versions "<v1.2", where consolidation is not supported. Defaults to False.
 
     Returns:
         dict: of the loaded JSON file.
@@ -593,11 +596,34 @@ def load(version="latest_stable", **kwargs):
         logger.info(f"Loading version {next(iter(version_dict.keys()))}'.")
 
     _dreq_content_loaded["json_path"] = json_path
+
     with open(json_path) as f:
+        consolidate_error = (
+            "Consolidation mapping is not supported for raw exports of versions < v1.2."
+            " Set 'export' to \"release\" (recommended), or set 'consolidate' to True"
+            " or set 'force_consolidate' to True to force consolidation regardless."
+        )
+        consolidate_warning = (
+            "Consolidation mapping is not supported for raw exports of versions < v1.2." " Forcing it regardless ..."
+        )
         if "consolidate" in kwargs:
             if kwargs["consolidate"]:
+                if "export" in kwargs and kwargs["export"] == "raw":
+                    if _parse_version(version) < _parse_version("v1.2") and version != "dev":
+                        if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
+                            logger.warning(consolidate_warning)
+                        else:
+                            logger.error(consolidate_error)
+                            raise ValueError(consolidate_error)
                 return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)
             else:
                 return json.load(f)
         else:
+            if "export" in kwargs and kwargs["export"] == "raw":
+                if _parse_version(version) < _parse_version("v1.2") and version != "dev":
+                    if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
+                        logger.warning(consolidate_warning)
+                    else:
+                        logger.error(consolidate_error)
+                        raise ValueError(consolidate_error)
             return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)

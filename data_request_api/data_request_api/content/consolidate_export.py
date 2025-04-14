@@ -1,7 +1,6 @@
 import re
 from collections import defaultdict
 
-from data_request_api.content.dreq_content import _parse_version
 from data_request_api.utilities.logger import get_logger  # noqa
 
 from .mapping_table import (
@@ -195,7 +194,7 @@ def _gen_rid_uid_map(data):
     return rid_uid_map
 
 
-def map_data(data, mapping_table, version, force=False, **kwargs):
+def map_data(data, mapping_table, version, **kwargs):
     """
     Maps the data to the one-base structure using the mapping table.
 
@@ -207,8 +206,6 @@ def map_data(data, mapping_table, version, force=False, **kwargs):
         The mapping table to apply to map to one base.
     version : str
         The version tag of the exported Data Request Content dictionary.
-    force : bool, optional
-        Force consolidation mapping for versions < v1.2 where mapping is not supported.
 
     Returns
     -------
@@ -226,14 +223,6 @@ def map_data(data, mapping_table, version, force=False, **kwargs):
 
     # Check if data is already one-base
     if len(data.keys()) in [3, 4]:
-        if _parse_version(version) < _parse_version("v1.2"):
-            if force:
-                logger.warning("Consolidation mapping is not supported for versions < v1.2. Forcing it regardless ...")
-            else:
-                errmsg = "Consolidation mapping is not supported for versions < v1.2."
-                logger.error(errmsg)
-                raise ValueError(errmsg)
-
         # Set version
         mapped_data["Data Request"]["version"] = version
 

@@ -305,7 +305,7 @@ def compare_dicts(raw, rel):
                 print(f"Multiple matches: {len(mltmatch[table_i])}")
         if len(examples[table_i].keys()) > 0:
             print()
-            print("{h4s}Differences occurred for the following fields:{h4e}")
+            print(f"{h4s}Differences occurred for the following fields:{h4e}")
             print()
             for fld in diff_fields_count[table_i]:
                 diffstr = ""
