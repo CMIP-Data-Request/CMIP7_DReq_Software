@@ -122,7 +122,7 @@ def get_cached(**kwargs):
             elif kwargs["export"] == "release":
                 json_export = _json_release
             else:
-                warnings.warn(f"Unknown export type '{kwargs['export']}'. Defaulting to" " 'release'.")
+                warnings.warn(f"Unknown export type '{kwargs['export']}'. Defaulting to 'release'.")
                 json_export = _json_release
         local_versions = [
             name for name in os.listdir(_dreq_res) if os.path.isfile(os.path.join(_dreq_res, name, json_export))
@@ -172,7 +172,7 @@ def _send_api_request(api_url, page_url="", target="tags"):
         if response.status_code in _fallback_status_codes:
             if page_url:
                 warnings.warn(
-                    "GitHub API not accessible, falling back to parsing the" f" public GitHub page: {http_err}"
+                    f"GitHub API not accessible, falling back to parsing the public GitHub page: {http_err}"
                 )
                 results = _send_html_request(page_url, target)
             else:
@@ -181,7 +181,7 @@ def _send_api_request(api_url, page_url="", target="tags"):
                     f" GitHub API ({response.status_code}): {http_err}"
                 )
         else:
-            warnings.warn(f"A HTTP error occurred when retrieving '{target}'" f" ({response.status_code}): {http_err}")
+            warnings.warn(f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}")
     except Exception as e:
         warnings.warn(f"An error occurred when retrieving '{target}': {e}")
 
@@ -473,7 +473,7 @@ def retrieve(version="latest_stable", **kwargs):
     # Capture no correct export found for cached versions (offline mode)
     if not json_paths or json_paths == {}:
         raise ValueError(
-            "The version(s) you requested are not cached. Please deactivate" " offline mode and try again."
+            "The version(s) you requested are not cached. Please deactivate offline mode and try again."
         )
 
     return json_paths
