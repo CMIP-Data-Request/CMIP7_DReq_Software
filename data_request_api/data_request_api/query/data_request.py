@@ -1015,11 +1015,13 @@ class DataRequest(object):
                         logger.error(f"Could not find value {val} for element type {req}.")
                         raise ValueError(f"Could not find value {val} for element type {req}.")
             if len(request_dict) > 0:
-                bcv_op = self.find_element("opportunities", "Baseline Climate Variables for Earth System Modelling")
-                bcv_prio = self.find_element("priority_level", "Core")
-                request_save_bcv_filtering = set(list(request_dict)) - {bcv_op.DR_type, bcv_prio.DR_type,
+                bcv_op = self.find_element("opportunities", "Baseline Climate Variables for Earth System Modelling", default=None)
+                bcv_prio = self.find_element("priority_level", "Core", default=None)
+                request_save_bcv_filtering = set(list(request_dict)) - {"opportunities", "priority_levels",
                                                                         "max_priority_levels"}
-                if len(request_save_bcv_filtering) > 0 or\
+                if bcv_op is None or bcv_prio is None:
+                    logger.warning("Can not check that request filtering includes baseline variables, no reference found.")
+                elif len(request_save_bcv_filtering) > 0 or\
                         (bcv_op.DR_type in request_dict and bcv_op not in request_dict[bcv_op.DR_type]) or\
                         (bcv_prio.DR_type in request_dict and bcv_prio not in request_dict[bcv_prio.DR_type]):
                     logger.warning(f"Request output might not include '{bcv_op.name}'. "
