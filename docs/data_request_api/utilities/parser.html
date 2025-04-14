@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.command_line API documentation</title>
+<title>data_request_api.utilities.parser API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,30 +33,35 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.command_line</code></h1>
+<h1 class="title">Module <code>data_request_api.utilities.parser</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="data_request_api.command_line.config" href="config.html">data_request_api.command_line.config</a></code></dt>
+<dt id="data_request_api.utilities.parser.append_arguments_to_parser"><code class="name flex">
+<span>def <span class="ident">append_arguments_to_parser</span></span>(<span>parser)</span>
+</code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append_arguments_to_parser(parser):
+    config = dreqcfg.load_config()
+    for (key, value) in config.items():
+        parser.add_argument(f&#34;--{key}&#34;, default=value, type=dreqcfg.DEFAULT_CONFIG_TYPES[key],
+                            help=dreqcfg.DEFAULT_CONFIG_HELP[key])
+    return parser</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="data_request_api.command_line.export_dreq_lists_json" href="export_dreq_lists_json.html">data_request_api.command_line.export_dreq_lists_json</a></code></dt>
-<dd>
-<div class="desc"><p>Command line interface for retrieving simple variable lists from the data request.</p></div>
-</dd>
-<dt><code class="name"><a title="data_request_api.command_line.get_variables_metadata" href="get_variables_metadata.html">data_request_api.command_line.get_variables_metadata</a></code></dt>
-<dd>
-<div class="desc"><p>Extract metadata of CMOR variables and write them to a json file.</p></div>
-</dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -68,14 +73,12 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api" href="../index.html">data_request_api</a></code></li>
+<li><code><a title="data_request_api.utilities" href="index.html">data_request_api.utilities</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="data_request_api.command_line.config" href="config.html">data_request_api.command_line.config</a></code></li>
-<li><code><a title="data_request_api.command_line.export_dreq_lists_json" href="export_dreq_lists_json.html">data_request_api.command_line.export_dreq_lists_json</a></code></li>
-<li><code><a title="data_request_api.command_line.get_variables_metadata" href="get_variables_metadata.html">data_request_api.command_line.get_variables_metadata</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.utilities.parser.append_arguments_to_parser" href="#data_request_api.utilities.parser.append_arguments_to_parser">append_arguments_to_parser</a></code></li>
 </ul>
 </li>
 </ul>

@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 '''
 Extract metadata of CMOR variables and write them to a json file.
-Example output file: scripts/variable_info/all_var_info.json
-Output file names (filepath) are set below.
 '''
 
 import argparse
 
-import data_request_api.stable.content.dreq_content as dc
+import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 from data_request_api import version as api_version
 
@@ -51,22 +49,21 @@ def main():
     content = dc.load(use_dreq_version)
 
     # Get metadata for variables
-    dq.DREQ_VERSION = use_dreq_version
     all_var_info = dq.get_variables_metadata(
         content,
+        use_dreq_version,
         compound_names=args.compound_names,
         cmor_tables=args.cmor_tables,
         cmor_variables=args.cmor_variables,
-        use_dreq_version=use_dreq_version  # TO DEPRECATE
     )
 
     # Write output file(s)
     for filepath in args.outfile:
         dq.write_variables_metadata(
             all_var_info,
+            use_dreq_version,
             filepath,
             api_version=api_version,
-            use_dreq_version=use_dreq_version,
             content_path=dc._dreq_content_loaded['json_path']
         )
 

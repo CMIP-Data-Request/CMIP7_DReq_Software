@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.command_line API documentation</title>
-<meta name="description" content="">
+<title>data_request_api.content.mapping_table API documentation</title>
+<meta name="description" content="Mapping Table …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -33,26 +33,75 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.command_line</code></h1>
+<h1 class="title">Module <code>data_request_api.content.mapping_table</code></h1>
 </header>
 <section id="section-intro">
+<p>Mapping Table</p>
+<p>The mapping_table dictionary defines how to map the three-base structure to the one-base structure.
+Each entry in the dictionary represents a table in the one-base structure and includes the information
+how to obtain it from the three-base structure.</p>
+<p>Explanation of the dictionary keys:</p>
+<p>Base ("source_base"):
+The base containing the table to be selected.</p>
+<p>Table ("source_table"):
+The table to be selected from the "source_base".</p>
+<p>Internal Mapping of record attributes ("internal_mapping"):
+Record attributes may point to records of other tables.
+However, there is no cross-linkage between the three bases,
+so these links need to be mapped as well.
+"internal_mapping" is a dictionary with the key corresponding
+to the record attributes to be mapped and the values containing
+the actual mapping information.</p>
+<pre><code>The mapping information is again a dictionary with the following keys:
+- base_copy_of_table:
+    If a copy of table corresponding to the record attribute exists in the current base,
+    provide the name; otherwise, set to False.
+- base:
+    The base containing the original table the record attribute points to.
+- table:
+    The original table the record attribute points to.
+- operation:
+    The operation to perform on the attribute value (either "split" or "", if it is
+    already provided as list or a string without comma separated values).
+- map_by_key:
+    A list of keys to map by.
+- entry_type:
+    The type of entry (either "record_id" or "name").
+</code></pre>
+<p>(Internal) Filters of record attributes ("internal_filters"):
+Not all records of the raw export shall be included since they may be
+labeled as junk or not be approved by the community. The filters are applied on all records
+and also internally on links to other records. "internal_filters" is a dictionary
+with the key corresponding to the record attributes used for filtering and the value
+another dictionary with the following possible keys:
+- operator: Can be one of "nonempty", "in", "not in"
+- values:
+A list of values, not necessary for "nonempty" operator.</p>
+<p>Example Configuration</p>
+<p>Suppose we want to map the "CMIP7 Variable Groups" key in the "Variables" table of the "Data Request Variables (Public)"
+base to a list of record IDs of "Variable Group" records in the "Data Request Opportunities (Public)" base.</p>
+<p>We would define the mapping_table as follows:
+mapping_table = {
+"Variables": {
+"base": "Data Request Variables (Public)",
+"source_table": "Variables",
+"internal_mapping": {
+"CMIP7 Variable Groups": {
+"base_copy_of_table": False,
+"base": "Data Request Opportunities (Public)",
+"table": "Variable Group",
+"operation": "split",
+"map_by_key": ["Name"],
+"entry_type": "name",
+},
+},
+"internal_filters": {
+"Status": {"operator": "not in", "values": ["Junk"]},
+}
+},
+}</p>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
-<dl>
-<dt><code class="name"><a title="data_request_api.command_line.config" href="config.html">data_request_api.command_line.config</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="data_request_api.command_line.export_dreq_lists_json" href="export_dreq_lists_json.html">data_request_api.command_line.export_dreq_lists_json</a></code></dt>
-<dd>
-<div class="desc"><p>Command line interface for retrieving simple variable lists from the data request.</p></div>
-</dd>
-<dt><code class="name"><a title="data_request_api.command_line.get_variables_metadata" href="get_variables_metadata.html">data_request_api.command_line.get_variables_metadata</a></code></dt>
-<dd>
-<div class="desc"><p>Extract metadata of CMOR variables and write them to a json file.</p></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -68,14 +117,7 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api" href="../index.html">data_request_api</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="data_request_api.command_line.config" href="config.html">data_request_api.command_line.config</a></code></li>
-<li><code><a title="data_request_api.command_line.export_dreq_lists_json" href="export_dreq_lists_json.html">data_request_api.command_line.export_dreq_lists_json</a></code></li>
-<li><code><a title="data_request_api.command_line.get_variables_metadata" href="get_variables_metadata.html">data_request_api.command_line.get_variables_metadata</a></code></li>
+<li><code><a title="data_request_api.content" href="index.html">data_request_api.content</a></code></li>
 </ul>
 </li>
 </ul>

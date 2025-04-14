@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.command_line API documentation</title>
+<title>data_request_api.utilities.config API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,30 +33,157 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.command_line</code></h1>
+<h1 class="title">Module <code>data_request_api.utilities.config</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="data_request_api.command_line.config" href="config.html">data_request_api.command_line.config</a></code></dt>
+<dt id="data_request_api.utilities.config.load_config"><code class="name flex">
+<span>def <span class="ident">load_config</span></span>(<span>) ‑> dict</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_config() -&gt; dict:
+    &#34;&#34;&#34;Load the configuration file, creating it if necessary.
+
+    Returns:
+        dict: The configuration data.
+
+    Raises:
+        FileNotFoundError: If the config file does not exist.
+        yaml.YAMLError: If the config file is not in the correct format.
+        KeyError: If the key is not in the DEFAULT_CONFIG.
+        TypeError: If the value is not of the expected type for the key.
+        ValueError: If the value is not within the valid values for the key.
+    &#34;&#34;&#34;
+    global CONFIG
+    if CONFIG == {}:
+        try:
+            with open(CONFIG_FILE) as f:
+                CONFIG = yaml.safe_load(f)
+        except FileNotFoundError:
+            pass
+
+        # Read configuration must be a dict - if no or an empty file is read,
+        #  assign DEFAULT_CONFIG
+        if CONFIG == &#34;&#34; or CONFIG is None or CONFIG == {}:
+            with open(CONFIG_FILE, &#34;w&#34;) as f:
+                yaml.dump(DEFAULT_CONFIG, f)
+            CONFIG = DEFAULT_CONFIG.copy()
+        elif not isinstance(CONFIG, dict):
+            raise TypeError(
+                f&#34;Config file (&#39;{CONFIG_FILE}&#39;) must contain a dictionary&#34;
+            )
+
+        # Sanity test for allowed types and values
+        for key, value in CONFIG.items():
+            _sanity_check(key, value)
+
+        # Ensure all required keys are present and update config file if necessary
+        missing_keys = {
+            k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG
+        }
+        for key, value in missing_keys.items():
+            update_config(key, value)
+
+    return CONFIG</code></pre>
+</details>
+<div class="desc"><p>Load the configuration file, creating it if necessary.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>The configuration data.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>If the config file does not exist.</dd>
+<dt><code>yaml.YAMLError</code></dt>
+<dd>If the config file is not in the correct format.</dd>
+<dt><code>KeyError</code></dt>
+<dd>If the key is not in the DEFAULT_CONFIG.</dd>
+<dt><code>TypeError</code></dt>
+<dd>If the value is not of the expected type for the key.</dd>
+<dt><code>ValueError</code></dt>
+<dd>If the value is not within the valid values for the key.</dd>
+</dl></div>
 </dd>
-<dt><code class="name"><a title="data_request_api.command_line.export_dreq_lists_json" href="export_dreq_lists_json.html">data_request_api.command_line.export_dreq_lists_json</a></code></dt>
+<dt id="data_request_api.utilities.config.update_config"><code class="name flex">
+<span>def <span class="ident">update_config</span></span>(<span>key, value)</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Command line interface for retrieving simple variable lists from the data request.</p></div>
-</dd>
-<dt><code class="name"><a title="data_request_api.command_line.get_variables_metadata" href="get_variables_metadata.html">data_request_api.command_line.get_variables_metadata</a></code></dt>
-<dd>
-<div class="desc"><p>Extract metadata of CMOR variables and write them to a json file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_config(key, value):
+    &#34;&#34;&#34;
+    Update the configuration with the specified key-value pair.
+
+    Args:
+        key (str): The configuration key to update.
+        value (Any): The new value for the configuration key. Boolean-like strings
+                     (&#34;true&#34;, &#34;false&#34;) will be converted to actual booleans.
+
+    Raises:
+        KeyError: If the key is not in the DEFAULT_CONFIG.
+        TypeError: If the value is not of the expected type for the key.
+        ValueError: If the value is not within the valid values for the key.
+
+    This function updates the global configuration dictionary with the given key-value
+    pair and writes the updated configuration back to the configuration file.
+    &#34;&#34;&#34;
+    global CONFIG
+    if CONFIG == {}:
+        CONFIG = load_config()
+
+    # Convert boolean-like strings to actual booleans
+    key = str(key)
+    value = str(value)
+    if value.lower() in {&#34;true&#34;, &#34;false&#34;}:
+        value = value.lower() == &#34;true&#34;
+    _sanity_check(key, value)
+
+    # Overwrite / set the value
+    CONFIG[key] = value
+
+    # Write the updated config back to the file
+    with open(CONFIG_FILE, &#34;w&#34;) as f:
+        yaml.dump(CONFIG, f)
+
+    print(f&#34;Updated {key} to {value} in &#39;{CONFIG_FILE}&#39;.&#34;)</code></pre>
+</details>
+<div class="desc"><p>Update the configuration with the specified key-value pair.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
+<dd>The configuration key to update.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>Any</code></dt>
+<dd>The new value for the configuration key. Boolean-like strings
+("true", "false") will be converted to actual booleans.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code></dt>
+<dd>If the key is not in the DEFAULT_CONFIG.</dd>
+<dt><code>TypeError</code></dt>
+<dd>If the value is not of the expected type for the key.</dd>
+<dt><code>ValueError</code></dt>
+<dd>If the value is not within the valid values for the key.</dd>
+</dl>
+<p>This function updates the global configuration dictionary with the given key-value
+pair and writes the updated configuration back to the configuration file.</p></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -68,14 +195,13 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api" href="../index.html">data_request_api</a></code></li>
+<li><code><a title="data_request_api.utilities" href="index.html">data_request_api.utilities</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="data_request_api.command_line.config" href="config.html">data_request_api.command_line.config</a></code></li>
-<li><code><a title="data_request_api.command_line.export_dreq_lists_json" href="export_dreq_lists_json.html">data_request_api.command_line.export_dreq_lists_json</a></code></li>
-<li><code><a title="data_request_api.command_line.get_variables_metadata" href="get_variables_metadata.html">data_request_api.command_line.get_variables_metadata</a></code></li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.utilities.config.load_config" href="#data_request_api.utilities.config.load_config">load_config</a></code></li>
+<li><code><a title="data_request_api.utilities.config.update_config" href="#data_request_api.utilities.config.update_config">update_config</a></code></li>
 </ul>
 </li>
 </ul>
