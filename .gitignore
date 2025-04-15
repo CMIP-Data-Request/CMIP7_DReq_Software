@@ -179,5 +179,6 @@ dreq_res
 *.csv
 
 cmip6-cmor-tables
+attributes.yaml
 
 *profiling*
