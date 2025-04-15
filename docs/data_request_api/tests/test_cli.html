@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>data_request_api.tests.test_cli API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>data_request_api.tests.test_cli</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="data_request_api.tests.test_cli.consolidate"><code class="name flex">
+<span>def <span class="ident">consolidate</span></span>(<span>request)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;)
+def consolidate(request):
+    # &#34;consolidate&#34; or &#34;no consolidate&#34;
+    return request.param</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.monkeyclass"><code class="name flex">
+<span>def <span class="ident">monkeyclass</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;)
+def monkeyclass():
+    with pytest.MonkeyPatch.context() as mp:
+        yield mp</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.temp_config_file"><code class="name flex">
+<span>def <span class="ident">temp_config_file</span></span>(<span>tmp_path_factory, monkeyclass)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;)
+def temp_config_file(tmp_path_factory, monkeyclass):
+    temp_dir = tmp_path_factory.mktemp(&#34;data&#34;)
+    config_file = temp_dir / &#34;.CMIP7_data_request_api_config&#34;
+    monkeyclass.setenv(&#34;CMIP7_DR_API_CONFIGFILE&#34;, str(config_file))
+    # Provide the test with the config file
+    try:
+        yield config_file
+    finally:
+        config_file.unlink(missing_ok=True)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson"><code class="flex name class">
+<span>class <span class="ident">TestExportDreqListsJson</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.mark.parametrize(
+    &#34;consolidate&#34;,
+    [&#34;consolidate&#34;, &#34;no consolidate&#34;],
+    indirect=True,
+    scope=&#34;class&#34;,
+)
+class TestExportDreqListsJson:
+    @pytest.fixture(scope=&#34;class&#34;, autouse=True)
+    def setup_class(self, request):
+        # Initialize config and load v1.2 content version
+        self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+        self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+        with open(self.temp_config_file, &#34;w&#34;) as fh:
+            config = {
+                &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+                &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+            }
+            yaml.dump(config, fh)
+        dc.load(&#34;v1.2&#34;)
+
+    def test_export_dreq_lists_json(self, temp_config_file, consolidate):
+        ofile = temp_config_file.parent / &#34;test1.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+                &#34;--all_opportunities&#34;,
+                &#34;v1.2&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+
+    def test_export_dreq_lists_json_with_opportunities_file(
+        self, temp_config_file, consolidate
+    ):
+        # Test that the script creates an opportunities file template
+        opportunities_file = temp_config_file.parent / &#34;opportunities.json&#34;
+        opportunities_file.unlink(missing_ok=True)
+        ofile = temp_config_file.parent / &#34;test2.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+                &#34;--opportunities_file&#34;,
+                opportunities_file,
+                &#34;v1.2&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert (
+            os.path.exists(opportunities_file)
+            and os.path.getsize(opportunities_file) &gt; 0
+        )
+        assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
+
+        # Test that it now applies the opportunities settings from opportunities_file
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+                &#34;--opportunities_file&#34;,
+                opportunities_file,
+                &#34;v1.2&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+
+    def test_export_dreq_lists_json_with_invalid_opportunities_file(
+        self, temp_config_file, consolidate
+    ):
+        # Test that the script raises an error with an invalid opportunities file
+        opportunities_file = (
+            temp_config_file.parent / &#34;invalid_opportunities.json&#34;
+        )
+        opportunities_file.unlink(missing_ok=True)
+        ofile = temp_config_file.parent / &#34;test3.json&#34;
+        ofile.unlink(missing_ok=True)
+        with open(opportunities_file, &#34;w&#34;) as fh:
+            json.dump({&#34;Invalid&#34;: &#34;data&#34;}, fh)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+                &#34;--opportunities_file&#34;,
+                opportunities_file,
+                &#34;v1.2&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode != 0
+        assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
+
+    def test_export_dreq_lists_json_entry_point(
+        self, temp_config_file, consolidate
+    ):
+        ofile = temp_config_file.parent / &#34;test4.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                &#34;export_dreq_lists_json&#34;,
+                &#34;--all_opportunities&#34;,
+                &#34;v1.2&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson.pytestmark"><code class="name">var <span class="ident">pytestmark</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson.setup_class"><code class="name flex">
+<span>def <span class="ident">setup_class</span></span>(<span>self, request)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;, autouse=True)
+def setup_class(self, request):
+    # Initialize config and load v1.2 content version
+    self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+    self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+    with open(self.temp_config_file, &#34;w&#34;) as fh:
+        config = {
+            &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+            &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+        }
+        yaml.dump(config, fh)
+    dc.load(&#34;v1.2&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json"><code class="name flex">
+<span>def <span class="ident">test_export_dreq_lists_json</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_export_dreq_lists_json(self, temp_config_file, consolidate):
+    ofile = temp_config_file.parent / &#34;test1.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+            &#34;--all_opportunities&#34;,
+            &#34;v1.2&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_entry_point"><code class="name flex">
+<span>def <span class="ident">test_export_dreq_lists_json_entry_point</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_export_dreq_lists_json_entry_point(
+    self, temp_config_file, consolidate
+):
+    ofile = temp_config_file.parent / &#34;test4.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            &#34;export_dreq_lists_json&#34;,
+            &#34;--all_opportunities&#34;,
+            &#34;v1.2&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_with_invalid_opportunities_file"><code class="name flex">
+<span>def <span class="ident">test_export_dreq_lists_json_with_invalid_opportunities_file</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_export_dreq_lists_json_with_invalid_opportunities_file(
+    self, temp_config_file, consolidate
+):
+    # Test that the script raises an error with an invalid opportunities file
+    opportunities_file = (
+        temp_config_file.parent / &#34;invalid_opportunities.json&#34;
+    )
+    opportunities_file.unlink(missing_ok=True)
+    ofile = temp_config_file.parent / &#34;test3.json&#34;
+    ofile.unlink(missing_ok=True)
+    with open(opportunities_file, &#34;w&#34;) as fh:
+        json.dump({&#34;Invalid&#34;: &#34;data&#34;}, fh)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+            &#34;--opportunities_file&#34;,
+            opportunities_file,
+            &#34;v1.2&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_with_opportunities_file"><code class="name flex">
+<span>def <span class="ident">test_export_dreq_lists_json_with_opportunities_file</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_export_dreq_lists_json_with_opportunities_file(
+    self, temp_config_file, consolidate
+):
+    # Test that the script creates an opportunities file template
+    opportunities_file = temp_config_file.parent / &#34;opportunities.json&#34;
+    opportunities_file.unlink(missing_ok=True)
+    ofile = temp_config_file.parent / &#34;test2.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+            &#34;--opportunities_file&#34;,
+            opportunities_file,
+            &#34;v1.2&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert (
+        os.path.exists(opportunities_file)
+        and os.path.getsize(opportunities_file) &gt; 0
+    )
+    assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
+
+    # Test that it now applies the opportunities settings from opportunities_file
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.export_dreq_lists_json&#34;,
+            &#34;--opportunities_file&#34;,
+            opportunities_file,
+            &#34;v1.2&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata"><code class="flex name class">
+<span>class <span class="ident">TestGetVariablesMetadata</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.mark.parametrize(
+    &#34;consolidate&#34;,
+    [&#34;consolidate&#34;, &#34;no consolidate&#34;],
+    indirect=True,
+    scope=&#34;class&#34;,
+)
+class TestGetVariablesMetadata:
+    @pytest.fixture(scope=&#34;class&#34;, autouse=True)
+    def setup_class(self, request):
+        # Initialize config and load v1.2 content version
+        self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+        self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+        with open(self.temp_config_file, &#34;w&#34;) as fh:
+            config = {
+                &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+                &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+            }
+            yaml.dump(config, fh)
+        dc.load(&#34;v1.2&#34;)
+
+    def test_get_variables_metadata(self, temp_config_file, consolidate):
+        ofile = temp_config_file.parent / &#34;test1.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.get_variables_metadata&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+
+    def test_get_variables_metadata_with_compound_names(
+        self, temp_config_file, consolidate
+    ):
+        ofile = temp_config_file.parent / &#34;test2.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.get_variables_metadata&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+                &#34;-cn&#34;,
+                &#34;Amon.tas&#34;,
+                &#34;Omon.sos&#34;,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+
+    def test_get_variables_metadata_with_cmor_tables(
+        self, temp_config_file, consolidate
+    ):
+        ofile = temp_config_file.parent / &#34;test3.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.get_variables_metadata&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+                &#34;-t&#34;,
+                &#34;Amon&#34;,
+                &#34;Omon&#34;,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+
+    def test_get_variables_metadata_with_cmor_variables(
+        self, temp_config_file, consolidate
+    ):
+        ofile = temp_config_file.parent / &#34;test4.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.get_variables_metadata&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+                &#34;-v&#34;,
+                &#34;tas&#34;,
+                &#34;siconc&#34;,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+
+    def test_get_variables_metadata_entry_point(
+        self, temp_config_file, consolidate
+    ):
+        ofile = temp_config_file.parent / &#34;test5.json&#34;
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                &#34;get_variables_metadata&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.pytestmark"><code class="name">var <span class="ident">pytestmark</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.setup_class"><code class="name flex">
+<span>def <span class="ident">setup_class</span></span>(<span>self, request)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;, autouse=True)
+def setup_class(self, request):
+    # Initialize config and load v1.2 content version
+    self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+    self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+    with open(self.temp_config_file, &#34;w&#34;) as fh:
+        config = {
+            &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+            &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+        }
+        yaml.dump(config, fh)
+    dc.load(&#34;v1.2&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata"><code class="name flex">
+<span>def <span class="ident">test_get_variables_metadata</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_variables_metadata(self, temp_config_file, consolidate):
+    ofile = temp_config_file.parent / &#34;test1.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.get_variables_metadata&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_entry_point"><code class="name flex">
+<span>def <span class="ident">test_get_variables_metadata_entry_point</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_variables_metadata_entry_point(
+    self, temp_config_file, consolidate
+):
+    ofile = temp_config_file.parent / &#34;test5.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            &#34;get_variables_metadata&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_cmor_tables"><code class="name flex">
+<span>def <span class="ident">test_get_variables_metadata_with_cmor_tables</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_variables_metadata_with_cmor_tables(
+    self, temp_config_file, consolidate
+):
+    ofile = temp_config_file.parent / &#34;test3.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.get_variables_metadata&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+            &#34;-t&#34;,
+            &#34;Amon&#34;,
+            &#34;Omon&#34;,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_cmor_variables"><code class="name flex">
+<span>def <span class="ident">test_get_variables_metadata_with_cmor_variables</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_variables_metadata_with_cmor_variables(
+    self, temp_config_file, consolidate
+):
+    ofile = temp_config_file.parent / &#34;test4.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.get_variables_metadata&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+            &#34;-v&#34;,
+            &#34;tas&#34;,
+            &#34;siconc&#34;,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_compound_names"><code class="name flex">
+<span>def <span class="ident">test_get_variables_metadata_with_compound_names</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_variables_metadata_with_compound_names(
+    self, temp_config_file, consolidate
+):
+    ofile = temp_config_file.parent / &#34;test2.json&#34;
+    ofile.unlink(missing_ok=True)
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.get_variables_metadata&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+            &#34;-cn&#34;,
+            &#34;Amon.tas&#34;,
+            &#34;Omon.sos&#34;,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="data_request_api.tests" href="index.html">data_request_api.tests</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_cli.consolidate" href="#data_request_api.tests.test_cli.consolidate">consolidate</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.monkeyclass" href="#data_request_api.tests.test_cli.monkeyclass">monkeyclass</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.temp_config_file" href="#data_request_api.tests.test_cli.temp_config_file">temp_config_file</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson" href="#data_request_api.tests.test_cli.TestExportDreqListsJson">TestExportDreqListsJson</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson.pytestmark" href="#data_request_api.tests.test_cli.TestExportDreqListsJson.pytestmark">pytestmark</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson.setup_class" href="#data_request_api.tests.test_cli.TestExportDreqListsJson.setup_class">setup_class</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json" href="#data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json">test_export_dreq_lists_json</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_entry_point" href="#data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_entry_point">test_export_dreq_lists_json_entry_point</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_with_invalid_opportunities_file" href="#data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_with_invalid_opportunities_file">test_export_dreq_lists_json_with_invalid_opportunities_file</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_with_opportunities_file" href="#data_request_api.tests.test_cli.TestExportDreqListsJson.test_export_dreq_lists_json_with_opportunities_file">test_export_dreq_lists_json_with_opportunities_file</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata">TestGetVariablesMetadata</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.pytestmark" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.pytestmark">pytestmark</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.setup_class" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.setup_class">setup_class</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata">test_get_variables_metadata</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_entry_point" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_entry_point">test_get_variables_metadata_entry_point</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_cmor_tables" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_cmor_tables">test_get_variables_metadata_with_cmor_tables</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_cmor_variables" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_cmor_variables">test_get_variables_metadata_with_cmor_variables</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_compound_names" href="#data_request_api.tests.test_cli.TestGetVariablesMetadata.test_get_variables_metadata_with_compound_names">test_get_variables_metadata_with_compound_names</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>
