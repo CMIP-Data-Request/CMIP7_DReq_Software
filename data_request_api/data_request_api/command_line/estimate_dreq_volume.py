@@ -71,9 +71,9 @@ def get_variable_size(var_info, config, dreq_tables):
     assert all([isinstance(dim, str) for dim in dimensions])
 
     dim_sizes = {}
+    temporal_shape = None
     for dim in dimensions:
         n = None
-        temporal_shape = None
         if dim in time_dims:
             # Get number of time gridpoints in one year
             frequency = var_info['frequency']
@@ -277,6 +277,7 @@ years: 1
                         'Unknown temporal shape: ' + str(temporal_shape)
                     # Multiply the 1-year size by the minimum number of request years for this experiment
                     size *= num_years
+
                 # Multiply by number of ensemble members
                 size *= num_ensem
                 # Increment size tally for this experiment at this priority level
@@ -292,8 +293,8 @@ years: 1
             d['size (human readable)'] = file_size_str(d['size (bytes)'])
 
         expt_size[expt] = OrderedDict({
-            'no. of years': num_years,
-            'no. of ensemble members': num_ensem,
+            'assumed no. of years': num_years,
+            'assumed no. of ensemble members': num_ensem,
         })
         expt_size[expt].update({
             'total request size (all priorities)': request_size['TOTAL'],
