@@ -59,7 +59,7 @@ el.replaceWith(d);
     def decorator(*args, **kwargs):
         logger = get_logger()
         logger.debug(
-            &#34;Function &#39;{func.__qualname__}&#39;: Passing **kwargs from config file.&#34;
+            f&#34;Function &#39;{func.__qualname__}&#39;: Passing **kwargs from config file.&#34;
         )
 
         # Get function args

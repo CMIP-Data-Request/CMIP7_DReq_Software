@@ -14,11 +14,10 @@ import requests
 from bs4 import BeautifulSoup
 
 import data_request_api.utilities.config as dreqcfg
+from data_request_api.content import consolidate_export as ce
 from data_request_api.content.mapping_table import mapping_table
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.logger import get_logger  # noqa
-
-from data_request_api.content import consolidate_export as ce
 
 # Suppress pooch info output
 pooch.get_logger().setLevel("WARNING")
@@ -30,7 +29,9 @@ _json_release = "dreq_release_export.json"
 # Base URL template for fetching Dreq content json files from GitHub
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
-REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+REPO_RAW_URL = (
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+)
 _dev_branch = "main"
 
 # API URL for fetching tags or branches
@@ -54,9 +55,7 @@ _versions_retrieved_last = {"tags": 0, "branches": 0}
 _fallback_status_codes = [403, 429, 500, 502, 503, 504]
 
 # Regex pattern for version parsing (captures major, minor, patch and optional pre-release parts)
-_version_pattern = re.compile(
-    r"^v?(\d+)\.(\d+)(?:\.(\d+))?((?:alpha|beta|a|b)?)?(\d*)$", re.IGNORECASE
-)
+_version_pattern = re.compile(r"^v?(\d+)\.(\d+)(?:\.(\d+))?((?:alpha|beta|a|b)?)?(\d*)$", re.IGNORECASE)
 
 # Directory where to find/store the data request JSON files
 try:
@@ -87,9 +86,7 @@ def _parse_version(version):
         # 'a' for alpha, 'b' for beta, or None
         pre_release_type = match.group(4)[0] if match.group(4) else None
         # alpha/beta version number or 0
-        pre_release_number = (
-            int(match.group(5)) if match.group(5) and pre_release_type else 0
-        )
+        pre_release_number = int(match.group(5)) if match.group(5) and pre_release_type else 0
         return (major, minor, patch, pre_release_type or "", pre_release_number)
     # if no valid version
     return (0, 0, 0, "", 0)
@@ -125,14 +122,10 @@ def get_cached(**kwargs):
             elif kwargs["export"] == "release":
                 json_export = _json_release
             else:
-                warnings.warn(
-                    f"Unknown export type '{kwargs['export']}'. Defaulting to 'release'."
-                )
+                warnings.warn(f"Unknown export type '{kwargs['export']}'. Defaulting to 'release'.")
                 json_export = _json_release
         local_versions = [
-            name
-            for name in os.listdir(_dreq_res)
-            if os.path.isfile(os.path.join(_dreq_res, name, json_export))
+            name for name in os.listdir(_dreq_res) if os.path.isfile(os.path.join(_dreq_res, name, json_export))
         ]
     return local_versions
 
@@ -173,11 +166,7 @@ def _send_api_request(api_url, page_url="", target="tags"):
         response.raise_for_status()
 
         # Extract the list of tags or branches from the response
-        results = [
-            entry["name"]
-            for entry in response.json()
-            if "name" in entry and entry["name"] != _dev_branch
-        ] or []
+        results = [entry["name"] for entry in response.json() if "name" in entry and entry["name"] != _dev_branch] or []
 
     except requests.exceptions.HTTPError as http_err:
         if response.status_code in _fallback_status_codes:
@@ -188,12 +177,11 @@ def _send_api_request(api_url, page_url="", target="tags"):
                 results = _send_html_request(page_url, target)
             else:
                 warnings.warn(
-                    f"A HTTP error occurred when retrieving '{target}' via the GitHub API ({response.status_code}): {http_err}"
+                    f"A HTTP error occurred when retrieving '{target}' via the"
+                    f" GitHub API ({response.status_code}): {http_err}"
                 )
         else:
-            warnings.warn(
-                f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}"
-            )
+            warnings.warn(f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}")
     except Exception as e:
         warnings.warn(f"An error occurred when retrieving '{target}': {e}")
 
@@ -245,33 +233,22 @@ def _send_html_request(page_url, target="tags"):
 
             if target == "branches":
                 # Find the branches on the page - GitHub embeds json data under the script tag
-                script_tag = soup.find(
-                    "script", {"data-target": "react-app.embeddedData"}
-                )
+                script_tag = soup.find("script", {"data-target": "react-app.embeddedData"})
                 if not script_tag:
-                    raise ValueError(
-                        "Could not find the 'script' tag in the html response."
-                    )
+                    raise ValueError("Could not find the 'script' tag in the html response.")
                 json_response = json.loads(script_tag.string)
                 results_json = json_response["payload"][target]
                 results += [
-                    entry["name"]
-                    for entry in results_json
-                    if "name" in entry and entry["name"] != _dev_branch
+                    entry["name"] for entry in results_json if "name" in entry and entry["name"] != _dev_branch
                 ] or []
             else:
                 # Find the tags on the page - GitHub uses "Link--primary" class for tags / branches
-                results += [
-                    entry.text.strip()
-                    for entry in soup.find_all("a", class_="Link--primary")
-                ]
+                results += [entry.text.strip() for entry in soup.find_all("a", class_="Link--primary")]
 
             # Check for pagination links and construct URL for the next page
             # ToDo: I could not find a repo with more branches than fit on a single page
             #       so the next_page_links may have to be adapted for branches
-            next_page_links = soup.find_all(
-                "a", {"href": lambda x: x and "after=" in x}
-            )
+            next_page_links = soup.find_all("a", {"href": lambda x: x and "after=" in x})
             if next_page_links:
                 current_urls.append(current_url)
                 current_url = "https://github.com" + next_page_links[-1]["href"]
@@ -323,23 +300,12 @@ def get_versions(target="tags", **kwargs):
     if "offline" in kwargs and kwargs["offline"]:
         lversions = get_cached(**kwargs)
         if target == "tags":
-            versions[target] = [
-                lv
-                for lv in lversions
-                if lv == "dev" or _parse_version(lv) != (0, 0, 0, "", 0)
-            ]
+            versions[target] = [lv for lv in lversions if lv == "dev" or _parse_version(lv) != (0, 0, 0, "", 0)]
         else:
-            versions[target] = [
-                lv
-                for lv in lversions
-                if lv != "dev" and _parse_version(lv) == (0, 0, 0, "", 0)
-            ]
+            versions[target] = [lv for lv in lversions if lv != "dev" and _parse_version(lv) == (0, 0, 0, "", 0)]
     else:
         # Retrieve the list of tags or branches from the GitHub API
-        if (
-            not versions[target]
-            or _versions_retrieved_last[target] - time.time() > 60 * 60
-        ):
+        if not versions[target] or _versions_retrieved_last[target] - time.time() > 60 * 60:
             versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
 
             # Update the last time the tags/branches were retrieved
@@ -372,11 +338,7 @@ def _get_latest_version(stable=True, **kwargs):
     """
     versions = get_versions(**kwargs)
     if stable:
-        sversions = [
-            version
-            for version in versions
-            if all([x not in version for x in ["a", "b", "dev"]])
-        ]
+        sversions = [version for version in versions if all([x not in version for x in ["a", "b", "dev"]])]
         return max(sversions, key=_parse_version) if sversions else None
     return max(versions, key=_parse_version)
 
@@ -423,9 +385,7 @@ def retrieve(version="latest_stable", **kwargs):
     elif version == "all":
         versions = get_versions(**kwargs)
     else:
-        if version not in get_versions(**kwargs) + get_versions(
-            target="branches", **kwargs
-        ):
+        if version not in get_versions(**kwargs) + get_versions(target="branches", **kwargs):
             if version not in get_cached(**kwargs):
                 raise ValueError(f"Version '{version}' not found.")
         versions = [version]
@@ -467,7 +427,7 @@ def retrieve(version="latest_stable", **kwargs):
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=REPO_RAW_URL.format(
-                            version=_dev_branch if version == "dev" else version,
+                            version=(_dev_branch if version == "dev" else version),
                             _json_export=json_export,
                             _github_org=_github_org,
                         ),
@@ -491,7 +451,7 @@ def retrieve(version="latest_stable", **kwargs):
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=REPO_RAW_URL.format(
-                            version=_dev_branch if version == "dev" else version,
+                            version=(_dev_branch if version == "dev" else version),
                             _json_export=json_export,
                             _github_org=_github_org,
                         ),
@@ -505,9 +465,7 @@ def retrieve(version="latest_stable", **kwargs):
                     else:
                         os.remove(json_path_temp)
                 except Exception as e:
-                    warnings.warn(
-                        f"Potential update for version '{version}' failed: {e}"
-                    )
+                    warnings.warn(f"Potential update for version '{version}' failed: {e}")
 
             # Store the path to the dreq.json in the json_paths dictionary
             json_paths[version] = json_path
@@ -559,9 +517,7 @@ def delete(version="all", keep_latest=False, **kwargs):
         if keep_latest:
             # Identify the latest stable and prerelease versions
             valid_versions = [v for v in local_versions if _version_pattern.match(v)]
-            valid_sversions = [
-                v for v in valid_versions if "a" not in v and "b" not in v
-            ]
+            valid_sversions = [v for v in valid_versions if "a" not in v and "b" not in v]
             latest = False
             latest_stable = False
             if valid_versions:
@@ -572,9 +528,7 @@ def delete(version="all", keep_latest=False, **kwargs):
             local_versions = [v for v in local_versions if v not in to_keep]
     else:
         if keep_latest:
-            warnings.warn(
-                "'keep_latest' option is ignored when 'version' is not 'all'."
-            )
+            warnings.warn("'keep_latest' option is ignored when 'version' is not 'all'.")
         local_versions = [version] if version in local_versions else []
 
     # Deletion
@@ -589,9 +543,7 @@ def delete(version="all", keep_latest=False, **kwargs):
     if kwargs["export"] == "raw":
         cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
     elif kwargs["export"] == "release":
-        cached_files = [
-            os.path.join(_dreq_res, v, _json_release) for v in local_versions
-        ]
+        cached_files = [os.path.join(_dreq_res, v, _json_release) for v in local_versions]
     else:
         # Since files are to be deleted, not defaulting to "release" but rather
         #  raising a ValueError
@@ -620,9 +572,12 @@ def load(version="latest_stable", **kwargs):
             Export type. Defaults to 'release'.
         consolidate: bool, optional
             Whether to consolidate the data request dictionary after loading it.
-            Experimental feature. Defaults to False.
+            Experimental feature. Defaults to True.
         offline : bool, optional
             Whether to disable online requests / retrievals. Defaults to False.
+        force_consolidate : bool, optional
+            Whether to force consolidation of the data request dictionary for raw exports
+            of versions "<v1.2", where consolidation is not supported. Defaults to False.
 
     Returns:
         dict: of the loaded JSON file.
@@ -641,11 +596,34 @@ def load(version="latest_stable", **kwargs):
         logger.info(f"Loading version {next(iter(version_dict.keys()))}'.")
 
     _dreq_content_loaded["json_path"] = json_path
+
     with open(json_path) as f:
+        consolidate_error = (
+            "Consolidation mapping is not supported for raw exports of versions < v1.2."
+            " Set 'export' to \"release\" (recommended), or set 'consolidate' to True"
+            " or set 'force_consolidate' to True to force consolidation regardless."
+        )
+        consolidate_warning = (
+            "Consolidation mapping is not supported for raw exports of versions < v1.2." " Forcing it regardless ..."
+        )
         if "consolidate" in kwargs:
             if kwargs["consolidate"]:
-                return ce.map_data(json.load(f), mapping_table)
+                if "export" in kwargs and kwargs["export"] == "raw":
+                    if _parse_version(version) < _parse_version("v1.2") and version != "dev":
+                        if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
+                            logger.warning(consolidate_warning)
+                        else:
+                            logger.error(consolidate_error)
+                            raise ValueError(consolidate_error)
+                return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)
             else:
                 return json.load(f)
         else:
-            return json.load(f)
+            if "export" in kwargs and kwargs["export"] == "raw":
+                if _parse_version(version) < _parse_version("v1.2") and version != "dev":
+                    if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
+                        logger.warning(consolidate_warning)
+                    else:
+                        logger.error(consolidate_error)
+                        raise ValueError(consolidate_error)
+            return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)

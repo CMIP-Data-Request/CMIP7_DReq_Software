@@ -518,6 +518,7 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
     :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
     &#34;&#34;&#34;
     logger = get_logger()
+    if &#34;Data Request&#34; in content: content[&#34;Data Request&#34;].pop(&#34;version&#34;, None)
     transform_settings = get_transform_settings(version)
     if isinstance(content, dict):
         # Correct dictionaries
