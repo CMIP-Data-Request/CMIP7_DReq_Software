@@ -70,6 +70,7 @@ def get_table_id2name(base):
     Get a mapping from table id to table name
     '''
     table_id2name = {}
+    base.pop("version", None)
     for table in base.values():
         table_id2name.update({
             table['id']: table['name']

@@ -694,6 +694,7 @@ and that it's the same list for all experiments.</dd>
     Get a mapping from table id to table name
     &#39;&#39;&#39;
     table_id2name = {}
+    base.pop(&#34;version&#34;, None)
     for table in base.values():
         table_id2name.update({
             table[&#39;id&#39;]: table[&#39;name&#39;]
