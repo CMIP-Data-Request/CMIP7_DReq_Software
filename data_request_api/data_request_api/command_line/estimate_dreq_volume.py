@@ -73,10 +73,17 @@ def get_variable_size(var_info, config, dreq_tables):
     dim_sizes = {}
     for dim in dimensions:
         n = None
+        temporal_shape = None
         if dim in time_dims:
             # Get number of time gridpoints in one year
             frequency = var_info['frequency']
-            n = freq_times_per_year[frequency]
+            if dim == 'diurnal-cycle':
+                # Special case: diurnal cycle averaged over a month
+                assert frequency == '1hr', 'What frequency is correct for mean diurnal cycle? Received: ' + frequency
+                n = 24*12
+            else:
+                n = freq_times_per_year[frequency]
+            temporal_shape = dim
         elif dim in config['dimensions']:
             # Use model-specific dimension size
             n = config['dimensions'][dim]
@@ -99,7 +106,7 @@ def get_variable_size(var_info, config, dreq_tables):
     size *= config['bytes_per_float']
     size *= config['scale_file_size']
 
-    return size, dim_sizes
+    return size, dim_sizes, temporal_shape
 
 
 def parse_args():
@@ -217,7 +224,7 @@ years: 1
         # Find size of specified variables, then exit
         for var_name in args.variables:
             var_info = variables[var_name]
-            size, dim_sizes = get_variable_size(var_info, config, dreq_tables)
+            size, dim_sizes, temporal_shape = get_variable_size(var_info, config, dreq_tables)
             nyr = 1
             if 'years' in config:
                 nyr = config['years']
@@ -254,11 +261,20 @@ years: 1
             for var_name in var_list:
                 var_info = variables[var_name]
                 # Get size of 1 year of this variable
-                size, dim_sizes = get_variable_size(var_info, config, dreq_tables)
-                if var_info['frequency'] == 'fx':
+                size, dim_sizes, temporal_shape = get_variable_size(var_info, config, dreq_tables)
+                if var_info['frequency'] == 'fx' or temporal_shape in [None, 'None', 'time-fxc']:
+                    # For fixed fields, get_variable_size() assumed 1 "time" point per year,
+                    # and no need to multiply by number of years.
                     pass
-                # ALSO NEED TO HANDLE CLIMATOLOGIES
+                elif temporal_shape == 'climatology':
+                    # For climatology, should not multiply by number of years.
+                    pass
+                elif temporal_shape == 'diurnal-cycle':
+                    # Assume this is a climatology, so don't multiply by number of years
+                    pass
                 else:
+                    assert temporal_shape in ['time-intv', 'time-point', 'monthly-mean-daily-stat'], \
+                        'Unknown temporal shape: ' + str(temporal_shape)
                     # Multiply the 1-year size by the minimum number of request years for this experiment
                     size *= num_years
                 # Multiply by number of ensemble members
