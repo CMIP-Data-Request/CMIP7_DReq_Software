@@ -39,9 +39,11 @@ use_opps.append('Synoptic systems')
 use_opps = 'all'
 
 # Get the requested variables for each opportunity and aggregate them into variable lists by experiment
-# (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
+# (i.e., for every experiment, a list of the variables that should be produced to support all of the
+# specified opportunities)
 priority_cutoff = 'Low'
-expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps, priority_cutoff=priority_cutoff, verbose=False)
+expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps,
+                                       priority_cutoff=priority_cutoff, verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:

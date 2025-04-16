@@ -246,11 +246,26 @@ years: 1
         print(warning_msg)
         sys.exit()
 
-    expts = requested['Header']['Experiments included']
+    if requested:
+        # Use experiments from input file
+        expts = requested['Header']['Experiments included']
+        vars_by_expt = requested['experiment']
+    else:
+        # Generate lists of requested variables
+        if use_request == 'all Opportunities':
+            use_opps = 'all'
+        else:
+            raise ValueError('What Opportunities to use? Received: ' + use_request)
+        # Get the requested variables
+        priority_cutoff = 'Low'
+        expt_vars = dq.get_requested_variables(base, use_dreq_version, use_opps,
+                                               priority_cutoff=priority_cutoff, verbose=False)
+        expts = sorted(expt_vars['experiment'].keys(), key=str.lower)
+        vars_by_expt = expt_vars['experiment']
+
     if args.experiments:
         # Only retain specified experiments
         expts = [expt for expt in expts if expt in args.experiments]
-    vars_by_expt = requested['experiment']
 
     expt_records = {expt_rec.experiment: expt_rec for expt_rec in dreq_tables['expts'].records.values()}
     expt_size = OrderedDict()

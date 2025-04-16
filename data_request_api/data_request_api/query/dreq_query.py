@@ -958,6 +958,7 @@ def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff,
         'Header': header,
         'experiment': OrderedDict(),
     }
+    # Put sorted contents of expt_vars into OrderedDict
     expt_names = sorted(expt_vars['experiment'].keys(), key=str.lower)
     for expt_name in expt_names:
         out['experiment'][expt_name] = OrderedDict()
