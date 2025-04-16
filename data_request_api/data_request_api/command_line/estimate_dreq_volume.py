@@ -5,7 +5,7 @@ import json
 import os
 import sys
 import yaml
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
@@ -181,14 +181,14 @@ years: 1
     warning_msg += '\n These volumes are an initial estimate, to be improved in the next software version.'
     warning_msg += '\n They should be used with caution and verified against known data volumes.\n'
 
-    requested = None
+    request_from_input_file = None
     if os.path.exists(args.request):
         # Argument is a file that lists requested variables
         filepath = args.request
         with open(filepath, 'r') as f:
-            requested = json.load(f)
+            request_from_input_file = json.load(f)
             print('Loaded ' + filepath)
-        use_dreq_version = requested['Header']['dreq content version']
+        use_dreq_version = request_from_input_file['Header']['dreq content version']
         use_request = args.request
     elif args.request in dc.get_versions():
         # Argument is a recognized data request version string
@@ -246,10 +246,11 @@ years: 1
         print(warning_msg)
         sys.exit()
 
-    if requested:
+    if request_from_input_file:
         # Use experiments from input file
-        expts = requested['Header']['Experiments included']
-        vars_by_expt = requested['experiment']
+        expts = request_from_input_file['Header']['Experiments included']
+        vars_by_expt = request_from_input_file['experiment']
+        del request_from_input_file
     else:
         # Generate lists of requested variables
         if use_request == 'all Opportunities':
@@ -267,24 +268,30 @@ years: 1
         # Only retain specified experiments
         expts = [expt for expt in expts if expt in args.experiments]
 
+    # Loop over experiments, estimating output volume for each one
     expt_records = {expt_rec.experiment: expt_rec for expt_rec in dreq_tables['expts'].records.values()}
     expt_size = OrderedDict()
+    all_vars = defaultdict(set)
+    total_size = OrderedDict({'all priorities' : 0})
+    total_size.update({priority : 0 for priority in dq.get_priority_levels()})
     for expt in expts:
         expt_rec = expt_records[expt]
-        # print('%-5s' % expt_rec.size_years_minimum, expt)
 
         num_years = expt_rec.size_years_minimum
-        num_ensem = 1  # TO DO: ADD ENSEMBLE MEMBER INFO FROM OPPORTUNITY
+        num_ensem = 1
 
+        # Loop over priority levels of requeste variables
         request_size = OrderedDict()
         for priority, var_list in vars_by_expt[expt].items():
             if args.variables:
                 # Only retain specified variables from the list of requested  variables
                 var_list = [var_name for var_name in var_list if var_name in args.variables]
             request_size[priority] = OrderedDict({
-                'no. of vars': len(var_list),
+                'no. of variables': len(var_list),
                 'size (bytes)': 0,
                 })
+
+            # Loop over variables requested at this priority level
             for var_name in var_list:
                 var_info = variables[var_name]
                 # Get size of 1 year of this variable
@@ -310,30 +317,62 @@ years: 1
                 # Increment size tally for this experiment at this priority level
                 request_size[priority]['size (bytes)'] += size
 
-        priority = 'TOTAL'    
+                # Increment variables count
+                all_vars[priority].add(var_name)
+
+        # Get total size and number of variables across all priorities
+        priority = 'all priorities'
         assert priority not in request_size
         request_size[priority] = OrderedDict({
-            'no of vars': sum([d['no. of vars'] for d in request_size.values()]),
+            'no. of variables': sum([d['no. of variables'] for d in request_size.values()]),
             'size (bytes)': sum([d['size (bytes)'] for d in request_size.values()]),
             })
+
+        # Provide sizes more readable units than number of bytes
         for d in request_size.values():
             d['size (human readable)'] = file_size_str(d['size (bytes)'])
 
+        # Clarify assumptions that went into the volume estimate
         expt_size[expt] = OrderedDict({
             'assumed no. of years': num_years,
             'assumed no. of ensemble members': num_ensem,
         })
+
+        # Give volumes by priority level and for the total (all priorities)
         expt_size[expt].update({
-            'total request size (all priorities)': request_size['TOTAL'],
+            'total request size (all priorities)': request_size['all priorities'],
             'request size by priority level': OrderedDict(),
         })
         for priority in vars_by_expt[expt]:
             expt_size[expt]['request size by priority level'][priority] = request_size[priority]
 
+        # Increment total size estimate (total across all experiments)
+        for priority in request_size:
+            total_size[priority] += request_size[priority]['size (bytes)']
+
+    # Show total number of variables (by priority level) across all experiments
+    total_vars = OrderedDict({
+        'all priorities' : set()
+    })
+    for priority in dq.get_priority_levels():
+        total_vars[priority] = len(all_vars[priority])
+        total_vars['all priorities'].update(all_vars[priority])
+    total_vars['all priorities'] = len(total_vars['all priorities'])
+
+    # Show human-readable units for total sizes in the output file
+    # (size in bytes is available from the experiment entries, this is a summary for the file header)
+    for priority, size in total_size.items():
+        total_size[priority] = file_size_str(size)
+
     out = OrderedDict({
         'Header': OrderedDict({
             'dreq content version': use_dreq_version,
             'requested experiments and variables': use_request,
+            'no. of experiments': len(expts),
+            'total for all experiments': OrderedDict({
+                'no. of variables': total_vars,
+                'size (human readable)': total_size,
+            }),
             'model-specific size options': args.config_size,
             'block size for converting bytes to human-readable units': BLOCK_SIZE,
         }),
