@@ -118,9 +118,10 @@ def parse_args():
         description='Estimate volume of requested model output'
     )
     # Positional arguments
-    parser.add_argument('requested_variables', type=str,
+    parser.add_argument('request', type=str,
                         help='json file specifying variables requested by experiment' +
-                        ' (output from export_dreq_lists_json, which specifies the data request version)')
+                        ' (output from export_dreq_lists_json, which specifies the data request version)' +
+                        ' OR can be a data request version (e.g. "v1.2") if using ')
     # Optional arguments
     parser.add_argument('-v', '--variables', nargs='+', type=str,
                         help='include only the specified variables in the estimate')
@@ -180,23 +181,28 @@ years: 1
     warning_msg += '\n These volumes are an initial estimate, to be improved in the next software version.'
     warning_msg += '\n They should be used with caution and verified against known data volumes.\n'
 
-    filepath = args.requested_variables
-    with open(filepath, 'r') as f:
-        requested = json.load(f)
-        print('Loaded ' + filepath)
-    use_dreq_version = requested['Header']['dreq content version']
+    requested = None
+    if os.path.exists(args.request):
+        # Argument is a file that lists requested variables
+        filepath = args.request
+        with open(filepath, 'r') as f:
+            requested = json.load(f)
+            print('Loaded ' + filepath)
+        use_dreq_version = requested['Header']['dreq content version']
+        use_request = args.request
+    elif args.request in dc.get_versions():
+        # Argument is a recognized data request version string
+        use_dreq_version = args.request
+        use_request = 'all Opportunities'
+    else:
+        raise ValueError(f'"request" argument must be a json file (output from export_dreq_lists_json)' +
+                         ' or data request version (e.g., "v1.2")')
     print(f'Estimating volume for data request {use_dreq_version}')
 
     if not args.outfile:
         outfile = f'volume_estimate_{use_dreq_version}.json'
     else:
         outfile = args.outfile
-
-    expts = requested['Header']['Experiments included']
-    if args.experiments:
-        # Only retain specified experiments
-        expts = [expt for expt in expts if expt in args.experiments]
-    vars_by_expt = requested['experiment']
 
     # Download specified version of data request content (if not locally cached)
     dc.retrieve(use_dreq_version)
@@ -239,6 +245,12 @@ years: 1
             print(msg)
         print(warning_msg)
         sys.exit()
+
+    expts = requested['Header']['Experiments included']
+    if args.experiments:
+        # Only retain specified experiments
+        expts = [expt for expt in expts if expt in args.experiments]
+    vars_by_expt = requested['experiment']
 
     expt_records = {expt_rec.experiment: expt_rec for expt_rec in dreq_tables['expts'].records.values()}
     expt_size = OrderedDict()
@@ -306,7 +318,7 @@ years: 1
     out = OrderedDict({
         'Header': OrderedDict({
             'dreq content version': use_dreq_version,
-            'requested experiments and variables': args.requested_variables,
+            'requested experiments and variables': use_request,
             'model-specific size options': args.config_size,
             'block size for converting bytes to human-readable units': BLOCK_SIZE,
         }),
