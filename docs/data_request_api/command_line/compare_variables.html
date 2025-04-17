@@ -82,7 +82,7 @@ el.replaceWith(d);
                 &#39;positive&#39;,
             ],
             &#39;repos&#39;: {
-                &#39;cmip6&#39; : {
+                &#39;cmip6&#39;: {
                     &#39;url&#39;: &#39;https://github.com/PCMDI/cmip6-cmor-tables&#39;,
                 }
             }
@@ -206,7 +206,7 @@ el.replaceWith(d);
         for attr in var_diff:
             diffs_by_attr[attr][var_name] = var_diff[attr]
 
-    # Show summary on stdout 
+    # Show summary on stdout
     print(f&#39;Total number of variables with differences: {len(diffs_by_name)}&#39;)
     if len(diffs_by_name) &gt; 0:
         print(f&#39;Number of variables with differences in each metadata attribute:&#39;)
@@ -235,13 +235,13 @@ el.replaceWith(d);
         })
     })
     out = OrderedDict({
-        &#39;Header&#39; : OrderedDict({
+        &#39;Header&#39;: OrderedDict({
             &#39;Description&#39;: f&#39;Comparison of variable lists between {ver0} and {ver1}&#39;,
             f&#39;No. of variables in {ver0}&#39;: len(dreq_vars[ver0]),
             f&#39;No. of variables in {ver1}&#39;: len(dreq_vars[ver1]),
             &#39;No. of variables in both&#39;: len(common_vars)
-            }),
-        &#39;Missing&#39; : missing,
+        }),
+        &#39;Missing&#39;: missing,
     })
     outfile = outfile_missing
     with open(outfile, &#39;w&#39;) as f:
@@ -257,14 +257,14 @@ el.replaceWith(d);
         f&#39;No. of variables in {ver1}&#39;: len(dreq_vars[ver1]),
         &#39;No. of variables with differences&#39;: len(diffs_by_name),
         &#39;No. of variables with differences in each metadata attribute&#39;: count_attr_diffs
-        })
+    })
     # Write output file organized by variable name
     out = OrderedDict({
-        &#39;Header&#39; : OrderedDict({
-            &#39;Description&#39;: f&#39;Comparison of variable metadata between {ver0} and {ver1}, &#39; + 
-                            &#39;arranged by variable&#39;,
-            }),
-        &#39;Compound Name&#39; : diffs_by_name,
+        &#39;Header&#39;: OrderedDict({
+            &#39;Description&#39;: f&#39;Comparison of variable metadata between {ver0} and {ver1}, &#39; +
+            &#39;arranged by variable&#39;,
+        }),
+        &#39;Compound Name&#39;: diffs_by_name,
     })
     out[&#39;Header&#39;].update(diff_count_summary)
     outfile = outfile_vars
@@ -274,8 +274,8 @@ el.replaceWith(d);
     # Write output file organized by metadata attribute name
     out = OrderedDict({
         &#39;Header&#39;: OrderedDict({
-            &#39;Description&#39;: f&#39;Comparison of variable metadata between {ver0} and {ver1}, &#39; + 
-                            &#39;arranged by metadata attribute&#39;,
+            &#39;Description&#39;: f&#39;Comparison of variable metadata between {ver0} and {ver1}, &#39; +
+            &#39;arranged by metadata attribute&#39;,
         }),
         &#39;Attribute&#39;: diffs_by_attr,
     })

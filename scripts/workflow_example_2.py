@@ -13,12 +13,12 @@ First create an environment with the required dependencies:
 (replacing my_dreq_env with your preferred env name). Then activate it and run the script:
 
     conda activate my_dreq_env
-    python workflow_example.py
+    python workflow_example2.py
 
 will load the data request content and save a json file of requested variables in the current dir.
 To run interactively in ipython:
 
-    run -i workflow_example.py
+    run -i workflow_example2.py
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 
@@ -90,7 +90,31 @@ def get_information_from_data_request(version, output_dir, **kwargs):
 
     DR.export_summary("opportunities", "data_request_themes", os.sep.join([output_dir, "op_per_th.csv"]))
     DR.export_summary("variables", "opportunities", os.sep.join([output_dir, "var_per_op.csv"]))
+    DR.export_summary(lines_data="variables", columns_data="opportunities",
+                      filtering_requests={"max_priority_level": "High"},
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      output_file=os.sep.join([output_dir, "var_per_op_regrouped_filtered.csv"]), regroup=True)
+    DR.export_summary(lines_data="variables", columns_data="opportunities",
+                      filtering_requests={"max_priority_level": "High"},
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      output_file=os.sep.join([output_dir, "var_per_op_filtered.csv"]))
+    DR.export_summary(lines_data="variables", columns_data="experiments",
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      filtering_requests={"max_priority_level": "High"},
+                      output_file=os.sep.join([output_dir, "var_per_exp_regrouped_filtered.csv"]), regroup=True)
+    DR.export_summary(lines_data="variables", columns_data="experiments",
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      filtering_requests={"max_priority_level": "High"},
+                      output_file=os.sep.join([output_dir, "var_per_exp_filtered.csv"]))
     DR.export_summary("experiments", "opportunities", os.sep.join([output_dir, "exp_per_op.csv"]))
+    DR.export_summary(lines_data="experiments", columns_data="opportunities",
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      filtering_requests={"max_priority_level": "High"},
+                      output_file=os.sep.join([output_dir, "exp_per_op_regrouped_filtered.csv"]), regroup=True)
+    DR.export_summary(lines_data="experiments", columns_data="opportunities",
+                      sorting_line=["physical_parameter", "frequency", "name"],
+                      filtering_requests={"max_priority_level": "High"},
+                      output_file=os.sep.join([output_dir, "exp_per_op_filtered.csv"]))
     DR.export_summary("variables", "spatial_shape", os.sep.join([output_dir, "var_per_spsh.csv"]))
     DR.export_data("opportunities", os.sep.join([output_dir, "op.csv"]),
                    export_columns_request=["name", "lead_theme", "description"])
