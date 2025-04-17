@@ -39,7 +39,9 @@ el.replaceWith(d);
 <p>Mapping Table</p>
 <p>The mapping_table dictionary defines how to map the three-base structure to the one-base structure.
 Each entry in the dictionary represents a table in the one-base structure and includes the information
-how to obtain it from the three-base structure.</p>
+how to obtain it from the three-base structure. Not all source tables are available in all content
+versions of the data request. For example, "ESM-BCV 1.3" has been replaced with "ESM-BCV 1.4" in newer
+content versions.</p>
 <p>Explanation of the dictionary keys:</p>
 <p>Base ("source_base"):
 The base containing the table to be selected.</p>
@@ -77,6 +79,12 @@ another dictionary with the following possible keys:
 - operator: Can be one of "nonempty", "in", "not in"
 - values:
 A list of values, not necessary for "nonempty" operator.</p>
+<p>Internal renaming of keys to achieve consistency across content versions ("internal_consistency"):
+"internal_consistency" is a dictionary with the key corresponding to the record attributes
+to be renamed and the value containing the new name. This is required as some attributes have
+been renamed in newer content versions or are renamed when setting up releases with airtable.</p>
+<p>Attributes to remove ("drop_keys"):
+List of record attributes that are not needed in the one-base (=release) structure.</p>
 <p>Example Configuration</p>
 <p>Suppose we want to map the "CMIP7 Variable Groups" key in the "Variables" table of the "Data Request Variables (Public)"
 base to a list of record IDs of "Variable Group" records in the "Data Request Opportunities (Public)" base.</p>
@@ -97,7 +105,9 @@ mapping_table = {
 },
 "internal_filters": {
 "Status": {"operator": "not in", "values": ["Junk"]},
-}
+},
+"internal_consistency": {"OldFieldName": "NewFieldName"},
+"drop_keys": ["Field1", "Field2"],
 },
 }</p>
 </section>

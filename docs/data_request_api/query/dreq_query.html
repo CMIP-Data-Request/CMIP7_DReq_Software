@@ -40,8 +40,9 @@ el.replaceWith(d);
 <p>Functions to extract information from the data request.
 E.g., get variables requested for each experiment.</p>
 <p>The module has two basic sections:</p>
-<p>1) Functions that take the data request content and convert it to python objects.
-2) Functions that interrogate the data request, usually using output from (1) as their input.</p>
+<p>1) Functions that take the data request content and convert it to python objects
+(instances of classes defined in dreq_classes.py).</p>
+<p>2) Functions that interrogate the data request, usually using output from (1) as their input.</p>
 </section>
 <section>
 </section>
@@ -51,24 +52,24 @@ E.g., get variables requested for each experiment.</p>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="data_request_api.query.dreq_query.create_dreq_tables_for_request"><code class="name flex">
-<span>def <span class="ident">create_dreq_tables_for_request</span></span>(<span>content, consolidated=True)</span>
+<span>def <span class="ident">create_dreq_tables_for_request</span></span>(<span>content, dreq_version)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_dreq_tables_for_request(content, consolidated=True):
+<pre><code class="python">def create_dreq_tables_for_request(content, dreq_version):
     &#39;&#39;&#39;
     For the &#34;request&#34; part of the data request content (Opportunities, Variable Groups, etc),
-    render raw airtable export content as DreqTable objects.
+    render airtable export content as DreqTable objects.
 
     For the &#34;data&#34; part of the data request, the corresponding function is create_dreq_tables_for_variables().
 
     Parameters
     ----------
     content : dict
-        Raw airtable export. Dict is keyed by base name, for example:
+        Airtable export (from json file). Dict is keyed by base name, for example:
         {&#39;Data Request Opportunities (Public)&#39; : {
             &#39;Opportunity&#39; : {...},
             ...
@@ -78,30 +79,15 @@ E.g., get variables requested for each experiment.</p>
             ...
             }
         }
+    dreq_version : str
+        Version string identifier for Data Request Content
 
     Returns
     -------
-    Dict whose keys are table names and values are DreqTable objects.
-    (The base name from the input &#39;content&#39; dict no longer appears.)
+    Dict &#39;base&#39; whose keys are table names and values are DreqTable objects.
     &#39;&#39;&#39;
-    if not isinstance(content, dict):
-        raise TypeError(&#39;Input should be dict from raw airtable export json file&#39;)
-
-    # Content is dict loaded from raw airtable export json file
-    if consolidated:
-        base_name = version_base_name()
-        content_type = &#39;consolidated&#39;
-    else:
-        # for backward compatibility
-        content_type = get_content_type(content)
-        if content_type == &#39;working&#39;:
-            base_name = &#39;Data Request Opportunities (Public)&#39;
-        elif content_type == &#39;version&#39;:
-            base_name = version_base_name()
-        else:
-            raise ValueError(&#39;Unknown content type: &#39; + content_type)
-    # base_name = &#39;Data Request&#39;
-    base = content[base_name]
+    base, content_type = _get_base_dict(content, dreq_version, purpose=&#39;request&#39;)
+    # base, content_type = _get_base_dict(content, dreq_version)
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -112,7 +98,7 @@ E.g., get variables requested for each experiment.</p>
     # Change names of tables if needed
     # (insulates downstream code from upstream name changes that don&#39;t affect functionality)
     change_table_names = {}
-    if content_type == &#39;working&#39;:
+    if content_type == &#39;raw&#39;:
         change_table_names = {
             # old name : new name
             &#39;Experiment&#39;: &#39;Experiments&#39;,
@@ -131,7 +117,7 @@ E.g., get variables requested for each experiment.</p>
     dreq_opps.rename_attr(&#39;title_of_opportunity&#39;, &#39;title&#39;)  # rename title attribute for brevity in downstream code
     for opp in dreq_opps.records.values():
         opp.title = opp.title.strip()
-    if content_type == &#39;working&#39;:
+    if content_type == &#39;raw&#39;:
         if &#39;variable_groups&#39; not in dreq_opps.attr2field:
             # Try alternate names for the latest variable groups
             try_vg_attr = []
@@ -165,8 +151,8 @@ E.g., get variables requested for each experiment.</p>
 
     # Determine which compound name to use based on dreq content version
     USE_COMPOUND_NAME = &#39;compound_name&#39;
-    version = tuple(map(int, DREQ_VERSION.strip(&#39;v&#39;).split(&#39;.&#39;)))  # e.g. &#39;v1.2&#39; --&gt; (1,2)
-    if version[:2] &gt;= (1, 2):
+    version_tuple = get_dreq_version_tuple(dreq_version)
+    if version_tuple[:2] &gt;= (1, 2):
         USE_COMPOUND_NAME = &#39;cmip6_compound_name&#39;
     if USE_COMPOUND_NAME != &#39;compound_name&#39;:
         table_name = &#39;Variables&#39;
@@ -178,12 +164,12 @@ E.g., get variables requested for each experiment.</p>
     return base</code></pre>
 </details>
 <div class="desc"><p>For the "request" part of the data request content (Opportunities, Variable Groups, etc),
-render raw airtable export content as DreqTable objects.</p>
+render airtable export content as DreqTable objects.</p>
 <p>For the "data" part of the data request, the corresponding function is create_dreq_tables_for_variables().</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>content</code></strong> :&ensp;<code>dict</code></dt>
-<dd>Raw airtable export. Dict is keyed by base name, for example:
+<dd>Airtable export (from json file). Dict is keyed by base name, for example:
 {'Data Request Opportunities (Public)' : {
 'Opportunity' : {&hellip;},
 &hellip;
@@ -193,44 +179,29 @@ render raw airtable export content as DreqTable objects.</p>
 &hellip;
 }
 }</dd>
+<dt><strong><code>dreq_version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Version string identifier for Data Request Content</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>Dict whose keys are table names and values are DreqTable objects.
-(The base name from the input 'content' dict no longer appears.)</p></div>
+<p>Dict 'base' whose keys are table names and values are DreqTable objects.</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.create_dreq_tables_for_variables"><code class="name flex">
-<span>def <span class="ident">create_dreq_tables_for_variables</span></span>(<span>content, consolidated=True)</span>
+<span>def <span class="ident">create_dreq_tables_for_variables</span></span>(<span>content, dreq_version)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_dreq_tables_for_variables(content, consolidated=True):
+<pre><code class="python">def create_dreq_tables_for_variables(content, dreq_version):
     &#39;&#39;&#39;
     For the &#34;data&#34; part of the data request content (Variables, Cell Methods etc),
-    render raw airtable export content as DreqTable objects.
+    render airtable export content as DreqTable objects.
 
     For the &#34;request&#34; part of the data request, the corresponding function is create_dreq_tables_for_request().
 
     &#39;&#39;&#39;
-    if not isinstance(content, dict):
-        raise TypeError(&#39;Input should be dict from raw airtable export json file&#39;)
-
-    # Content is dict loaded from raw airtable export json file
-    if consolidated:
-        base_name = &#39;Data Request&#39;
-        content_type = &#39;consolidated&#39;
-    else:
-        # for backward compatibility
-        content_type = get_content_type(content)
-        if content_type == &#39;working&#39;:
-            base_name = &#39;Data Request Variables (Public)&#39;
-        elif content_type == &#39;version&#39;:
-            base_name = version_base_name()
-        else:
-            raise ValueError(&#39;Unknown content type: &#39; + content_type)
-    base = content[base_name]
+    base, content_type = _get_base_dict(content, dreq_version, purpose=&#39;variables&#39;)
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -241,7 +212,7 @@ render raw airtable export content as DreqTable objects.</p>
     # Change names of tables if needed
     # (insulates downstream code from upstream name changes that don&#39;t affect functionality)
     change_table_names = {}
-    if content_type == &#39;working&#39;:
+    if content_type == &#39;raw&#39;:
         change_table_names = {
             # old name : new name
             &#39;Variable&#39;: &#39;Variables&#39;,
@@ -256,59 +227,39 @@ render raw airtable export content as DreqTable objects.</p>
     return base</code></pre>
 </details>
 <div class="desc"><p>For the "data" part of the data request content (Variables, Cell Methods etc),
-render raw airtable export content as DreqTable objects.</p>
+render airtable export content as DreqTable objects.</p>
 <p>For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().</p></div>
 </dd>
-<dt id="data_request_api.query.dreq_query.get_content_type"><code class="name flex">
-<span>def <span class="ident">get_content_type</span></span>(<span>content)</span>
+<dt id="data_request_api.query.dreq_query.get_dreq_version_tuple"><code class="name flex">
+<span>def <span class="ident">get_dreq_version_tuple</span></span>(<span>version: str)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_content_type(content):
+<pre><code class="python">def get_dreq_version_tuple(version: str):
     &#39;&#39;&#39;
-    Internal function to distinguish the type of airtable export we are working with, based on the input dict.
-
-    Parameters
-    ----------
-    content : dict
-        Dict containing data request content exported from airtable.
-
-    Returns
-    -------
-    str indicating type of content:
-
-        &#39;working&#39; : 3 bases containing the latest working version of data request content,
-                    or 4 bases if the Schema table has been added to the export.
-
-        &#39;version&#39; : 1 base containing the content of a tagged data request version.
+    Parse version string to return tuple giving version major, minor (etc) numbers.
+    Examples:
+        get_dreq_version_tuple(&#39;v1.2&#39;) --&gt; (1,2)
+        get_dreq_version_tuple(&#39;v1.0beta&#39;) --&gt; (1,0)
     &#39;&#39;&#39;
-    n = len(content)
-    if n in [3, 4]:
-        content_type = &#39;working&#39;
-    elif n == 1:
-        content_type = &#39;version&#39;
+    if version == &#39;dev&#39;:
+        # Is a tuple needed/useful for &#39;dev&#39; versions? Set one just in case.
+        return (0,)
     else:
-        raise ValueError(&#39;Unable to determine type of data request content in the exported json file&#39;)
-    return content_type</code></pre>
+        patt = &#39;[0-9.]*[0-9]&#39;
+        ver_num = re.findall(patt, version)
+        if len(ver_num) != 1:
+            raise ValueError(&#39;Ambiguous version string: &#39; + version)
+        ver_num_str = ver_num[0]
+        return tuple(map(int, ver_num_str.split(&#39;.&#39;)))</code></pre>
 </details>
-<div class="desc"><p>Internal function to distinguish the type of airtable export we are working with, based on the input dict.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>content</code></strong> :&ensp;<code>dict</code></dt>
-<dd>Dict containing data request content exported from airtable.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str indicating type</code> of <code>content:</code></dt>
-<dd>
-<p>'working' : 3 bases containing the latest working version of data request content,
-or 4 bases if the Schema table has been added to the export.</p>
-<p>'version' : 1 base containing the content of a tagged data request version.</p>
-</dd>
-</dl></div>
+<div class="desc"><p>Parse version string to return tuple giving version major, minor (etc) numbers.</p>
+<h2 id="examples">Examples</h2>
+<p>get_dreq_version_tuple('v1.2') &ndash;&gt; (1,2)
+get_dreq_version_tuple('v1.0beta') &ndash;&gt; (1,0)</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.get_opp_expts"><code class="name flex">
 <span>def <span class="ident">get_opp_expts</span></span>(<span>opp, expt_groups, expts, verbose=False)</span>
@@ -553,14 +504,16 @@ Input parameters are not modified.</p>
 List is ordered from highest to lowest priority.</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.get_requested_variables"><code class="name flex">
-<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>use_opps='all',<br>priority_cutoff='Low',<br>verbose=True,<br>consolidated=True,<br>check_core_variables=True)</span>
+<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>dreq_version,<br>use_opps='all',<br>priority_cutoff='Low',<br>verbose=True,<br>check_core_variables=True)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_requested_variables(content, use_opps=&#39;all&#39;, priority_cutoff=&#39;Low&#39;, verbose=True, consolidated=True, check_core_variables=True):
+<pre><code class="python">def get_requested_variables(content, dreq_version,
+                            use_opps=&#39;all&#39;, priority_cutoff=&#39;Low&#39;,
+                            verbose=True, check_core_variables=True):
     &#39;&#39;&#39;
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -571,6 +524,8 @@ List is ordered from highest to lowest priority.</p></div>
         - data request content as exported from airtable
         OR
         - DreqTable objects representing tables (dict keys are table names)
+    dreq_version : str
+        Version string identifier for Data Request Content
     use_opp : str or list of str/int
         Identifies the opportunities being supported. Options:
             &#39;all&#39; : include all available opportunities
@@ -597,15 +552,7 @@ List is ordered from highest to lowest priority.</p></div>
         }
     }
     &#39;&#39;&#39;
-    if isinstance(content, dict):
-        if all([isinstance(table, DreqTable) for table in content.values()]):
-            # tables have already been rendered as DreqTable objects
-            base = content
-        else:
-            # render tables as DreqTable objects
-            base = create_dreq_tables_for_request(content, consolidated=consolidated)
-    else:
-        raise TypeError(&#39;Expect dict as input&#39;)
+    base = _get_base_dreq_tables(content, dreq_version, purpose=&#39;request&#39;)
 
     dreq_tables = {
         &#39;opps&#39;: base[&#39;Opportunity&#39;],
@@ -668,7 +615,7 @@ List is ordered from highest to lowest priority.</p></div>
     requested_vars = {
         &#39;Header&#39;: {
             &#39;Opportunities&#39;: opp_titles,
-            &#39;dreq version&#39;: DREQ_VERSION,
+            &#39;dreq version&#39;: dreq_version,
         },
         &#39;experiment&#39;: {},
     }
@@ -703,6 +650,8 @@ List is ordered from highest to lowest priority.</p></div>
 - data request content as exported from airtable
 OR
 - DreqTable objects representing tables (dict keys are table names)</dd>
+<dt><strong><code>dreq_version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Version string identifier for Data Request Content</dd>
 <dt><strong><code>use_opp</code></strong> :&ensp;<code>str</code> or <code>list</code> of <code>str/int</code></dt>
 <dd>Identifies the opportunities being supported. Options:
 'all' : include all available opportunities
@@ -745,6 +694,7 @@ and that it's the same list for all experiments.</dd>
     Get a mapping from table id to table name
     &#39;&#39;&#39;
     table_id2name = {}
+    base.pop(&#34;version&#34;, None)
     for table in base.values():
         table_id2name.update({
             table[&#39;id&#39;]: table[&#39;name&#39;]
@@ -854,14 +804,15 @@ Its "priority_level" attribute specifies the priority as either string or link t
 </dl></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.get_variables_metadata"><code class="name flex">
-<span>def <span class="ident">get_variables_metadata</span></span>(<span>content,<br>compound_names=None,<br>cmor_tables=None,<br>cmor_variables=None,<br>consolidated=True,<br>use_dreq_version=None)</span>
+<span>def <span class="ident">get_variables_metadata</span></span>(<span>content, dreq_version, compound_names=None, cmor_tables=None, cmor_variables=None)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_variables_metadata(content, compound_names=None, cmor_tables=None, cmor_variables=None, consolidated=True, use_dreq_version=None):
+<pre><code class="python">def get_variables_metadata(content, dreq_version,
+                           compound_names=None, cmor_tables=None, cmor_variables=None):
     &#39;&#39;&#39;
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
 
@@ -872,6 +823,8 @@ Its "priority_level" attribute specifies the priority as either string or link t
         - data request content as exported from airtable
         OR
         - DreqTable objects representing tables (dict keys are table names)
+    dreq_version : str
+        Version string identifier for Data Request Content
     compound_names : list[str]
         Compound names of variables to include. If not given, all are included.
         Example: [&#39;Amon.tas&#39;, &#39;Omon.sos&#39;]
@@ -888,25 +841,11 @@ Its "priority_level" attribute specifies the priority as either string or link t
     all_var_info : dict
         Dictionary indexed by unique variable name, giving metadata for each variable.
         Also includes a header giving info on provenance of the info (data request version used, etc).
-
-    Notes:
-    ------
-    TO DEPRECATE: use_dreq_version as input should be removed once CMIP6 frequency issue fixed.
     &#39;&#39;&#39;
-    if isinstance(content, dict):
-        if all([isinstance(table, DreqTable) for table in content.values()]):
-            # tables have already been rendered as DreqTable objects
-            base = content
-        else:
-            # render tables as DreqTable objects
-            base = create_dreq_tables_for_request(content, consolidated=consolidated)
-    else:
-        raise TypeError(&#39;Expect dict as input&#39;)
+    base = _get_base_dreq_tables(content, dreq_version, purpose=&#39;request&#39;)
 
     # Some variables in these dreq versions lack a &#39;frequency&#39; attribute; use the legacy CMIP6 frequency for them
     dreq_versions_substitute_cmip6_freq = [&#39;v1.0&#39;, &#39;v1.1&#39;]
-    if not use_dreq_version:
-        raise ValueError(&#39;\n(TO DEPRECATE) use_dreq_version is required to set frequencies\n&#39;)
 
     # Use dict dreq_tables to store instances of the DreqTable class that are used in this function.
     # Mostly this would be the same as simply using base[table name], but in some cases there&#39;s a choice
@@ -918,26 +857,22 @@ Its "priority_level" attribute specifies the priority as either string or link t
     # Each entry (row) is a CMOR variable, containing the variable&#39;s metadata.
     # Many of these entries are links to other tables in the database (see below).
 
-    # Choose which table to use for freqency
-    try_freq_table_name = []
-    try_freq_table_name.append(&#39;Frequency&#39;)  # not available in v1.0beta release export, need to use CMIP7 or CMIP6 one instead
-    try_freq_table_name.append(&#39;CMIP7 Frequency&#39;)
-    try_freq_table_name.append(&#39;CMIP6 Frequency (legacy)&#39;)
-
-    found_freq = False
-    for freq_table_name in try_freq_table_name:
+    # Set frequency table and (if necessary) frequency attribute of variables table
+    freq_table_name = &#39;CMIP7 Frequency&#39;
+    dreq_tables[&#39;frequency&#39;] = base[freq_table_name]
+    if &#39;frequency&#39; not in dreq_tables[&#39;variables&#39;].attr2field:
+        # The code below assumes each variable has an attribute called &#39;frequency&#39;.
+        # Here adjust for the possibility that the variables table may not yet have an attribute with this name.
         freq_attr_name = format_attribute_name(freq_table_name)
-        if freq_attr_name not in dreq_tables[&#39;variables&#39;].attr2field:
-            continue
-        if &#39;frequency&#39; not in dreq_tables[&#39;variables&#39;].attr2field:
-            # code below assumes a variable&#39;s frequency is given by its &#34;frequency&#34;
+        if freq_attr_name in dreq_tables[&#39;variables&#39;].attr2field:
+            # If the attribute name corresponding to this table name is available, rename it as &#39;frequency&#39;
             dreq_tables[&#39;variables&#39;].rename_attr(freq_attr_name, &#39;frequency&#39;)
-        if freq_table_name in base:
-            dreq_tables[&#39;frequency&#39;] = base[freq_table_name]
-        found_freq = True
-        break
-    if not found_freq:
-        raise ValueError(&#39;Which airtable field gives the frequency?&#39;)
+        else:
+            raise ValueError(f&#39;Expected attribute {freq_attr_name} linking to table {freq_table_name}&#39;)
+        # Confirm that the &#39;frequency&#39; attribute points to the correct table
+        # (this is checking if the above change was made self-consistently).
+        assert dreq_tables[&#39;variables&#39;].links[&#39;frequency&#39;] == freq_table_name, \
+            &#39;inconsistent table link for frequency attribute&#39;
 
     # Get other tables from the database that are required to find all of a variable&#39;s metadata used by CMOR.
     dreq_tables.update({
@@ -964,7 +899,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
     else:
         raise ValueError(&#39;Which table contains CMOR table identifiers?&#39;)
 
-    if use_dreq_version in dreq_versions_substitute_cmip6_freq:
+    if dreq_version in dreq_versions_substitute_cmip6_freq:
         # needed for corrections below
         dreq_tables[&#39;CMIP6 frequency&#39;] = base[&#39;CMIP6 Frequency (legacy)&#39;]
 
@@ -1000,7 +935,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
             if table_id not in cmor_tables:
                 continue
 
-        if not hasattr(var, &#39;frequency&#39;) and use_dreq_version in dreq_versions_substitute_cmip6_freq:
+        if not hasattr(var, &#39;frequency&#39;) and dreq_version in dreq_versions_substitute_cmip6_freq:
             # seems to be an error for some vars in v1.0, so instead use their CMIP6 frequency
             assert len(var.cmip6_frequency_legacy) == 1
             link = var.cmip6_frequency_legacy[0]
@@ -1008,7 +943,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
             # print(&#39;using CMIP6 frequency for &#39; + var.compound_name)
 
         if isinstance(var.frequency[0], str):
-            # retain this option for non-consolidated raw export?
+            # retain this option for non-consolidated airtable export?
             assert isinstance(var.frequency, list)
             frequency = var.frequency[0]
         else:
@@ -1061,7 +996,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
         standard_name_proposed = &#39;&#39;
         if hasattr(phys_param, &#39;cf_standard_name&#39;):
             if isinstance(phys_param.cf_standard_name, str):
-                # retain this option for non-consolidated raw export?
+                # retain this option for non-consolidated airtable export?
                 standard_name = phys_param.cf_standard_name
             else:
                 link = phys_param.cf_standard_name[0]
@@ -1147,6 +1082,8 @@ Dict containing either:
 - data request content as exported from airtable
 OR
 - DreqTable objects representing tables (dict keys are table names)
+dreq_version : str
+Version string identifier for Data Request Content
 compound_names : list[str]
 Compound names of variables to include. If not given, all are included.
 Example: ['Amon.tas', 'Omon.sos']
@@ -1160,24 +1097,22 @@ Example: ['tas', 'siconc']</p>
 <h2 id="returns">Returns:</h2>
 <p>all_var_info : dict
 Dictionary indexed by unique variable name, giving metadata for each variable.
-Also includes a header giving info on provenance of the info (data request version used, etc).</p>
-<h2 id="notes">Notes:</h2>
-<p>TO DEPRECATE: use_dreq_version as input should be removed once CMIP6 frequency issue fixed.</p></div>
+Also includes a header giving info on provenance of the info (data request version used, etc).</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.show_requested_vars_summary"><code class="name flex">
-<span>def <span class="ident">show_requested_vars_summary</span></span>(<span>expt_vars, use_dreq_version)</span>
+<span>def <span class="ident">show_requested_vars_summary</span></span>(<span>expt_vars, dreq_version)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def show_requested_vars_summary(expt_vars, use_dreq_version):
+<pre><code class="python">def show_requested_vars_summary(expt_vars, dreq_version):
     &#39;&#39;&#39;
     Display quick summary to stdout of variables requested.
     expt_vars is the output dict from dq.get_requested_variables().
     &#39;&#39;&#39;
-    print(f&#39;\nFor data request version {use_dreq_version}, number of requested variables found by experiment:&#39;)
+    print(f&#39;\nFor data request version {dreq_version}, number of requested variables found by experiment:&#39;)
     priority_levels = get_priority_levels()
     for expt, req in sorted(expt_vars[&#39;experiment&#39;].items()):
         d = {p: 0 for p in priority_levels}
@@ -1190,28 +1125,15 @@ Also includes a header giving info on provenance of the info (data request versi
 <div class="desc"><p>Display quick summary to stdout of variables requested.
 expt_vars is the output dict from dq.get_requested_variables().</p></div>
 </dd>
-<dt id="data_request_api.query.dreq_query.version_base_name"><code class="name flex">
-<span>def <span class="ident">version_base_name</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def version_base_name():
-    return f&#39;Data Request {DREQ_VERSION}&#39;</code></pre>
-</details>
-<div class="desc"></div>
-</dd>
 <dt id="data_request_api.query.dreq_query.write_requested_vars_json"><code class="name flex">
-<span>def <span class="ident">write_requested_vars_json</span></span>(<span>outfile, expt_vars, use_dreq_version, priority_cutoff, content_path)</span>
+<span>def <span class="ident">write_requested_vars_json</span></span>(<span>outfile, expt_vars, dreq_version, priority_cutoff, content_path)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def write_requested_vars_json(outfile, expt_vars, use_dreq_version, priority_cutoff, content_path):
+<pre><code class="python">def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff, content_path):
     &#39;&#39;&#39;
     Write a nicely formatted json file with lists of requested variables by experiment.
     expt_vars is the output dict from dq.get_requested_variables().
@@ -1244,7 +1166,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
     with open(content_path, &#39;rb&#39;) as f:
         content_hash = hashlib.sha256(f.read()).hexdigest()
     header.update({
-        &#39;dreq content version&#39;: use_dreq_version,
+        &#39;dreq content version&#39;: dreq_version,
         &#39;dreq content file&#39;: os.path.basename(os.path.normpath(content_path)),
         &#39;dreq content sha256 hash&#39;: content_hash,
         &#39;dreq api version&#39;: api_version,
@@ -1272,21 +1194,20 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
 expt_vars is the output dict from dq.get_requested_variables().</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.write_variables_metadata"><code class="name flex">
-<span>def <span class="ident">write_variables_metadata</span></span>(<span>all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None)</span>
+<span>def <span class="ident">write_variables_metadata</span></span>(<span>all_var_info, dreq_version, filepath, api_version=None, content_path=None)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def write_variables_metadata(all_var_info, filepath, api_version=None, use_dreq_version=None, content_path=None):
+<pre><code class="python">def write_variables_metadata(all_var_info, dreq_version, filepath,
+                             api_version=None, content_path=None):
 
     ext = os.path.splitext(filepath)[-1]
 
     if not api_version:
         raise ValueError(f&#39;Must provide API version, received: {api_version}&#39;)
-    if not use_dreq_version:
-        raise ValueError(f&#39;Must provide data request content version, received: {use_dreq_version}&#39;)
     if not content_path:
         raise ValueError(f&#39;Must provide path to data request content, received: {content_path}&#39;)
 
@@ -1300,7 +1221,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
             &#39;Header&#39;: OrderedDict({
                 &#39;Description&#39;: &#39;Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.&#39;,
                 &#39;no. of variables&#39;: len(all_var_info),
-                &#39;dreq content version&#39;: use_dreq_version,
+                &#39;dreq content version&#39;: dreq_version,
                 &#39;dreq content file&#39;: os.path.basename(os.path.normpath(content_path)),
                 &#39;dreq content sha256 hash&#39;: content_hash,
                 &#39;dreq api version&#39;: api_version,
@@ -1311,7 +1232,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
         # Write variables metadata to json
         with open(filepath, &#39;w&#39;) as f:
             json.dump(out, f, indent=4)
-            print(f&#39;Wrote {filepath} for {len(all_var_info)} variables, dreq version = {use_dreq_version}&#39;)
+            print(f&#39;Wrote {filepath} for {len(all_var_info)} variables, dreq version = {dreq_version}&#39;)
 
     elif ext == &#39;.csv&#39;:
         # Write variables metadata to csv
@@ -1336,7 +1257,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
             rows.append(row)
         write_csv_output_file_content(filepath, rows)
         n = len(all_var_info)
-        print(f&#39;Wrote {filepath} for {n} variables, dreq version = {use_dreq_version}&#39;)</code></pre>
+        print(f&#39;Wrote {filepath} for {n} variables, dreq version = {dreq_version}&#39;)</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -1359,7 +1280,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
 <ul class="">
 <li><code><a title="data_request_api.query.dreq_query.create_dreq_tables_for_request" href="#data_request_api.query.dreq_query.create_dreq_tables_for_request">create_dreq_tables_for_request</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.create_dreq_tables_for_variables" href="#data_request_api.query.dreq_query.create_dreq_tables_for_variables">create_dreq_tables_for_variables</a></code></li>
-<li><code><a title="data_request_api.query.dreq_query.get_content_type" href="#data_request_api.query.dreq_query.get_content_type">get_content_type</a></code></li>
+<li><code><a title="data_request_api.query.dreq_query.get_dreq_version_tuple" href="#data_request_api.query.dreq_query.get_dreq_version_tuple">get_dreq_version_tuple</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_expts" href="#data_request_api.query.dreq_query.get_opp_expts">get_opp_expts</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_ids" href="#data_request_api.query.dreq_query.get_opp_ids">get_opp_ids</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_vars" href="#data_request_api.query.dreq_query.get_opp_vars">get_opp_vars</a></code></li>
@@ -1370,7 +1291,6 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
 <li><code><a title="data_request_api.query.dreq_query.get_var_group_priority" href="#data_request_api.query.dreq_query.get_var_group_priority">get_var_group_priority</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_variables_metadata" href="#data_request_api.query.dreq_query.get_variables_metadata">get_variables_metadata</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.show_requested_vars_summary" href="#data_request_api.query.dreq_query.show_requested_vars_summary">show_requested_vars_summary</a></code></li>
-<li><code><a title="data_request_api.query.dreq_query.version_base_name" href="#data_request_api.query.dreq_query.version_base_name">version_base_name</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.write_requested_vars_json" href="#data_request_api.query.dreq_query.write_requested_vars_json">write_requested_vars_json</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.write_variables_metadata" href="#data_request_api.query.dreq_query.write_variables_metadata">write_variables_metadata</a></code></li>
 </ul>

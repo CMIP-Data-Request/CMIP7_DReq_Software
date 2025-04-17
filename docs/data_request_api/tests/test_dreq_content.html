@@ -151,30 +151,41 @@ el.replaceWith(d);
 <div class="desc"><p>Test the get_versions function for branches.</p></div>
 </dd>
 <dt id="data_request_api.tests.test_dreq_content.test_load_consolidate"><code class="name flex">
-<span>def <span class="ident">test_load_consolidate</span></span>(<span>tmp_path)</span>
+<span>def <span class="ident">test_load_consolidate</span></span>(<span>tmp_path, monkeypatch)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_load_consolidate(tmp_path):
+<pre><code class="python">def test_load_consolidate(tmp_path, monkeypatch):
     &#34;Test the load function.&#34;
     dc._dreq_res = str(tmp_path)
+
+    # Alter mapping table - skip time consuming bits of consolidation
+    import data_request_api.content.mapping_table as mt
+
+    original_mapping_table = mt.mapping_table
+    updated_mapping_table = original_mapping_table.copy()
+    for key in updated_mapping_table:
+        if key != &#34;Variables&#34;:
+            updated_mapping_table[key][&#34;internal_mapping&#34;] = {}
+    monkeypatch.setattr(mt, &#34;mapping_table&#34;, updated_mapping_table)
 
     with pytest.raises(ValueError):
         jsondict = dc.load(&#34; invalid-version &#34;)
 
     # Load multi-base export with consolidation
-    with pytest.raises(KeyError):
-        jsondict = dc.load(&#34;dev&#34;, consolidate=True, export=&#34;raw&#34;)
-    # assert isinstance(jsondict, dict)
-    # assert os.path.isfile(tmp_path / &#34;dev&#34; / dc._json_raw)
-    # assert not os.path.isfile(tmp_path / &#34;dev&#34; / dc._json_release)
+    jsondict = dc.load(&#34;dev&#34;, consolidate=True, export=&#34;raw&#34;)
+    assert isinstance(jsondict, dict)
+    assert os.path.isfile(tmp_path / &#34;dev&#34; / dc._json_raw)
+    assert not os.path.isfile(tmp_path / &#34;dev&#34; / dc._json_release)
 
     # Load release export with consolidation
     jsondict = dc.load(&#34;dev&#34;, consolidate=True, export=&#34;release&#34;)
     assert isinstance(jsondict, dict)
+    assert &#34;Data Request&#34; in jsondict
+    assert jsondict[&#34;Data Request&#34;][&#34;version&#34;] == &#34;dev&#34;
     assert os.path.isfile(tmp_path / &#34;dev&#34; / dc._json_release)</code></pre>
 </details>
 <div class="desc"><p>Test the load function.</p></div>
@@ -374,7 +385,9 @@ el.replaceWith(d);
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception(&#34;Network request detected despite active offline mode.&#34;)
+            raise Exception(
+                &#34;Network request detected despite active offline mode.&#34;
+            )
 
         monkeypatch.setattr(&#34;requests.get&#34;, mock_requests_get)
 
@@ -510,7 +523,9 @@ def setup(self, tmp_path):
     dc._dreq_res = self.dreq_res
 
     def mock_requests_get(*args, **kwargs):
-        raise Exception(&#34;Network request detected despite active offline mode.&#34;)
+        raise Exception(
+            &#34;Network request detected despite active offline mode.&#34;
+        )
 
     monkeypatch.setattr(&#34;requests.get&#34;, mock_requests_get)
 

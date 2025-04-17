@@ -312,8 +312,10 @@ class DreqLink:
         if attr in self.attr2field:
             records = [record for record in self.records.values() if getattr(record, attr) == value]
             if len(records) == 0:
-                raise Exception(f&#39;No record found for {attr}={value}&#39;)
+                raise ValueError(f&#39;No record found for {attr}={value}&#39;)
             if unique:
+                if len(records) != 1:
+                    raise ValueError(f&#39;{attr}={value} is not unique (identified {len(records)} records)&#39;)
                 return records[0]
             else:
                 return records
@@ -371,8 +373,10 @@ refers to the name of a column as it appears in Airtable.
     if attr in self.attr2field:
         records = [record for record in self.records.values() if getattr(record, attr) == value]
         if len(records) == 0:
-            raise Exception(f&#39;No record found for {attr}={value}&#39;)
+            raise ValueError(f&#39;No record found for {attr}={value}&#39;)
         if unique:
+            if len(records) != 1:
+                raise ValueError(f&#39;{attr}={value} is not unique (identified {len(records)} records)&#39;)
             return records[0]
         else:
             return records
