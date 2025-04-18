@@ -899,6 +899,90 @@ def get_variables_metadata(content, dreq_version,
     return all_var_info
 
 
+def get_dimension_sizes(dreq_tables):
+    '''
+    Create lookup table of dimension sizes by examining records in the Spatial Shape table.
+
+    Parameters
+    ----------
+    dreq_tables: dict
+        Dict values are DreqTable objects for the required tables, e.g.:
+        dreq_tables = {
+            'coordinates and dimensions': base['Coordinates and Dimensions'],
+            'spatial shape': base['Spatial Shape'],
+        }
+    '''
+    dim_names = [dimension.name for dimension in dreq_tables['coordinates and dimensions'].records.values()]
+    assert len(set(dim_names)) == len(dim_names)
+    dim_names.sort(key=str.lower)
+    # Initialize dict having names of all dimensions in the data request (to ensure we don't miss any).
+    # Each entry is a set(), and below we determine dimension sizes by any available method,
+    # and then after the fact check to see if the answers were consistent.
+    dim_sizes = OrderedDict({dim : set() for dim in dim_names})
+
+    # Determine dimension sizes based on their records in the Coordinates & Dimensions table
+    for dimension in dreq_tables['coordinates and dimensions'].records.values():
+        dim = dimension.name
+        if hasattr(dimension, 'grid_class'):
+            # Get size based on what type of grid this dimension is labelled as.
+            if dimension.grid_class in ['model', 'options']:
+                dim_sizes[dim].add(dimension.grid_class)
+            elif dimension.grid_class in ['fixedScalar', 'fixedScaler']: # fixedScaler = typo in Airtable
+                dim_sizes[dim].add(1)
+            elif dimension.grid_class == 'fixed':
+                dim_sizes[dim].add(dimension.size)
+            elif dimension.grid_class == 'fixedExternal':
+                pass
+            else:
+                raise ValueError(f'Unknown grid class for dimension {dim}: {dimension.grid_class}')
+        if hasattr(dimension, 'size'):
+            # Use the size attribute, if it exists.
+            dim_sizes[dim].add(dimension.size)
+        if hasattr(dimension, 'requested_values'):
+            # If a set of requested values if specified (e.g. for pressure levels grids like "plev19"),
+            # use the length of the list of values.
+            # The list is stored in Airtable as a space-delimited string.
+            values = dimension.requested_values.split()
+            dim_sizes[dim].add(len(values))
+
+    # Determine dimension sizes where possible by looking in the Spatial Shape table records
+    # This is an extra consistency check on the results from dimensions
+    for spatial_shape in dreq_tables['spatial shape'].records.values():
+        if hasattr(spatial_shape, 'dimensions'):
+            # Follow links from Spatial Shape to dimensions, if they exist
+            for link in spatial_shape.dimensions:
+                dimension = dreq_tables['coordinates and dimensions'].get_record(link)
+                dim = dimension.name
+                if hasattr(dimension, 'axis_flag') and dimension.axis_flag == 'Z':
+                    dim_sizes[dim].add(spatial_shape.number_of_levels)
+                if hasattr(dimension, 'size'):
+                    dim_sizes[dim].add(dimension.size)
+
+    # Check that the results make sense
+    # Each dimension should have only one size
+    # User-determined sizes are indicated by the grid_class values listed in user_sizes
+    for dim, sizes in dim_sizes.items():
+        user_sizes = {'options', 'model'}
+        if len(user_sizes.intersection(sizes)) > 1:
+            # Raise error if more than one user-determined size option is given, because
+            # the result is ambiguous (which should be used?).
+            raise ValueError(f'Unexpected sizes: {sizes}')
+        for grid_class in user_sizes:
+            if grid_class in sizes:
+                sizes = {grid_class}
+
+        if len(sizes) == 1:
+            size = list(sizes)[0]
+        elif len(sizes) > 1:
+            size = max(sizes)
+            print(f'Warning: found sizes {sorted(sizes)} for dimension {dim}, assuming size = {size}')
+        else:
+            size = None
+        dim_sizes[dim] = size
+
+    return dim_sizes
+
+
 def show_requested_vars_summary(expt_vars, dreq_version):
     '''
     Display quick summary to stdout of variables requested.
