@@ -11,7 +11,7 @@ import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 
 # Set block size to use for converting bytes to larger units that are more easily readable (KB, MB, etc).
-# BLOCK_SIZE = 1024 seems to give results closer to what bash shell 'du -h' produces.
+# Using BLOCK_SIZE = 1024 seems to give results closer to what bash shell 'du -h' produces.
 BLOCK_SIZE = 1024  # 1 KB = 1024 B, 1 MB = 1024 KB, etc
 # BLOCK_SIZE = 1000  # 1 KB = 1000 B, 1 MB = 1000 KB, etc
 
@@ -39,32 +39,11 @@ def file_size_str(size):
     return sa + ' ' + su
 
 
-def get_variable_size(var_info, config, dreq_tables):
+def get_variable_size(var_info, dreq_dim_sizes, time_dims, freq_times_per_year, config):
     '''
     Return size (B) of 1 year of a variable.
     Also return a dict giving its dimension sizes (no. of gridpoints, with the time size being for 1 year).
     '''
-
-    # Available frequencies
-    freqs = [rec.name for rec in dreq_tables['frequency'].records.values()]
-    days_per_year = 365
-    freq_times_per_year = {
-        'subhr': days_per_year*48,
-        '1hr': days_per_year*24,
-        '3hr': days_per_year*8,
-        '6hr': days_per_year*4,
-        'day': days_per_year,
-        'mon': 12,
-        'yr': 1,
-        'dec': 0.1,
-        'fx': 1,
-    }
-    if set(freq_times_per_year.keys()) != set(freqs):
-        raise Exception('Times per year must be defined for all available frequencies')
-
-    # Available time dimensions ('time-intv', 'time-point', etc)
-    time_dims = [rec.name for rec in dreq_tables['temporal shape'].records.values()]
-
     dimensions = var_info['dimensions']
     if isinstance(dimensions, str):
         dimensions = dimensions.split()
@@ -88,14 +67,10 @@ def get_variable_size(var_info, config, dreq_tables):
             # Use model-specific dimension size
             n = config['dimensions'][dim]
         else:
-            # Use requested dimension size (i.e., size given in the data request)
-            rec = dreq_tables['coordinates and dimensions'].get_attr_record('name', dim, unique=True)
-            # print(rec)
-            if hasattr(rec, 'size'):
-                n = rec.size
-            else:
-                n = 1
-                # raise ValueError(f'Unknown size for dimension: {dim}')
+            # Use dimension size specified in the data request
+            # (e.g. for plev19, n = 19)
+            n = dreq_dim_sizes[dim]
+
         dim_sizes[dim] = n
 
     num_gridpoints = 1
@@ -217,7 +192,33 @@ years: 1
         'opps': base['Opportunity'],
         'temporal shape': base['Temporal Shape'],
         'frequency': base['CMIP7 Frequency'],
+        'spatial shape': base['Spatial Shape'],
     }
+
+    # Get lookup table of dimension sizes
+    dreq_dim_sizes = dq.get_dimension_sizes(dreq_tables)
+
+    # Get available frequencies
+    freqs = [rec.name for rec in dreq_tables['frequency'].records.values()]
+    # Make lookup table of number of time points per year for each frequency
+    days_per_year = 365
+    freq_times_per_year = {
+        'subhr': days_per_year*48,
+        '1hr': days_per_year*24,
+        '3hr': days_per_year*8,
+        '6hr': days_per_year*4,
+        'day': days_per_year,
+        'mon': 12,
+        'yr': 1,
+        'dec': 0.1,
+        'fx': 1,
+    }
+    # Make sure we got all frequencies
+    if set(freq_times_per_year.keys()) != set(freqs):
+        raise Exception('Times per year must be defined for all available frequencies')
+
+    # Get available time dimensions ('time-intv', 'time-point', etc)
+    time_dims = [rec.name for rec in dreq_tables['temporal shape'].records.values()]
 
     # Get metadata for variables
     variables = dq.get_variables_metadata(
@@ -230,7 +231,9 @@ years: 1
         # Find size of specified variables, then exit
         for var_name in args.variables:
             var_info = variables[var_name]
-            size, dim_sizes, temporal_shape = get_variable_size(var_info, config, dreq_tables)
+            size, dim_sizes, temporal_shape = get_variable_size(var_info, dreq_dim_sizes,
+                                                                time_dims, freq_times_per_year, config)
+
             nyr = 1
             if 'years' in config:
                 nyr = config['years']
@@ -295,7 +298,9 @@ years: 1
             for var_name in var_list:
                 var_info = variables[var_name]
                 # Get size of 1 year of this variable
-                size, dim_sizes, temporal_shape = get_variable_size(var_info, config, dreq_tables)
+                size, dim_sizes, temporal_shape = get_variable_size(var_info, dreq_dim_sizes,
+                                                                    time_dims, freq_times_per_year, config)
+
                 if var_info['frequency'] == 'fx' or temporal_shape in [None, 'None', 'time-fxc']:
                     # For fixed fields, get_variable_size() assumed 1 "time" point per year,
                     # and no need to multiply by number of years.

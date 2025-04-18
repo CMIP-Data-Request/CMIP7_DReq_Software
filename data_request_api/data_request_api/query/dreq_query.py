@@ -920,7 +920,7 @@ def get_dimension_sizes(dreq_tables):
     # and then after the fact check to see if the answers were consistent.
     dim_sizes = OrderedDict({dim : set() for dim in dim_names})
 
-    # Determine dimension sizes based on their records in the Coordinates & Dimensions table
+    # Determine dimension sizes based on their records in the Coordinates & Dimensions table.
     for dimension in dreq_tables['coordinates and dimensions'].records.values():
         dim = dimension.name
         if hasattr(dimension, 'grid_class'):
@@ -942,11 +942,14 @@ def get_dimension_sizes(dreq_tables):
             # If a set of requested values if specified (e.g. for pressure levels grids like "plev19"),
             # use the length of the list of values.
             # The list is stored in Airtable as a space-delimited string.
+            assert isinstance(dimension.requested_values, str), \
+                f'Expected str for dimension.requested_values, received: {type(dimension.requested_values)}'
             values = dimension.requested_values.split()
             dim_sizes[dim].add(len(values))
 
-    # Determine dimension sizes where possible by looking in the Spatial Shape table records
-    # This is an extra consistency check on the results from dimensions
+    # Determine dimension sizes where possible by looking in the Spatial Shape table records.
+    # This is an extra consistency check on the results from dimensions, but it doesn't seem to change
+    # the results (as tested on dreq v1.2 content).
     for spatial_shape in dreq_tables['spatial shape'].records.values():
         if hasattr(spatial_shape, 'dimensions'):
             # Follow links from Spatial Shape to dimensions, if they exist
