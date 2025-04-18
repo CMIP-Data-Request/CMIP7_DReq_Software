@@ -202,10 +202,10 @@ years: 1
     dreq_tables = {
         'coordinates and dimensions': base['Coordinates and Dimensions'],
         'expts': base['Experiments'],
-        'opps': base['Opportunity'],
         'temporal shape': base['Temporal Shape'],
         'frequency': base['CMIP7 Frequency'],
         'spatial shape': base['Spatial Shape'],
+        # 'opps': base['Opportunity'], # would need for ensemble members
     }
 
     # Get lookup table of dimension sizes
@@ -239,6 +239,13 @@ years: 1
         use_dreq_version,
         compound_names=args.variables,
     )
+
+    if args.variables:
+        # Confirm variables were found
+        # (guards against typos in variable names causing silent fail)
+        for var_name in args.variables:
+            if var_name not in variables:
+                raise ValueError(f'Variable not found: {var_name}')
 
     if args.variables and args.variable_size_only:
         # Find size of specified variables, then exit
@@ -281,6 +288,10 @@ years: 1
         vars_by_expt = expt_vars['experiment']
 
     if args.experiments:
+        # Check specified experiments are valid (guard against silent fail)
+        for expt in args.experiments:
+            if expt not in expts:
+                raise ValueError(f'Experiment {expt} not found, is it missing from the input file or a typo?')
         # Only retain specified experiments
         expts = [expt for expt in expts if expt in args.experiments]
 
