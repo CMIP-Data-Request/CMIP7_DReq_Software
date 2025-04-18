@@ -71,6 +71,9 @@ def get_variable_size(var_info, dreq_dim_sizes, time_dims, freq_times_per_year, 
             # (e.g. for plev19, n = 19)
             n = dreq_dim_sizes[dim]
 
+        if n is None:
+            raise ValueError(f'No size found for dimension {dim}')
+
         dim_sizes[dim] = n
 
     num_gridpoints = 1
@@ -129,17 +132,27 @@ def main():
 
 # Model-specific dimension sizes (edit as needed)
 dimensions:
-  longitude: 360
-  latitude: 180
   alevel: 80
+  alevhalf: 80
+  gridlatitude: 100
+  latitude: 180
+  longitude: 360
   olevel: 80
+  olevhalf: 80
+  rho: 80
   sdepth: 20
+  soilpools: 5
+  spectband: 10
 
+# Number of bytes per floating point number
 bytes_per_float: 4
+
+# Scaling factor (e.g., adjust to account for netcdf compression)
 scale_file_size: 1
 
 # No. of years to use if showing size of single variables (-vso option)
 years: 1
+
 '''
         with open(config_file, 'w') as f:
             f.write(w)
