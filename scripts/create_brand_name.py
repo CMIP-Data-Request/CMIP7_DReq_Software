@@ -25,6 +25,8 @@ from data_request_api.utilities.decorators import append_kwargs_from_config
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--version", default="latest_stable", help="Version to be used")
+parser.add_argument("--extended_brand_name", action="store_true", default=False,
+                    help="Should extended brand name be used?")
 parser = append_arguments_to_parser(parser)
 subparser = parser.add_mutually_exclusive_group()
 subparser.add_argument("--output_dir", default=None, help="Dedicated output directory to use")
@@ -33,7 +35,7 @@ subparser.add_argument("--test", action="store_true",
 args = parser.parse_args()
 
 
-def compute_brand(variable):
+def compute_brand(variable, extended_brand_name=False):
 	var_name = str(variable.name)
 	param_name = str(variable.physical_parameter.name)
 	freq_name = str(variable.cmip7_frequency.name)
@@ -170,11 +172,15 @@ def compute_brand(variable):
 		rlabel = "site"
 	else:
 		rlabel = "global"
-	return "-".join([param_name, freq_name, rlabel, tlabel, vlabel, hlabel, alabel])
+	rep = "-".join([param_name, tlabel, vlabel, hlabel, alabel])
+	if extended_brand_name:
+		return ".".join([rep, freq_name, rlabel])
+	else:
+		return rep
 
 
 @append_kwargs_from_config
-def create_brand_name(version, output_dir, **kwargs):
+def create_brand_name(version, output_dir, extended_brand_name, **kwargs):
 	change_log_file(default=True, logfile=kwargs["log_file"])
 	change_log_level(kwargs["log_level"])
 	### Step 1: Get the data request content
@@ -183,7 +189,8 @@ def create_brand_name(version, output_dir, **kwargs):
 	### Step 2: Create the brand name
 	vs_content = read_json_input_file_content(content_dict["VS_input"])
 	for var in vs_content["variables"].keys():
-		vs_content["variables"][var]["brand"] = compute_brand(DR.find_element("variable", var))
+		vs_content["variables"][var]["brand"] = compute_brand(DR.find_element("variable", var),
+		                                                      extended_brand_name=extended_brand_name)
 	### Step 3: Rewrite file
 	write_json_output_file_content(content_dict["VS_input"], vs_content)
 	### Step 4: Create statistics file
