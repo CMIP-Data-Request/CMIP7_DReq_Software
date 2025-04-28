@@ -428,7 +428,7 @@ class TestEstimateDreqVolume:
             yaml.dump(config, fh)
         dc.load("v1.2")
 
-    def test_esimate_dreq_volume(self, temp_config_file, consolidate):
+    def test_estimate_dreq_volume(self, temp_config_file, consolidate):
         os.chdir(temp_config_file.parent)
         ofile = temp_config_file.parent / "test1.json"
         sizecfg = temp_config_file.parent / "size.yaml"

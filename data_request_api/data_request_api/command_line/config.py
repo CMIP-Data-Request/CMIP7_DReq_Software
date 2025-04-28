@@ -38,7 +38,7 @@ Examples:
         dreqcfg.CONFIG_FILE = args.cfgfile
 
     if len(args.command) == 0 or args.command[0] == "init":
-        print("Initializing config file:")
+        print(f"Initializing config file: '{dreqcfg.CONFIG_FILE}'")
         dreqcfg.load_config()
     elif args.command[0] == "reset":
         print("Resetting config with defaults:")
