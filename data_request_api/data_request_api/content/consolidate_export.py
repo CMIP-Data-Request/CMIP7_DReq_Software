@@ -143,7 +143,7 @@ def _filter_references(val, key, table, rid):
                     f" references for '{key}' of record '{rid}'."
                 )
         return filtered
-    elif isinstance(val, str) and "rec" in val:
+    elif isinstance(val, str) and val.startswith("rec"):
         if "," in val:
             vallist = [v.strip() for v in val.split(",")]
             filtered = [v for v in vallist if v not in filtered_records]
@@ -162,9 +162,9 @@ def _filter_references(val, key, table, rid):
             logger.warning(f"'{table}': Filtered the only reference for '{key}' of record '{rid}'.")
             return ""
         else:
-            return val.strip()
+            return _fix_str(val)
     else:
-        return val
+        return _fix_str(val)
 
 
 def _gen_rid_uid_map(data):
@@ -192,6 +192,23 @@ def _gen_rid_uid_map(data):
                 if "UID" in record:
                     rid_uid_map[rid] = record["UID"]
     return rid_uid_map
+
+
+def _fix_str(var):
+    """Adds missing space after commas and strips whitespace from strings."""
+    if isinstance(var, str):
+        return re.sub(r",(?=\S)", ", ", var).strip()
+    else:
+        return var
+
+
+def _fix_str_nested(data):
+    """Adds missing space after commas and strips whitespace from strings in nested dictionary."""
+    sub = re.sub
+    pattern = r",(?=\S)"
+    for table in data.values():
+        for record in table["records"].values():
+            record.update({k: sub(pattern, ", ", v).strip() if isinstance(v, str) else v for k, v in record.items()})
 
 
 def map_data(data, mapping_table, version, **kwargs):
@@ -525,6 +542,7 @@ def map_data(data, mapping_table, version, **kwargs):
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)
+        _fix_str_nested(mapped_data)
         mapped_data["version"] = version
         return {"Data Request": mapped_data}
     else:
