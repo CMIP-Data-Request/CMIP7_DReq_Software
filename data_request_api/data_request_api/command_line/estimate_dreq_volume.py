@@ -172,7 +172,7 @@ years: 1
     warning_msg += '\n They should be used with caution and verified against known data volumes.\n'
 
     request_from_input_file = None
-    if os.path.exists(args.request):
+    if os.path.isfile(args.request):
         # Argument is a file that lists requested variables
         filepath = args.request
         with open(filepath, 'r') as f:
