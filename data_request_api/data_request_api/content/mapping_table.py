@@ -95,8 +95,18 @@ mapping_table = {
         "source_base": "Data Request Physical Parameters (Public)",
         "source_table": ["CF Standard Names", "CF Standard Name"],
         "internal_mapping": {},
-        "internal_filters": {},
-        "drop_keys": ["Comments"],
+        "internal_filters": {
+            "Physical parameters": {
+                "aliases": [],
+                "operator": "nonempty",
+            },
+            "Status (from Physical parameters)": {
+                "aliases": [],
+                "operator": "in",
+                "values": ["New", "Existing physical parameter"],
+            },
+        },
+        "drop_keys": ["Comments", "Status (from Physical parameters)"],
         "internal_consistency": {
             "name": "Name",
             "Physical parameters 2": "Physical parameters",
@@ -356,12 +366,13 @@ mapping_table = {
                 "entry_type": "name",
             }
         },
-        "internal_filters": {},
-        # "Opportunity Status (from CMIP7 Variable Groups) (from Variables) (from Link to back sync)": {
-        #    "aliases": [],
-        #    "operator": "in",
-        #    "values": ["Under review", "Accepted"],
-        # },
+        "internal_filters": {
+            "Status": {
+                "aliases": [],
+                "operator": "in",
+                "values": ["New", "Existing physical parameter"],
+            },
+        },
         "drop_keys": [
             "Atmosphere review comments",
             "Atmosphere team review status",
