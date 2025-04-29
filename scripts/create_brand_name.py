@@ -83,7 +83,7 @@ def compute_brand(variable, extended_brand_name=False):
 		if len(height_dims) > 0:
 			vlabel = f"h{re.match(height_pattern, height_dims[0]).group(1)}m"
 		elif len(sdepth_dims) > 0:
-			vlabel = f"d{re.match(sdepth_pattern, sdepth_dims[0]).group(1)}cm"
+			vlabel = f"d{re.match(sdepth_pattern, sdepth_dims[0]).group(1)}0cm"
 		elif len(depth_dims) > 0:
 			vlabel = f"d{re.match(depth_pattern, depth_dims[0]).group(4)}m"
 		elif len(opbar_dims) > 0:
