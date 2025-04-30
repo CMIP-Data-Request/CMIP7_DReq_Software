@@ -10,7 +10,7 @@
 Python software to interact with the [CMIP7 data request](https://wcrp-cmip.org/cmip7/cmip7-data-request/).
 It provides an API to query and utilize the information in the data request, including example scripts and notebooks showing how to use the API.
 
-For the **Quick Start** guide, please see below.
+Please see below for the [installation guide](#installation) or how to [try it without installation](#try-it-without-installation).
 
 The Data Request Task Team encourages user feedback to help us improve the software.
 Here are some ways to provide feedback:
