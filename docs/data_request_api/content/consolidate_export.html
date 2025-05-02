@@ -168,7 +168,11 @@ el.replaceWith(d);
                     &#34;records&#34;: {
                         record_id: {
                             mapinfo[&#34;internal_consistency&#34;].get(reckey, reckey): _filter_references(
-                                recvalue, reckey, table, record_id
+                                recvalue,
+                                reckey,
+                                table,
+                                record_id,
+                                mapinfo[&#34;field_dtypes&#34;].get(mapinfo[&#34;internal_consistency&#34;].get(reckey, reckey), None),
                             )
                             for reckey, recvalue in record.items()
                             if reckey not in mapinfo[&#34;drop_keys&#34;]
@@ -383,6 +387,9 @@ el.replaceWith(d);
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)
+        # String fixes
+        logger.debug(&#34;Consolidation: Removing / Adding (un)necessary whitespace to strings.&#34;)
+        _fix_str_nested(mapped_data)
         mapped_data[&#34;version&#34;] = version
         return {&#34;Data Request&#34;: mapped_data}
     else:

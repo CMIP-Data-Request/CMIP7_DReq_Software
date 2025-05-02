@@ -1076,7 +1076,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
             sorting_val = sorting_request.pop(0)
             sorting_values_dict = defaultdict(list)
             for data in data_list:
-                sorting_values_dict[data.get(sorting_val)].append(data)
+                sorting_values_dict[str(data.get(sorting_val))].append(data)
             rep = list()
             for elt in sorted(list(sorting_values_dict)):
                 rep.extend(self.sort_func(sorting_values_dict[elt], sorting_request))
@@ -1112,7 +1112,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
 
     def export_summary(self, lines_data, columns_data, output_file, sorting_line=&#34;id&#34;, title_line=&#34;name&#34;,
                        sorting_column=&#34;id&#34;, title_column=&#34;name&#34;, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
-                       filtering_skip_if_missing=False, **kwargs):
+                       filtering_skip_if_missing=False, regroup=False, **kwargs):
         &#34;&#34;&#34;
         Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
         :param str lines_data: kind of data to be put in row
@@ -1126,6 +1126,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
         :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
         :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
                                                main_data kind
+        :param bool regroup: should lines/columns be regrouped by similarities
         :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
         :return: a csv output file
         &#34;&#34;&#34;
@@ -1134,9 +1135,13 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
         filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
                                                          operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
-        sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
+        if not isinstance(sorting_line, list):
+            sorting_line = [sorting_line, ]
+        sorted_filtered_data = self.sort_func(filtered_data, sorting_request=sorting_line)
         columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
-        columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
+        if not isinstance(sorting_column, list):
+            sorting_column = [sorting_column, ]
+        columns_datasets = self.sort_func(columns_datasets, sorting_request=sorting_column)
         columns_title_list = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
         columns_title_dict = {elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
         table_title = f&#34;{lines_data} {title_line} / {columns_data} {title_column}&#34;
@@ -1164,6 +1169,24 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
                 content[line_title] = {columns_title_dict[elt.id]: &#34;x&#34; for elt in filtered_columns}
 
         logger.debug(&#34;Format summary&#34;)
+        if regroup:
+            similar_columns = defaultdict(list)
+            for column_data_title in columns_title_list:
+                similar_columns[tuple([content[line_title].get(column_data_title, &#34;&#34;)
+                                       for line_title in lines_title_list])].append(column_data_title)
+            new_columns_title_list = list()
+            for similar_column in sorted(list(similar_columns), reverse=True, key=lambda x: (x.count(&#34;x&#34;), x)):
+                new_columns_title_list.extend(similar_columns[similar_column])
+            columns_title_list = new_columns_title_list
+            similar_lines = defaultdict(list)
+            for line_data_title in lines_title_list:
+                similar_lines[tuple([content[line_data_title].get(column_title, &#34;&#34;)
+                                     for column_title in columns_title_list])].append(line_data_title)
+            new_lines_title_list = list()
+            for similar_line in sorted(list(similar_lines), reverse=True, key=lambda x: (x.count(&#34;x&#34;), x)):
+                new_lines_title_list.extend(similar_lines[similar_line])
+            lines_title_list = new_lines_title_list
+
         rep = list()
         rep.append([table_title, ] + columns_title_list)
         for line_data_title in lines_title_list:
@@ -1317,7 +1340,7 @@ main_data kind
 :return: an output csv file</p></div>
 </dd>
 <dt id="data_request_api.query.data_request.DataRequest.export_summary"><code class="name flex">
-<span>def <span class="ident">export_summary</span></span>(<span>self,<br>lines_data,<br>columns_data,<br>output_file,<br>sorting_line='id',<br>title_line='name',<br>sorting_column='id',<br>title_column='name',<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>**kwargs)</span>
+<span>def <span class="ident">export_summary</span></span>(<span>self,<br>lines_data,<br>columns_data,<br>output_file,<br>sorting_line='id',<br>title_line='name',<br>sorting_column='id',<br>title_column='name',<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>regroup=False,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1326,7 +1349,7 @@ main_data kind
 </summary>
 <pre><code class="python">def export_summary(self, lines_data, columns_data, output_file, sorting_line=&#34;id&#34;, title_line=&#34;name&#34;,
                    sorting_column=&#34;id&#34;, title_column=&#34;name&#34;, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
-                   filtering_skip_if_missing=False, **kwargs):
+                   filtering_skip_if_missing=False, regroup=False, **kwargs):
     &#34;&#34;&#34;
     Create a 2D tables of csv kind which give the linked between the two list of elements kinds specified
     :param str lines_data: kind of data to be put in row
@@ -1340,6 +1363,7 @@ main_data kind
     :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
     :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
                                            main_data kind
+    :param bool regroup: should lines/columns be regrouped by similarities
     :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
     :return: a csv output file
     &#34;&#34;&#34;
@@ -1348,9 +1372,13 @@ main_data kind
     filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
                                                      operation=filtering_operation,
                                                      skip_if_missing=filtering_skip_if_missing)
-    sorted_filtered_data = self.sort_func(filtered_data, sorting_request=[sorting_line, ])
+    if not isinstance(sorting_line, list):
+        sorting_line = [sorting_line, ]
+    sorted_filtered_data = self.sort_func(filtered_data, sorting_request=sorting_line)
     columns_datasets = self.filter_elements_per_request(elements_to_filter=columns_data)
-    columns_datasets = self.sort_func(columns_datasets, sorting_request=[sorting_column, ])
+    if not isinstance(sorting_column, list):
+        sorting_column = [sorting_column, ]
+    columns_datasets = self.sort_func(columns_datasets, sorting_request=sorting_column)
     columns_title_list = [str(elt.__getattr__(title_column)) for elt in columns_datasets]
     columns_title_dict = {elt.id: title for (elt, title) in zip(columns_datasets, columns_title_list)}
     table_title = f&#34;{lines_data} {title_line} / {columns_data} {title_column}&#34;
@@ -1378,6 +1406,24 @@ main_data kind
             content[line_title] = {columns_title_dict[elt.id]: &#34;x&#34; for elt in filtered_columns}
 
     logger.debug(&#34;Format summary&#34;)
+    if regroup:
+        similar_columns = defaultdict(list)
+        for column_data_title in columns_title_list:
+            similar_columns[tuple([content[line_title].get(column_data_title, &#34;&#34;)
+                                   for line_title in lines_title_list])].append(column_data_title)
+        new_columns_title_list = list()
+        for similar_column in sorted(list(similar_columns), reverse=True, key=lambda x: (x.count(&#34;x&#34;), x)):
+            new_columns_title_list.extend(similar_columns[similar_column])
+        columns_title_list = new_columns_title_list
+        similar_lines = defaultdict(list)
+        for line_data_title in lines_title_list:
+            similar_lines[tuple([content[line_data_title].get(column_title, &#34;&#34;)
+                                 for column_title in columns_title_list])].append(line_data_title)
+        new_lines_title_list = list()
+        for similar_line in sorted(list(similar_lines), reverse=True, key=lambda x: (x.count(&#34;x&#34;), x)):
+            new_lines_title_list.extend(similar_lines[similar_line])
+        lines_title_list = new_lines_title_list
+
     rep = list()
     rep.append([table_title, ] + columns_title_list)
     for line_data_title in lines_title_list:
@@ -1399,6 +1445,7 @@ main_data kind
 :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
 :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
 main_data kind
+:param bool regroup: should lines/columns be regrouped by similarities
 :param dict kwargs: additional arguments to be given to function write_csv_output_file_content
 :return: a csv output file</p></div>
 </dd>
@@ -2326,7 +2373,7 @@ opportunity.</p></div>
         sorting_val = sorting_request.pop(0)
         sorting_values_dict = defaultdict(list)
         for data in data_list:
-            sorting_values_dict[data.get(sorting_val)].append(data)
+            sorting_values_dict[str(data.get(sorting_val))].append(data)
         rep = list()
         for elt in sorted(list(sorting_values_dict)):
             rep.extend(self.sort_func(sorting_values_dict[elt], sorting_request))

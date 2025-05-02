@@ -1,5 +1,6 @@
 [![pypi](https://img.shields.io/pypi/v/CMIP7-data-request-api.svg)](https://pypi.python.org/pypi/CMIP7-data-request-api)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CMIP-Data-Request/CMIP7_DReq_Software/main?filepath=notebooks)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CMIP-Data-Request/CMIP7_DReq_Software/)
 [![NBviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/CMIP-Data-Request/CMIP7_DReq_Software/tree/main/notebooks/)
 [![license](https://img.shields.io/github/license/CMIP-Data-Request/CMIP7_DReq_Software.svg)](https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/blob/main/LICENSE)
 [![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -9,7 +10,7 @@
 Python software to interact with the [CMIP7 data request](https://wcrp-cmip.org/cmip7/cmip7-data-request/).
 It provides an API to query and utilize the information in the data request, including example scripts and notebooks showing how to use the API.
 
-For the **Quick Start** guide, please see below.
+Please see below for the [installation guide](#installation) or how to [try it without installation](#try-it-without-installation).
 
 The Data Request Task Team encourages user feedback to help us improve the software.
 Here are some ways to provide feedback:
@@ -26,6 +27,14 @@ Please note that a technical update to the Data Request, `v1.2.1`, is planned fo
 This update will affect some details such as the names of CMOR variables, without substantially changing the scientific content of the request.
 For further information please see the [v1.2 release page](https://wcrp-cmip.org/cmip7-data-request-v1-2/).
 An update of this software will follow the release of `v1.2.1`.
+
+
+## Try It Without Installation
+
+You can launch and interact with this repository in a live environment via [Binder](https://mybinder.org/) or [Google Colab](https://colab.research.google.com/) — no installation needed, just click on one of the badges to run it in your browser:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CMIP-Data-Request/CMIP7_DReq_Software/main?filepath=notebooks)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CMIP-Data-Request/CMIP7_DReq_Software/)
 
 
 ## Installation

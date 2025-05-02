@@ -38,6 +38,7 @@ Issues = "https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/issues"
 export_dreq_lists_json = "data_request_api.command_line.export_dreq_lists_json:main"
 get_variables_metadata = "data_request_api.command_line.get_variables_metadata:main"
 CMIP7_data_request_api_config = "data_request_api.command_line.config:main"
+estimate_dreq_volume = "data_request_api.command_line.estimate_dreq_volume:main"
 compare_variables = "data_request_api.command_line.compare_variables:main"
 
 [tool.setuptools]

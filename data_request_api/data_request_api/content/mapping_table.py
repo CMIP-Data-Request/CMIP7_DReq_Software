@@ -59,6 +59,9 @@ Internal renaming of keys to achieve consistency across content versions ("inter
 Attributes to remove ("drop_keys"):
     List of record attributes that are not needed in the one-base (=release) structure.
 
+Data type of record attributes ("field_dtypes"):
+    Dictionary of field names and their data type. This is required as some attributes differ between export
+    types, such as integer fields in one export type being stored as strings in the other.
 
 
 Example Configuration
@@ -86,6 +89,14 @@ mapping_table = {
                 },
                 "internal_consistency": {"OldFieldName": "NewFieldName"},
                 "drop_keys": ["Field1", "Field2"],
+                "field_dtypes": {
+                    "Field1": "str",
+                    "Field2": "int",
+                    "Field3": "float",
+                    "Field4": "listofstr",
+                    "Field5": "listofint",
+                    "Field6": "listoffloat",
+                },
       },
 }
 """
@@ -95,12 +106,23 @@ mapping_table = {
         "source_base": "Data Request Physical Parameters (Public)",
         "source_table": ["CF Standard Names", "CF Standard Name"],
         "internal_mapping": {},
-        "internal_filters": {},
-        "drop_keys": ["Comments"],
+        "internal_filters": {
+            "Physical parameters": {
+                "aliases": [],
+                "operator": "nonempty",
+            },
+            "Status (from Physical parameters)": {
+                "aliases": [],
+                "operator": "in",
+                "values": ["New", "Existing physical parameter"],
+            },
+        },
+        "drop_keys": ["Comments", "Status (from Physical parameters)"],
         "internal_consistency": {
             "name": "Name",
             "Physical parameters 2": "Physical parameters",
         },
+        "field_dtypes": {},
     },
     "CMIP6 Table Identifiers (legacy)": {
         "source_base": "Data Request Variables (Public)",
@@ -114,6 +136,7 @@ mapping_table = {
         "internal_consistency": {
             "Comment": "Notes",
         },
+        "field_dtypes": {},
     },
     "CMIP6 Frequency (legacy)": {
         "source_base": "Data Request Variables (Public)",
@@ -122,6 +145,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": [],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "CMIP7 Frequency": {
         "source_base": "Data Request Variables (Public)",
@@ -132,6 +156,7 @@ mapping_table = {
         "internal_consistency": {
             "CMIP6 Frequency": "CMIP6 Frequency (legacy)",
         },
+        "field_dtypes": {},
     },
     "Cell Measures": {
         "source_base": "Data Request Variables (Public)",
@@ -140,6 +165,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": ["Variables comments"],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Cell Methods": {
         "source_base": "Data Request Variables (Public)",
@@ -155,6 +181,7 @@ mapping_table = {
             "Structures",
         ],
         "internal_consistency": {"uid": "UID"},
+        "field_dtypes": {},
     },
     "Coordinates and Dimensions": {
         "source_base": "Data Request Variables (Public)",
@@ -176,6 +203,7 @@ mapping_table = {
             "Spatial shape": "Spatial Shape",
             "Temporal shape": "Temporal Shape",
         },
+        "field_dtypes": {},
     },
     "Data Request Themes": {
         "source_base": "Data Request Opportunities (Public)",
@@ -187,6 +215,7 @@ mapping_table = {
             "Opportunities led": "Lead theme for Opportunity",
             "Opportunity": "Tagged for Opportunity",
         },
+        "field_dtypes": {},
     },
     "Docs for Opportunities": {
         "source_base": "Data Request Opportunities (Public)",
@@ -195,6 +224,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": ["Base"],
         "internal_consistency": {"language identifier": "Language Identifier"},
+        "field_dtypes": {},
     },
     "ESM-BCV 1.4": {
         "source_base": "Data Request Variables (Public)",
@@ -228,6 +258,9 @@ mapping_table = {
             "Title (from CMOR Variables)": "Title (from Variables)",
             "Units": "Units (from Physical Parameter) (from Variables)",
         },
+        "field_dtypes": {
+            "Title (from Variables)": "listofstr",
+        },
     },
     "Experiment Group": {
         "source_base": "Data Request Opportunities (Public)",
@@ -255,6 +288,7 @@ mapping_table = {
             "Themes to alert",
         ],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Experiments": {
         "source_base": "Data Request Opportunities (Public)",
@@ -274,6 +308,7 @@ mapping_table = {
         "internal_consistency": {
             "Unique list of variables attached to Opportunity (linked) (from Opportunity)": ("Variables")
         },
+        "field_dtypes": {},
     },
     "Glossary": {
         "source_base": "Data Request Opportunities (Public)",
@@ -282,6 +317,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": ["Opportunity"],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "MIPs": {
         "source_base": "Data Request Opportunities (Public)",
@@ -290,6 +326,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": [],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Modelling Realm": {
         "source_base": "Data Request Variables (Public)",
@@ -300,6 +337,7 @@ mapping_table = {
         "internal_consistency": {
             "Variables": "Variables - primary realm",
         },
+        "field_dtypes": {},
     },
     "Opportunity": {
         "source_base": "Data Request Opportunities (Public)",
@@ -342,6 +380,7 @@ mapping_table = {
             ),
             "Working/Updated Variable Groups": "Variable Groups",
         },
+        "field_dtypes": {},
     },
     "Physical Parameters": {
         "source_base": "Data Request Physical Parameters (Public)",
@@ -356,12 +395,13 @@ mapping_table = {
                 "entry_type": "name",
             }
         },
-        "internal_filters": {},
-        # "Opportunity Status (from CMIP7 Variable Groups) (from Variables) (from Link to back sync)": {
-        #    "aliases": [],
-        #    "operator": "in",
-        #    "values": ["Under review", "Accepted"],
-        # },
+        "internal_filters": {
+            "Status": {
+                "aliases": [],
+                "operator": "in",
+                "values": ["New", "Existing physical parameter"],
+            },
+        },
         "drop_keys": [
             "Atmosphere review comments",
             "Atmosphere team review status",
@@ -378,6 +418,7 @@ mapping_table = {
             "Tagged author team",
         ],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Priority Level": {
         "source_base": "Data Request Opportunities (Public)",
@@ -386,6 +427,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": [],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Ranking": {
         "source_base": "Data Request Variables (Public)",
@@ -394,6 +436,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": [],
         "internal_consistency": {"Name": "ID"},
+        "field_dtypes": {},
     },
     "Spatial Shape": {
         "source_base": "Data Request Variables (Public)",
@@ -402,6 +445,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": ["Comments", "Structure"],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Temporal Shape": {
         "source_base": "Data Request Variables (Public)",
@@ -410,6 +454,7 @@ mapping_table = {
         "internal_filters": {},
         "drop_keys": ["Comments", "Structure"],
         "internal_consistency": {},
+        "field_dtypes": {},
     },
     "Time Subset": {
         "source_base": "Data Request Opportunities (Public)",
@@ -422,6 +467,7 @@ mapping_table = {
             "sliceLenUnit": "subsetLenUnit",
             "uid": "UID",
         },
+        "field_dtypes": {},
     },
     "Variable Group": {
         "source_base": "Data Request Opportunities (Public)",
@@ -475,19 +521,12 @@ mapping_table = {
             "Experiment Groups (from Final Opportunity selection)": "Experiment Groups (from Opportunity)",
             "Final Opportunity selection": "Opportunity",
         },
+        "field_dtypes": {},
     },
     "Variables": {
         "source_base": "Data Request Variables (Public)",
         "source_table": ["Variable", "Variables"],
         "internal_mapping": {
-            "ESM-BCV 1.4": {
-                "base_copy_of_table": False,
-                "base": "Data Request Variables (Public)",
-                "table": "ESM-BCV 1.4",
-                "operation": "split",
-                "map_by_key": ["Name"],
-                "entry_type": "name",
-            },
             "CMIP7 Variable Groups": {
                 "base_copy_of_table": False,
                 "base": "Data Request Opportunities (Public)",
@@ -582,6 +621,12 @@ mapping_table = {
             "Status": "Variable Status",
             "Status (from Physical Parameter)": "Physical Parameter Status",
             "Table": "CMIP6 Table (legacy)",
+        },
+        "field_dtypes": {
+            "Vertical Dimension": "int",
+            "Horizontal Mesh": "int",
+            "Temporal Sampling Rate": "int",
+            "Min Rank in CMIP6 download statistics": "listofint",
         },
     },
 }

@@ -100,6 +100,530 @@ def temp_config_file(tmp_path_factory, monkeyclass):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="data_request_api.tests.test_cli.TestCompareVariables"><code class="flex name class">
+<span>class <span class="ident">TestCompareVariables</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.mark.parametrize(
+    &#34;consolidate&#34;,
+    [&#34;consolidate&#34;, &#34;no consolidate&#34;],
+    indirect=True,
+    scope=&#34;class&#34;,
+)
+class TestCompareVariables:
+    @pytest.fixture(scope=&#34;class&#34;, autouse=True)
+    def setup_class(self, request):
+        # Initialize config and load v1.2 content version
+        self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+        self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+        with open(self.temp_config_file, &#34;w&#34;) as fh:
+            config = {
+                &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+                &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+            }
+            yaml.dump(config, fh)
+        dc.load(&#34;v1.2&#34;)
+        dc.load(&#34;v1.2.1&#34;)
+
+    def test_compare_variables(self, temp_config_file, consolidate):
+        os.chdir(temp_config_file.parent)
+        ofileA = temp_config_file.parent / &#34;testA.json&#34;
+        ofileB = temp_config_file.parent / &#34;testB.json&#34;
+        ofile_vars = temp_config_file.parent / &#34;diffs_by_variable.json&#34;
+        ofile_attr = temp_config_file.parent / &#34;diffs_by_attribute.json&#34;
+        ofile_missing = temp_config_file.parent / &#34;missing_variables.json&#34;
+        attr_file = temp_config_file.parent / &#34;attributes.yaml&#34;
+
+        # Part 1 - Standard comparison
+        ofile_vars.unlink(missing_ok=True)
+        ofile_attr.unlink(missing_ok=True)
+        ofile_missing.unlink(missing_ok=True)
+        ofileA.unlink(missing_ok=True)
+        ofileB.unlink(missing_ok=True)
+        attr_file.unlink(missing_ok=True)
+        # Create Variable List A
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.get_variables_metadata&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofileA,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofileA) and os.path.getsize(ofileA) &gt; 0
+        # Create Variable List B
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.get_variables_metadata&#34;,
+                &#34;v1.2.1&#34;,
+                &#34;-o&#34;,
+                ofileB,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofileB) and os.path.getsize(ofileB) &gt; 0
+        # Actual comparison
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.compare_variables&#34;,
+                ofileA,
+                ofileB,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile_missing) and os.path.getsize(ofile_missing) &gt; 0
+        assert os.path.exists(ofile_vars) and os.path.getsize(ofile_vars) &gt; 0
+        assert os.path.exists(ofile_attr) and os.path.getsize(ofile_attr) &gt; 0
+        assert os.path.exists(attr_file) and os.path.getsize(attr_file) &gt; 0
+
+        # Part 2 - Provide attribute file
+        ofile_vars.unlink(missing_ok=True)
+        ofile_attr.unlink(missing_ok=True)
+        ofile_missing.unlink(missing_ok=True)
+        # Write custom attributes file
+        cattr_file = temp_config_file.parent / &#34;custom_attrs.yaml&#34;
+        cattr_file.unlink(missing_ok=True)
+        config = {
+            &#34;compare_attributes&#34;: [&#34;standard_name&#34;, &#34;units&#34;, &#34;cell_methods&#34;],
+            &#34;repos&#34;: {
+                &#34;cmip6&#34;: {
+                    &#34;url&#34;: &#34;https://github.com/PCMDI/cmip6-cmor-tables&#34;,
+                }
+            },
+        }
+        with open(cattr_file, &#34;w&#34;) as f:
+            yaml.dump(config, f, default_flow_style=False)
+        # Actual comparison
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.compare_variables&#34;,
+                ofileA,
+                ofileB,
+                &#34;-c&#34;,
+                cattr_file,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile_missing) and os.path.getsize(ofile_missing) &gt; 0
+        assert os.path.exists(ofile_vars) and os.path.getsize(ofile_vars) &gt; 0
+        assert os.path.exists(ofile_attr) and os.path.getsize(ofile_attr) &gt; 0
+        assert os.path.getsize(cattr_file) &lt; os.path.getsize(attr_file)
+
+        # Part 3 - Compare with CMIP6
+        ofile_vars.unlink(missing_ok=True)
+        ofile_attr.unlink(missing_ok=True)
+        ofile_missing.unlink(missing_ok=True)
+        # Actual comparison
+        result = subprocess.run(
+            [sys.executable, &#34;-m&#34;, &#34;data_request_api.command_line.compare_variables&#34;, ofileB, &#34;cmip6&#34;],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile_missing) and os.path.getsize(ofile_missing) &gt; 0
+        assert os.path.exists(ofile_vars) and os.path.getsize(ofile_vars) &gt; 0
+        assert os.path.exists(ofile_attr) and os.path.getsize(ofile_attr) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestCompareVariables.pytestmark"><code class="name">var <span class="ident">pytestmark</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestCompareVariables.setup_class"><code class="name flex">
+<span>def <span class="ident">setup_class</span></span>(<span>self, request)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;, autouse=True)
+def setup_class(self, request):
+    # Initialize config and load v1.2 content version
+    self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+    self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+    with open(self.temp_config_file, &#34;w&#34;) as fh:
+        config = {
+            &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+            &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+        }
+        yaml.dump(config, fh)
+    dc.load(&#34;v1.2&#34;)
+    dc.load(&#34;v1.2.1&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestCompareVariables.test_compare_variables"><code class="name flex">
+<span>def <span class="ident">test_compare_variables</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_compare_variables(self, temp_config_file, consolidate):
+    os.chdir(temp_config_file.parent)
+    ofileA = temp_config_file.parent / &#34;testA.json&#34;
+    ofileB = temp_config_file.parent / &#34;testB.json&#34;
+    ofile_vars = temp_config_file.parent / &#34;diffs_by_variable.json&#34;
+    ofile_attr = temp_config_file.parent / &#34;diffs_by_attribute.json&#34;
+    ofile_missing = temp_config_file.parent / &#34;missing_variables.json&#34;
+    attr_file = temp_config_file.parent / &#34;attributes.yaml&#34;
+
+    # Part 1 - Standard comparison
+    ofile_vars.unlink(missing_ok=True)
+    ofile_attr.unlink(missing_ok=True)
+    ofile_missing.unlink(missing_ok=True)
+    ofileA.unlink(missing_ok=True)
+    ofileB.unlink(missing_ok=True)
+    attr_file.unlink(missing_ok=True)
+    # Create Variable List A
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.get_variables_metadata&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofileA,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofileA) and os.path.getsize(ofileA) &gt; 0
+    # Create Variable List B
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.get_variables_metadata&#34;,
+            &#34;v1.2.1&#34;,
+            &#34;-o&#34;,
+            ofileB,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofileB) and os.path.getsize(ofileB) &gt; 0
+    # Actual comparison
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.compare_variables&#34;,
+            ofileA,
+            ofileB,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile_missing) and os.path.getsize(ofile_missing) &gt; 0
+    assert os.path.exists(ofile_vars) and os.path.getsize(ofile_vars) &gt; 0
+    assert os.path.exists(ofile_attr) and os.path.getsize(ofile_attr) &gt; 0
+    assert os.path.exists(attr_file) and os.path.getsize(attr_file) &gt; 0
+
+    # Part 2 - Provide attribute file
+    ofile_vars.unlink(missing_ok=True)
+    ofile_attr.unlink(missing_ok=True)
+    ofile_missing.unlink(missing_ok=True)
+    # Write custom attributes file
+    cattr_file = temp_config_file.parent / &#34;custom_attrs.yaml&#34;
+    cattr_file.unlink(missing_ok=True)
+    config = {
+        &#34;compare_attributes&#34;: [&#34;standard_name&#34;, &#34;units&#34;, &#34;cell_methods&#34;],
+        &#34;repos&#34;: {
+            &#34;cmip6&#34;: {
+                &#34;url&#34;: &#34;https://github.com/PCMDI/cmip6-cmor-tables&#34;,
+            }
+        },
+    }
+    with open(cattr_file, &#34;w&#34;) as f:
+        yaml.dump(config, f, default_flow_style=False)
+    # Actual comparison
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.compare_variables&#34;,
+            ofileA,
+            ofileB,
+            &#34;-c&#34;,
+            cattr_file,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile_missing) and os.path.getsize(ofile_missing) &gt; 0
+    assert os.path.exists(ofile_vars) and os.path.getsize(ofile_vars) &gt; 0
+    assert os.path.exists(ofile_attr) and os.path.getsize(ofile_attr) &gt; 0
+    assert os.path.getsize(cattr_file) &lt; os.path.getsize(attr_file)
+
+    # Part 3 - Compare with CMIP6
+    ofile_vars.unlink(missing_ok=True)
+    ofile_attr.unlink(missing_ok=True)
+    ofile_missing.unlink(missing_ok=True)
+    # Actual comparison
+    result = subprocess.run(
+        [sys.executable, &#34;-m&#34;, &#34;data_request_api.command_line.compare_variables&#34;, ofileB, &#34;cmip6&#34;],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile_missing) and os.path.getsize(ofile_missing) &gt; 0
+    assert os.path.exists(ofile_vars) and os.path.getsize(ofile_vars) &gt; 0
+    assert os.path.exists(ofile_attr) and os.path.getsize(ofile_attr) &gt; 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestEstimateDreqVolume"><code class="flex name class">
+<span>class <span class="ident">TestEstimateDreqVolume</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.mark.parametrize(
+    &#34;consolidate&#34;,
+    [&#34;consolidate&#34;, &#34;no consolidate&#34;],
+    indirect=True,
+    scope=&#34;class&#34;,
+)
+class TestEstimateDreqVolume:
+    @pytest.fixture(scope=&#34;class&#34;, autouse=True)
+    def setup_class(self, request):
+        # Initialize config and load v1.2 content version
+        self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+        self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+        with open(self.temp_config_file, &#34;w&#34;) as fh:
+            config = {
+                &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+                &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+            }
+            yaml.dump(config, fh)
+        dc.load(&#34;v1.2&#34;)
+
+    def test_estimate_dreq_volume(self, temp_config_file, consolidate):
+        os.chdir(temp_config_file.parent)
+        ofile = temp_config_file.parent / &#34;test1.json&#34;
+        sizecfg = temp_config_file.parent / &#34;size.yaml&#34;
+        ofile.unlink(missing_ok=True)
+        sizecfg.unlink(missing_ok=True)
+        # Part 1 - Create size.yaml
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.estimate_dreq_volume&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
+        assert os.path.exists(sizecfg) and os.path.getsize(sizecfg) &gt; 0
+        # Part 2 - Actual volume estimate
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.estimate_dreq_volume&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+        assert os.path.exists(sizecfg) and os.path.getsize(sizecfg) &gt; 0
+        # Part 3 - Custom size.yaml
+        ofile.unlink(missing_ok=True)
+        csizecfg = temp_config_file.parent / &#34;custom_size.yaml&#34;
+        csizecfg.unlink(missing_ok=True)
+        # Read default size.yaml
+        with open(sizecfg) as fh:
+            config = yaml.safe_load(fh)
+        sizecfg.unlink(missing_ok=True)
+        # Update config
+        config[&#34;longitude&#34;] = 720
+        config[&#34;latitude&#34;] = 360
+        # Write custom size.yaml
+        with open(csizecfg, &#34;w&#34;) as fh:
+            yaml.dump(config, fh)
+        # Actual volume estimate
+        result = subprocess.run(
+            [
+                sys.executable,
+                &#34;-m&#34;,
+                &#34;data_request_api.command_line.estimate_dreq_volume&#34;,
+                &#34;v1.2&#34;,
+                &#34;-o&#34;,
+                ofile,
+                &#34;-c&#34;,
+                csizecfg,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+        assert os.path.exists(csizecfg) and os.path.getsize(csizecfg) &gt; 0
+        assert not os.path.exists(sizecfg) or os.path.getsize(sizecfg) == 0</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestEstimateDreqVolume.pytestmark"><code class="name">var <span class="ident">pytestmark</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="data_request_api.tests.test_cli.TestEstimateDreqVolume.setup_class"><code class="name flex">
+<span>def <span class="ident">setup_class</span></span>(<span>self, request)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@pytest.fixture(scope=&#34;class&#34;, autouse=True)
+def setup_class(self, request):
+    # Initialize config and load v1.2 content version
+    self.temp_config_file = request.getfixturevalue(&#34;temp_config_file&#34;)
+    self.consolidate = request.getfixturevalue(&#34;consolidate&#34;)
+    with open(self.temp_config_file, &#34;w&#34;) as fh:
+        config = {
+            &#34;consolidate&#34;: self.consolidate == &#34;consolidate&#34;,
+            &#34;cache_dir&#34;: str(self.temp_config_file.parent),
+        }
+        yaml.dump(config, fh)
+    dc.load(&#34;v1.2&#34;)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_cli.TestEstimateDreqVolume.test_estimate_dreq_volume"><code class="name flex">
+<span>def <span class="ident">test_estimate_dreq_volume</span></span>(<span>self, temp_config_file, consolidate)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_estimate_dreq_volume(self, temp_config_file, consolidate):
+    os.chdir(temp_config_file.parent)
+    ofile = temp_config_file.parent / &#34;test1.json&#34;
+    sizecfg = temp_config_file.parent / &#34;size.yaml&#34;
+    ofile.unlink(missing_ok=True)
+    sizecfg.unlink(missing_ok=True)
+    # Part 1 - Create size.yaml
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.estimate_dreq_volume&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
+    assert os.path.exists(sizecfg) and os.path.getsize(sizecfg) &gt; 0
+    # Part 2 - Actual volume estimate
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.estimate_dreq_volume&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+    assert os.path.exists(sizecfg) and os.path.getsize(sizecfg) &gt; 0
+    # Part 3 - Custom size.yaml
+    ofile.unlink(missing_ok=True)
+    csizecfg = temp_config_file.parent / &#34;custom_size.yaml&#34;
+    csizecfg.unlink(missing_ok=True)
+    # Read default size.yaml
+    with open(sizecfg) as fh:
+        config = yaml.safe_load(fh)
+    sizecfg.unlink(missing_ok=True)
+    # Update config
+    config[&#34;longitude&#34;] = 720
+    config[&#34;latitude&#34;] = 360
+    # Write custom size.yaml
+    with open(csizecfg, &#34;w&#34;) as fh:
+        yaml.dump(config, fh)
+    # Actual volume estimate
+    result = subprocess.run(
+        [
+            sys.executable,
+            &#34;-m&#34;,
+            &#34;data_request_api.command_line.estimate_dreq_volume&#34;,
+            &#34;v1.2&#34;,
+            &#34;-o&#34;,
+            ofile,
+            &#34;-c&#34;,
+            csizecfg,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
+    assert os.path.exists(csizecfg) and os.path.getsize(csizecfg) &gt; 0
+    assert not os.path.exists(sizecfg) or os.path.getsize(sizecfg) == 0</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="data_request_api.tests.test_cli.TestExportDreqListsJson"><code class="flex name class">
 <span>class <span class="ident">TestExportDreqListsJson</span></span>
 </code></dt>
@@ -146,9 +670,7 @@ class TestExportDreqListsJson:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
 
-    def test_export_dreq_lists_json_with_opportunities_file(
-        self, temp_config_file, consolidate
-    ):
+    def test_export_dreq_lists_json_with_opportunities_file(self, temp_config_file, consolidate):
         # Test that the script creates an opportunities file template
         opportunities_file = temp_config_file.parent / &#34;opportunities.json&#34;
         opportunities_file.unlink(missing_ok=True)
@@ -168,10 +690,7 @@ class TestExportDreqListsJson:
             text=True,
         )
         assert result.returncode == 0
-        assert (
-            os.path.exists(opportunities_file)
-            and os.path.getsize(opportunities_file) &gt; 0
-        )
+        assert os.path.exists(opportunities_file) and os.path.getsize(opportunities_file) &gt; 0
         assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
 
         # Test that it now applies the opportunities settings from opportunities_file
@@ -191,13 +710,9 @@ class TestExportDreqListsJson:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
 
-    def test_export_dreq_lists_json_with_invalid_opportunities_file(
-        self, temp_config_file, consolidate
-    ):
+    def test_export_dreq_lists_json_with_invalid_opportunities_file(self, temp_config_file, consolidate):
         # Test that the script raises an error with an invalid opportunities file
-        opportunities_file = (
-            temp_config_file.parent / &#34;invalid_opportunities.json&#34;
-        )
+        opportunities_file = temp_config_file.parent / &#34;invalid_opportunities.json&#34;
         opportunities_file.unlink(missing_ok=True)
         ofile = temp_config_file.parent / &#34;test3.json&#34;
         ofile.unlink(missing_ok=True)
@@ -219,9 +734,7 @@ class TestExportDreqListsJson:
         assert result.returncode != 0
         assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
 
-    def test_export_dreq_lists_json_entry_point(
-        self, temp_config_file, consolidate
-    ):
+    def test_export_dreq_lists_json_entry_point(self, temp_config_file, consolidate):
         ofile = temp_config_file.parent / &#34;test4.json&#34;
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -306,9 +819,7 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_export_dreq_lists_json_entry_point(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_export_dreq_lists_json_entry_point(self, temp_config_file, consolidate):
     ofile = temp_config_file.parent / &#34;test4.json&#34;
     ofile.unlink(missing_ok=True)
     result = subprocess.run(
@@ -334,13 +845,9 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_export_dreq_lists_json_with_invalid_opportunities_file(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_export_dreq_lists_json_with_invalid_opportunities_file(self, temp_config_file, consolidate):
     # Test that the script raises an error with an invalid opportunities file
-    opportunities_file = (
-        temp_config_file.parent / &#34;invalid_opportunities.json&#34;
-    )
+    opportunities_file = temp_config_file.parent / &#34;invalid_opportunities.json&#34;
     opportunities_file.unlink(missing_ok=True)
     ofile = temp_config_file.parent / &#34;test3.json&#34;
     ofile.unlink(missing_ok=True)
@@ -372,9 +879,7 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_export_dreq_lists_json_with_opportunities_file(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_export_dreq_lists_json_with_opportunities_file(self, temp_config_file, consolidate):
     # Test that the script creates an opportunities file template
     opportunities_file = temp_config_file.parent / &#34;opportunities.json&#34;
     opportunities_file.unlink(missing_ok=True)
@@ -394,10 +899,7 @@ def setup_class(self, request):
         text=True,
     )
     assert result.returncode == 0
-    assert (
-        os.path.exists(opportunities_file)
-        and os.path.getsize(opportunities_file) &gt; 0
-    )
+    assert os.path.exists(opportunities_file) and os.path.getsize(opportunities_file) &gt; 0
     assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
 
     # Test that it now applies the opportunities settings from opportunities_file
@@ -467,9 +969,7 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
 
-    def test_get_variables_metadata_with_compound_names(
-        self, temp_config_file, consolidate
-    ):
+    def test_get_variables_metadata_with_compound_names(self, temp_config_file, consolidate):
         ofile = temp_config_file.parent / &#34;test2.json&#34;
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -490,9 +990,7 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
 
-    def test_get_variables_metadata_with_cmor_tables(
-        self, temp_config_file, consolidate
-    ):
+    def test_get_variables_metadata_with_cmor_tables(self, temp_config_file, consolidate):
         ofile = temp_config_file.parent / &#34;test3.json&#34;
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -513,9 +1011,7 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
 
-    def test_get_variables_metadata_with_cmor_variables(
-        self, temp_config_file, consolidate
-    ):
+    def test_get_variables_metadata_with_cmor_variables(self, temp_config_file, consolidate):
         ofile = temp_config_file.parent / &#34;test4.json&#34;
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -536,9 +1032,7 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) &gt; 0
 
-    def test_get_variables_metadata_entry_point(
-        self, temp_config_file, consolidate
-    ):
+    def test_get_variables_metadata_entry_point(self, temp_config_file, consolidate):
         ofile = temp_config_file.parent / &#34;test5.json&#34;
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -623,9 +1117,7 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_get_variables_metadata_entry_point(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_get_variables_metadata_entry_point(self, temp_config_file, consolidate):
     ofile = temp_config_file.parent / &#34;test5.json&#34;
     ofile.unlink(missing_ok=True)
     result = subprocess.run(
@@ -651,9 +1143,7 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_get_variables_metadata_with_cmor_tables(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_get_variables_metadata_with_cmor_tables(self, temp_config_file, consolidate):
     ofile = temp_config_file.parent / &#34;test3.json&#34;
     ofile.unlink(missing_ok=True)
     result = subprocess.run(
@@ -684,9 +1174,7 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_get_variables_metadata_with_cmor_variables(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_get_variables_metadata_with_cmor_variables(self, temp_config_file, consolidate):
     ofile = temp_config_file.parent / &#34;test4.json&#34;
     ofile.unlink(missing_ok=True)
     result = subprocess.run(
@@ -717,9 +1205,7 @@ def setup_class(self, request):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_get_variables_metadata_with_compound_names(
-    self, temp_config_file, consolidate
-):
+<pre><code class="python">def test_get_variables_metadata_with_compound_names(self, temp_config_file, consolidate):
     ofile = temp_config_file.parent / &#34;test2.json&#34;
     ofile.unlink(missing_ok=True)
     result = subprocess.run(
@@ -766,6 +1252,22 @@ def setup_class(self, request):
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="data_request_api.tests.test_cli.TestCompareVariables" href="#data_request_api.tests.test_cli.TestCompareVariables">TestCompareVariables</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_cli.TestCompareVariables.pytestmark" href="#data_request_api.tests.test_cli.TestCompareVariables.pytestmark">pytestmark</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestCompareVariables.setup_class" href="#data_request_api.tests.test_cli.TestCompareVariables.setup_class">setup_class</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestCompareVariables.test_compare_variables" href="#data_request_api.tests.test_cli.TestCompareVariables.test_compare_variables">test_compare_variables</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data_request_api.tests.test_cli.TestEstimateDreqVolume" href="#data_request_api.tests.test_cli.TestEstimateDreqVolume">TestEstimateDreqVolume</a></code></h4>
+<ul class="">
+<li><code><a title="data_request_api.tests.test_cli.TestEstimateDreqVolume.pytestmark" href="#data_request_api.tests.test_cli.TestEstimateDreqVolume.pytestmark">pytestmark</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestEstimateDreqVolume.setup_class" href="#data_request_api.tests.test_cli.TestEstimateDreqVolume.setup_class">setup_class</a></code></li>
+<li><code><a title="data_request_api.tests.test_cli.TestEstimateDreqVolume.test_estimate_dreq_volume" href="#data_request_api.tests.test_cli.TestEstimateDreqVolume.test_estimate_dreq_volume">test_estimate_dreq_volume</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="data_request_api.tests.test_cli.TestExportDreqListsJson" href="#data_request_api.tests.test_cli.TestExportDreqListsJson">TestExportDreqListsJson</a></code></h4>
 <ul class="">

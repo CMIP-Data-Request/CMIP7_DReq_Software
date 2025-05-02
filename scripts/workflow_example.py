@@ -26,22 +26,25 @@ reload(dq)
 use_dreq_version = 'v1.2'
 
 # Download specified version of data request content (if not locally cached)
-dc.retrieve(use_dreq_version)
+#MPM_not_needed dc.retrieve(use_dreq_version)
 # Load content into python dict
 content = dc.load(use_dreq_version)
 
 # Specify opportunities that modelling group chooses to support
 # This can be a subset:
 use_opps = []
-use_opps.append('Baseline Climate Variables for Earth System Modelling')
-use_opps.append('Synoptic systems')
+#use_opps.append('Baseline Climate Variables for Earth System Modelling')
+#use_opps.append('Synoptic systems')
+use_opps.append('Energy System Impacts')
 # Or, to support all opportunities in the data request:
-use_opps = 'all'
+#use_opps = 'all'
 
 # Get the requested variables for each opportunity and aggregate them into variable lists by experiment
-# (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
+# (i.e., for every experiment, a list of the variables that should be produced to support all of the
+# specified opportunities)
 priority_cutoff = 'Low'
-expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps, priority_cutoff=priority_cutoff, verbose=False)
+expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps,
+                                       priority_cutoff=priority_cutoff, verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:

@@ -122,7 +122,7 @@ def _apply_hard_fixes(data):
     return data
 
 
-def _filter_references(val, key, table, rid):
+def _filter_references(val, key, table, rid, dtype=None):
     """
     Filters lists of or strings with comma-separated references to other records.
     """
@@ -142,8 +142,8 @@ def _filter_references(val, key, table, rid):
                     f"'{table}': Filtered {len(val) - len(filtered)} of {len(val)}"
                     f" references for '{key}' of record '{rid}'."
                 )
-        return filtered
-    elif isinstance(val, str) and "rec" in val:
+        return _fix_dtype(key, filtered, dtype)
+    elif isinstance(val, str) and val.startswith("rec"):
         if "," in val:
             vallist = [v.strip() for v in val.split(",")]
             filtered = [v for v in vallist if v not in filtered_records]
@@ -157,14 +157,14 @@ def _filter_references(val, key, table, rid):
                         f"'{table}': Filtered {len(vallist) - len(filtered)} of"
                         f" {len(vallist)} references for '{key}' of record '{rid}'."
                     )
-            return ",".join(filtered)
+            return _fix_dtype(key, ",".join(filtered), dtype)
         elif val.strip() in filtered_records:
             logger.warning(f"'{table}': Filtered the only reference for '{key}' of record '{rid}'.")
-            return ""
+            return _fix_dtype(key, "", dtype)
         else:
-            return val.strip()
+            return _fix_dtype(key, _fix_str(val), dtype)
     else:
-        return val
+        return _fix_dtype(key, _fix_str(val), dtype)
 
 
 def _gen_rid_uid_map(data):
@@ -192,6 +192,61 @@ def _gen_rid_uid_map(data):
                 if "UID" in record:
                     rid_uid_map[rid] = record["UID"]
     return rid_uid_map
+
+
+def _fix_str(var):
+    """Adds missing space after commas and strips whitespace from strings."""
+    if isinstance(var, str):
+        return re.sub(r",(?=\S)", ", ", var).strip()
+    else:
+        return var
+
+
+def _fix_str_nested(data):
+    """Adds missing space after commas and strips whitespace from strings in nested dictionary."""
+    sub = re.sub
+    pattern = r",(?=\S)"
+    for table in data.values():
+        for record in table["records"].values():
+            record.update({k: sub(pattern, ", ", v).strip() if isinstance(v, str) else v for k, v in record.items()})
+
+
+def _fix_dtype(fkey, fval, dtype=None):
+    """Fixes data types for record fields."""
+    logger = get_logger()
+
+    if dtype is None:
+        return fval
+    elif dtype == "str":
+        logger.debug(f"Consolidate export: Converting field '{fkey}' ('{fval}') to string.")
+        return str(fval)
+    elif dtype == "int":
+        logger.debug(f"Consolidate export: Converting field '{fkey}' ('{fval}') to int.")
+        return int(fval)
+    elif dtype == "float":
+        logger.debug(f"Consolidate export: Converting field '{fkey}' ('{fval}') to float.")
+        return float(fval)
+    elif dtype == "listofstr":
+        logger.debug(f"Consolidate export: Converting field '{fkey}' to a list of strings.")
+        if isinstance(fval, list):
+            return [str(v) for v in fval]
+        else:
+            return [str(fval)]
+    elif dtype == "listofint":
+        logger.debug(f"Consolidate export: Converting field '{fkey}' to a list of ints.")
+        if isinstance(fval, list):
+            return [int(v) for v in fval]
+        else:
+            return [int(fval)]
+    elif dtype == "listoffloat":
+        logger.debug(f"Consolidate export: Converting field '{fkey}' to a list of floats.")
+        if isinstance(fval, list):
+            return [float(v) for v in fval]
+        else:
+            return [float(fval)]
+    else:
+        logger.warning(f"Consolidate export: Unsupported data type '{dtype}' for field '{fkey}'.")
+        return fval
 
 
 def map_data(data, mapping_table, version, **kwargs):
@@ -310,7 +365,11 @@ def map_data(data, mapping_table, version, **kwargs):
                     "records": {
                         record_id: {
                             mapinfo["internal_consistency"].get(reckey, reckey): _filter_references(
-                                recvalue, reckey, table, record_id
+                                recvalue,
+                                reckey,
+                                table,
+                                record_id,
+                                mapinfo["field_dtypes"].get(mapinfo["internal_consistency"].get(reckey, reckey), None),
                             )
                             for reckey, recvalue in record.items()
                             if reckey not in mapinfo["drop_keys"]
@@ -525,6 +584,9 @@ def map_data(data, mapping_table, version, **kwargs):
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)
+        # String fixes
+        logger.debug("Consolidation: Removing / Adding (un)necessary whitespace to strings.")
+        _fix_str_nested(mapped_data)
         mapped_data["version"] = version
         return {"Data Request": mapped_data}
     else:
