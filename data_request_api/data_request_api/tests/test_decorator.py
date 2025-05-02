@@ -111,3 +111,6 @@ def test_append_kwargs_from_config_args(monkeypatch, recwarn):
     #  that is also a config-key
     with pytest.raises(TypeError):
         result = test_function("a", "b", "c")
+
+    with pytest.raises(ValueError):
+        result = test_function("a", "b", False, export="invalid")
