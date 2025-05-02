@@ -863,13 +863,13 @@ class TestDataRequest(unittest.TestCase):
 
     def test_get_filtering_structure(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        self.assertEqual(obj.get_filtering_structure("opportunities"), set())
-        self.assertEqual(obj.get_filtering_structure("variable_groups"), {"opportunities", })
-        self.assertEqual(obj.get_filtering_structure("variables"), {"opportunities", "variable_groups"})
-        self.assertEqual(obj.get_filtering_structure("physical_parameters"), {"opportunities", "variable_groups", "variables"})
-        self.assertEqual(obj.get_filtering_structure("experiment_groups"), {"opportunities", })
-        self.assertEqual(obj.get_filtering_structure("experiments"), {"opportunities", "experiment_groups"})
-        self.assertEqual(obj.get_filtering_structure("test"), set())
+        self.assertSetEqual(obj.get_filtering_structure("variable_groups"), {"opportunities", })
+        self.assertSetEqual(obj.get_filtering_structure("variables"), {"opportunities", "variable_groups"})
+        self.assertSetEqual(obj.get_filtering_structure("physical_parameters"), {"opportunities", "variable_groups", "variables"})
+        self.assertSetEqual(obj.get_filtering_structure("experiment_groups"), {"opportunities", })
+        self.assertSetEqual(obj.get_filtering_structure("experiments"), {"opportunities", "experiment_groups"})
+        self.assertSetEqual(obj.get_filtering_structure("test"), set())
+        self.assertSetEqual(obj.get_filtering_structure("opportunities"), set())
 
 
 class TestDataRequestFilter(unittest.TestCase):
