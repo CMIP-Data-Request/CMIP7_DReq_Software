@@ -18,24 +18,5 @@
     "time_slices": ["opportunities"],
     "experiment_groups": ["opportunities"],
     "variable_groups": ["opportunities"]
-  },
-  "filtering": {
-    "default": ["opportunities"],
-    "experiments": ["opportunities", "experiment_groups"],
-    "cmip6_tables_identifiers": ["opportunities", "variable_groups", "variables"],
-    "temporal_shapes": ["opportunities", "variable_groups", "variables"],
-    "spatial_shapes": ["opportunities", "variable_groups", "variables"],
-    "structures": ["opportunities", "variable_groups", "variables"],
-    "structure_titles": ["opportunities", "variable_groups", "variables"],
-    "physical_parameters": ["opportunities", "variable_groups", "variables"],
-    "modelling_realms": ["opportunities", "variable_groups", "variables"],
-    "esm-bcvs": ["opportunities", "variable_groups", "variables"],
-    "cf_standard_names": ["opportunities", "variable_groups", "variables"],
-    "cell_methods": ["opportunities", "variable_groups", "variables"],
-    "cell_measures": ["opportunities", "variable_groups", "variables"],
-    "variables": ["opportunities", "variable_groups"],
-    "priority_levels": ["opportunities", "variable_groups"],
-    "max_priority_levels": ["opportunities", "variable_groups"],
-    "mips": ["opportunities", "variable_groups"]
   }
 }

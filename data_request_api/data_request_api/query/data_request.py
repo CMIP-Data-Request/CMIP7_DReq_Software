@@ -1077,13 +1077,13 @@ class DataRequest(object):
             else:
                 raise ValueError(f"Unknown value {operation} for operation (only 'all' and 'any' are available).")
             if print_warning_bcv and elements_to_filter in ["variables", ]:
-                bcv_list = self.find_element("opportunities", "Baseline Climate Variables for Earth System Modelling", default=None)
-                if bcv_list is None:
+                bcv_op = self.find_element("opportunities", "Baseline Climate Variables for Earth System Modelling", default=None)
+                if bcv_op is None:
                     logger.warning("Can not check that request filtering includes baseline variables, no reference found.")
                 else:
-                    bcv_list = set(bcv_list.get_variables())
-                    common_list = bcv_list & rep_list
-                    if len(common_list) < len(bcv_list):
+                    bcv_list = set(elt for elt in self.get_variables() if bcv_op.filter_on_request(elt)[1])
+                    missing_list = bcv_list - rep_list
+                    if len(missing_list) > 0:
                         logger.warning("Output of the current filtering request does not include all the BCV variables.")
             return sorted(list(rep_list))
 
