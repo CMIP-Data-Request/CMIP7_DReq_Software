@@ -121,9 +121,6 @@ def get_cached(**kwargs):
                 json_export = _json_raw
             elif kwargs["export"] == "release":
                 json_export = _json_release
-            else:
-                warnings.warn(f"Unknown export type '{kwargs['export']}'. Defaulting to 'release'.")
-                json_export = _json_release
         local_versions = [
             name for name in os.listdir(_dreq_res) if os.path.isfile(os.path.join(_dreq_res, name, json_export))
         ]
@@ -393,7 +390,7 @@ def retrieve(version="latest_stable", **kwargs):
     if versions == [None] or not versions:
         raise ValueError(f"Version '{version}' not found.")
     elif version in ["v1.0alpha"] and "export" in kwargs and kwargs["export"] == "raw":
-        warnings.warn(f"For version '{version}' no raw export exists.")
+        warnings.warn(f"For version '{version}' no raw export exists. Defaulting to release export.")
 
     json_paths = dict()
     for version in versions:
@@ -406,8 +403,6 @@ def retrieve(version="latest_stable", **kwargs):
                 json_export = _json_release
             elif kwargs["export"] == "raw":
                 json_export = _json_raw
-            else:
-                warnings.warn(f"Unknown export type '{kwargs['export']}'.")
         elif _version_pattern.match(version):
             json_export = _json_release
         else:
@@ -544,10 +539,6 @@ def delete(version="all", keep_latest=False, **kwargs):
         cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
     elif kwargs["export"] == "release":
         cached_files = [os.path.join(_dreq_res, v, _json_release) for v in local_versions]
-    else:
-        # Since files are to be deleted, not defaulting to "release" but rather
-        #  raising a ValueError
-        raise ValueError(f"Unknown export type '{kwargs['export']}'.")
 
     # Delete files
     for f in cached_files:

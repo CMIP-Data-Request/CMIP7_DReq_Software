@@ -100,6 +100,13 @@ def test_retrieve_with_invalid_version(tmp_path):
         dc.retrieve(" invalid-version ")
 
 
+def test_retrieve_with_invalid_export(tmp_path):
+    "Test the retrieval function with an invalid export."
+    dc._dreq_res = str(tmp_path)
+    with pytest.raises(ValueError):
+        dc.retrieve("v1.2.1", export="invalid")
+
+
 def test_api_and_html_request(recwarn):
     "Test the _send_api_request and _send_html_request functions."
     tags1 = set(dc._send_api_request(dc.REPO_API_URL, "", "tags"))
@@ -206,7 +213,7 @@ class TestDreqContent:
         assert set(cached_branches) == set(self.branches)
 
         # With invalid export kwarg
-        with pytest.warns(UserWarning, match="Unknown export type"):
+        with pytest.raises(ValueError, match="Invalid value for config key export: invalid."):
             dc.get_cached(export="invalid")
 
     def test_delete(self, caplog):
@@ -249,7 +256,10 @@ class TestDreqContent:
 
         # Now there is no ValueError since no version is found
         dc.delete("2.0.2b")
-        dc.delete(export="none")
+
+        # But illegal config kwargs raise ValueError nonetheless
+        with pytest.raises(ValueError, match="Invalid value for config key export: none."):
+            dc.delete(export="none")
 
     def test_offline_mode(self, monkeypatch):
         "Test the offline mode explicitly."
