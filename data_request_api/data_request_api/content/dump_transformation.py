@@ -16,7 +16,7 @@ from collections import defaultdict
 
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.logger import get_logger, change_log_level, change_log_file
-from data_request_api.utilities.tools import read_json_input_file_content, write_json_output_file_content
+from data_request_api.utilities.tools import write_json_output_file_content, read_json_file
 from data_request_api.content import dreq_content as dc
 
 
@@ -85,7 +85,7 @@ def get_transform_settings(version):
                 rep[elt] = value
         return rep
 
-    transform = read_json_input_file_content(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "transform.json"]))
+    transform = read_json_file(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "transform.json"]))
     common = transform.pop("common", dict())
     if version not in ["default", ]:
         common = update_dict(common["default"], common.get(version, dict()))
@@ -500,7 +500,7 @@ if __name__ == "__main__":
                         help="Template to be used for output files")
     parser.add_argument("--version", default="unknown", help="Version of the data used")
     args = parser.parse_args()
-    content = read_json_input_file_content(args.input_file)
+    content = read_json_file(args.input_file)
     data_request, vocabulary_server = transform_content(content, args.version)
     write_json_output_file_content("_".join(["DR", args.output_files_template]), data_request)
     write_json_output_file_content("_".join(["VS", args.output_files_template]), vocabulary_server)
