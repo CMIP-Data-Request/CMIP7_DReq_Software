@@ -40,8 +40,8 @@ def consolidate(request):
     scope="class",
 )
 class TestExportDreqListsJson:
-    @pytest.fixture(scope="class", autouse=True)
-    def setup_class(self, request):
+    @pytest.fixture(scope="function", autouse=True)
+    def setup_method(self, request):
         # Initialize config and load v1.2 content version
         self.temp_config_file = request.getfixturevalue("temp_config_file")
         self.consolidate = request.getfixturevalue("consolidate")
@@ -159,8 +159,8 @@ class TestExportDreqListsJson:
     scope="class",
 )
 class TestGetVariablesMetadata:
-    @pytest.fixture(scope="class", autouse=True)
-    def setup_class(self, request):
+    @pytest.fixture(scope="function", autouse=True)
+    def setup_method(self, request):
         # Initialize config and load v1.2 content version
         self.temp_config_file = request.getfixturevalue("temp_config_file")
         self.consolidate = request.getfixturevalue("consolidate")
@@ -277,8 +277,8 @@ class TestGetVariablesMetadata:
     scope="class",
 )
 class TestCompareVariables:
-    @pytest.fixture(scope="class", autouse=True)
-    def setup_class(self, request):
+    @pytest.fixture(scope="function", autouse=True)
+    def setup_method(self, request):
         # Initialize config and load v1.2 content version
         self.temp_config_file = request.getfixturevalue("temp_config_file")
         self.consolidate = request.getfixturevalue("consolidate")
@@ -415,8 +415,8 @@ class TestCompareVariables:
     scope="class",
 )
 class TestEstimateDreqVolume:
-    @pytest.fixture(scope="class", autouse=True)
-    def setup_class(self, request):
+    @pytest.fixture(scope="function", autouse=True)
+    def setup_method(self, request):
         # Initialize config and load v1.2 content version
         self.temp_config_file = request.getfixturevalue("temp_config_file")
         self.consolidate = request.getfixturevalue("consolidate")
