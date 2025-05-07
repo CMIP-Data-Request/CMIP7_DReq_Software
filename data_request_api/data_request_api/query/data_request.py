@@ -10,7 +10,9 @@ from __future__ import division, print_function, unicode_literals, absolute_impo
 import argparse
 import copy
 import os
+import pprint
 from collections import defaultdict, namedtuple
+from itertools import product, chain
 
 from data_request_api.utilities.logger import get_logger, change_log_file, change_log_level
 from data_request_api.content.dump_transformation import transform_content
@@ -140,7 +142,7 @@ class DRObjects(object):
         indent = "    " * level
         return [f"{indent}{to_singular(self.DR_type)}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
 
-    def filter_on_request(self, request_value):
+    def filter_on_request(self, request_value, inner=True):
         """
         Check whether the current object can be filtered by the requested value.
         :param request_value: an object to be tested
@@ -159,13 +161,13 @@ class DRObjects(object):
         return filtered_found, found
 
     @staticmethod
-    def filter_on_request_list(request_values, list_to_check):
+    def filter_on_request_list(request_values, list_to_check, inner=True):
         if not isinstance(request_values, list):
             request_values = [request_values, ]
         iter_to_check = iter(list_to_check)
         found = False
         while not found and (elt := next(iter_to_check, None)) is not None:
-            found = all(elt.filter_on_request(request_value=request_value)[1] for request_value in request_values)
+            found = all(elt.filter_on_request(request_value=request_value, inner=inner)[1] for request_value in request_values)
         return found
 
 
@@ -207,7 +209,7 @@ class ExperimentsGroup(DRObjects):
         return super().from_input(DR_type="experiment_groups", dr=dr, id=id, structure=dict(experiments=experiments),
                                   elements=kwargs)
 
-    def filter_on_request(self, request_value):
+    def filter_on_request(self, request_value, inner=True):
         request_type = request_value.DR_type
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
@@ -239,7 +241,7 @@ class Variable(DRObjects):
         return [f"{indent}{self.DR_type.rstrip('s')}: {self.physical_parameter.name} at frequency "
                 f"{self.cmip7_frequency.name} (id: {is_link_id_or_value(self.id)[1]}, title: {self.title})", ]
 
-    def filter_on_request(self, request_value):
+    def filter_on_request(self, request_value, inner=True):
         request_type = request_value.DR_type
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
@@ -263,7 +265,11 @@ class Variable(DRObjects):
             elif request_type in ["cell_methods", ]:
                 found = request_value == self.cell_methods
             elif request_type in ["cell_measures", ]:
-                found = request_value in self.cell_measures
+	            found = request_value in self.cell_measures
+            elif request_type in ["cmip7_frequencies", ]:
+	            found = request_value == self.cmip7_frequency
+            elif request_type in ["cmip6_frequencies", ]:
+	            found = request_value == self.cmip6_frequency
             else:
                 filtered_found, found = super().filter_on_request(request_value)
             self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id] = (filtered_found, found)
@@ -323,7 +329,7 @@ class VariablesGroup(DRObjects):
                 rep.extend(variable.print_content(level=level + 2))
         return rep
 
-    def filter_on_request(self, request_value):
+    def filter_on_request(self, request_value, inner=True):
         request_type = request_value.DR_type
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
@@ -342,7 +348,7 @@ class VariablesGroup(DRObjects):
                 found = req_priority == priority
             elif request_type in ["cmip6_tables_identifiers", "temporal_shapes", "spatial_shapes", "structures", "structure_titles",
                                   "physical_parameters", "modelling_realms", "esm-bcvs", "cf_standard_names", "cell_methods",
-                                  "cell_measures"]:
+                                  "cell_measures", "cmip7_frequencies"]:
                 found = self.filter_on_request_list(request_values=request_value, list_to_check=self.get_variables())
             else:
                 filtered_found, found = super().filter_on_request(request_value=request_value)
@@ -438,7 +444,7 @@ class Opportunity(DRObjects):
                 rep.extend(time_subset.print_content(level=level + 2, add_content=False))
         return rep
 
-    def filter_on_request(self, request_value):
+    def filter_on_request(self, request_value, inner=True):
         request_type = request_value.DR_type
         filtered_found, found = self.dr.cache_filtering[self.DR_type][self.id][request_type][request_value.id]
         if filtered_found is None:
@@ -453,11 +459,11 @@ class Opportunity(DRObjects):
                 found = request_value in self.get_time_subsets()
             elif request_type in ["mips", ]:
                 found = request_value in self.get_mips() or \
-                    self.filter_on_request_list(request_values=request_value,
-                                                list_to_check=self.get_variable_groups())
+                        (inner and self.filter_on_request_list(request_values=request_value,
+                                                list_to_check=self.get_variable_groups()))
             elif request_type in ["variables", "priority_levels", "cmip6_tables_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
-                                  "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
+                                  "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels", "cmip7_frequencies"]:
                 found = self.filter_on_request_list(request_values=request_value,
                                                     list_to_check=self.get_variable_groups())
             elif request_type in ["experiments", ]:
@@ -889,8 +895,10 @@ class DataRequest(object):
         :param default: default value to be returned if no value found
         :return: element corresponding to the specified value of a given type if found, else the default value
         """
+        if "priority" in element_type and isinstance(value, int):
+	        key = "value"
         if key in ["id", ]:
-            init_default = default
+	        init_default = default
         else:
             init_default = None
         rep = self.find_element_per_identifier_from_vs(element_type=element_type, value=value, key="id",
@@ -952,7 +960,7 @@ class DataRequest(object):
         return elements
 
     @staticmethod
-    def _two_elements_filtering(filtering_elt_1, filtering_elt_2, list_to_filter):
+    def _two_elements_filtering(filtering_elt_1, filtering_elt_2, list_to_filter, inner=True):
         """
         Check if a list of elements can be filtered by two values
         :param filtering_elt_1: first element for filtering
@@ -969,7 +977,7 @@ class DataRequest(object):
         found = found_1 and found_2
         if filtered_found and not found:
             found = elt.filter_on_request_list(request_values=[filtering_elt_1, filtering_elt_2],
-                                               list_to_check=list_to_filter[1:])
+                                               list_to_check=list_to_filter[1:], inner=True)
         return filtered_found, found
 
     def get_filtering_structure(self, DR_type):
@@ -1022,28 +1030,27 @@ class DataRequest(object):
                     elements = [elements_to_filter, ]
                 else:
                     elements = elements_to_filter
-                elements_to_filter = elements[0].DR_type
+            elements_to_filter = elements[0].DR_type
             # Filter elements
-            rep = defaultdict(lambda: defaultdict(set))
             elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
-            for (request, values) in request_dict.items():
+
+            def filter_against_request(request, values, elements_to_filter, elements, elements_filtering_structure):
                 request_filtering_structure = self.get_filtering_structure(request)
                 common_filtering_structure = request_filtering_structure & elements_filtering_structure
-                filtered_found = True
-                iter_values = iter(values)
-                iter_elements = iter(elements)
-                if elements_to_filter in request_filtering_structure | {request}:
-                    while filtered_found and (val := next(iter_values, None)) is not None:
-                        while filtered_found and (elt := next(iter_elements, None)) is not None:
-                            filtered_found, found = elt.filter_on_request(val)
-                            if found:
-                                rep[request][val.id].add(elt)
+                if len(values) == 0 or len(elements) == 0:
+                    rep = list()
+                    filtered_found = True
+                elif request == elements_to_filter:
+                    filtered_found = True
+                    rep = [(elt.id, elt) for elt in set(values) & set(elements)]
+                elif elements_to_filter in request_filtering_structure:
+                    filtered_found, _ = elements[0].filter_on_request(values[0])
+                    if filtered_found:
+                        rep = [(val.id, elt) for (val, elt) in product(values, elements) if elt.filter_on_request(val)[1]]
                 elif request in elements_filtering_structure:
-                    while filtered_found and (val := next(iter_values, None)) is not None:
-                        while filtered_found and (elt := next(iter_elements, None)) is not None:
-                            filtered_found, found = val.filter_on_request(elt)
-                            if found:
-                                rep[request][val.id].add(elt)
+                    filtered_found, _ = values[0].filter_on_request(elements[0])
+                    if filtered_found:
+                        rep = [(val.id, elt) for (val, elt) in product(values, elements) if val.filter_on_request(elt)[1]]
                 else:
                     if "experiment_groups" in common_filtering_structure:
                         list_to_filter = self.get_experiment_groups()
@@ -1053,26 +1060,38 @@ class DataRequest(object):
                         list_to_filter = self.get_variable_groups()
                     else:
                         list_to_filter = self.get_opportunities()
-                    while filtered_found and (val := next(iter_values, None)) is not None:
-                        while filtered_found and (elt := next(iter_elements, None)) is not None:
-                            filtered_found, found = self._two_elements_filtering(val, elt, list_to_filter)
-                            if found:
-                                rep[request][val.id].add(elt)
+                    filtered_found, _ = self._two_elements_filtering(values[0], elements[0], list_to_filter)
+                    if filtered_found:
+                        rep = [(val.id, elt) for (val, elt) in product(values, elements) if self._two_elements_filtering(val, elt, list_to_filter)[1]]
+                    if "mips" in [request, elements_to_filter]:
+                        list_to_filter = self.get_opportunities()
+                        new_filtered_found, _ = self._two_elements_filtering(values[0], elements[0], list_to_filter, inner=False)
+                        filtered_found = filtered_found or new_filtered_found
+                        if new_filtered_found:
+                            new_rep = [(val.id, elt) for (val, elt) in product(values, elements) if
+                                       self._two_elements_filtering(val, elt, list_to_filter, inner=False)[1]]
+                            rep.extend(new_rep)
                 if not filtered_found:
                     logger.error(f"Could not filter {elements_to_filter} by {request}")
                     raise ValueError(f"Could not filter {elements_to_filter} by {request}")
+                else:
+                    new_rep = defaultdict(list)
+                    for (key, val) in rep:
+                        new_rep[key].append(val)
+                    new_rep = {key: set(val) for (key, val) in new_rep.items()}
+                    return new_rep
+
+            rep = {request: filter_against_request(request, values, elements_to_filter, elements, elements_filtering_structure)
+                   for (request, values) in request_dict.items()}
+
             if len(rep) == 0:
                 rep_list = set(elements)
             elif operation in ["any", ]:
-                rep_list = set()
-                for req in rep:
-                    for val in rep[req]:
-                        rep_list = rep_list | rep[req][val]
+                rep_list = {key: set().union(*chain(val.values())) for (key, val) in rep.items()}
+                rep_list = set().union(*rep_list.values())
             elif operation in ["all", ]:
-                rep_list = set(elements)
-                for req in rep:
-                    for val in rep[req]:
-                        rep_list = rep_list & rep[req][val]
+                rep_list = {key: set(elements).intersection(*chain(val.values())) for (key, val) in rep.items()}
+                rep_list = set(elements).intersection(*rep_list.values())
             else:
                 raise ValueError(f"Unknown value {operation} for operation (only 'all' and 'any' are available).")
             rep_list = sorted(list(rep_list))
