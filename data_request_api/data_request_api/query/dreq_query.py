@@ -1042,10 +1042,10 @@ def get_dimension_sizes(dreq_tables):
             size = list(sizes)[0]
         elif len(sizes) > 1:
             size = max(sizes)
-            print(f'Warning: found sizes {sorted(sizes)} for dimension {dim}, assuming size = {size}')
+            print(f'Warning: found sizes {sorted(sizes)} for dimension "{dim}", assuming size = {size}')
         else:
             size = None
-            msg = f'Warning: found no size for dimension {dim}'
+            msg = f'Warning: found no size for dimension "{dim}"'
             if dim in ['xant', 'yant']:
                 size = 200
                 msg += f', assuming size = {size}'
