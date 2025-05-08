@@ -23,7 +23,7 @@ from data_request_api.query import dreq_query as dq
 from importlib import reload
 reload(dq)
 
-use_dreq_version = 'v1.2'
+use_dreq_version = 'v1.2.1'
 
 # Download specified version of data request content (if not locally cached)
 #MPM_not_needed dc.retrieve(use_dreq_version)
@@ -37,7 +37,7 @@ use_opps = []
 #use_opps.append('Synoptic systems')
 use_opps.append('Energy System Impacts')
 # Or, to support all opportunities in the data request:
-#use_opps = 'all'
+use_opps = 'all'
 
 # Get the requested variables for each opportunity and aggregate them into variable lists by experiment
 # (i.e., for every experiment, a list of the variables that should be produced to support all of the

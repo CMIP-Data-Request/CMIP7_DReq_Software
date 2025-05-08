@@ -64,7 +64,7 @@ def get_variable_size(var_info, dreq_dim_sizes, time_dims, freq_times_per_year, 
                 n = 24 * 12
             else:
                 n = freq_times_per_year[frequency]
-            temporal_shape = dim
+            temporal_shape = time_dims[dim]
         elif dim in config['dimensions']:
             # Use model-specific dimension size
             n = config['dimensions'][dim]
@@ -74,7 +74,7 @@ def get_variable_size(var_info, dreq_dim_sizes, time_dims, freq_times_per_year, 
             n = dreq_dim_sizes[dim]
 
         if n is None:
-            raise ValueError(f'No size found for dimension {dim}')
+            raise ValueError(f'No size found for dimension: {dim}')
 
         dim_sizes[dim] = n
 
@@ -101,7 +101,7 @@ def parse_args():
     parser.add_argument('request', type=str,
                         help='json file specifying variables requested by experiment' +
                         ' (output from export_dreq_lists_json, which specifies the data request version)' +
-                        ' OR can be a data request version (e.g. "v1.2") if using ')
+                        ' OR can be a data request version (e.g. "v1.2")')
     # Optional arguments
     parser.add_argument('-v', '--variables', nargs='+', type=str,
                         help='include only the specified variables in the estimate')
@@ -167,9 +167,10 @@ years: 1
         config = yaml.safe_load(f)
         print('Loaded ' + config_file)
 
-    warning_msg = '\n * * * WARNING * * *'
-    warning_msg += '\n These volumes are an initial estimate, to be improved in the next software version.'
-    warning_msg += '\n They should be used with caution and verified against known data volumes.\n'
+    warning_msg = '\n * * * * * * * * * * * * * * * WARNING * * * * * * * * * * * * * * *'
+    warning_msg += '\n These volumes are an initial estimate.'
+    warning_msg += '\n They should be used with caution and verified against known data volumes.'
+    warning_msg += '\n * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n'
 
     request_from_input_file = None
     if os.path.isfile(args.request):
@@ -232,8 +233,20 @@ years: 1
     if set(freq_times_per_year.keys()) != set(freqs):
         raise Exception('Times per year must be defined for all available frequencies')
 
-    # Get available time dimensions ('time-intv', 'time-point', etc)
-    time_dims = [rec.name for rec in dreq_tables['temporal shape'].records.values()]
+    # Get mapping from time dimension name to temporal shape name
+    # {'time1': 'time-point', 'time': 'time-intv', ... etc}
+    time_dims = {}
+    for rec in dreq_tables['temporal shape'].records.values():
+        shape_name = rec.name
+        if hasattr(rec, 'dimensions'):
+            assert len(rec.dimensions) == 1
+            link = rec.dimensions[0]
+            dim_rec = dreq_tables['coordinates and dimensions'].get_record(link)
+            dim_name = dim_rec.name
+        else:
+            dim_name = 'None'
+        assert dim_name not in time_dims, 'time dimension names are not unique'
+        time_dims[dim_name] = shape_name
 
     # Get metadata for variables
     variables = dq.get_variables_metadata(
@@ -307,7 +320,11 @@ years: 1
     for expt in expts:
         expt_rec = expt_records[expt]
 
-        num_years = expt_rec.size_years_minimum
+        if hasattr(expt_rec, 'size_years_minimum'):
+            num_years = expt_rec.size_years_minimum
+        else:
+            num_years = 100
+            print(f'Warning: number of years not found for experiment {expt}, assuming size_years_minimum = {num_years}')
         num_ensem = 1
 
         # Loop over priority levels of requeste variables
@@ -339,7 +356,12 @@ years: 1
                     # Assume this is a climatology, so don't multiply by number of years
                     pass
                 else:
-                    assert temporal_shape in ['time-intv', 'time-point', 'monthly-mean-daily-stat'], \
+                    valid_shapes = ['time-intv', 'time-point', 'monthly-mean-daily-stat']
+                    version_tuple = dq.get_dreq_version_tuple(use_dreq_version)
+                    if version_tuple[:2] < (1, 2):
+                        # Prior to v1.2, monthly-mean-daily-stat was called monthly-mean-stat
+                        valid_shapes.append('monthly-mean-stat')
+                    assert temporal_shape in valid_shapes, \
                         'Unknown temporal shape: ' + str(temporal_shape)
                     # Multiply the 1-year size by the minimum number of request years for this experiment
                     size *= num_years
