@@ -977,7 +977,7 @@ class DataRequest(object):
         found = found_1 and found_2
         if filtered_found and not found:
             found = elt.filter_on_request_list(request_values=[filtering_elt_1, filtering_elt_2],
-                                               list_to_check=list_to_filter[1:], inner=True)
+                                               list_to_check=list_to_filter[1:], inner=inner)
         return filtered_found, found
 
     def get_filtering_structure(self, DR_type):
