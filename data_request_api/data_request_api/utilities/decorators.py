@@ -41,6 +41,9 @@ def append_kwargs_from_config(func):
                 if key in bound_args.arguments.keys():
                     _sanity_check(key, bound_args.arguments[key])
                     continue
+            elif key in kwargs.keys():
+                # Perform a _sanity_check on the key-value pair
+                _sanity_check(key, kwargs[key])
             # Append kwarg if not set - this assigns function args if they have the same name
             kwargs.setdefault(key, value)
         return func(*args, **kwargs)
