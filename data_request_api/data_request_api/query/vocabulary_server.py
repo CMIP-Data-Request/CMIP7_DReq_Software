@@ -91,6 +91,7 @@ class VocabularyServer(object):
             dimension="coordinates_and_dimensions",
             coordinate="coordinates_and_dimensions",
             extra_dimension="coordinates_and_dimensions",
+            frequency="cmip7_frequency",
             max_priority_level="priority_level",
             structure="structure_title",
             table="cmip6_tables_identifier",
