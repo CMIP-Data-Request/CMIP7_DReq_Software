@@ -58,9 +58,14 @@ el.replaceWith(d);
 
     def mock_load_config():
         return config
+    def mock_sanity_check(key, value):
+        return
 
     monkeypatch.setattr(
         &#34;data_request_api.utilities.config.load_config&#34;, mock_load_config
+    )
+    monkeypatch.setattr(
+        &#34;data_request_api.utilities.decorators._sanity_check&#34;, mock_sanity_check
     )
 
     # Set up a test function with the decorator
@@ -122,6 +127,8 @@ el.replaceWith(d);
     # 2.1) They keep the value as passed to the function
     # 2.2) Default values are overridden by the config dictionary
     # 3) kwargs are set as expected
+    # 3.1) kwargs are sanity-checked
+    # 3.2) non-config kwargs are left untouched
 
     # 1st test case
     result = test_function(&#34;a&#34;, &#34;b&#34;, False)
@@ -158,7 +165,25 @@ el.replaceWith(d);
     #  for an illegal type/value of a function argument
     #  that is also a config-key
     with pytest.raises(TypeError):
-        result = test_function(&#34;a&#34;, &#34;b&#34;, &#34;c&#34;)</code></pre>
+        result = test_function(&#34;a&#34;, &#34;b&#34;, &#34;c&#34;)
+
+    # Ensure that _sanity_check raises an error for
+    #  the illegal value of config-key &#39;loglevel&#39; despite it
+    #  being not a function argument
+    with pytest.raises(ValueError):
+        result = test_function(&#34;a&#34;, &#34;b&#34;, False, export=&#34;release&#34;, log_level=&#34;release&#34;)
+
+    # Ensure a kwarg that is not part of
+    #  the config dictionary is left untouched
+    result = test_function(0, 1, False, &#34;value&#34;, &#34;release&#34;, somekwarg=&#34;somevalue&#34;)
+    assert result == {
+        &#34;arg1&#34;: 0,
+        &#34;arg2&#34;: 1,
+        &#34;offline&#34;: False,
+        &#34;arg4&#34;: &#34;value&#34;,
+        &#34;export&#34;: &#34;release&#34;,
+        &#34;kwargs&#34;: {**config_mod, &#34;somekwarg&#34;: &#34;somevalue&#34;},
+    }</code></pre>
 </details>
 <div class="desc"></div>
 </dd>

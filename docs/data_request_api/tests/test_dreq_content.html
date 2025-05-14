@@ -272,6 +272,22 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Test the retrieval function.</p></div>
 </dd>
+<dt id="data_request_api.tests.test_dreq_content.test_retrieve_with_invalid_export"><code class="name flex">
+<span>def <span class="ident">test_retrieve_with_invalid_export</span></span>(<span>tmp_path)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_retrieve_with_invalid_export(tmp_path):
+    &#34;Test the retrieval function with an invalid export.&#34;
+    dc._dreq_res = str(tmp_path)
+    with pytest.raises(ValueError):
+        dc.retrieve(&#34;v1.2.1&#34;, export=&#34;invalid&#34;)</code></pre>
+</details>
+<div class="desc"><p>Test the retrieval function with an invalid export.</p></div>
+</dd>
 <dt id="data_request_api.tests.test_dreq_content.test_retrieve_with_invalid_version"><code class="name flex">
 <span>def <span class="ident">test_retrieve_with_invalid_version</span></span>(<span>tmp_path)</span>
 </code></dt>
@@ -335,7 +351,7 @@ el.replaceWith(d);
         assert set(cached_branches) == set(self.branches)
 
         # With invalid export kwarg
-        with pytest.warns(UserWarning, match=&#34;Unknown export type&#34;):
+        with pytest.raises(ValueError, match=&#34;Invalid value for config key export: invalid.&#34;):
             dc.get_cached(export=&#34;invalid&#34;)
 
     def test_delete(self, caplog):
@@ -378,7 +394,10 @@ el.replaceWith(d);
 
         # Now there is no ValueError since no version is found
         dc.delete(&#34;2.0.2b&#34;)
-        dc.delete(export=&#34;none&#34;)
+
+        # But illegal config kwargs raise ValueError nonetheless
+        with pytest.raises(ValueError, match=&#34;Invalid value for config key export: none.&#34;):
+            dc.delete(export=&#34;none&#34;)
 
     def test_offline_mode(self, monkeypatch):
         &#34;Test the offline mode explicitly.&#34;
@@ -476,7 +495,10 @@ def setup(self, tmp_path):
 
     # Now there is no ValueError since no version is found
     dc.delete(&#34;2.0.2b&#34;)
-    dc.delete(export=&#34;none&#34;)</code></pre>
+
+    # But illegal config kwargs raise ValueError nonetheless
+    with pytest.raises(ValueError, match=&#34;Invalid value for config key export: none.&#34;):
+        dc.delete(export=&#34;none&#34;)</code></pre>
 </details>
 <div class="desc"><p>Test the delete function.</p></div>
 </dd>
@@ -505,7 +527,7 @@ def setup(self, tmp_path):
     assert set(cached_branches) == set(self.branches)
 
     # With invalid export kwarg
-    with pytest.warns(UserWarning, match=&#34;Unknown export type&#34;):
+    with pytest.raises(ValueError, match=&#34;Invalid value for config key export: invalid.&#34;):
         dc.get_cached(export=&#34;invalid&#34;)</code></pre>
 </details>
 <div class="desc"><p>Test the get_cached function.</p></div>
@@ -564,6 +586,7 @@ def setup(self, tmp_path):
 <li><code><a title="data_request_api.tests.test_dreq_content.test_load_dont_consolidate" href="#data_request_api.tests.test_dreq_content.test_load_dont_consolidate">test_load_dont_consolidate</a></code></li>
 <li><code><a title="data_request_api.tests.test_dreq_content.test_parse_version" href="#data_request_api.tests.test_dreq_content.test_parse_version">test_parse_version</a></code></li>
 <li><code><a title="data_request_api.tests.test_dreq_content.test_retrieve" href="#data_request_api.tests.test_dreq_content.test_retrieve">test_retrieve</a></code></li>
+<li><code><a title="data_request_api.tests.test_dreq_content.test_retrieve_with_invalid_export" href="#data_request_api.tests.test_dreq_content.test_retrieve_with_invalid_export">test_retrieve_with_invalid_export</a></code></li>
 <li><code><a title="data_request_api.tests.test_dreq_content.test_retrieve_with_invalid_version" href="#data_request_api.tests.test_dreq_content.test_retrieve_with_invalid_version">test_retrieve_with_invalid_version</a></code></li>
 </ul>
 </li>

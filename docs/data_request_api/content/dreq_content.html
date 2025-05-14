@@ -117,10 +117,6 @@ def delete(version=&#34;all&#34;, keep_latest=False, **kwargs):
         cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
     elif kwargs[&#34;export&#34;] == &#34;release&#34;:
         cached_files = [os.path.join(_dreq_res, v, _json_release) for v in local_versions]
-    else:
-        # Since files are to be deleted, not defaulting to &#34;release&#34; but rather
-        #  raising a ValueError
-        raise ValueError(f&#34;Unknown export type &#39;{kwargs[&#39;export&#39;]}&#39;.&#34;)
 
     # Delete files
     for f in cached_files:
@@ -195,9 +191,6 @@ def get_cached(**kwargs):
             if kwargs[&#34;export&#34;] == &#34;raw&#34;:
                 json_export = _json_raw
             elif kwargs[&#34;export&#34;] == &#34;release&#34;:
-                json_export = _json_release
-            else:
-                warnings.warn(f&#34;Unknown export type &#39;{kwargs[&#39;export&#39;]}&#39;. Defaulting to &#39;release&#39;.&#34;)
                 json_export = _json_release
         local_versions = [
             name for name in os.listdir(_dreq_res) if os.path.isfile(os.path.join(_dreq_res, name, json_export))
@@ -474,7 +467,7 @@ def retrieve(version=&#34;latest_stable&#34;, **kwargs):
     if versions == [None] or not versions:
         raise ValueError(f&#34;Version &#39;{version}&#39; not found.&#34;)
     elif version in [&#34;v1.0alpha&#34;] and &#34;export&#34; in kwargs and kwargs[&#34;export&#34;] == &#34;raw&#34;:
-        warnings.warn(f&#34;For version &#39;{version}&#39; no raw export exists.&#34;)
+        warnings.warn(f&#34;For version &#39;{version}&#39; no raw export exists. Defaulting to release export.&#34;)
 
     json_paths = dict()
     for version in versions:
@@ -487,8 +480,6 @@ def retrieve(version=&#34;latest_stable&#34;, **kwargs):
                 json_export = _json_release
             elif kwargs[&#34;export&#34;] == &#34;raw&#34;:
                 json_export = _json_raw
-            else:
-                warnings.warn(f&#34;Unknown export type &#39;{kwargs[&#39;export&#39;]}&#39;.&#34;)
         elif _version_pattern.match(version):
             json_export = _json_release
         else:
