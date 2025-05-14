@@ -273,11 +273,11 @@ class TestDreqContent:
         monkeypatch.setattr("requests.get", mock_requests_get)
 
         # Call dc.load with offline=True
-        dc.load("v1.0.0", offline=True)
+        dc.load("v1.0.0", consolidate=False, offline=True)
 
         # Call dc.load with offline=False
         with pytest.raises(Exception, match="Network request detected"):
-            dc.load("v1.0.0", offline=False)
+            dc.load("v1.0.0", consolidate=False, offline=False)
 
     # def test_load(self):
     #    dc._dreq_res = self.tmp_dir.name
