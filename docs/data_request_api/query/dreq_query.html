@@ -52,14 +52,15 @@ E.g., get variables requested for each experiment.</p>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="data_request_api.query.dreq_query.create_dreq_tables_for_request"><code class="name flex">
-<span>def <span class="ident">create_dreq_tables_for_request</span></span>(<span>content, dreq_version)</span>
+<span>def <span class="ident">create_dreq_tables_for_request</span></span>(<span>content, dreq_version, **kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_dreq_tables_for_request(content, dreq_version):
+<pre><code class="python">@append_kwargs_from_config
+def create_dreq_tables_for_request(content, dreq_version, **kwargs):
     &#39;&#39;&#39;
     For the &#34;request&#34; part of the data request content (Opportunities, Variable Groups, etc),
     render airtable export content as DreqTable objects.
@@ -88,6 +89,12 @@ E.g., get variables requested for each experiment.</p>
     &#39;&#39;&#39;
     base, content_type = _get_base_dict(content, dreq_version, purpose=&#39;request&#39;)
     # base, content_type = _get_base_dict(content, dreq_version)
+
+    # config defaults
+    CONFIG = {&#39;consolidate&#39;: True}
+    # override with input args, if given
+    CONFIG.update(kwargs)
+    consolidate = CONFIG[&#39;consolidate&#39;]
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -149,11 +156,15 @@ E.g., get variables requested for each experiment.</p>
         # the above code to erroneously remove all opportunities.
         raise Exception(&#39; * ERROR *    All Opportunities were removed!&#39;)
 
-    # Determine which compound name to use based on dreq content version
-    USE_COMPOUND_NAME = &#39;compound_name&#39;
-    version_tuple = get_dreq_version_tuple(dreq_version)
-    if version_tuple[:2] &gt;= (1, 2):
+    # Determine which compound name to use
+    if consolidate:
         USE_COMPOUND_NAME = &#39;cmip6_compound_name&#39;
+    else:
+        version_tuple = get_dreq_version_tuple(dreq_version)
+        if version_tuple[:2] &gt;= (1, 2):
+            USE_COMPOUND_NAME = &#39;cmip6_compound_name&#39;
+        else:
+            USE_COMPOUND_NAME = &#39;compound_name&#39;
     if USE_COMPOUND_NAME != &#39;compound_name&#39;:
         table_name = &#39;Variables&#39;
         for rec in base[table_name].records.values():
@@ -317,10 +328,10 @@ render airtable export content as DreqTable objects.</p>
             size = list(sizes)[0]
         elif len(sizes) &gt; 1:
             size = max(sizes)
-            print(f&#39;Warning: found sizes {sorted(sizes)} for dimension {dim}, assuming size = {size}&#39;)
+            print(f&#39;Warning: found sizes {sorted(sizes)} for dimension &#34;{dim}&#34;, assuming size = {size}&#39;)
         else:
             size = None
-            msg = f&#39;Warning: found no size for dimension {dim}&#39;
+            msg = f&#39;Warning: found no size for dimension &#34;{dim}&#34;&#39;
             if dim in [&#39;xant&#39;, &#39;yant&#39;]:
                 size = 200
                 msg += f&#39;, assuming size = {size}&#39;
@@ -998,6 +1009,8 @@ Its "priority_level" attribute specifies the priority as either string or link t
     })
     if &#39;CF Standard Names&#39; in base:
         dreq_tables[&#39;CF standard name&#39;] = base[&#39;CF Standard Names&#39;]
+    if &#39;Structure&#39; in base:
+        dreq_tables[&#39;structure&#39;] = base[&#39;Structure&#39;]
 
     if &#39;Table Identifiers&#39; in base:
         dreq_tables[&#39;CMOR tables&#39;] = base[&#39;Table Identifiers&#39;]
@@ -1062,9 +1075,6 @@ Its "priority_level" attribute specifies the priority as either string or link t
             freq = dreq_tables[&#39;frequency&#39;].get_record(link)
             frequency = freq.name
 
-        link = var.temporal_shape[0]
-        temporal_shape = dreq_tables[&#39;temporal shape&#39;].get_record(link)
-
         cell_methods = &#39;&#39;
         area_label_dd = &#39;&#39;
         if hasattr(var, &#39;cell_methods&#39;):
@@ -1075,22 +1085,75 @@ Its "priority_level" attribute specifies the priority as either string or link t
             if hasattr(cm, &#39;brand_id&#39;):
                 area_label_dd = cm.brand_id
 
-        # get the &#39;Spatial Shape&#39; record, which contains info about dimensions
+        # Get dimensions by
+        # 1) using dimensions attribute from variable table, if given
+        # 2) following database links
+        dimensions_var = None
+        if hasattr(var, &#39;dimensions&#39;):
+            # The variable table record gives the dimensions
+            # dreq versions before v1.2 don&#39;t have a dimensions attribute in the variables table
+            assert isinstance(var.dimensions, str), \
+                f&#39;Expected comma-delimited string giving the dimensions for {var.compound_name}&#39;
+            dims_list = [s.strip() for s in var.dimensions.split(&#39;,&#39;)]
+            dimensions_var = &#39; &#39;.join(dims_list)
+
+            # As an extra check, confirm each name in the list corresponds to a record in the coords+dims table
+            for dim_name in dims_list:
+                dimension = dreq_tables[&#39;coordinates and dimensions&#39;].get_attr_record(&#39;name&#39;, dim_name, unique=True)
+                # get_attr_record() with unique=True will fail if the name doesn&#39;t uniquely correspond
+                # to a coordinates &amp; dimensions table record.
+
+        # Create dimensions list by following the relevant database links.
+        dims_list = []
+        # Get the &#39;Spatial Shape&#39; record, which contains info about dimensions
         assert len(var.spatial_shape) == 1
         link = var.spatial_shape[0]
         spatial_shape = dreq_tables[&#39;spatial shape&#39;].get_record(link)
-
-        dims_list = []
-        dims = None
         if hasattr(spatial_shape, &#39;dimensions&#39;):
             for link in spatial_shape.dimensions:
-                dims = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
-                dims_list.append(dims.name)
-        dims_list.append(temporal_shape.name)
+                dimension = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
+                dims_list.append(dimension.name)
+        # Add any dimensions present in structure record, if given
+        # (A &#39;structure&#39; link gives dimensions besides spatial &amp; temporal ones, e.g. &#39;tau&#39;)
+        if hasattr(var, &#39;structure_title&#39;):
+            link = var.structure_title[0]
+            structure = dreq_tables[&#39;structure&#39;].get_record(link)
+            if hasattr(structure, &#39;dimensions&#39;):
+                for link in structure.dimensions:
+                    dimension = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
+                    dims_list.append(dimension.name)
+        # Add temporal dimensions
+        link = var.temporal_shape[0]
+        temporal_shape = dreq_tables[&#39;temporal shape&#39;].get_record(link)
+        # dims_list.append(temporal_shape.name)
+        # An example of temporal_shape.name is &#39;time-point&#39;, but the equivalent dimensions list
+        # entry for this is &#39;time1&#39;.
+        if hasattr(temporal_shape, &#39;dimensions&#39;):
+            for link in temporal_shape.dimensions:
+                dimension = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
+                dims_list.append(dimension.name)
+        # Add any coordinates
         if hasattr(var, &#39;coordinates&#39;):
             for link in var.coordinates:
                 coordinate = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
                 dims_list.append(coordinate.name)
+
+        dimensions_linked = &#39; &#39;.join(dims_list)
+
+        compare_dims = False
+        if compare_dims and dimensions_var:
+            # Compare dimensions obtained from links vs. variable table record.
+            # This check is expected to fail for some variables for v1.2 onward because the
+            # Structure table was removed from the release base. It&#39;s left here in the code
+            # as an internal option because it can be useful for debugging.
+            if dimensions_linked != dimensions_var:
+                msg = f&#39;Inconsistent dimensions for {var.compound_name}:\n  {dimensions_var}\n  {dimensions_linked}&#39;
+                print(msg)
+
+        if dimensions_var:
+            dimensions = dimensions_var
+        else:
+            dimensions = dimensions_linked
 
         # Get physical parameter record and out_name
         link = var.physical_parameter[0]
@@ -1149,7 +1212,8 @@ Its "priority_level" attribute specifies the priority as either string or link t
             &#39;long_name&#39;: var.title,
             &#39;comment&#39;: comment,
 
-            &#39;dimensions&#39;: &#39; &#39;.join(dims_list),
+            &#39;dimensions&#39;: dimensions,
+
             &#39;out_name&#39;: out_name,
             &#39;type&#39;: var.type,
             &#39;positive&#39;: positive,

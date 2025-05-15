@@ -934,7 +934,8 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
             tmp_rep, to_add = to_add, set()
         return rep
 
-    def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation=&#34;all&#34;, skip_if_missing=False):
+    def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation=&#34;all&#34;, skip_if_missing=False,
+                                    print_warning_bcv=True):
         &#34;&#34;&#34;
         Filter the elements of kind element_type with a dictionary of requests.
         :param str or list od DRObjects elements_to_filter: kind of elements to be filtered
@@ -948,6 +949,15 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
             raise ValueError(f&#34;Operation does not accept {operation} as value: choose among &#39;any&#39; (match at least one&#34;
                              f&#34; requirement) and &#39;all&#39; (match all requirements)&#34;)
         else:
+            # Get elements corresponding to element_type
+            if isinstance(elements_to_filter, str):
+                elements = self.get_elements_per_kind(elements_to_filter)
+            else:
+                if not isinstance(elements_to_filter, list):
+                    elements = [elements_to_filter, ]
+                else:
+                    elements = elements_to_filter
+                elements_to_filter = elements[0].DR_type
             # Prepare the request dictionary
             request_dict = defaultdict(list)
             for (req, values) in requests.items():
@@ -965,15 +975,6 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
                     else:
                         logger.error(f&#34;Could not find value {val} for element type {req}.&#34;)
                         raise ValueError(f&#34;Could not find value {val} for element type {req}.&#34;)
-            # Get elements corresponding to element_type
-            if isinstance(elements_to_filter, str):
-                elements = self.get_elements_per_kind(elements_to_filter)
-            else:
-                if not isinstance(elements_to_filter, list):
-                    elements = [elements_to_filter, ]
-                else:
-                    elements = elements_to_filter
-                elements_to_filter = elements[0].DR_type
             # Filter elements
             rep = defaultdict(lambda: defaultdict(set))
             elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
@@ -1026,8 +1027,16 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
                         rep_list = rep_list &amp; rep[req][val]
             else:
                 raise ValueError(f&#34;Unknown value {operation} for operation (only &#39;all&#39; and &#39;any&#39; are available).&#34;)
-            rep_list = sorted(list(rep_list))
-            return rep_list
+            if print_warning_bcv and elements_to_filter in [&#34;variables&#34;, ]:
+                bcv_op = self.find_element(&#34;opportunities&#34;, &#34;Baseline Climate Variables for Earth System Modelling&#34;, default=None)
+                if bcv_op is None:
+                    logger.warning(&#34;Can not check that request filtering includes baseline variables, no reference found.&#34;)
+                else:
+                    bcv_list = set(elt for elt in self.get_variables() if bcv_op.filter_on_request(elt)[1])
+                    missing_list = bcv_list - rep_list
+                    if len(missing_list) &gt; 0:
+                        logger.warning(&#34;Output of the current filtering request does not include all the BCV variables.&#34;)
+            return sorted(list(rep_list))
 
     def find_opportunities(self, operation=&#34;any&#34;, skip_if_missing=False, **kwargs):
         &#34;&#34;&#34;
@@ -1158,14 +1167,16 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
             DR_type = columns_datasets[0].DR_type
             for (column_data, column_title) in zip(columns_datasets, columns_title_list):
                 filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
-                                                                        requests={DR_type: column_data}, operation=&#34;all&#34;)
+                                                                        requests={DR_type: column_data},
+                                                                        operation=&#34;all&#34;, print_warning_bcv=False)
                 for line in filter_line_datasets:
                     content[lines_title_dict[line.id]][column_title] = &#34;x&#34;
         else:
             DR_type = sorted_filtered_data[0].DR_type
             for (line_data, line_title) in zip(sorted_filtered_data, lines_title_list):
                 filtered_columns = self.filter_elements_per_request(elements_to_filter=columns_datasets,
-                                                                    requests={DR_type: line_data}, operation=&#34;all&#34;)
+                                                                    requests={DR_type: line_data}, operation=&#34;all&#34;,
+                                                                    print_warning_bcv=False)
                 content[line_title] = {columns_title_dict[elt.id]: &#34;x&#34; for elt in filtered_columns}
 
         logger.debug(&#34;Format summary&#34;)
@@ -1395,14 +1406,16 @@ main_data kind
         DR_type = columns_datasets[0].DR_type
         for (column_data, column_title) in zip(columns_datasets, columns_title_list):
             filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
-                                                                    requests={DR_type: column_data}, operation=&#34;all&#34;)
+                                                                    requests={DR_type: column_data},
+                                                                    operation=&#34;all&#34;, print_warning_bcv=False)
             for line in filter_line_datasets:
                 content[lines_title_dict[line.id]][column_title] = &#34;x&#34;
     else:
         DR_type = sorted_filtered_data[0].DR_type
         for (line_data, line_title) in zip(sorted_filtered_data, lines_title_list):
             filtered_columns = self.filter_elements_per_request(elements_to_filter=columns_datasets,
-                                                                requests={DR_type: line_data}, operation=&#34;all&#34;)
+                                                                requests={DR_type: line_data}, operation=&#34;all&#34;,
+                                                                print_warning_bcv=False)
             content[line_title] = {columns_title_dict[elt.id]: &#34;x&#34; for elt in filtered_columns}
 
     logger.debug(&#34;Format summary&#34;)
@@ -1450,14 +1463,15 @@ main_data kind
 :return: a csv output file</p></div>
 </dd>
 <dt id="data_request_api.query.data_request.DataRequest.filter_elements_per_request"><code class="name flex">
-<span>def <span class="ident">filter_elements_per_request</span></span>(<span>self, elements_to_filter, requests={}, operation='all', skip_if_missing=False)</span>
+<span>def <span class="ident">filter_elements_per_request</span></span>(<span>self,<br>elements_to_filter,<br>requests={},<br>operation='all',<br>skip_if_missing=False,<br>print_warning_bcv=True)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation=&#34;all&#34;, skip_if_missing=False):
+<pre><code class="python">def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation=&#34;all&#34;, skip_if_missing=False,
+                                print_warning_bcv=True):
     &#34;&#34;&#34;
     Filter the elements of kind element_type with a dictionary of requests.
     :param str or list od DRObjects elements_to_filter: kind of elements to be filtered
@@ -1471,6 +1485,15 @@ main_data kind
         raise ValueError(f&#34;Operation does not accept {operation} as value: choose among &#39;any&#39; (match at least one&#34;
                          f&#34; requirement) and &#39;all&#39; (match all requirements)&#34;)
     else:
+        # Get elements corresponding to element_type
+        if isinstance(elements_to_filter, str):
+            elements = self.get_elements_per_kind(elements_to_filter)
+        else:
+            if not isinstance(elements_to_filter, list):
+                elements = [elements_to_filter, ]
+            else:
+                elements = elements_to_filter
+            elements_to_filter = elements[0].DR_type
         # Prepare the request dictionary
         request_dict = defaultdict(list)
         for (req, values) in requests.items():
@@ -1488,15 +1511,6 @@ main_data kind
                 else:
                     logger.error(f&#34;Could not find value {val} for element type {req}.&#34;)
                     raise ValueError(f&#34;Could not find value {val} for element type {req}.&#34;)
-        # Get elements corresponding to element_type
-        if isinstance(elements_to_filter, str):
-            elements = self.get_elements_per_kind(elements_to_filter)
-        else:
-            if not isinstance(elements_to_filter, list):
-                elements = [elements_to_filter, ]
-            else:
-                elements = elements_to_filter
-            elements_to_filter = elements[0].DR_type
         # Filter elements
         rep = defaultdict(lambda: defaultdict(set))
         elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
@@ -1549,8 +1563,16 @@ main_data kind
                     rep_list = rep_list &amp; rep[req][val]
         else:
             raise ValueError(f&#34;Unknown value {operation} for operation (only &#39;all&#39; and &#39;any&#39; are available).&#34;)
-        rep_list = sorted(list(rep_list))
-        return rep_list</code></pre>
+        if print_warning_bcv and elements_to_filter in [&#34;variables&#34;, ]:
+            bcv_op = self.find_element(&#34;opportunities&#34;, &#34;Baseline Climate Variables for Earth System Modelling&#34;, default=None)
+            if bcv_op is None:
+                logger.warning(&#34;Can not check that request filtering includes baseline variables, no reference found.&#34;)
+            else:
+                bcv_list = set(elt for elt in self.get_variables() if bcv_op.filter_on_request(elt)[1])
+                missing_list = bcv_list - rep_list
+                if len(missing_list) &gt; 0:
+                    logger.warning(&#34;Output of the current filtering request does not include all the BCV variables.&#34;)
+        return sorted(list(rep_list))</code></pre>
 </details>
 <div class="desc"><p>Filter the elements of kind element_type with a dictionary of requests.
 :param str or list od DRObjects elements_to_filter: kind of elements to be filtered
