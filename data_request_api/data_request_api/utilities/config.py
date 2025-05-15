@@ -20,6 +20,7 @@ DEFAULT_CONFIG = {
     "log_level": "info",
     "log_file": "default",
     "cache_dir": str(Path.home() / f".{PACKAGE_NAME}_cache"),
+    "check_api_version": True,
 }
 
 # Valid types and values for each key
@@ -30,6 +31,7 @@ DEFAULT_CONFIG_TYPES = {
     "log_level": str,
     "log_file": str,
     "cache_dir": str,
+    "check_api_version": bool,
 }
 
 # Valid types and values for each key
@@ -40,6 +42,7 @@ DEFAULT_CONFIG_HELP = {
     "log_level": "Log level to use",
     "log_file": "Log file to use",
     "cache_dir": "Cache directory to use",
+    "check_api_version": "Check pypi for the latest API version?",
 }
 
 DEFAULT_CONFIG_VALID_VALUES = {
