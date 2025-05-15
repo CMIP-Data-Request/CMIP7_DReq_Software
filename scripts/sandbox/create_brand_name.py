@@ -3,6 +3,8 @@
 
 """
 Add brand name in VS database.
+
+To make quality control check on the branded name computed with official software.
 """
 from __future__ import division, print_function, unicode_literals, absolute_import
 
@@ -15,7 +17,7 @@ from collections import defaultdict
 
 from data_request_api.query.data_request import DataRequest
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from data_request_api.content.dump_transformation import get_transformed_content
 from data_request_api.utilities.tools import write_json_output_file_content, read_json_input_file_content
