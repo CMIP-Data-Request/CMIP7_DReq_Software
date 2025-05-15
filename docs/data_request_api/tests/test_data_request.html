@@ -577,13 +577,13 @@ not have a method with the specified name.</p></div>
 
     def test_get_filtering_structure(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        self.assertEqual(obj.get_filtering_structure(&#34;opportunities&#34;), set())
-        self.assertEqual(obj.get_filtering_structure(&#34;variable_groups&#34;), {&#34;opportunities&#34;, })
-        self.assertEqual(obj.get_filtering_structure(&#34;variables&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;})
-        self.assertEqual(obj.get_filtering_structure(&#34;physical_parameters&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;, &#34;variables&#34;})
-        self.assertEqual(obj.get_filtering_structure(&#34;experiment_groups&#34;), {&#34;opportunities&#34;, })
-        self.assertEqual(obj.get_filtering_structure(&#34;experiments&#34;), {&#34;opportunities&#34;, &#34;experiment_groups&#34;})
-        self.assertEqual(obj.get_filtering_structure(&#34;test&#34;), set())</code></pre>
+        self.assertSetEqual(obj.get_filtering_structure(&#34;variable_groups&#34;), {&#34;opportunities&#34;, })
+        self.assertSetEqual(obj.get_filtering_structure(&#34;variables&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;})
+        self.assertSetEqual(obj.get_filtering_structure(&#34;physical_parameters&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;, &#34;variables&#34;})
+        self.assertSetEqual(obj.get_filtering_structure(&#34;experiment_groups&#34;), {&#34;opportunities&#34;, })
+        self.assertSetEqual(obj.get_filtering_structure(&#34;experiments&#34;), {&#34;opportunities&#34;, &#34;experiment_groups&#34;})
+        self.assertSetEqual(obj.get_filtering_structure(&#34;test&#34;), set())
+        self.assertSetEqual(obj.get_filtering_structure(&#34;opportunities&#34;), set())</code></pre>
 </details>
 <div class="desc"><p>A class whose instances are single test cases.</p>
 <p>By default, the test code itself should be placed in a method named
@@ -802,13 +802,13 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">def test_get_filtering_structure(self):
     obj = DataRequest(input_database=self.input_database, VS=self.vs)
-    self.assertEqual(obj.get_filtering_structure(&#34;opportunities&#34;), set())
-    self.assertEqual(obj.get_filtering_structure(&#34;variable_groups&#34;), {&#34;opportunities&#34;, })
-    self.assertEqual(obj.get_filtering_structure(&#34;variables&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;})
-    self.assertEqual(obj.get_filtering_structure(&#34;physical_parameters&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;, &#34;variables&#34;})
-    self.assertEqual(obj.get_filtering_structure(&#34;experiment_groups&#34;), {&#34;opportunities&#34;, })
-    self.assertEqual(obj.get_filtering_structure(&#34;experiments&#34;), {&#34;opportunities&#34;, &#34;experiment_groups&#34;})
-    self.assertEqual(obj.get_filtering_structure(&#34;test&#34;), set())</code></pre>
+    self.assertSetEqual(obj.get_filtering_structure(&#34;variable_groups&#34;), {&#34;opportunities&#34;, })
+    self.assertSetEqual(obj.get_filtering_structure(&#34;variables&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;})
+    self.assertSetEqual(obj.get_filtering_structure(&#34;physical_parameters&#34;), {&#34;opportunities&#34;, &#34;variable_groups&#34;, &#34;variables&#34;})
+    self.assertSetEqual(obj.get_filtering_structure(&#34;experiment_groups&#34;), {&#34;opportunities&#34;, })
+    self.assertSetEqual(obj.get_filtering_structure(&#34;experiments&#34;), {&#34;opportunities&#34;, &#34;experiment_groups&#34;})
+    self.assertSetEqual(obj.get_filtering_structure(&#34;test&#34;), set())
+    self.assertSetEqual(obj.get_filtering_structure(&#34;opportunities&#34;), set())</code></pre>
 </details>
 <div class="desc"></div>
 </dd>

@@ -18,15 +18,10 @@ Here are some ways to provide feedback:
 - For more general questions or concerns, such as suggestions for new features, contribute to the Software's [github discussion forum](https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/discussions).
 
 
-## v1.2 Data Request release
+## v1.2.1 Data Request release
 
-The latest **official release** of the CMIP7 Data Request is `v1.2` (31 March 2025)
-Access all information about the v1.2 release [on the CMIP website](https://wcrp-cmip.org/cmip7-data-request-v1-2/).
-
-Please note that a technical update to the Data Request, `v1.2.1`, is planned for late April 2025.
-This update will affect some details such as the names of CMOR variables, without substantially changing the scientific content of the request.
-For further information please see the [v1.2 release page](https://wcrp-cmip.org/cmip7-data-request-v1-2/).
-An update of this software will follow the release of `v1.2.1`.
+The latest **official release** of the CMIP7 Data Request is `v1.2.1` (26 April 2025).
+[Learn more about this release on the CMIP website](https://wcrp-cmip.org/cmip7-data-request-v1-2-1/).
 
 
 ## Try It Without Installation
@@ -41,7 +36,7 @@ You can launch and interact with this repository in a live environment via [Bind
 
 ### Quick Start
 
-In a python virtual environment that already has the dependencies installed, do:
+In a python virtual environment or conda environment in which you want to install the package, do:
 
 ```bash
 pip install CMIP7-data-request-api
@@ -53,9 +48,14 @@ If an environment first needs to be created, you can do:
 python -m venv my_dreq_env
 source my_dreq_env/bin/activate
 pip install --upgrade pip
+pip install CMIP7-data-request-api
+```
+
+This will automatically install the dependencies, but if necessary they can be manually installed by doing:
+
+```bash
 wget https://raw.githubusercontent.com/CMIP-Data-Request/CMIP7_DReq_Software/refs/heads/main/requirements.txt
 pip install -r requirements.txt 
-pip install CMIP7-data-request-api
 ```
 
 using the `requirements.txt` file from the top-level directory of this repository, which lists the package dependencies, and `my_dreq_env` can be changed to whatever environment name is preferred.

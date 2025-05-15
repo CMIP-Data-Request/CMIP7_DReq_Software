@@ -16,7 +16,7 @@ CONFIG_FILE = os.environ.get(
 DEFAULT_CONFIG = {
     "offline": False,
     "export": "release",
-    "consolidate": False,
+    "consolidate": True,
     "log_level": "info",
     "log_file": "default",
     "cache_dir": str(Path.home() / f".{PACKAGE_NAME}_cache"),

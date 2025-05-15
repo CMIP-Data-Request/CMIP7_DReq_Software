@@ -411,11 +411,11 @@ el.replaceWith(d);
         monkeypatch.setattr(&#34;requests.get&#34;, mock_requests_get)
 
         # Call dc.load with offline=True
-        dc.load(&#34;v1.0.0&#34;, offline=True)
+        dc.load(&#34;v1.0.0&#34;, consolidate=False, offline=True)
 
         # Call dc.load with offline=False
         with pytest.raises(Exception, match=&#34;Network request detected&#34;):
-            dc.load(&#34;v1.0.0&#34;, offline=False)
+            dc.load(&#34;v1.0.0&#34;, consolidate=False, offline=False)
 
     # def test_load(self):
     #    dc._dreq_res = self.tmp_dir.name
@@ -552,11 +552,11 @@ def setup(self, tmp_path):
     monkeypatch.setattr(&#34;requests.get&#34;, mock_requests_get)
 
     # Call dc.load with offline=True
-    dc.load(&#34;v1.0.0&#34;, offline=True)
+    dc.load(&#34;v1.0.0&#34;, consolidate=False, offline=True)
 
     # Call dc.load with offline=False
     with pytest.raises(Exception, match=&#34;Network request detected&#34;):
-        dc.load(&#34;v1.0.0&#34;, offline=False)</code></pre>
+        dc.load(&#34;v1.0.0&#34;, consolidate=False, offline=False)</code></pre>
 </details>
 <div class="desc"><p>Test the offline mode explicitly.</p></div>
 </dd>
