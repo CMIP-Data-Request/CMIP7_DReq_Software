@@ -573,6 +573,9 @@ def load(version="latest_stable", **kwargs):
     Returns:
         dict: of the loaded JSON file.
     """
+    if not kwargs["offline"]:
+        dreqcfg.check_api_version()
+
     _dreq_content_loaded["json_path"] = ""
     logger = get_logger()
     if version == "all":
