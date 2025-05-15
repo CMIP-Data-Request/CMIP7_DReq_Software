@@ -8,6 +8,7 @@ from data_request_api.utilities import config as dreqcfg
 def main():
     parser = argparse.ArgumentParser(
         description="Config CLI",
+        formatter_class=argparse.RawTextHelpFormatter,
         epilog="""Arguments:
   init (or no arguments): Initialize the config file,
       i.e. create a config file with default values if it does not exist.
@@ -17,8 +18,8 @@ def main():
   help: print this help message.
 
 Examples:
-  python -m utilities.config offline true
-  python -m utilities.config reset""",
+  CMIP7_data_request_api_config offline true
+  CMIP7_data_request_api_config reset""",
     )
 
     if parser.prog.startswith("config"):
