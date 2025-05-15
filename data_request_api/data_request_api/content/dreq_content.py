@@ -18,6 +18,7 @@ from data_request_api.content import consolidate_export as ce
 from data_request_api.content.mapping_table import mapping_table
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.logger import get_logger  # noqa
+from data_request_api.utilities.tools import read_json_file
 
 # Suppress pooch info output
 pooch.get_logger().setLevel("WARNING")
@@ -588,28 +589,16 @@ def load(version="latest_stable", **kwargs):
 
     _dreq_content_loaded["json_path"] = json_path
 
-    with open(json_path) as f:
-        consolidate_error = (
-            "Consolidation mapping is not supported for raw exports of versions < v1.2."
-            " Set 'export' to \"release\" (recommended), or set 'consolidate' to True"
-            " or set 'force_consolidate' to True to force consolidation regardless."
-        )
-        consolidate_warning = (
-            "Consolidation mapping is not supported for raw exports of versions < v1.2." " Forcing it regardless ..."
-        )
-        if "consolidate" in kwargs:
-            if kwargs["consolidate"]:
-                if "export" in kwargs and kwargs["export"] == "raw":
-                    if _parse_version(version) < _parse_version("v1.2") and version != "dev":
-                        if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
-                            logger.warning(consolidate_warning)
-                        else:
-                            logger.error(consolidate_error)
-                            raise ValueError(consolidate_error)
-                return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)
-            else:
-                return json.load(f)
-        else:
+    consolidate_error = (
+        "Consolidation mapping is not supported for raw exports of versions < v1.2."
+        " Set 'export' to \"release\" (recommended), or set 'consolidate' to True"
+        " or set 'force_consolidate' to True to force consolidation regardless."
+    )
+    consolidate_warning = (
+        "Consolidation mapping is not supported for raw exports of versions < v1.2." " Forcing it regardless ..."
+    )
+    if "consolidate" in kwargs:
+        if kwargs["consolidate"]:
             if "export" in kwargs and kwargs["export"] == "raw":
                 if _parse_version(version) < _parse_version("v1.2") and version != "dev":
                     if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
@@ -617,4 +606,15 @@ def load(version="latest_stable", **kwargs):
                     else:
                         logger.error(consolidate_error)
                         raise ValueError(consolidate_error)
-            return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)
+            return ce.map_data(read_json_file(json_path), mapping_table, next(iter(version_dict.keys())), **kwargs)
+        else:
+            return read_json_file(json_path)
+    else:
+        if "export" in kwargs and kwargs["export"] == "raw":
+            if _parse_version(version) < _parse_version("v1.2") and version != "dev":
+                if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
+                    logger.warning(consolidate_warning)
+                else:
+                    logger.error(consolidate_error)
+                    raise ValueError(consolidate_error)
+        return ce.map_data(read_json_file(json_path), mapping_table, next(iter(version_dict.keys())), **kwargs)

@@ -18,7 +18,7 @@ import pstats
 
 from data_request_api.query.data_request import DataRequest
 from data_request_api.content.dreq_content import _dreq_res
-from data_request_api.utilities.tools import read_json_input_file_content
+from data_request_api.utilities.tools import read_json_file
 from data_request_api.content.dump_transformation import correct_dictionaries, transform_content_inner, \
     get_transformed_content, get_transform_settings
 from data_request_api.tests import filepath
@@ -60,7 +60,7 @@ class TestDataRequest11(unittest.TestCase):
         self.vs_dict = content["VS_input"]
         self.input_database = content["DR_input"]
         self.single = f"{_dreq_res}/{self.version}/dreq_{export_version}_export.json"
-        self.single_content = read_json_input_file_content(self.single)
+        self.single_content = read_json_file(self.single)
         self.single_format = correct_dictionaries(self.single_content)
 
     @unittest.skip
