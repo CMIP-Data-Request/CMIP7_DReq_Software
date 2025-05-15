@@ -17,7 +17,8 @@
     "mips": ["opportunities", "variable_groups"],
     "time_slices": ["opportunities"],
     "experiment_groups": ["opportunities"],
-    "variable_groups": ["opportunities"]
+    "variable_groups": ["opportunities"],
+    "region": ["variable_groups"]
   },
   "filtering": {
     "default": ["opportunities"],
@@ -36,6 +37,7 @@
     "variables": ["opportunities", "variable_groups"],
     "priority_levels": ["opportunities", "variable_groups"],
     "max_priority_levels": ["opportunities", "variable_groups"],
-    "mips": ["opportunities", "variable_groups"]
+    "mips": ["opportunities", "variable_groups"],
+    "region": ["opportunities", "variable_groups"]
   }
 }

@@ -395,7 +395,8 @@ def split_content_one_base(content):
                           ("mips", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),
-                            ("priority_level", (str, type(None)), None)],
+                            ("priority_level", (str, type(None)), None),
+                            ("region", (str, type(None)), None)],
         "experiment_groups": [("experiments", list, list()), ]
     }
     if isinstance(content, dict):

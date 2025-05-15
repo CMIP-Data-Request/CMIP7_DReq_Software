@@ -272,7 +272,7 @@ class Variable(DRObjects):
 
 class VariablesGroup(DRObjects):
     def __init__(self, id, dr, DR_type="variable_groups",
-                 structure=dict(variables=list(), mips=list(), priority_level="High"), **attributes):
+                 structure=dict(variables=list(), mips=list(), priority_level="High", region=None), **attributes):
         super().__init__(id=id, dr=dr, DR_type=DR_type, structure=structure, **attributes)
 
     def check(self):
@@ -282,9 +282,10 @@ class VariablesGroup(DRObjects):
             logger.critical(f"No variable defined for {self.DR_type} id {self.id}")
 
     @classmethod
-    def from_input(cls, dr, id, variables=list(), mips=list(), priority_level="High", **kwargs):
+    def from_input(cls, dr, id, variables=list(), mips=list(), priority_level="High", region=None, **kwargs):
         return super().from_input(DR_type="variable_groups", dr=dr, id=id, elements=kwargs,
-                                  structure=dict(variables=variables, mips=mips, priority_level=priority_level))
+                                  structure=dict(variables=variables, mips=mips, priority_level=priority_level,
+                                                 region=None))
 
     def count(self):
         """
@@ -292,6 +293,13 @@ class VariablesGroup(DRObjects):
         :return int: number of variables linked to the VariablesGroup
         """
         return len(self.get_variables())
+
+    def get_region(self):
+        """
+        Return the region of the variable group.
+        :return: DRObject: the region associated with the variable group.
+        """
+        return self.structure["region"]
 
     def get_variables(self):
         """
@@ -332,6 +340,8 @@ class VariablesGroup(DRObjects):
                 found = request_value in self.get_variables()
             elif request_type in ["mips", ]:
                 found = request_value in self.get_mips()
+            elif request_type in ["regions", ]:
+                found = request_value == self.get_region()
             elif request_type in ["max_priority_levels", ]:
                 priority = self.dr.find_element("priority_level", self.get_priority_level().id)
                 req_priority = self.dr.find_element("priority_level", request_value.id)
@@ -457,7 +467,7 @@ class Opportunity(DRObjects):
                                                 list_to_check=self.get_variable_groups())
             elif request_type in ["variables", "priority_levels", "cmip6_tables_identifiers", "temporal_shapes",
                                   "spatial_shapes", "structure_titles", "physical_parameters", "modelling_realms", "esm-bcvs",
-                                  "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels"]:
+                                  "cf_standard_names", "cell_methods", "cell_measures", "max_priority_levels", "regions"]:
                 found = self.filter_on_request_list(request_values=request_value,
                                                     list_to_check=self.get_variable_groups())
             elif request_type in ["experiments", ]:
