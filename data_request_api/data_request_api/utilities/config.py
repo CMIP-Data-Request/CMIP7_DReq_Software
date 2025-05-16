@@ -53,6 +53,8 @@ DEFAULT_CONFIG_VALID_VALUES = {
 # Global variable to hold the loaded config
 CONFIG = {}
 
+# Global flag used to determine whether a warning on API version can be issued
+API_VERSION_CHECKED = False
 
 def _sanity_check(key, value):
     """Validate the given config key and value."""
@@ -160,6 +162,12 @@ def check_api_version():
     Check pypi for latest release of the software.
     Warn user if the installed version is not the latest release.
     """
+    global API_VERSION_CHECKED
+    if API_VERSION_CHECKED:
+        # To avoid bombarding the user with the same warning multiple times,
+        # skip the check if it's already been done since invoking the API.
+        return
+
     try:
         installed_version = version(PACKAGE_NAME)
     except PackageNotFoundError:
@@ -176,11 +184,14 @@ def check_api_version():
 
     if installed_version != latest_version:
         # Warn user that installed version isn't the same as the latest pypi version
-        msg =  f"Warning: installed {PACKAGE_NAME} version does not match latest pypi version\n"
-        msg += f"  Latest pypi version: {latest_version}\n"
-        msg += f"  Installed version:   {installed_version}\n"
-        msg +=  "  To install the latest version from pypi:\n"
-        msg += f"    pip install --upgrade {PACKAGE_NAME}"
+        msg =  f"Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n"
+        msg += f"Latest version on PyPI:  {latest_version}\n"
+        msg += f"Installed version:       {installed_version}\n"
+        msg +=  "To install the latest version from PyPI:\n"
+        msg += f"  pip install --upgrade {PACKAGE_NAME}\n"
+        msg +=  "To turn off this warning:\n"
+        msg +=  "  CMIP7_data_request_api_config check_api_version false"
+        msg = '\n' + msg + '\n'
 
         # Add color to the warning message
         color_code = "\033[91m"
@@ -188,3 +199,5 @@ def check_api_version():
         msg = color_code + msg + color_code_end
 
         print(msg)
+
+    API_VERSION_CHECKED = True

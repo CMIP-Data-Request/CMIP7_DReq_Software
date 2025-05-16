@@ -311,7 +311,11 @@ def get_versions(target="tags", **kwargs):
         if target == "tags" and "dev" not in versions[target]:
             versions[target].append("dev")
 
-    # List tags hosted on GitHub
+    if kwargs['check_api_version'] and not kwargs["offline"]:
+        # Warn user if the API version is not the latest one available on PyPI
+        dreqcfg.check_api_version()
+
+    # List tags of dreq versions hosted on GitHub
     return versions[target]
 
 
@@ -573,9 +577,6 @@ def load(version="latest_stable", **kwargs):
     Returns:
         dict: of the loaded JSON file.
     """
-    if kwargs['check_api_version'] and not kwargs["offline"]:
-        dreqcfg.check_api_version()
-
     _dreq_content_loaded["json_path"] = ""
     logger = get_logger()
     if version == "all":
