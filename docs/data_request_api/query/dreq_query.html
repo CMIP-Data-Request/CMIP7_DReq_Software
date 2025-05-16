@@ -1027,10 +1027,10 @@ Its "priority_level" attribute specifies the priority as either string or link t
         # needed for corrections below
         dreq_tables[&#39;CMIP6 frequency&#39;] = base[&#39;CMIP6 Frequency (legacy)&#39;]
 
-    # Compound names will be used to uniquely identify variables.
-    # Check here that this is indeed a unique name as expected.
-    var_name_map = {record.compound_name: record_id for record_id, record in dreq_tables[&#39;variables&#39;].records.items()}
-    assert len(var_name_map) == len(dreq_tables[&#39;variables&#39;].records), &#39;compound names do not uniquely map to variable record ids&#39;
+    # Check uniqueness of chosen variable names.
+    var_name_map = {get_unique_var_name(record): record_id for record_id, record in dreq_tables[&#39;variables&#39;].records.items()}
+    assert len(var_name_map) == len(dreq_tables[&#39;variables&#39;].records), \
+        f&#39;Variable names from UNIQUE_VAR_NAME=&#34;{UNIQUE_VAR_NAME}&#34; do not uniquely map to variable record ids&#39;
 
     if cmor_tables:
         print(&#39;Retaining only these CMOR tables: &#39; + &#39;, &#39;.join(cmor_tables))
@@ -1050,9 +1050,11 @@ Its "priority_level" attribute specifies the priority as either string or link t
             if var.compound_name not in compound_names:
                 continue
 
+        var_name = get_unique_var_name(var)
+
         link_table = getattr(var, attr_table)
         if len(link_table) != 1:
-            raise Exception(f&#39;variable {var.compound_name} should have one table link, found: &#39; + str(link_table))
+            raise Exception(f&#39;variable {var_name} should have one table link, found: &#39; + str(link_table))
         table_id = dreq_tables[&#39;CMOR tables&#39;].get_record(link_table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
@@ -1064,7 +1066,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
             assert len(var.cmip6_frequency_legacy) == 1
             link = var.cmip6_frequency_legacy[0]
             var.frequency = [dreq_tables[&#39;CMIP6 frequency&#39;].get_record(link).name]
-            # print(&#39;using CMIP6 frequency for &#39; + var.compound_name)
+            # print(&#39;using CMIP6 frequency for &#39; + var_name)
 
         if isinstance(var.frequency[0], str):
             # retain this option for non-consolidated airtable export?
@@ -1093,7 +1095,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
             # The variable table record gives the dimensions
             # dreq versions before v1.2 don&#39;t have a dimensions attribute in the variables table
             assert isinstance(var.dimensions, str), \
-                f&#39;Expected comma-delimited string giving the dimensions for {var.compound_name}&#39;
+                f&#39;Expected comma-delimited string giving the dimensions for {var_name}&#39;
             dims_list = [s.strip() for s in var.dimensions.split(&#39;,&#39;)]
             dimensions_var = &#39; &#39;.join(dims_list)
 
@@ -1147,7 +1149,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
             # Structure table was removed from the release base. It&#39;s left here in the code
             # as an internal option because it can be useful for debugging.
             if dimensions_linked != dimensions_var:
-                msg = f&#39;Inconsistent dimensions for {var.compound_name}:\n  {dimensions_var}\n  {dimensions_linked}&#39;
+                msg = f&#39;Inconsistent dimensions for {var_name}:\n  {dimensions_var}\n  {dimensions_linked}&#39;
                 print(msg)
 
         if dimensions_var:
@@ -1155,7 +1157,9 @@ Its "priority_level" attribute specifies the priority as either string or link t
         else:
             dimensions = dimensions_linked
 
-        # Get physical parameter record and out_name
+        # Get physical parameter record and use its name as out_name.
+        # (Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
+        # for almost all variables in dreq v1.2.1.)
         link = var.physical_parameter[0]
         phys_param = dreq_tables[&#39;physical parameters&#39;].get_record(link)
         out_name = phys_param.name
@@ -1224,10 +1228,23 @@ Its "priority_level" attribute specifies the priority as either string or link t
             # &#39;temporalLabelDD&#39; : temporal_shape.brand,
             # &#39;verticalLabelDD&#39; : spatial_shape.vertical_label_dd,
             # &#39;horizontalLabelDD&#39; : spatial_shape.hor_label_dd,
-            # &#39;areaLabelDD&#39; : area_label_dd,  # this comes from cell methods
+            # &#39;areaLabelDD&#39; : area_label_dd,
 
-            &#39;table&#39;: table_id,
+            &#39;cmip6_table&#39;: table_id,
+            &#39;physical_parameter_name&#39;: phys_param.name,
         })
+
+        # Get info on branded variable name, if available
+        if hasattr(var, &#39;branded_variable_name&#39;):
+            branded_variable_name = var.branded_variable_name
+            assert branded_variable_name.count(&#39;_&#39;) == 1, \
+                &#39;Expected one (and only one) underscore in branded variable name: &#39; + branded_variable_name
+            variableRootDD = branded_variable_name.split(&#39;_&#39;)[0]
+            var_info.update({
+                &#39;variableRootDD&#39;: variableRootDD,
+                &#39;branded_variable_name&#39;: branded_variable_name,
+            })
+
         for k, v in var_info.items():
             v = v.strip()
             for replacement in substitute:
@@ -1235,7 +1252,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
-        var_name = var.compound_name
+
         assert var_name not in all_var_info, &#39;non-unique variable name: &#39; + var_name
         all_var_info[var_name] = var_info
 

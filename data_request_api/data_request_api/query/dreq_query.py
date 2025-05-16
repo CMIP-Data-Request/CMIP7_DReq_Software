@@ -739,10 +739,10 @@ def get_variables_metadata(content, dreq_version,
         # needed for corrections below
         dreq_tables['CMIP6 frequency'] = base['CMIP6 Frequency (legacy)']
 
-    # Compound names will be used to uniquely identify variables.
-    # Check here that this is indeed a unique name as expected.
-    var_name_map = {record.compound_name: record_id for record_id, record in dreq_tables['variables'].records.items()}
-    assert len(var_name_map) == len(dreq_tables['variables'].records), 'compound names do not uniquely map to variable record ids'
+    # Check uniqueness of chosen variable names.
+    var_name_map = {get_unique_var_name(record): record_id for record_id, record in dreq_tables['variables'].records.items()}
+    assert len(var_name_map) == len(dreq_tables['variables'].records), \
+        f'Variable names from UNIQUE_VAR_NAME="{UNIQUE_VAR_NAME}" do not uniquely map to variable record ids'
 
     if cmor_tables:
         print('Retaining only these CMOR tables: ' + ', '.join(cmor_tables))
@@ -762,9 +762,11 @@ def get_variables_metadata(content, dreq_version,
             if var.compound_name not in compound_names:
                 continue
 
+        var_name = get_unique_var_name(var)
+
         link_table = getattr(var, attr_table)
         if len(link_table) != 1:
-            raise Exception(f'variable {var.compound_name} should have one table link, found: ' + str(link_table))
+            raise Exception(f'variable {var_name} should have one table link, found: ' + str(link_table))
         table_id = dreq_tables['CMOR tables'].get_record(link_table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
@@ -776,7 +778,7 @@ def get_variables_metadata(content, dreq_version,
             assert len(var.cmip6_frequency_legacy) == 1
             link = var.cmip6_frequency_legacy[0]
             var.frequency = [dreq_tables['CMIP6 frequency'].get_record(link).name]
-            # print('using CMIP6 frequency for ' + var.compound_name)
+            # print('using CMIP6 frequency for ' + var_name)
 
         if isinstance(var.frequency[0], str):
             # retain this option for non-consolidated airtable export?
@@ -805,7 +807,7 @@ def get_variables_metadata(content, dreq_version,
             # The variable table record gives the dimensions
             # dreq versions before v1.2 don't have a dimensions attribute in the variables table
             assert isinstance(var.dimensions, str), \
-                f'Expected comma-delimited string giving the dimensions for {var.compound_name}'
+                f'Expected comma-delimited string giving the dimensions for {var_name}'
             dims_list = [s.strip() for s in var.dimensions.split(',')]
             dimensions_var = ' '.join(dims_list)
 
@@ -859,7 +861,7 @@ def get_variables_metadata(content, dreq_version,
             # Structure table was removed from the release base. It's left here in the code
             # as an internal option because it can be useful for debugging.
             if dimensions_linked != dimensions_var:
-                msg = f'Inconsistent dimensions for {var.compound_name}:\n  {dimensions_var}\n  {dimensions_linked}'
+                msg = f'Inconsistent dimensions for {var_name}:\n  {dimensions_var}\n  {dimensions_linked}'
                 print(msg)
 
         if dimensions_var:
@@ -867,7 +869,9 @@ def get_variables_metadata(content, dreq_version,
         else:
             dimensions = dimensions_linked
 
-        # Get physical parameter record and out_name
+        # Get physical parameter record and use its name as out_name.
+        # (Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
+        # for almost all variables in dreq v1.2.1.)
         link = var.physical_parameter[0]
         phys_param = dreq_tables['physical parameters'].get_record(link)
         out_name = phys_param.name
@@ -936,10 +940,23 @@ def get_variables_metadata(content, dreq_version,
             # 'temporalLabelDD' : temporal_shape.brand,
             # 'verticalLabelDD' : spatial_shape.vertical_label_dd,
             # 'horizontalLabelDD' : spatial_shape.hor_label_dd,
-            # 'areaLabelDD' : area_label_dd,  # this comes from cell methods
+            # 'areaLabelDD' : area_label_dd,
 
-            'table': table_id,
+            'cmip6_table': table_id,
+            'physical_parameter_name': phys_param.name,
         })
+
+        # Get info on branded variable name, if available
+        if hasattr(var, 'branded_variable_name'):
+            branded_variable_name = var.branded_variable_name
+            assert branded_variable_name.count('_') == 1, \
+                'Expected one (and only one) underscore in branded variable name: ' + branded_variable_name
+            variableRootDD = branded_variable_name.split('_')[0]
+            var_info.update({
+                'variableRootDD': variableRootDD,
+                'branded_variable_name': branded_variable_name,
+            })
+
         for k, v in var_info.items():
             v = v.strip()
             for replacement in substitute:
@@ -947,7 +964,7 @@ def get_variables_metadata(content, dreq_version,
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
-        var_name = var.compound_name
+
         assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
         all_var_info[var_name] = var_info
 
