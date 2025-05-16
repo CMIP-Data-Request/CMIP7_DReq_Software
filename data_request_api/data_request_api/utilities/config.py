@@ -53,8 +53,6 @@ DEFAULT_CONFIG_VALID_VALUES = {
 # Global variable to hold the loaded config
 CONFIG = {}
 
-# Global flag used to determine whether a warning on API version can be issued
-API_VERSION_CHECKED = False
 
 def _sanity_check(key, value):
     """Validate the given config key and value."""
@@ -162,12 +160,6 @@ def check_api_version():
     Check pypi for latest release of the software.
     Warn user if the installed version is not the latest release.
     """
-    global API_VERSION_CHECKED
-    if API_VERSION_CHECKED:
-        # To avoid bombarding the user with the same warning multiple times,
-        # skip the check if it's already been done since invoking the API.
-        return
-
     try:
         installed_version = version(PACKAGE_NAME)
     except PackageNotFoundError:
@@ -199,5 +191,3 @@ def check_api_version():
         msg = color_code + msg + color_code_end
 
         print(msg)
-
-    API_VERSION_CHECKED = True
