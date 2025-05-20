@@ -477,6 +477,7 @@ def retrieve(version="latest_stable", **kwargs):
 
             # Store the path to the dreq.json in the json_paths dictionary
             json_paths[version] = json_path
+            logger.debug(f"'{version}' stored under '{json_path}'")
 
     # Capture no correct export found for cached versions (offline mode)
     if not json_paths or json_paths == {}:
