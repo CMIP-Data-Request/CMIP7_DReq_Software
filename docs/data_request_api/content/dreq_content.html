@@ -253,6 +253,7 @@ def get_versions(target=&#34;tags&#34;, **kwargs):
     &#34;&#34;&#34;
     global versions
     global _versions_retrieved_last
+    global _CHECK_API_VERSION
 
     if target not in [&#34;tags&#34;, &#34;branches&#34;]:
         raise ValueError(&#34;target must be &#39;tags&#39; or &#39;branches&#39;.&#34;)
@@ -274,7 +275,14 @@ def get_versions(target=&#34;tags&#34;, **kwargs):
         if target == &#34;tags&#34; and &#34;dev&#34; not in versions[target]:
             versions[target].append(&#34;dev&#34;)
 
-    # List tags hosted on GitHub
+    if kwargs[&#39;check_api_version&#39;] and not kwargs[&#34;offline&#34;]:
+        # Warn user if the API version is not the latest one available on PyPI
+        if _CHECK_API_VERSION:
+            atexit.register(dreqcfg.check_api_version)
+            # Set flag to prevent the same warning being shown more than once
+            _CHECK_API_VERSION = False
+
+    # List tags of dreq versions hosted on GitHub
     return versions[target]</code></pre>
 </details>
 <div class="desc"><p>Fetch list of tags from the GitHub repository using the GitHub API.</p>

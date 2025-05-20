@@ -482,11 +482,12 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
                     to_remove_entries[subelt][(record_id, uid)] += 1
                 content_string = tmp_content_string
         content[content_subelt] = json.loads(content_string)
-    if &#34;opportunities&#34; in to_remove_entries:
-        to_remove = [elt for (elt, nb) in to_remove_entries[&#34;opportunities&#34;].items() if nb == len_list_content]
-        for record_id, _ in to_remove:
-            del record_to_uid_index[&#34;opportunities&#34;][record_id]
-        del to_remove_entries[&#34;opportunities&#34;]
+    for content_subelt in [&#34;opportunities&#34;, &#34;coordinates_and_dimensions&#34;]:
+        if content_subelt in to_remove_entries:
+            to_remove = [elt for (elt, nb) in to_remove_entries[content_subelt].items() if nb == len_list_content]
+            for record_id, _ in to_remove:
+                del record_to_uid_index[content_subelt][record_id]
+            del to_remove_entries[content_subelt]
     for (subelt, to_remove) in to_remove_entries.items():
         to_remove = [elt for (elt, nb) in to_remove.items() if nb == len_list_content]
         for (record_id, uid) in to_remove:

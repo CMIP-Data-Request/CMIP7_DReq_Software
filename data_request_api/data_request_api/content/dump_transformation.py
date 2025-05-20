@@ -290,11 +290,12 @@ def tidy_content(content, record_to_uid_index):
                     to_remove_entries[subelt][(record_id, uid)] += 1
                 content_string = tmp_content_string
         content[content_subelt] = json.loads(content_string)
-    if "opportunities" in to_remove_entries:
-        to_remove = [elt for (elt, nb) in to_remove_entries["opportunities"].items() if nb == len_list_content]
-        for record_id, _ in to_remove:
-            del record_to_uid_index["opportunities"][record_id]
-        del to_remove_entries["opportunities"]
+    for content_subelt in ["opportunities", "coordinates_and_dimensions"]:
+        if content_subelt in to_remove_entries:
+            to_remove = [elt for (elt, nb) in to_remove_entries[content_subelt].items() if nb == len_list_content]
+            for record_id, _ in to_remove:
+                del record_to_uid_index[content_subelt][record_id]
+            del to_remove_entries[content_subelt]
     for (subelt, to_remove) in to_remove_entries.items():
         to_remove = [elt for (elt, nb) in to_remove.items() if nb == len_list_content]
         for (record_id, uid) in to_remove:

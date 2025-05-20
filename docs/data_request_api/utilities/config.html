@@ -44,6 +44,54 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="data_request_api.utilities.config.check_api_version"><code class="name flex">
+<span>def <span class="ident">check_api_version</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_api_version():
+    &#34;&#34;&#34;
+    Check pypi for latest release of the software.
+    Warn user if the installed version is not the latest release.
+    &#34;&#34;&#34;
+    try:
+        installed_version = version(PACKAGE_NAME)
+    except PackageNotFoundError:
+        print(f&#34;{PACKAGE_NAME} is not installed.&#34;)
+        return
+
+    try:
+        response = requests.get(f&#34;https://pypi.org/pypi/{PACKAGE_NAME}/json&#34;, timeout=5)
+        response.raise_for_status()
+        latest_version = response.json()[&#39;info&#39;][&#39;version&#39;]
+    except requests.RequestException as e:
+        print(f&#34;Error checking PyPI: {e}&#34;)
+        return
+
+    if installed_version != latest_version:
+        # Warn user that installed version isn&#39;t the same as the latest pypi version
+        msg =  f&#34;Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n&#34;
+        msg += f&#34;Latest version on PyPI:  {latest_version}\n&#34;
+        msg += f&#34;Installed version:       {installed_version}\n&#34;
+        msg +=  &#34;To install the latest version from PyPI:\n&#34;
+        msg += f&#34;  pip install --upgrade {PACKAGE_NAME}\n&#34;
+        msg +=  &#34;To turn off this warning:\n&#34;
+        msg +=  &#34;  CMIP7_data_request_api_config check_api_version false&#34;
+        msg = &#39;\n&#39; + msg + &#39;\n&#39;
+
+        # Add color to the warning message
+        color_code = &#34;\033[91m&#34;
+        color_code_end = color_code.split(&#34;[&#34;)[0] + &#34;[0m&#34;
+        msg = color_code + msg + color_code_end
+
+        print(msg)</code></pre>
+</details>
+<div class="desc"><p>Check pypi for latest release of the software.
+Warn user if the installed version is not the latest release.</p></div>
+</dd>
 <dt id="data_request_api.utilities.config.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>) ‑> dict</span>
 </code></dt>
@@ -200,6 +248,7 @@ pair and writes the updated configuration back to the configuration file.</p></d
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="data_request_api.utilities.config.check_api_version" href="#data_request_api.utilities.config.check_api_version">check_api_version</a></code></li>
 <li><code><a title="data_request_api.utilities.config.load_config" href="#data_request_api.utilities.config.load_config">load_config</a></code></li>
 <li><code><a title="data_request_api.utilities.config.update_config" href="#data_request_api.utilities.config.update_config">update_config</a></code></li>
 </ul>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-
+import atexit
 import json
 import os
 import re
@@ -65,6 +65,10 @@ except KeyError:
     _dreq_res = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dreq_res")
 
 _dreq_content_loaded = {}
+
+# Internal flag used to determine whether a warning on API version can be issued
+# (Purpose is to prevent the warning being issued more than once per session)
+_CHECK_API_VERSION = True
 
 
 def _parse_version(version):
@@ -291,6 +295,7 @@ def get_versions(target="tags", **kwargs):
     """
     global versions
     global _versions_retrieved_last
+    global _CHECK_API_VERSION
 
     if target not in ["tags", "branches"]:
         raise ValueError("target must be 'tags' or 'branches'.")
@@ -312,7 +317,14 @@ def get_versions(target="tags", **kwargs):
         if target == "tags" and "dev" not in versions[target]:
             versions[target].append("dev")
 
-    # List tags hosted on GitHub
+    if kwargs['check_api_version'] and not kwargs["offline"]:
+        # Warn user if the API version is not the latest one available on PyPI
+        if _CHECK_API_VERSION:
+            atexit.register(dreqcfg.check_api_version)
+            # Set flag to prevent the same warning being shown more than once
+            _CHECK_API_VERSION = False
+
+    # List tags of dreq versions hosted on GitHub
     return versions[target]
 
 

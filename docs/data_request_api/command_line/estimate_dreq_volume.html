@@ -110,7 +110,7 @@ human-readable units (like ls -h does at the shell prompt).</p></div>
                 n = 24 * 12
             else:
                 n = freq_times_per_year[frequency]
-            temporal_shape = dim
+            temporal_shape = time_dims[dim]
         elif dim in config[&#39;dimensions&#39;]:
             # Use model-specific dimension size
             n = config[&#39;dimensions&#39;][dim]
@@ -120,7 +120,7 @@ human-readable units (like ls -h does at the shell prompt).</p></div>
             n = dreq_dim_sizes[dim]
 
         if n is None:
-            raise ValueError(f&#39;No size found for dimension {dim}&#39;)
+            raise ValueError(f&#39;No size found for dimension: {dim}&#39;)
 
         dim_sizes[dim] = n
 
@@ -196,9 +196,10 @@ years: 1
         config = yaml.safe_load(f)
         print(&#39;Loaded &#39; + config_file)
 
-    warning_msg = &#39;\n * * * WARNING * * *&#39;
-    warning_msg += &#39;\n These volumes are an initial estimate, to be improved in the next software version.&#39;
-    warning_msg += &#39;\n They should be used with caution and verified against known data volumes.\n&#39;
+    warning_msg = &#39;\n * * * * * * * * * * * * * * * WARNING * * * * * * * * * * * * * * *&#39;
+    warning_msg += &#39;\n These volumes are an initial estimate.&#39;
+    warning_msg += &#39;\n They should be used with caution and verified against known data volumes.&#39;
+    warning_msg += &#39;\n * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n&#39;
 
     request_from_input_file = None
     if os.path.isfile(args.request):
@@ -261,8 +262,20 @@ years: 1
     if set(freq_times_per_year.keys()) != set(freqs):
         raise Exception(&#39;Times per year must be defined for all available frequencies&#39;)
 
-    # Get available time dimensions (&#39;time-intv&#39;, &#39;time-point&#39;, etc)
-    time_dims = [rec.name for rec in dreq_tables[&#39;temporal shape&#39;].records.values()]
+    # Get mapping from time dimension name to temporal shape name
+    # {&#39;time1&#39;: &#39;time-point&#39;, &#39;time&#39;: &#39;time-intv&#39;, ... etc}
+    time_dims = {}
+    for rec in dreq_tables[&#39;temporal shape&#39;].records.values():
+        shape_name = rec.name
+        if hasattr(rec, &#39;dimensions&#39;):
+            assert len(rec.dimensions) == 1
+            link = rec.dimensions[0]
+            dim_rec = dreq_tables[&#39;coordinates and dimensions&#39;].get_record(link)
+            dim_name = dim_rec.name
+        else:
+            dim_name = &#39;None&#39;
+        assert dim_name not in time_dims, &#39;time dimension names are not unique&#39;
+        time_dims[dim_name] = shape_name
 
     # Get metadata for variables
     variables = dq.get_variables_metadata(
@@ -336,7 +349,11 @@ years: 1
     for expt in expts:
         expt_rec = expt_records[expt]
 
-        num_years = expt_rec.size_years_minimum
+        if hasattr(expt_rec, &#39;size_years_minimum&#39;):
+            num_years = expt_rec.size_years_minimum
+        else:
+            num_years = 100
+            print(f&#39;Warning: number of years not found for experiment {expt}, assuming size_years_minimum = {num_years}&#39;)
         num_ensem = 1
 
         # Loop over priority levels of requeste variables
@@ -368,7 +385,12 @@ years: 1
                     # Assume this is a climatology, so don&#39;t multiply by number of years
                     pass
                 else:
-                    assert temporal_shape in [&#39;time-intv&#39;, &#39;time-point&#39;, &#39;monthly-mean-daily-stat&#39;], \
+                    valid_shapes = [&#39;time-intv&#39;, &#39;time-point&#39;, &#39;monthly-mean-daily-stat&#39;]
+                    version_tuple = dq.get_dreq_version_tuple(use_dreq_version)
+                    if version_tuple[:2] &lt; (1, 2):
+                        # Prior to v1.2, monthly-mean-daily-stat was called monthly-mean-stat
+                        valid_shapes.append(&#39;monthly-mean-stat&#39;)
+                    assert temporal_shape in valid_shapes, \
                         &#39;Unknown temporal shape: &#39; + str(temporal_shape)
                     # Multiply the 1-year size by the minimum number of request years for this experiment
                     size *= num_years
@@ -472,7 +494,7 @@ years: 1
     parser.add_argument(&#39;request&#39;, type=str,
                         help=&#39;json file specifying variables requested by experiment&#39; +
                         &#39; (output from export_dreq_lists_json, which specifies the data request version)&#39; +
-                        &#39; OR can be a data request version (e.g. &#34;v1.2&#34;) if using &#39;)
+                        &#39; OR can be a data request version (e.g. &#34;v1.2&#34;)&#39;)
     # Optional arguments
     parser.add_argument(&#39;-v&#39;, &#39;--variables&#39;, nargs=&#39;+&#39;, type=str,
                         help=&#39;include only the specified variables in the estimate&#39;)
