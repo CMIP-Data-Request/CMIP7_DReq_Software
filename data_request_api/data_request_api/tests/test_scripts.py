@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 
 import data_request_api.content.dreq_content as dc
+import data_request_api.utilities.config as dreqcfg
 import pytest
 import yaml
 
@@ -59,6 +60,10 @@ class TestWorkflowV10:
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
+        dc._dreq_res = self.temp_config_file.parent
+        dc.versions = {"tags": [], "branches": []}
+        dreqcfg.CONFIG_FILE = self.temp_config_file
+        dreqcfg.CONFIG = {}  # alternatively: dreqcfg.load_config(reload=True)
         dc.load(self.version)
 
     def test_database_transformation(self, temp_config_file, export):
@@ -147,6 +152,10 @@ class TestWorkflowV11:
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
+        dc._dreq_res = self.temp_config_file.parent
+        dc.versions = {"tags": [], "branches": []}
+        dreqcfg.CONFIG_FILE = self.temp_config_file
+        dreqcfg.CONFIG = {}  # alternatively: dreqcfg.load_config(reload=True)
         dc.load(self.version)
 
     def test_database_transformation(self, temp_config_file, export):
@@ -235,6 +244,10 @@ class TestWorkflowV12:
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
+        dc._dreq_res = self.temp_config_file.parent
+        dc.versions = {"tags": [], "branches": []}
+        dreqcfg.CONFIG_FILE = self.temp_config_file
+        dreqcfg.CONFIG = {}  # alternatively: dreqcfg.load_config(reload=True)
         dc.load(self.version)
 
     def test_database_transformation(self, temp_config_file, export):
@@ -323,6 +336,10 @@ class TestWorkflowV121:
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
+        dc._dreq_res = self.temp_config_file.parent
+        dc.versions = {"tags": [], "branches": []}
+        dreqcfg.CONFIG_FILE = self.temp_config_file
+        dreqcfg.CONFIG = {}  # alternatively: dreqcfg.load_config(reload=True)
         dc.load(self.version)
 
     def test_database_transformation(self, temp_config_file, export):
