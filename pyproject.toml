@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "coverage", "pytest", "setuptools_scm"]
+requires = ["setuptools>=61.0", "coverage", "pytest", "setuptools_scm", "pytest-cov"]
 build-backend = "setuptools.build_meta"
 
 [project]
