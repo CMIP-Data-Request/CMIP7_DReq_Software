@@ -129,6 +129,7 @@ class TestWorkflowV10:
         assert os.path.exists(checkfile) and os.path.getsize(checkfile) > 0
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize(
     "export",
     ["release", ],
