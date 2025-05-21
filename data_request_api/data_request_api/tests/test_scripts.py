@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
 Test scripts
 """
@@ -74,7 +71,7 @@ class TestWorkflowV10:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/database_transformation.py",
+                os.sep.join(["scripts", "database_transformation.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -100,7 +97,7 @@ class TestWorkflowV10:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/workflow_example_2.py",
+                os.sep.join(["scripts", "workflow_example_2.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -119,7 +116,7 @@ class TestWorkflowV10:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/check_variables_attributes.py",
+                os.sep.join(["scripts", "check_variables_attributes.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -166,7 +163,7 @@ class TestWorkflowV11:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/database_transformation.py",
+                os.sep.join(["scripts", "database_transformation.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -192,7 +189,7 @@ class TestWorkflowV11:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/workflow_example_2.py",
+                os.sep.join(["scripts", "workflow_example_2.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -211,7 +208,7 @@ class TestWorkflowV11:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/check_variables_attributes.py",
+                os.sep.join(["scripts", "check_variables_attributes.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -258,7 +255,7 @@ class TestWorkflowV12:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/database_transformation.py",
+                os.sep.join(["scripts", "database_transformation.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -284,7 +281,7 @@ class TestWorkflowV12:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/workflow_example_2.py",
+                os.sep.join(["scripts", "workflow_example_2.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -303,7 +300,7 @@ class TestWorkflowV12:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/check_variables_attributes.py",
+                os.sep.join(["scripts", "check_variables_attributes.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -350,7 +347,7 @@ class TestWorkflowV121:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/database_transformation.py",
+                os.sep.join(["scripts", "database_transformation.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -376,7 +373,7 @@ class TestWorkflowV121:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/workflow_example_2.py",
+                os.sep.join(["scripts", "workflow_example_2.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
@@ -395,7 +392,7 @@ class TestWorkflowV121:
         result = subprocess.run(
             [
                 sys.executable,
-                "scripts/check_variables_attributes.py",
+                os.sep.join(["scripts", "check_variables_attributes.py"]),
                 "--output_dir",
                 str(temp_config_file.parent),
                 "--version",
