@@ -5,3 +5,4 @@ pooch
 pytest
 pyyaml
 requests
+pytest-cov

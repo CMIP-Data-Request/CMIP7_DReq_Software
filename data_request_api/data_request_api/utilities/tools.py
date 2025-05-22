@@ -24,11 +24,6 @@ def read_json_file(filename):
     return content
 
 
-def read_json_input_file_content(filename):
-    content = read_json_file(filename)
-    return content
-
-
 def write_json_output_file_content(filename, content, **kwargs):
     logger = get_logger()
     logger.debug(f"Writing file {filename}.")

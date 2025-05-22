@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
-from importlib.metadata import version, PackageNotFoundError
 import os
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+
 import requests
 import yaml
+from data_request_api.utilities.logger import get_logger  # noqa
 
 # Config file location in the user's home directory
 PACKAGE_NAME = "CMIP7_data_request_api"
@@ -71,8 +73,11 @@ def _sanity_check(key, value):
         )
 
 
-def load_config() -> dict:
+def load_config(reload=False) -> dict:
     """Load the configuration file, creating it if necessary.
+    Args:
+        reload (bool): Reload config from disk and do not load from cache.
+                       Default is False.
 
     Returns:
         dict: The configuration data.
@@ -85,7 +90,12 @@ def load_config() -> dict:
         ValueError: If the value is not within the valid values for the key.
     """
     global CONFIG
+    logger = get_logger()
+
+    if reload:
+        CONFIG = {}
     if CONFIG == {}:
+        logger.debug(f"Loading config file: {CONFIG_FILE}")
         try:
             with open(CONFIG_FILE) as f:
                 CONFIG = yaml.safe_load(f)
@@ -99,20 +109,19 @@ def load_config() -> dict:
                 yaml.dump(DEFAULT_CONFIG, f)
             CONFIG = DEFAULT_CONFIG.copy()
         elif not isinstance(CONFIG, dict):
-            raise TypeError(
-                f"Config file ('{CONFIG_FILE}') must contain a dictionary"
-            )
+            raise TypeError(f"Config file ('{CONFIG_FILE}') must contain a dictionary")
 
         # Sanity test for allowed types and values
         for key, value in CONFIG.items():
             _sanity_check(key, value)
 
         # Ensure all required keys are present and update config file if necessary
-        missing_keys = {
-            k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG
-        }
+        missing_keys = {k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG}
         for key, value in missing_keys.items():
             update_config(key, value)
+        logger.debug(f"Loaded config from file: {CONFIG}")
+    else:
+        logger.debug(f"Loaded config from cache: {CONFIG}")
 
     return CONFIG
 
@@ -169,7 +178,7 @@ def check_api_version():
     try:
         response = requests.get(f"https://pypi.org/pypi/{PACKAGE_NAME}/json", timeout=5)
         response.raise_for_status()
-        latest_version = response.json()['info']['version']
+        latest_version = response.json()["info"]["version"]
     except requests.RequestException as e:
         print(f"Error checking PyPI: {e}")
         return
@@ -183,7 +192,7 @@ def check_api_version():
         msg += f"  pip install --upgrade {PACKAGE_NAME}\n"
         msg += "To turn off this warning:\n"
         msg += "  CMIP7_data_request_api_config check_api_version false"
-        msg = '\n' + msg + '\n'
+        msg = "\n" + msg + "\n"
 
         # Add color to the warning message
         color_code = "\033[91m"
