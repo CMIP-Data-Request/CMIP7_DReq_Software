@@ -1014,7 +1014,7 @@ class DataRequest(object):
                     elements = [elements_to_filter, ]
                 else:
                     elements = elements_to_filter
-                elements_to_filter = elements[0].DR_type
+            elements_to_filter = elements[0].DR_type
             # Prepare the request dictionary
             request_dict = defaultdict(list)
             for (req, values) in requests.items():
