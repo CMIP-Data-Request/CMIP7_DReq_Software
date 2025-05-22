@@ -1,0 +1,3 @@
+set -e
+
+pip install --upgrade CMIP7-data-request-api
