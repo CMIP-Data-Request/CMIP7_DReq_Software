@@ -67,7 +67,7 @@ conda env create -n my_dreq_env --file env.yml
 
 If installation is successful you should be able to run the command
 ```bash
-export_dreq_lists_json --all_opportunities v1.1 amip.json --experiments amip
+export_dreq_lists_json --all_opportunities v1.2.1 amip.json --experiments amip
 ```
 
 The package can be uninstalled using
