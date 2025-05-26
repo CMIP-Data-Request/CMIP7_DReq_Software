@@ -440,8 +440,12 @@ class Opportunity(DRObjects):
             for theme in self.get_data_request_themes():
                 rep.extend(theme.print_content(level=level + 2, add_content=False))
             rep.append(f"{indent}Time subsets included:")
+            superindent = "    " * (level + 2)
             for time_subset in self.get_time_subsets():
-                rep.extend(time_subset.print_content(level=level + 2, add_content=False))
+                if time_subset is None:
+                    rep.append(superindent + "time_subset: None")
+                else:
+                    rep.extend(time_subset.print_content(level=level + 2, add_content=False))
         return rep
 
     def filter_on_request(self, request_value, inner=True):

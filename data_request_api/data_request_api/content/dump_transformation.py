@@ -392,7 +392,7 @@ def split_content_one_base(content):
         "opportunities": [("experiment_groups", list, list()),
                           ("variable_groups", list, list()),
                           ("data_request_themes", list, list()),
-                          ("time_subsets", list, list()),
+                          ("time_subsets", list, [None, ]),
                           ("mips", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),
