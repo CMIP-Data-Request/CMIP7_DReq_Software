@@ -929,10 +929,10 @@ class TestDataRequestFilter(unittest.TestCase):
             self.dr.filter_elements_per_request()
 
         self.assertEqual(self.dr.filter_elements_per_request("opportunities"), self.dr.get_opportunities())
-        self.assertEqual(self.dr.filter_elements_per_request("opportunities", operation="any"),
+        self.assertEqual(self.dr.filter_elements_per_request("opportunities", request_operation="any"),
                          self.dr.get_opportunities())
         with self.assertRaises(ValueError):
-            self.dr.filter_elements_per_request("opportunities", operation="one")
+            self.dr.filter_elements_per_request("opportunities", request_operation="one")
 
         with self.assertRaises(ValueError):
             self.dr.filter_elements_per_request("opportunities", requests=dict(variables="link::test_dummy"))
@@ -950,6 +950,11 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
                                                                  requests=dict(experiment="default_290")),
                              list_var_grp)
+        self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
+                                                                 requests=dict(experiment="default_290"),
+                                                                 not_requests=dict(opportunity="default_421")),
+                             [self.dr.find_element("variable_group", elt)
+                              for elt in ["default_569", "default_570", "default_571", "default_572", "default_579"]])
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
                                                                  requests=dict(experiment="default_290")),
                              list_var_grp)

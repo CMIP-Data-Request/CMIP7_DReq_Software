@@ -995,19 +995,114 @@ class DataRequest(object):
             tmp_rep, to_add = to_add, set()
         return rep
 
-    def filter_elements_per_request(self, elements_to_filter, requests=dict(), operation="all", skip_if_missing=False,
-                                    print_warning_bcv=True):
+    def filter_elements_per_request(self, elements_to_filter, requests=dict(), request_operation="all",
+                                    not_requests=dict(), not_request_operation="any",
+                                    skip_if_missing=False, print_warning_bcv=True):
         """
         Filter the elements of kind element_type with a dictionary of requests.
         :param str or list od DRObjects elements_to_filter: kind of elements to be filtered
         :param dict requests: dictionary of the filters to be applied
-        :param str operation: should at least one filter be applied ("any") or all filters be fulfilled ("all")
+        :param dict not_requests: dictionary of the filters to be applied for non requested elements
+        :param str request_operation: should at least one filter from requests be applied ("any") or all filters be fulfilled ("all")
+        :param str not_request_operation: should at least one filter from not_requests be applied ("any") or all filters be fulfilled ("all")
         :param bool skip_if_missing: if a request filter is missing, should it be skipped or should an error be raised?
+        :param bool print_warning_bcv: should a warning be printed if BCV variables are not included?
         :return: list of elements of kind element_type which correspond to the filtering requests
         """
+        def filter_against_request(request, values, elements_to_filter, elements, elements_filtering_structure):
+            logger = get_logger()
+            request_filtering_structure = self.get_filtering_structure(request)
+            common_filtering_structure = request_filtering_structure & elements_filtering_structure
+            if len(values) == 0 or len(elements) == 0:
+                rep = list()
+                filtered_found = True
+            elif request == elements_to_filter:
+                filtered_found = True
+                rep = [(elt.id, elt) for elt in set(values) & set(elements)]
+            elif elements_to_filter in request_filtering_structure:
+                filtered_found, _ = elements[0].filter_on_request(values[0])
+                if filtered_found:
+                    rep = [(val.id, elt) for (val, elt) in product(values, elements) if elt.filter_on_request(val)[1]]
+            elif request in elements_filtering_structure:
+                filtered_found, _ = values[0].filter_on_request(elements[0])
+                if filtered_found:
+                    rep = [(val.id, elt) for (val, elt) in product(values, elements) if val.filter_on_request(elt)[1]]
+            else:
+                if "experiment_groups" in common_filtering_structure:
+                    list_to_filter = self.get_experiment_groups()
+                elif "variables" in common_filtering_structure:
+                    list_to_filter = self.get_variables()
+                elif "variable_groups" in common_filtering_structure:
+                    list_to_filter = self.get_variable_groups()
+                else:
+                    list_to_filter = self.get_opportunities()
+                filtered_found, _ = self._two_elements_filtering(values[0], elements[0], list_to_filter)
+                if filtered_found:
+                    rep = [(val.id, elt) for (val, elt) in product(values, elements) if
+                           self._two_elements_filtering(val, elt, list_to_filter)[1]]
+                if "mips" in [request, elements_to_filter]:
+                    list_to_filter = self.get_opportunities()
+                    new_filtered_found, _ = self._two_elements_filtering(values[0], elements[0], list_to_filter,
+                                                                         inner=False)
+                    filtered_found = filtered_found or new_filtered_found
+                    if new_filtered_found:
+                        new_rep = [(val.id, elt) for (val, elt) in product(values, elements) if
+                                   self._two_elements_filtering(val, elt, list_to_filter, inner=False)[1]]
+                        rep.extend(new_rep)
+            if not filtered_found:
+                logger.error(f"Could not filter {elements_to_filter} by {request}")
+                raise ValueError(f"Could not filter {elements_to_filter} by {request}")
+            else:
+                new_rep = defaultdict(list)
+                for (key, val) in rep:
+                    new_rep[key].append(val)
+                new_rep = {key: set(val) for (key, val) in new_rep.items()}
+                return new_rep
+
+        def fill_request_dict(request_dict):
+            logger = get_logger()
+            rep = defaultdict(list)
+            for (req, values) in request_dict.items():
+                if not isinstance(values, list):
+                    values = [values, ]
+                for val in values:
+                    if not isinstance(val, DRObjects):
+                        new_val = self.find_element(element_type=req, value=val, default=None)
+                    else:
+                        new_val = val
+                    if new_val is not None:
+                        rep[new_val.DR_type].append(new_val)
+                    elif skip_if_missing:
+                        logger.warning(f"Could not find value {val} for element type {req}, skip it.")
+                    else:
+                        logger.error(f"Could not find value {val} for element type {req}.")
+                        raise ValueError(f"Could not find value {val} for element type {req}.")
+            return rep
+
+        def apply_operation_on_requests_links(dict_request_links, elements, operation, void_list="full"):
+            logger = get_logger()
+            if len(rep) == 0:
+                if void_list == "full":
+                    rep_list = set(elements)
+                elif void_list == "void":
+                    rep_list = set()
+                else:
+                    logger.error(f"Unknown void_list value {void_list} (should be either 'full' or 'void').")
+                    raise ValueError(f"Unknown void_list value {void_list} (should be either 'full' or 'void').")
+            elif operation in ["any", ]:
+                rep_list = {key: set().union(*chain(val.values())) for (key, val) in dict_request_links.items()}
+                rep_list = set().union(*rep_list.values())
+            elif operation in ["all", ]:
+                rep_list = {key: set(elements).intersection(*chain(val.values())) for (key, val) in dict_request_links.items()}
+                rep_list = set(elements).intersection(*rep_list.values())
+            else:
+                logger.error(f"Unknown value {operation} for request_operation (only 'all' and 'any' are available).")
+                raise ValueError(f"Unknown value {operation} for request_operation (only 'all' and 'any' are available).")
+            return rep_list
+
         logger = get_logger()
-        if operation not in ["any", "all"]:
-            raise ValueError(f"Operation does not accept {operation} as value: choose among 'any' (match at least one"
+        if request_operation not in ["any", "all"]:
+            raise ValueError(f"Operation does not accept {request_operation} as value: choose among 'any' (match at least one"
                              f" requirement) and 'all' (match all requirements)")
         else:
             # Get elements corresponding to element_type
@@ -1019,86 +1114,22 @@ class DataRequest(object):
                 else:
                     elements = elements_to_filter
             elements_to_filter = elements[0].DR_type
-            # Prepare the request dictionary
-            request_dict = defaultdict(list)
-            for (req, values) in requests.items():
-                if not isinstance(values, list):
-                    values = [values, ]
-                for val in values:
-                    if not isinstance(val, DRObjects):
-                        new_val = self.find_element(element_type=req, value=val, default=None)
-                    else:
-                        new_val = val
-                    if new_val is not None:
-                        request_dict[new_val.DR_type].append(new_val)
-                    elif skip_if_missing:
-                        logger.warning(f"Could not find value {val} for element type {req}, skip it.")
-                    else:
-                        logger.error(f"Could not find value {val} for element type {req}.")
-                        raise ValueError(f"Could not find value {val} for element type {req}.")
-            # Filter elements
+            # Find out elements linked to request
+            request_dict = fill_request_dict(requests)
             elements_filtering_structure = self.get_filtering_structure(elements_to_filter)
-
-            def filter_against_request(request, values, elements_to_filter, elements, elements_filtering_structure):
-                request_filtering_structure = self.get_filtering_structure(request)
-                common_filtering_structure = request_filtering_structure & elements_filtering_structure
-                if len(values) == 0 or len(elements) == 0:
-                    rep = list()
-                    filtered_found = True
-                elif request == elements_to_filter:
-                    filtered_found = True
-                    rep = [(elt.id, elt) for elt in set(values) & set(elements)]
-                elif elements_to_filter in request_filtering_structure:
-                    filtered_found, _ = elements[0].filter_on_request(values[0])
-                    if filtered_found:
-                        rep = [(val.id, elt) for (val, elt) in product(values, elements) if elt.filter_on_request(val)[1]]
-                elif request in elements_filtering_structure:
-                    filtered_found, _ = values[0].filter_on_request(elements[0])
-                    if filtered_found:
-                        rep = [(val.id, elt) for (val, elt) in product(values, elements) if val.filter_on_request(elt)[1]]
-                else:
-                    if "experiment_groups" in common_filtering_structure:
-                        list_to_filter = self.get_experiment_groups()
-                    elif "variables" in common_filtering_structure:
-                        list_to_filter = self.get_variables()
-                    elif "variable_groups" in common_filtering_structure:
-                        list_to_filter = self.get_variable_groups()
-                    else:
-                        list_to_filter = self.get_opportunities()
-                    filtered_found, _ = self._two_elements_filtering(values[0], elements[0], list_to_filter)
-                    if filtered_found:
-                        rep = [(val.id, elt) for (val, elt) in product(values, elements) if self._two_elements_filtering(val, elt, list_to_filter)[1]]
-                    if "mips" in [request, elements_to_filter]:
-                        list_to_filter = self.get_opportunities()
-                        new_filtered_found, _ = self._two_elements_filtering(values[0], elements[0], list_to_filter, inner=False)
-                        filtered_found = filtered_found or new_filtered_found
-                        if new_filtered_found:
-                            new_rep = [(val.id, elt) for (val, elt) in product(values, elements) if
-                                       self._two_elements_filtering(val, elt, list_to_filter, inner=False)[1]]
-                            rep.extend(new_rep)
-                if not filtered_found:
-                    logger.error(f"Could not filter {elements_to_filter} by {request}")
-                    raise ValueError(f"Could not filter {elements_to_filter} by {request}")
-                else:
-                    new_rep = defaultdict(list)
-                    for (key, val) in rep:
-                        new_rep[key].append(val)
-                    new_rep = {key: set(val) for (key, val) in new_rep.items()}
-                    return new_rep
 
             rep = {request: filter_against_request(request, values, elements_to_filter, elements, elements_filtering_structure)
                    for (request, values) in request_dict.items()}
+            rep_list = apply_operation_on_requests_links(rep, elements, request_operation, void_list="full")
+            # Find out elements linked to not_request
+            not_request_dict = fill_request_dict(not_requests)
+            not_rep = {request: filter_against_request(request, values, elements_to_filter, elements,
+                                                       elements_filtering_structure)
+                       for (request, values) in not_request_dict.items()}
+            not_rep_list = apply_operation_on_requests_links(not_rep, elements, not_request_operation, void_list="void")
+            # Remove not requested elements from requested elements
+            rep_list = rep_list - not_rep_list
 
-            if len(rep) == 0:
-                rep_list = set(elements)
-            elif operation in ["any", ]:
-                rep_list = {key: set().union(*chain(val.values())) for (key, val) in rep.items()}
-                rep_list = set().union(*rep_list.values())
-            elif operation in ["all", ]:
-                rep_list = {key: set(elements).intersection(*chain(val.values())) for (key, val) in rep.items()}
-                rep_list = set(elements).intersection(*rep_list.values())
-            else:
-                raise ValueError(f"Unknown value {operation} for operation (only 'all' and 'any' are available).")
             if print_warning_bcv and elements_to_filter in ["variables", ]:
                 bcv_op = self.find_element("opportunities", "Baseline Climate Variables for Earth System Modelling", default=None)
                 if bcv_op is None:
@@ -1119,7 +1150,7 @@ class DataRequest(object):
         :return list of Opportunity: opportunities linked to the filters
         """
         return self.filter_elements_per_request(elements_to_filter="opportunities", requests=kwargs,
-                                                operation=operation, skip_if_missing=skip_if_missing)
+                                                request_operation=operation, skip_if_missing=skip_if_missing)
 
     def find_experiments(self, operation="any", skip_if_missing=False, **kwargs):
         """
@@ -1129,7 +1160,7 @@ class DataRequest(object):
         :param dict kwargs: filters to be applied
         :return list of DRObjects: experiments linked to the filters
         """
-        return self.filter_elements_per_request(elements_to_filter="experiments", requests=kwargs, operation=operation,
+        return self.filter_elements_per_request(elements_to_filter="experiments", requests=kwargs, request_operation=operation,
                                                 skip_if_missing=skip_if_missing)
 
     def find_variables(self, operation="any", skip_if_missing=False, **kwargs):
@@ -1140,7 +1171,7 @@ class DataRequest(object):
         :param dict kwargs: filters to be applied
         :return list of Variable: variables linked to the filters
         """
-        return self.filter_elements_per_request(elements_to_filter="variables", requests=kwargs, operation=operation,
+        return self.filter_elements_per_request(elements_to_filter="variables", requests=kwargs, request_operation=operation,
                                                 skip_if_missing=skip_if_missing)
 
     def sort_func(self, data_list, sorting_request=list()):
@@ -1170,7 +1201,7 @@ class DataRequest(object):
         :param str main_data: kind of data to be exported
         :param str output_file: name of the output faile (csv)
         :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
-        :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+        :param str filtering_operation: filtering request_operation to be applied to the list of object of main_data kind
         :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
                                                main_data kind
         :param list export_columns_request: columns to be putted in the output file
@@ -1179,7 +1210,7 @@ class DataRequest(object):
         :return: an output csv file
         """
         filtered_data = self.filter_elements_per_request(elements_to_filter=main_data, requests=filtering_requests,
-                                                         operation=filtering_operation,
+                                                         request_operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
         sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
 
@@ -1204,7 +1235,7 @@ class DataRequest(object):
         :param str sorting_column: criteria to sort range data
         :param str title_column: attribute to be used for range header
         :param dict filtering_requests: filtering request to be applied to the list of object of main_data kind
-        :param str filtering_operation: filtering operation to be applied to the list of object of main_data kind
+        :param str filtering_operation: filtering request_operation to be applied to the list of object of main_data kind
         :param bool filtering_skip_if_missing: filtering skip_if_missing to be applied to the list of object of
                                                main_data kind
         :param bool regroup: should lines/columns be regrouped by similarities
@@ -1214,7 +1245,7 @@ class DataRequest(object):
         logger = get_logger()
         logger.debug(f"Generate summary for {lines_data}/{columns_data}")
         filtered_data = self.filter_elements_per_request(elements_to_filter=lines_data, requests=filtering_requests,
-                                                         operation=filtering_operation,
+                                                         request_operation=filtering_operation,
                                                          skip_if_missing=filtering_skip_if_missing)
         if not isinstance(sorting_line, list):
             sorting_line = [sorting_line, ]
@@ -1240,14 +1271,14 @@ class DataRequest(object):
             for (column_data, column_title) in zip(columns_datasets, columns_title_list):
                 filter_line_datasets = self.filter_elements_per_request(elements_to_filter=sorted_filtered_data,
                                                                         requests={DR_type: column_data},
-                                                                        operation="all", print_warning_bcv=False)
+                                                                        request_operation="all", print_warning_bcv=False)
                 for line in filter_line_datasets:
                     content[lines_title_dict[line.id]][column_title] = "x"
         else:
             DR_type = sorted_filtered_data[0].DR_type
             for (line_data, line_title) in zip(sorted_filtered_data, lines_title_list):
                 filtered_columns = self.filter_elements_per_request(elements_to_filter=columns_datasets,
-                                                                    requests={DR_type: line_data}, operation="all",
+                                                                    requests={DR_type: line_data}, request_operation="all",
                                                                     print_warning_bcv=False)
                 content[line_title] = {columns_title_dict[elt.id]: "x" for elt in filtered_columns}
 
