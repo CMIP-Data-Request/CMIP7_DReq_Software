@@ -86,7 +86,8 @@
           "ensemble_size": "minimum_ensemble_size",
           "themes": "data_request_themes",
           "working/updated_variable_groups": "variable_groups",
-          "time_slice": "time_subsets"
+          "time_slice": "time_subsets",
+          "time_subset": "time_subsets"
         },
         "physical_parameters": {
           "comments": "physical_parameter_comments",
@@ -224,7 +225,7 @@
       "tables_provenance": {
         "esm-bcv_1.3": ["variable", "esm-bcv_1.3"],
         "structure": ["variable", "structure"],
-        "time_slice": ["opportunity", "time_slice"]
+        "time_subset": ["opportunity", "time_slice"]
       }
     },
     "v1.0": {
@@ -239,7 +240,7 @@
         "ranking": ["variable", "ranking_synced"],
         "structure": ["variable", "structure"],
         "cmip6_tables_identifiers": ["variable", "table_identifiers"],
-        "time_slice": ["opportunity", "time_slice"]
+        "time_subset": ["opportunity", "time_slice"]
       }
     },
     "v1.1": {
@@ -253,7 +254,7 @@
         "ranking": ["variable", "ranking_synced"],
         "structure": ["variable", "structure"],
         "cmip6_tables_identifiers": ["variable", "table_identifiers"],
-        "time_slice": ["opportunity", "time_subset"]
+        "time_subset": ["opportunity", "time_subset"]
       }
     },
     "v1.2": {

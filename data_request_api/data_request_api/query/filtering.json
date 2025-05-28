@@ -15,7 +15,7 @@
     "priority_levels": ["variable_groups"],
     "max_priority_levels": ["variable_groups"],
     "mips": ["opportunities", "variable_groups"],
-    "time_slices": ["opportunities"],
+    "time_subsets": ["opportunities"],
     "experiment_groups": ["opportunities"],
     "variable_groups": ["opportunities"],
     "cmip7_frequencies": ["variables"],
