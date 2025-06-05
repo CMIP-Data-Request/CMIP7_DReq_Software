@@ -161,7 +161,8 @@
             "variables": [
                 "link::baa71c7c-e5dd-11e5-8482-ac72891c3257",
                 "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
-            ]
+            ],
+            "region": null
         },
         "default_570": {
             "mips": [
@@ -178,7 +179,8 @@
                 "link::83bbfc6e-7f07-11ef-9308-b1dd71e64bec",
                 "link::83bbfc6f-7f07-11ef-9308-b1dd71e64bec",
                 "link::baa4e07e-e5dd-11e5-8482-ac72891c3257"
-            ]
+            ],
+            "region": null
         },
         "default_571": {
             "mips": [
@@ -202,7 +204,8 @@
                 "link::baa72514-e5dd-11e5-8482-ac72891c3257",
                 "link::c9180bae-c5e8-11e6-84e6-5404a60d96b5",
                 "link::c9181982-c5e8-11e6-84e6-5404a60d96b5"
-            ]
+            ],
+            "region": null
         },
         "default_572": {
             "mips": [
@@ -222,7 +225,8 @@
                 "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec",
                 "link::baa50c2a-e5dd-11e5-8482-ac72891c3257",
                 "link::default_580"
-            ]
+            ],
+            "region": null
         },
         "default_573": {
             "mips": [],
@@ -254,7 +258,8 @@
                 "link::babbbbe6-e5dd-11e5-8482-ac72891c3257",
                 "link::babbd25c-e5dd-11e5-8482-ac72891c3257",
                 "link::babd0e56-e5dd-11e5-8482-ac72891c3257"
-            ]
+            ],
+            "region": null
         },
         "default_574": {
             "mips": [],
@@ -274,7 +279,8 @@
                 "link::bab742c8-e5dd-11e5-8482-ac72891c3257",
                 "link::bab9bd00-e5dd-11e5-8482-ac72891c3257",
                 "link::f2fad86e-c38d-11e6-abc1-1b922e5e1118"
-            ]
+            ],
+            "region": null
         },
         "default_575": {
             "mips": [],
@@ -362,7 +368,8 @@
                 "link::babd0906-e5dd-11e5-8482-ac72891c3257",
                 "link::babd9ace-e5dd-11e5-8482-ac72891c3257",
                 "link::d241a6d2-4a9f-11e6-b84e-ac72891c3257"
-            ]
+            ],
+            "region": null
         },
         "default_576": {
             "mips": [],
@@ -378,7 +385,8 @@
                 "link::bab91b20-e5dd-11e5-8482-ac72891c3257",
                 "link::babb5db8-e5dd-11e5-8482-ac72891c3257",
                 "link::babbdec8-e5dd-11e5-8482-ac72891c3257"
-            ]
+            ],
+            "region": null
         },
         "default_577": {
             "mips": [],
@@ -393,7 +401,8 @@
                 "link::83bbfbca-7f07-11ef-9308-b1dd71e64bec",
                 "link::8baebea6-4a5b-11e6-9cd2-ac72891c3257",
                 "link::bab2f9d4-e5dd-11e5-8482-ac72891c3257"
-            ]
+            ],
+            "region": "Southern Ocean and Antarctic (south of 30\u00b0)"
         },
         "default_578": {
             "mips": [
@@ -418,7 +427,8 @@
                 "link::bab65138-e5dd-11e5-8482-ac72891c3257",
                 "link::bab91b20-e5dd-11e5-8482-ac72891c3257",
                 "link::babb12ae-e5dd-11e5-8482-ac72891c3257"
-            ]
+            ],
+            "region": null
         },
         "default_579": {
             "mips": [
@@ -441,7 +451,8 @@
                 "link::baa58b1e-e5dd-11e5-8482-ac72891c3257",
                 "link::babb20b4-e5dd-11e5-8482-ac72891c3257",
                 "link::d243ba76-4a9f-11e6-b84e-ac72891c3257"
-            ]
+            ],
+            "region": null
         }
     },
     "version": "test"

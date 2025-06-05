@@ -4660,7 +4660,6 @@
         "default_577": {
             "justification": "Minimal set of variables needed as input for physics-based microclimate models, which are essential for ecophysiological models of organism heat and water balance.",
             "name": "biodiv_microclim_hourly",
-            "region": "Southern Ocean and Antarctic (south of 30\u00b0)",
             "title": "Minimal set of variables for physics-based microclimate models as input for ecophysiological models."
         },
         "default_578": {

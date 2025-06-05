@@ -19,6 +19,7 @@
     "experiment_groups": ["opportunities"],
     "variable_groups": ["opportunities"],
     "cmip7_frequencies": ["variables"],
-    "cmip6_frequencies": ["variables"]
+    "cmip6_frequencies": ["variables"],
+    "region": ["variable_groups"]
   }
 }

@@ -12,7 +12,7 @@ from data_request_api.utilities.logger import (
     get_logger,
 )
 from data_request_api.utilities.tools import (
-    read_json_input_file_content,
+    read_json_file,
     write_json_output_file_content,
 )
 

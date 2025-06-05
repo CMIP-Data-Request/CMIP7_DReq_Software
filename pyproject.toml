@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "coverage", "pytest", "setuptools_scm"]
+requires = ["setuptools>=61.0", "coverage", "pytest", "setuptools_scm", "pytest-cov"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -52,6 +52,7 @@ write_to = "data_request_api/data_request_api/version.py"  # updated path for ve
 
 [tool.pytest.ini_options]
 cache_dir = "data_request_api/data_request_api/tests/.pytest_cache"
+addopts = " --cov --cov-append --cov-branch"
 
 [tool.coverage.run]
 branch = true
@@ -65,6 +66,7 @@ source = [
     "scripts"
 ]
 data_file = "data_request_api/data_request_api/tests/.coverage"
+sigterm = true
 
 [tool.coverage.report]
 fail_under = 50
