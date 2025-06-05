@@ -208,8 +208,8 @@ class VocabularyServer(object):
                     value["id"] = element_id
                 return value
             elif default is not False:
-                logger.critical(f"Could not find {id_type} {element_id} of type {element_type}"
-                                f" in the vocabulary server.")
+                logger.debug(f"Could not find {id_type} {element_id} of type {element_type}"
+                             f" in the vocabulary server.")
                 return default
             else:
                 logger.error(f"Could not find {id_type} {element_id} of type {element_type} "

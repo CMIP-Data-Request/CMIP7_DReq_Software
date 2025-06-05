@@ -73,13 +73,13 @@ el.replaceWith(d);
 
     if installed_version != latest_version:
         # Warn user that installed version isn&#39;t the same as the latest pypi version
-        msg =  f&#34;Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n&#34;
+        msg = f&#34;Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n&#34;
         msg += f&#34;Latest version on PyPI:  {latest_version}\n&#34;
         msg += f&#34;Installed version:       {installed_version}\n&#34;
-        msg +=  &#34;To install the latest version from PyPI:\n&#34;
+        msg += &#34;To install the latest version from PyPI:\n&#34;
         msg += f&#34;  pip install --upgrade {PACKAGE_NAME}\n&#34;
-        msg +=  &#34;To turn off this warning:\n&#34;
-        msg +=  &#34;  CMIP7_data_request_api_config check_api_version false&#34;
+        msg += &#34;To turn off this warning:\n&#34;
+        msg += &#34;  CMIP7_data_request_api_config check_api_version false&#34;
         msg = &#39;\n&#39; + msg + &#39;\n&#39;
 
         # Add color to the warning message
