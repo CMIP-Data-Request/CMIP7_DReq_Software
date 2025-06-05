@@ -425,7 +425,7 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
         &#34;opportunities&#34;: [(&#34;experiment_groups&#34;, list, list()),
                           (&#34;variable_groups&#34;, list, list()),
                           (&#34;data_request_themes&#34;, list, list()),
-                          (&#34;time_subsets&#34;, list, list()),
+                          (&#34;time_subsets&#34;, list, [None, ]),
                           (&#34;mips&#34;, list, list())],
         &#34;variable_groups&#34;: [(&#34;variables&#34;, list, list()),
                             (&#34;mips&#34;, list, list()),

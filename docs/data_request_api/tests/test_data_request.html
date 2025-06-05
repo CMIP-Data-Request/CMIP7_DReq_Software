@@ -1097,10 +1097,10 @@ not have a method with the specified name.</p></div>
             self.dr.filter_elements_per_request()
 
         self.assertEqual(self.dr.filter_elements_per_request(&#34;opportunities&#34;), self.dr.get_opportunities())
-        self.assertEqual(self.dr.filter_elements_per_request(&#34;opportunities&#34;, operation=&#34;any&#34;),
+        self.assertEqual(self.dr.filter_elements_per_request(&#34;opportunities&#34;, request_operation=&#34;any&#34;),
                          self.dr.get_opportunities())
         with self.assertRaises(ValueError):
-            self.dr.filter_elements_per_request(&#34;opportunities&#34;, operation=&#34;one&#34;)
+            self.dr.filter_elements_per_request(&#34;opportunities&#34;, request_operation=&#34;one&#34;)
 
         with self.assertRaises(ValueError):
             self.dr.filter_elements_per_request(&#34;opportunities&#34;, requests=dict(variables=&#34;link::test_dummy&#34;))
@@ -1118,6 +1118,45 @@ not have a method with the specified name.</p></div>
         self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
                                                                  requests=dict(experiment=&#34;default_290&#34;)),
                              list_var_grp)
+        found_vargrp_all = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                               requests=dict(experiment=&#34;default_290&#34;),
+                                                               not_requests=dict(
+                                                                   opportunity=&#34;default_421&#34;,
+                                                                   variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;, &#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                               not_request_operation=&#34;all&#34;)
+        self.assertEqual(len(found_vargrp_all), len(list_var_grp))
+        self.assertListEqual(found_vargrp_all, list_var_grp)
+        found_vargrp_any = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                               requests=dict(experiment=&#34;default_290&#34;),
+                                                               not_requests=dict(
+                                                                   opportunity=&#34;default_421&#34;,
+                                                                   variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;, &#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                               not_request_operation=&#34;any&#34;)
+        list_vargrp_any = [self.dr.find_element(&#34;variable_group&#34;, elt) for elt in [&#34;default_570&#34;, &#34;default_571&#34;, &#34;default_572&#34;]]
+        self.assertEqual(len(found_vargrp_any), len(list_vargrp_any))
+        self.assertListEqual(found_vargrp_any, list_vargrp_any)
+        found_vargrp_anyofall = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                                    requests=dict(experiment=&#34;default_290&#34;),
+                                                                    not_requests=dict(
+                                                                        opportunity=&#34;default_421&#34;,
+                                                                        variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;, &#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                                    not_request_operation=&#34;any_of_all&#34;)
+        list_vargrp_anyofall = [self.dr.find_element(&#34;variable_group&#34;, elt) for elt in [&#34;default_569&#34;, &#34;default_570&#34;, &#34;default_571&#34;, &#34;default_572&#34;]]
+        self.assertEqual(len(found_vargrp_anyofall), len(list_vargrp_anyofall))
+        self.assertListEqual(found_vargrp_anyofall, list_vargrp_anyofall)
+        found_vargrp_allofany = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                                    requests=dict(experiment=&#34;default_290&#34;),
+                                                                    not_requests=dict(
+                                                                        opportunity=&#34;default_421&#34;,
+                                                                        variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;,&#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                                    not_request_operation=&#34;all_of_any&#34;)
+        self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
+        self.assertListEqual(found_vargrp_allofany, list_var_grp)
+        self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                                 requests=dict(experiment=&#34;default_290&#34;),
+                                                                 not_requests=dict(opportunity=&#34;default_421&#34;)),
+                             [self.dr.find_element(&#34;variable_group&#34;, elt)
+                              for elt in [&#34;default_569&#34;, &#34;default_570&#34;, &#34;default_571&#34;, &#34;default_572&#34;, &#34;default_579&#34;]])
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
                                                                  requests=dict(experiment=&#34;default_290&#34;)),
                              list_var_grp)
@@ -1622,10 +1661,10 @@ not have a method with the specified name.</p></div>
         self.dr.filter_elements_per_request()
 
     self.assertEqual(self.dr.filter_elements_per_request(&#34;opportunities&#34;), self.dr.get_opportunities())
-    self.assertEqual(self.dr.filter_elements_per_request(&#34;opportunities&#34;, operation=&#34;any&#34;),
+    self.assertEqual(self.dr.filter_elements_per_request(&#34;opportunities&#34;, request_operation=&#34;any&#34;),
                      self.dr.get_opportunities())
     with self.assertRaises(ValueError):
-        self.dr.filter_elements_per_request(&#34;opportunities&#34;, operation=&#34;one&#34;)
+        self.dr.filter_elements_per_request(&#34;opportunities&#34;, request_operation=&#34;one&#34;)
 
     with self.assertRaises(ValueError):
         self.dr.filter_elements_per_request(&#34;opportunities&#34;, requests=dict(variables=&#34;link::test_dummy&#34;))
@@ -1643,6 +1682,45 @@ not have a method with the specified name.</p></div>
     self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
                                                              requests=dict(experiment=&#34;default_290&#34;)),
                          list_var_grp)
+    found_vargrp_all = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                           requests=dict(experiment=&#34;default_290&#34;),
+                                                           not_requests=dict(
+                                                               opportunity=&#34;default_421&#34;,
+                                                               variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;, &#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                           not_request_operation=&#34;all&#34;)
+    self.assertEqual(len(found_vargrp_all), len(list_var_grp))
+    self.assertListEqual(found_vargrp_all, list_var_grp)
+    found_vargrp_any = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                           requests=dict(experiment=&#34;default_290&#34;),
+                                                           not_requests=dict(
+                                                               opportunity=&#34;default_421&#34;,
+                                                               variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;, &#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                           not_request_operation=&#34;any&#34;)
+    list_vargrp_any = [self.dr.find_element(&#34;variable_group&#34;, elt) for elt in [&#34;default_570&#34;, &#34;default_571&#34;, &#34;default_572&#34;]]
+    self.assertEqual(len(found_vargrp_any), len(list_vargrp_any))
+    self.assertListEqual(found_vargrp_any, list_vargrp_any)
+    found_vargrp_anyofall = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                                requests=dict(experiment=&#34;default_290&#34;),
+                                                                not_requests=dict(
+                                                                    opportunity=&#34;default_421&#34;,
+                                                                    variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;, &#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                                not_request_operation=&#34;any_of_all&#34;)
+    list_vargrp_anyofall = [self.dr.find_element(&#34;variable_group&#34;, elt) for elt in [&#34;default_569&#34;, &#34;default_570&#34;, &#34;default_571&#34;, &#34;default_572&#34;]]
+    self.assertEqual(len(found_vargrp_anyofall), len(list_vargrp_anyofall))
+    self.assertListEqual(found_vargrp_anyofall, list_vargrp_anyofall)
+    found_vargrp_allofany = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                                requests=dict(experiment=&#34;default_290&#34;),
+                                                                not_requests=dict(
+                                                                    opportunity=&#34;default_421&#34;,
+                                                                    variable=[&#34;babb20b4-e5dd-11e5-8482-ac72891c3257&#34;,&#34;d243ba76-4a9f-11e6-b84e-ac72891c3257&#34;]),
+                                                                not_request_operation=&#34;all_of_any&#34;)
+    self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
+    self.assertListEqual(found_vargrp_allofany, list_var_grp)
+    self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
+                                                             requests=dict(experiment=&#34;default_290&#34;),
+                                                             not_requests=dict(opportunity=&#34;default_421&#34;)),
+                         [self.dr.find_element(&#34;variable_group&#34;, elt)
+                          for elt in [&#34;default_569&#34;, &#34;default_570&#34;, &#34;default_571&#34;, &#34;default_572&#34;, &#34;default_579&#34;]])
     self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
                                                              requests=dict(experiment=&#34;default_290&#34;)),
                          list_var_grp)
