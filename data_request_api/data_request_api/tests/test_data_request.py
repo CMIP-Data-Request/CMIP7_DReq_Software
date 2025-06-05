@@ -950,6 +950,40 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
                                                                  requests=dict(experiment="default_290")),
                              list_var_grp)
+        found_vargrp_all = self.dr.filter_elements_per_request("variable_groups",
+                                                               requests=dict(experiment="default_290"),
+                                                               not_requests=dict(
+                                                                   opportunity="default_421",
+                                                                   variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                               not_request_operation="all")
+        self.assertEqual(len(found_vargrp_all), len(list_var_grp))
+        self.assertListEqual(found_vargrp_all, list_var_grp)
+        found_vargrp_any = self.dr.filter_elements_per_request("variable_groups",
+                                                               requests=dict(experiment="default_290"),
+                                                               not_requests=dict(
+                                                                   opportunity="default_421",
+                                                                   variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                               not_request_operation="any")
+        list_vargrp_any = [self.dr.find_element("variable_group", elt) for elt in ["default_570", "default_571", "default_572"]]
+        self.assertEqual(len(found_vargrp_any), len(list_vargrp_any))
+        self.assertListEqual(found_vargrp_any, list_vargrp_any)
+        found_vargrp_anyofall = self.dr.filter_elements_per_request("variable_groups",
+                                                                    requests=dict(experiment="default_290"),
+                                                                    not_requests=dict(
+                                                                        opportunity="default_421",
+                                                                        variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                                    not_request_operation="any_of_all")
+        list_vargrp_anyofall = [self.dr.find_element("variable_group", elt) for elt in ["default_569", "default_570", "default_571", "default_572"]]
+        self.assertEqual(len(found_vargrp_anyofall), len(list_vargrp_anyofall))
+        self.assertListEqual(found_vargrp_anyofall, list_vargrp_anyofall)
+        found_vargrp_allofany = self.dr.filter_elements_per_request("variable_groups",
+                                                                    requests=dict(experiment="default_290"),
+                                                                    not_requests=dict(
+                                                                        opportunity="default_421",
+                                                                        variable=["babb20b4-e5dd-11e5-8482-ac72891c3257","d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                                    not_request_operation="all_of_any")
+        self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
+        self.assertListEqual(found_vargrp_allofany, list_var_grp)
         self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
                                                                  requests=dict(experiment="default_290"),
                                                                  not_requests=dict(opportunity="default_421")),

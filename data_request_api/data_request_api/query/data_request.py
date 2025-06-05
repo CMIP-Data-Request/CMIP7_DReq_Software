@@ -1095,13 +1095,19 @@ class DataRequest(object):
             elif operation in ["all", ]:
                 rep_list = {key: set(elements).intersection(*chain(val.values())) for (key, val) in dict_request_links.items()}
                 rep_list = set(elements).intersection(*rep_list.values())
+            elif operation in ["all_of_any", ]:
+                rep_list = {key: set().union(*chain(val.values())) for (key, val) in dict_request_links.items()}
+                rep_list = set(elements).intersection(*rep_list.values())
+            elif operation in ["any_of_all", ]:
+                rep_list = {key: set(elements).intersection(*chain(val.values())) for (key, val) in dict_request_links.items()}
+                rep_list = set().union(*rep_list.values())
             else:
-                logger.error(f"Unknown value {operation} for request_operation (only 'all' and 'any' are available).")
-                raise ValueError(f"Unknown value {operation} for request_operation (only 'all' and 'any' are available).")
+                logger.error(f"Unknown value {operation} for request_operation (only 'all', 'any', 'any_of_all' and 'all_of_any' are available).")
+                raise ValueError(f"Unknown value {operation} for request_operation (only 'all', 'any', 'any_of_all' and 'all_of_any' are available).")
             return rep_list
 
         logger = get_logger()
-        if request_operation not in ["any", "all"]:
+        if request_operation not in ["any", "all", "any_of_all", "all_of_any"]:
             raise ValueError(f"Operation does not accept {request_operation} as value: choose among 'any' (match at least one"
                              f" requirement) and 'all' (match all requirements)")
         else:
