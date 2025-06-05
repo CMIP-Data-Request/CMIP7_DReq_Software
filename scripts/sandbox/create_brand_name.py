@@ -48,7 +48,7 @@ def compute_brand(variable, extended_brand_name=False):
 		tlabel = "tstat"
 	elif "time: sum" in cell_methods:
 		tlabel = "tsum"
-	elif "time" in dimensions:
+	elif "time" in dimensions or "timefxc" in dimensions:
 		tlabel = "tavg"
 	elif "time1" in dimensions:
 		tlabel = "tpt"
@@ -127,7 +127,7 @@ def compute_brand(variable, extended_brand_name=False):
 		alabel = "crp"
 	elif "floating_ice_shelf" in cell_methods:
 		alabel = "fis"
-	elif "grouded_ice_sheet" in cell_methods:
+	elif "grounded_ice_sheet" in cell_methods:
 		alabel = "gis"
 	elif "ice_sheet" in cell_methods:
 		alabel = "is"
