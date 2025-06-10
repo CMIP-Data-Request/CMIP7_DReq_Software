@@ -84,7 +84,7 @@
             ],
             "mips": [],
             "time_subsets": [
-                null
+                "None"
             ],
             "variable_groups": [
                 "link::default_532",
@@ -109,7 +109,7 @@
             ],
             "mips": [],
             "time_subsets": [
-                null
+                "None"
             ],
             "variable_groups": [
                 "link::default_536",

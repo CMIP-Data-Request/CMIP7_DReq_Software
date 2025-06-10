@@ -4501,6 +4501,13 @@
             "start": 1995,
             "title": "1995-2014",
             "type": "simpleRange"
+        },
+        "None": {
+            "end": null,
+            "name": "None",
+            "start": null,
+            "title": "No time subset",
+            "type": "void"
         }
     },
     "variable_comments": {
