@@ -85,16 +85,40 @@ def get_transform_settings(version):
                 rep[elt] = value
         return rep
 
+    def get_config_version(version, input_dict, keys_to_remove=["default", ], default=False):
+        logger = get_logger()
+        available_versions = list(set(list(input_dict)) - set(keys_to_remove))
+        target_version = None
+        if version in available_versions:
+            target_version = version
+        else:
+            # Find out last matching version
+            matching_versions = [v for v in available_versions if v in version]
+            if len(matching_versions) == 1:
+                target_version = matching_versions[0]
+            elif len(matching_versions) > 1:
+                found_version = max(matching_versions, key=dc._parse_version)
+                logger.warning(f"Several versions found matching {version} in config, get last {found_version}.")
+                target_version = found_version
+        if target_version is None and default is not False:
+            logger.warning(f"No version found matching {version} in config")
+            return default
+        elif target_version is None:
+            logger.error(f"No version found matching {version} in config")
+            raise ValueError(f"No version found matching {version} in config")
+        else:
+            return input_dict[target_version]
+
     transform = read_json_input_file_content(os.sep.join([os.path.dirname(os.path.abspath(__file__)), "transform.json"]))
     common = transform.pop("common", dict())
     if version not in ["default", ]:
-        common = update_dict(common["default"], common.get(version, dict()))
+        common = update_dict(common["default"], get_config_version(version=version, input_dict=common, default=dict()))
     else:
         common = common["default"]
     for (elt, content) in transform.items():
         default_content = update_dict(common, content["default"])
         if version not in ["default", ]:
-            default_content = update_dict(default_content, content.get(version, dict()))
+            default_content = update_dict(default_content, get_config_version(version=version, input_dict=content, default=dict()))
         transform[elt] = default_content
     return transform
 

@@ -38,7 +38,9 @@ args = parser.parse_args()
 
 
 def compute_brand(variable, extended_brand_name=False):
-	var_name = str(variable.name)
+	var_name = str(variable.variablerootdd)
+	if var_name in ["undef", ]:
+		var_name = str(variable.name)
 	param_name = str(variable.physical_parameter.name)
 	freq_name = str(variable.cmip7_frequency.name)
 	cell_methods = str(variable.cell_methods.cell_methods)
