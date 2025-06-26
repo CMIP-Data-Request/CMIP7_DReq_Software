@@ -3796,11 +3796,11 @@
             "title": "1995-2014",
             "type": "simpleRange"
         },
-        "None": {
+        "80ac3156-a698-11ef-914a-613c0433d878": {
             "end": null,
-            "name": "None",
+            "name": "all",
             "start": null,
-            "title": "No time subset",
+            "title": "Whole time serie",
             "type": "void"
         }
     },

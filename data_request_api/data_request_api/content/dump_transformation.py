@@ -392,15 +392,15 @@ def split_content_one_base(content):
         "opportunities": [("experiment_groups", list, list()),
                           ("variable_groups", list, list()),
                           ("data_request_themes", list, list()),
-                          ("time_subsets", list, ["None", ]),
+                          ("time_subsets", list, ["80ac3156-a698-11ef-914a-613c0433d878", ]),
                           ("mips", list, list())],
         "variable_groups": [("variables", list, list()),
                             ("mips", list, list()),
                             ("priority_level", (str, type(None)), None)],
         "experiment_groups": [("experiments", list, list()), ]
     }
-    if "None" not in content["time_subsets"]:
-        content["time_subsets"]["None"] = dict(start=None, end=None, title="No time subset", name="None", type="void")
+    if "80ac3156-a698-11ef-914a-613c0433d878" not in content["time_subsets"]:
+        content["time_subsets"]["80ac3156-a698-11ef-914a-613c0433d878"] = dict(start=None, end=None, title="Whole time serie", name="all", type="void")
     if isinstance(content, dict):
         logger.debug("Build DR and VS")
         for subelt in sorted(list(content)):
