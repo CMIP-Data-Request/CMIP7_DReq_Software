@@ -298,8 +298,9 @@ years: 1
             raise ValueError('What Opportunities to use? Received: ' + use_request)
         # Get the requested variables
         priority_cutoff = 'Low'
-        expt_vars = dq.get_requested_variables(base, use_dreq_version, use_opps,
-                                               priority_cutoff=priority_cutoff, verbose=False)
+        expt_vars = dq.get_requested_variables(base, use_dreq_version,
+                                               use_opps=use_opps, priority_cutoff=priority_cutoff,
+                                               verbose=False)
         expts = sorted(expt_vars['experiment'].keys(), key=str.lower)
         vars_by_expt = expt_vars['experiment']
 

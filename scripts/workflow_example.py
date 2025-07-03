@@ -43,8 +43,9 @@ use_opps = 'all'
 # (i.e., for every experiment, a list of the variables that should be produced to support all of the
 # specified opportunities)
 priority_cutoff = 'Low'
-expt_vars = dq.get_requested_variables(content, use_dreq_version, use_opps,
-                                       priority_cutoff=priority_cutoff, verbose=False)
+expt_vars = dq.get_requested_variables(content, use_dreq_version,
+                                       use_opps=use_opps, priority_cutoff=priority_cutoff,
+                                       verbose=False)
 
 
 if len(expt_vars['experiment']) > 0:
