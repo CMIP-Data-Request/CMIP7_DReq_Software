@@ -106,7 +106,9 @@ def main():
 
     # Get the requested variables for each opportunity and aggregate them into variable lists by experiment
     # (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
-    expt_vars = dq.get_requested_variables(base, use_opps, priority_cutoff=args.priority_cutoff, verbose=False)
+    expt_vars = dq.get_requested_variables(base, use_dreq_version,
+                                           use_opps=use_opps, priority_cutoff=args.priority_cutoff,
+                                           verbose=False)
 
     # filter output by requested experiments
     if args.experiments:
