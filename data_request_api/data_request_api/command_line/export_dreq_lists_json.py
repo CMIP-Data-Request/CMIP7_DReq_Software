@@ -22,6 +22,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('dreq_version', choices=dc.get_versions(), help="data request version")
     parser.add_argument('--opportunities_file', type=str, help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
+    parser.add_argument('--opportunity_ids', nargs='+', type=int, help="opportunity ids to respond to (space-delimited list of integers).")
     parser.add_argument('--all_opportunities', action='store_true', help="respond to all opportunities")
     parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments (space-delimited list, case sensitive)')
     parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
@@ -58,11 +59,12 @@ def main():
 
     # Deal with opportunities
     if args.opportunities_file:
+        # Select opportunities by their title, as given in a user-specified json file
         opportunities_file = args.opportunities_file
-        Opps = base['Opportunity']
+        dreq_opps = base['Opportunity']
         if not os.path.exists(opportunities_file):
             # create opportunities file template
-            use_opps = sorted([opp.title for opp in Opps.records.values()], key=str.lower)
+            use_opps = sorted([opp.title for opp in dreq_opps.records.values()], key=str.lower)
             default_opportunity_dict = OrderedDict({
                 'Header': OrderedDict({
                     'Description': 'Opportunities template file for use with export_dreq_lists_json. Set supported/unsupported Opportunities to true/false.',
@@ -90,7 +92,7 @@ def main():
 
             # validate opportunities
             # (mismatches can occur if an opportunities file created with an earlier data request version is loaded)
-            valid_opps = [opp.title for opp in Opps.records.values()]
+            valid_opps = [opp.title for opp in dreq_opps.records.values()]
             invalid_opps = [title for title in opportunity_dict if title not in valid_opps]
             if invalid_opps:
                 raise ValueError(f'\nInvalid opportunities were found in {opportunities_file}:\n' + '\n'.join(sorted(invalid_opps, key=str.lower)))
@@ -98,8 +100,28 @@ def main():
             # filter opportunities
             use_opps = [title for title in opportunity_dict if opportunity_dict[title]]
 
+    elif args.opportunity_ids:
+        # Select opportunities by their integer IDs, specified from the command line
+        dreq_opps = base['Opportunity']
+        all_opp_ids = [opp.opportunity_id for opp in dreq_opps.records.values()]
+        if len(all_opp_ids) != len(set(all_opp_ids)):
+            raise ValueError(f'Opportunity IDs (integers) in data request {use_dreq_version} are not unique!')
+        oppid2title = {int(opp.opportunity_id): opp.title for opp in dreq_opps.records.values()}
+        use_opps = []
+        invalid_opp_ids = set()
+        for opp_id in args.opportunity_ids:
+            if opp_id in oppid2title:
+                use_opps.append(oppid2title[opp_id])
+            else:
+                invalid_opp_ids.add(opp_id)
+        if len(invalid_opp_ids) > 0:
+            raise ValueError(f'The following Opportunity IDs were not found in data request {use_dreq_version}: '
+                             + ', '.join([str(opp_id) for opp_id in sorted(invalid_opp_ids)]))
+
     elif args.all_opportunities:
+        # Use all available opportunities in the data request
         use_opps = 'all'
+
     else:
         print("Please use one of the opportunities arguments")
         sys.exit(1)
