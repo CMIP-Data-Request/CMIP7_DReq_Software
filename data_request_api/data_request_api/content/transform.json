@@ -31,7 +31,7 @@
         "glossary": ["opportunit.*", "related_terms"],
         "mips": ["variable_group.*", "experiments.*", ".*opportunit.*", "variables"],
         "modelling_realm": ["variables"],
-        "opportunities": [".*data_volume_estimate", "opportunity_id", "originally_requested_variable_groups"],
+        "opportunities": [".*data_volume_estimate", "originally_requested_variable_groups"],
         "opportunity/variable_group_comments": ["experiment_groups", "opportunities", "theme", "variable_groups"],
         "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
         "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names", "physical_parameters"],
