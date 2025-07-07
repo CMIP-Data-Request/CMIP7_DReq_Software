@@ -16,26 +16,33 @@ import data_request_api.query.dreq_query as dq
 
 def parse_args():
     """
-    Parse command line arguments
+    Parse command-line arguments
     """
 
     parser = argparse.ArgumentParser()
+    
+    # Positional (mandatory) input arguments
     parser.add_argument('dreq_version', choices=dc.get_versions(), help="data request version")
-    parser.add_argument('--opportunities_file', type=str, help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
+    parser.add_argument('output_file', help='file to write JSON output to')
+
+    # Optional input arguments
+    parser.add_argument('--opportunities_file', type=str,help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
     parser.add_argument('--opportunity_ids', nargs='+', type=int, help="opportunity ids to respond to (space-delimited list of integers).")
     parser.add_argument('--all_opportunities', action='store_true', help="respond to all opportunities")
     parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments (space-delimited list, case sensitive)')
     parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
-    parser.add_argument('output_file', help='file to write JSON output to')
     parser.add_argument('--version', action='store_true', help='Return version information and exit')
 
-    def _var_metadata_check(arg):
-        if arg.endswith('.json') or arg.endswith('.csv'):
-            return arg
-        else:
-            raise ValueError()
-    parser.register('type', 'json_or_csv_file', _var_metadata_check)
-    parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file', help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
+    # def _var_metadata_check(arg):
+    #     if arg.endswith('.json') or arg.endswith('.csv'):
+    #         return arg
+    #     else:
+    #         raise ValueError()
+    # parser.register('type', 'json_or_csv_file', _var_metadata_check)
+    # parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file', help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
+    parser.add_argument('--variables_metadata', type=str,
+                        help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
+
     return parser.parse_args()
 
 
@@ -167,27 +174,27 @@ def main():
 
         # Get all variable names for all requested experiments
         all_var_names = set()
-        for expt_name, vars_by_priority in expt_vars['experiment'].items():
-            for priority_level, var_names in vars_by_priority.items():
+        for vars_by_priority in expt_vars['experiment'].values():
+            for var_names in vars_by_priority.values():
                 all_var_names.update(var_names)
 
         # Get metadata for variables
         all_var_info = dq.get_variables_metadata(
-            base, use_dreq_version,
+            base,
+            use_dreq_version,
             compound_names=all_var_names,
-            # use_dreq_version=use_dreq_version  # TO DEPRECATE
+            verbose=False,
         )
 
         # Write output file(s)
-        for filepath in args.variables_metadata:
-            dq.write_variables_metadata(
-                all_var_info,
-                use_dreq_version,
-                filepath,
-                api_version=data_request_api.version,
-                # use_dreq_version=use_dreq_version,
-                content_path=dc._dreq_content_loaded['json_path']
-            )
+        filepath = args.variables_metadata
+        dq.write_variables_metadata(
+            all_var_info,
+            use_dreq_version,
+            filepath,
+            api_version=data_request_api.version,
+            content_path=dc._dreq_content_loaded['json_path']
+        )
 
 
 if __name__ == '__main__':

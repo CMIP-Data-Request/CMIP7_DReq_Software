@@ -646,7 +646,8 @@ def get_requested_variables(content, dreq_version,
 
 
 def get_variables_metadata(content, dreq_version,
-                           compound_names=None, cmor_tables=None, cmor_variables=None):
+                           compound_names=None, cmor_tables=None, cmor_variables=None,
+                           verbose=True):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
 
@@ -744,12 +745,13 @@ def get_variables_metadata(content, dreq_version,
     assert len(var_name_map) == len(dreq_tables['variables'].records), \
         f'Variable names from UNIQUE_VAR_NAME="{UNIQUE_VAR_NAME}" do not uniquely map to variable record ids'
 
-    if cmor_tables:
-        print('Retaining only these CMOR tables: ' + ', '.join(cmor_tables))
-    if cmor_variables:
-        print('Retaining only these CMOR variables: ' + ', '.join(cmor_variables))
-    if compound_names:
-        print('Retaining only these compound names: ' + ', '.join(compound_names))
+    if verbose:
+        if cmor_tables:
+            print('Retaining only these CMOR tables: ' + ', '.join(sorted(cmor_tables, key=str.lower)))
+        if cmor_variables:
+            print('Retaining only these CMOR variables: ' + ', '.join(sorted(cmor_variables, key=str.lower)))
+        if compound_names:
+            print('Retaining only these compound names: ' + ', '.join(sorted(compound_names, key=str.lower)))
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
