@@ -1205,3 +1205,6 @@ def write_variables_metadata(all_var_info, dreq_version, filepath,
         write_csv_output_file_content(filepath, rows)
         n = len(all_var_info)
         print(f'Wrote {filepath} for {n} variables, dreq version = {dreq_version}')
+
+    else:
+        raise ValueError('Unsupported file extension: ' + ext)

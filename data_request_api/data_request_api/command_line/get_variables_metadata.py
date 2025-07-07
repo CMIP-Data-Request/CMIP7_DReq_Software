@@ -4,6 +4,7 @@ Extract metadata of CMOR variables and write them to a json file.
 '''
 
 import argparse
+import os
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
@@ -16,32 +17,38 @@ def parse_args():
     '''
 
     parser = argparse.ArgumentParser(
-        description='Get CMOR variables metadata and write to json.'
+        description='Get metadata of CMOR variables (e.g., cell_methods, dimensions, ...) and write it to a json file.'
     )
+    
+    # Positional (mandatory) input arguments
     parser.add_argument('dreq_version', choices=dc.get_versions(),
                         help='data request version')
+    parser.add_argument('outfile', type=str,
+                        help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
 
-    def _var_metadata_check(arg):
-        if arg.endswith('.json') or arg.endswith('.csv'):
-            return arg
-        else:
-            raise ValueError()
-    parser.register('type', 'json_or_csv_file', _var_metadata_check)
-    required_named_args = parser.add_argument_group('required named arguments')
-    required_named_args.add_argument('-o', '--outfile', nargs='+', type='json_or_csv_file', required=True,
-                                     help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
+    # Optional input arguments
     parser.add_argument('-cn', '--compound_names', nargs='+', type=str,
                         help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
     parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
                         help='include only the specified CMOR tables (aka MIP tables, examples: "Amon", "Omon")')
     parser.add_argument('-v', '--cmor_variables', nargs='+', type=str,
                         help='include only the specified CMOR variables (out_name, examples: "tas", "siconc")')
+    
     return parser.parse_args()
 
 
 def main():
 
     args = parse_args()
+
+    # Check validity of requested output file type.
+    # This should conform to what dq.write_variables_metadata() expects, which throws an error if file type is wrong.
+    # Checking this here is redundant, but useful to catch input error before spending time retrieving the metadata.
+    filepath = args.outfile
+    ext = os.path.splitext(filepath)[-1]
+    valid_ext = ['.json', '.csv']
+    if ext not in valid_ext:
+        raise ValueError(f'{ext} file extension is not supported, valid types are: {", ".join(valid_ext)}')
 
     # Load data request content
     use_dreq_version = args.dreq_version
@@ -57,15 +64,14 @@ def main():
         cmor_variables=args.cmor_variables,
     )
 
-    # Write output file(s)
-    for filepath in args.outfile:
-        dq.write_variables_metadata(
-            all_var_info,
-            use_dreq_version,
-            filepath,
-            api_version=api_version,
-            content_path=dc._dreq_content_loaded['json_path']
-        )
+    # Write output file
+    dq.write_variables_metadata(
+        all_var_info,
+        use_dreq_version,
+        filepath,
+        api_version=api_version,
+        content_path=dc._dreq_content_loaded['json_path']
+    )
 
 
 if __name__ == '__main__':
