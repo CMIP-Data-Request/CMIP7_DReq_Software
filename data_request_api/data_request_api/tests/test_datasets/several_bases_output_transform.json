@@ -2127,7 +2127,8 @@
             "time_subsets": "link::527f5cac-8c97-11ef-944e-41a8eb05f654",
             "variable_groups": [
                 "link::default_540"
-            ]
+            ],
+            "opportunity_id": "1"
         },
         "default_324": {
             "data_request_themes": [
@@ -2157,7 +2158,8 @@
                 "link::default_534",
                 "link::default_535",
                 "link::default_541"
-            ]
+            ],
+            "opportunity_id": "49"
         },
         "default_325": {
             "data_request_themes": [
@@ -2183,7 +2185,8 @@
                 "link::default_537",
                 "link::default_538",
                 "link::default_539"
-            ]
+            ],
+            "opportunity_id": "68"
         }
     },
     "opportunity/variable_group_comments": {

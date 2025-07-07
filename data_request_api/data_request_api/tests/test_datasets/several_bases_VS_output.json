@@ -2071,7 +2071,8 @@
             "justification_of_resources": "A time slice simulation of historical run could help understanding the land-atmosphere coupling in Earth system models and comparing modeled processes with observational datasets. More scientific evidence could be found in a recent GMD paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
             "lead_theme": "Land & Land-Ice",
             "minimum_ensemble_size": 1,
-            "name": "Accurate assessment of land-atmosphere coupling"
+            "name": "Accurate assessment of land-atmosphere coupling",
+            "opportunity_id": "1"
         },
         "default_324": {
             "description": "The \u201cOcean Extremes\u201d project aims to investigate and address the impacts of extreme ocean conditions such as marine heatwaves, hypoxic zones, extreme salinities, sea level extremes and storm surges, ocean acidification, and compound events. As climate change accelerates, these extreme conditions are becoming more frequent and severe, posing significant risks to marine ecosystems and coastal communities. This opportunity will collect the high-frequency multidisciplinary approach to analyze these phenomena, their causes, and their effects, ultimately contributing to better management strategies and mitigation efforts. \u00a0Extreme sea levels are primarily caused by storm surges often in combination with astronomical tides, waves and/or river overflow, which requires climate-scale forcing data at the appropriate spatial and temporal scales to be combined with other resources offline. This opportunity is particularly relevant to revealing differences between eddy-permitting and coarse-resolution models.\n\nLong-term assessment of ocean extremes important for identifying vulnerable regions, designing coastal protection to appropriate levels, and assessing infrastructure and ecosystem viability. It also enables various adaptation measures to be considered and tested via sensitivity testing. In the coming decades, ocean extremes and associated floods are likely to remain a leading cause of natural disasters due to the combined effects of the increasing frequency and intensity of extremes combined with increased coastal development associated with greater exposure.\n",
@@ -2082,7 +2083,8 @@
             ],
             "lead_theme": "Ocean & Sea-Ice",
             "minimum_ensemble_size": 1,
-            "name": "Ocean Extremes"
+            "name": "Ocean Extremes",
+            "opportunity_id": "49"
         },
         "default_325": {
             "description": "One of the majors impact of the global warming are related to coastal regions, due to coastal floodings, coastal erosions, with more than 40% of the world's population living within 150 kilometers of the coast, with more than 108 million people expose to potential inundation with 1m of (Sea-Level Rise).\nSurface ocean waves has a huge impact in our modern society, from ship routes (Nielsen & Iknomakis, 2021), ports and harbors operations and safety (Nikolaos et. al. 2021), coastal erosion  (Pang et al. 2020), and many others. Also wind driven surface gravity waves affects several marine and atmosphere processes like: marine aerosols formations ( Dziembor, 2018), modulation of the air-sea fluxes (Qi et al. , 2024; Wu et al. 2022),  tropical cyclones maintenance and decay ( Zhang, et al. 2023), ocean mixing layer depths (Kantha & Clayson, 2004), planetary boundary layer profile and stability (Wu,  2022), among others processes. \nEstimating the role of the ocean's surface waves in the sea-level rise is under discussion ( Aucan et al., 2019) .\nSea-ice also might be affected by ocean waves as well (Alberello et al., 2024; Yang et al., 2024), due to ice and waves interactions, such as wave induced fracturing, lateral and bottom melting (Yang et al., 2024), air-sea-ocean fluxes exchange. \n\nGeneral wave parameters (i.e. Significant Wave Height (SWH), Mean Period (MP), Peak Period (PP), mean direction (MD), peak direction (PD)) among partitioned parameters (same but for windsea and swells) are important to better represent all processes listed above. \nIt is nice to mention that the ocean surface wave community has joint efforts to create the COWCLIP (Coordinated Ocean Wave Climate Project). This project aims to raise the profile of wind-waves as a variable in the global climate system to both foster and support determination of the effects of climate variability and change. on the wave climate and the feedback influence of waves on the coupled earth climate system. \n\n",
@@ -2090,7 +2092,8 @@
             "justification_of_resources": "Several modelling centers already have wave models in to their capabilities, coupled or uncoupled. The effects of surface  wind waves are  important  in modulating mean climate but also extreme events over the oceans. \n",
             "lead_theme": "Ocean & Sea-Ice",
             "minimum_ensemble_size": 1,
-            "name": "Wind driven Ocean Surface Waves "
+            "name": "Wind driven Ocean Surface Waves ",
+            "opportunity_id": "68"
         }
     },
     "opportunity/variable_group_comments": {
@@ -3795,6 +3798,13 @@
             "start": 1995,
             "title": "1995-2014",
             "type": "simpleRange"
+        },
+        "80ac3156-a698-11ef-914a-613c0433d878": {
+            "end": null,
+            "name": "all",
+            "start": null,
+            "title": "Whole time serie",
+            "type": "void"
         }
     },
     "variable_comments": {

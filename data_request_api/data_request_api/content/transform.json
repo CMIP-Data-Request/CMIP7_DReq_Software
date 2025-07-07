@@ -31,7 +31,7 @@
         "glossary": ["opportunit.*", "related_terms"],
         "mips": ["variable_group.*", "experiments.*", ".*opportunit.*", "variables"],
         "modelling_realm": ["variables"],
-        "opportunities": [".*data_volume_estimate", "opportunity_id", "originally_requested_variable_groups"],
+        "opportunities": [".*data_volume_estimate", "originally_requested_variable_groups"],
         "opportunity/variable_group_comments": ["experiment_groups", "opportunities", "theme", "variable_groups"],
         "physical_parameters": ["variables", "conditional", "does_a_cf.*"],
         "physical_parameter_comments": ["physical_parameters", "does_a.*", "cf_standard_names", "physical_parameters"],
@@ -163,18 +163,6 @@
           "cmip6_compound_name": "name"
         }
       }
-    },
-    "v1.2.1": {
-      "keys_to_merge": {
-        "variables": {
-          "modelling_realm.+": "modelling_realm"
-        }
-      },
-      "keys_to_rename": {
-        "variables": {
-          "cmip6_compound_name": "name"
-        }
-      }
     }
   },
   "one_to_transform": {
@@ -258,26 +246,6 @@
       }
     },
     "v1.2": {
-      "tables_provenance": {
-        "esm-bcv_1.4": ["variable", "esm-bcv_1.4"],
-        "priority_level": ["opportunity", "priority_level"],
-        "data_request_themes": ["opportunity", "data_request_themes"],
-        "glossary": ["opportunity", "glossary"],
-        "modelling_realm": ["variable", "modeling_realm"],
-        "cmip6_frequency": ["variable", "cmip6_frequency_(legacy)"],
-        "cmip7_frequency": ["variable", "cmip7_frequency"],
-        "ranking": ["variable", "ranking_synced"],
-        "cmip6_tables_identifiers": ["variable", "cmip6_table_identifiers_(legacy)"],
-        "time_subset": ["opportunity", "time_subset"]
-      },
-      "several_bases_link": {
-        "variable": [
-          ["opportunity", "variables", "compound_name"],
-          ["variable", "variable", "cmip6_compound_name"]
-        ]
-      }
-    },
-    "v1.2.1": {
       "tables_provenance": {
         "esm-bcv_1.4": ["variable", "esm-bcv_1.4"],
         "priority_level": ["opportunity", "priority_level"],

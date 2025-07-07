@@ -840,7 +840,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
         :param default: default value to be returned if no value found
         :return: element corresponding to the specified value of a given type if found, else the default value
         &#34;&#34;&#34;
-        if &#34;priority&#34; in element_type and isinstance(value, int):
+        if &#34;priorit&#34; in element_type and isinstance(value, int):
             key = &#34;value&#34;
         if key in [&#34;id&#34;, ]:
             init_default = default
@@ -865,6 +865,7 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
         :param default: value to be returned if non found
         :return: the found element if existing, else the default value
         &#34;&#34;&#34;
+        element_type = self.VS.get_element_type(element_type)
         check_val = is_link_id_or_value(value)[1]
         if check_val in self.content[element_type]:
             return self.content[element_type][check_val]
@@ -1699,6 +1700,7 @@ main_data kind
     :param default: value to be returned if non found
     :return: the found element if existing, else the default value
     &#34;&#34;&#34;
+    element_type = self.VS.get_element_type(element_type)
     check_val = is_link_id_or_value(value)[1]
     if check_val in self.content[element_type]:
         return self.content[element_type][check_val]
@@ -1731,7 +1733,7 @@ else from vocabulary server.
     :param default: default value to be returned if no value found
     :return: element corresponding to the specified value of a given type if found, else the default value
     &#34;&#34;&#34;
-    if &#34;priority&#34; in element_type and isinstance(value, int):
+    if &#34;priorit&#34; in element_type and isinstance(value, int):
         key = &#34;value&#34;
     if key in [&#34;id&#34;, ]:
         init_default = default

@@ -4501,6 +4501,13 @@
             "start": 1995,
             "title": "1995-2014",
             "type": "simpleRange"
+        },
+        "80ac3156-a698-11ef-914a-613c0433d878": {
+            "end": null,
+            "name": "all",
+            "start": null,
+            "title": "Whole time serie",
+            "type": "void"
         }
     },
     "variable_comments": {

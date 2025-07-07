@@ -899,7 +899,7 @@ class DataRequest(object):
         :param default: default value to be returned if no value found
         :return: element corresponding to the specified value of a given type if found, else the default value
         """
-        if "priority" in element_type and isinstance(value, int):
+        if "priorit" in element_type and isinstance(value, int):
             key = "value"
         if key in ["id", ]:
             init_default = default
@@ -924,6 +924,7 @@ class DataRequest(object):
         :param default: value to be returned if non found
         :return: the found element if existing, else the default value
         """
+        element_type = self.VS.get_element_type(element_type)
         check_val = is_link_id_or_value(value)[1]
         if check_val in self.content[element_type]:
             return self.content[element_type][check_val]
