@@ -19,28 +19,39 @@ def parse_args():
     Parse command-line arguments
     """
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description='Get lists of requested variables by experiment, and write them to a json file.'
+    )
     
     # Positional (mandatory) input arguments
     parser.add_argument('dreq_version', choices=dc.get_versions(), help="data request version")
     parser.add_argument('output_file', help='file to write JSON output to')
 
-    # Optional input arguments
-    parser.add_argument('--opportunities_file', type=str,help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
-    parser.add_argument('--opportunity_ids', nargs='+', type=int, help="opportunity ids to respond to (space-delimited list of integers).")
-    parser.add_argument('--all_opportunities', action='store_true', help="respond to all opportunities")
-    parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments (space-delimited list, case sensitive)')
-    parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
-    parser.add_argument('--version', action='store_true', help='Return version information and exit')
+    sep = ','
+    def parse_input_list(input_str: str, sep=sep) -> list:
+        '''Create list of input args separated by separator "sep" (str)'''
+        input_args = input_str.split(sep)
+        # Guard against leading, trailing, or repeated instances of the separator
+        input_args = [s for s in input_args if s not in ['']]
+        return input_args
 
-    # def _var_metadata_check(arg):
-    #     if arg.endswith('.json') or arg.endswith('.csv'):
-    #         return arg
-    #     else:
-    #         raise ValueError()
-    # parser.register('type', 'json_or_csv_file', _var_metadata_check)
-    # parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file', help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
-    parser.add_argument('--variables_metadata', type=str,
+    # Optional input arguments
+    parser.add_argument('-a', '--all_opportunities', action='store_true',
+                        help="respond to all opportunities")
+    parser.add_argument('-f', '--opportunities_file', type=str,
+                        help="path to JSON file listing opportunities to respond to. \
+                            If it doesn't exist, a template will be created")
+    parser.add_argument('-i', '--opportunity_ids', type=parse_input_list,
+                        help=f'opportunity ids (integers) of opportunities to respond to, \
+                            example: -i 69{sep}22{sep}37')
+    parser.add_argument('-e', '--experiments', type=parse_input_list,
+                        help=f'limit output to the specified experiments (case sensitive), \
+                            example: -e historical{sep}piControl')
+    parser.add_argument('-p', '--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS,
+                        help="discard variables that are requested at lower priority than this cutoff priority")
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='Return version information and exit')
+    parser.add_argument('-m', '--variables_metadata', type=str,
                         help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
 
     return parser.parse_args()
@@ -117,6 +128,10 @@ def main():
         use_opps = []
         invalid_opp_ids = set()
         for opp_id in args.opportunity_ids:
+            try:
+                opp_id = int(opp_id)
+            except:
+                ValueError('Opportunity ID should be an integer')
             if opp_id in oppid2title:
                 use_opps.append(oppid2title[opp_id])
             else:
