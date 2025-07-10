@@ -49,8 +49,6 @@ def parse_args():
                             example: -e historical{sep}piControl')
     parser.add_argument('-p', '--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS,
                         help="discard variables that are requested at lower priority than this cutoff priority")
-    parser.add_argument('-v', '--version', action='store_true',
-                        help='Return version information and exit')
     parser.add_argument('-m', '--variables_metadata', type=str,
                         help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
 
@@ -63,9 +61,6 @@ def main():
     """
     args = parse_args()
 
-    if args.version:
-        print("CMIP7 data request api version {}".format(data_request_api.version))
-        sys.exit(0)
     use_dreq_version = args.dreq_version
 
     # Download specified version of data request content (if not locally cached)
