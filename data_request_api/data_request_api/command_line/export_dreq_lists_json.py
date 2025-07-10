@@ -16,26 +16,42 @@ import data_request_api.query.dreq_query as dq
 
 def parse_args():
     """
-    Parse command line arguments
+    Parse command-line arguments
     """
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description='Get lists of requested variables by experiment, and write them to a json file.'
+    )
+    
+    # Positional (mandatory) input arguments
     parser.add_argument('dreq_version', choices=dc.get_versions(), help="data request version")
-    parser.add_argument('--opportunities_file', type=str, help="path to JSON file listing opportunities to respond to. If it doesn't exist a template will be created")
-    parser.add_argument('--opportunity_ids', nargs='+', type=int, help="opportunity ids to respond to (space-delimited list of integers).")
-    parser.add_argument('--all_opportunities', action='store_true', help="respond to all opportunities")
-    parser.add_argument('--experiments', nargs='+', type=str, help='limit output to the specified experiments (space-delimited list, case sensitive)')
-    parser.add_argument('--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS, help="discard variables that are requested at lower priority than this cutoff priority")
     parser.add_argument('output_file', help='file to write JSON output to')
-    parser.add_argument('--version', action='store_true', help='Return version information and exit')
 
-    def _var_metadata_check(arg):
-        if arg.endswith('.json') or arg.endswith('.csv'):
-            return arg
-        else:
-            raise ValueError()
-    parser.register('type', 'json_or_csv_file', _var_metadata_check)
-    parser.add_argument('-vm', '--variables_metadata', nargs='+', type='json_or_csv_file', help='output files containing variable metadata of requested variables, files with ".json" or ".csv" will be produced')
+    sep = ','
+    def parse_input_list(input_str: str, sep=sep) -> list:
+        '''Create list of input args separated by separator "sep" (str)'''
+        input_args = input_str.split(sep)
+        # Guard against leading, trailing, or repeated instances of the separator
+        input_args = [s for s in input_args if s not in ['']]
+        return input_args
+
+    # Optional input arguments
+    parser.add_argument('-a', '--all_opportunities', action='store_true',
+                        help="respond to all opportunities")
+    parser.add_argument('-f', '--opportunities_file', type=str,
+                        help="path to JSON file listing opportunities to respond to. \
+                            If it doesn't exist, a template will be created")
+    parser.add_argument('-i', '--opportunity_ids', type=parse_input_list,
+                        help=f'opportunity ids (integers) of opportunities to respond to, \
+                            example: -i 69{sep}22{sep}37')
+    parser.add_argument('-e', '--experiments', type=parse_input_list,
+                        help=f'limit output to the specified experiments (case sensitive), \
+                            example: -e historical{sep}piControl')
+    parser.add_argument('-p', '--priority_cutoff', default='low', choices=dq.PRIORITY_LEVELS,
+                        help="discard variables that are requested at lower priority than this cutoff priority")
+    parser.add_argument('-m', '--variables_metadata', type=str,
+                        help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
+
     return parser.parse_args()
 
 
@@ -45,9 +61,6 @@ def main():
     """
     args = parse_args()
 
-    if args.version:
-        print("CMIP7 data request api version {}".format(data_request_api.version))
-        sys.exit(0)
     use_dreq_version = args.dreq_version
 
     # Download specified version of data request content (if not locally cached)
@@ -110,6 +123,10 @@ def main():
         use_opps = []
         invalid_opp_ids = set()
         for opp_id in args.opportunity_ids:
+            try:
+                opp_id = int(opp_id)
+            except:
+                ValueError('Opportunity ID should be an integer')
             if opp_id in oppid2title:
                 use_opps.append(oppid2title[opp_id])
             else:
@@ -167,27 +184,27 @@ def main():
 
         # Get all variable names for all requested experiments
         all_var_names = set()
-        for expt_name, vars_by_priority in expt_vars['experiment'].items():
-            for priority_level, var_names in vars_by_priority.items():
+        for vars_by_priority in expt_vars['experiment'].values():
+            for var_names in vars_by_priority.values():
                 all_var_names.update(var_names)
 
         # Get metadata for variables
         all_var_info = dq.get_variables_metadata(
-            base, use_dreq_version,
+            base,
+            use_dreq_version,
             compound_names=all_var_names,
-            # use_dreq_version=use_dreq_version  # TO DEPRECATE
+            verbose=False,
         )
 
         # Write output file(s)
-        for filepath in args.variables_metadata:
-            dq.write_variables_metadata(
-                all_var_info,
-                use_dreq_version,
-                filepath,
-                api_version=data_request_api.version,
-                # use_dreq_version=use_dreq_version,
-                content_path=dc._dreq_content_loaded['json_path']
-            )
+        filepath = args.variables_metadata
+        dq.write_variables_metadata(
+            all_var_info,
+            use_dreq_version,
+            filepath,
+            api_version=data_request_api.version,
+            content_path=dc._dreq_content_loaded['json_path']
+        )
 
 
 if __name__ == '__main__':

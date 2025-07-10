@@ -99,18 +99,29 @@ def parse_args():
     )
     # Positional arguments
     parser.add_argument('request', type=str,
-                        help='json file specifying variables requested by experiment' +
-                        ' (output from export_dreq_lists_json, which specifies the data request version)' +
-                        ' OR can be a data request version (e.g. "v1.2")')
+                        help='json file specifying variables requested by experiment \
+                        (output from export_dreq_lists_json, which specifies the data request version) \
+                        OR can be a data request version (e.g. "v1.2")')
+
+    sep = ','
+    def parse_input_list(input_str: str, sep=sep) -> list:
+        '''Create list of input args separated by separator "sep" (str)'''
+        input_args = input_str.split(sep)
+        # Guard against leading, trailing, or repeated instances of the separator
+        input_args = [s for s in input_args if s not in ['']]
+        return input_args
+
     # Optional arguments
-    parser.add_argument('-v', '--variables', nargs='+', type=str,
-                        help='include only the specified variables in the estimate')
-    parser.add_argument('-e', '--experiments', nargs='+', type=str,
-                        help='include only the specified experiments in the estimate')
-    parser.add_argument('-c', '--config-size', type=str, default='size.yaml',
-                        help='config file (yaml) giving size parameters to use in the volume estimate')
     parser.add_argument('-o', '--outfile', type=str,
                         help='name of output file, default: volume_estimate_{data request version}.json')
+    parser.add_argument('-c', '--config-size', type=str, default='size.yaml',
+                        help='config file (yaml) giving size parameters to use in the volume estimate')
+    parser.add_argument('-v', '--variables', type=parse_input_list,
+                        help=f'include only the specified variables in the estimate, \
+                            example: -v Amon.tas{sep}Omon.tos')
+    parser.add_argument('-e', '--experiments', type=parse_input_list,
+                        help=f'include only the specified experiments in the estimate, \
+                            example: -e historical{sep}piControl')
     parser.add_argument('-vso', '--variable-size-only', action='store_true',
                         help='show ONLY the sizes of individual variables (ignores experiments)')
     return parser.parse_args()
