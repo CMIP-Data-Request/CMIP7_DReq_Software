@@ -26,13 +26,21 @@ def parse_args():
     parser.add_argument('outfile', type=str,
                         help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
 
+    sep = ','
+    def parse_input_list(input_str: str, sep=sep) -> list:
+        '''Create list of input args separated by separator "sep" (str)'''
+        input_args = input_str.split(sep)
+        # Guard against leading, trailing, or repeated instances of the separator
+        input_args = [s for s in input_args if s not in ['']]
+        return input_args
+
     # Optional input arguments
-    parser.add_argument('-cn', '--compound_names', nargs='+', type=str,
-                        help='include only variables with the specified Compound Names (examples: "Amon.tas", "Omon.sos")')
-    parser.add_argument('-t', '--cmor_tables', nargs='+', type=str,
-                        help='include only the specified CMOR tables (aka MIP tables, examples: "Amon", "Omon")')
-    parser.add_argument('-v', '--cmor_variables', nargs='+', type=str,
-                        help='include only the specified CMOR variables (out_name, examples: "tas", "siconc")')
+    parser.add_argument('-cn', '--compound_names', type=parse_input_list,
+                        help=f'include only variables with the specified compound names, example: -cn Amon.tas{sep}Omon.sos')
+    parser.add_argument('-t', '--cmor_tables', type=parse_input_list,
+                        help=f'include only the specified CMOR tables, example: -t Amon{sep}Omon')
+    parser.add_argument('-v', '--cmor_variables', type=parse_input_list,
+                        help=f'include only the specified CMOR variable short names, example: -v tas{sep}siconc')
     
     return parser.parse_args()
 
