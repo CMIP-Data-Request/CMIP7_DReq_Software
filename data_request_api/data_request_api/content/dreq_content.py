@@ -596,7 +596,7 @@ def load(version="latest_stable", **kwargs):
         return {}
     else:
         json_path = next(iter(version_dict.values()))
-        logger.info(f"Loading version {next(iter(version_dict.keys()))}'.")
+        logger.info(f"Loading version {next(iter(version_dict.keys()))}")
 
     _dreq_content_loaded["json_path"] = json_path
 

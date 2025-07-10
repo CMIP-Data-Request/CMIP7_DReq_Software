@@ -14,6 +14,10 @@ import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 
 
+from data_request_api.utilities import config as dreqcfg
+from data_request_api.utilities.logger import change_log_file, change_log_level, get_logger
+
+
 def parse_args():
     """
     Parse command line arguments
@@ -44,6 +48,11 @@ def main():
     main routine
     """
     args = parse_args()
+
+    config = dreqcfg.load_config()
+    change_log_file(logfile=config['log_file'])
+    change_log_level(level=config['log_level'])
+    logger = get_logger()
 
     if args.version:
         print("CMIP7 data request api version {}".format(data_request_api.version))
@@ -105,7 +114,11 @@ def main():
         dreq_opps = base['Opportunity']
         all_opp_ids = [opp.opportunity_id for opp in dreq_opps.records.values()]
         if len(all_opp_ids) != len(set(all_opp_ids)):
-            raise ValueError(f'Opportunity IDs (integers) in data request {use_dreq_version} are not unique!')
+            # Check that opportunity IDs defined in the data request are unique
+            # (if they are not, this is an error in the data request content)
+            msg = f'Opportunity IDs (integers) in data request {use_dreq_version} are not unique!'
+            logger.error(msg)
+            raise ValueError(msg)
         oppid2title = {int(opp.opportunity_id): opp.title for opp in dreq_opps.records.values()}
         use_opps = []
         invalid_opp_ids = set()
@@ -115,8 +128,10 @@ def main():
             else:
                 invalid_opp_ids.add(opp_id)
         if len(invalid_opp_ids) > 0:
-            raise ValueError(f'The following Opportunity IDs were not found in data request {use_dreq_version}: '
-                             + ', '.join([str(opp_id) for opp_id in sorted(invalid_opp_ids)]))
+            msg = f'The following Opportunity IDs were not found in data request {use_dreq_version}: ' \
+                    + ', '.join([str(opp_id) for opp_id in sorted(invalid_opp_ids)])
+            logger.error(msg)
+            raise ValueError(msg)
 
     elif args.all_opportunities:
         # Use all available opportunities in the data request
@@ -188,7 +203,6 @@ def main():
                 # use_dreq_version=use_dreq_version,
                 content_path=dc._dreq_content_loaded['json_path']
             )
-
 
 if __name__ == '__main__':
     main()

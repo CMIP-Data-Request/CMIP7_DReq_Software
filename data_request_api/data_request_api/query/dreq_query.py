@@ -21,6 +21,8 @@ from data_request_api.query.dreq_classes import (
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.tools import write_csv_output_file_content
 
+from data_request_api.utilities.logger import get_logger
+
 # Version of software (python API):
 from data_request_api import version as api_version
 
@@ -554,6 +556,9 @@ def get_requested_variables(content, dreq_version,
         }
     }
     '''
+    logger = get_logger()
+    logger.info(f'Getting requested variables using data request {dreq_version}')
+
     base = _get_base_dreq_tables(content, dreq_version, purpose='request')
 
     dreq_tables = {
@@ -1078,7 +1083,10 @@ def show_requested_vars_summary(expt_vars, dreq_version):
     Display quick summary to stdout of variables requested.
     expt_vars is the output dict from dq.get_requested_variables().
     '''
-    print(f'\nFor data request version {dreq_version}, number of requested variables found by experiment:')
+    logger = get_logger()
+    msg = f'For data request version {dreq_version}, number of requested variables found by experiment:'
+    logger.info(msg)
+    print('\n' + msg)
     priority_levels = get_priority_levels()
     for expt, req in sorted(expt_vars['experiment'].items()):
         d = {p: 0 for p in priority_levels}
@@ -1086,7 +1094,9 @@ def show_requested_vars_summary(expt_vars, dreq_version):
             if p in req:
                 d[p] = len(req[p])
         n_total = sum(d.values())
-        print(f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p, n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}')
+        msg = f'  {expt} : ' + ' ,'.join(['{p}={n}'.format(p=p, n=d[p]) for p in priority_levels]) + f', TOTAL={n_total}'
+        logger.info(msg)
+        print(msg)
 
 
 def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff, content_path):
@@ -1094,6 +1104,7 @@ def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff,
     Write a nicely formatted json file with lists of requested variables by experiment.
     expt_vars is the output dict from dq.get_requested_variables().
     '''
+    logger = get_logger()
 
     header = OrderedDict({
         'Description': 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
@@ -1145,7 +1156,9 @@ def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff,
     with open(outfile, 'w') as f:
         # json.dump(expt_vars, f, indent=4, sort_keys=True)
         json.dump(out, f, indent=4)
-        print('\nWrote requested variables to ' + outfile)
+        msg = 'Wrote requested variables to ' + outfile
+        logger.info(msg)
+        print('\n' + msg)
 
 
 def write_variables_metadata(all_var_info, dreq_version, filepath,
