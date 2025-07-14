@@ -959,6 +959,15 @@ def get_variables_metadata(content, dreq_version,
                 'branded_variable_name': branded_variable_name,
             })
 
+        # Include hash-like unique identifier string from the CMIP7 dreq Variables table ("UID" column)
+        # example: 'bab52da8-e5dd-11e5-8482-ac72891c3257'
+        valid_uid = isinstance(var.uid, str) and len(var.uid) >= 36
+        if not valid_uid:
+            raise ValueError(f'Invalid UID string: {var.uid}')
+        var_info.update({
+            'uid': var.uid,
+        })
+
         for k, v in var_info.items():
             v = v.strip()
             for replacement in substitute:
