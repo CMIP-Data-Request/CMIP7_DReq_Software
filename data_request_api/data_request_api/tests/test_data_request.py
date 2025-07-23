@@ -871,6 +871,15 @@ class TestDataRequest(unittest.TestCase):
         self.assertSetEqual(obj.get_filtering_structure("test"), set())
         self.assertSetEqual(obj.get_filtering_structure("opportunities"), set())
 
+    def test_find_element(self):
+        obj = DataRequest(input_database=self.input_database, VS=self.vs)
+        elt1 = obj.find_element("theme", "Atmosphere")
+        self.assertEqual(elt1.DR_type, "data_request_themes")
+        elt2 = obj.find_element("priority_level", "Medium")
+        self.assertEqual(elt2.DR_type, "priority_levels")
+        elt3 = obj.find_element("max_priority_level", "High")
+        self.assertEqual(elt3.DR_type, "max_priority_levels")
+
 
 class TestDataRequestFilter(unittest.TestCase):
     def setUp(self):

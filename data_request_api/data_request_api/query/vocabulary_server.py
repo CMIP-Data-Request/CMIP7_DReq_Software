@@ -96,7 +96,8 @@ class VocabularyServer(object):
             structure="structure_title",
             table="cmip6_tables_identifier",
             table_identifier="cmip6_tables_identifier",
-            reference="docs_for_opportunity"
+            reference="docs_for_opportunity",
+            theme="data_request_themes"
         )
         return element_type_dict.get(element_type, element_type)
 
