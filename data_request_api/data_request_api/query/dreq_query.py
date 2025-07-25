@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import warnings
 from collections import OrderedDict
 
 from data_request_api.query.dreq_classes import (
@@ -951,8 +952,9 @@ def get_variables_metadata(content, dreq_version,
         # Get info on branded variable name, if available
         if hasattr(var, 'branded_variable_name'):
             branded_variable_name = var.branded_variable_name
-            assert branded_variable_name.count('_') == 1, \
-                'Expected one (and only one) underscore in branded variable name: ' + branded_variable_name
+            if branded_variable_name.count('_') != 1:
+                warnings.warn('Expected one (and only one) underscore in branded variable name: ' + branded_variable_name)
+            
             variableRootDD = branded_variable_name.split('_')[0]
             var_info.update({
                 'variableRootDD': variableRootDD,
