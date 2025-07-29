@@ -152,7 +152,7 @@
     },
     "v1.0": {},
     "v1.1": {},
-    "v1.2": {
+    "v1.2.0": {
       "keys_to_merge": {
         "variables": {
           "modelling_realm.+": "modelling_realm"
@@ -161,6 +161,30 @@
       "keys_to_rename": {
         "variables": {
           "cmip6_compound_name": "name"
+        }
+      }
+    },
+    "v1.2.1": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+        }
+      },
+      "keys_to_rename": {
+        "variables": {
+          "cmip6_compound_name": "name"
+        }
+      }
+    },
+    "v1.2": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+        }
+      },
+      "keys_to_rename": {
+        "variables": {
+          "cmip7_compound_name": "name"
         }
       }
     }
