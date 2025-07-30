@@ -142,7 +142,8 @@ class TestVocabularyServer(unittest.TestCase):
             "mip_long_name": "Tipping Point Modelling Intercomparison Project",
             "name": "TIPMIP",
             "mip_website": "https://www.tipmip.org",
-            "id": "default_417"
+            "id": "default_417",
+            "uid": "default_417"
         }
         self.assertDictEqual(elt, target_dict)
         obj = vs.get_element(element_type="mips", element_id="link::default_417")

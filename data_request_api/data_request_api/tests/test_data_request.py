@@ -343,7 +343,7 @@ class TestVariablesGroup(unittest.TestCase):
         self.assertEqual(obj.get_mips(), [self.dr.find_element("mips", "link::default_401")])
         self.assertDictEqual(obj.get_priority_level().attributes,
                              {'name': "High", "notes": "High priority should be used sparingly", "value": 1,
-                              'id': "default_481"})
+                              'id': "default_481", 'uid': 'default_481'})
 
     def test_filter_on_request(self):
         var_grp1 = self.dr.find_element("variable_groups", "default_570")

@@ -19,6 +19,9 @@ from data_request_api.utilities.logger import get_logger, change_log_level, chan
 from data_request_api.utilities.tools import read_json_input_file_content, write_json_output_file_content
 from data_request_api.content import dreq_content as dc
 
+default_count = 0
+default_template = "default_{:d}"
+
 
 def correct_key_string(input_string, *to_remove_strings):
     """
@@ -125,18 +128,22 @@ def get_transform_settings(version):
 
 def distribute_on_entry(func):
     def distribute(content, per_entry_input, **common_inputs):
-        for (key, value) in content.items():
-            list_args = [value, ]
+        if "default" in per_entry_input:
+            default_value = per_entry_input["default"]
+        else:
+            default_value = None
+        for key in sorted(list(content)):
+            list_args = [content[key], ]
             if key in per_entry_input:
                 list_args.append(per_entry_input[key])
-            content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+            content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
         return content
 
     return distribute
 
 
 @distribute_on_entry
-def remove_unused_keys(content, patterns_to_remove=list(), default_patterns_to_remove=list()):
+def remove_unused_keys(content, patterns_to_remove=list(), default_patterns_to_remove=list(), default=None):
     content = content["records"]
     patterns_to_remove.extend(default_patterns_to_remove)
     patterns_to_remove = [re.compile(elt) for elt in patterns_to_remove]
@@ -149,7 +156,7 @@ def remove_unused_keys(content, patterns_to_remove=list(), default_patterns_to_r
 
 
 @distribute_on_entry
-def rename_useful_keys(content, patterns_to_rename=dict()):
+def rename_useful_keys(content, patterns_to_rename=dict(), default=None):
     for record_id in content:
         for (patt, repl) in patterns_to_rename.items():
             patt = re.compile(patt)
@@ -162,7 +169,7 @@ def rename_useful_keys(content, patterns_to_rename=dict()):
 
 
 @distribute_on_entry
-def merge_useful_keys(content, patterns_to_merge=dict()):
+def merge_useful_keys(content, patterns_to_merge=dict(), default=None):
     for record_id in content:
         for (patt, repl) in patterns_to_merge.items():
             patt = re.compile(patt)
@@ -178,7 +185,28 @@ def merge_useful_keys(content, patterns_to_merge=dict()):
 
 
 @distribute_on_entry
-def sort_useful_keys(content, patterns_to_sort=list()):
+def copy_useful_keys(content, keys_to_copy=dict(), default=None):
+    if default is not None and isinstance(default, dict):
+        default.update(keys_to_copy)
+        keys_to_copy = default
+    logger = get_logger()
+    for record_id in sorted(list(content),
+                            key=lambda record_id: "|".join([content[record_id].get("name", "undef"),
+                                                            content[record_id].get("uid", "undef"),
+                                                            record_id])):
+        for (key, val) in keys_to_copy.items():
+            if val not in content[record_id]:
+                global default_count
+                value = default_template.format(default_count)
+                default_count += 1
+                content[record_id][val] = value
+                logger.debug(f"Undefined {val} for element {record_id}, set {value}")
+            content[record_id][key] = copy.deepcopy(content[record_id][val])
+    return content
+
+
+@distribute_on_entry
+def sort_useful_keys(content, patterns_to_sort=list(), default=None):
     patterns_to_sort = [re.compile(elt) for elt in patterns_to_sort]
     for uid in content:
         # Sort content of needed keys
@@ -190,7 +218,7 @@ def sort_useful_keys(content, patterns_to_sort=list()):
 
 
 @distribute_on_entry
-def reshape_useful_keys(content, patterns_to_reshape=list(), reshape_style=None):
+def reshape_useful_keys(content, patterns_to_reshape=list(), reshape_style=None, default=None):
     logger = get_logger()
     patterns_to_reshape = [re.compile(elt) for elt in patterns_to_reshape]
     for uid in content:
@@ -229,9 +257,7 @@ def reshape_useful_keys(content, patterns_to_reshape=list(), reshape_style=None)
 
 def add_useful_keys(content):
     logger = get_logger()
-    record_to_uid_index = defaultdict(lambda: dict())
-    default_count = 0
-    default_template = "default_{:d}"
+    record_to_linked_id_index = defaultdict(lambda: dict())
     list_entries = sorted(list(content))
     for subelt in list_entries:
         list_record_ids = sorted(list(content[subelt]),
@@ -241,18 +267,13 @@ def add_useful_keys(content):
         for record_id in list_record_ids:
             if "name" not in content[subelt][record_id]:
                 content[subelt][record_id]["name"] = "undef"
-            if "uid" not in content[subelt][record_id]:
-                uid = default_template.format(default_count)
-                content[subelt][record_id]["uid"] = uid
-                default_count += 1
-                logger.debug(f"Undefined uid for element {os.sep.join([subelt, 'records', record_id])}, set {uid}")
-            uid = content[subelt][record_id].pop("uid")
-            if uid.endswith(os.linesep):
-                logger.debug(f"uid of element type {subelt} and record id {record_id} endswith '\\n'.")
-                uid = uid.rstrip(os.linesep)
-            record_to_uid_index[subelt][record_id] = uid
-            content[subelt][uid] = content[subelt].pop(record_id)
-    return content, record_to_uid_index
+            linked_id = content[subelt][record_id].pop("linked_id")
+            if linked_id.endswith(os.linesep):
+                logger.debug(f"linked_id of element type {subelt} and record id {record_id} endswith '\\n'.")
+                linked_id = linked_id.rstrip(os.linesep)
+            record_to_linked_id_index[subelt][record_id] = linked_id
+            content[subelt][linked_id] = content[subelt].pop(record_id)
+    return content, record_to_linked_id_index
 
 
 def filter_content(content):
@@ -328,7 +349,7 @@ def tidy_content(content, record_to_uid_index):
     # Tidy the content once again
     content_str = json.dumps(content)
     for subelt in record_to_uid_index:
-        for uid in [uid for uid in record_to_uid_index[subelt].values() if content_str.count(uid) < 2]:
+        for uid in [uid for uid in record_to_uid_index[subelt].values() if content_str.count(uid) < 3]:
             del content[subelt][uid]
     return content
 
@@ -381,12 +402,17 @@ def transform_content_inner(content, settings, change_tables=False):
         to_rename_keys_patterns = settings["keys_to_rename"]
         to_merge_keys_patterns = settings["keys_to_merge"]
         to_sort_keys_content = settings["keys_to_sort"]
+        to_copy_keys_content = settings["keys_to_copy"]
         content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
                                      default_patterns_to_remove=default_patterns_to_remove)
         content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns)
         content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
         # Filter on status if needed then remove linked keys
         content = filter_content(content)
+        # Copy some keys to others
+        global default_count
+        default_count = 0
+        content = copy_useful_keys(content=content, per_entry_input=to_copy_keys_content)
         # Add name and uid if needed, build equivalence dict between record_id and uid
         content, record_to_uid_index = add_useful_keys(content)
         # Tidy the content of the dictionary by removing unused entries

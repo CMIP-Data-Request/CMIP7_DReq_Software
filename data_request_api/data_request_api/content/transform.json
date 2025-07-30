@@ -148,6 +148,11 @@
         "string_to_list": {
           "opportunities": ["keyword"]
         }
+      },
+      "keys_to_copy": {
+        "default": {
+          "linked_id": "uid"
+        }
       }
     },
     "v1.0": {},
