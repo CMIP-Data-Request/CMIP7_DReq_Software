@@ -262,6 +262,12 @@
         "ranking": ["variable", "ranking_synced"],
         "cmip6_tables_identifiers": ["variable", "cmip6_table_identifiers_(legacy)"],
         "time_subset": ["opportunity", "time_subset"]
+      },
+      "several_bases_link": {
+        "variable": [
+          ["opportunity", "variables", "compound_name"],
+          ["variable", "variable", "cmip6_compound_name"]
+        ]
       }
     },
     "v1.0": {
