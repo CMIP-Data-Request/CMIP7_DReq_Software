@@ -67,8 +67,8 @@ def test_apply_consistency_fixes():
     assert varfield_torename != []
     assert varfield_dropped != []
     # Read 1-base export and select certain tables
-    one_base_input = read_json_file(filepath("one_base_input.json"))["Data Request v1.0alpha"]
-    selected_tables = ["Variables", "Variable Group", "Time Slice", "CF Standard Names", "Structure"]
+    one_base_input = read_json_file(filepath("one_base_input.json"))["Data Request v1.2.2"]
+    selected_tables = ["Variables", "Variable Group", "Time Subset", "CF Standard Names", "Structure"]
     subset = {table: one_base_input[table] for table in one_base_input if table in selected_tables}
     # Apply consistency fixes
     subset = _apply_consistency_fixes(subset)

@@ -129,12 +129,11 @@ def get_information_from_data_request(version, output_dir, **kwargs):
                       output_file=os.sep.join([output_dir, "exp_per_op_filtered.csv"]))
     logger.info("Create table of variables per spatial shapes")
     DR.export_summary("variables", "spatial_shape", os.sep.join([output_dir, "var_per_spsh.csv"]))
-    DR.export_summary(lines_data="physical_parameters", columns_data="priority_level",
-                      sorting_line="name", sorting_column="value",
-                      output_file=os.sep.join([output_dir, "param_per_prio.csv"]))
     logger.info("Export opportunities info")
     DR.export_data("opportunities", os.sep.join([output_dir, "op.csv"]),
                    export_columns_request=["name", "lead_theme", "description"])
+    DR.export_data("variables", os.sep.join([output_dir, "var.csv"]), add_id=False,
+                   export_columns_request=["name", "cmip6_compound_name", "title"])
 
 
 kwargs = args.__dict__

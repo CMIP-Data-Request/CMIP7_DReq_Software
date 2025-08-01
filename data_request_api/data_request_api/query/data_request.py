@@ -1208,7 +1208,8 @@ class DataRequest(object):
             return rep
 
     def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation="all",
-                    filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(), **kwargs):
+                    filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(),
+                    add_id=False, **kwargs):
         """
         Method to export a filtered and sorted list of data to a csv file.
         :param str main_data: kind of data to be exported
@@ -1227,7 +1228,8 @@ class DataRequest(object):
                                                          skip_if_missing=filtering_skip_if_missing)
         sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
 
-        export_columns_request.insert(0, "id")
+        if add_id:
+            export_columns_request.insert(0, "id")
         content = list()
         content.append(export_columns_request)
         for data in sorted_filtered_data:
