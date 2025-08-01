@@ -71,7 +71,7 @@ el.replaceWith(d);
         print(f&#34;Error checking PyPI: {e}&#34;)
         return
 
-    if installed_version != latest_version:
+    if not installed_version &gt; latest_version:
         # Warn user that installed version isn&#39;t the same as the latest pypi version
         msg = f&#34;Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n&#34;
         msg += f&#34;Latest version on PyPI:  {latest_version}\n&#34;

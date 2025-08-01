@@ -1239,8 +1239,9 @@ Its "priority_level" attribute specifies the priority as either string or link t
         # Get info on branded variable name, if available
         if hasattr(var, &#39;branded_variable_name&#39;):
             branded_variable_name = var.branded_variable_name
-            assert branded_variable_name.count(&#39;_&#39;) == 1, \
-                &#39;Expected one (and only one) underscore in branded variable name: &#39; + branded_variable_name
+            if branded_variable_name.count(&#39;_&#39;) != 1:
+                warnings.warn(&#39;Expected one (and only one) underscore in branded variable name: &#39; + branded_variable_name)
+            
             variableRootDD = branded_variable_name.split(&#39;_&#39;)[0]
             var_info.update({
                 &#39;variableRootDD&#39;: variableRootDD,

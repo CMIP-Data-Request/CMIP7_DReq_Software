@@ -174,7 +174,7 @@ def check_api_version():
         print(f"Error checking PyPI: {e}")
         return
 
-    if installed_version != latest_version:
+    if not installed_version > latest_version:
         # Warn user that installed version isn't the same as the latest pypi version
         msg = f"Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n"
         msg += f"Latest version on PyPI:  {latest_version}\n"
