@@ -241,7 +241,8 @@ def create_dreq_tables_for_request(content, dreq_version, **kwargs):
         # the above code to erroneously remove all opportunities.
         raise Exception(' * ERROR *    All Opportunities were removed!')
 
-    # Determine which compound name to use
+    # Determine which compound name API functions should use to uniquely identify data request variables
+    # (in those cases where the functionality makes use of a unique variable name).
     if consolidate:
         USE_COMPOUND_NAME = 'cmip6_compound_name'
     else:
@@ -251,9 +252,12 @@ def create_dreq_tables_for_request(content, dreq_version, **kwargs):
         else:
             USE_COMPOUND_NAME = 'compound_name'
     if USE_COMPOUND_NAME != 'compound_name':
+        # Create a "compound_name" attribute in each record in the variables table,
+        # using the specified compound name option.
         table_name = 'Variables'
         for rec in base[table_name].records.values():
             if hasattr(rec, 'compound_name'):
+                # This check ensures we're not overwriting a "compound_name" attribute that already exists
                 raise Exception(f'compound_name attribute is already defined for table "{table_name}"')
             rec.compound_name = getattr(rec, USE_COMPOUND_NAME)
 
@@ -952,17 +956,76 @@ def get_variables_metadata(content, dreq_version,
         # Get info on branded variable name, if available
         if hasattr(var, 'branded_variable_name'):
             branded_variable_name = var.branded_variable_name
-            if branded_variable_name.count('_') != 1:
-                warnings.warn('Expected one (and only one) underscore in branded variable name: ' + branded_variable_name)
 
-            variableRootDD = branded_variable_name.split('_')[0]
+            variableRootDD, branding_label = None, None
+
+            # Get variableRootDD, the short variable name used in the branded name
+            if hasattr(phys_param, 'variablerootdd'):
+                # variableRootDD is included in the Physical Parameter record for this variable
+                variableRootDD = phys_param.variablerootdd
+
+            # Get the branding label by parsing the branded variable name
+            if branded_variable_name.count('_') == 1:
+                s, branding_label = branded_variable_name.split('_')
+                if not variableRootDD:
+                    # Set variableRootDD if it wasn't already defined
+                    variableRootDD = s
+            
+            # Handle undefined cases, to ensure variableRootDD and branding_label are not left undefined
+            # (any such cases are anticipated to vanish in post-v1.2.2 dreq versions)
+            if not variableRootDD:
+                variableRootDD = 'None'
+            if not branding_label:
+                assert var.branded_variable_name_status not in ['Accepted']
+                if branded_variable_name.startswith('unknown'):
+                    branding_label = branded_variable_name
+                else:
+                    branding_label = 'None'
+
+            check_branded_name = False
+            if check_branded_name:
+                # Consistency check on definition of branded name.
+                # For development, not intended as a user option.
+                if branded_variable_name != f'{variableRootDD}_{branding_label}':
+                    warnings.warn(f'Inconsistency between branded variable name {branded_variable_name} '
+                                + f'and its components: {variableRootDD}, {branding_label}')
+
             var_info.update({
                 'variableRootDD': variableRootDD,
+                'branding_label': branding_label,
                 'branded_variable_name': branded_variable_name,
             })
 
+        if hasattr(var, 'region'):
+            var_info['region'] = var.region
+
+        # To help clarify the origin of the "compound name" used as a unique identifier to index
+        # the output dict (all_var_info), include the CMIP6 and CMIP7 compoun names explicitly
+        # as metadata parameters.
+        for attr in ['cmip6_compound_name', 'cmip7_compound_name']:
+            if hasattr(var, attr):
+                var_info[attr] = getattr(var, attr)
+
+        check_c7_name = True
+        if check_c7_name:
+            # Consistency check on definition of CMIP7 compound name.
+            # For development, not intended as a user option.
+            if get_dreq_version_tuple(dreq_version) >= (1,2,2):
+                cn = []
+                cn.append(modeling_realm[0])
+                cn.append(variableRootDD)
+                cn.append(branding_label)
+                cn.append(frequency)
+                cn.append(var_info['region'])
+                sep = '.'
+                s = sep.join(cn)
+                if var_info['cmip7_compound_name'] != s:
+                    warnings.warn(f'Unexpected CMIP7 compound name in {dreq_version}: '
+                                  + var_info['cmip7_compound_name'])
+
         # Include hash-like unique identifier string from the CMIP7 dreq Variables table ("UID" column)
-        # example: 'bab52da8-e5dd-11e5-8482-ac72891c3257'
+        # Example: 'bab52da8-e5dd-11e5-8482-ac72891c3257'
+        # This should also be a unique variable identifier.
         valid_uid = isinstance(var.uid, str) and len(var.uid) >= 36
         if not valid_uid:
             raise ValueError(f'Invalid UID string: {var.uid}')
