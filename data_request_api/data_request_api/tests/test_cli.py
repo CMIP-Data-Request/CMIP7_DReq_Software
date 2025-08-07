@@ -200,7 +200,8 @@ class TestGetVariablesMetadata:
                 "v1.2",
                 ofile,
                 "-cn",
-                "Amon.tas,Omon.sos",
+                # "Amon.tas,Omon.sos",
+                "atmos.tas.tavg-h2m-hxy-u.mon.GLB,ocean.sos.tavg-u-hxy-sea.mon.GLB"
             ],
             capture_output=True,
             text=True,
