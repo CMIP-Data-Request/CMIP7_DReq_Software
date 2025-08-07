@@ -22,7 +22,6 @@ PYTHON_VERSION = (sys.version_info.major, sys.version_info.minor)
 if PYTHON_VERSION < (3, 9):
     from typing import Set
 
-UNIQUE_VAR_NAME = 'compound name'  # method used to uniquely name variables
 
 PRIORITY_LEVELS = ('core', 'high', 'medium', 'low')  # names of priority levels, ordered from highest to lowest priority
 
@@ -337,7 +336,7 @@ class ExptRequest:
 
     def __repr__(self):
         self.consistency_check()
-        break_up_compound_name = not True
+        break_up_varname_for_display = False
         l = [f'Variables (by priority) for experiment: {self.experiment}']
         for p in PRIORITY_LEVELS:
             req = getattr(self, p)
@@ -348,8 +347,9 @@ class ExptRequest:
             indent = ' ' * len(s)
             sortby = str.lower
             req = sorted(req, key=sortby)
-            if break_up_compound_name and UNIQUE_VAR_NAME == 'compound name':
+            if break_up_varname_for_display:
                 # for better readability, show all vars in each cmor table on one line
+                # TO DO: remove this option? probably not ever used
                 separator = '.'
                 lt = [tuple(varname.split(separator)) for varname in req]
                 tables = sorted(set([t[0] for t in lt]), key=sortby)

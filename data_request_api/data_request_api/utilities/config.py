@@ -21,6 +21,7 @@ DEFAULT_CONFIG = {
     "log_file": "default",
     "cache_dir": str(Path.home() / f".{PACKAGE_NAME}_cache"),
     "check_api_version": True,
+    "variable_name": "CMIP7 Compound Name"
 }
 
 # Valid types and values for each key
@@ -32,6 +33,7 @@ DEFAULT_CONFIG_TYPES = {
     "log_file": str,
     "cache_dir": str,
     "check_api_version": bool,
+    "variable_name": str,
 }
 
 # Valid types and values for each key
@@ -43,6 +45,7 @@ DEFAULT_CONFIG_HELP = {
     "log_file": "Log file to use",
     "cache_dir": "Cache directory to use",
     "check_api_version": "Check pypi for the latest API version?",
+    "variable_name": "Unique identifier to use for requested variables"
 }
 
 DEFAULT_CONFIG_VALID_VALUES = {

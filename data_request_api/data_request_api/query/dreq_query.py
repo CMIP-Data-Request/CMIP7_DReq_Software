@@ -18,7 +18,7 @@ import warnings
 from collections import OrderedDict
 
 from data_request_api.query.dreq_classes import (
-    DreqTable, ExptRequest, UNIQUE_VAR_NAME, PRIORITY_LEVELS, format_attribute_name)
+    DreqTable, ExptRequest, PRIORITY_LEVELS, format_attribute_name)
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.tools import write_csv_output_file_content
 
@@ -175,11 +175,11 @@ def create_dreq_tables_for_request(content, dreq_version, **kwargs):
     base, content_type = _get_base_dict(content, dreq_version, purpose='request')
     # base, content_type = _get_base_dict(content, dreq_version)
 
-    # config defaults
+    # Config defaults
     CONFIG = {'consolidate': True}
-    # override with input args, if given
+    # Override with input args, if given
     CONFIG.update(kwargs)
-    consolidate = CONFIG['consolidate']
+    # consolidate = CONFIG['consolidate']
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -240,26 +240,6 @@ def create_dreq_tables_for_request(content, dreq_version, **kwargs):
         # This check is here because if something changes upstream in Airtable, it might cause
         # the above code to erroneously remove all opportunities.
         raise Exception(' * ERROR *    All Opportunities were removed!')
-
-    # Determine which compound name API functions should use to uniquely identify data request variables
-    # (in those cases where the functionality makes use of a unique variable name).
-    if consolidate:
-        USE_COMPOUND_NAME = 'cmip6_compound_name'
-    else:
-        version_tuple = get_dreq_version_tuple(dreq_version)
-        if version_tuple[:2] >= (1, 2):
-            USE_COMPOUND_NAME = 'cmip6_compound_name'
-        else:
-            USE_COMPOUND_NAME = 'compound_name'
-    if USE_COMPOUND_NAME != 'compound_name':
-        # Create a "compound_name" attribute in each record in the variables table,
-        # using the specified compound name option.
-        table_name = 'Variables'
-        for rec in base[table_name].records.values():
-            if hasattr(rec, 'compound_name'):
-                # This check ensures we're not overwriting a "compound_name" attribute that already exists
-                raise Exception(f'compound_name attribute is already defined for table "{table_name}"')
-            rec.compound_name = getattr(rec, USE_COMPOUND_NAME)
 
     return base
 
@@ -395,11 +375,19 @@ def get_var_group_priority(var_group, dreq_priorities=None):
     return priority_level
 
 
+@append_kwargs_from_config
+def use_unique_var_name(**kwargs):
+    '''
+    Return parameter name to use to uniquely identify requested variables.
+    This is a user configuration setting.
+    '''
+    return format_attribute_name(kwargs['variable_name'])
+
 def get_unique_var_name(var):
     '''
     Return name that uniquely identifies a variable.
-    Reason to make this a function is to control this choice in one place.
-    E.g., if compound_name is used initially, but something else chosen later.
+    This function should be called whenever a unique variable name is used in the code,
+    so that the choice of name is consistently controlled in one place.
 
     Parameters
     ----------
@@ -410,11 +398,14 @@ def get_unique_var_name(var):
     -------
     str that uniquely identifes a variable in the data request
     '''
-    if UNIQUE_VAR_NAME == 'compound name':
-        return var.compound_name
-    else:
-        raise ValueError('Unknown identifier for UNIQUE_VAR_NAME: ' + UNIQUE_VAR_NAME +
-                         '\nHow should the unique variable name be determined?')
+    var_name_param = use_unique_var_name()
+    
+    if not hasattr(var, var_name_param):
+        raise ValueError(f'Unrecognized unique variable identifier: {var_name_param}'
+                         + '\nSet "variable_name" in API configuration')
+
+    var_name = getattr(var, var_name_param)
+    return var_name
 
 
 def get_opp_expts(opp, expt_groups, expts, verbose=False):
@@ -748,7 +739,7 @@ def get_variables_metadata(content, dreq_version,
     # Check uniqueness of chosen variable names.
     var_name_map = {get_unique_var_name(record): record_id for record_id, record in dreq_tables['variables'].records.items()}
     assert len(var_name_map) == len(dreq_tables['variables'].records), \
-        f'Variable names from UNIQUE_VAR_NAME="{UNIQUE_VAR_NAME}" do not uniquely map to variable record ids'
+        f'Variable names specified by {use_unique_var_name()} do not uniquely map to variable record ids'
 
     if verbose:
         if cmor_tables:
@@ -765,11 +756,11 @@ def get_variables_metadata(content, dreq_version,
     all_var_info = {}
     for var in dreq_tables['variables'].records.values():
 
-        if compound_names:
-            if var.compound_name not in compound_names:
-                continue
-
         var_name = get_unique_var_name(var)
+
+        if compound_names:
+            if var_name not in compound_names:
+                continue
 
         link_table = getattr(var, attr_table)
         if len(link_table) != 1:
@@ -1006,7 +997,7 @@ def get_variables_metadata(content, dreq_version,
             if hasattr(var, attr):
                 var_info[attr] = getattr(var, attr)
 
-        check_c7_name = True
+        check_c7_name = False
         if check_c7_name:
             # Consistency check on definition of CMIP7 compound name.
             # For development, not intended as a user option.
