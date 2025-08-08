@@ -281,8 +281,9 @@ class TestCompareVariables:
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
-        dc.load("v1.2")
-        dc.load("v1.2.1")
+        # dc.load("v1.2")
+        # dc.load("v1.2.1")
+        dc.load("v1.2.2")
 
     def test_compare_variables(self, temp_config_file, consolidate):
         os.chdir(temp_config_file.parent)
@@ -306,7 +307,8 @@ class TestCompareVariables:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.get_variables_metadata",
-                "v1.2",
+                # "v1.2",
+                "v1.2.2",
                 ofileA,
             ],
             capture_output=True,
@@ -320,7 +322,8 @@ class TestCompareVariables:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.get_variables_metadata",
-                "v1.2.1",
+                # "v1.2.1",
+                "v1.2.2",
                 ofileB,
             ],
             capture_output=True,
@@ -417,7 +420,7 @@ class TestEstimateDreqVolume:
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
-        dc.load("v1.2")
+        dc.load("v1.2.2")
 
     def test_estimate_dreq_volume(self, temp_config_file, consolidate):
         os.chdir(temp_config_file.parent)
@@ -431,7 +434,7 @@ class TestEstimateDreqVolume:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.estimate_dreq_volume",
-                "v1.2",
+                "v1.2.2",
                 "-o",
                 ofile,
             ],
@@ -447,7 +450,7 @@ class TestEstimateDreqVolume:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.estimate_dreq_volume",
-                "v1.2",
+                "v1.2.2",
                 "-o",
                 ofile,
             ],
@@ -477,7 +480,7 @@ class TestEstimateDreqVolume:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.estimate_dreq_volume",
-                "v1.2",
+                "v1.2.2",
                 "-o",
                 ofile,
                 "-c",

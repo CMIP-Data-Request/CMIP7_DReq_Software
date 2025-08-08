@@ -21,7 +21,7 @@ DEFAULT_CONFIG = {
     "log_file": "default",
     "cache_dir": str(Path.home() / f".{PACKAGE_NAME}_cache"),
     "check_api_version": True,
-    "variable_name": "CMIP6 Compound Name"
+    "variable_name": "CMIP7 Compound Name"
 }
 
 # Valid types and values for each key
