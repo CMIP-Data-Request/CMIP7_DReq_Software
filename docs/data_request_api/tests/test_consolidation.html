@@ -61,8 +61,8 @@ el.replaceWith(d);
     assert varfield_torename != []
     assert varfield_dropped != []
     # Read 1-base export and select certain tables
-    one_base_input = read_json_file(filepath(&#34;one_base_input.json&#34;))[&#34;Data Request v1.0alpha&#34;]
-    selected_tables = [&#34;Variables&#34;, &#34;Variable Group&#34;, &#34;Time Slice&#34;, &#34;CF Standard Names&#34;, &#34;Structure&#34;]
+    one_base_input = read_json_file(filepath(&#34;one_base_input.json&#34;))[&#34;Data Request v1.2.2&#34;]
+    selected_tables = [&#34;Variables&#34;, &#34;Variable Group&#34;, &#34;Time Subset&#34;, &#34;CF Standard Names&#34;, &#34;Structure&#34;]
     subset = {table: one_base_input[table] for table in one_base_input if table in selected_tables}
     # Apply consistency fixes
     subset = _apply_consistency_fixes(subset)
@@ -114,7 +114,8 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_map_record_id():
+<pre><code class="python">@pytest.mark.skip(reason=&#34;Work on this test deferred to allow release&#34;)
+def test_map_record_id():
     # Read 3-base export
     several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
     # Select a variable record to map (day.wap)

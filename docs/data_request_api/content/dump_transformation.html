@@ -55,9 +55,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def add_useful_keys(content):
     logger = get_logger()
-    record_to_uid_index = defaultdict(lambda: dict())
-    default_count = 0
-    default_template = &#34;default_{:d}&#34;
+    record_to_linked_id_index = defaultdict(lambda: dict())
     list_entries = sorted(list(content))
     for subelt in list_entries:
         list_record_ids = sorted(list(content[subelt]),
@@ -67,18 +65,35 @@ el.replaceWith(d);
         for record_id in list_record_ids:
             if &#34;name&#34; not in content[subelt][record_id]:
                 content[subelt][record_id][&#34;name&#34;] = &#34;undef&#34;
-            if &#34;uid&#34; not in content[subelt][record_id]:
-                uid = default_template.format(default_count)
-                content[subelt][record_id][&#34;uid&#34;] = uid
-                default_count += 1
-                logger.debug(f&#34;Undefined uid for element {os.sep.join([subelt, &#39;records&#39;, record_id])}, set {uid}&#34;)
-            uid = content[subelt][record_id].pop(&#34;uid&#34;)
-            if uid.endswith(os.linesep):
-                logger.debug(f&#34;uid of element type {subelt} and record id {record_id} endswith &#39;\\n&#39;.&#34;)
-                uid = uid.rstrip(os.linesep)
-            record_to_uid_index[subelt][record_id] = uid
-            content[subelt][uid] = content[subelt].pop(record_id)
-    return content, record_to_uid_index</code></pre>
+            linked_id = content[subelt][record_id].pop(&#34;linked_id&#34;)
+            if linked_id.endswith(os.linesep):
+                logger.debug(f&#34;linked_id of element type {subelt} and record id {record_id} endswith &#39;\\n&#39;.&#34;)
+                linked_id = linked_id.rstrip(os.linesep)
+            record_to_linked_id_index[subelt][record_id] = linked_id
+            content[subelt][linked_id] = content[subelt].pop(record_id)
+    return content, record_to_linked_id_index</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.content.dump_transformation.copy_useful_keys"><code class="name flex">
+<span>def <span class="ident">copy_useful_keys</span></span>(<span>content, per_entry_input, **common_inputs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
+    return content</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -163,11 +178,15 @@ It also removes others specified strings.
 </summary>
 <pre><code class="python">def distribute_on_entry(func):
     def distribute(content, per_entry_input, **common_inputs):
-        for (key, value) in content.items():
-            list_args = [value, ]
+        if &#34;default&#34; in per_entry_input:
+            default_value = per_entry_input[&#34;default&#34;]
+        else:
+            default_value = None
+        for key in sorted(list(content)):
+            list_args = [content[key], ]
             if key in per_entry_input:
                 list_args.append(per_entry_input[key])
-            content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+            content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
         return content
 
     return distribute</code></pre>
@@ -346,11 +365,15 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
-    for (key, value) in content.items():
-        list_args = [value, ]
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
         if key in per_entry_input:
             list_args.append(per_entry_input[key])
-        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -364,11 +387,15 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
-    for (key, value) in content.items():
-        list_args = [value, ]
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
         if key in per_entry_input:
             list_args.append(per_entry_input[key])
-        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -382,11 +409,15 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
-    for (key, value) in content.items():
-        list_args = [value, ]
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
         if key in per_entry_input:
             list_args.append(per_entry_input[key])
-        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -400,11 +431,15 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
-    for (key, value) in content.items():
-        list_args = [value, ]
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
         if key in per_entry_input:
             list_args.append(per_entry_input[key])
-        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -418,11 +453,15 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
-    for (key, value) in content.items():
-        list_args = [value, ]
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
         if key in per_entry_input:
             list_args.append(per_entry_input[key])
-        content[key] = func(*list_args, **copy.deepcopy(common_inputs))
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
     return content</code></pre>
 </details>
 <div class="desc"></div>
@@ -522,7 +561,7 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
     # Tidy the content once again
     content_str = json.dumps(content)
     for subelt in record_to_uid_index:
-        for uid in [uid for uid in record_to_uid_index[subelt].values() if content_str.count(uid) &lt; 2]:
+        for uid in [uid for uid in record_to_uid_index[subelt].values() if content_str.count(uid) &lt; 3]:
             del content[subelt][uid]
     return content</code></pre>
 </details>
@@ -631,12 +670,17 @@ The key "version" is added to the DR and VS dictionaries.
         to_rename_keys_patterns = settings[&#34;keys_to_rename&#34;]
         to_merge_keys_patterns = settings[&#34;keys_to_merge&#34;]
         to_sort_keys_content = settings[&#34;keys_to_sort&#34;]
+        to_copy_keys_content = settings[&#34;keys_to_copy&#34;]
         content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
                                      default_patterns_to_remove=default_patterns_to_remove)
         content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns)
         content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
         # Filter on status if needed then remove linked keys
         content = filter_content(content)
+        # Copy some keys to others
+        global default_count
+        default_count = 0
+        content = copy_useful_keys(content=content, per_entry_input=to_copy_keys_content)
         # Add name and uid if needed, build equivalence dict between record_id and uid
         content, record_to_uid_index = add_useful_keys(content)
         # Tidy the content of the dictionary by removing unused entries
@@ -678,6 +722,7 @@ The key "version" is added to the DR and VS dictionaries.
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="data_request_api.content.dump_transformation.add_useful_keys" href="#data_request_api.content.dump_transformation.add_useful_keys">add_useful_keys</a></code></li>
+<li><code><a title="data_request_api.content.dump_transformation.copy_useful_keys" href="#data_request_api.content.dump_transformation.copy_useful_keys">copy_useful_keys</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.correct_dictionaries" href="#data_request_api.content.dump_transformation.correct_dictionaries">correct_dictionaries</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.correct_key_string" href="#data_request_api.content.dump_transformation.correct_key_string">correct_key_string</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.distribute_on_entry" href="#data_request_api.content.dump_transformation.distribute_on_entry">distribute_on_entry</a></code></li>

@@ -52,7 +52,7 @@ class TestVocabularyServer(unittest.TestCase):
         self.vs_file = filepath("one_base_VS_output.json")
         self.vs_content = read_json_input_file_content(self.vs_file)
         self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
-        self.vs_content_infinite_loop["cell_methods"]["CellMethods::am-tm"]["structure_title"] = "link::default_483"
+        self.vs_content_infinite_loop["cell_methods"]["a269a4d7-8c9b-11ef-944e-41a8eb05f654"]["variables"] = "link::0facb764-817d-11e6-b80b-5404a60d96b5"
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -140,18 +140,19 @@ class TestVocabularyServer(unittest.TestCase):
                             "individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, "
                             "in which the impact of fully collapsed tipping elements can be studied.",
             "mip_long_name": "Tipping Point Modelling Intercomparison Project",
-            "name": "TIPMIP",
             "mip_website": "https://www.tipmip.org",
-            "id": "default_417"
+            "name": "TIPMIP",
+            "id": "527f5c6c-8c97-11ef-944e-41a8eb05f654",
+            "uid": "527f5c6c-8c97-11ef-944e-41a8eb05f654"
         }
         self.assertDictEqual(elt, target_dict)
-        obj = vs.get_element(element_type="mips", element_id="link::default_417")
+        obj = vs.get_element(element_type="mips", element_id="link::527f5c6c-8c97-11ef-944e-41a8eb05f654")
         self.assertDictEqual(elt, target_dict)
 
         with self.assertRaises(ValueError):
-            obj = vs.get_element(element_type="mips", element_id="link::default_200")
+            obj = vs.get_element(element_type="mips", element_id="link::80ab737a-a698-11ef-914a-613c0433d878")
 
-        obj = vs.get_element(element_type="mips", element_id="link::default_200", default=None)
+        obj = vs.get_element(element_type="mips", element_id="link::80ab737a-a698-11ef-914a-613c0433d878", default=None)
         self.assertIsNone(obj)
 
         with self.assertRaises(ValueError):
@@ -160,8 +161,8 @@ class TestVocabularyServer(unittest.TestCase):
         with self.assertRaises(ValueError):
             obj = vs.get_element(element_type="mips", element_id="undef", id_type="name")
 
-        obj = vs.get_element(element_type="mips", element_id="link::default_417", element_key="mip_long_name")
+        obj = vs.get_element(element_type="mips", element_id="link::527f5c6c-8c97-11ef-944e-41a8eb05f654", element_key="mip_long_name")
         self.assertEqual(obj, "Tipping Point Modelling Intercomparison Project")
 
         with self.assertRaises(ValueError):
-            obj = vs.get_element(element_type="mips", element_id="link::default_417", element_key="long_name")
+            obj = vs.get_element(element_type="mips", element_id="link::527f5c6c-8c97-11ef-944e-41a8eb05f654", element_key="long_name")

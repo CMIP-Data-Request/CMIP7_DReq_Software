@@ -41,8 +41,8 @@ def check_variables_attributes(version, output_dir, **kwargs):
 	DR = DataRequest.from_separated_inputs(**content)
 
 	rep = defaultdict(lambda: dict(cell_measures=set(), cell_methods=set(), cmip7_frequencies=set(), descriptions=set(),
-	                               modelling_realms=set(), spatial_shapes=set(), structure_titles=set(),
-	                               temporal_shapes=set(), titles=set(), names=set()))
+	                               modelling_realms=set(), spatial_shapes=set(), temporal_shapes=set(), titles=set(),
+	                               names=set()))
 	for variable in DR.get_variables():
 		physical_parameter = str(variable.physical_parameter.name)
 		rep[physical_parameter]["cell_measures"] = \
@@ -53,8 +53,6 @@ def check_variables_attributes(version, output_dir, **kwargs):
 		rep[physical_parameter]["modelling_realms"] = \
 			rep[physical_parameter]["modelling_realms"] | set(str(elt.name) for elt in variable.modelling_realm)
 		rep[physical_parameter]["spatial_shapes"].add(str(variable.spatial_shape.name))
-		rep[physical_parameter]["structure_titles"] = \
-			rep[physical_parameter]["structure_titles"] | set(str(elt.name) for elt in variable.structure_title)
 		rep[physical_parameter]["temporal_shapes"].add(str(variable.temporal_shape.name))
 		rep[physical_parameter]["titles"].add(str(variable.title))
 		rep[physical_parameter]["names"].add(str(variable.name))

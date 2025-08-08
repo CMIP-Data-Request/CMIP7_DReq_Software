@@ -1241,7 +1241,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
             branded_variable_name = var.branded_variable_name
             if branded_variable_name.count(&#39;_&#39;) != 1:
                 warnings.warn(&#39;Expected one (and only one) underscore in branded variable name: &#39; + branded_variable_name)
-            
+
             variableRootDD = branded_variable_name.split(&#39;_&#39;)[0]
             var_info.update({
                 &#39;variableRootDD&#39;: variableRootDD,

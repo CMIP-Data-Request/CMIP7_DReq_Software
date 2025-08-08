@@ -1149,7 +1149,8 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
             return rep
 
     def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
-                    filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(), **kwargs):
+                    filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(),
+                    add_id=False, **kwargs):
         &#34;&#34;&#34;
         Method to export a filtered and sorted list of data to a csv file.
         :param str main_data: kind of data to be exported
@@ -1168,7 +1169,8 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
                                                          skip_if_missing=filtering_skip_if_missing)
         sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
 
-        export_columns_request.insert(0, &#34;id&#34;)
+        if add_id:
+            export_columns_request.insert(0, &#34;id&#34;)
         content = list()
         content.append(export_columns_request)
         for data in sorted_filtered_data:
@@ -1360,7 +1362,7 @@ def version(self):
 :return:</p></div>
 </dd>
 <dt id="data_request_api.query.data_request.DataRequest.export_data"><code class="name flex">
-<span>def <span class="ident">export_data</span></span>(<span>self,<br>main_data,<br>output_file,<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>export_columns_request=[],<br>sorting_request=[],<br>**kwargs)</span>
+<span>def <span class="ident">export_data</span></span>(<span>self,<br>main_data,<br>output_file,<br>filtering_requests={},<br>filtering_operation='all',<br>filtering_skip_if_missing=False,<br>export_columns_request=[],<br>sorting_request=[],<br>add_id=False,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1368,7 +1370,8 @@ def version(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def export_data(self, main_data, output_file, filtering_requests=dict(), filtering_operation=&#34;all&#34;,
-                filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(), **kwargs):
+                filtering_skip_if_missing=False, export_columns_request=list(), sorting_request=list(),
+                add_id=False, **kwargs):
     &#34;&#34;&#34;
     Method to export a filtered and sorted list of data to a csv file.
     :param str main_data: kind of data to be exported
@@ -1387,7 +1390,8 @@ def version(self):
                                                      skip_if_missing=filtering_skip_if_missing)
     sorted_filtered_data = self.sort_func(filtered_data, sorting_request)
 
-    export_columns_request.insert(0, &#34;id&#34;)
+    if add_id:
+        export_columns_request.insert(0, &#34;id&#34;)
     content = list()
     content.append(export_columns_request)
     for data in sorted_filtered_data:

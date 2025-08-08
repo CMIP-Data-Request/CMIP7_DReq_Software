@@ -18,10 +18,10 @@ Here are some ways to provide feedback:
 - For more general questions or concerns, such as suggestions for new features, contribute to the Software's [github discussion forum](https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/discussions).
 
 
-## v1.2.1 Data Request release
+## v1.2.2 Data Request release
 
-The latest **official release** of the CMIP7 Data Request is `v1.2.1` (26 April 2025).
-[Learn more about this release on the CMIP website](https://wcrp-cmip.org/cmip7-data-request-v1-2-1/).
+The latest **official release** of the CMIP7 Data Request is `v1.2.2` (25 July 2025).
+[Learn more about this release on the CMIP website](https://wcrp-cmip.org/cmip7-data-request-v1-2-2/).
 
 
 ## Try It Without Installation

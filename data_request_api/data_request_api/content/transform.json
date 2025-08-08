@@ -148,11 +148,28 @@
         "string_to_list": {
           "opportunities": ["keyword"]
         }
+      },
+      "keys_to_copy": {
+        "default": {
+          "linked_id": "uid"
+        }
+      }
+    },
+    "test": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+        }
+      },
+      "keys_to_rename": {
+        "variables": {
+          "cmip7_compound_name": "name"
+        }
       }
     },
     "v1.0": {},
     "v1.1": {},
-    "v1.2": {
+    "v1.2.0": {
       "keys_to_merge": {
         "variables": {
           "modelling_realm.+": "modelling_realm"
@@ -161,6 +178,30 @@
       "keys_to_rename": {
         "variables": {
           "cmip6_compound_name": "name"
+        }
+      }
+    },
+    "v1.2.1": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+        }
+      },
+      "keys_to_rename": {
+        "variables": {
+          "cmip6_compound_name": "name"
+        }
+      }
+    },
+    "v1.2": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+        }
+      },
+      "keys_to_rename": {
+        "variables": {
+          "cmip7_compound_name": "name"
         }
       }
     }
@@ -211,9 +252,22 @@
     },
     "test": {
       "tables_provenance": {
-        "esm-bcv_1.3": ["variable", "esm-bcv_1.3"],
-        "structure": ["variable", "structure"],
-        "time_subset": ["opportunity", "time_slice"]
+        "esm-bcv_1.4": ["variable", "esm-bcv_1.4"],
+        "priority_level": ["opportunity", "priority_level"],
+        "data_request_themes": ["opportunity", "data_request_themes"],
+        "glossary": ["opportunity", "glossary"],
+        "modelling_realm": ["variable", "modeling_realm"],
+        "cmip6_frequency": ["variable", "cmip6_frequency_(legacy)"],
+        "cmip7_frequency": ["variable", "cmip7_frequency"],
+        "ranking": ["variable", "ranking_synced"],
+        "cmip6_tables_identifiers": ["variable", "cmip6_table_identifiers_(legacy)"],
+        "time_subset": ["opportunity", "time_subset"]
+      },
+      "several_bases_link": {
+        "variable": [
+          ["opportunity", "variables", "compound_name"],
+          ["variable", "variable", "cmip6_compound_name"]
+        ]
       }
     },
     "v1.0": {

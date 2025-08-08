@@ -258,7 +258,7 @@ not have a method with the specified name.</p></div>
         self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
         self.vs_content = read_json_input_file_content(self.vs_file)
         self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
-        self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;CellMethods::am-tm&#34;][&#34;structure_title&#34;] = &#34;link::default_483&#34;
+        self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;a269a4d7-8c9b-11ef-944e-41a8eb05f654&#34;][&#34;variables&#34;] = &#34;link::0facb764-817d-11e6-b80b-5404a60d96b5&#34;
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -346,18 +346,19 @@ not have a method with the specified name.</p></div>
                             &#34;individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, &#34;
                             &#34;in which the impact of fully collapsed tipping elements can be studied.&#34;,
             &#34;mip_long_name&#34;: &#34;Tipping Point Modelling Intercomparison Project&#34;,
-            &#34;name&#34;: &#34;TIPMIP&#34;,
             &#34;mip_website&#34;: &#34;https://www.tipmip.org&#34;,
-            &#34;id&#34;: &#34;default_417&#34;
+            &#34;name&#34;: &#34;TIPMIP&#34;,
+            &#34;id&#34;: &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;,
+            &#34;uid&#34;: &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;
         }
         self.assertDictEqual(elt, target_dict)
-        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;)
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;)
         self.assertDictEqual(elt, target_dict)
 
         with self.assertRaises(ValueError):
-            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;)
+            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::80ab737a-a698-11ef-914a-613c0433d878&#34;)
 
-        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;, default=None)
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::80ab737a-a698-11ef-914a-613c0433d878&#34;, default=None)
         self.assertIsNone(obj)
 
         with self.assertRaises(ValueError):
@@ -366,11 +367,11 @@ not have a method with the specified name.</p></div>
         with self.assertRaises(ValueError):
             obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;undef&#34;, id_type=&#34;name&#34;)
 
-        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;mip_long_name&#34;)
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, element_key=&#34;mip_long_name&#34;)
         self.assertEqual(obj, &#34;Tipping Point Modelling Intercomparison Project&#34;)
 
         with self.assertRaises(ValueError):
-            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;long_name&#34;)</code></pre>
+            obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, element_key=&#34;long_name&#34;)</code></pre>
 </details>
 <div class="desc"><p>A class whose instances are single test cases.</p>
 <p>By default, the test code itself should be placed in a method named
@@ -418,7 +419,7 @@ not have a method with the specified name.</p></div>
     self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
     self.vs_content = read_json_input_file_content(self.vs_file)
     self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
-    self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;CellMethods::am-tm&#34;][&#34;structure_title&#34;] = &#34;link::default_483&#34;</code></pre>
+    self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;a269a4d7-8c9b-11ef-944e-41a8eb05f654&#34;][&#34;variables&#34;] = &#34;link::0facb764-817d-11e6-b80b-5404a60d96b5&#34;</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -496,18 +497,19 @@ not have a method with the specified name.</p></div>
                         &#34;individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, &#34;
                         &#34;in which the impact of fully collapsed tipping elements can be studied.&#34;,
         &#34;mip_long_name&#34;: &#34;Tipping Point Modelling Intercomparison Project&#34;,
-        &#34;name&#34;: &#34;TIPMIP&#34;,
         &#34;mip_website&#34;: &#34;https://www.tipmip.org&#34;,
-        &#34;id&#34;: &#34;default_417&#34;
+        &#34;name&#34;: &#34;TIPMIP&#34;,
+        &#34;id&#34;: &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;,
+        &#34;uid&#34;: &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;
     }
     self.assertDictEqual(elt, target_dict)
-    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;)
+    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;)
     self.assertDictEqual(elt, target_dict)
 
     with self.assertRaises(ValueError):
-        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;)
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::80ab737a-a698-11ef-914a-613c0433d878&#34;)
 
-    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_200&#34;, default=None)
+    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::80ab737a-a698-11ef-914a-613c0433d878&#34;, default=None)
     self.assertIsNone(obj)
 
     with self.assertRaises(ValueError):
@@ -516,11 +518,11 @@ not have a method with the specified name.</p></div>
     with self.assertRaises(ValueError):
         obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;undef&#34;, id_type=&#34;name&#34;)
 
-    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;mip_long_name&#34;)
+    obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, element_key=&#34;mip_long_name&#34;)
     self.assertEqual(obj, &#34;Tipping Point Modelling Intercomparison Project&#34;)
 
     with self.assertRaises(ValueError):
-        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::default_417&#34;, element_key=&#34;long_name&#34;)</code></pre>
+        obj = vs.get_element(element_type=&#34;mips&#34;, element_id=&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, element_key=&#34;long_name&#34;)</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
