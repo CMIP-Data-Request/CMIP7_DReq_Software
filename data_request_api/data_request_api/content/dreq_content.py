@@ -30,7 +30,7 @@ _json_release = "dreq_release_export.json"
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
 REPO_RAW_URL = (
-    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content//refs/tags/{version}/airtable_export/{_json_export}"
 )
 _dev_branch = "main"
 
