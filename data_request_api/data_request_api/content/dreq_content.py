@@ -30,7 +30,7 @@ _json_release = "dreq_release_export.json"
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
 REPO_RAW_URL = (
-    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content//refs/tags/{version}/airtable_export/{_json_export}"
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
 )
 _dev_branch = "main"
 
@@ -434,7 +434,7 @@ def retrieve(version="latest_stable", **kwargs):
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=REPO_RAW_URL.format(
-                            version=(_dev_branch if version == "dev" else version),
+                            version=(_dev_branch if version == "dev" else "/refs/tags/" + version),
                             _json_export=json_export,
                             _github_org=_github_org,
                         ),
@@ -458,7 +458,7 @@ def retrieve(version="latest_stable", **kwargs):
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=REPO_RAW_URL.format(
-                            version=(_dev_branch if version == "dev" else version),
+                            version=(_dev_branch if version == "dev" else "/refs/tags/" + version),
                             _json_export=json_export,
                             _github_org=_github_org,
                         ),
