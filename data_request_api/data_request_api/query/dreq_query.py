@@ -1078,7 +1078,15 @@ def get_dimension_sizes(dreq_tables):
             elif dimension.grid_class in ['fixedScalar', 'fixedScaler']:  # fixedScaler = typo in Airtable
                 dim_sizes[dim].add(1)
             elif dimension.grid_class == 'fixed':
-                dim_sizes[dim].add(dimension.size)
+                if hasattr(dimension, 'size'):
+                    dim_sizes[dim].add(dimension.size)
+                elif hasattr(dimension, 'requested_values'):
+                    if not isinstance(dimension.requested_values, str):
+                        raise TypeError(f'Expected space-delimited string for requested_values for dimension {dimension.name}')
+                    dim_sizes[dim].add(len(dimension.requested_values.split()))
+                else:
+                    # raise AttributeError(f'How should the size of dimension {dimension.name} be determined?')
+                    pass
             elif dimension.grid_class == 'fixedExternal':
                 pass
             else:
