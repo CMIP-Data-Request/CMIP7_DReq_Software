@@ -177,8 +177,21 @@ def check_api_version():
         print(f"Error checking PyPI: {e}")
         return
 
-    if not installed_version > latest_version:
-        # Warn user that installed version isn't the same as the latest pypi version
+    if '.dev' in installed_version:
+        # Development versions are indicated by the latest version number followed by 'dev' + stuff.
+        # Example: '1.2.1.dev8+g6aa6222.d20250515'
+        # For development versions, only issue the warning if the version number preceding 'dev' is before
+        # the latest version.
+        # For example, if latest_version is '1.2.2':
+        #   installed_version = '1.2.1.dev8+g6aa6222.d20250515' ==> issue the warning
+
+        #   installed_version = '1.2.2.dev8+g6aa6222.d20250515' ==> don't issue the warning
+        check_version = installed_version.split('.dev')[0]
+    else:
+        check_version = installed_version
+
+    if check_version < latest_version:
+        # Warn user that installed version is earlier than the latest version on pypi
         msg = f"Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n"
         msg += f"Latest version on PyPI:  {latest_version}\n"
         msg += f"Installed version:       {installed_version}\n"
