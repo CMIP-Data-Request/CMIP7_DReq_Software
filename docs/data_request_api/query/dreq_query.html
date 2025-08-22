@@ -842,7 +842,7 @@ and that it's the same list for all experiments.</dd>
     str that uniquely identifes a variable in the data request
     &#39;&#39;&#39;
     var_name_param = use_unique_var_name()
-    
+
     if not hasattr(var, var_name_param):
         raise ValueError(f&#39;Unrecognized unique variable identifier: {var_name_param}&#39;
                          + &#39;\nSet &#34;variable_name&#34; in API configuration&#39;)
@@ -1248,7 +1248,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
                 if not variableRootDD:
                     # Set variableRootDD if it wasn&#39;t already defined
                     variableRootDD = s
-            
+
             # Handle undefined cases, to ensure variableRootDD and branding_label are not left undefined
             # (any such cases are anticipated to vanish in post-v1.2.2 dreq versions)
             if not variableRootDD:
@@ -1266,7 +1266,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
                 # For development, not intended as a user option.
                 if branded_variable_name != f&#39;{variableRootDD}_{branding_label}&#39;:
                     warnings.warn(f&#39;Inconsistency between branded variable name {branded_variable_name} &#39;
-                                + f&#39;and its components: {variableRootDD}, {branding_label}&#39;)
+                                  + f&#39;and its components: {variableRootDD}, {branding_label}&#39;)
 
             var_info.update({
                 &#39;variableRootDD&#39;: variableRootDD,
@@ -1288,7 +1288,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
         if check_c7_name:
             # Consistency check on definition of CMIP7 compound name.
             # For development, not intended as a user option.
-            if get_dreq_version_tuple(dreq_version) &gt;= (1,2,2):
+            if get_dreq_version_tuple(dreq_version) &gt;= (1, 2, 2):
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)
