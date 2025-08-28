@@ -577,7 +577,7 @@ def map_data(data, mapping_table, version, **kwargs):
     elif len(data.keys()) == 1:
         l_version = next(iter(data.keys())).replace("Data Request", "").strip()
         if l_version != version and version != "dev":
-            logger.warning(
+            raise RuntimeError(
                 "The Data Request version inferred from the content dictionary"
                 f" ({l_version}) is different than the requested version ({version})."
             )

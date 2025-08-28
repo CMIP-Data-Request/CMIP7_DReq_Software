@@ -30,8 +30,12 @@ _json_release = "dreq_release_export.json"
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
 REPO_RAW_URL = (
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/tags/{version}/airtable_export/{_json_export}"
+)
+REPO_RAW_URL_DEV = (
     "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
 )
+
 _dev_branch = "main"
 
 # API URL for fetching tags or branches
@@ -431,13 +435,15 @@ def retrieve(version="latest_stable", **kwargs):
             if not os.path.isfile(json_path):
                 # Download with pooch - use "main" branch for "dev"
                 try:
+                    if version == "dev":
+                        url = REPO_RAW_URL_DEV.format(
+                            version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                    else:
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org)
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
-                        url=REPO_RAW_URL.format(
-                            version=(_dev_branch if version == "dev" else version),
-                            _json_export=json_export,
-                            _github_org=_github_org,
-                        ),
+                        url=url,
                         known_hash=None,
                         fname=json_export,
                     )
@@ -455,13 +461,15 @@ def retrieve(version="latest_stable", **kwargs):
                     if os.path.exists(json_path_temp):
                         os.remove(json_path_temp)
                     # Retrieve
+                    if version == "dev":
+                        url = REPO_RAW_URL_DEV.format(
+                            version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                    else:
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org)
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
-                        url=REPO_RAW_URL.format(
-                            version=(_dev_branch if version == "dev" else version),
-                            _json_export=json_export,
-                            _github_org=_github_org,
-                        ),
+                        url=url,
                         known_hash=None,
                         fname=json_export + ".tmp",
                     )
