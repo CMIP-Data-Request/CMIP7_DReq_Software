@@ -3,19 +3,18 @@
 import atexit
 import json
 import os
-import re
 import time
 import warnings
 from filecmp import cmp
 from shutil import move
 
+import data_request_api.utilities.config as dreqcfg
 import pooch
 import requests
 from bs4 import BeautifulSoup
-
-import data_request_api.utilities.config as dreqcfg
 from data_request_api.content import consolidate_export as ce
 from data_request_api.content.mapping_table import mapping_table
+from data_request_api.content.utils import _parse_version, _version_pattern
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.logger import get_logger  # noqa
 
@@ -25,13 +24,17 @@ pooch.get_logger().setLevel("WARNING")
 # File names of Airtable exports in JSON format
 _json_raw = "dreq_raw_export.json"
 _json_release = "dreq_release_export.json"
+_json_raw_consolidated = "dreq_raw_consolidated.json"
+_json_release_consolidated = "dreq_release_consolidated.json"
+_json_release_DR = "DR_release_content.json"
+_json_release_VS = "VS_release_content.json"
+_json_raw_DR = "DR_raw_content.json"
+_json_raw_VS = "VS_raw_content.json"
 
 # Base URL template for fetching Dreq content json files from GitHub
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
-REPO_RAW_URL = (
-    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
-)
+REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
 _dev_branch = "main"
 
 # API URL for fetching tags or branches
@@ -54,9 +57,6 @@ _versions_retrieved_last = {"tags": 0, "branches": 0}
 #   504 Gateway Timeout
 _fallback_status_codes = [403, 429, 500, 502, 503, 504]
 
-# Regex pattern for version parsing (captures major, minor, patch and optional pre-release parts)
-_version_pattern = re.compile(r"^v?(\d+)\.(\d+)(?:\.(\d+))?((?:alpha|beta|a|b)?)?(\d*)$", re.IGNORECASE)
-
 # Directory where to find/store the data request JSON files
 try:
     _dreq_res = dreqcfg.load_config()["cache_dir"]
@@ -68,32 +68,6 @@ _dreq_content_loaded = {}
 # Internal flag used to determine whether a warning on API version can be issued
 # (Purpose is to prevent the warning being issued more than once per session)
 _CHECK_API_VERSION = True
-
-
-def _parse_version(version):
-    """Parse a version tag and return a tuple for sorting.
-
-    Parameters
-    ----------
-    version : str
-        The version tag to parse.
-
-    Returns
-    -------
-    tuple
-        The parsed version tuple:
-        (major, minor, patch, pre_release_type, pre_release_number)
-    """
-    match = _version_pattern.match(version)
-    if match:
-        major, minor, patch = map(lambda x: int(x) if x else 0, match.groups()[:3])
-        # 'a' for alpha, 'b' for beta, or None
-        pre_release_type = match.group(4)[0] if match.group(4) else None
-        # alpha/beta version number or 0
-        pre_release_number = int(match.group(5)) if match.group(5) and pre_release_type else 0
-        return (major, minor, patch, pre_release_type or "", pre_release_number)
-    # if no valid version
-    return (0, 0, 0, "", 0)
 
 
 @append_kwargs_from_config
@@ -126,7 +100,61 @@ def get_cached(**kwargs):
             elif kwargs["export"] == "release":
                 json_export = _json_release
         local_versions = [
-            name for name in os.listdir(_dreq_res) if os.path.isfile(os.path.join(_dreq_res, name, json_export))
+            name
+            for name in os.listdir(_dreq_res)
+            if os.path.isfile(os.path.join(_dreq_res, name, json_export))
+        ]
+    return local_versions
+
+
+@append_kwargs_from_config
+def _get_partly_cached(**kwargs):
+    """Get list of partly cached versions.
+
+    Parameters
+    ----------
+    **kwargs
+        export : {'raw', 'release'}, optional
+            Export type. Defaults to "release".
+
+    Returns
+    -------
+    list
+        The list of partly cached versions, i.e. versions where only derived files
+        (eg. the consolidated export file) but not the officially released content
+        export files are cached.
+
+    Raises
+    ------
+    Warning
+        If known kwargs have an invalid value.
+    """
+    local_versions = []
+    if os.path.isdir(_dreq_res):
+        # List all subdirectories in the dreq_res directory that include both dreq.json files
+        #   - the subdirectory name is the tag name
+        if "export" in kwargs:
+            if kwargs["export"] == "raw":
+                json_export = _json_raw
+                DR = _json_raw_DR
+                VS = _json_raw_VS
+                json_export_consolidated = _json_raw_consolidated
+            elif kwargs["export"] == "release":
+                json_export = _json_release
+                DR = _json_release_DR
+                VS = _json_release_VS
+                json_export_consolidated = _json_release_consolidated
+        local_versions = [
+            name
+            for name in os.listdir(_dreq_res)
+            if not os.path.isfile(os.path.join(_dreq_res, name, json_export))
+            and (
+                os.path.isfile(os.path.join(_dreq_res, name, DR))
+                or os.path.isfile(os.path.join(_dreq_res, name, VS))
+                or os.path.isfile(
+                    os.path.join(_dreq_res, name, json_export_consolidated)
+                )
+            )
         ]
     return local_versions
 
@@ -167,7 +195,11 @@ def _send_api_request(api_url, page_url="", target="tags"):
         response.raise_for_status()
 
         # Extract the list of tags or branches from the response
-        results = [entry["name"] for entry in response.json() if "name" in entry and entry["name"] != _dev_branch] or []
+        results = [
+            entry["name"]
+            for entry in response.json()
+            if "name" in entry and entry["name"] != _dev_branch
+        ] or []
 
     except requests.exceptions.HTTPError as http_err:
         if response.status_code in _fallback_status_codes:
@@ -182,7 +214,9 @@ def _send_api_request(api_url, page_url="", target="tags"):
                     f" GitHub API ({response.status_code}): {http_err}"
                 )
         else:
-            warnings.warn(f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}")
+            warnings.warn(
+                f"A HTTP error occurred when retrieving '{target}' ({response.status_code}): {http_err}"
+            )
     except Exception as e:
         warnings.warn(f"An error occurred when retrieving '{target}': {e}")
 
@@ -234,22 +268,33 @@ def _send_html_request(page_url, target="tags"):
 
             if target == "branches":
                 # Find the branches on the page - GitHub embeds json data under the script tag
-                script_tag = soup.find("script", {"data-target": "react-app.embeddedData"})
+                script_tag = soup.find(
+                    "script", {"data-target": "react-app.embeddedData"}
+                )
                 if not script_tag:
-                    raise ValueError("Could not find the 'script' tag in the html response.")
+                    raise ValueError(
+                        "Could not find the 'script' tag in the html response."
+                    )
                 json_response = json.loads(script_tag.string)
                 results_json = json_response["payload"][target]
                 results += [
-                    entry["name"] for entry in results_json if "name" in entry and entry["name"] != _dev_branch
+                    entry["name"]
+                    for entry in results_json
+                    if "name" in entry and entry["name"] != _dev_branch
                 ] or []
             else:
                 # Find the tags on the page - GitHub uses "Link--primary" class for tags / branches
-                results += [entry.text.strip() for entry in soup.find_all("a", class_="Link--primary")]
+                results += [
+                    entry.text.strip()
+                    for entry in soup.find_all("a", class_="Link--primary")
+                ]
 
             # Check for pagination links and construct URL for the next page
             # ToDo: I could not find a repo with more branches than fit on a single page
             #       so the next_page_links may have to be adapted for branches
-            next_page_links = soup.find_all("a", {"href": lambda x: x and "after=" in x})
+            next_page_links = soup.find_all(
+                "a", {"href": lambda x: x and "after=" in x}
+            )
             if next_page_links:
                 current_urls.append(current_url)
                 current_url = "https://github.com" + next_page_links[-1]["href"]
@@ -302,12 +347,23 @@ def get_versions(target="tags", **kwargs):
     if "offline" in kwargs and kwargs["offline"]:
         lversions = get_cached(**kwargs)
         if target == "tags":
-            versions[target] = [lv for lv in lversions if lv == "dev" or _parse_version(lv) != (0, 0, 0, "", 0)]
+            versions[target] = [
+                lv
+                for lv in lversions
+                if lv == "dev" or _parse_version(lv) != (0, 0, 0, "", 0)
+            ]
         else:
-            versions[target] = [lv for lv in lversions if lv != "dev" and _parse_version(lv) == (0, 0, 0, "", 0)]
+            versions[target] = [
+                lv
+                for lv in lversions
+                if lv != "dev" and _parse_version(lv) == (0, 0, 0, "", 0)
+            ]
     else:
         # Retrieve the list of tags or branches from the GitHub API
-        if not versions[target] or _versions_retrieved_last[target] - time.time() > 60 * 60:
+        if (
+            not versions[target]
+            or _versions_retrieved_last[target] - time.time() > 60 * 60
+        ):
             versions[target] = _send_api_request(REPO_API_URL, REPO_PAGE_URL, target)
 
             # Update the last time the tags/branches were retrieved
@@ -316,7 +372,7 @@ def get_versions(target="tags", **kwargs):
         if target == "tags" and "dev" not in versions[target]:
             versions[target].append("dev")
 
-    if kwargs['check_api_version'] and not kwargs["offline"]:
+    if kwargs["check_api_version"] and not kwargs["offline"]:
         # Warn user if the API version is not the latest one available on PyPI
         if _CHECK_API_VERSION:
             atexit.register(dreqcfg.check_api_version)
@@ -347,7 +403,11 @@ def _get_latest_version(stable=True, **kwargs):
     """
     versions = get_versions(**kwargs)
     if stable:
-        sversions = [version for version in versions if all([x not in version for x in ["a", "b", "dev"]])]
+        sversions = [
+            version
+            for version in versions
+            if all([x not in version for x in ["a", "b", "dev"]])
+        ]
         return max(sversions, key=_parse_version) if sversions else None
     return max(versions, key=_parse_version)
 
@@ -394,7 +454,9 @@ def retrieve(version="latest_stable", **kwargs):
     elif version == "all":
         versions = get_versions(**kwargs)
     else:
-        if version not in get_versions(**kwargs) + get_versions(target="branches", **kwargs):
+        if version not in get_versions(**kwargs) + get_versions(
+            target="branches", **kwargs
+        ):
             if version not in get_cached(**kwargs):
                 raise ValueError(f"Version '{version}' not found.")
         versions = [version]
@@ -402,7 +464,9 @@ def retrieve(version="latest_stable", **kwargs):
     if versions == [None] or not versions:
         raise ValueError(f"Version '{version}' not found.")
     elif version in ["v1.0alpha"] and "export" in kwargs and kwargs["export"] == "raw":
-        warnings.warn(f"For version '{version}' no raw export exists. Defaulting to release export.")
+        warnings.warn(
+            f"For version '{version}' no raw export exists. Defaulting to release export."
+        )
 
     json_paths = dict()
     for version in versions:
@@ -472,7 +536,9 @@ def retrieve(version="latest_stable", **kwargs):
                     else:
                         os.remove(json_path_temp)
                 except Exception as e:
-                    warnings.warn(f"Potential update for version '{version}' failed: {e}")
+                    warnings.warn(
+                        f"Potential update for version '{version}' failed: {e}"
+                    )
 
             # Store the path to the dreq.json in the json_paths dictionary
             json_paths[version] = json_path
@@ -484,6 +550,50 @@ def retrieve(version="latest_stable", **kwargs):
         )
 
     return json_paths
+
+
+@append_kwargs_from_config
+def cleanup(**kwargs):
+    """Clean up the dreq_res directory."""
+    logger = get_logger()
+
+    # Get list of imcompletely cached versions
+    cleanup_versions = _get_partly_cached(**kwargs)
+
+    logger.info(
+        f"Cleaning up files for the following incompletely cached versions: {cleanup_versions}"
+    )
+    logger.info(cleanup_versions)
+
+    # Compile file paths
+    if kwargs["export"] == "raw":
+        cached_files = [
+            os.path.join(_dreq_res, v, version_type)
+            for v in cleanup_versions
+            for version_type in [_json_raw_consolidated, _json_raw_DR, _json_raw_VS]
+        ]
+    elif kwargs["export"] == "release":
+        cached_files = [
+            os.path.join(_dreq_res, v, version_type)
+            for v in cleanup_versions
+            for version_type in [
+                _json_release_consolidated,
+                _json_release_DR,
+                _json_release_VS,
+            ]
+        ]
+
+    # Delete files
+    for f in cached_files:
+        if os.path.isfile(f):
+            if "dryrun" in kwargs and kwargs["dryrun"]:
+                logger.info(f"Dryrun: would delete '{f}'.")
+            else:
+                try:
+                    os.remove(f)
+                    logger.info(f"Deleted '{f}'.")
+                except Exception as e:
+                    logger.warning(f"Could not delete '{f}': {e}")
 
 
 @append_kwargs_from_config
@@ -524,7 +634,9 @@ def delete(version="all", keep_latest=False, **kwargs):
         if keep_latest:
             # Identify the latest stable and prerelease versions
             valid_versions = [v for v in local_versions if _version_pattern.match(v)]
-            valid_sversions = [v for v in valid_versions if "a" not in v and "b" not in v]
+            valid_sversions = [
+                v for v in valid_versions if "a" not in v and "b" not in v
+            ]
             latest = False
             latest_stable = False
             if valid_versions:
@@ -535,8 +647,13 @@ def delete(version="all", keep_latest=False, **kwargs):
             local_versions = [v for v in local_versions if v not in to_keep]
     else:
         if keep_latest:
-            warnings.warn("'keep_latest' option is ignored when 'version' is not 'all'.")
+            warnings.warn(
+                "'keep_latest' option is ignored when 'version' is not 'all'."
+            )
         local_versions = [version] if version in local_versions else []
+
+    # General cleanup of derived files
+    cleanup(**kwargs)
 
     # Deletion
     if local_versions:
@@ -550,7 +667,9 @@ def delete(version="all", keep_latest=False, **kwargs):
     if kwargs["export"] == "raw":
         cached_files = [os.path.join(_dreq_res, v, _json_raw) for v in local_versions]
     elif kwargs["export"] == "release":
-        cached_files = [os.path.join(_dreq_res, v, _json_release) for v in local_versions]
+        cached_files = [
+            os.path.join(_dreq_res, v, _json_release) for v in local_versions
+        ]
 
     # Delete files
     for f in cached_files:
@@ -558,75 +677,88 @@ def delete(version="all", keep_latest=False, **kwargs):
             if "dryrun" in kwargs and kwargs["dryrun"]:
                 logger.info(f"Dryrun: would delete '{f}'.")
             else:
-                os.remove(f)
+                try:
+                    os.remove(f)
+                    logger.info(f"Deleted '{f}'.")
+                except Exception as e:
+                    logger.warning(f"Could not delete '{f}': {e}")
 
 
 @append_kwargs_from_config
 def load(version="latest_stable", **kwargs):
-    """Load the JSON file for the specified version.
+    """Load the JSON file for the specified version, with caching of consolidated results."""
 
-    Args:
-        version (str): The version to load.
-                 Can be 'latest', 'latest_stable', 'dev',
-                 or a specific version, eg. '1.0.0'.
-                 The default is 'latest_stable'.
-    **kwargs
-        export : {'raw', 'release'}, optional
-            Export type. Defaults to 'release'.
-        consolidate: bool, optional
-            Whether to consolidate the data request dictionary after loading it.
-            Experimental feature. Defaults to True.
-        offline : bool, optional
-            Whether to disable online requests / retrievals. Defaults to False.
-        force_consolidate : bool, optional
-            Whether to force consolidation of the data request dictionary for raw exports
-            of versions "<v1.2", where consolidation is not supported. Defaults to False.
-
-    Returns:
-        dict: of the loaded JSON file.
-    """
     _dreq_content_loaded["json_path"] = ""
     logger = get_logger()
+
     if version == "all":
         raise ValueError("Cannot load 'all' versions.")
 
     version_dict = retrieve(version, **kwargs)
-    if version_dict == {}:
+    if not version_dict:
         logger.info(f"Version '{version}' could not be loaded.")
         return {}
-    else:
-        json_path = next(iter(version_dict.values()))
-        logger.info(f"Loading version {next(iter(version_dict.keys()))}'.")
+
+    version_key = next(iter(version_dict.keys()))
+    json_path = version_dict[version_key]
+    logger.info(f"Loading version {version_key}'.")
 
     _dreq_content_loaded["json_path"] = json_path
 
+    consolidate_error = (
+        "Consolidation mapping is not supported for raw exports of versions < v1.2."
+        " Set 'export' to \"release\" (recommended), or set 'consolidate' to True"
+        " or set 'force_consolidate' to True to force consolidation regardless."
+    )
+    consolidate_warning = (
+        "Consolidation mapping is not supported for raw exports of versions < v1.2."
+        " Forcing it regardless ..."
+    )
+
+    export_type = kwargs.get("export", "release")
+    consolidate = kwargs.get("consolidate", True)
+
+    # determine cache file path
+    version_dir = os.path.join("_dreq_res", version_key)
+    os.makedirs(version_dir, exist_ok=True)
+    cache_filename = (
+        "_json_raw_consolidated.json"
+        if export_type == "raw"
+        else "_json_release_consolidated.json"
+    )
+    cache_path = os.path.join(version_dir, cache_filename)
+
     with open(json_path) as f:
-        consolidate_error = (
-            "Consolidation mapping is not supported for raw exports of versions < v1.2."
-            " Set 'export' to \"release\" (recommended), or set 'consolidate' to True"
-            " or set 'force_consolidate' to True to force consolidation regardless."
-        )
-        consolidate_warning = (
-            "Consolidation mapping is not supported for raw exports of versions < v1.2." " Forcing it regardless ..."
-        )
-        if "consolidate" in kwargs:
-            if kwargs["consolidate"]:
-                if "export" in kwargs and kwargs["export"] == "raw":
-                    if _parse_version(version) < _parse_version("v1.2") and version != "dev":
-                        if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
-                            logger.warning(consolidate_warning)
-                        else:
-                            logger.error(consolidate_error)
-                            raise ValueError(consolidate_error)
-                return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)
-            else:
-                return json.load(f)
+        if consolidate:
+            if (
+                export_type == "raw"
+                and _parse_version(version) < _parse_version("v1.2")
+                and version != "dev"
+            ):
+                if kwargs.get("force_consolidate", False):
+                    logger.warning(consolidate_warning)
+                else:
+                    logger.error(consolidate_error)
+                    raise ValueError(consolidate_error)
+
+            # Caching for consolidated dreq content
+            if os.path.exists(cache_path):
+                logger.info(f"Loading consolidated data from cache: {cache_path}")
+                with open(cache_path) as cf:
+                    return json.load(cf)
+
+            logger.info(
+                "Consolidated data request content not found in cache, performing consolidation..."
+            )
+            consolidated = ce.map_data(
+                json.load(f), mapping_table, version_key, **kwargs
+            )
+
+            with open(cache_path, "w") as cf:
+                json.dump(consolidated, cf)
+                logger.info(f"Stored consolidated data in cache: {cache_path}")
+
+            return consolidated
+
         else:
-            if "export" in kwargs and kwargs["export"] == "raw":
-                if _parse_version(version) < _parse_version("v1.2") and version != "dev":
-                    if "force_consolidate" in kwargs and kwargs["force_consolidate"]:
-                        logger.warning(consolidate_warning)
-                    else:
-                        logger.error(consolidate_error)
-                        raise ValueError(consolidate_error)
-            return ce.map_data(json.load(f), mapping_table, next(iter(version_dict.keys())), **kwargs)
+            return json.load(f)
