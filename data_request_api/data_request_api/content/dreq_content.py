@@ -435,7 +435,7 @@ def retrieve(version="latest_stable", **kwargs):
             if not os.path.isfile(json_path):
                 # Download with pooch - use "main" branch for "dev"
                 try:
-                    if version == "dev":
+                    if version == "dev" or version not in get_versions():
                         url = REPO_RAW_URL_DEV.format(
                             version=_dev_branch, _json_export=json_export, _github_org=_github_org)
                     else:
