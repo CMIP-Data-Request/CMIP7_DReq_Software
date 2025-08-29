@@ -509,7 +509,7 @@ def transform_content(content, version):
 @append_kwargs_from_config
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
                             force_retrieve=False, output_dir=None,
-                            default_transformed_content_pattern="{kind}_{export_version}_content.json", **kwargs):
+                            default_transformed_content_pattern="{kind}_{export_version}_{consolidate}_content.json", **kwargs):
     # Download specified version of data request content (if not locally cached)
     versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
 
@@ -525,8 +525,9 @@ def get_transformed_content(version="latest_stable", export="release", consolida
             output_dir = os.path.dirname(content)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
-        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
+        consolidate_status = {True: "consolidate", False: "not-consolidate"}[consolidate]
+        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export, consolidate=consolidate_status)
+        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export, consolidate=consolidate_status)
         DR_content = os.sep.join([output_dir, DR_content])
         VS_content = os.sep.join([output_dir, VS_content])
         if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
