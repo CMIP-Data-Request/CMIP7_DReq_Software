@@ -163,7 +163,9 @@
       },
       "keys_to_copy": {
         "variables": {
-          "cmip7_compound_name": "name"
+          "cmip7_compound_name": "name",
+          "modelling_realm_-_primary": "primary_modelling_realm",
+          "modeling_realm_-_primary": "primary_modelling_realm"
         }
       }
     },
@@ -211,7 +213,9 @@
       },
       "keys_to_copy": {
         "variables": {
-          "cmip7_compound_name": "name"
+          "cmip7_compound_name": "name",
+          "modelling_realm_-_primary": "primary_modelling_realm",
+          "modeling_realm_-_primary": "primary_modelling_realm"
         }
       }
     }

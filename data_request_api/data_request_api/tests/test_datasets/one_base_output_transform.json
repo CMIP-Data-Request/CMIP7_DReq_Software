@@ -6081,6 +6081,9 @@
             ],
             "name": "ocean.mlotstmax.tmax-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::d4ee907c-b00f-11e6-a1f0-ac72891c3257",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "dsigmat coordinate added to clarify definition.Report on native horizontal grid as well as on a spherical latitude/longitude grid. CHANGE SINCE CMIP6 in Cell Measures - CMIP6:area: areacello CMIP7:area: areacella, CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time CMIP7:longitude latitude time deltasigt, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean time: maximum CMIP7:area: mean where sea time: maximum,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -6112,6 +6115,9 @@
             ],
             "name": "ocean.mlotstmin.tmin-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::d4ee9e5a-b00f-11e6-a1f0-ac72891c3257",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "dsigmat coordinate added to clarify definition. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time CMIP7:longitude latitude time deltasigt, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean time: minimum CMIP7:area: mean where sea time: minimum,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -6141,6 +6147,9 @@
             ],
             "name": "ocean.wo.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::d476e6113f5c466d27fd3aa9e9c35411",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. Those who wish to record vertical velocities and vertical fluxes on ocean half-levels may do so. If using CMOR3 you will be required to specify artificial bounds (e.g. located at full model levels) to avoid an error exit. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean, CHANGE SINCE CMIP6 in Cell Measures - CMIP6:::OPT CMIP7:area: areacello volume: volcello,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -6165,6 +6174,9 @@
             ],
             "name": "ocean.zostoga.tavg-u-hm-sea.day.GLB",
             "physical_parameter": "link::69c17331aebbebfc295d5b7af7f0ef8b",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a6560fba-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6194,6 +6206,9 @@
             ],
             "name": "atmos.hurs.tavg-h2m-hxy-u.day.GLB",
             "physical_parameter": "link::c75f684ec69602e9de82b48e53afb2cc",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -6223,6 +6238,9 @@
             ],
             "name": "atmos.ta.tpt-p3-hxy-air.6hr.GLB",
             "physical_parameter": "link::b9c3eb96337c69c1c4a5aab1317f5563",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "On the following pressure levels: 850, 500, 250 hPa\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean time: point CMIP7:area: mean where air time: point,\n",
             "provenance": "6hrPlev ((isd.003))",
             "region": "GLB",
@@ -6252,6 +6270,9 @@
             ],
             "name": "seaIce.sitemptop.tavg-u-hxy-si.mon.GLB",
             "physical_parameter": "link::5914a456-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -6281,6 +6302,9 @@
             ],
             "name": "seaIce.siv.tavg-u-hxy-si.mon.GLB",
             "physical_parameter": "link::59141748-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -6309,6 +6333,9 @@
             ],
             "name": "seaIce.sitimefrac.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::590e8b2a-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -6338,6 +6365,9 @@
             ],
             "name": "seaIce.siu.tavg-u-hxy-si.mon.GLB",
             "physical_parameter": "link::590e80c6-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -6366,6 +6396,9 @@
             ],
             "name": "seaIce.simass.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::5917184e-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -6395,6 +6428,9 @@
             ],
             "name": "seaIce.snd.tavg-u-hxy-sn.mon.GLB",
             "physical_parameter": "link::5913c266-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\n CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean where snow over sea\\_ice area: time: mean where sea\\_ice CMIP7:area: time: mean where snow (for snow on sea ice only),\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -6424,6 +6460,9 @@
             "name": "atmos.rluscs.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::f86eb6b8-8ca1-11ef-944e-41a8eb05f654",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -6451,6 +6490,9 @@
             "name": "land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
             "physical_parameter": "link::5d2b76d0-0e25-11e7-bdeb-ac72891c3257",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6477,6 +6519,9 @@
             "name": "land.evspsblveg.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::32ed0e80b1ae2adc7d4fb4b71bce9285",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6503,6 +6548,9 @@
             "name": "land.evspsblsoi.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::fb6dac37f41c49ca02fc234d4da1a782",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6529,6 +6577,9 @@
             "name": "land.tran.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::19e117c2298a016c96c496ee22f39976",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6555,6 +6606,9 @@
             "name": "land.srfrad.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::80ab71de-a698-11ef-914a-613c0433d878",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6581,6 +6635,9 @@
             ],
             "name": "ocean.swh.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6d8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6607,6 +6664,9 @@
             ],
             "name": "ocean.swh.tmax-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::80ab73d3-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6634,6 +6694,9 @@
             ],
             "name": "ocean.wpp.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::80ab73d2-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -6661,6 +6724,9 @@
             ],
             "name": "ocean.wpp.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::80ab73d2-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6688,6 +6754,9 @@
             ],
             "name": "ocean.swh.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6d8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -6715,6 +6784,9 @@
             ],
             "name": "ocean.swh.tmax-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::80ab73d3-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6741,6 +6813,9 @@
             ],
             "name": "ocean.sdvo.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::80ab73d1-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6767,6 +6842,9 @@
             ],
             "name": "ocean.mpw.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6a8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6793,6 +6871,9 @@
             ],
             "name": "ocean.wdir.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6f3-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6819,6 +6900,9 @@
             ],
             "name": "ocean.sduo.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6f6-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6845,6 +6929,9 @@
             ],
             "name": "ocean.mpwswell.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6d4-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6871,6 +6958,9 @@
             ],
             "name": "ocean.swhswell.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6d5-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6897,6 +6987,9 @@
             ],
             "name": "ocean.swhwindsea.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6c2-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6923,6 +7016,9 @@
             ],
             "name": "ocean.wdirswell.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6d6-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6949,6 +7045,9 @@
             ],
             "name": "ocean.wdirwindsea.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6c3-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -6975,6 +7074,9 @@
             ],
             "name": "ocean.wppswell.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6d7-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7001,6 +7103,9 @@
             ],
             "name": "ocean.wppwindsea.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6c4-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7028,6 +7133,9 @@
             ],
             "name": "ocean.mpw.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6a8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7055,6 +7163,9 @@
             ],
             "name": "ocean.mpwwindsea.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6c1-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7081,6 +7192,9 @@
             ],
             "name": "ocean.mpwswell.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6d4-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7107,6 +7221,9 @@
             ],
             "name": "ocean.sduo.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6f6-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7133,6 +7250,9 @@
             ],
             "name": "ocean.sdvo.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::80ab73d1-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7159,6 +7279,9 @@
             ],
             "name": "ocean.swhwindsea.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6c2-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7185,6 +7308,9 @@
             ],
             "name": "ocean.swhswell.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6d5-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7212,6 +7338,9 @@
             ],
             "name": "ocean.wdir.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6f3-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7239,6 +7368,9 @@
             ],
             "name": "ocean.wdirwindsea.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6c3-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7265,6 +7397,9 @@
             ],
             "name": "ocean.wdirswell.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6d6-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7291,6 +7426,9 @@
             ],
             "name": "ocean.wppwindsea.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6c4-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7317,6 +7455,9 @@
             ],
             "name": "ocean.wppswell.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::f86eb6d7-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7342,6 +7483,9 @@
             ],
             "name": "atmos.hus.tpt-p6-hxy-air.3hr.GLB",
             "physical_parameter": "link::80ab73c7-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "950 hPa to 700 hPa with an interval of 50h Pa for vertical layers (6 vertical layers)\n",
             "region": "GLB",
             "spatial_shape": "link::5f6a1637-f846-11ef-8cb2-abf30bcbed80",
@@ -7368,6 +7512,9 @@
             ],
             "name": "atmos.ua.tpt-p6-hxy-air.3hr.GLB",
             "physical_parameter": "link::80ab73c8-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "950 hPa to 700 hPa with an interval of 50h Pa for vertical layers (6 vertical layers)\n",
             "region": "GLB",
             "spatial_shape": "link::5f6a1637-f846-11ef-8cb2-abf30bcbed80",
@@ -7394,6 +7541,9 @@
             ],
             "name": "atmos.va.tpt-p6-hxy-air.3hr.GLB",
             "physical_parameter": "link::80ab73c9-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "950 hPa to 700 hPa with an interval of 50h Pa for vertical layers (6 vertical layers)\n",
             "region": "GLB",
             "spatial_shape": "link::5f6a1637-f846-11ef-8cb2-abf30bcbed80",
@@ -7420,6 +7570,9 @@
             ],
             "name": "atmos.wap.tpt-p6-hxy-air.3hr.GLB",
             "physical_parameter": "link::80ab73ca-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "950 hPa to 700 hPa with an interval of 50h Pa for vertical layers (6 vertical layers)\n",
             "region": "GLB",
             "spatial_shape": "link::5f6a1637-f846-11ef-8cb2-abf30bcbed80",
@@ -7446,6 +7599,9 @@
             ],
             "name": "atmos.ta.tpt-p6-hxy-air.3hr.GLB",
             "physical_parameter": "link::80ab73cb-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "950 hPa to 700 hPa with an interval of 50h Pa for vertical layers (6 vertical layers)\n",
             "region": "GLB",
             "spatial_shape": "link::5f6a1637-f846-11ef-8cb2-abf30bcbed80",
@@ -7475,6 +7631,9 @@
             ],
             "name": "land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
             "physical_parameter": "link::80ac3161-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7502,6 +7661,9 @@
             ],
             "name": "ocean.swh.tavg-u-hxy-sea.3hr.GLB",
             "physical_parameter": "link::f86eb6d8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7530,6 +7692,9 @@
             ],
             "name": "ocean.wdir.tavg-u-hxy-sea.3hr.GLB",
             "physical_parameter": "link::f86eb6f3-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7558,6 +7723,9 @@
             ],
             "name": "ocean.wpp.tavg-u-hxy-sea.3hr.GLB",
             "physical_parameter": "link::80ab73d2-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7585,6 +7753,9 @@
             ],
             "name": "ocean.mpwwindsea.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f86eb6c1-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7610,6 +7781,9 @@
             ],
             "name": "ocean.wpdir.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::80ab73cc-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7636,6 +7810,9 @@
             ],
             "name": "ocean.wpdir.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::80ab73cc-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7663,6 +7840,9 @@
             ],
             "name": "ocean.wpdir.tavg-u-hxy-sea.3hr.GLB",
             "physical_parameter": "link::80ab73cc-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7689,6 +7869,9 @@
             ],
             "name": "ocean.wpdirwindsea.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::80ab73cd-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7714,6 +7897,9 @@
             ],
             "name": "ocean.wpdirwindsea.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::80ab73cd-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7739,6 +7925,9 @@
             ],
             "name": "ocean.wpdirswell.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::80ab73ce-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7764,6 +7953,9 @@
             ],
             "name": "ocean.wpdirswell.tavg-u-hxy-sea.6hr.GLB",
             "physical_parameter": "link::80ab73ce-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -7791,6 +7983,9 @@
             ],
             "name": "ocean.mpw.tavg-u-hxy-sea.3hr.GLB",
             "physical_parameter": "link::f86eb6a8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The 3-hourly version of this variable is preferable for the science goals, but if this is not possible the 6-hourly version may be archived instead. Please do not provide both.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -7818,6 +8013,9 @@
             ],
             "name": "ocean.mpw.unknown01.3hr.GLB",
             "physical_parameter": "link::f86eb6a8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -7844,6 +8042,9 @@
             ],
             "name": "ocean.swh.unknown02.3hr.GLB",
             "physical_parameter": "link::f86eb6d8-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -7869,6 +8070,9 @@
             ],
             "name": "ocean.wdir.unknown03.3hr.GLB",
             "physical_parameter": "link::f86eb6f3-8ca1-11ef-944e-41a8eb05f654",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -7894,6 +8098,9 @@
             ],
             "name": "ocean.wpdir.unknown04.3hr.GLB",
             "physical_parameter": "link::80ab73cc-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -7920,6 +8127,9 @@
             ],
             "name": "ocean.wpp.unknown05.3hr.GLB",
             "physical_parameter": "link::80ab73d2-a698-11ef-914a-613c0433d878",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -7949,6 +8159,9 @@
             ],
             "name": "ocean.mlotst.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::b1ac17c786f782027deb9a5985ad106e",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "dsigmat coordinate added to clarify definition. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time CMIP7:longitude latitude time deltasigt,\n",
             "provenance": "DCPP [DCPP-day]",
             "region": "GLB",
@@ -7980,6 +8193,9 @@
             ],
             "name": "ocean.bigthetao.tavg-op20bar-hxy-sea.day.GLB",
             "physical_parameter": "link::4bccb8dcdb0ffe97dc89475c91ed66cc",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The variable at the depth of 200 meters is requested. \n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8008,6 +8224,9 @@
             ],
             "name": "ocean.zos.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::7539774a693b6a99db7e174343a488bd",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::cf34c974-80be-11e6-97ee-ac72891c3257",
@@ -8037,6 +8256,9 @@
             ],
             "name": "ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
             "physical_parameter": "link::cf53bdf4168a9107354d059ff39b5753",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "The variable at the depth of 200 meters is requested. \n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8063,6 +8285,9 @@
             ],
             "name": "ocean.so.tavg-ol-hxy-sea.day.GLB",
             "physical_parameter": "link::31eb8d2a1ed4d82ef8bebe4227ec90b9",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native\n",
             "region": "GLB",
             "spatial_shape": "link::a6562c2a-8883-11e5-b571-ac72891c3257",
@@ -8093,6 +8318,9 @@
             ],
             "name": "ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB",
             "physical_parameter": "link::b50af258aff9f9ca19fdf1ec4b039a55",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "The variable at the depth of 200 meters is requested. \n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8123,6 +8351,9 @@
             ],
             "name": "ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB",
             "physical_parameter": "link::c2705ac5fb7561a3aa5744c1163bf2d7",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "The variable at the depth of 200 meters is requested. \n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8153,6 +8384,9 @@
             ],
             "name": "ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB",
             "physical_parameter": "link::ab60603d901dfa1c47f4d2fd7784f8ea",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "The variable at the depth of 200 meters is requested.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8182,6 +8416,9 @@
             ],
             "name": "atmos.vas.tpt-h10m-hxy-u.1hr.GLB",
             "physical_parameter": "link::86b1cd51f370e346ecb20f1e80cb6ea4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -8210,6 +8447,9 @@
             ],
             "name": "atmos.uas.tpt-h10m-hxy-u.1hr.GLB",
             "physical_parameter": "link::e72b243a2a1c8691ab0168d8b62534c2",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -8238,6 +8478,9 @@
             ],
             "name": "ocean.vos.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::2fabd221-a80c-11ef-851e-c9d2077e3a3c",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Surface values only.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8267,6 +8510,9 @@
             ],
             "name": "ocean.uos.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::2fabd220-a80c-11ef-851e-c9d2077e3a3c",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Surface values only.\n",
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
@@ -8295,6 +8541,9 @@
             ],
             "name": "atmos.bldep.tpt-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::590e3c7e-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "region": "GLB",
             "spatial_shape": "link::a656047a-8883-11e5-b571-ac72891c3257",
             "temporal_shape": "link::7a976ce0-8042-11e6-97ee-ac72891c3257",
@@ -8322,6 +8571,9 @@
             ],
             "name": "seaIce.siconc.tavg-u-hxy-u.day.GLB",
             "physical_parameter": "link::150ada98-357c-11e7-8257-5404a60d96b5",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Units (from Physical Parameter) - CMIP6:% CMIP7:1, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean where sea time: mean CMIP7:area: time: mean, CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time typesi CMIP7:longitude latitude time,\n",
             "provenance": "SIMIP [seaiceday]",
             "region": "GLB",
@@ -8351,6 +8603,9 @@
             ],
             "name": "seaIce.siconc.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::150ada98-357c-11e7-8257-5404a60d96b5",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Units (from Physical Parameter) - CMIP6:% CMIP7:1, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean where sea time: mean CMIP7:area: time: mean, CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time typesi CMIP7:longitude latitude time,\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -8380,6 +8635,9 @@
             ],
             "name": "atmos.ua.tpt-p3-hxy-air.6hr.GLB",
             "physical_parameter": "link::21db90c0a12448299f855fdab60930d4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "On the following pressure levels: 850, 500, 250 hPa. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean time: point CMIP7:area: mean where air time: point,\n",
             "provenance": "6hrPlev ((isd.003))",
             "region": "GLB",
@@ -8409,6 +8667,9 @@
             ],
             "name": "atmos.va.tpt-p3-hxy-air.6hr.GLB",
             "physical_parameter": "link::2dedcb347c18e132a2f4d625abf94585",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "on the following pressure levels: 850, 500, 250 hPa. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean time: point CMIP7:area: mean where air time: point,\n",
             "provenance": "6hrPlev ((isd.003))",
             "region": "GLB",
@@ -8438,6 +8699,9 @@
             ],
             "name": "atmos.pr.tavg-u-hxy-u.1hr.GLB",
             "physical_parameter": "link::62f26742cf240c1b5169a5cd511196b6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "HighResMIP [1hrLev]",
             "region": "GLB",
@@ -8465,6 +8729,9 @@
             ],
             "name": "atmos.psl.tpt-u-hxy-u.1hr.GLB",
             "physical_parameter": "link::3d23c359f44d6a153c4dcab9e07d7cb6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "HighResMIP [1hr_strat]",
             "region": "GLB",
@@ -8496,6 +8763,9 @@
             ],
             "name": "atmos.hurs.tavg-h2m-hxy-u.6hr.GLB",
             "physical_parameter": "link::c75f684ec69602e9de82b48e53afb2cc",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "VIACSAB [viacsabExtra]",
             "region": "GLB",
@@ -8524,6 +8794,9 @@
             ],
             "name": "seaIce.siu.tavg-u-hxy-si.day.GLB",
             "physical_parameter": "link::590e80c6-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaiceday]",
             "region": "GLB",
@@ -8552,6 +8825,9 @@
             ],
             "name": "seaIce.siv.tavg-u-hxy-si.day.GLB",
             "physical_parameter": "link::59141748-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaiceday]",
             "region": "GLB",
@@ -8579,6 +8855,9 @@
             ],
             "name": "ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::13654e951d583dc7d02b5c23485e6eb5",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "Concentrations of all 3D tracers in the uppermost ocean layer. See first table in Oyr for a complete list of these tracers.  \"Tracer\"  concentations should be reported even if they are diagnosed rather than prognostically calculated.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8606,6 +8885,9 @@
             ],
             "name": "ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::c85ac4ad4664c34898cdb9af2418c45a",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "Concentrations of all 3D tracers in the uppermost ocean layer. See first table in Oyr for a complete list of these tracers.  \"Tracer\"  concentations should be reported even if they are diagnosed rather than prognostically calculated.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8633,6 +8915,9 @@
             ],
             "name": "ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::a72a0bcf271db9db3a7fb9b7f3e7b93a",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "Concentrations of all 3D tracers in the uppermost ocean layer. See first table in Oyr for a complete list of these tracers.  \"Tracer\"  concentations should be reported even if they are diagnosed rather than prognostically calculated.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8660,6 +8945,9 @@
             ],
             "name": "ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::d90bac355dae4e53a6d0e5df81a090ad",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "Concentrations of all 3D tracers in the uppermost ocean layer. See first table in Oyr for a complete list of these tracers.  \"Tracer\"  concentations should be reported even if they are diagnosed rather than prognostically calculated.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8688,6 +8976,9 @@
             ],
             "name": "ocean.deptho.ti-u-hxy-sea.fx.GLB",
             "physical_parameter": "link::f1b8ddb539cb96eb65453dce4c8bb978",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Save both native and spherical. \n",
             "provenance": "Ofx ((isd.003))",
             "region": "GLB",
@@ -8718,6 +9009,9 @@
             ],
             "name": "ocean.masscello.ti-ol-hxy-sea.fx.GLB",
             "physical_parameter": "link::9122e7b627c429163fd0857dc366e14e",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "3-d field: report on grid that applies to temperature. Use this variable if masscello is fixed, e.g. for Boussinesq models with static ocean grid cell thickness.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: sum CMIP7:area: mean where sea,\n",
             "provenance": "Ofx ((isd.003))",
             "region": "GLB",
@@ -8743,6 +9037,9 @@
             ],
             "name": "ocean.areacell.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::62c5b9728a01c0031e3a788ac4c8eff5",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "For oceans with more than 1 mesh (e.g., staggered grids), report areas that apply to surface vertical fluxes of energy.\n",
             "provenance": "Ofx ((isd.003))",
             "region": "GLB",
@@ -8771,6 +9068,9 @@
             ],
             "name": "ocean.sftof.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::20e7d22ad09b324af00f41f6060701a7",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Should this be recorded as a function of depth?  Report on the same grid that ocean fields are reported (i.e., the ocean native grid, or the grid that ocean data has been provided to CMIP.  For completeness, provide this even if the ocean grid is the same as the atmospheric grid.\n",
             "provenance": "Ofx ((isd.003))",
             "region": "GLB",
@@ -8799,6 +9099,9 @@
             ],
             "name": "ocean.basin.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::1d3ef4c73895a317948f1f3870f65834",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on the same grid as the temperature field. flag\\_values=0,1,2,3,4,5,6,7,8,9,10 corresponding to flag\\_meanings=global\\_land, southern\\_ocean, atlantic\\_ocean, pacific\\_ocean, arctic\\_ocean, indian\\_ocean, mediterranean\\_sea, black\\_sea, hudson\\_bay, baltic\\_sea, red\\_sea.  CHANGE: Flag values and meanings are in processing note. ISSUE: may not be easily machine processed.\n",
             "provenance": "Ofx ((isd.003))",
             "region": "GLB",
@@ -8832,6 +9135,9 @@
             "name": "ocean.hfgeou.ti-u-hxy-sea.fx.GLB",
             "physical_parameter": "link::1418ccb847c5c235176620baf22d7b33",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Variable value should be reported as the upward flux at bottom of the deepest ocean layer\nIf this field is time-dependent then save it instead as one of your Omon fields (see the Omon table)\nCHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude CMIP7:longitude latitude seafloor,\n",
             "provenance": "Ofx ((isd.003))",
             "region": "GLB",
@@ -8859,6 +9165,9 @@
             ],
             "name": "ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
             "physical_parameter": "link::bb27046ce21470dfbbecdd4f7eca546a",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "\n",
             "provenance": "Oyr ((isd.003))",
             "region": "GLB",
@@ -8887,6 +9196,9 @@
             ],
             "name": "ocean.zos.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::7539774a693b6a99db7e174343a488bd",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "See OMDP document for details. Report on native horizontal grid as well as on a spherical latitude/longitude grid.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8914,6 +9226,9 @@
             ],
             "name": "ocean.zossq.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::f7658de98a4b03f947f0ffb19eeca1fd",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8939,6 +9254,9 @@
             ],
             "name": "ocean.zostoga.tavg-u-hm-sea.mon.GLB",
             "physical_parameter": "link::69c17331aebbebfc295d5b7af7f0ef8b",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8969,6 +9287,9 @@
             ],
             "name": "ocean.masscello.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::9122e7b627c429163fd0857dc366e14e",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. Do not use this field if masscello is fixed: use Ofx.masscello instead. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: sum where sea time: mean CMIP7:area: mean where sea time: mean,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -8997,6 +9318,9 @@
             ],
             "name": "ocean.thkcello.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::5aea9677ebbb40076a0e0b3b11fdb46f",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9025,6 +9349,9 @@
             ],
             "name": "ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::cf53bdf4168a9107354d059ff39b5753",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9053,6 +9380,9 @@
             ],
             "name": "ocean.bigthetao.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::4bccb8dcdb0ffe97dc89475c91ed66cc",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9081,6 +9411,9 @@
             ],
             "name": "ocean.tos.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::0e5d376315a376cd2b1e37f440fe43d3",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Note change from CMIP5 K to CMIP6 C. Report on native horizontal grid as well as on a spherical latitude/longitude grid.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9110,6 +9443,9 @@
             ],
             "name": "ocean.so.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::31eb8d2a1ed4d82ef8bebe4227ec90b9",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native.\nCHANGE SINCE CMIP6 in Units (from Physical Parameter) - CMIP6:0.001 CMIP7:1E-03,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9139,6 +9475,9 @@
             ],
             "name": "ocean.sos.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::74a9891bcab2667dbcb66574c6370c86",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as on a spherical latitude/longitude grid. CHANGE SINCE CMIP6 in Units (from Physical Parameter) - CMIP6:0.001 CMIP7:1E-03,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9171,6 +9510,9 @@
             ],
             "name": "ocean.mlotst.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::b1ac17c786f782027deb9a5985ad106e",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "dsigmat coordinate added to clarify definition. Report on native horizontal grid as well as on a spherical latitude/longitude grid. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time CMIP7:longitude latitude time deltasigt,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9200,6 +9542,9 @@
             ],
             "name": "ocean.uo.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::1ed3e3be3675e589a5327ce82016ab72",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean, CHANGE SINCE CMIP6 in Cell Measures - CMIP6:::OPT CMIP7:area: areacello volume: volcello,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9229,6 +9574,9 @@
             ],
             "name": "ocean.vo.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::3e3ddc77800e7d421834b9cb808602d7",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean, CHANGE SINCE CMIP6 in Cell Measures - CMIP6:::OPT CMIP7:area: areacello volume: volcello,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9257,6 +9605,9 @@
             ],
             "name": "ocean.wmo.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::05b30c1e249f6854ffc0b3f7676eed73",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. Those who wish to record vertical velocities and vertical fluxes on ocean half-levels may do so. If using CMOR3 you will be required to specify artificial bounds (e.g. located at full model levels) to avoid an error exit.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9286,6 +9637,9 @@
             ],
             "name": "ocean.umo.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::2f074f3417a26ad322b96dd0b6c21e09",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean, CHANGE SINCE CMIP6 in Cell Measures - CMIP6:::OPT CMIP7:area: areacello volume: volcello,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9315,6 +9669,9 @@
             ],
             "name": "ocean.vmo.tavg-ol-hxy-sea.mon.GLB",
             "physical_parameter": "link::f7fdcc15d14c0066a9590e4bce820056",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. Online mapping to depth/pressure vertical grid if depth or pressure are not native. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean, CHANGE SINCE CMIP6 in Cell Measures - CMIP6:::OPT CMIP7:area: areacello volume: volcello,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9344,6 +9701,9 @@
             "name": "ocean.hfds.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::db14915fa8f71225f7775d0d922197ec",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid as well as remapped onto a latitude/longitude grid.\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9374,6 +9734,9 @@
             "name": "ocean.tauuo.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::d1cfe9e20a66d3e922554248677efaba",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9404,6 +9767,9 @@
             "name": "ocean.tauvo.tavg-u-hxy-sea.mon.GLB",
             "physical_parameter": "link::593ed46e925a8bce9de9eb47f5e72632",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on native horizontal grid. CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: mean where sea time: mean,\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -9431,6 +9797,9 @@
             ],
             "name": "ocean.tossq.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::d1b497a4f7f4cb666757ec97d152079e",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on the ocean horizontal native grid.\n",
             "provenance": "Oday ((isd.003))",
             "region": "GLB",
@@ -9459,6 +9828,9 @@
             ],
             "name": "ocean.tos.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::0e5d376315a376cd2b1e37f440fe43d3",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on the ocean horizontal native grid.\n",
             "provenance": "Oday ((isd.003))",
             "region": "GLB",
@@ -9488,6 +9860,9 @@
             ],
             "name": "ocean.sos.tavg-u-hxy-sea.day.GLB",
             "physical_parameter": "link::74a9891bcab2667dbcb66574c6370c86",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "Report on the ocean horizontal native grid. CHANGE SINCE CMIP6 in Units (from Physical Parameter) - CMIP6:0.001 CMIP7:1E-03,\n",
             "provenance": "Oday ((isd.003))",
             "region": "GLB",
@@ -9514,6 +9889,9 @@
             ],
             "name": "atmos.areacell.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::c47a4040603c03d250c73e9c266a24bb",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "For atmospheres with more than 1 mesh (e.g., staggered grids), report areas that apply to surface vertical fluxes of energy.\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -9542,6 +9920,9 @@
             ],
             "name": "atmos.cl.tavg-al-hxy-u.mon.GLB",
             "physical_parameter": "link::e0ecf1c1305c1bdc69bee0e7ba1e2e03",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "Report on model layers (not standard pressures).\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9570,6 +9951,9 @@
             ],
             "name": "atmos.cli.tavg-al-hxy-u.mon.GLB",
             "physical_parameter": "link::dd916e3e2eca18cda5d9f81749d0c91c",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "Report on model layers (not standard pressures).\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9598,6 +9982,9 @@
             ],
             "name": "atmos.clivi.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::73c496f5669cc122cf1cddfe4df2a27a",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9626,6 +10013,9 @@
             ],
             "name": "atmos.clt.tavg-u-hxy-u.day.GLB",
             "physical_parameter": "link::7c2249d424dde72f8616d42870a9d425",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -9654,6 +10044,9 @@
             ],
             "name": "atmos.clt.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::7c2249d424dde72f8616d42870a9d425",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9682,6 +10075,9 @@
             ],
             "name": "atmos.clw.tavg-al-hxy-u.mon.GLB",
             "physical_parameter": "link::86b2b3318a73839edfafa9d46864aadc",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "Report on model layers (not standard pressures).\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9710,6 +10106,9 @@
             ],
             "name": "atmos.clwvi.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::80a1dd605b563e9f09c718a5ba9cb9cc",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9739,6 +10138,9 @@
             ],
             "name": "atmos.evspsbl.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::089961a3af4d54d5fb045cf3750e760c",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9767,6 +10169,9 @@
             ],
             "name": "land.evspsblsoi.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::fb6dac37f41c49ca02fc234d4da1a782",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -9795,6 +10200,9 @@
             ],
             "name": "land.evspsblveg.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::32ed0e80b1ae2adc7d4fb4b71bce9285",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -9823,6 +10231,9 @@
             "name": "atmos.hfls.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::95cbf6ac889c8fe7d92e20e8c34960d1",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -9852,6 +10263,9 @@
             "name": "atmos.hfls.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::95cbf6ac889c8fe7d92e20e8c34960d1",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9880,6 +10294,9 @@
             "name": "atmos.hfss.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::a13ed886b17e20cdae8b89b9ff8e4610",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -9909,6 +10326,9 @@
             "name": "atmos.hfss.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::a13ed886b17e20cdae8b89b9ff8e4610",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9938,6 +10358,9 @@
             ],
             "name": "atmos.hur.tavg-p19-hxy-air.mon.GLB",
             "physical_parameter": "link::3cc6766c2d001a58d18dfe7f60fd5e66",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -9967,6 +10390,9 @@
             ],
             "name": "atmos.hur.tavg-p19-hxy-u.day.GLB",
             "physical_parameter": "link::3cc6766c2d001a58d18dfe7f60fd5e66",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -9998,6 +10424,9 @@
             ],
             "name": "atmos.hurs.tavg-h2m-hxy-u.mon.GLB",
             "physical_parameter": "link::c75f684ec69602e9de82b48e53afb2cc",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "express as a percentage.  Normally, the relative humidity  should be reported at the 2 meter height\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10026,6 +10455,9 @@
             ],
             "name": "atmos.hus.tavg-p19-hxy-u.mon.GLB",
             "physical_parameter": "link::53f4724d228998d54191c73352532ce3",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10055,6 +10487,9 @@
             ],
             "name": "atmos.hus.tavg-p19-hxy-u.day.GLB",
             "physical_parameter": "link::53f4724d228998d54191c73352532ce3",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -10086,6 +10521,9 @@
             ],
             "name": "atmos.huss.tavg-h2m-hxy-u.mon.GLB",
             "physical_parameter": "link::ebfefc2ab8716ef597b128171b275945",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10117,6 +10555,9 @@
             ],
             "name": "atmos.huss.tavg-h2m-hxy-u.day.GLB",
             "physical_parameter": "link::ebfefc2ab8716ef597b128171b275945",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -10148,6 +10589,9 @@
             ],
             "name": "atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
             "physical_parameter": "link::ebfefc2ab8716ef597b128171b275945",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -10176,6 +10620,9 @@
             ],
             "name": "land.lai.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::6c3e8db1b45a6ae7e80ca5a265c0fd50",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "Note that if this variable is independent of time, it should be stored only for a single time (user choice).\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -10205,6 +10652,9 @@
             ],
             "name": "landIce.mrfso.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::154d00de9ab9aff72373a673df10946a",
+            "primary_modelling_realm": [
+                "link::landIce"
+            ],
             "processing_note": "\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -10233,6 +10683,9 @@
             ],
             "name": "land.mrro.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::e0a0f457ec117b27ca8353b11bf9d4fa",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -10261,6 +10714,9 @@
             ],
             "name": "land.mrros.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::26a31ad76858198bd4d719aafeebe801",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -10289,6 +10745,9 @@
             ],
             "name": "land.mrso.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::af574f1ac4a9f44a2d943352a455cfeb",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -10317,6 +10776,9 @@
             ],
             "name": "land.mrsofc.ti-u-hxy-lnd.fx.GLB",
             "physical_parameter": "link::ec6da64bcabf72243b381d6b50bffa5f",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "This variable should exclude lake water and must refer to soil water only.\nCHANGE: processing clarified.\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -10348,6 +10810,9 @@
             ],
             "name": "land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB",
             "physical_parameter": "link::40c091a01dc9db6d6d5901528c375ab3",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "integrate over uppermost 10 cm. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time sdepth1 CMIP7:longitude latitude time sdepth10cm,\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -10380,6 +10845,9 @@
             ],
             "name": "land.mrsol.tavg-d10cm-hxy-lnd.mon.GLB",
             "physical_parameter": "link::40c091a01dc9db6d6d5901528c375ab3",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "integrate over uppermost 10 cm. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time sdepth1 CMIP7:longitude latitude time sdepth10cm,\n",
             "provenance": "Lmon ((isd.003))",
             "region": "GLB",
@@ -10408,6 +10876,9 @@
             ],
             "name": "land.orog.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::00e77372e8b909d9a827a0790e991fd9",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -10436,6 +10907,9 @@
             ],
             "name": "atmos.pr.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::62f26742cf240c1b5169a5cd511196b6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -10464,6 +10938,9 @@
             ],
             "name": "atmos.pr.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::62f26742cf240c1b5169a5cd511196b6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10492,6 +10969,9 @@
             ],
             "name": "atmos.pr.tavg-u-hxy-u.day.GLB",
             "physical_parameter": "link::62f26742cf240c1b5169a5cd511196b6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -10520,6 +11000,9 @@
             ],
             "name": "atmos.prc.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::aa2bea81f238ad8f2c35a7e16ad97801",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10548,6 +11031,9 @@
             ],
             "name": "atmos.prsn.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::051919eddec810e292c883205c944ceb",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10576,6 +11062,9 @@
             ],
             "name": "atmos.prw.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::fc637f1c75e58be8a6e4112411a00f36",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10604,6 +11093,9 @@
             ],
             "name": "atmos.ps.tavg-u-hxy-u.day.GLB",
             "physical_parameter": "link::8c9504d28596e05586c8e193082ac617",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "CFday ((isd.003))",
             "region": "GLB",
@@ -10631,6 +11123,9 @@
             ],
             "name": "atmos.ps.tpt-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::8c9504d28596e05586c8e193082ac617",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -10659,6 +11154,9 @@
             ],
             "name": "atmos.ps.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::8c9504d28596e05586c8e193082ac617",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10687,6 +11185,9 @@
             ],
             "name": "atmos.psl.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::3d23c359f44d6a153c4dcab9e07d7cb6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10715,6 +11216,9 @@
             ],
             "name": "atmos.psl.tavg-u-hxy-u.day.GLB",
             "physical_parameter": "link::3d23c359f44d6a153c4dcab9e07d7cb6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -10743,6 +11247,9 @@
             "name": "atmos.rlds.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::70d7d6fc0e9c2f14624a0270bf2b99b9",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -10772,6 +11279,9 @@
             "name": "atmos.rlds.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::70d7d6fc0e9c2f14624a0270bf2b99b9",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10801,6 +11311,9 @@
             "name": "atmos.rldscs.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::7b2d1e1a3ece1169d8ac61af4b758ed2",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10830,6 +11343,9 @@
             "name": "atmos.rlus.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::89027ee0079acb709750ddeac1c08899",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10858,6 +11374,9 @@
             "name": "atmos.rlus.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::89027ee0079acb709750ddeac1c08899",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -10887,6 +11406,9 @@
             "name": "atmos.rlut.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::63345d9732c72b97ca395f24ce2d6642",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10916,6 +11438,9 @@
             "name": "atmos.rlutcs.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::921b8b8f6620826567d9324314c70410",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -10945,6 +11470,9 @@
             ],
             "name": "land.rootd.ti-u-hxy-lnd.fx.GLB",
             "physical_parameter": "link::d76ba4c5868a0a9a02f433dc3c86d5d2",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean CMIP7:area: mean where land,\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -10973,6 +11501,9 @@
             "name": "atmos.rsds.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::6e7b9f984d3bba15daccaaa18039a85d",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -11002,6 +11533,9 @@
             "name": "atmos.rsds.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::6e7b9f984d3bba15daccaaa18039a85d",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11031,6 +11565,9 @@
             "name": "atmos.rsds.tavg-u-hxy-u.day.GLB",
             "physical_parameter": "link::6e7b9f984d3bba15daccaaa18039a85d",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11060,6 +11597,9 @@
             "name": "atmos.rsdscs.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::d0a35d5c99a0aa93ad4069cfe83bf748",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11089,6 +11629,9 @@
             "name": "atmos.rsdt.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::a21e250a10f96b1c1ad6d742206a157e",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11117,6 +11660,9 @@
             "name": "atmos.rsus.tavg-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::70bf79db957daa3b82413da949233ac7",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -11146,6 +11692,9 @@
             "name": "atmos.rsus.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::70bf79db957daa3b82413da949233ac7",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11175,6 +11724,9 @@
             "name": "atmos.rsuscs.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::90df05fe3dcd9fe0c9b48aaa74b5e9e2",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11204,6 +11756,9 @@
             "name": "atmos.rsut.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::b907fef85d4c9571a9457ee1b259bb8f",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11233,6 +11788,9 @@
             "name": "atmos.rsutcs.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::12e0369ff0ba1a6f1a84e0d9565d4b07",
             "positive_direction": "up",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11264,6 +11822,9 @@
             ],
             "name": "atmos.sfcWind.tavg-h10m-hxy-u.mon.GLB",
             "physical_parameter": "link::4b97609a32d53dff5b8e73729e4f258b",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally, the the wind component should be reported at the 10 meter height\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11295,6 +11856,9 @@
             ],
             "name": "atmos.sfcWind.tavg-h10m-hxy-u.day.GLB",
             "physical_parameter": "link::4b97609a32d53dff5b8e73729e4f258b",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 10 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11323,6 +11887,9 @@
             ],
             "name": "land.sftgif.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::a1d2e309c6f25017442ad6c79c4f9eca",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "For atmospheres with more than 1 mesh (e.g., staggered grids), report areas that apply to surface vertical fluxes of energy.\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -11351,6 +11918,9 @@
             ],
             "name": "atmos.sftlf.ti-u-hxy-u.fx.GLB",
             "physical_parameter": "link::b0444e42-b096-11e6-aab6-ac72891c3257",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "For atmospheres with more than 1 mesh (e.g., staggered grids), report areas that apply to surface vertical fluxes of energy.\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -11380,6 +11950,9 @@
             ],
             "name": "landIce.snc.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::e53e97d7e904fe67aa54b721b3c6a290",
+            "primary_modelling_realm": [
+                "link::landIce"
+            ],
             "processing_note": "\n",
             "provenance": "LImon ((isd.003))",
             "region": "GLB",
@@ -11409,6 +11982,9 @@
             ],
             "name": "landIce.snw.tavg-u-hxy-lnd.mon.GLB",
             "physical_parameter": "link::0e1704f8fbacbe223946d84392b8064e",
+            "primary_modelling_realm": [
+                "link::landIce"
+            ],
             "processing_note": "\n",
             "provenance": "LImon ((isd.003))",
             "region": "GLB",
@@ -11438,6 +12014,9 @@
             ],
             "name": "atmos.ta.tavg-p19-hxy-air.mon.GLB",
             "physical_parameter": "link::b9c3eb96337c69c1c4a5aab1317f5563",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11467,6 +12046,9 @@
             ],
             "name": "atmos.ta.tavg-p19-hxy-air.day.GLB",
             "physical_parameter": "link::b9c3eb96337c69c1c4a5aab1317f5563",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11498,6 +12080,9 @@
             ],
             "name": "atmos.tas.tpt-h2m-hxy-u.3hr.GLB",
             "physical_parameter": "link::5c4978e802ba55d5a298cf1b3bdc2b3a",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -11529,6 +12114,9 @@
             ],
             "name": "atmos.tas.tavg-h2m-hxy-u.mon.GLB",
             "physical_parameter": "link::5c4978e802ba55d5a298cf1b3bdc2b3a",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11560,6 +12148,9 @@
             ],
             "name": "atmos.tas.tavg-h2m-hxy-u.day.GLB",
             "physical_parameter": "link::5c4978e802ba55d5a298cf1b3bdc2b3a",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11592,6 +12183,9 @@
             ],
             "name": "atmos.tas.tmax-h2m-hxy-u.mon.GLB",
             "physical_parameter": "link::2dd48e8c50b4b88a83ff07d308e4e642",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "Normally, this should be reported at the 2 meter height. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time height2m CMIP7:longitude latitude time4 height2m,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11623,6 +12217,9 @@
             ],
             "name": "atmos.tas.tmax-h2m-hxy-u.day.GLB",
             "physical_parameter": "link::2dd48e8c50b4b88a83ff07d308e4e642",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11655,6 +12252,9 @@
             ],
             "name": "atmos.tas.tmin-h2m-hxy-u.mon.GLB",
             "physical_parameter": "link::cce3dd39c138bf3c4d713263cc2e6cff",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "Normally, this should be reported at the 2 meter height. CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude time height2m CMIP7:longitude latitude time4 height2m,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11686,6 +12286,9 @@
             ],
             "name": "atmos.tas.tmin-h2m-hxy-u.day.GLB",
             "physical_parameter": "link::cce3dd39c138bf3c4d713263cc2e6cff",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 2 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11715,6 +12318,9 @@
             "name": "atmos.tauu.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::3abb7c5b4c4650e9d17a8439004aebea",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11744,6 +12350,9 @@
             "name": "atmos.tauv.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::bd10cebbde1593b65e5220911f9a997c",
             "positive_direction": "down",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11773,6 +12382,9 @@
             ],
             "name": "ocean.thkcello.ti-ol-hxy-sea.fx.GLB",
             "physical_parameter": "link::5aea9677ebbb40076a0e0b3b11fdb46f",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "If this field is time-dependent then save it instead as one of your Omon fields (see the Omon table) CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean CMIP7:area: mean where sea,\n",
             "provenance": "fx ((isd.003))",
             "region": "GLB",
@@ -11801,6 +12413,9 @@
             ],
             "name": "atmos.ts.tavg-u-hxy-u.mon.GLB",
             "physical_parameter": "link::90c49fce92dc1f21647dad07d1342843",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11829,6 +12444,9 @@
             ],
             "name": "land.tslsi.tpt-u-hxy-u.3hr.GLB",
             "physical_parameter": "link::2a92e434b37059d90e72b193bdbcce0f",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: mean (comment: over land and sea ice) time: point CMIP7:area: mean (over land and sea ice) time: point,\n\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -11856,6 +12474,9 @@
             ],
             "name": "ocean.tos.tpt-u-hxy-sea.3hr.GLB",
             "physical_parameter": "link::0e5d376315a376cd2b1e37f440fe43d3",
+            "primary_modelling_realm": [
+                "link::ocean"
+            ],
             "processing_note": "\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -11885,6 +12506,9 @@
             ],
             "name": "atmos.ua.tavg-p19-hxy-air.mon.GLB",
             "physical_parameter": "link::21db90c0a12448299f855fdab60930d4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -11914,6 +12538,9 @@
             ],
             "name": "atmos.ua.tavg-p19-hxy-air.day.GLB",
             "physical_parameter": "link::21db90c0a12448299f855fdab60930d4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -11946,6 +12573,9 @@
             ],
             "name": "atmos.uas.tpt-h10m-hxy-u.3hr.GLB",
             "physical_parameter": "link::e72b243a2a1c8691ab0168d8b62534c2",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6: compound name,\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -11977,6 +12607,9 @@
             ],
             "name": "atmos.uas.tavg-h10m-hxy-u.mon.GLB",
             "physical_parameter": "link::e72b243a2a1c8691ab0168d8b62534c2",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally, the the wind component should be reported at the 10 meter height\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -12008,6 +12641,9 @@
             ],
             "name": "atmos.uas.tavg-h10m-hxy-u.day.GLB",
             "physical_parameter": "link::e72b243a2a1c8691ab0168d8b62534c2",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 10 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -12036,6 +12672,9 @@
             ],
             "name": "atmos.va.tavg-p19-hxy-air.mon.GLB",
             "physical_parameter": "link::2dedcb347c18e132a2f4d625abf94585",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -12065,6 +12704,9 @@
             ],
             "name": "atmos.va.tavg-p19-hxy-air.day.GLB",
             "physical_parameter": "link::2dedcb347c18e132a2f4d625abf94585",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -12096,6 +12738,9 @@
             ],
             "name": "atmos.vas.tavg-h10m-hxy-u.mon.GLB",
             "physical_parameter": "link::86b1cd51f370e346ecb20f1e80cb6ea4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally, the the wind component should be reported at the 10 meter height\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -12127,6 +12772,9 @@
             ],
             "name": "atmos.vas.tavg-h10m-hxy-u.day.GLB",
             "physical_parameter": "link::86b1cd51f370e346ecb20f1e80cb6ea4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "normally report this at 10 meters above the surface\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -12159,6 +12807,9 @@
             ],
             "name": "atmos.vas.tpt-h10m-hxy-u.3hr.GLB",
             "physical_parameter": "link::86b1cd51f370e346ecb20f1e80cb6ea4",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6: compound name,\n",
             "provenance": "3hr ((isd.003))",
             "region": "GLB",
@@ -12188,6 +12839,9 @@
             ],
             "name": "atmos.wap.tavg-p19-hxy-air.mon.GLB",
             "physical_parameter": "link::51fb29dd55442361fa9c5dbe23aca9c6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -12217,6 +12871,9 @@
             ],
             "name": "atmos.wap.tavg-p19-hxy-u.day.GLB",
             "physical_parameter": "link::51fb29dd55442361fa9c5dbe23aca9c6",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -12246,6 +12903,9 @@
             ],
             "name": "atmos.zg.tavg-p19-hxy-air.mon.GLB",
             "physical_parameter": "link::28e774ec0ecd561a6a3d437e6c443a6b",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "Amon ((isd.003))",
             "region": "GLB",
@@ -12274,6 +12934,9 @@
             ],
             "name": "atmos.zg.tavg-p19-hxy-air.day.GLB",
             "physical_parameter": "link::28e774ec0ecd561a6a3d437e6c443a6b",
+            "primary_modelling_realm": [
+                "link::atmos"
+            ],
             "processing_note": "CHANGE SINCE CMIP6 in Dimensions - CMIP6:longitude latitude plev8 time CMIP7:longitude latitude plev19 time, CHANGE SINCE CMIP6 in Cell Methods - CMIP6:time: mean CMIP7:area: time: mean where air,\n",
             "provenance": "day ((isd.003))",
             "region": "GLB",
@@ -12301,6 +12964,9 @@
             ],
             "name": "ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB",
             "physical_parameter": "link::c96cc5b0-c5f0-11e6-ac20-5404a60d96b5",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -12328,6 +12994,9 @@
             ],
             "name": "ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB",
             "physical_parameter": "link::c96cd366-c5f0-11e6-ac20-5404a60d96b5",
+            "primary_modelling_realm": [
+                "link::ocnBgchem"
+            ],
             "processing_note": "\n",
             "provenance": "Omon ((isd.003))",
             "region": "GLB",
@@ -12358,6 +13027,9 @@
             ],
             "name": "seaIce.sithick.tavg-u-hxy-si.mon.GLB",
             "physical_parameter": "link::591321f8-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaicemon]",
             "region": "GLB",
@@ -12387,6 +13059,9 @@
             ],
             "name": "seaIce.sithick.tavg-u-hxy-si.day.GLB",
             "physical_parameter": "link::591321f8-9e49-11e5-803c-0d0b866b59f3",
+            "primary_modelling_realm": [
+                "link::seaIce"
+            ],
             "processing_note": "Note that SIMIP requests the area-weighted average for all intensive variables (i.e., variables that are not proportional to area fraction such as albedo, temperature, or heat flux). Hence, all time samples with non-zero sea-ice fraction are first multiplied by area fraction, then summed, and then divided by the sum of the area fractions. See Appendix C of Notz et al. (2016) for more detail.\nCHANGE SINCE CMIP6 in Cell Methods - CMIP6:area: time: mean where sea\\_ice (comment: mask=siconc) CMIP7:area: time: mean where sea\\_ice (mask=siconc),\n",
             "provenance": "SIMIP [seaiceday]",
             "region": "GLB",
@@ -12415,6 +13090,9 @@
             ],
             "name": "land.slthick.ti-sl-hxy-lnd.fx.GLB",
             "physical_parameter": "link::7124901e-c7b6-11e6-bb2a-ac72891c3257",
+            "primary_modelling_realm": [
+                "link::land"
+            ],
             "processing_note": "\n",
             "provenance": "LS3MIP [fxLS3MIP]",
             "region": "GLB",
