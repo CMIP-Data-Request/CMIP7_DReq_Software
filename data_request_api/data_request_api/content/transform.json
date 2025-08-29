@@ -115,7 +115,6 @@
           "comments": "opportunity/variable_group_comments"
         },
         "variables": {
-          "compound_name": "name",
           "cmip6_frequency.+": "cmip6_frequency",
           "^frequency": "cmip7_frequency",
           "esm-bcv.*": "esm-bcv",
@@ -149,11 +148,12 @@
           "opportunities": ["keyword"]
         }
       },
-      "keys_to_copy": {
+      "keys_to_initialize": {
         "default": {
           "linked_id": "uid"
         }
-      }
+      },
+      "keys_to_copy": {}
     },
     "test": {
       "keys_to_merge": {
@@ -161,21 +161,31 @@
           "modelling_realm.+": "modelling_realm"
         }
       },
-      "keys_to_rename": {
+      "keys_to_copy": {
         "variables": {
           "cmip7_compound_name": "name"
         }
       }
     },
-    "v1.0": {},
-    "v1.1": {},
+    "v1.0": {
+      "keys_to_copy": {
+        "variables": {
+          "compound_name": "name"
+        }
+      }},
+    "v1.1": {
+      "keys_to_copy": {
+        "variables": {
+          "compound_name": "name"
+        }
+      }},
     "v1.2.0": {
       "keys_to_merge": {
         "variables": {
           "modelling_realm.+": "modelling_realm"
         }
       },
-      "keys_to_rename": {
+      "keys_to_copy": {
         "variables": {
           "cmip6_compound_name": "name"
         }
@@ -187,7 +197,7 @@
           "modelling_realm.+": "modelling_realm"
         }
       },
-      "keys_to_rename": {
+      "keys_to_copy": {
         "variables": {
           "cmip6_compound_name": "name"
         }
@@ -199,7 +209,7 @@
           "modelling_realm.+": "modelling_realm"
         }
       },
-      "keys_to_rename": {
+      "keys_to_copy": {
         "variables": {
           "cmip7_compound_name": "name"
         }

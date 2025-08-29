@@ -186,15 +186,30 @@ def merge_useful_keys(content, patterns_to_merge=dict(), default=None):
 
 @distribute_on_entry
 def copy_useful_keys(content, keys_to_copy=dict(), default=None):
+    logger = get_logger()
     if default is not None and isinstance(default, dict):
         default.update(keys_to_copy)
         keys_to_copy = default
+    for record_id in sorted(list(content)):
+        for (key, val) in keys_to_copy.items():
+            if key in content[record_id]:
+                content[record_id][val] = copy.deepcopy(content[record_id][key])
+            else:
+                logger.warning(f"Key {key} not in found for record id {record_id}.")
+    return content
+
+
+@distribute_on_entry
+def initialize_useful_keys(content, keys_to_initialize=dict(), default=None):
+    if default is not None and isinstance(default, dict):
+        default.update(keys_to_initialize)
+        keys_to_initialize = default
     logger = get_logger()
     for record_id in sorted(list(content),
                             key=lambda record_id: "|".join([content[record_id].get("name", "undef"),
                                                             content[record_id].get("uid", "undef"),
                                                             record_id])):
-        for (key, val) in keys_to_copy.items():
+        for (key, val) in keys_to_initialize.items():
             if val not in content[record_id]:
                 global default_count
                 value = default_template.format(default_count)
@@ -354,7 +369,7 @@ def tidy_content(content, record_to_uid_index):
     return content
 
 
-def transform_content_inner(content, settings, change_tables=False):
+def transform_content_inner(content, settings, change_tables=False, force_variable_name=False, variable_name=None):
     """
     Transform a one base export content to:
     - remove unused keys which could create circle import later
@@ -400,11 +415,18 @@ def transform_content_inner(content, settings, change_tables=False):
         default_patterns_to_remove = settings["default_keys_to_delete"]
         to_remove_keys_patterns = settings["keys_to_delete"]
         to_rename_keys_patterns = settings["keys_to_rename"]
+        to_copy_keys_content = settings["keys_to_copy"]
+        if force_variable_name:
+            for key in list(to_copy_keys_content["variables"]):
+                if to_copy_keys_content["variables"][key] in ["name", ]:
+                    del to_copy_keys_content["variables"][key]
+            to_copy_keys_content["variables"][correct_key_string(variable_name)] = "name"
         to_merge_keys_patterns = settings["keys_to_merge"]
         to_sort_keys_content = settings["keys_to_sort"]
-        to_copy_keys_content = settings["keys_to_copy"]
+        to_initialize_keys_content = settings["keys_to_initialize"]
         content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
                                      default_patterns_to_remove=default_patterns_to_remove)
+        content = copy_useful_keys(content=content, per_entry_input=to_copy_keys_content)
         content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns)
         content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
         # Filter on status if needed then remove linked keys
@@ -412,7 +434,7 @@ def transform_content_inner(content, settings, change_tables=False):
         # Copy some keys to others
         global default_count
         default_count = 0
-        content = copy_useful_keys(content=content, per_entry_input=to_copy_keys_content)
+        content = initialize_useful_keys(content=content, per_entry_input=to_initialize_keys_content)
         # Add name and uid if needed, build equivalence dict between record_id and uid
         content, record_to_uid_index = add_useful_keys(content)
         # Tidy the content of the dictionary by removing unused entries
@@ -472,12 +494,14 @@ def split_content_one_base(content):
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
 
 
-def transform_content(content, version):
+def transform_content(content, version, force_variable_name=False, variable_name=None):
     """
     Function to transform the export content (single or several base-s- export) to VS and DR dictionaries.
     The key "version" is added to the DR and VS dictionaries.
     :param dict content: input export content (either single base or several bases)
     :param str version: string containing the version of the export content
+    :param bool force_variable_name: bool whether to force variable name to config one
+    :param str variable_name: string containing the variable name to be used
     :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
     """
     logger = get_logger()
@@ -490,10 +514,12 @@ def transform_content(content, version):
         # Get back to one database case if needed
         if len(content) == 1:
             logger.info("Single database case - no structure transformation needed")
-            content = transform_content_inner(content, transform_settings["one_to_transform"])
+            content = transform_content_inner(content, transform_settings["one_to_transform"],
+                                              force_variable_name=force_variable_name, variable_name=variable_name)
         elif len(content) in [3, 4]:
             logger.info("Several databases case - structure transformation needed")
-            content = transform_content_inner(content, transform_settings["several_to_transform"], change_tables=True)
+            content = transform_content_inner(content, transform_settings["several_to_transform"], change_tables=True,
+                                              force_variable_name=force_variable_name, variable_name=variable_name)
         else:
             raise ValueError(f"Could not manage the {len(content):d} bases export file.")
         # Separate DR and VS files
@@ -508,7 +534,7 @@ def transform_content(content, version):
 
 @append_kwargs_from_config
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
-                            force_retrieve=False, output_dir=None,
+                            force_retrieve=False, output_dir=None, force_variable_name=False,
                             default_transformed_content_pattern="{kind}_{export_version}_content.json", **kwargs):
     # Download specified version of data request content (if not locally cached)
     versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
@@ -536,7 +562,8 @@ def get_transformed_content(version="latest_stable", export="release", consolida
                 os.remove(VS_content)
         if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
             content = dc.load(version, export=export, consolidate=consolidate)
-            data_request, vocabulary_server = transform_content(content, version)
+            data_request, vocabulary_server = transform_content(content, version, variable_name=kwargs["variable_name"],
+                                                                force_variable_name=force_variable_name)
             write_json_output_file_content(DR_content, data_request)
             write_json_output_file_content(VS_content, vocabulary_server)
         return dict(DR_input=DR_content, VS_input=VS_content)
