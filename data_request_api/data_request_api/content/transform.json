@@ -167,8 +167,20 @@
         }
       }
     },
-    "v1.0": {},
-    "v1.1": {},
+    "v1.0": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+         }
+      }
+    },
+    "v1.1": {
+      "keys_to_merge": {
+        "variables": {
+          "modelling_realm.+": "modelling_realm"
+        }
+      }
+    },
     "v1.2.0": {
       "keys_to_merge": {
         "variables": {
