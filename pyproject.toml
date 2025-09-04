@@ -40,6 +40,7 @@ get_variables_metadata = "data_request_api.command_line.get_variables_metadata:m
 CMIP7_data_request_api_config = "data_request_api.command_line.config:main"
 estimate_dreq_volume = "data_request_api.command_line.estimate_dreq_volume:main"
 compare_variables = "data_request_api.command_line.compare_variables:main"
+add_timesubsets = "data_request_api.command_line.add_timesubsets:main"
 
 [tool.setuptools]
 package-dir = {"" = "data_request_api"}  # 🔍 Tell setuptools that packages are under src/
