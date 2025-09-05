@@ -278,11 +278,11 @@ class TestCompareVariables:
         with open(self.temp_config_file, "w") as fh:
             config = {
                 "consolidate": self.consolidate == "consolidate",
+                "variable_name": "CMIP6 Compound Name",
                 "cache_dir": str(self.temp_config_file.parent),
             }
             yaml.dump(config, fh)
-        # dc.load("v1.2")
-        # dc.load("v1.2.1")
+        dc.load("v1.2.1")
         dc.load("v1.2.2")
 
     def test_compare_variables(self, temp_config_file, consolidate):
@@ -307,8 +307,7 @@ class TestCompareVariables:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.get_variables_metadata",
-                # "v1.2",
-                "v1.2.2",
+                "v1.2.1",
                 ofileA,
             ],
             capture_output=True,
@@ -322,7 +321,6 @@ class TestCompareVariables:
                 sys.executable,
                 "-m",
                 "data_request_api.command_line.get_variables_metadata",
-                # "v1.2.1",
                 "v1.2.2",
                 ofileB,
             ],

@@ -507,9 +507,12 @@ def retrieve(version=&#34;latest_stable&#34;, **kwargs):
                     if version == &#34;dev&#34;:
                         url = REPO_RAW_URL_DEV.format(
                             version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                    elif version not in get_versions():
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org, target=&#34;heads&#34;)
                     else:
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org)
+                            version=version, _json_export=json_export, _github_org=_github_org, target=&#34;tags&#34;)
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=url,
@@ -535,7 +538,7 @@ def retrieve(version=&#34;latest_stable&#34;, **kwargs):
                             version=_dev_branch, _json_export=json_export, _github_org=_github_org)
                     else:
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org)
+                            version=version, _json_export=json_export, _github_org=_github_org, target=&#34;heads&#34;)
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=url,

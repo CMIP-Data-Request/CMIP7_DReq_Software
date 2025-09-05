@@ -11,7 +11,7 @@ import os
 import sys
 
 
-log_dir = os.getcwd()
+log_dir = "."
 log_filename = "log.out"
 log_file = os.sep.join([log_dir, log_filename])
 log_level = "info"

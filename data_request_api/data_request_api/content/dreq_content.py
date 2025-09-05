@@ -30,7 +30,7 @@ _json_release = "dreq_release_export.json"
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
 REPO_RAW_URL = (
-    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/tags/{version}/airtable_export/{_json_export}"
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/{target}/{version}/airtable_export/{_json_export}"
 )
 REPO_RAW_URL_DEV = (
     "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
@@ -438,9 +438,12 @@ def retrieve(version="latest_stable", **kwargs):
                     if version == "dev":
                         url = REPO_RAW_URL_DEV.format(
                             version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                    elif version not in get_versions():
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org, target="heads")
                     else:
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org)
+                            version=version, _json_export=json_export, _github_org=_github_org, target="tags")
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=url,
@@ -466,7 +469,7 @@ def retrieve(version="latest_stable", **kwargs):
                             version=_dev_branch, _json_export=json_export, _github_org=_github_org)
                     else:
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org)
+                            version=version, _json_export=json_export, _github_org=_github_org, target="heads")
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=url,

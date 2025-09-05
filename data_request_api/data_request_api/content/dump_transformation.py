@@ -15,7 +15,8 @@ import re
 from collections import defaultdict
 
 from data_request_api.utilities.decorators import append_kwargs_from_config
-from data_request_api.utilities.logger import get_logger, change_log_level, change_log_file
+from data_request_api.utilities.logger import get_logger
+from data_request_api.utilities.parser import append_arguments_to_parser
 from data_request_api.utilities.tools import read_json_input_file_content, write_json_output_file_content
 from data_request_api.content import dreq_content as dc
 
@@ -570,17 +571,15 @@ def get_transformed_content(version="latest_stable", export="release", consolida
 
 
 if __name__ == "__main__":
-    change_log_file(default=True)
-    change_log_level("debug")
-    logger = get_logger()
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_file", default="dreq_raw_export.json",
-                        help="Json file exported from airtable")
-    parser.add_argument("--output_files_template", default="request_basic_dump2.json",
-                        help="Template to be used for output files")
-    parser.add_argument("--version", default="unknown", help="Version of the data used")
+    parser.add_argument("--version", default="latest_stable", help="Version to be used")
+    parser = append_arguments_to_parser(parser)
+    subparser = parser.add_mutually_exclusive_group()
+    subparser.add_argument("--output_dir", default=None, help="Dedicated output directory to use")
+    subparser.add_argument("--test", action="store_true",
+                           help="Is the launch a test? If so, launch in temporary directory.")
     args = parser.parse_args()
-    content = read_json_input_file_content(args.input_file)
-    data_request, vocabulary_server = transform_content(content, args.version)
-    write_json_output_file_content("_".join(["DR", args.output_files_template]), data_request)
-    write_json_output_file_content("_".join(["VS", args.output_files_template]), vocabulary_server)
+    kwargs = args.__dict__
+    version = kwargs.pop("version")
+    versions = dc.retrieve(version=version, **kwargs)
+    content = get_transformed_content(version=version, **kwargs)
