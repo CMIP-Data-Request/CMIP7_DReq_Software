@@ -3404,51 +3404,6 @@
             "title": "Experiment group for the extension scenario experiments",
             "uid": "80ab72c9-a698-11ef-914a-613c0433d878"
         },
-        "80ac3142-a698-11ef-914a-613c0433d878": {
-            "complete_experiment_list": true,
-            "experiments": [
-                "link::80ab72b4-a698-11ef-914a-613c0433d878",
-                "link::80ab72b5-a698-11ef-914a-613c0433d878",
-                "link::80ab72b6-a698-11ef-914a-613c0433d878",
-                "link::80ab72b7-a698-11ef-914a-613c0433d878",
-                "link::80ab72b8-a698-11ef-914a-613c0433d878",
-                "link::80ab72b9-a698-11ef-914a-613c0433d878",
-                "link::80ab72ba-a698-11ef-914a-613c0433d878",
-                "link::80ab72bb-a698-11ef-914a-613c0433d878",
-                "link::80ab72bc-a698-11ef-914a-613c0433d878",
-                "link::80ab72bd-a698-11ef-914a-613c0433d878",
-                "link::80ab72be-a698-11ef-914a-613c0433d878",
-                "link::80ab72bf-a698-11ef-914a-613c0433d878",
-                "link::80ab72c0-a698-11ef-914a-613c0433d878",
-                "link::80ab72c1-a698-11ef-914a-613c0433d878",
-                "link::80ab72c2-a698-11ef-914a-613c0433d878",
-                "link::80ab72c3-a698-11ef-914a-613c0433d878",
-                "link::80ab72cc-a698-11ef-914a-613c0433d878",
-                "link::80ab72cd-a698-11ef-914a-613c0433d878",
-                "link::80ab72ce-a698-11ef-914a-613c0433d878",
-                "link::80ab72cf-a698-11ef-914a-613c0433d878",
-                "link::80ab72d0-a698-11ef-914a-613c0433d878",
-                "link::80ab72d1-a698-11ef-914a-613c0433d878",
-                "link::80ab72d2-a698-11ef-914a-613c0433d878",
-                "link::80ab73b0-a698-11ef-914a-613c0433d878",
-                "link::80ab73b1-a698-11ef-914a-613c0433d878",
-                "link::80ab73b2-a698-11ef-914a-613c0433d878",
-                "link::80ab73b3-a698-11ef-914a-613c0433d878",
-                "link::80ab73b4-a698-11ef-914a-613c0433d878",
-                "link::80ab73b5-a698-11ef-914a-613c0433d878",
-                "link::80ab73b6-a698-11ef-914a-613c0433d878",
-                "link::80ab73b7-a698-11ef-914a-613c0433d878",
-                "link::80ab73b8-a698-11ef-914a-613c0433d878",
-                "link::80ab73e9-a698-11ef-914a-613c0433d878",
-                "link::80ab73ea-a698-11ef-914a-613c0433d878",
-                "link::80ab73eb-a698-11ef-914a-613c0433d878",
-                "link::80ab73ee-a698-11ef-914a-613c0433d878",
-                "link::80ab73f0-a698-11ef-914a-613c0433d878",
-                "link::80ab73f1-a698-11ef-914a-613c0433d878"
-            ],
-            "name": "all-non-fasttrack",
-            "uid": "80ac3142-a698-11ef-914a-613c0433d878"
-        },
         "dafc748d-8c95-11ef-944e-41a8eb05f654": {
             "complete_experiment_list": true,
             "experiments": [
@@ -3870,16 +3825,6 @@
             "size_(years,_minimum)": 50,
             "uid": "80ab72c1-a698-11ef-914a-613c0433d878"
         },
-        "80ab72c2-a698-11ef-914a-613c0433d878": {
-            "name": "hist-noFire",
-            "size_(years,_minimum)": 172,
-            "uid": "80ab72c2-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72c3-a698-11ef-914a-613c0433d878": {
-            "name": "esm-s7h-noFireChange",
-            "size_(years,_minimum)": 10,
-            "uid": "80ab72c3-a698-11ef-914a-613c0433d878"
-        },
         "80ab72c4-a698-11ef-914a-613c0433d878": {
             "name": "piClim-NOX",
             "size_(years,_minimum)": 30,
@@ -3900,86 +3845,6 @@
             "size_(years,_minimum)": 30,
             "uid": "80ab72c7-a698-11ef-914a-613c0433d878"
         },
-        "80ab72cc-a698-11ef-914a-613c0433d878": {
-            "name": "amip-m4K",
-            "size_(years,_minimum)": 44,
-            "uid": "80ab72cc-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72cd-a698-11ef-914a-613c0433d878": {
-            "name": "amip-p4K-SST-rad",
-            "size_(years,_minimum)": 44,
-            "uid": "80ab72cd-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72ce-a698-11ef-914a-613c0433d878": {
-            "name": "amip-p4K-SST-turb",
-            "size_(years,_minimum)": 44,
-            "uid": "80ab72ce-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72cf-a698-11ef-914a-613c0433d878": {
-            "name": "hist-noirr",
-            "size_(years,_minimum)": 122,
-            "uid": "80ab72cf-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72d0-a698-11ef-914a-613c0433d878": {
-            "name": "hist-irr",
-            "size_(years,_minimum)": 122,
-            "uid": "80ab72d0-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72d1-a698-11ef-914a-613c0433d878": {
-            "name": "amip-irr",
-            "size_(years,_minimum)": 122,
-            "uid": "80ab72d1-a698-11ef-914a-613c0433d878"
-        },
-        "80ab72d2-a698-11ef-914a-613c0433d878": {
-            "name": "amip-noirr",
-            "size_(years,_minimum)": 122,
-            "uid": "80ab72d2-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b0-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0",
-            "size_(years,_minimum)": 200,
-            "uid": "80ab73b0-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b1-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl2p0",
-            "size_(years,_minimum)": 300,
-            "uid": "80ab73b1-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b2-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl4p0",
-            "size_(years,_minimum)": 300,
-            "uid": "80ab73b2-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b3-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl2p0-50y-dn2p0",
-            "size_(years,_minimum)": 100,
-            "uid": "80ab73b3-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b4-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl4p0-50y-dn2p0",
-            "size_(years,_minimum)": 200,
-            "uid": "80ab73b4-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b5-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl4p0-50y-dn2p0-gwl2p0",
-            "size_(years,_minimum)": 300,
-            "uid": "80ab73b5-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b6-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl1p5",
-            "size_(years,_minimum)": 300,
-            "uid": "80ab73b6-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b7-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl3p0",
-            "size_(years,_minimum)": 300,
-            "uid": "80ab73b7-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73b8-a698-11ef-914a-613c0433d878": {
-            "name": "esm-up2p0-gwl5p0",
-            "size_(years,_minimum)": 300,
-            "uid": "80ab73b8-a698-11ef-914a-613c0433d878"
-        },
         "80ab73b9-a698-11ef-914a-613c0433d878": {
             "name": "esm-scen7-vlho-Aer",
             "size_(years,_minimum)": 104,
@@ -3994,36 +3859,6 @@
             "name": "esm-scen7-h-Aer",
             "size_(years,_minimum)": 104,
             "uid": "80ab73bb-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73e9-a698-11ef-914a-613c0433d878": {
-            "name": "dcppA-assim",
-            "size_(years,_minimum)": 56,
-            "uid": "80ab73e9-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73ea-a698-11ef-914a-613c0433d878": {
-            "name": "dcppA-hindcast",
-            "size_(years,_minimum)": 5,
-            "uid": "80ab73ea-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73eb-a698-11ef-914a-613c0433d878": {
-            "name": "dcppB-forecast",
-            "size_(years,_minimum)": 5,
-            "uid": "80ab73eb-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73ee-a698-11ef-914a-613c0433d878": {
-            "name": "highresSST-pxxkpat",
-            "size_(years,_minimum)": 20,
-            "uid": "80ab73ee-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73f0-a698-11ef-914a-613c0433d878": {
-            "name": "highres-future-xxx",
-            "size_(years,_minimum)": 78,
-            "uid": "80ab73f0-a698-11ef-914a-613c0433d878"
-        },
-        "80ab73f1-a698-11ef-914a-613c0433d878": {
-            "name": "hist-1950",
-            "size_(years,_minimum)": 73,
-            "uid": "80ab73f1-a698-11ef-914a-613c0433d878"
         }
     },
     "glossary": {},
@@ -4194,7 +4029,6 @@
             "description": "The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.\n",
             "expected_impacts": "Greater consistency in provision of high-impact data variables.\n",
             "experiment_groups": [
-                "link::80ac3142-a698-11ef-914a-613c0433d878",
                 "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
                 "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
                 "link::dafc748f-8c95-11ef-944e-41a8eb05f654",

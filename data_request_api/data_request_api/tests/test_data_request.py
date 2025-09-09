@@ -660,7 +660,7 @@ class TestDataRequest(unittest.TestCase):
             DataRequest(self.input_database)
 
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
@@ -681,12 +681,12 @@ class TestDataRequest(unittest.TestCase):
             DataRequest.from_input(self.complete_input_file + "tmp", version="test")
 
         obj = DataRequest.from_input(json_input=self.complete_input, version="test")
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
         obj = DataRequest.from_input(json_input=self.complete_input_file, version="test")
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
@@ -710,22 +710,22 @@ class TestDataRequest(unittest.TestCase):
             DataRequest.from_separated_inputs(DR_input=self.input_database_file, VS_input=self.vs)
 
         obj = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_dict)
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
         obj = DataRequest.from_separated_inputs(DR_input=self.input_database_file, VS_input=self.vs_dict)
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
         obj = DataRequest.from_separated_inputs(DR_input=self.input_database, VS_input=self.vs_file)
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
         obj = DataRequest.from_separated_inputs(DR_input=self.input_database_file, VS_input=self.vs_file)
-        self.assertEqual(len(obj.get_experiment_groups()), 7)
+        self.assertEqual(len(obj.get_experiment_groups()), 6)
         self.assertEqual(len(obj.get_variable_groups()), 13)
         self.assertEqual(len(obj.get_opportunities()), 4)
 
@@ -772,13 +772,12 @@ class TestDataRequest(unittest.TestCase):
     def test_get_experiment_groups(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
         exp_groups = obj.get_experiment_groups()
-        self.assertEqual(len(exp_groups), 7)
+        self.assertEqual(len(exp_groups), 6)
         self.assertListEqual(exp_groups,
                              [obj.find_element("experiment_groups", id)
                               for id in ["80ab723e-a698-11ef-914a-613c0433d878", "80ab72c9-a698-11ef-914a-613c0433d878",
-                                         "80ac3142-a698-11ef-914a-613c0433d878", "dafc748d-8c95-11ef-944e-41a8eb05f654",
-                                         "dafc748e-8c95-11ef-944e-41a8eb05f654", "dafc748f-8c95-11ef-944e-41a8eb05f654",
-                                         "dafc7490-8c95-11ef-944e-41a8eb05f654"]])
+                                         "dafc748d-8c95-11ef-944e-41a8eb05f654", "dafc748e-8c95-11ef-944e-41a8eb05f654",
+                                         "dafc748f-8c95-11ef-944e-41a8eb05f654", "dafc7490-8c95-11ef-944e-41a8eb05f654"]])
 
     def test_get_experiment_group(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
@@ -946,9 +945,9 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.filter_elements_per_request("experiment_groups",
                                                                  requests=dict(variable="ocean.wo.tavg-ol-hxy-sea.mon.GLB")),
                              [self.dr.find_element("experiment_group", id)
-                              for id in ["link::80ab72c9-a698-11ef-914a-613c0433d878", "link::80ac3142-a698-11ef-914a-613c0433d878",
-                                         "link::dafc748d-8c95-11ef-944e-41a8eb05f654", "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
-                                         "link::dafc748f-8c95-11ef-944e-41a8eb05f654", "link::dafc7490-8c95-11ef-944e-41a8eb05f654"]])
+                              for id in ["link::80ab72c9-a698-11ef-914a-613c0433d878", "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
+                                         "link::dafc748e-8c95-11ef-944e-41a8eb05f654", "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
+                                         "link::dafc7490-8c95-11ef-944e-41a8eb05f654"]])
         list_var_grp = [self.dr.find_element("variable_groups", id)
                         for id in ["link::80ab73e2-a698-11ef-914a-613c0433d878", "link::80ab73e4-a698-11ef-914a-613c0433d878",
                                    "link::dafc73da-8c95-11ef-944e-41a8eb05f654", "link::dafc73dc-8c95-11ef-944e-41a8eb05f654",
@@ -1087,22 +1086,10 @@ class TestDataRequestFilter(unittest.TestCase):
                           'link::80ab72bb-a698-11ef-914a-613c0433d878', 'link::80ab72bc-a698-11ef-914a-613c0433d878',
                           'link::80ab72bd-a698-11ef-914a-613c0433d878', 'link::80ab72be-a698-11ef-914a-613c0433d878',
                           'link::80ab72bf-a698-11ef-914a-613c0433d878', 'link::80ab72c0-a698-11ef-914a-613c0433d878',
-                          'link::80ab72c1-a698-11ef-914a-613c0433d878', 'link::80ab72c2-a698-11ef-914a-613c0433d878',
-                          'link::80ab72c3-a698-11ef-914a-613c0433d878', 'link::80ab72c4-a698-11ef-914a-613c0433d878',
+                          'link::80ab72c1-a698-11ef-914a-613c0433d878', 'link::80ab72c4-a698-11ef-914a-613c0433d878',
                           'link::80ab72c5-a698-11ef-914a-613c0433d878', 'link::80ab72c6-a698-11ef-914a-613c0433d878',
-                          'link::80ab72c7-a698-11ef-914a-613c0433d878', 'link::80ab72cc-a698-11ef-914a-613c0433d878',
-                          'link::80ab72cd-a698-11ef-914a-613c0433d878', 'link::80ab72ce-a698-11ef-914a-613c0433d878',
-                          'link::80ab72cf-a698-11ef-914a-613c0433d878', 'link::80ab72d0-a698-11ef-914a-613c0433d878',
-                          'link::80ab72d1-a698-11ef-914a-613c0433d878', 'link::80ab72d2-a698-11ef-914a-613c0433d878',
-                          'link::80ab73b0-a698-11ef-914a-613c0433d878', 'link::80ab73b1-a698-11ef-914a-613c0433d878',
-                          'link::80ab73b2-a698-11ef-914a-613c0433d878', 'link::80ab73b3-a698-11ef-914a-613c0433d878',
-                          'link::80ab73b4-a698-11ef-914a-613c0433d878', 'link::80ab73b5-a698-11ef-914a-613c0433d878',
-                          'link::80ab73b6-a698-11ef-914a-613c0433d878', 'link::80ab73b7-a698-11ef-914a-613c0433d878',
-                          'link::80ab73b8-a698-11ef-914a-613c0433d878', 'link::80ab73b9-a698-11ef-914a-613c0433d878',
-                          'link::80ab73ba-a698-11ef-914a-613c0433d878', 'link::80ab73bb-a698-11ef-914a-613c0433d878',
-                          'link::80ab73e9-a698-11ef-914a-613c0433d878', 'link::80ab73ea-a698-11ef-914a-613c0433d878',
-                          'link::80ab73eb-a698-11ef-914a-613c0433d878', 'link::80ab73ee-a698-11ef-914a-613c0433d878',
-                          'link::80ab73f0-a698-11ef-914a-613c0433d878', 'link::80ab73f1-a698-11ef-914a-613c0433d878']]
+                          'link::80ab72c7-a698-11ef-914a-613c0433d878', 'link::80ab73b9-a698-11ef-914a-613c0433d878',
+                          'link::80ab73ba-a698-11ef-914a-613c0433d878', 'link::80ab73bb-a698-11ef-914a-613c0433d878']]
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_id), exp)
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_name), exp)
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_target), exp)
