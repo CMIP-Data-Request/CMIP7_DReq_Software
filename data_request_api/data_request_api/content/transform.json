@@ -151,6 +151,9 @@
       "keys_to_initialize": {
         "default": {
           "linked_id": "uid"
+        },
+        "variables": {
+          "linked_id": "cmip7_compound_name"
         }
       },
       "keys_to_copy": {}

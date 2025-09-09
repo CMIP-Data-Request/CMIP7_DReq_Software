@@ -215,8 +215,8 @@ class TestVariables(unittest.TestCase):
                                                     DR_input=filepath("one_base_DR_output.json"))
 
     def test_print(self):
-        obj = self.dr.find_element("variable", "1aab80fc-b006-11e6-9289-ac72891c3257")
-        ref_str = 'variable: wo at frequency mon (id: 1aab80fc-b006-11e6-9289-ac72891c3257, title: Sea Water Vertical Velocity)'
+        obj = self.dr.find_element("variable", "ocean.wo.tavg-ol-hxy-sea.mon.GLB")
+        ref_str = 'variable: wo at frequency mon (id: ocean.wo.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Vertical Velocity)'
         ref_str_2 = [
             ref_str,
         ]
@@ -227,9 +227,9 @@ class TestVariables(unittest.TestCase):
         self.assertEqual(str(obj), os.linesep.join(ref_str_2))
 
     def test_filter_on_request(self):
-        var_1 = self.dr.find_element("variable", "1aab80fc-b006-11e6-9289-ac72891c3257")
+        var_1 = self.dr.find_element("variable", "ocean.wo.tavg-ol-hxy-sea.mon.GLB")
         var_2 = copy.deepcopy(var_1)
-        var_3 = self.dr.find_element("variable", "5a070350-c77d-11e6-8a33-5404a60d96b5")
+        var_3 = self.dr.find_element("variable", "atmos.hurs.tavg-h2m-hxy-u.day.GLB")
         table_1 = self.dr.find_element("table_identifier", "527f5d06-8c97-11ef-944e-41a8eb05f654")
         table_2 = self.dr.find_element("table_identifier", "527f5d03-8c97-11ef-944e-41a8eb05f654")
         tshp_1 = self.dr.find_element("temporal_shape", "cf34c974-80be-11e6-97ee-ac72891c3257")
@@ -309,16 +309,16 @@ class TestVariablesGroup(unittest.TestCase):
             obj = VariablesGroup.from_input(id="link:my_id", dr=self.dr, variables=["link::test", ])
 
         obj = VariablesGroup.from_input(id="link::my_id", dr=self.dr,
-                                        variables=["link::bab3cb52-e5dd-11e5-8482-ac72891c3257",
-                                                   "link::bab48ce0-e5dd-11e5-8482-ac72891c3257"])
+                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
+                                                   "link::atmos.psl.tavg-u-hxy-u.mon.GLB"])
 
     def test_check(self):
         obj = VariablesGroup(id="link::my_id", dr=self.dr)
         obj.check()
 
         obj = VariablesGroup(id="link::my_id", dr=self.dr,
-                             variables=["link::bab3cb52-e5dd-11e5-8482-ac72891c3257",
-                                        "link::bab48ce0-e5dd-11e5-8482-ac72891c3257"])
+                             variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
+                                        "link::atmos.psl.tavg-u-hxy-u.mon.GLB"])
         obj.check()
 
     def test_methods(self):
@@ -329,13 +329,13 @@ class TestVariablesGroup(unittest.TestCase):
         self.assertEqual(obj.get_priority_level(), self.dr.find_element("priority_level", "High"))
 
         obj = VariablesGroup.from_input(id="link::dafc7484-8c95-11ef-944e-41a8eb05f654", dr=self.dr,
-                                        variables=["link::bab3cb52-e5dd-11e5-8482-ac72891c3257",
-                                                   "link::bab48ce0-e5dd-11e5-8482-ac72891c3257"],
+                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
+                                                   "link::atmos.psl.tavg-u-hxy-u.mon.GLB"],
                                         mips=["link::527f5c7f-8c97-11ef-944e-41a8eb05f654", ], priority_level="High")
         self.assertEqual(obj.count(), 2)
         self.assertListEqual(obj.get_variables(),
-                             [self.dr.find_element("variables", "link::bab3cb52-e5dd-11e5-8482-ac72891c3257"),
-                              self.dr.find_element("variables", "link::bab48ce0-e5dd-11e5-8482-ac72891c3257")])
+                             [self.dr.find_element("variables", "link::atmos.pr.tavg-u-hxy-u.mon.GLB"),
+                              self.dr.find_element("variables", "link::atmos.psl.tavg-u-hxy-u.mon.GLB")])
         self.assertEqual(obj.get_mips(), [self.dr.find_element("mips", "link::527f5c7f-8c97-11ef-944e-41a8eb05f654")])
         self.assertDictEqual(obj.get_priority_level().attributes,
                              {'name': "High", "notes": "The variables support the core objectives of the opportunity.  These are required to make the opportunity viable.", "value": 2,
@@ -345,8 +345,8 @@ class TestVariablesGroup(unittest.TestCase):
         var_grp1 = self.dr.find_element("variable_groups", "dafc743a-8c95-11ef-944e-41a8eb05f654")
         var_grp2 = copy.deepcopy(var_grp1)
         var_grp3 = self.dr.find_element("variable_groups", "dafc7435-8c95-11ef-944e-41a8eb05f654")
-        var_2 = self.dr.find_element("variable", "baa71c7c-e5dd-11e5-8482-ac72891c3257")
-        var_1 = self.dr.find_element("variable", "83bbfc6e-7f07-11ef-9308-b1dd71e64bec")
+        var_2 = self.dr.find_element("variable", "ocean.tossq.tavg-u-hxy-sea.day.GLB")
+        var_1 = self.dr.find_element("variable", "ocean.vos.tavg-u-hxy-sea.day.GLB")
         mip_2 = self.dr.find_element("mips", "527f5c7d-8c97-11ef-944e-41a8eb05f654")
         mip_1 = self.dr.find_element("mips", "527f5c6c-8c97-11ef-944e-41a8eb05f654")
         prio_2 = self.dr.find_element("priority_level", "527f5c94-8c97-11ef-944e-41a8eb05f654")
@@ -403,14 +403,14 @@ class TestVariablesGroup(unittest.TestCase):
     def test_print(self):
         obj = VariablesGroup.from_input(id="link::dafc73dd-8c95-11ef-944e-41a8eb05f654", dr=self.dr, priority_level="Medium",
                                         name="baseline_monthly",
-                                        variables=["link::bab3cb52-e5dd-11e5-8482-ac72891c3257",
-                                                   "link::bab48ce0-e5dd-11e5-8482-ac72891c3257"])
+                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
+                                                   "link::atmos.psl.tavg-u-hxy-u.mon.GLB"])
         ref_str = "variable_group: baseline_monthly (id: dafc73dd-8c95-11ef-944e-41a8eb05f654)"
         ref_str_2 = [
             ref_str,
             "    Variables included:",
-            "        variable: pr at frequency mon (id: bab3cb52-e5dd-11e5-8482-ac72891c3257, title: Precipitation)",
-            "        variable: psl at frequency mon (id: bab48ce0-e5dd-11e5-8482-ac72891c3257, "
+            "        variable: pr at frequency mon (id: atmos.pr.tavg-u-hxy-u.mon.GLB, title: Precipitation)",
+            "        variable: psl at frequency mon (id: atmos.psl.tavg-u-hxy-u.mon.GLB, "
             "title: Sea Level Pressure)"
         ]
         self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
@@ -427,8 +427,8 @@ class TestVariablesGroup(unittest.TestCase):
         obj3 = VariablesGroup(id="link::my_id_2", dr=self.dr)
         self.assertNotEqual(obj, obj3)
 
-        obj4 = VariablesGroup(id="link::my_id", dr=self.dr, variables=["link::bab3cb52-e5dd-11e5-8482-ac72891c3257",
-                                                                       "link::bab48ce0-e5dd-11e5-8482-ac72891c3257"])
+        obj4 = VariablesGroup(id="link::my_id", dr=self.dr, variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
+                                                                       "link::atmos.psl.tavg-u-hxy-u.mon.GLB"])
         self.assertNotEqual(obj, obj4)
 
         obj5 = VariablesGroup(id="link::my_id", dr=self.dr, mips=["link::527f5c7f-8c97-11ef-944e-41a8eb05f654", ])
@@ -572,8 +572,8 @@ class TestOpportunity(unittest.TestCase):
         exp_1 = self.dr.find_element("experiment", "527f5c3d-8c97-11ef-944e-41a8eb05f654")
         exp_2 = self.dr.find_element("experiment", "527f5c40-8c97-11ef-944e-41a8eb05f654")
         time_1 = self.dr.find_element("time_subset", "link::527f5cac-8c97-11ef-944e-41a8eb05f654")
-        var_2 = self.dr.find_element("variable", "5a070350-c77d-11e6-8a33-5404a60d96b5")
-        var_1 = self.dr.find_element("variable", "83bbfc6e-7f07-11ef-9308-b1dd71e64bec")
+        var_2 = self.dr.find_element("variable", "atmos.hurs.tavg-h2m-hxy-u.day.GLB")
+        var_1 = self.dr.find_element("variable", "ocean.vos.tavg-u-hxy-sea.day.GLB")
         mip_2 = self.dr.find_element("mips", "527f5c77-8c97-11ef-944e-41a8eb05f654")
         mip_1 = self.dr.find_element("mips", "527f5c6c-8c97-11ef-944e-41a8eb05f654")
         prio_2 = self.dr.find_element("priority_level", "527f5c94-8c97-11ef-944e-41a8eb05f654")
@@ -886,7 +886,7 @@ class TestDataRequestFilter(unittest.TestCase):
         self.maxDiff = None
 
     def test_element_per_identifier_from_vs(self):
-        id_var = "link::1aab80fc-b006-11e6-9289-ac72891c3257"
+        id_var = "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB"
         name_var = "ocean.wo.tavg-ol-hxy-sea.mon.GLB"
         target_var = self.dr.find_element("variables", id_var)
         self.assertEqual(self.dr.find_element_per_identifier_from_vs(element_type="variables", key="id", value=id_var),
@@ -912,7 +912,7 @@ class TestDataRequestFilter(unittest.TestCase):
                          None)
 
     def test_element_from_vs(self):
-        id_var = "link::1aab80fc-b006-11e6-9289-ac72891c3257"
+        id_var = "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB"
         name_var = "ocean.wo.tavg-ol-hxy-sea.mon.GLB"
         target_var = self.dr.find_element("variables", id_var)
         self.assertEqual(self.dr.find_element_from_vs(element_type="variables", value=id_var), target_var)
@@ -944,7 +944,7 @@ class TestDataRequestFilter(unittest.TestCase):
                              self.dr.get_opportunities())
 
         self.assertListEqual(self.dr.filter_elements_per_request("experiment_groups",
-                                                                 requests=dict(variable="1aab80fc-b006-11e6-9289-ac72891c3257")),
+                                                                 requests=dict(variable="ocean.wo.tavg-ol-hxy-sea.mon.GLB")),
                              [self.dr.find_element("experiment_group", id)
                               for id in ["link::80ab72c9-a698-11ef-914a-613c0433d878", "link::80ac3142-a698-11ef-914a-613c0433d878",
                                          "link::dafc748d-8c95-11ef-944e-41a8eb05f654", "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
@@ -963,7 +963,7 @@ class TestDataRequestFilter(unittest.TestCase):
                                                                requests=dict(experiment="527f5c48-8c97-11ef-944e-41a8eb05f654"),
                                                                not_requests=dict(
                                                                    opportunity="dafc739f-8c95-11ef-944e-41a8eb05f654",
-                                                                   variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                                   variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
                                                                not_request_operation="all")
         self.assertEqual(len(found_vargrp_all), len(list_var_grp))
         self.assertListEqual(found_vargrp_all, list_var_grp)
@@ -971,7 +971,7 @@ class TestDataRequestFilter(unittest.TestCase):
                                                                requests=dict(experiment="527f5c48-8c97-11ef-944e-41a8eb05f654"),
                                                                not_requests=dict(
                                                                    opportunity="dafc739f-8c95-11ef-944e-41a8eb05f654",
-                                                                   variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                                   variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
                                                                not_request_operation="any")
         list_vargrp_any = [self.dr.find_element("variable_group", elt)
                            for elt in ["link::80ab73e2-a698-11ef-914a-613c0433d878", "link::dafc7436-8c95-11ef-944e-41a8eb05f654",
@@ -982,7 +982,7 @@ class TestDataRequestFilter(unittest.TestCase):
                                                                     requests=dict(experiment="527f5c48-8c97-11ef-944e-41a8eb05f654"),
                                                                     not_requests=dict(
                                                                         opportunity="dafc739f-8c95-11ef-944e-41a8eb05f654",
-                                                                        variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                                        variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
                                                                     not_request_operation="any_of_all")
         list_vargrp_anyofall = [self.dr.find_element("variable_group", elt)
                                 for elt in ["link::80ab73e2-a698-11ef-914a-613c0433d878", "link::dafc7435-8c95-11ef-944e-41a8eb05f654",
@@ -994,7 +994,7 @@ class TestDataRequestFilter(unittest.TestCase):
                                                                     requests=dict(experiment="527f5c48-8c97-11ef-944e-41a8eb05f654"),
                                                                     not_requests=dict(
                                                                         opportunity="dafc739f-8c95-11ef-944e-41a8eb05f654",
-                                                                        variable=["babb20b4-e5dd-11e5-8482-ac72891c3257", "d243ba76-4a9f-11e6-b84e-ac72891c3257"]),
+                                                                        variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
                                                                     not_request_operation="all_of_any")
         self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
         self.assertListEqual(found_vargrp_allofany, list_var_grp)
@@ -1016,21 +1016,21 @@ class TestDataRequestFilter(unittest.TestCase):
         priority = "Medium"
         priority_obj = self.dr.find_element("priority_level", "link::527f5c95-8c97-11ef-944e-41a8eb05f654")
         target_var_list = [self.dr.find_element("variables", id)
-                           for id in ["link::80ab71f9-a698-11ef-914a-613c0433d878", "link::80ab71fa-a698-11ef-914a-613c0433d878",
-                                      "link::80ab71fb-a698-11ef-914a-613c0433d878", "link::80ab71fc-a698-11ef-914a-613c0433d878",
-                                      "link::80ab7430-a698-11ef-914a-613c0433d878", "link::80ab7431-a698-11ef-914a-613c0433d878",
-                                      "link::80ab7432-a698-11ef-914a-613c0433d878", "link::80ab7433-a698-11ef-914a-613c0433d878",
-                                      "link::80ab7434-a698-11ef-914a-613c0433d878", "link::80ab7435-a698-11ef-914a-613c0433d878",
-                                      "link::83bbfb6e-7f07-11ef-9308-b1dd71e64bec", "link::83bbfb71-7f07-11ef-9308-b1dd71e64bec",
-                                      "link::83bbfb7c-7f07-11ef-9308-b1dd71e64bec", "link::83bbfb7f-7f07-11ef-9308-b1dd71e64bec",
-                                      "link::83bbfb94-7f07-11ef-9308-b1dd71e64bec", "link::83bbfc6e-7f07-11ef-9308-b1dd71e64bec",
-                                      "link::83bbfc6f-7f07-11ef-9308-b1dd71e64bec", "link::ba9f3ac0-e5dd-11e5-8482-ac72891c3257",
-                                      "link::ba9f643c-e5dd-11e5-8482-ac72891c3257", "link::ba9f686a-e5dd-11e5-8482-ac72891c3257",
-                                      "link::ba9f91f0-e5dd-11e5-8482-ac72891c3257", "link::baa4e07e-e5dd-11e5-8482-ac72891c3257",
-                                      "link::baa720e6-e5dd-11e5-8482-ac72891c3257", "link::baa72514-e5dd-11e5-8482-ac72891c3257",
-                                      "link::bab52b5a-e5dd-11e5-8482-ac72891c3257", "link::bab59202-e5dd-11e5-8482-ac72891c3257",
-                                      "link::bab5df78-e5dd-11e5-8482-ac72891c3257", "link::bab65138-e5dd-11e5-8482-ac72891c3257",
-                                      "link::c9180bae-c5e8-11e6-84e6-5404a60d96b5", "link::c9181982-c5e8-11e6-84e6-5404a60d96b5"]]
+                           for id in ["link::atmos.hus.tpt-p6-hxy-air.3hr.GLB", "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB",
+                                      "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB", "link::atmos.rsds.tavg-u-hxy-u.3hr.GLB",
+                                      "link::atmos.rsus.tavg-u-hxy-u.3hr.GLB", "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB",
+                                      "link::atmos.ua.tpt-p6-hxy-air.3hr.GLB", "link::atmos.va.tpt-p6-hxy-air.3hr.GLB",
+                                      "link::atmos.wap.tpt-p6-hxy-air.3hr.GLB", "link::land.evspsblsoi.tavg-u-hxy-u.3hr.GLB",
+                                      "link::land.evspsblveg.tavg-u-hxy-u.3hr.GLB", "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
+                                      "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB", "link::land.tran.tavg-u-hxy-u.3hr.GLB",
+                                      "link::ocean.so.tavg-ol-hxy-sea.day.GLB", "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
+                                      "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB", "link::ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
+                                      "link::ocean.tos.tavg-u-hxy-sea.day.GLB", "link::ocean.uos.tavg-u-hxy-sea.day.GLB",
+                                      "link::ocean.vos.tavg-u-hxy-sea.day.GLB", "link::ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB",
+                                      "link::ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB", "link::ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB",
+                                      "link::ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB", "link::ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB",
+                                      "link::ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB", "link::ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB",
+                                      "link::ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB", "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"]]
         var_list = self.dr.find_variables_per_priority(priority=priority)
         self.assertEqual(len(var_list), 30)
         self.assertListEqual(var_list, target_var_list)
@@ -1112,105 +1112,105 @@ class TestDataRequestFilter(unittest.TestCase):
         theme_name = "Atmosphere"
         theme_target = self.dr.find_element("data_request_themes", theme_id)
         var = [self.dr.find_element("variables", id)
-               for id in ['link::1aab80fc-b006-11e6-9289-ac72891c3257', 'link::5a070350-c77d-11e6-8a33-5404a60d96b5',
-                          'link::6a35d178-aa6a-11e6-9736-5404a60d96b5', 'link::711075e2-faa7-11e6-bfb7-ac72891c3257',
-                          'link::71237944-faa7-11e6-bfb7-ac72891c3257', 'link::714344cc-faa7-11e6-bfb7-ac72891c3257',
-                          'link::7147b8fe-faa7-11e6-bfb7-ac72891c3257', 'link::714b603a-faa7-11e6-bfb7-ac72891c3257',
-                          'link::714eec6e-faa7-11e6-bfb7-ac72891c3257', 'link::80ab71f6-a698-11ef-914a-613c0433d878',
-                          'link::80ab71f9-a698-11ef-914a-613c0433d878', 'link::80ab71fa-a698-11ef-914a-613c0433d878',
-                          'link::80ab71fb-a698-11ef-914a-613c0433d878', 'link::80ab71fc-a698-11ef-914a-613c0433d878',
-                          'link::80ab71fd-a698-11ef-914a-613c0433d878', 'link::80ab740d-a698-11ef-914a-613c0433d878',
-                          'link::80ab740e-a698-11ef-914a-613c0433d878', 'link::80ab740f-a698-11ef-914a-613c0433d878',
-                          'link::80ab7410-a698-11ef-914a-613c0433d878', 'link::80ab7416-a698-11ef-914a-613c0433d878',
-                          'link::80ab7417-a698-11ef-914a-613c0433d878', 'link::80ab7418-a698-11ef-914a-613c0433d878',
-                          'link::80ab7419-a698-11ef-914a-613c0433d878', 'link::80ab741a-a698-11ef-914a-613c0433d878',
-                          'link::80ab741b-a698-11ef-914a-613c0433d878', 'link::80ab741c-a698-11ef-914a-613c0433d878',
-                          'link::80ab741d-a698-11ef-914a-613c0433d878', 'link::80ab741e-a698-11ef-914a-613c0433d878',
-                          'link::80ab741f-a698-11ef-914a-613c0433d878', 'link::80ab7420-a698-11ef-914a-613c0433d878',
-                          'link::80ab7421-a698-11ef-914a-613c0433d878', 'link::80ab7422-a698-11ef-914a-613c0433d878',
-                          'link::80ab7423-a698-11ef-914a-613c0433d878', 'link::80ab7424-a698-11ef-914a-613c0433d878',
-                          'link::80ab7425-a698-11ef-914a-613c0433d878', 'link::80ab7426-a698-11ef-914a-613c0433d878',
-                          'link::80ab7427-a698-11ef-914a-613c0433d878', 'link::80ab7428-a698-11ef-914a-613c0433d878',
-                          'link::80ab7429-a698-11ef-914a-613c0433d878', 'link::80ab742a-a698-11ef-914a-613c0433d878',
-                          'link::80ab742b-a698-11ef-914a-613c0433d878', 'link::80ab742c-a698-11ef-914a-613c0433d878',
-                          'link::80ab742d-a698-11ef-914a-613c0433d878', 'link::80ab742e-a698-11ef-914a-613c0433d878',
-                          'link::80ab7430-a698-11ef-914a-613c0433d878', 'link::80ab7431-a698-11ef-914a-613c0433d878',
-                          'link::80ab7432-a698-11ef-914a-613c0433d878', 'link::80ab7433-a698-11ef-914a-613c0433d878',
-                          'link::80ab7434-a698-11ef-914a-613c0433d878', 'link::80ab7435-a698-11ef-914a-613c0433d878',
-                          'link::80ab743a-a698-11ef-914a-613c0433d878', 'link::80ab743b-a698-11ef-914a-613c0433d878',
-                          'link::80ab743c-a698-11ef-914a-613c0433d878', 'link::80ab743d-a698-11ef-914a-613c0433d878',
-                          'link::80ab743e-a698-11ef-914a-613c0433d878', 'link::80ab743f-a698-11ef-914a-613c0433d878',
-                          'link::80ab7440-a698-11ef-914a-613c0433d878', 'link::80ab7441-a698-11ef-914a-613c0433d878',
-                          'link::80ab7442-a698-11ef-914a-613c0433d878', 'link::80ab7443-a698-11ef-914a-613c0433d878',
-                          'link::80ab7444-a698-11ef-914a-613c0433d878', 'link::80ab7449-a698-11ef-914a-613c0433d878',
-                          'link::80ab744a-a698-11ef-914a-613c0433d878', 'link::80ab744b-a698-11ef-914a-613c0433d878',
-                          'link::80ab744c-a698-11ef-914a-613c0433d878', 'link::80ab744d-a698-11ef-914a-613c0433d878',
-                          'link::80ab744e-a698-11ef-914a-613c0433d878', 'link::83bbfb69-7f07-11ef-9308-b1dd71e64bec',
-                          'link::83bbfc71-7f07-11ef-9308-b1dd71e64bec', 'link::85c3e888-357c-11e7-8257-5404a60d96b5',
-                          'link::86119ff6-357c-11e7-8257-5404a60d96b5', 'link::8bae55ba-4a5b-11e6-9cd2-ac72891c3257',
-                          'link::8bae5aba-4a5b-11e6-9cd2-ac72891c3257', 'link::8baebea6-4a5b-11e6-9cd2-ac72891c3257',
-                          'link::917b8532-267c-11e7-8933-ac72891c3257', 'link::baa3e4d0-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa3ea2a-e5dd-11e5-8482-ac72891c3257', 'link::baa3ee94-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa3f2e0-e5dd-11e5-8482-ac72891c3257', 'link::baa3f718-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa3fb50-e5dd-11e5-8482-ac72891c3257', 'link::baa507f2-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa51058-e5dd-11e5-8482-ac72891c3257', 'link::baa5147c-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa518c8-e5dd-11e5-8482-ac72891c3257', 'link::baa51d00-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa5255c-e5dd-11e5-8482-ac72891c3257', 'link::baa52de0-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa5491a-e5dd-11e5-8482-ac72891c3257', 'link::baa557f2-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa57688-e5dd-11e5-8482-ac72891c3257', 'link::baa586e6-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa58b1e-e5dd-11e5-8482-ac72891c3257', 'link::baa58f74-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa5942e-e5dd-11e5-8482-ac72891c3257', 'link::baa598c0-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa6c33a-e5dd-11e5-8482-ac72891c3257', 'link::baa6cf38-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa6d366-e5dd-11e5-8482-ac72891c3257', 'link::baa720e6-e5dd-11e5-8482-ac72891c3257',
-                          'link::baa72514-e5dd-11e5-8482-ac72891c3257', 'link::baa83a12-e5dd-11e5-8482-ac72891c3257',
-                          'link::baaa4302-e5dd-11e5-8482-ac72891c3257', 'link::baaa8326-e5dd-11e5-8482-ac72891c3257',
-                          'link::baaa9852-e5dd-11e5-8482-ac72891c3257', 'link::baaace4e-e5dd-11e5-8482-ac72891c3257',
-                          'link::baaad7e0-e5dd-11e5-8482-ac72891c3257', 'link::baab0382-e5dd-11e5-8482-ac72891c3257',
-                          'link::baab1818-e5dd-11e5-8482-ac72891c3257', 'link::baad45c0-e5dd-11e5-8482-ac72891c3257',
-                          'link::baad5d9e-e5dd-11e5-8482-ac72891c3257', 'link::baad6596-e5dd-11e5-8482-ac72891c3257',
-                          'link::baaefbcc-e5dd-11e5-8482-ac72891c3257', 'link::baaefe2e-e5dd-11e5-8482-ac72891c3257',
-                          'link::baaf8452-e5dd-11e5-8482-ac72891c3257', 'link::baaf86a0-e5dd-11e5-8482-ac72891c3257',
-                          'link::baafe578-e5dd-11e5-8482-ac72891c3257', 'link::baafec80-e5dd-11e5-8482-ac72891c3257',
-                          'link::baaff41e-e5dd-11e5-8482-ac72891c3257', 'link::bab00b98-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab0135e-e5dd-11e5-8482-ac72891c3257', 'link::bab01dfe-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab0238a-e5dd-11e5-8482-ac72891c3257', 'link::bab034a6-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab0919e-e5dd-11e5-8482-ac72891c3257', 'link::bab1688a-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab17a6e-e5dd-11e5-8482-ac72891c3257', 'link::bab19ff8-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab1a782-e5dd-11e5-8482-ac72891c3257', 'link::bab1c08c-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab1c668-e5dd-11e5-8482-ac72891c3257', 'link::bab1c85c-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab2f9d4-e5dd-11e5-8482-ac72891c3257', 'link::bab3c904-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab3cb52-e5dd-11e5-8482-ac72891c3257', 'link::bab3d692-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab3f8a2-e5dd-11e5-8482-ac72891c3257', 'link::bab42b88-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab45df6-e5dd-11e5-8482-ac72891c3257', 'link::bab46db4-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab47354-e5dd-11e5-8482-ac72891c3257', 'link::bab47b56-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab48ce0-e5dd-11e5-8482-ac72891c3257', 'link::bab491f4-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab52b5a-e5dd-11e5-8482-ac72891c3257', 'link::bab52da8-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab5540e-e5dd-11e5-8482-ac72891c3257', 'link::bab578d0-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab59202-e5dd-11e5-8482-ac72891c3257', 'link::bab5aad0-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab5bcdc-e5dd-11e5-8482-ac72891c3257', 'link::bab5c7fe-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab5df78-e5dd-11e5-8482-ac72891c3257', 'link::bab5e1b2-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab5ecd4-e5dd-11e5-8482-ac72891c3257', 'link::bab607c8-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab6219a-e5dd-11e5-8482-ac72891c3257', 'link::bab65138-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab6537c-e5dd-11e5-8482-ac72891c3257', 'link::bab670b4-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab68ebe-e5dd-11e5-8482-ac72891c3257', 'link::bab69c06-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab6f494-e5dd-11e5-8482-ac72891c3257', 'link::bab6fe58-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab73a76-e5dd-11e5-8482-ac72891c3257', 'link::bab742c8-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab7c2d4-e5dd-11e5-8482-ac72891c3257', 'link::bab81e50-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab8fa0a-e5dd-11e5-8482-ac72891c3257', 'link::bab902e8-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab91b20-e5dd-11e5-8482-ac72891c3257', 'link::bab9237c-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab928ae-e5dd-11e5-8482-ac72891c3257', 'link::bab942a8-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab94a50-e5dd-11e5-8482-ac72891c3257', 'link::bab955ea-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab95fae-e5dd-11e5-8482-ac72891c3257', 'link::bab96cc4-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab9888a-e5dd-11e5-8482-ac72891c3257', 'link::bab9bd00-e5dd-11e5-8482-ac72891c3257',
-                          'link::babaef0e-e5dd-11e5-8482-ac72891c3257', 'link::babb12ae-e5dd-11e5-8482-ac72891c3257',
-                          'link::babb4b34-e5dd-11e5-8482-ac72891c3257', 'link::babb5084-e5dd-11e5-8482-ac72891c3257',
-                          'link::babb5db8-e5dd-11e5-8482-ac72891c3257', 'link::babb67c2-e5dd-11e5-8482-ac72891c3257',
-                          'link::babb6cea-e5dd-11e5-8482-ac72891c3257', 'link::babbb25e-e5dd-11e5-8482-ac72891c3257',
-                          'link::babbbbe6-e5dd-11e5-8482-ac72891c3257', 'link::babbcd34-e5dd-11e5-8482-ac72891c3257',
-                          'link::babbd25c-e5dd-11e5-8482-ac72891c3257', 'link::babbdec8-e5dd-11e5-8482-ac72891c3257',
-                          'link::babd0906-e5dd-11e5-8482-ac72891c3257', 'link::babd0e56-e5dd-11e5-8482-ac72891c3257',
-                          'link::babd9ace-e5dd-11e5-8482-ac72891c3257', 'link::babda032-e5dd-11e5-8482-ac72891c3257',
-                          'link::d241a6d2-4a9f-11e6-b84e-ac72891c3257', 'link::f2fad86e-c38d-11e6-abc1-1b922e5e1118']]
+               for id in ["atmos.areacell.ti-u-hxy-u.fx.GLB", "atmos.bldep.tpt-u-hxy-u.3hr.GLB",
+                          "atmos.cl.tavg-al-hxy-u.mon.GLB", "atmos.cli.tavg-al-hxy-u.mon.GLB",
+                          "atmos.clivi.tavg-u-hxy-u.mon.GLB", "atmos.clt.tavg-u-hxy-u.day.GLB",
+                          "atmos.clt.tavg-u-hxy-u.mon.GLB", "atmos.clw.tavg-al-hxy-u.mon.GLB",
+                          "atmos.clwvi.tavg-u-hxy-u.mon.GLB", "atmos.evspsbl.tavg-u-hxy-u.mon.GLB",
+                          "atmos.hfls.tavg-u-hxy-u.3hr.GLB", "atmos.hfls.tavg-u-hxy-u.mon.GLB",
+                          "atmos.hfss.tavg-u-hxy-u.3hr.GLB", "atmos.hfss.tavg-u-hxy-u.mon.GLB",
+                          "atmos.hur.tavg-p19-hxy-air.mon.GLB", "atmos.hur.tavg-p19-hxy-u.day.GLB",
+                          "atmos.hurs.tavg-h2m-hxy-u.6hr.GLB", "atmos.hurs.tavg-h2m-hxy-u.day.GLB",
+                          "atmos.hurs.tavg-h2m-hxy-u.mon.GLB", "atmos.hus.tavg-p19-hxy-u.day.GLB",
+                          "atmos.hus.tavg-p19-hxy-u.mon.GLB", "atmos.hus.tpt-p6-hxy-air.3hr.GLB",
+                          "atmos.huss.tavg-h2m-hxy-u.day.GLB", "atmos.huss.tavg-h2m-hxy-u.mon.GLB",
+                          "atmos.huss.tpt-h2m-hxy-u.3hr.GLB", "atmos.pr.tavg-u-hxy-u.1hr.GLB",
+                          "atmos.pr.tavg-u-hxy-u.3hr.GLB", "atmos.pr.tavg-u-hxy-u.day.GLB",
+                          "atmos.pr.tavg-u-hxy-u.mon.GLB", "atmos.prc.tavg-u-hxy-u.mon.GLB",
+                          "atmos.prsn.tavg-u-hxy-u.mon.GLB", "atmos.prw.tavg-u-hxy-u.mon.GLB",
+                          "atmos.ps.tavg-u-hxy-u.day.GLB", "atmos.ps.tavg-u-hxy-u.mon.GLB",
+                          "atmos.ps.tpt-u-hxy-u.3hr.GLB", "atmos.psl.tavg-u-hxy-u.day.GLB",
+                          "atmos.psl.tavg-u-hxy-u.mon.GLB", "atmos.rlds.tavg-u-hxy-u.3hr.GLB",
+                          "atmos.rlds.tavg-u-hxy-u.mon.GLB", "atmos.rldscs.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rlus.tavg-u-hxy-u.3hr.GLB", "atmos.rlus.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rluscs.tavg-u-hxy-u.mon.GLB", "atmos.rlut.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rlutcs.tavg-u-hxy-u.mon.GLB", "atmos.rsds.tavg-u-hxy-u.3hr.GLB",
+                          "atmos.rsds.tavg-u-hxy-u.day.GLB", "atmos.rsds.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rsdscs.tavg-u-hxy-u.mon.GLB", "atmos.rsdt.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rsus.tavg-u-hxy-u.3hr.GLB", "atmos.rsus.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rsuscs.tavg-u-hxy-u.mon.GLB", "atmos.rsut.tavg-u-hxy-u.mon.GLB",
+                          "atmos.rsutcs.tavg-u-hxy-u.mon.GLB", "atmos.sfcWind.tavg-h10m-hxy-u.day.GLB",
+                          "atmos.sfcWind.tavg-h10m-hxy-u.mon.GLB", "atmos.sftlf.ti-u-hxy-u.fx.GLB",
+                          "atmos.ta.tavg-p19-hxy-air.day.GLB", "atmos.ta.tavg-p19-hxy-air.mon.GLB",
+                          "atmos.ta.tpt-p3-hxy-air.6hr.GLB", "atmos.ta.tpt-p6-hxy-air.3hr.GLB",
+                          "atmos.tas.tavg-h2m-hxy-u.day.GLB", "atmos.tas.tavg-h2m-hxy-u.mon.GLB",
+                          "atmos.tas.tmax-h2m-hxy-u.day.GLB", "atmos.tas.tmax-h2m-hxy-u.mon.GLB",
+                          "atmos.tas.tmin-h2m-hxy-u.day.GLB", "atmos.tas.tmin-h2m-hxy-u.mon.GLB",
+                          "atmos.tas.tpt-h2m-hxy-u.3hr.GLB", "atmos.tauu.tavg-u-hxy-u.mon.GLB",
+                          "atmos.tauv.tavg-u-hxy-u.mon.GLB", "atmos.ts.tavg-u-hxy-u.mon.GLB",
+                          "atmos.ua.tavg-p19-hxy-air.day.GLB", "atmos.ua.tavg-p19-hxy-air.mon.GLB",
+                          "atmos.ua.tpt-p3-hxy-air.6hr.GLB", "atmos.ua.tpt-p6-hxy-air.3hr.GLB",
+                          "atmos.uas.tavg-h10m-hxy-u.day.GLB", "atmos.uas.tavg-h10m-hxy-u.mon.GLB",
+                          "atmos.uas.tpt-h10m-hxy-u.3hr.GLB", "atmos.va.tavg-p19-hxy-air.day.GLB",
+                          "atmos.va.tavg-p19-hxy-air.mon.GLB", "atmos.va.tpt-p3-hxy-air.6hr.GLB",
+                          "atmos.va.tpt-p6-hxy-air.3hr.GLB", "atmos.vas.tavg-h10m-hxy-u.day.GLB",
+                          "atmos.vas.tavg-h10m-hxy-u.mon.GLB", "atmos.vas.tpt-h10m-hxy-u.3hr.GLB",
+                          "atmos.wap.tavg-p19-hxy-air.mon.GLB", "atmos.wap.tavg-p19-hxy-u.day.GLB",
+                          "atmos.wap.tpt-p6-hxy-air.3hr.GLB", "atmos.zg.tavg-p19-hxy-air.day.GLB",
+                          "atmos.zg.tavg-p19-hxy-air.mon.GLB", "land.evspsblsoi.tavg-u-hxy-lnd.mon.GLB",
+                          "land.evspsblsoi.tavg-u-hxy-u.3hr.GLB", "land.evspsblveg.tavg-u-hxy-lnd.mon.GLB",
+                          "land.evspsblveg.tavg-u-hxy-u.3hr.GLB", "land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
+                          "land.lai.tavg-u-hxy-lnd.mon.GLB", "land.mrro.tavg-u-hxy-lnd.mon.GLB",
+                          "land.mrros.tavg-u-hxy-lnd.mon.GLB", "land.mrso.tavg-u-hxy-lnd.mon.GLB",
+                          "land.mrsofc.ti-u-hxy-lnd.fx.GLB", "land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
+                          "land.mrsol.tavg-d10cm-hxy-lnd.mon.GLB", "land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB",
+                          "land.orog.ti-u-hxy-u.fx.GLB", "land.rootd.ti-u-hxy-lnd.fx.GLB",
+                          "land.sftgif.ti-u-hxy-u.fx.GLB", "land.slthick.ti-sl-hxy-lnd.fx.GLB",
+                          "land.srfrad.tavg-u-hxy-u.3hr.GLB", "land.tran.tavg-u-hxy-u.3hr.GLB",
+                          "land.tslsi.tpt-u-hxy-u.3hr.GLB", "landIce.mrfso.tavg-u-hxy-lnd.mon.GLB",
+                          "landIce.snc.tavg-u-hxy-lnd.mon.GLB", "landIce.snw.tavg-u-hxy-lnd.mon.GLB",
+                          "ocean.areacell.ti-u-hxy-u.fx.GLB", "ocean.basin.ti-u-hxy-u.fx.GLB",
+                          "ocean.bigthetao.tavg-ol-hxy-sea.mon.GLB", "ocean.deptho.ti-u-hxy-sea.fx.GLB",
+                          "ocean.hfds.tavg-u-hxy-sea.mon.GLB", "ocean.hfgeou.ti-u-hxy-sea.fx.GLB",
+                          "ocean.masscello.tavg-ol-hxy-sea.mon.GLB", "ocean.masscello.ti-ol-hxy-sea.fx.GLB",
+                          "ocean.mlotst.tavg-u-hxy-sea.mon.GLB", "ocean.mpw.tavg-u-hxy-sea.3hr.GLB",
+                          "ocean.mpw.tavg-u-hxy-sea.6hr.GLB", "ocean.mpw.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.mpw.unknown01.3hr.GLB", "ocean.mpwswell.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.mpwswell.tavg-u-hxy-sea.mon.GLB", "ocean.mpwwindsea.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.mpwwindsea.tavg-u-hxy-sea.mon.GLB", "ocean.sduo.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.sduo.tavg-u-hxy-sea.mon.GLB", "ocean.sdvo.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.sdvo.tavg-u-hxy-sea.mon.GLB", "ocean.sftof.ti-u-hxy-u.fx.GLB",
+                          "ocean.so.tavg-ol-hxy-sea.mon.GLB", "ocean.sos.tavg-u-hxy-sea.day.GLB",
+                          "ocean.sos.tavg-u-hxy-sea.mon.GLB", "ocean.swh.tavg-u-hxy-sea.3hr.GLB",
+                          "ocean.swh.tavg-u-hxy-sea.6hr.GLB", "ocean.swh.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.swh.tmax-u-hxy-sea.6hr.GLB", "ocean.swh.tmax-u-hxy-sea.mon.GLB",
+                          "ocean.swh.unknown02.3hr.GLB", "ocean.swhswell.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.swhswell.tavg-u-hxy-sea.mon.GLB", "ocean.swhwindsea.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.swhwindsea.tavg-u-hxy-sea.mon.GLB", "ocean.tauuo.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.tauvo.tavg-u-hxy-sea.mon.GLB", "ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
+                          "ocean.thkcello.tavg-ol-hxy-sea.mon.GLB", "ocean.thkcello.ti-ol-hxy-sea.fx.GLB",
+                          "ocean.tos.tavg-u-hxy-sea.day.GLB", "ocean.tos.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.umo.tavg-ol-hxy-sea.mon.GLB", "ocean.uo.tavg-ol-hxy-sea.mon.GLB",
+                          "ocean.vmo.tavg-ol-hxy-sea.mon.GLB", "ocean.vo.tavg-ol-hxy-sea.mon.GLB",
+                          "ocean.wdir.tavg-u-hxy-sea.3hr.GLB", "ocean.wdir.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.wdir.tavg-u-hxy-sea.mon.GLB", "ocean.wdir.unknown03.3hr.GLB",
+                          "ocean.wdirswell.tavg-u-hxy-sea.6hr.GLB", "ocean.wdirswell.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.wdirwindsea.tavg-u-hxy-sea.6hr.GLB", "ocean.wdirwindsea.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.wmo.tavg-ol-hxy-sea.mon.GLB", "ocean.wo.tavg-ol-hxy-sea.mon.GLB",
+                          "ocean.wpdir.tavg-u-hxy-sea.3hr.GLB", "ocean.wpdir.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.wpdir.tavg-u-hxy-sea.mon.GLB", "ocean.wpdir.unknown04.3hr.GLB",
+                          "ocean.wpdirswell.tavg-u-hxy-sea.6hr.GLB", "ocean.wpdirswell.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.wpdirwindsea.tavg-u-hxy-sea.6hr.GLB", "ocean.wpdirwindsea.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.wpp.tavg-u-hxy-sea.3hr.GLB", "ocean.wpp.tavg-u-hxy-sea.6hr.GLB",
+                          "ocean.wpp.tavg-u-hxy-sea.mon.GLB", "ocean.wpp.unknown05.3hr.GLB",
+                          "ocean.wppswell.tavg-u-hxy-sea.6hr.GLB", "ocean.wppswell.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.wppwindsea.tavg-u-hxy-sea.6hr.GLB", "ocean.wppwindsea.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.zos.tavg-u-hxy-sea.day.GLB", "ocean.zos.tavg-u-hxy-sea.mon.GLB",
+                          "ocean.zostoga.tavg-u-hm-sea.mon.GLB", "seaIce.siconc.tavg-u-hxy-u.day.GLB",
+                          "seaIce.siconc.tavg-u-hxy-u.mon.GLB", "seaIce.simass.tavg-u-hxy-sea.mon.GLB",
+                          "seaIce.sitemptop.tavg-u-hxy-si.mon.GLB", "seaIce.sithick.tavg-u-hxy-si.mon.GLB",
+                          "seaIce.sitimefrac.tavg-u-hxy-sea.mon.GLB", "seaIce.siu.tavg-u-hxy-si.mon.GLB",
+                          "seaIce.siv.tavg-u-hxy-si.mon.GLB", "seaIce.snd.tavg-u-hxy-sn.mon.GLB"]]
         self.assertListEqual(self.dr.find_variables_per_theme(theme_id), var)
         self.assertListEqual(self.dr.find_variables_per_theme(theme_name), var)
         self.assertListEqual(self.dr.find_variables_per_theme(theme_target), var)
@@ -1260,18 +1260,18 @@ class TestDataRequestFilter(unittest.TestCase):
         op_name = "Accurate assessment of land-atmosphere coupling"
         op_target = self.dr.find_element("opportunities", op_id)
         var = [self.dr.find_element("variables", id)
-               for id in ['link::80ab71f9-a698-11ef-914a-613c0433d878', 'link::80ab71fa-a698-11ef-914a-613c0433d878',
-                          'link::80ab71fb-a698-11ef-914a-613c0433d878', 'link::80ab71fc-a698-11ef-914a-613c0433d878',
-                          'link::80ab71fd-a698-11ef-914a-613c0433d878', 'link::80ab7430-a698-11ef-914a-613c0433d878',
-                          'link::80ab7431-a698-11ef-914a-613c0433d878', 'link::80ab7432-a698-11ef-914a-613c0433d878',
-                          'link::80ab7433-a698-11ef-914a-613c0433d878', 'link::80ab7434-a698-11ef-914a-613c0433d878',
-                          'link::80ab7435-a698-11ef-914a-613c0433d878', 'link::83bbfc71-7f07-11ef-9308-b1dd71e64bec',
-                          'link::baaefbcc-e5dd-11e5-8482-ac72891c3257', 'link::baaf8452-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab034a6-e5dd-11e5-8482-ac72891c3257', 'link::bab1c668-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab3c904-e5dd-11e5-8482-ac72891c3257', 'link::bab47354-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab52b5a-e5dd-11e5-8482-ac72891c3257', 'link::bab59202-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab5df78-e5dd-11e5-8482-ac72891c3257', 'link::bab65138-e5dd-11e5-8482-ac72891c3257',
-                          'link::bab91b20-e5dd-11e5-8482-ac72891c3257', 'link::babb12ae-e5dd-11e5-8482-ac72891c3257']]
+               for id in ['link::atmos.bldep.tpt-u-hxy-u.3hr.GLB', 'link::atmos.hfls.tavg-u-hxy-u.3hr.GLB',
+                          'link::atmos.hfss.tavg-u-hxy-u.3hr.GLB', 'link::atmos.hus.tpt-p6-hxy-air.3hr.GLB',
+                          'link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB', 'link::atmos.pr.tavg-u-hxy-u.3hr.GLB',
+                          'link::atmos.ps.tpt-u-hxy-u.3hr.GLB', 'link::atmos.rlds.tavg-u-hxy-u.3hr.GLB',
+                          'link::atmos.rlus.tavg-u-hxy-u.3hr.GLB', 'link::atmos.rsds.tavg-u-hxy-u.3hr.GLB',
+                          'link::atmos.rsus.tavg-u-hxy-u.3hr.GLB', 'link::atmos.ta.tpt-p6-hxy-air.3hr.GLB',
+                          'link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB', 'link::atmos.ua.tpt-p6-hxy-air.3hr.GLB',
+                          'link::atmos.va.tpt-p6-hxy-air.3hr.GLB', 'link::atmos.wap.tpt-p6-hxy-air.3hr.GLB',
+                          'link::land.evspsblsoi.tavg-u-hxy-u.3hr.GLB', 'link::land.evspsblveg.tavg-u-hxy-u.3hr.GLB',
+                          'link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB', 'link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB',
+                          'link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB', 'link::land.srfrad.tavg-u-hxy-u.3hr.GLB',
+                          'link::land.tran.tavg-u-hxy-u.3hr.GLB', 'link::land.tslsi.tpt-u-hxy-u.3hr.GLB']]
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_id), var)
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_name), var)
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_target), var)
@@ -1289,7 +1289,7 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_mips_per_opportunity(op_target), mips)
 
     def test_opportunities_per_variable(self):
-        var_id = "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec"
+        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_target = self.dr.find_element("variables", var_id)
         op = [self.dr.find_element("opportunities", id)
@@ -1300,7 +1300,7 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_target), op)
 
     def test_themes_per_variable(self):
-        var_id = "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec"
+        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_target = self.dr.find_element("variables", var_id)
         themes = [self.dr.find_element("data_request_themes", id)
@@ -1313,7 +1313,7 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_themes_per_variable(var_target), themes)
 
     def test_mips_per_variable(self):
-        var_id = "link::83bbfb69-7f07-11ef-9308-b1dd71e64bec"
+        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_target = self.dr.find_element("variables", var_id)
         mips = [self.dr.find_element("mips", id)
@@ -1384,58 +1384,58 @@ class TestDataRequestFilter(unittest.TestCase):
 
     def test_find_variables(self):
         table_id = "527f5ced-8c97-11ef-944e-41a8eb05f654"
-        vars_id = ["83bbfbbc-7f07-11ef-9308-b1dd71e64bec", "83bbfbbd-7f07-11ef-9308-b1dd71e64bec",
-                   "8baebea6-4a5b-11e6-9cd2-ac72891c3257", "8bb11ef8-4a5b-11e6-9cd2-ac72891c3257"]
+        vars_id = ["atmos.pr.tavg-u-hxy-u.1hr.GLB", "atmos.psl.tpt-u-hxy-u.1hr.GLB",
+                   "atmos.uas.tpt-h10m-hxy-u.1hr.GLB", "atmos.vas.tpt-h10m-hxy-u.1hr.GLB"]
         self.assertListEqual(self.dr.find_variables(operation="all", table_identifier=table_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         tshp_id = "a06034e5-bbca-11ef-9840-9de7167a7ecb"
-        vars_id = ["bab942a8-e5dd-11e5-8482-ac72891c3257", "bab955ea-e5dd-11e5-8482-ac72891c3257"]
+        vars_id = ["atmos.tas.tmax-h2m-hxy-u.mon.GLB", "atmos.tas.tmin-h2m-hxy-u.mon.GLB"]
         self.assertListEqual(self.dr.find_variables(operation="all", temporal_shape=tshp_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         sshp_id = "a6563bca-8883-11e5-b571-ac72891c3257"
-        vars_id = ["f2fad86e-c38d-11e6-abc1-1b922e5e1118", ]
+        vars_id = ["land.slthick.ti-sl-hxy-lnd.fx.GLB", ]
         self.assertListEqual(self.dr.find_variables(operation="all", spatial_shape=sshp_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         param_id = "00e77372e8b909d9a827a0790e991fd9"
-        vars_id = ["bab2f9d4-e5dd-11e5-8482-ac72891c3257", ]
+        vars_id = ["land.orog.ti-u-hxy-u.fx.GLB", ]
         self.assertListEqual(self.dr.find_variables(operation="all", physical_parameter=param_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         realm_id = "ocnBgchem"
-        vars_id = ["83bbfb7c-7f07-11ef-9308-b1dd71e64bec", "83bbfb7f-7f07-11ef-9308-b1dd71e64bec",
-                   "83bbfb94-7f07-11ef-9308-b1dd71e64bec", "ba9f3ac0-e5dd-11e5-8482-ac72891c3257",
-                   "ba9f643c-e5dd-11e5-8482-ac72891c3257", "ba9f686a-e5dd-11e5-8482-ac72891c3257",
-                   "ba9f91f0-e5dd-11e5-8482-ac72891c3257", "c9180bae-c5e8-11e6-84e6-5404a60d96b5",
-                   "c9181982-c5e8-11e6-84e6-5404a60d96b5"]
+        vars_id = ["ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB", "ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB",
+                   "ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB", "ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB",
+                   "ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB", "ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB",
+                   "ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB", "ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB",
+                   "ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"]
         self.assertListEqual(self.dr.find_variables(operation="all", modelling_realm=realm_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         bcv_id = "80ab7325-a698-11ef-914a-613c0433d878"
-        vars_id = ["bab3c904-e5dd-11e5-8482-ac72891c3257", ]
+        vars_id = ["atmos.pr.tavg-u-hxy-u.3hr.GLB", ]
         self.assertListEqual(self.dr.find_variables(operation="all", **{"esm-bcv": bcv_id}),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         cf_std_id = "3ba74d83-8ca2-11ef-944e-41a8eb05f654"
-        vars_id = ["baab0382-e5dd-11e5-8482-ac72891c3257", ]
+        vars_id = ["atmos.clw.tavg-al-hxy-u.mon.GLB", ]
         self.assertListEqual(self.dr.find_variables(operation="all", cf_standard_name=cf_std_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         cell_methods_id = "a269a4c3-8c9b-11ef-944e-41a8eb05f654"
-        vars_id = ["bab1c08c-e5dd-11e5-8482-ac72891c3257", "bab5c7fe-e5dd-11e5-8482-ac72891c3257",
-                   "f2fad86e-c38d-11e6-abc1-1b922e5e1118"]
+        vars_id = ["land.mrsofc.ti-u-hxy-lnd.fx.GLB", "land.rootd.ti-u-hxy-lnd.fx.GLB",
+                   "land.slthick.ti-sl-hxy-lnd.fx.GLB"]
         self.assertListEqual(self.dr.find_variables(operation="all", cell_methods=cell_methods_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         cell_measure_id = "a269a4f8-8c9b-11ef-944e-41a8eb05f654"
-        vars_id = ["baa6cf38-e5dd-11e5-8482-ac72891c3257", "baa6d366-e5dd-11e5-8482-ac72891c3257"]
+        vars_id = ["ocean.tauuo.tavg-u-hxy-sea.mon.GLB", "ocean.tauvo.tavg-u-hxy-sea.mon.GLB"]
         self.assertListEqual(self.dr.find_variables(operation="all", cell_measures=cell_measure_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
     def test_find_priority_per_variable(self):
-        var_id = "link::babb20b4-e5dd-11e5-8482-ac72891c3257"
+        var_id = "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB"
         var = self.dr.find_element("variable", var_id)
         self.assertEqual(self.dr.find_priority_per_variable(var), 2)
 
