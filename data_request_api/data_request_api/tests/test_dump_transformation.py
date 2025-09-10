@@ -101,14 +101,10 @@ class TestTransformContent(unittest.TestCase):
 
     def test_one_base_correct(self):
         format_output = correct_dictionaries(self.one_base_input)
-        write_json_output_file_content(filepath("one_base_output_format_v2.json"), format_output)
         self.assertDictEqual(format_output, self.one_base_output_format)
         transform_output = transform_content_inner(format_output, get_transform_settings(self.version)["one_to_transform"])
-        write_json_output_file_content(filepath("one_base_output_tranform_v2.json"), transform_output)
         self.assertDictEqual(transform_output, self.one_base_output_transform)
         DR_output, VS_output = split_content_one_base(transform_output)
-        write_json_output_file_content(filepath("one_base_DR_output_v2.json"), DR_output)
-        write_json_output_file_content(filepath("one_base_VS_output_v2.json"), VS_output)
         self.assertDictEqual(DR_output, self.one_base_DR_output_noversion)
         self.assertDictEqual(VS_output, self.one_base_VS_output_noversion)
 
@@ -119,14 +115,10 @@ class TestTransformContent(unittest.TestCase):
 
     def test_several_bases_correct(self):
         format_output = correct_dictionaries(self.several_bases_input)
-        write_json_output_file_content(filepath("several_bases_output_format_v2.json"), format_output)
         self.assertDictEqual(format_output, self.several_bases_output_format)
         transform_output = transform_content_inner(format_output, self.transform_settings["several_to_transform"], change_tables=True)
-        write_json_output_file_content(filepath("several_bases_output_tranform_v2.json"), transform_output)
         self.assertDictEqual(transform_output, self.several_bases_output_transform)
         DR_output, VS_output = split_content_one_base(transform_output)
-        write_json_output_file_content(filepath("several_bases_DR_output_v2.json"), DR_output)
-        write_json_output_file_content(filepath("several_bases_VS_output_v2.json"), VS_output)
         self.assertDictEqual(DR_output, self.several_bases_DR_output_noversion)
         self.assertDictEqual(VS_output, self.several_bases_VS_output_noversion)
 
