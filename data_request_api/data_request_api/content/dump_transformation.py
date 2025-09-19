@@ -537,37 +537,44 @@ def transform_content(content, version, force_variable_name=False, variable_name
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
                             force_retrieve=False, output_dir=None, force_variable_name=False,
                             default_transformed_content_pattern="{kind}_{export_version}_content.json", **kwargs):
-    # Download specified version of data request content (if not locally cached)
-    versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
-
-    # Check that there is only one version associated
-    if len(versions) > 1:
-        raise ValueError("Could only deal with one version.")
-    elif len(versions) == 0:
-        raise ValueError("No version found.")
-    else:
-        version = list(versions)[0]
-        content = versions[version]
-        if output_dir is None:
-            output_dir = os.path.dirname(content)
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+    if version in ["test", ]:
         DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
         VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
-        DR_content = os.sep.join([output_dir, DR_content])
-        VS_content = os.sep.join([output_dir, VS_content])
-        if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            if os.path.exists(DR_content):
-                os.remove(DR_content)
-            if os.path.exists(VS_content):
-                os.remove(VS_content)
-        if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            content = dc.load(version, export=export, consolidate=consolidate)
-            data_request, vocabulary_server = transform_content(content, version, variable_name=kwargs["variable_name"],
-                                                                force_variable_name=force_variable_name)
-            write_json_output_file_content(DR_content, data_request)
-            write_json_output_file_content(VS_content, vocabulary_server)
-        return dict(DR_input=DR_content, VS_input=VS_content)
+        from data_request_api.tests import filepath
+        DR_content = filepath(DR_content)
+        VS_content = filepath(VS_content)
+    else:
+        # Download specified version of data request content (if not locally cached)
+        versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
+
+        # Check that there is only one version associated
+        if len(versions) > 1:
+            raise ValueError("Could only deal with one version.")
+        elif len(versions) == 0:
+            raise ValueError("No version found.")
+        else:
+            version = list(versions)[0]
+            content = versions[version]
+            if output_dir is None:
+                output_dir = os.path.dirname(content)
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
+            VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
+            DR_content = os.sep.join([output_dir, DR_content])
+            VS_content = os.sep.join([output_dir, VS_content])
+            if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+                if os.path.exists(DR_content):
+                    os.remove(DR_content)
+                if os.path.exists(VS_content):
+                    os.remove(VS_content)
+            if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+                content = dc.load(version, export=export, consolidate=consolidate)
+                data_request, vocabulary_server = transform_content(content, version, variable_name=kwargs["variable_name"],
+                                                                    force_variable_name=force_variable_name)
+                write_json_output_file_content(DR_content, data_request)
+                write_json_output_file_content(VS_content, vocabulary_server)
+    return dict(DR_input=DR_content, VS_input=VS_content)
 
 
 if __name__ == "__main__":
