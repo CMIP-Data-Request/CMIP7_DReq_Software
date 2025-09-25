@@ -275,6 +275,7 @@ def add_useful_keys(content):
     logger = get_logger()
     record_to_linked_id_index = defaultdict(lambda: dict())
     list_entries = sorted(list(content))
+    test = defaultdict(set)
     for subelt in list_entries:
         list_record_ids = sorted(list(content[subelt]),
                                  key=lambda record_id: "|".join([content[subelt][record_id].get("name", "undef"),
@@ -287,8 +288,13 @@ def add_useful_keys(content):
             if linked_id.endswith(os.linesep):
                 logger.debug(f"linked_id of element type {subelt} and record id {record_id} endswith '\\n'.")
                 linked_id = linked_id.rstrip(os.linesep)
+            if linked_id in content[subelt]:
+                test[linked_id].add(content[subelt][record_id]["uid"])
+                test[linked_id].add(content[subelt][linked_id]["uid"])
             record_to_linked_id_index[subelt][record_id] = linked_id
             content[subelt][linked_id] = content[subelt].pop(record_id)
+    if len(test) > 0:
+        raise ValueError("Linked id must be unique: issue with %s" % test)
     return content, record_to_linked_id_index
 
 
