@@ -868,7 +868,7 @@ def get_variables_metadata(content, dreq_version,
         else:
             dimensions = dimensions_linked
 
-        # Get physical parameter record and use its name as out_name
+        # Get physical parameter record and set out_name
         link = var.physical_parameter[0]
         phys_param = dreq_tables['physical parameters'].get_record(link)
         if hasattr(phys_param, 'variablerootdd'):
@@ -876,7 +876,7 @@ def get_variables_metadata(content, dreq_version,
             out_name = phys_param.variablerootdd
         else:
             # Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
-            # for almost all variables in dreq v1.2.1
+            # for most variables in dreq v1.2.1
             out_name = phys_param.name
 
         if cmor_variables:
