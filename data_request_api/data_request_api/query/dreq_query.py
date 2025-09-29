@@ -913,6 +913,10 @@ def get_variables_metadata(content, dreq_version,
         if hasattr(var, 'description'):
             comment = var.description
 
+        processing_note = ''
+        if hasattr(var, 'processing_note'):
+            processing_note = var.processing_note
+
         var_info = OrderedDict()
         # Insert fields in order given by CMIP6 cmor tables (https://github.com/PCMDI/cmip6-cmor-tables)
         var_info.update({
@@ -930,6 +934,7 @@ def get_variables_metadata(content, dreq_version,
 
             'long_name': var.title,
             'comment': comment,
+            'processing_note': processing_note,
 
             'dimensions': dimensions,
 
