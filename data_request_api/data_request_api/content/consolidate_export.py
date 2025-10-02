@@ -720,11 +720,6 @@ def map_data(data, mapping_table, version, **kwargs):
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
         l_version = next(iter(data.keys())).replace("Data Request", "").strip()
-        if l_version != version and version != "dev":
-            raise RuntimeError(
-                "The Data Request version inferred from the content dictionary"
-                f" ({l_version}) is different than the requested version ({version})."
-            )
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)

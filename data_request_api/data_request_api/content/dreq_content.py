@@ -26,14 +26,20 @@ _json_raw = "dreq_raw_export.json"
 _json_release = "dreq_release_export.json"
 _json_raw_consolidated = "dreq_raw_consolidated.json"
 _json_release_consolidated = "dreq_release_consolidated.json"
-_json_release_DR = "DR_release_content.json"
-_json_release_VS = "VS_release_content.json"
-_json_raw_DR = "DR_raw_content.json"
-_json_raw_VS = "VS_raw_content.json"
+_json_release_DR = "DR_release_consolidate_content.json"
+_json_release_VS = "VS_release_consolidate_content.json"
+_json_raw_DR = "DR_raw_consolidate_content.json"
+_json_raw_VS = "VS_raw_consolidate_content.json"
+_json_release_nc_DR = "DR_release_no-consolidate_content.json"
+_json_release_nc_VS = "VS_release_no-consolidate_content.json"
+_json_raw_nc_DR = "DR_raw_noconsolidate_content.json"
+_json_raw_nc_VS = "VS_raw_no-consolidate_content.json"
+
 
 # Base URL template for fetching Dreq content json files from GitHub
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
+#REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
 REPO_RAW_URL = (
     "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/{target}/{version}/airtable_export/{_json_export}"
 )
@@ -142,13 +148,17 @@ def _get_partly_cached(**kwargs):
         if "export" in kwargs:
             if kwargs["export"] == "raw":
                 json_export = _json_raw
-                DR = _json_raw_DR
-                VS = _json_raw_VS
+                DR_consolidated = _json_raw_DR
+                VS_consolidated = _json_raw_VS
+                DR = _json_raw_DR_nc
+                VS = _json_raw_VS_nc
                 json_export_consolidated = _json_raw_consolidated
             elif kwargs["export"] == "release":
                 json_export = _json_release
-                DR = _json_release_DR
-                VS = _json_release_VS
+                DR_consolidated = _json_release_DR
+                VS_consolidated = _json_release_VS
+                DR = _json_release_nc_DR
+                VS = _json_release_nc_VS
                 json_export_consolidated = _json_release_consolidated
         local_versions = [
             name
@@ -157,6 +167,8 @@ def _get_partly_cached(**kwargs):
             and (
                 os.path.isfile(os.path.join(_dreq_res, name, DR))
                 or os.path.isfile(os.path.join(_dreq_res, name, VS))
+                or os.path.isfile(os.path.join(_dreq_res, name, DR_consolidated))
+                or os.path.isfile(os.path.join(_dreq_res, name, VS_consolidated))
                 or os.path.isfile(
                     os.path.join(_dreq_res, name, json_export_consolidated)
                 )
@@ -558,9 +570,14 @@ def retrieve(version="latest_stable", **kwargs):
 
     # Capture no correct export found for cached versions (offline mode)
     if not json_paths or json_paths == {}:
-        raise ValueError(
-            "The version(s) you requested are not cached. Please deactivate offline mode and try again."
-        )
+        if "offline" in kwargs and kwargs["offline"]:
+            raise ValueError(
+                "The version(s) you requested are not cached. Please deactivate offline mode and try again."
+            )
+        else:
+            raise ValueError(
+                "The version(s) you requested could not be retrieved"
+            )
 
     return json_paths
 
@@ -583,7 +600,7 @@ def cleanup(**kwargs):
         cached_files = [
             os.path.join(_dreq_res, v, version_type)
             for v in cleanup_versions
-            for version_type in [_json_raw_consolidated, _json_raw_DR, _json_raw_VS]
+            for version_type in [_json_raw_consolidated, _json_raw_DR, _json_raw_VS, _json_raw_DR_nc, _json_raw_VS_nc]
         ]
     elif kwargs["export"] == "release":
         cached_files = [
@@ -593,6 +610,8 @@ def cleanup(**kwargs):
                 _json_release_consolidated,
                 _json_release_DR,
                 _json_release_VS,
+                _json_release_nc_DR,
+                _json_release_nc_VS,
             ]
         ]
 
