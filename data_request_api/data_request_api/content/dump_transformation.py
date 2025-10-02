@@ -535,7 +535,7 @@ def transform_content(content, version, force_variable_name=False, variable_name
 
 @append_kwargs_from_config
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
-                            force_retrieve=False, output_dir=None,
+                            force_retrieve=False, output_dir=None, force_variable_name=False,
                             default_transformed_content_pattern="{kind}_{export_version}_{consolidate}_content.json", **kwargs):
     # Download specified version of data request content (if not locally cached)
     versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)

@@ -754,9 +754,9 @@ def load(version="latest_stable", **kwargs):
     version_dir = os.path.join("_dreq_res", version_key)
     os.makedirs(version_dir, exist_ok=True)
     cache_filename = (
-        "_json_raw_consolidated.json"
+        f"{_json_raw_consolidated}.json"
         if export_type == "raw"
-        else "_json_release_consolidated.json"
+        else f"{_json_release_consolidated}.json"
     )
     cache_path = os.path.join(version_dir, cache_filename)
 
