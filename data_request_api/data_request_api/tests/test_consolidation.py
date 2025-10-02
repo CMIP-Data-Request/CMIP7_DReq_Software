@@ -42,13 +42,13 @@ def test_map_attribute():
     # Read 3-base export
     several_bases_input = read_json_file(filepath("several_bases_input.json"))
     # Select a CF Standard Name to map (lagrangian_tendency_of_air_pressure)
-    attr = "lagrangian_tendency_of_air_pressure"
+    attr = "mole_concentration_of_aragonite_expressed_as_carbon_in_sea_water"
     # Select the list of records to map against
     records = several_bases_input["Data Request Physical Parameters (Public)"]["CF Standard Name"]["records"]
     # Assert successful mapping via key "name"
-    assert _map_attribute(attr, records, ["name"]) == ["rectR4F3k6a6p7VPv"]
+    assert _map_attribute(attr, records, ["name"]) == ["rec0ik3QbkrzxJy0n"]
     # Delete the mapped record and assert no match is found
-    record_rm = records.pop("rectR4F3k6a6p7VPv")
+    record_rm = records.pop("rec0ik3QbkrzxJy0n")
     assert _map_attribute(attr, records, ["name"]) == []
     # Duplicate the record back in and assert two matches are found now
     records["test1"] = record_rm

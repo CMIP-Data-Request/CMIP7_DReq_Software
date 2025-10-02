@@ -95,13 +95,25 @@ el.replaceWith(d);
             if mapinfo[&#34;source_base&#34;] in data and any(
                 [st in data[mapinfo[&#34;source_base&#34;]] for st in mapinfo[&#34;source_table&#34;]]
             ):
-                source_table = [st for st in mapinfo[&#34;source_table&#34;] if st in data[mapinfo[&#34;source_base&#34;]]][0]
+                source_table = [
+                    st
+                    for st in mapinfo[&#34;source_table&#34;]
+                    if st in data[mapinfo[&#34;source_base&#34;]]
+                ][0]
                 if &#34;internal_filters&#34; in mapinfo:
-                    for record_id, record in data[mapinfo[&#34;source_base&#34;]][source_table][&#34;records&#34;].items():
+                    for record_id, record in data[mapinfo[&#34;source_base&#34;]][source_table][
+                        &#34;records&#34;
+                    ].items():
                         filter_results = []
-                        for filter_key, filter_val in mapinfo[&#34;internal_filters&#34;].items():
+                        for filter_key, filter_val in mapinfo[
+                            &#34;internal_filters&#34;
+                        ].items():
                             if all(
-                                [filter_alias not in record for filter_alias in [filter_key] + filter_val[&#34;aliases&#34;]]
+                                [
+                                    filter_alias not in record
+                                    for filter_alias in [filter_key]
+                                    + filter_val[&#34;aliases&#34;]
+                                ]
                             ):
                                 filter_results.append(False)
                             elif filter_val[&#34;operator&#34;] == &#34;nonempty&#34;:
@@ -109,7 +121,8 @@ el.replaceWith(d);
                                     any(
                                         [
                                             bool(record[fk])
-                                            for fk in [filter_key] + filter_val[&#34;aliases&#34;]
+                                            for fk in [filter_key]
+                                            + filter_val[&#34;aliases&#34;]
                                             if fk in record
                                         ]
                                     )
@@ -119,21 +132,32 @@ el.replaceWith(d);
                                     if fk in record:
                                         if isinstance(record[filter_key], list):
                                             filter_results.append(
-                                                any(fj in filter_val[&#34;values&#34;] for fj in record[filter_key])
+                                                any(
+                                                    fj in filter_val[&#34;values&#34;]
+                                                    for fj in record[filter_key]
+                                                )
                                             )
                                             break
                                         else:
-                                            filter_results.append(record[filter_key] in filter_val[&#34;values&#34;])
+                                            filter_results.append(
+                                                record[filter_key]
+                                                in filter_val[&#34;values&#34;]
+                                            )
                             elif filter_val[&#34;operator&#34;] == &#34;not in&#34;:
                                 for fk in [filter_key] + filter_val[&#34;aliases&#34;]:
                                     if fk in record:
                                         if isinstance(record[filter_key], list):
                                             filter_results.append(
-                                                any(fj not in filter_val[&#34;values&#34;] for fj in record[filter_key])
+                                                any(
+                                                    fj not in filter_val[&#34;values&#34;]
+                                                    for fj in record[filter_key]
+                                                )
                                             )
                                         break
                                 else:
-                                    filter_results.append(record[filter_key] not in filter_val[&#34;values&#34;])
+                                    filter_results.append(
+                                        record[filter_key] not in filter_val[&#34;values&#34;]
+                                    )
                         if not all(filter_results):
                             logger.debug(
                                 f&#34;Filtered record &#39;{record_id}&#39;&#34;
@@ -146,7 +170,9 @@ el.replaceWith(d);
                             else:
                                 filtered_records_dict[table] = [record_id]
         for key in filtered_records_dict:
-            logger.debug(f&#34;Filtered {len(filtered_records_dict[key])} records for &#39;{key}&#39;.&#34;)
+            logger.debug(
+                f&#34;Filtered {len(filtered_records_dict[key])} records for &#39;{key}&#39;.&#34;
+            )
         logger.debug(f&#34;Filtered {len(filtered_records)} records in total.&#34;)
 
         # Perform mapping in case of three-base structure
@@ -161,23 +187,36 @@ el.replaceWith(d);
                 #   &#34;internal_consistency&#34; settings
                 # - filter references to records for fields that are not
                 #   internally mapped below
-                source_table = [st for st in mapinfo[&#34;source_table&#34;] if st in data[mapinfo[&#34;source_base&#34;]]][0]
-                logger.debug(f&#34;Mapping &#39;{mapinfo[&#39;source_base&#39;]}&#39; : &#39;{source_table}&#39; -&gt; &#39;{table}&#39;&#34;)
+                source_table = [
+                    st
+                    for st in mapinfo[&#34;source_table&#34;]
+                    if st in data[mapinfo[&#34;source_base&#34;]]
+                ][0]
+                logger.debug(
+                    f&#34;Mapping &#39;{mapinfo[&#39;source_base&#39;]}&#39; : &#39;{source_table}&#39; -&gt; &#39;{table}&#39;&#34;
+                )
                 mapped_data[&#34;Data Request&#34;][table] = {
                     **data[mapinfo[&#34;source_base&#34;]][source_table],
                     &#34;records&#34;: {
                         record_id: {
-                            mapinfo[&#34;internal_consistency&#34;].get(reckey, reckey): _filter_references(
+                            mapinfo[&#34;internal_consistency&#34;].get(
+                                reckey, reckey
+                            ): _filter_references(
                                 recvalue,
                                 reckey,
                                 table,
                                 record_id,
-                                mapinfo[&#34;field_dtypes&#34;].get(mapinfo[&#34;internal_consistency&#34;].get(reckey, reckey), None),
+                                mapinfo[&#34;field_dtypes&#34;].get(
+                                    mapinfo[&#34;internal_consistency&#34;].get(reckey, reckey),
+                                    None,
+                                ),
                             )
                             for reckey, recvalue in record.items()
                             if reckey not in mapinfo[&#34;drop_keys&#34;]
                         }
-                        for record_id, record in data[mapinfo[&#34;source_base&#34;]][source_table][&#34;records&#34;].items()
+                        for record_id, record in data[mapinfo[&#34;source_base&#34;]][
+                            source_table
+                        ][&#34;records&#34;].items()
                         if record_id not in filtered_records
                     },
                 }
@@ -189,10 +228,13 @@ el.replaceWith(d);
                         intm_table = [
                             tn
                             for tn in mapping_table.keys()
-                            if tn in mapping_table[tn][&#34;source_table&#34;] and tn == intm[attr][&#34;table&#34;]
+                            if tn in mapping_table[tn][&#34;source_table&#34;]
+                            and tn == intm[attr][&#34;table&#34;]
                         ][0]
                         intm_table_alias = [
-                            tn for tn in mapping_table[intm_table][&#34;source_table&#34;] if tn in data[intm[attr][&#34;base&#34;]]
+                            tn
+                            for tn in mapping_table[intm_table][&#34;source_table&#34;]
+                            if tn in data[intm[attr][&#34;base&#34;]]
                         ]
                         try:
                             intm_table_alias = intm_table_alias[0]
@@ -201,13 +243,22 @@ el.replaceWith(d);
                             logger.error(errmsg)
                             raise ValueError(errmsg)
 
-                        for record_id, record in data[mapinfo[&#34;source_base&#34;]][source_table][&#34;records&#34;].items():
+                        for record_id, record in data[mapinfo[&#34;source_base&#34;]][
+                            source_table
+                        ][&#34;records&#34;].items():
                             if record_id in filtered_records:
                                 continue
-                            elif attr not in record or record[attr] is None or record[attr] == &#34;&#34; or record[attr] == []:
+                            elif (
+                                attr not in record
+                                or record[attr] is None
+                                or record[attr] == &#34;&#34;
+                                or record[attr] == []
+                            ):
                                 # Attribute name not found for record, but might have a different name
                                 #  in another export type or release version
-                                logger.debug(f&#34;{table}: Attribute &#39;{attr}&#39; not found for record &#39;{record_id}&#39;.&#34;)
+                                logger.debug(
+                                    f&#34;{table}: Attribute &#39;{attr}&#39; not found for record &#39;{record_id}&#39;.&#34;
+                                )
                                 attr_aliases = [
                                     a
                                     for a in mapinfo[&#34;internal_consistency&#34;].keys()
@@ -242,7 +293,12 @@ el.replaceWith(d);
                                     # raise TypeError({errmsg})
                                 else:
                                     attr_vals = list(
-                                        map(lambda x: x.strip(&#39;&#34;&#39;), re.split(r&#39;,\s*(?=(?:[^&#34;]|&#34;[^&#34;]*&#34;)*$)&#39;, attr_vals))
+                                        map(
+                                            lambda x: x.strip(&#39;&#34;&#39;),
+                                            re.split(
+                                                r&#39;,\s*(?=(?:[^&#34;]|&#34;[^&#34;]*&#34;)*$)&#39;, attr_vals
+                                            ),
+                                        )
                                     )
                             elif intm[attr][&#34;operation&#34;] == &#34;&#34;:
                                 if isinstance(attr_vals, str):
@@ -271,7 +327,10 @@ el.replaceWith(d);
                                     errmsg = f&#34;Base &#39;{intm[attr][&#39;base&#39;]}&#39; not found in data.&#34;
                                     logger.error(f&#34;KeyError: {errmsg}&#34;)
                                     raise KeyError(errmsg)
-                                elif intm[attr][&#34;base_copy_of_table&#34;] not in data[mapinfo[&#34;source_base&#34;]]:
+                                elif (
+                                    intm[attr][&#34;base_copy_of_table&#34;]
+                                    not in data[mapinfo[&#34;source_base&#34;]]
+                                ):
                                     errmsg = f&#34;Table &#39;{intm[attr][&#39;base_copy_of_table&#39;]}&#39; not found in base &#39;{mapinfo[&#39;source_base&#39;]}&#39;.&#34;
                                     logger.error(f&#34;KeyError: {errmsg}&#34;)
                                     raise KeyError(errmsg)
@@ -279,17 +338,23 @@ el.replaceWith(d);
                                 recordIDs_new = []
                                 for attr_val in attr_vals:
                                     # The record copy in the current base
-                                    record_copy = data[mapinfo[&#34;source_base&#34;]][intm[attr][&#34;base_copy_of_table&#34;]][
-                                        &#34;records&#34;
-                                    ][attr_val]
+                                    record_copy = data[mapinfo[&#34;source_base&#34;]][
+                                        intm[attr][&#34;base_copy_of_table&#34;]
+                                    ][&#34;records&#34;][attr_val]
                                     # The entire list of records in the base of origin
-                                    recordlist = data[intm[attr][&#34;base&#34;]][intm_table_alias][&#34;records&#34;]
+                                    recordlist = data[intm[attr][&#34;base&#34;]][
+                                        intm_table_alias
+                                    ][&#34;records&#34;]
                                     recordID_new = _map_record_id(
                                         record_copy,
                                         recordlist,
                                         intm[attr][&#34;map_by_key&#34;],
                                     )
-                                    recordID_filtered = [r for r in recordID_new if r not in filtered_records]
+                                    recordID_filtered = [
+                                        r
+                                        for r in recordID_new
+                                        if r not in filtered_records
+                                    ]
                                     if len(recordID_filtered) == 0:
                                         if len(recordID_new) == 0:
                                             logger.debug(
@@ -313,14 +378,20 @@ el.replaceWith(d);
                                 for attr_val in attr_vals:
                                     recordID_new = _map_attribute(
                                         attr_val,
-                                        data[intm[attr][&#34;base&#34;]][intm_table_alias][&#34;records&#34;],
+                                        data[intm[attr][&#34;base&#34;]][intm_table_alias][
+                                            &#34;records&#34;
+                                        ],
                                         (
                                             [intm[attr][&#34;map_by_key&#34;]]
                                             if isinstance(intm[attr][&#34;map_by_key&#34;], str)
                                             else intm[attr][&#34;map_by_key&#34;]
                                         ),
                                     )
-                                    recordID_filtered = [r for r in recordID_new if r not in filtered_records]
+                                    recordID_filtered = [
+                                        r
+                                        for r in recordID_new
+                                        if r not in filtered_records
+                                    ]
                                     if len(recordID_filtered) == 0:
                                         if len(recordID_new) == 0:
                                             logger.debug(
@@ -352,9 +423,13 @@ el.replaceWith(d);
                                 # This case can actually happen for the &#39;Coordinate and Dimension&#39; table
                                 # raise KeyError(errmsg)
                             try:
-                                mapped_data[&#34;Data Request&#34;][table][&#34;records&#34;][record_id][
+                                mapped_data[&#34;Data Request&#34;][table][&#34;records&#34;][
+                                    record_id
+                                ][
                                     mapinfo[&#34;internal_consistency&#34;].get(attr, attr)
-                                ] = list(set(recordIDs_new))
+                                ] = list(
+                                    set(recordIDs_new)
+                                )
                             except KeyError:
                                 logger.debug(
                                     f&#34;Consolidation of {table}@{intm_table_alias}:&#34;
@@ -364,10 +439,18 @@ el.replaceWith(d);
             else:
                 if mapinfo[&#34;source_base&#34;] not in data:
                     missing_bases.append(mapinfo[&#34;source_base&#34;])
-                elif all([st not in data[mapinfo[&#34;source_base&#34;]] for st in mapinfo[&#34;source_table&#34;]]):
+                elif all(
+                    [
+                        st not in data[mapinfo[&#34;source_base&#34;]]
+                        for st in mapinfo[&#34;source_table&#34;]
+                    ]
+                ):
                     missing_tables.append(mapinfo[&#34;source_table&#34;][0])
         if len(missing_bases) &gt; 0:
-            errmsg = &#34;Encountered missing bases when consolidating the data:&#34; f&#34; {set(missing_bases)}&#34;
+            errmsg = (
+                &#34;Encountered missing bases when consolidating the data:&#34;
+                f&#34; {set(missing_bases)}&#34;
+            )
             logger.critical(errmsg)
             raise KeyError(errmsg)
         if len(missing_tables) &gt; 0:
@@ -380,7 +463,7 @@ el.replaceWith(d);
     elif len(data.keys()) == 1:
         l_version = next(iter(data.keys())).replace(&#34;Data Request&#34;, &#34;&#34;).strip()
         if l_version != version and version != &#34;dev&#34;:
-            logger.warning(
+            raise RuntimeError(
                 &#34;The Data Request version inferred from the content dictionary&#34;
                 f&#34; ({l_version}) is different than the requested version ({version}).&#34;
             )
@@ -388,7 +471,9 @@ el.replaceWith(d);
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)
         # String fixes
-        logger.debug(&#34;Consolidation: Removing / Adding (un)necessary whitespace to strings.&#34;)
+        logger.debug(
+            &#34;Consolidation: Removing / Adding (un)necessary whitespace to strings.&#34;
+        )
         _fix_str_nested(mapped_data)
         mapped_data[&#34;version&#34;] = version
         return {&#34;Data Request&#34;: mapped_data}

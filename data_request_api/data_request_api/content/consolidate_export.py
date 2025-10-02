@@ -222,6 +222,14 @@ def _fix_str(var):
         return var
 
 
+def _fix_numeric_str(var):
+    """Removes invalid characters from strings that represent numeric values."""
+    if isinstance(var, str):
+        return re.sub(r"[^0-9eE\+\-\.]", "", var)
+    else:
+        return var
+
+
 def _fix_str_nested(data):
     """Adds missing space after commas and strips whitespace from strings in nested dictionary."""
     sub = re.sub
@@ -251,12 +259,12 @@ def _fix_dtype(fkey, fval, dtype=None):
         logger.debug(
             f"Consolidate export: Converting field '{fkey}' ('{fval}') to int."
         )
-        return int(fval)
+        return int(_fix_numeric_str(fval))
     elif dtype == "float":
         logger.debug(
             f"Consolidate export: Converting field '{fkey}' ('{fval}') to float."
         )
-        return float(fval)
+        return float(_fix_numeric_str(fval))
     elif dtype == "listofstr":
         logger.debug(
             f"Consolidate export: Converting field '{fkey}' to a list of strings."
@@ -271,6 +279,13 @@ def _fix_dtype(fkey, fval, dtype=None):
         )
         if isinstance(fval, list):
             return [int(v) for v in fval]
+        elif isinstance(fval, str):
+            if "," in fval:
+                return [int(ifval) for ifval in fval.replace(" ", "").split(",")]
+            elif " " in fval:
+                return [int(ifval) for ifval in fval.split() if ifval.strip() != ""]
+            else:
+                return [int(fval)]
         else:
             return [int(fval)]
     elif dtype == "listoffloat":
@@ -279,6 +294,13 @@ def _fix_dtype(fkey, fval, dtype=None):
         )
         if isinstance(fval, list):
             return [float(v) for v in fval]
+        elif isinstance(fval, str):
+            if "," in fval:
+                return [float(ifval) for ifval in fval.replace(" ", "").split(",")]
+            elif " " in fval:
+                return [float(ifval) for ifval in fval.split() if ifval.strip() != ""]
+            else:
+                return [float(fval)]
         else:
             return [float(fval)]
     else:
@@ -698,6 +720,11 @@ def map_data(data, mapping_table, version, **kwargs):
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
         l_version = next(iter(data.keys())).replace("Data Request", "").strip()
+        if l_version != version and version != "dev":
+            raise RuntimeError(
+                "The Data Request version inferred from the content dictionary"
+                f" ({l_version}) is different than the requested version ({version})."
+            )
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)

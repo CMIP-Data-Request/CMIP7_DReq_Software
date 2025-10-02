@@ -34,7 +34,13 @@ _json_raw_VS = "VS_raw_content.json"
 # Base URL template for fetching Dreq content json files from GitHub
 # _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
-REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+REPO_RAW_URL = (
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/{target}/{version}/airtable_export/{_json_export}"
+)
+REPO_RAW_URL_DEV = (
+    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+)
+
 _dev_branch = "main"
 
 # API URL for fetching tags or branches
@@ -495,13 +501,18 @@ def retrieve(version="latest_stable", **kwargs):
             if not os.path.isfile(json_path):
                 # Download with pooch - use "main" branch for "dev"
                 try:
+                    if version == "dev":
+                        url = REPO_RAW_URL_DEV.format(
+                            version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                    elif version not in get_versions():
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org, target="heads")
+                    else:
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org, target="tags")
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
-                        url=REPO_RAW_URL.format(
-                            version=(_dev_branch if version == "dev" else version),
-                            _json_export=json_export,
-                            _github_org=_github_org,
-                        ),
+                        url=url,
                         known_hash=None,
                         fname=json_export,
                     )
@@ -519,13 +530,15 @@ def retrieve(version="latest_stable", **kwargs):
                     if os.path.exists(json_path_temp):
                         os.remove(json_path_temp)
                     # Retrieve
+                    if version == "dev":
+                        url = REPO_RAW_URL_DEV.format(
+                            version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                    else:
+                        url = REPO_RAW_URL.format(
+                            version=version, _json_export=json_export, _github_org=_github_org, target="heads")
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
-                        url=REPO_RAW_URL.format(
-                            version=(_dev_branch if version == "dev" else version),
-                            _json_export=json_export,
-                            _github_org=_github_org,
-                        ),
+                        url=url,
                         known_hash=None,
                         fname=json_export + ".tmp",
                     )
