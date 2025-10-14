@@ -16,16 +16,17 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 import data_request_api.content.dreq_content as dc
-from data_request_api.content.dump_transformation import transform_content
-from data_request_api.utilities.tools import write_json_output_file_content
+from data_request_api.content.dump_transformation import get_transformed_content
 from data_request_api.utilities.logger import change_log_file, change_log_level
 from data_request_api.query.data_request import DataRequest
-from data_request_api.utilities.parser import append_arguments_to_parser
+from data_request_api.utilities.parser import append_arguments_to_parser, check_bool
 from data_request_api.utilities.decorators import append_kwargs_from_config
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--version", default="latest_stable", help="Version to be used")
+parser.add_argument("--force_variable_name", default=False, type=check_bool,
+                    help="Should variable name be forced to variable_name value?")
 parser = append_arguments_to_parser(parser)
 subparser = parser.add_mutually_exclusive_group()
 subparser.add_argument("--output_dir", default=None, help="Dedicated output directory to use")
@@ -34,7 +35,7 @@ args = parser.parse_args()
 
 
 @append_kwargs_from_config
-def database_transformation(version, output_dir, **kwargs):
+def database_transformation(version, output_dir, force_variable_name=False, **kwargs):
     change_log_file(default=True, logfile=kwargs["log_file"])
     change_log_level(kwargs["log_level"])
     # Download specified version of data request content (if not locally cached)
@@ -42,19 +43,11 @@ def database_transformation(version, output_dir, **kwargs):
 
     for (version, content) in versions.items():
         # Load the content
-        content = dc.load(version, **kwargs)
-
-        # Transform content into DR and VS
-        data_request, vocabulary_server = transform_content(content, version=version)
-
-        # Write down the two files
-        DR_file = os.path.sep.join([output_dir, version, f"DR_{kwargs['export']}_content.json"])
-        VS_file = os.path.sep.join([output_dir, version, f"VS_{kwargs['export']}_content.json"])
-        write_json_output_file_content(DR_file, data_request)
-        write_json_output_file_content(VS_file, vocabulary_server)
+        content = get_transformed_content(version=version, output_dir=output_dir,
+                                          force_variable_name=force_variable_name, **kwargs)
 
         # Test that the two files do not produce issues with the API
-        DR = DataRequest.from_separated_inputs(DR_input=DR_file, VS_input=VS_file)
+        DR = DataRequest.from_separated_inputs(**content)
 
 
 kwargs = args.__dict__

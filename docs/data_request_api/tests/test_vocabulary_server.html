@@ -58,7 +58,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class TestChangeNumber(unittest.TestCase):
     def setUp(self):
-        self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
+        self.vs_file = filepath(&#34;VS_release_content.json&#34;)
 
     def test_to_singular(self):
         vs = VocabularyServer.from_input(self.vs_file)
@@ -115,7 +115,7 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)</code></pre>
+    self.vs_file = filepath(&#34;VS_release_content.json&#34;)</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -255,7 +255,7 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestVocabularyServer(unittest.TestCase):
     def setUp(self):
-        self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
+        self.vs_file = filepath(&#34;VS_release_content.json&#34;)
         self.vs_content = read_json_input_file_content(self.vs_file)
         self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
         self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;a269a4d7-8c9b-11ef-944e-41a8eb05f654&#34;][&#34;variables&#34;] = &#34;link::0facb764-817d-11e6-b80b-5404a60d96b5&#34;
@@ -416,7 +416,7 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.vs_file = filepath(&#34;one_base_VS_output.json&#34;)
+    self.vs_file = filepath(&#34;VS_release_content.json&#34;)
     self.vs_content = read_json_input_file_content(self.vs_file)
     self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
     self.vs_content_infinite_loop[&#34;cell_methods&#34;][&#34;a269a4d7-8c9b-11ef-944e-41a8eb05f654&#34;][&#34;variables&#34;] = &#34;link::0facb764-817d-11e6-b80b-5404a60d96b5&#34;</code></pre>

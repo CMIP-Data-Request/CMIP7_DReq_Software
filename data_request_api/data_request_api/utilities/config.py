@@ -160,8 +160,12 @@ def update_config(key, value):
 
 def check_api_version():
     """
-    Check pypi for latest release of the software.
-    Warn user if the installed version is not the latest release.
+    Check pypi for latest release of the software and warn user if the installed version is not the latest release.
+    Intended behaviour, assuming that latest version is '1.2.2':
+        installed_version = '1.2.1' ==> warn user
+        installed_version = '1.2.2' ==> don't warn user
+        installed_version = '1.2.1.dev8+g6aa6222.d20250515' ==> warn user
+        installed_version = '1.2.2.dev8+g6aa6222.d20250515' ==> don't warn user
     """
     try:
         installed_version = version(PACKAGE_NAME)
@@ -177,8 +181,8 @@ def check_api_version():
         print(f"Error checking PyPI: {e}")
         return
 
-    if not installed_version > latest_version:
-        # Warn user that installed version isn't the same as the latest pypi version
+    if installed_version < latest_version:
+        # Warn user that installed version is earlier than the latest version on pypi
         msg = f"Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n"
         msg += f"Latest version on PyPI:  {latest_version}\n"
         msg += f"Installed version:       {installed_version}\n"

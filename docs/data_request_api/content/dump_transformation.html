@@ -57,6 +57,7 @@ el.replaceWith(d);
     logger = get_logger()
     record_to_linked_id_index = defaultdict(lambda: dict())
     list_entries = sorted(list(content))
+    test = defaultdict(set)
     for subelt in list_entries:
         list_record_ids = sorted(list(content[subelt]),
                                  key=lambda record_id: &#34;|&#34;.join([content[subelt][record_id].get(&#34;name&#34;, &#34;undef&#34;),
@@ -69,8 +70,13 @@ el.replaceWith(d);
             if linked_id.endswith(os.linesep):
                 logger.debug(f&#34;linked_id of element type {subelt} and record id {record_id} endswith &#39;\\n&#39;.&#34;)
                 linked_id = linked_id.rstrip(os.linesep)
+            if linked_id in content[subelt]:
+                test[linked_id].add(content[subelt][record_id][&#34;uid&#34;])
+                test[linked_id].add(content[subelt][linked_id][&#34;uid&#34;])
             record_to_linked_id_index[subelt][record_id] = linked_id
             content[subelt][linked_id] = content[subelt].pop(record_id)
+    if len(test) &gt; 0:
+        raise ValueError(&#34;Linked id must be unique: issue with %s&#34; % test)
     return content, record_to_linked_id_index</code></pre>
 </details>
 <div class="desc"></div>
@@ -312,7 +318,7 @@ It also removes others specified strings.
 <div class="desc"></div>
 </dd>
 <dt id="data_request_api.content.dump_transformation.get_transformed_content"><code class="name flex">
-<span>def <span class="ident">get_transformed_content</span></span>(<span>version='latest_stable',<br>export='release',<br>consolidate=False,<br>force_retrieve=False,<br>output_dir=None,<br>default_transformed_content_pattern='{kind}_{export_version}_content.json',<br>**kwargs)</span>
+<span>def <span class="ident">get_transformed_content</span></span>(<span>version='latest_stable',<br>export='release',<br>consolidate=False,<br>force_retrieve=False,<br>output_dir=None,<br>force_variable_name=False,<br>default_transformed_content_pattern='{kind}_{export_version}_content.json',<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -321,38 +327,68 @@ It also removes others specified strings.
 </summary>
 <pre><code class="python">@append_kwargs_from_config
 def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release&#34;, consolidate=False,
-                            force_retrieve=False, output_dir=None,
+                            force_retrieve=False, output_dir=None, force_variable_name=False,
                             default_transformed_content_pattern=&#34;{kind}_{export_version}_content.json&#34;, **kwargs):
-    # Download specified version of data request content (if not locally cached)
-    versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
-
-    # Check that there is only one version associated
-    if len(versions) &gt; 1:
-        raise ValueError(&#34;Could only deal with one version.&#34;)
-    elif len(versions) == 0:
-        raise ValueError(&#34;No version found.&#34;)
-    else:
-        version = list(versions)[0]
-        content = versions[version]
-        if output_dir is None:
-            output_dir = os.path.dirname(content)
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+    if version in [&#34;test&#34;, ]:
         DR_content = default_transformed_content_pattern.format(kind=&#34;DR&#34;, export_version=export)
         VS_content = default_transformed_content_pattern.format(kind=&#34;VS&#34;, export_version=export)
-        DR_content = os.sep.join([output_dir, DR_content])
-        VS_content = os.sep.join([output_dir, VS_content])
-        if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            if os.path.exists(DR_content):
-                os.remove(DR_content)
-            if os.path.exists(VS_content):
-                os.remove(VS_content)
-        if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            content = dc.load(version, export=export, consolidate=consolidate)
-            data_request, vocabulary_server = transform_content(content, version)
-            write_json_output_file_content(DR_content, data_request)
-            write_json_output_file_content(VS_content, vocabulary_server)
-        return dict(DR_input=DR_content, VS_input=VS_content)</code></pre>
+        from data_request_api.tests import filepath
+        DR_content = filepath(DR_content)
+        VS_content = filepath(VS_content)
+    else:
+        # Download specified version of data request content (if not locally cached)
+        versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
+
+        # Check that there is only one version associated
+        if len(versions) &gt; 1:
+            raise ValueError(&#34;Could only deal with one version.&#34;)
+        elif len(versions) == 0:
+            raise ValueError(&#34;No version found.&#34;)
+        else:
+            version = list(versions)[0]
+            content = versions[version]
+            if output_dir is None:
+                output_dir = os.path.dirname(content)
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            DR_content = default_transformed_content_pattern.format(kind=&#34;DR&#34;, export_version=export)
+            VS_content = default_transformed_content_pattern.format(kind=&#34;VS&#34;, export_version=export)
+            DR_content = os.sep.join([output_dir, DR_content])
+            VS_content = os.sep.join([output_dir, VS_content])
+            if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+                if os.path.exists(DR_content):
+                    os.remove(DR_content)
+                if os.path.exists(VS_content):
+                    os.remove(VS_content)
+            if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+                content = dc.load(version, export=export, consolidate=consolidate)
+                data_request, vocabulary_server = transform_content(content, version, variable_name=kwargs[&#34;variable_name&#34;],
+                                                                    force_variable_name=force_variable_name)
+                write_json_output_file_content(DR_content, data_request)
+                write_json_output_file_content(VS_content, vocabulary_server)
+    return dict(DR_input=DR_content, VS_input=VS_content)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="data_request_api.content.dump_transformation.initialize_useful_keys"><code class="name flex">
+<span>def <span class="ident">initialize_useful_keys</span></span>(<span>content, per_entry_input, **common_inputs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def distribute(content, per_entry_input, **common_inputs):
+    if &#34;default&#34; in per_entry_input:
+        default_value = per_entry_input[&#34;default&#34;]
+    else:
+        default_value = None
+    for key in sorted(list(content)):
+        list_args = [content[key], ]
+        if key in per_entry_input:
+            list_args.append(per_entry_input[key])
+        content[key] = func(*list_args, default=copy.deepcopy(default_value), **copy.deepcopy(common_inputs))
+    return content</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -568,19 +604,21 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 <div class="desc"></div>
 </dd>
 <dt id="data_request_api.content.dump_transformation.transform_content"><code class="name flex">
-<span>def <span class="ident">transform_content</span></span>(<span>content, version)</span>
+<span>def <span class="ident">transform_content</span></span>(<span>content, version, force_variable_name=False, variable_name=None)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def transform_content(content, version):
+<pre><code class="python">def transform_content(content, version, force_variable_name=False, variable_name=None):
     &#34;&#34;&#34;
     Function to transform the export content (single or several base-s- export) to VS and DR dictionaries.
     The key &#34;version&#34; is added to the DR and VS dictionaries.
     :param dict content: input export content (either single base or several bases)
     :param str version: string containing the version of the export content
+    :param bool force_variable_name: bool whether to force variable name to config one
+    :param str variable_name: string containing the variable name to be used
     :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)
     &#34;&#34;&#34;
     logger = get_logger()
@@ -593,10 +631,12 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
         # Get back to one database case if needed
         if len(content) == 1:
             logger.info(&#34;Single database case - no structure transformation needed&#34;)
-            content = transform_content_inner(content, transform_settings[&#34;one_to_transform&#34;])
+            content = transform_content_inner(content, transform_settings[&#34;one_to_transform&#34;],
+                                              force_variable_name=force_variable_name, variable_name=variable_name)
         elif len(content) in [3, 4]:
             logger.info(&#34;Several databases case - structure transformation needed&#34;)
-            content = transform_content_inner(content, transform_settings[&#34;several_to_transform&#34;], change_tables=True)
+            content = transform_content_inner(content, transform_settings[&#34;several_to_transform&#34;], change_tables=True,
+                                              force_variable_name=force_variable_name, variable_name=variable_name)
         else:
             raise ValueError(f&#34;Could not manage the {len(content):d} bases export file.&#34;)
         # Separate DR and VS files
@@ -612,17 +652,19 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 The key "version" is added to the DR and VS dictionaries.
 :param dict content: input export content (either single base or several bases)
 :param str version: string containing the version of the export content
+:param bool force_variable_name: bool whether to force variable name to config one
+:param str variable_name: string containing the variable name to be used
 :return dict, dict: DR and VS dictionaries containing respectively the structure (DR) and the vocabulary (VS)</p></div>
 </dd>
 <dt id="data_request_api.content.dump_transformation.transform_content_inner"><code class="name flex">
-<span>def <span class="ident">transform_content_inner</span></span>(<span>content, settings, change_tables=False)</span>
+<span>def <span class="ident">transform_content_inner</span></span>(<span>content,<br>settings,<br>change_tables=False,<br>force_variable_name=False,<br>variable_name=None)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def transform_content_inner(content, settings, change_tables=False):
+<pre><code class="python">def transform_content_inner(content, settings, change_tables=False, force_variable_name=False, variable_name=None):
     &#34;&#34;&#34;
     Transform a one base export content to:
     - remove unused keys which could create circle import later
@@ -668,11 +710,18 @@ The key "version" is added to the DR and VS dictionaries.
         default_patterns_to_remove = settings[&#34;default_keys_to_delete&#34;]
         to_remove_keys_patterns = settings[&#34;keys_to_delete&#34;]
         to_rename_keys_patterns = settings[&#34;keys_to_rename&#34;]
+        to_copy_keys_content = settings[&#34;keys_to_copy&#34;]
+        if force_variable_name:
+            for key in list(to_copy_keys_content[&#34;variables&#34;]):
+                if to_copy_keys_content[&#34;variables&#34;][key] in [&#34;name&#34;, ]:
+                    del to_copy_keys_content[&#34;variables&#34;][key]
+            to_copy_keys_content[&#34;variables&#34;][correct_key_string(variable_name)] = &#34;name&#34;
         to_merge_keys_patterns = settings[&#34;keys_to_merge&#34;]
         to_sort_keys_content = settings[&#34;keys_to_sort&#34;]
-        to_copy_keys_content = settings[&#34;keys_to_copy&#34;]
+        to_initialize_keys_content = settings[&#34;keys_to_initialize&#34;]
         content = remove_unused_keys(content=content, per_entry_input=to_remove_keys_patterns,
                                      default_patterns_to_remove=default_patterns_to_remove)
+        content = copy_useful_keys(content=content, per_entry_input=to_copy_keys_content)
         content = rename_useful_keys(content=content, per_entry_input=to_rename_keys_patterns)
         content = merge_useful_keys(content=content, per_entry_input=to_merge_keys_patterns)
         # Filter on status if needed then remove linked keys
@@ -680,7 +729,7 @@ The key "version" is added to the DR and VS dictionaries.
         # Copy some keys to others
         global default_count
         default_count = 0
-        content = copy_useful_keys(content=content, per_entry_input=to_copy_keys_content)
+        content = initialize_useful_keys(content=content, per_entry_input=to_initialize_keys_content)
         # Add name and uid if needed, build equivalence dict between record_id and uid
         content, record_to_uid_index = add_useful_keys(content)
         # Tidy the content of the dictionary by removing unused entries
@@ -729,6 +778,7 @@ The key "version" is added to the DR and VS dictionaries.
 <li><code><a title="data_request_api.content.dump_transformation.filter_content" href="#data_request_api.content.dump_transformation.filter_content">filter_content</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.get_transform_settings" href="#data_request_api.content.dump_transformation.get_transform_settings">get_transform_settings</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.get_transformed_content" href="#data_request_api.content.dump_transformation.get_transformed_content">get_transformed_content</a></code></li>
+<li><code><a title="data_request_api.content.dump_transformation.initialize_useful_keys" href="#data_request_api.content.dump_transformation.initialize_useful_keys">initialize_useful_keys</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.merge_useful_keys" href="#data_request_api.content.dump_transformation.merge_useful_keys">merge_useful_keys</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.remove_unused_keys" href="#data_request_api.content.dump_transformation.remove_unused_keys">remove_unused_keys</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.rename_useful_keys" href="#data_request_api.content.dump_transformation.rename_useful_keys">rename_useful_keys</a></code></li>

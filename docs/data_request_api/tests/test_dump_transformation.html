@@ -305,20 +305,20 @@ not have a method with the specified name.</p></div>
 <pre><code class="python">class TestTransformContent(unittest.TestCase):
     def setUp(self):
         self.version = &#34;test&#34;
-        self.one_base_input = read_json_file(filepath(&#34;one_base_input.json&#34;))
-        self.one_base_output_format = read_json_file(filepath(&#34;one_base_output_format.json&#34;))
-        self.one_base_output_transform = read_json_file(filepath(&#34;one_base_output_transform.json&#34;))
-        self.one_base_VS_output = read_json_file(filepath(&#34;one_base_VS_output.json&#34;))
-        self.one_base_DR_output = read_json_file(filepath(&#34;one_base_DR_output.json&#34;))
+        self.one_base_input = read_json_file(filepath(&#34;dreq_release_export.json&#34;))
+        self.one_base_output_format = read_json_file(filepath(&#34;release_output_format.json&#34;))
+        self.one_base_output_transform = read_json_file(filepath(&#34;release_output_transform.json&#34;))
+        self.one_base_VS_output = read_json_file(filepath(&#34;VS_release_content.json&#34;))
+        self.one_base_DR_output = read_json_file(filepath(&#34;DR_release_content.json&#34;))
         self.one_base_VS_output_noversion = copy.deepcopy(self.one_base_VS_output)
         del self.one_base_VS_output_noversion[&#34;version&#34;]
         self.one_base_DR_output_noversion = copy.deepcopy(self.one_base_DR_output)
         del self.one_base_DR_output_noversion[&#34;version&#34;]
-        self.several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
-        self.several_bases_output_format = read_json_file(filepath(&#34;several_bases_output_format.json&#34;))
-        self.several_bases_output_transform = read_json_file(filepath(&#34;several_bases_output_transform.json&#34;))
-        self.several_bases_VS_output = read_json_file(filepath(&#34;several_bases_VS_output.json&#34;))
-        self.several_bases_DR_output = read_json_file(filepath(&#34;several_bases_DR_output.json&#34;))
+        self.several_bases_input = read_json_file(filepath(&#34;dreq_raw_export.json&#34;))
+        self.several_bases_output_format = read_json_file(filepath(&#34;raw_output_format.json&#34;))
+        self.several_bases_output_transform = read_json_file(filepath(&#34;raw_output_transform.json&#34;))
+        self.several_bases_VS_output = read_json_file(filepath(&#34;VS_raw_content.json&#34;))
+        self.several_bases_DR_output = read_json_file(filepath(&#34;DR_raw_content.json&#34;))
         self.several_bases_VS_output_noversion = copy.deepcopy(self.several_bases_VS_output)
         del self.several_bases_VS_output_noversion[&#34;version&#34;]
         self.several_bases_DR_output_noversion = copy.deepcopy(self.several_bases_DR_output)
@@ -429,20 +429,20 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">def setUp(self):
     self.version = &#34;test&#34;
-    self.one_base_input = read_json_file(filepath(&#34;one_base_input.json&#34;))
-    self.one_base_output_format = read_json_file(filepath(&#34;one_base_output_format.json&#34;))
-    self.one_base_output_transform = read_json_file(filepath(&#34;one_base_output_transform.json&#34;))
-    self.one_base_VS_output = read_json_file(filepath(&#34;one_base_VS_output.json&#34;))
-    self.one_base_DR_output = read_json_file(filepath(&#34;one_base_DR_output.json&#34;))
+    self.one_base_input = read_json_file(filepath(&#34;dreq_release_export.json&#34;))
+    self.one_base_output_format = read_json_file(filepath(&#34;release_output_format.json&#34;))
+    self.one_base_output_transform = read_json_file(filepath(&#34;release_output_transform.json&#34;))
+    self.one_base_VS_output = read_json_file(filepath(&#34;VS_release_content.json&#34;))
+    self.one_base_DR_output = read_json_file(filepath(&#34;DR_release_content.json&#34;))
     self.one_base_VS_output_noversion = copy.deepcopy(self.one_base_VS_output)
     del self.one_base_VS_output_noversion[&#34;version&#34;]
     self.one_base_DR_output_noversion = copy.deepcopy(self.one_base_DR_output)
     del self.one_base_DR_output_noversion[&#34;version&#34;]
-    self.several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
-    self.several_bases_output_format = read_json_file(filepath(&#34;several_bases_output_format.json&#34;))
-    self.several_bases_output_transform = read_json_file(filepath(&#34;several_bases_output_transform.json&#34;))
-    self.several_bases_VS_output = read_json_file(filepath(&#34;several_bases_VS_output.json&#34;))
-    self.several_bases_DR_output = read_json_file(filepath(&#34;several_bases_DR_output.json&#34;))
+    self.several_bases_input = read_json_file(filepath(&#34;dreq_raw_export.json&#34;))
+    self.several_bases_output_format = read_json_file(filepath(&#34;raw_output_format.json&#34;))
+    self.several_bases_output_transform = read_json_file(filepath(&#34;raw_output_transform.json&#34;))
+    self.several_bases_VS_output = read_json_file(filepath(&#34;VS_raw_content.json&#34;))
+    self.several_bases_DR_output = read_json_file(filepath(&#34;DR_raw_content.json&#34;))
     self.several_bases_VS_output_noversion = copy.deepcopy(self.several_bases_VS_output)
     del self.several_bases_VS_output_noversion[&#34;version&#34;]
     self.several_bases_DR_output_noversion = copy.deepcopy(self.several_bases_DR_output)

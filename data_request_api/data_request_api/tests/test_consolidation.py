@@ -18,7 +18,7 @@ from data_request_api.utilities.tools import read_json_file, write_json_output_f
 @pytest.mark.skip(reason="Work on this test deferred to allow release")
 def test_map_record_id():
     # Read 3-base export
-    several_bases_input = read_json_file(filepath("several_bases_input.json"))
+    several_bases_input = read_json_file(filepath("dreq_raw_export.json"))
     # Select a variable record to map (day.wap)
     record = several_bases_input["Data Request Variables (Public)"]["Variable"]["records"]["recIHH5OexHWtBNgn"]
     # Select the list of records to map against
@@ -40,15 +40,15 @@ def test_map_record_id():
 
 def test_map_attribute():
     # Read 3-base export
-    several_bases_input = read_json_file(filepath("several_bases_input.json"))
+    several_bases_input = read_json_file(filepath("dreq_raw_export.json"))
     # Select a CF Standard Name to map (lagrangian_tendency_of_air_pressure)
-    attr = "lagrangian_tendency_of_air_pressure"
+    attr = "mole_concentration_of_aragonite_expressed_as_carbon_in_sea_water"
     # Select the list of records to map against
     records = several_bases_input["Data Request Physical Parameters (Public)"]["CF Standard Name"]["records"]
     # Assert successful mapping via key "name"
-    assert _map_attribute(attr, records, ["name"]) == ["rectR4F3k6a6p7VPv"]
+    assert _map_attribute(attr, records, ["name"]) == ["rec0ik3QbkrzxJy0n"]
     # Delete the mapped record and assert no match is found
-    record_rm = records.pop("rectR4F3k6a6p7VPv")
+    record_rm = records.pop("rec0ik3QbkrzxJy0n")
     assert _map_attribute(attr, records, ["name"]) == []
     # Duplicate the record back in and assert two matches are found now
     records["test1"] = record_rm
@@ -68,7 +68,7 @@ def test_apply_consistency_fixes():
     assert varfield_torename != []
     assert varfield_dropped != []
     # Read 1-base export and select certain tables
-    one_base_input = read_json_file(filepath("one_base_input.json"))["Data Request v1.2.2"]
+    one_base_input = read_json_file(filepath("dreq_release_export.json"))["Data Request v1.2.2"]
     selected_tables = ["Variables", "Variable Group", "Time Subset", "CF Standard Names", "Structure"]
     subset = {table: one_base_input[table] for table in one_base_input if table in selected_tables}
     # Apply consistency fixes

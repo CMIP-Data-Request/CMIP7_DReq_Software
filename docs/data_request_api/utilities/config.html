@@ -54,8 +54,12 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def check_api_version():
     &#34;&#34;&#34;
-    Check pypi for latest release of the software.
-    Warn user if the installed version is not the latest release.
+    Check pypi for latest release of the software and warn user if the installed version is not the latest release.
+    Intended behaviour, assuming that latest version is &#39;1.2.2&#39;:
+        installed_version = &#39;1.2.1&#39; ==&gt; warn user
+        installed_version = &#39;1.2.2&#39; ==&gt; don&#39;t warn user
+        installed_version = &#39;1.2.1.dev8+g6aa6222.d20250515&#39; ==&gt; warn user
+        installed_version = &#39;1.2.2.dev8+g6aa6222.d20250515&#39; ==&gt; don&#39;t warn user
     &#34;&#34;&#34;
     try:
         installed_version = version(PACKAGE_NAME)
@@ -71,8 +75,8 @@ el.replaceWith(d);
         print(f&#34;Error checking PyPI: {e}&#34;)
         return
 
-    if not installed_version &gt; latest_version:
-        # Warn user that installed version isn&#39;t the same as the latest pypi version
+    if installed_version &lt; latest_version:
+        # Warn user that installed version is earlier than the latest version on pypi
         msg = f&#34;Warning: the installed version of {PACKAGE_NAME} is not the latest version available from PyPI!\n&#34;
         msg += f&#34;Latest version on PyPI:  {latest_version}\n&#34;
         msg += f&#34;Installed version:       {installed_version}\n&#34;
@@ -89,8 +93,12 @@ el.replaceWith(d);
 
         print(msg)</code></pre>
 </details>
-<div class="desc"><p>Check pypi for latest release of the software.
-Warn user if the installed version is not the latest release.</p></div>
+<div class="desc"><p>Check pypi for latest release of the software and warn user if the installed version is not the latest release.
+Intended behaviour, assuming that latest version is '1.2.2':
+installed_version = '1.2.1' ==&gt; warn user
+installed_version = '1.2.2' ==&gt; don't warn user
+installed_version = '1.2.1.dev8+g6aa6222.d20250515' ==&gt; warn user
+installed_version = '1.2.2.dev8+g6aa6222.d20250515' ==&gt; don't warn user</p></div>
 </dd>
 <dt id="data_request_api.utilities.config.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>) ‑> dict</span>

@@ -842,7 +842,7 @@ and that it's the same list for all experiments.</dd>
     str that uniquely identifes a variable in the data request
     &#39;&#39;&#39;
     var_name_param = use_unique_var_name()
-    
+
     if not hasattr(var, var_name_param):
         raise ValueError(f&#39;Unrecognized unique variable identifier: {var_name_param}&#39;
                          + &#39;\nSet &#34;variable_name&#34; in API configuration&#39;)
@@ -1008,16 +1008,19 @@ Its "priority_level" attribute specifies the priority as either string or link t
     if &#39;Structure&#39; in base:
         dreq_tables[&#39;structure&#39;] = base[&#39;Structure&#39;]
 
-    if &#39;Table Identifiers&#39; in base:
-        dreq_tables[&#39;CMOR tables&#39;] = base[&#39;Table Identifiers&#39;]
-        attr_table = &#39;table&#39;
-        attr_realm = &#39;modelling_realm&#39;
-    elif &#39;CMIP6 Table Identifiers (legacy)&#39; in base:
+    # Specify names of some DR variable attributes depending the DR version
+    # TO DO: is this logic still needed? If so, make it explicitly depend on DR Content version?
+    if &#39;CMIP6 Table Identifiers (legacy)&#39; in base:
         dreq_tables[&#39;CMOR tables&#39;] = base[&#39;CMIP6 Table Identifiers (legacy)&#39;]
         attr_table = &#39;cmip6_table_legacy&#39;
         attr_realm = &#39;modelling_realm___primary&#39;
+    elif &#39;Table Identifiers&#39; in base:
+        dreq_tables[&#39;CMOR tables&#39;] = base[&#39;Table Identifiers&#39;]
+        attr_table = &#39;table&#39;
+        attr_realm = &#39;modelling_realm&#39;
     else:
         raise ValueError(&#39;Which table contains CMOR table identifiers?&#39;)
+    attr_realm_additional = &#39;modelling_realm___secondary&#39;
 
     if dreq_version in dreq_versions_substitute_cmip6_freq:
         # needed for corrections below
@@ -1154,12 +1157,16 @@ Its "priority_level" attribute specifies the priority as either string or link t
         else:
             dimensions = dimensions_linked
 
-        # Get physical parameter record and use its name as out_name.
-        # (Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
-        # for almost all variables in dreq v1.2.1.)
+        # Get physical parameter record and use its name as out_name
         link = var.physical_parameter[0]
         phys_param = dreq_tables[&#39;physical parameters&#39;].get_record(link)
-        out_name = phys_param.name
+        if hasattr(phys_param, &#39;variablerootdd&#39;):
+            # variableRootDD (aka &#34;root name&#34;) is available in DR v1.2.2 onward
+            out_name = phys_param.variablerootdd
+        else:
+            # Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
+            # for almost all variables in dreq v1.2.1
+            out_name = phys_param.name
 
         if cmor_variables:
             # Filter by CMOR variable name
@@ -1180,8 +1187,16 @@ Its "priority_level" attribute specifies the priority as either string or link t
         else:
             standard_name_proposed = phys_param.proposed_cf_standard_name
 
+        # Get realm(s)
         link_realm = getattr(var, attr_realm)
         modeling_realm = [dreq_tables[&#39;realm&#39;].get_record(link).id for link in link_realm]
+        if hasattr(var, attr_realm_additional):
+            # Add secondary realm(s), if any, to the list
+            link_realm_additional = getattr(var, attr_realm_additional)
+            modeling_realm += [dreq_tables[&#39;realm&#39;].get_record(link).id for link in link_realm_additional]
+        # Raise error if any realm is duplicated in the list
+        if len(modeling_realm) != len(set(modeling_realm)):
+            raise ValueError(f&#39;Redundant realm(s) found for DR variable {var_name}: {modeling_realm}&#39;)
 
         cell_measures = &#39;&#39;
         if hasattr(var, &#39;cell_measures&#39;):
@@ -1194,6 +1209,10 @@ Its "priority_level" attribute specifies the priority as either string or link t
         comment = &#39;&#39;
         if hasattr(var, &#39;description&#39;):
             comment = var.description
+
+        processing_note = &#39;&#39;
+        if hasattr(var, &#39;processing_note&#39;):
+            processing_note = var.processing_note
 
         var_info = OrderedDict()
         # Insert fields in order given by CMIP6 cmor tables (https://github.com/PCMDI/cmip6-cmor-tables)
@@ -1212,6 +1231,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
 
             &#39;long_name&#39;: var.title,
             &#39;comment&#39;: comment,
+            &#39;processing_note&#39;: processing_note,
 
             &#39;dimensions&#39;: dimensions,
 
@@ -1248,7 +1268,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
                 if not variableRootDD:
                     # Set variableRootDD if it wasn&#39;t already defined
                     variableRootDD = s
-            
+
             # Handle undefined cases, to ensure variableRootDD and branding_label are not left undefined
             # (any such cases are anticipated to vanish in post-v1.2.2 dreq versions)
             if not variableRootDD:
@@ -1266,7 +1286,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
                 # For development, not intended as a user option.
                 if branded_variable_name != f&#39;{variableRootDD}_{branding_label}&#39;:
                     warnings.warn(f&#39;Inconsistency between branded variable name {branded_variable_name} &#39;
-                                + f&#39;and its components: {variableRootDD}, {branding_label}&#39;)
+                                  + f&#39;and its components: {variableRootDD}, {branding_label}&#39;)
 
             var_info.update({
                 &#39;variableRootDD&#39;: variableRootDD,
@@ -1288,7 +1308,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
         if check_c7_name:
             # Consistency check on definition of CMIP7 compound name.
             # For development, not intended as a user option.
-            if get_dreq_version_tuple(dreq_version) &gt;= (1,2,2):
+            if get_dreq_version_tuple(dreq_version) &gt;= (1, 2, 2):
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)

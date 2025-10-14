@@ -1,0 +1,414 @@
+{
+    "experiment_groups": {
+        "80ab723e-a698-11ef-914a-613c0433d878": {
+            "experiments": [
+                "link::527f5c53-8c97-11ef-944e-41a8eb05f654"
+            ]
+        },
+        "80ab72c9-a698-11ef-914a-613c0433d878": {
+            "experiments": [
+                "link::80ab72b4-a698-11ef-914a-613c0433d878",
+                "link::80ab72b5-a698-11ef-914a-613c0433d878",
+                "link::80ab72b6-a698-11ef-914a-613c0433d878"
+            ]
+        },
+        "dafc748d-8c95-11ef-944e-41a8eb05f654": {
+            "experiments": [
+                "link::527f5c3c-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c3d-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c3e-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c3f-8c97-11ef-944e-41a8eb05f654"
+            ]
+        },
+        "dafc748e-8c95-11ef-944e-41a8eb05f654": {
+            "experiments": [
+                "link::527f5c53-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c54-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c55-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5a-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5b-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5c-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5d-8c97-11ef-944e-41a8eb05f654",
+                "link::80ab724d-a698-11ef-914a-613c0433d878",
+                "link::80ab72c4-a698-11ef-914a-613c0433d878"
+            ]
+        },
+        "dafc748f-8c95-11ef-944e-41a8eb05f654": {
+            "experiments": [
+                "link::527f5c5a-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5b-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5c-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c5d-8c97-11ef-944e-41a8eb05f654"
+            ]
+        },
+        "dafc7490-8c95-11ef-944e-41a8eb05f654": {
+            "experiments": [
+                "link::527f5c3d-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c3f-8c97-11ef-944e-41a8eb05f654"
+            ]
+        }
+    },
+    "opportunities": {
+        "dafc739e-8c95-11ef-944e-41a8eb05f654": {
+            "data_request_themes": [
+                "link::527f5c8f-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c90-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c91-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c93-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "experiment_groups": [
+                "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+            ],
+            "mips": [
+                "link::527f5c6e-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c70-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6c-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "time_subsets": [
+                "link::80ac3156-a698-11ef-914a-613c0433d878"
+            ],
+            "variable_groups": [
+                "link::dafc73da-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc73dc-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc73dd-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc73de-8c95-11ef-944e-41a8eb05f654"
+            ]
+        },
+        "dafc739f-8c95-11ef-944e-41a8eb05f654": {
+            "data_request_themes": [
+                "link::527f5c8f-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c90-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c93-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "experiment_groups": [
+                "link::80ab72c9-a698-11ef-914a-613c0433d878",
+                "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+            ],
+            "mips": [
+                "link::527f5c70-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "time_subsets": [
+                "link::80ac3156-a698-11ef-914a-613c0433d878"
+            ],
+            "variable_groups": [
+                "link::80ab73e4-a698-11ef-914a-613c0433d878",
+                "link::dafc73da-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc73dc-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc73dd-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc73de-8c95-11ef-944e-41a8eb05f654"
+            ]
+        },
+        "dafc73a5-8c95-11ef-944e-41a8eb05f654": {
+            "data_request_themes": [
+                "link::527f5c8f-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c93-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "experiment_groups": [
+                "link::80ab723e-a698-11ef-914a-613c0433d878",
+                "link::80ab72c9-a698-11ef-914a-613c0433d878",
+                "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+            ],
+            "mips": [
+                "link::527f5c70-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6e-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "time_subsets": [
+                "link::80ac3156-a698-11ef-914a-613c0433d878"
+            ],
+            "variable_groups": [
+                "link::80ab73e2-a698-11ef-914a-613c0433d878",
+                "link::dafc7435-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc7436-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc743a-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc7464-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc747f-8c95-11ef-944e-41a8eb05f654"
+            ]
+        },
+        "dafc73bd-8c95-11ef-944e-41a8eb05f654": {
+            "data_request_themes": [
+                "link::527f5c90-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c91-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "experiment_groups": [
+                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
+                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+            ],
+            "mips": [
+                "link::527f5c76-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c77-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "time_subsets": [
+                "link::527f5cac-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5cbd-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "variable_groups": [
+                "link::80ab723b-a698-11ef-914a-613c0433d878",
+                "link::dafc7428-8c95-11ef-944e-41a8eb05f654"
+            ]
+        }
+    },
+    "variable_groups": {
+        "80ab723b-a698-11ef-914a-613c0433d878": {
+            "mips": [
+                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c76-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c77-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c95-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB",
+                "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
+                "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
+                "link::land.tran.tavg-u-hxy-u.3hr.GLB"
+            ]
+        },
+        "80ab73e2-a698-11ef-914a-613c0433d878": {
+            "mips": [],
+            "priority_level": "link::527f5c94-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.mlotst.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.mlotstmax.tmax-u-hxy-sea.mon.GLB",
+                "link::ocean.mlotstmin.tmin-u-hxy-sea.mon.GLB"
+            ]
+        },
+        "80ab73e4-a698-11ef-914a-613c0433d878": {
+            "mips": [],
+            "priority_level": "link::527f5c94-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.mpw.tavg-u-hxy-sea.3hr.GLB",
+                "link::ocean.mpw.tavg-u-hxy-sea.6hr.GLB",
+                "link::ocean.mpw.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.swh.tavg-u-hxy-sea.3hr.GLB",
+                "link::ocean.swh.tavg-u-hxy-sea.6hr.GLB",
+                "link::ocean.swh.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.swh.tmax-u-hxy-sea.6hr.GLB",
+                "link::ocean.swh.tmax-u-hxy-sea.mon.GLB",
+                "link::ocean.wpp.tavg-u-hxy-sea.3hr.GLB",
+                "link::ocean.wpp.tavg-u-hxy-sea.6hr.GLB",
+                "link::ocean.wpp.tavg-u-hxy-sea.mon.GLB"
+            ]
+        },
+        "dafc73da-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c83-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c97-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.pr.tavg-u-hxy-u.day.GLB",
+                "link::atmos.ps.tavg-u-hxy-u.day.GLB",
+                "link::atmos.psl.tavg-u-hxy-u.day.GLB",
+                "link::atmos.sfcWind.tavg-h10m-hxy-u.day.GLB",
+                "link::atmos.ta.tavg-p19-hxy-air.day.GLB",
+                "link::atmos.tas.tavg-h2m-hxy-u.day.GLB",
+                "link::atmos.tas.tmax-h2m-hxy-u.day.GLB",
+                "link::atmos.tas.tmin-h2m-hxy-u.day.GLB",
+                "link::atmos.zg.tavg-p19-hxy-air.day.GLB",
+                "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.tos.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.zos.tavg-u-hxy-sea.day.GLB",
+                "link::seaIce.siconc.tavg-u-hxy-u.day.GLB"
+            ]
+        },
+        "dafc73dc-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [],
+            "priority_level": "link::527f5c97-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.areacell.ti-u-hxy-u.fx.GLB",
+                "link::atmos.sftlf.ti-u-hxy-u.fx.GLB",
+                "link::land.orog.ti-u-hxy-u.fx.GLB",
+                "link::land.rootd.ti-u-hxy-lnd.fx.GLB",
+                "link::land.slthick.ti-sl-hxy-lnd.fx.GLB",
+                "link::ocean.areacell.ti-u-hxy-u.fx.GLB",
+                "link::ocean.deptho.ti-u-hxy-sea.fx.GLB",
+                "link::ocean.masscello.ti-ol-hxy-sea.fx.GLB"
+            ]
+        },
+        "dafc73dd-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c83-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c97-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.pr.tavg-u-hxy-u.mon.GLB",
+                "link::atmos.prc.tavg-u-hxy-u.mon.GLB",
+                "link::atmos.sfcWind.tavg-h10m-hxy-u.mon.GLB",
+                "link::atmos.ta.tavg-p19-hxy-air.mon.GLB",
+                "link::atmos.tas.tavg-h2m-hxy-u.mon.GLB",
+                "link::atmos.tas.tmax-h2m-hxy-u.mon.GLB",
+                "link::atmos.tas.tmin-h2m-hxy-u.mon.GLB",
+                "link::atmos.ts.tavg-u-hxy-u.mon.GLB",
+                "link::atmos.zg.tavg-p19-hxy-air.mon.GLB",
+                "link::land.lai.tavg-u-hxy-lnd.mon.GLB",
+                "link::land.mrso.tavg-u-hxy-lnd.mon.GLB",
+                "link::land.mrsol.tavg-d10cm-hxy-lnd.mon.GLB",
+                "link::landIce.snc.tavg-u-hxy-lnd.mon.GLB",
+                "link::ocean.bigthetao.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocean.so.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocean.sos.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocean.tos.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocean.zos.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.zostoga.tavg-u-hm-sea.mon.GLB",
+                "link::seaIce.siconc.tavg-u-hxy-u.mon.GLB",
+                "link::seaIce.simass.tavg-u-hxy-sea.mon.GLB",
+                "link::seaIce.sithick.tavg-u-hxy-si.mon.GLB",
+                "link::seaIce.siu.tavg-u-hxy-si.mon.GLB",
+                "link::seaIce.siv.tavg-u-hxy-si.mon.GLB"
+            ]
+        },
+        "dafc73de-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [],
+            "priority_level": "link::527f5c97-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.hurs.tavg-h2m-hxy-u.6hr.GLB",
+                "link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
+                "link::atmos.pr.tavg-u-hxy-u.1hr.GLB",
+                "link::atmos.pr.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.ta.tpt-p3-hxy-air.6hr.GLB",
+                "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB"
+            ]
+        },
+        "dafc7428-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c76-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c77-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c94-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.bldep.tpt-u-hxy-u.3hr.GLB",
+                "link::atmos.hfls.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.hfss.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
+                "link::atmos.pr.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.ps.tpt-u-hxy-u.3hr.GLB",
+                "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB",
+                "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB",
+                "link::land.srfrad.tavg-u-hxy-u.3hr.GLB",
+                "link::land.tslsi.tpt-u-hxy-u.3hr.GLB"
+            ]
+        },
+        "dafc7435-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c64-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6b-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c73-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c7d-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c94-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.bigthetao.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB",
+                "link::ocean.tossq.tavg-u-hxy-sea.day.GLB"
+            ]
+        },
+        "dafc7436-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6f-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c70-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c7f-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c95-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.so.tavg-ol-hxy-sea.day.GLB",
+                "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocean.tos.tavg-u-hxy-sea.day.GLB",
+                "link::ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB",
+                "link::ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB",
+                "link::ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"
+            ]
+        },
+        "dafc743a-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c64-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6c-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6f-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c76-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c95-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
+                "link::ocean.uos.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.vos.tavg-u-hxy-sea.day.GLB"
+            ]
+        },
+        "dafc7464-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c64-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c66-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6b-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6c-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c6f-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c73-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c76-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c94-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.zos.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.zossq.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.zostoga.tavg-u-hm-sea.day.GLB"
+            ]
+        },
+        "dafc747f-8c95-11ef-944e-41a8eb05f654": {
+            "mips": [
+                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
+                "link::527f5c76-8c97-11ef-944e-41a8eb05f654"
+            ],
+            "priority_level": "link::527f5c94-8c97-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::atmos.psl.tpt-u-hxy-u.1hr.GLB",
+                "link::atmos.uas.tpt-h10m-hxy-u.1hr.GLB",
+                "link::atmos.vas.tpt-h10m-hxy-u.1hr.GLB",
+                "link::ocean.so.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocean.sos.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
+                "link::ocean.tos.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB",
+                "link::seaIce.sithick.tavg-u-hxy-si.day.GLB",
+                "link::seaIce.siu.tavg-u-hxy-si.day.GLB",
+                "link::seaIce.siv.tavg-u-hxy-si.day.GLB"
+            ]
+        }
+    },
+    "version": "test"
+}

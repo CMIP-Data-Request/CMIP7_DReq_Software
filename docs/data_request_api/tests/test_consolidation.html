@@ -61,7 +61,7 @@ el.replaceWith(d);
     assert varfield_torename != []
     assert varfield_dropped != []
     # Read 1-base export and select certain tables
-    one_base_input = read_json_file(filepath(&#34;one_base_input.json&#34;))[&#34;Data Request v1.2.2&#34;]
+    one_base_input = read_json_file(filepath(&#34;dreq_release_export.json&#34;))[&#34;Data Request v1.2.2&#34;]
     selected_tables = [&#34;Variables&#34;, &#34;Variable Group&#34;, &#34;Time Subset&#34;, &#34;CF Standard Names&#34;, &#34;Structure&#34;]
     subset = {table: one_base_input[table] for table in one_base_input if table in selected_tables}
     # Apply consistency fixes
@@ -86,15 +86,15 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def test_map_attribute():
     # Read 3-base export
-    several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
+    several_bases_input = read_json_file(filepath(&#34;dreq_raw_export.json&#34;))
     # Select a CF Standard Name to map (lagrangian_tendency_of_air_pressure)
-    attr = &#34;lagrangian_tendency_of_air_pressure&#34;
+    attr = &#34;mole_concentration_of_aragonite_expressed_as_carbon_in_sea_water&#34;
     # Select the list of records to map against
     records = several_bases_input[&#34;Data Request Physical Parameters (Public)&#34;][&#34;CF Standard Name&#34;][&#34;records&#34;]
     # Assert successful mapping via key &#34;name&#34;
-    assert _map_attribute(attr, records, [&#34;name&#34;]) == [&#34;rectR4F3k6a6p7VPv&#34;]
+    assert _map_attribute(attr, records, [&#34;name&#34;]) == [&#34;rec0ik3QbkrzxJy0n&#34;]
     # Delete the mapped record and assert no match is found
-    record_rm = records.pop(&#34;rectR4F3k6a6p7VPv&#34;)
+    record_rm = records.pop(&#34;rec0ik3QbkrzxJy0n&#34;)
     assert _map_attribute(attr, records, [&#34;name&#34;]) == []
     # Duplicate the record back in and assert two matches are found now
     records[&#34;test1&#34;] = record_rm
@@ -117,7 +117,7 @@ el.replaceWith(d);
 <pre><code class="python">@pytest.mark.skip(reason=&#34;Work on this test deferred to allow release&#34;)
 def test_map_record_id():
     # Read 3-base export
-    several_bases_input = read_json_file(filepath(&#34;several_bases_input.json&#34;))
+    several_bases_input = read_json_file(filepath(&#34;dreq_raw_export.json&#34;))
     # Select a variable record to map (day.wap)
     record = several_bases_input[&#34;Data Request Variables (Public)&#34;][&#34;Variable&#34;][&#34;records&#34;][&#34;recIHH5OexHWtBNgn&#34;]
     # Select the list of records to map against
