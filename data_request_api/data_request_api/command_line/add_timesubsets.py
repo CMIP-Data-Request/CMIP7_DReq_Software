@@ -21,6 +21,7 @@ CANON_TS = [
 # ---------------------------------------------------------------------
 # Load DR
 # ---------------------------------------------------------------------
+
 def _load_dr(version: str = "latest_stable"):
     resolved = dc.retrieve(version)
     ver = next(iter(resolved))
@@ -35,6 +36,7 @@ def _load_dr(version: str = "latest_stable"):
 # ---------------------------------------------------------------------
 # Helpers for Time Subsets
 # ---------------------------------------------------------------------
+
 def _find_ts_table_name(base) -> str | None:
     for name in ("Time Subset", "Time Subsets", "time_subsets"):
         if name in base:
@@ -104,10 +106,8 @@ def _extract_opportunity_time_subsets(base) -> tuple[dict[str, list[str]], dict[
                     label = v.strip()
                     break
             label = label or "subset"
-            # Build a canonical period string (normalize UTF dashes to ASCII)
             period = patch_time_subset_periods(label, getattr(ts, "start", None), getattr(ts, "end", None))
             period = period.replace("–", "-")
-            # we only need labels here (periods are predefined below)
             labels.append(label)
 
         if labels:
@@ -153,6 +153,7 @@ def _map_subsets_to_experiments(base, use_opps, opp_subsets: dict[str, list[str]
 # ---------------------------------------------------------------------
 # Build Total block
 # ---------------------------------------------------------------------
+
 def _build_total_block(payload, time_tags):
     priorities = ["Core", "High", "Medium", "Low"]
     total = {
@@ -205,10 +206,8 @@ def parse_args():
                    help="Output JSON path. Default: requested_<version>_cmip7names.timesubsetted.json")
     p.add_argument("--add-combined", action="store_true",
                    help="Add rolled-up Total block (historical/scenario/AllExp).")
-    p.add_argument(
-    "--prefer-version",
-    default="latest_stable",
-    help="Data Request version to load (default: latest_stable).",)
+    p.add_argument("--prefer-version", default="latest_stable", 
+                   help="Data Request version to load (default: latest_stable).",)
     p.add_argument("--quiet", action="store_true", help="Suppress verbose logging.")
     return p.parse_args()
 
@@ -216,6 +215,7 @@ def parse_args():
 # ---------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------
+
 def main():
     args = parse_args()
     base, ver, content_path = _load_dr(args.prefer_version)
@@ -232,7 +232,6 @@ def main():
     expt_vars = dq.get_requested_variables(
         base, ver,
         use_opps=sorted(opp_titles, key=str.lower),
-        priority_cutoff=args.priority_cutoff,
         verbose=not args.quiet,
         check_core_variables=False,
     )
@@ -240,13 +239,14 @@ def main():
     outfile = args.outfile or f"requested_{ver}_cmip7names.timesubsetted.json"
 
     # Write requested file
+    all_levels = dq.get_priority_levels()
+    include_all = all_levels[-1] 
     dq.write_requested_vars_json(
-        outfile,
-        expt_vars,
-        ver,
-        priority_cutoff=args.priority_cutoff,
-        content_path=content_path,
-    )
+    outfile=outfile,
+    expt_vars=expt_vars,
+    dreq_version=ver,
+    priority_cutoff=include_all,
+    content_path=content_path,)
 
     # Build time subset info
     opp_subsets, tag_periods = _extract_opportunity_time_subsets(base)
@@ -263,9 +263,13 @@ def main():
         tags = ["all"] + expt_subsets.get(expt, [])
         known = [t for t in CANON_TS if t in tags]
         other = sorted([t for t in tags if t not in CANON_TS and t != "all"], key=str.lower)
-        tags_ordered = ["all"] + known + other
-        if "all" in tags_ordered:
+        known = [t for t in CANON_TS if t in tags]
+        other = sorted([t for t in tags if t not in CANON_TS and t != "all"], key=str.lower)
+        if known or other:
+            tags_ordered = ["all"] + known + other
+        else:
             tags_ordered = ["all"]
+
 
         time_tags[expt] = {}
         for p in priorities:
