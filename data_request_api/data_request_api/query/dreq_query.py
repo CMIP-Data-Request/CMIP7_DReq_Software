@@ -21,6 +21,7 @@ from data_request_api.query.dreq_classes import (
     DreqTable, ExptRequest, PRIORITY_LEVELS, format_attribute_name)
 from data_request_api.utilities.decorators import append_kwargs_from_config
 from data_request_api.utilities.tools import write_csv_output_file_content
+from data_request_api.content.utils import _parse_version
 
 # Version of software (python API):
 from data_request_api import version as api_version
@@ -28,25 +29,6 @@ from data_request_api import version as api_version
 ###############################################################################
 # Functions to manage data request content input and use it to create python
 # objects representing the tables.
-
-
-def get_dreq_version_tuple(version: str):
-    '''
-    Parse version string to return tuple giving version major, minor (etc) numbers.
-    Examples:
-        get_dreq_version_tuple('v1.2') --> (1,2)
-        get_dreq_version_tuple('v1.0beta') --> (1,0)
-    '''
-    if version == 'dev':
-        # Is a tuple needed/useful for 'dev' versions? Set one just in case.
-        return (0,)
-    else:
-        patt = '[0-9.]*[0-9]'
-        ver_num = re.findall(patt, version)
-        if len(ver_num) != 1:
-            raise ValueError('Ambiguous version string: ' + version)
-        ver_num_str = ver_num[0]
-        return tuple(map(int, ver_num_str.split('.')))
 
 
 def get_priority_levels():
@@ -1002,7 +984,7 @@ def get_variables_metadata(content, dreq_version,
         if check_c7_name:
             # Consistency check on definition of CMIP7 compound name.
             # For development, not intended as a user option.
-            if get_dreq_version_tuple(dreq_version) >= (1, 2, 2):
+            if _parse_version(dreq_version) >= (1, 2, 2, 0, "", 0):
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)

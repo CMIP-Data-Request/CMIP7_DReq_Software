@@ -9,6 +9,7 @@ from collections import OrderedDict, defaultdict
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
+from data_request_api.content.utils import _parse_version
 
 # Set block size to use for converting bytes to larger units that are more easily readable (KB, MB, etc).
 # Using BLOCK_SIZE = 1024 seems to give results closer to what bash shell 'du -h' produces.
@@ -370,8 +371,7 @@ years: 1
                     pass
                 else:
                     valid_shapes = ['time-intv', 'time-point', 'monthly-mean-daily-stat']
-                    version_tuple = dq.get_dreq_version_tuple(use_dreq_version)
-                    if version_tuple[:2] < (1, 2):
+                    if _parse_version(use_dreq_version) < (1, 2, 0, 0, "", 0):
                         # Prior to v1.2, monthly-mean-daily-stat was called monthly-mean-stat
                         valid_shapes.append('monthly-mean-stat')
                     assert temporal_shape in valid_shapes, \
