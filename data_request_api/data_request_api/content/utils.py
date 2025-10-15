@@ -19,7 +19,7 @@ def _parse_version(version):
     -------
     tuple
         The parsed version tuple:
-        (major, minor, patch, pre_release_type, pre_release_number)
+        (major, minor, maintenance, patch, pre_release_type, pre_release_number)
     """
     match = _version_pattern.match(version)
     if match:
