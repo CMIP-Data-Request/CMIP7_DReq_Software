@@ -9,7 +9,7 @@ from __future__ import print_function, division, unicode_literals, absolute_impo
 import copy
 import unittest
 
-from data_request_api.utilities.tools import read_json_file, write_json_output_file_content
+from data_request_api.utilities.tools import read_json_file
 from data_request_api.content.dump_transformation import correct_key_string, correct_dictionaries, \
     transform_content_inner, transform_content, split_content_one_base, get_transform_settings
 from data_request_api.tests import filepath
@@ -79,20 +79,20 @@ class TestCorrectDictionaries(unittest.TestCase):
 class TestTransformContent(unittest.TestCase):
     def setUp(self):
         self.version = "test"
-        self.one_base_input = read_json_file(filepath("one_base_input.json"))
-        self.one_base_output_format = read_json_file(filepath("one_base_output_format.json"))
-        self.one_base_output_transform = read_json_file(filepath("one_base_output_transform.json"))
-        self.one_base_VS_output = read_json_file(filepath("one_base_VS_output.json"))
-        self.one_base_DR_output = read_json_file(filepath("one_base_DR_output.json"))
+        self.one_base_input = read_json_file(filepath("dreq_release_export.json"))
+        self.one_base_output_format = read_json_file(filepath("release_output_format.json"))
+        self.one_base_output_transform = read_json_file(filepath("release_output_transform.json"))
+        self.one_base_VS_output = read_json_file(filepath("VS_release_content.json"))
+        self.one_base_DR_output = read_json_file(filepath("DR_release_content.json"))
         self.one_base_VS_output_noversion = copy.deepcopy(self.one_base_VS_output)
         del self.one_base_VS_output_noversion["version"]
         self.one_base_DR_output_noversion = copy.deepcopy(self.one_base_DR_output)
         del self.one_base_DR_output_noversion["version"]
-        self.several_bases_input = read_json_file(filepath("several_bases_input.json"))
-        self.several_bases_output_format = read_json_file(filepath("several_bases_output_format.json"))
-        self.several_bases_output_transform = read_json_file(filepath("several_bases_output_transform.json"))
-        self.several_bases_VS_output = read_json_file(filepath("several_bases_VS_output.json"))
-        self.several_bases_DR_output = read_json_file(filepath("several_bases_DR_output.json"))
+        self.several_bases_input = read_json_file(filepath("dreq_raw_export.json"))
+        self.several_bases_output_format = read_json_file(filepath("raw_output_format.json"))
+        self.several_bases_output_transform = read_json_file(filepath("raw_output_transform.json"))
+        self.several_bases_VS_output = read_json_file(filepath("VS_raw_content.json"))
+        self.several_bases_DR_output = read_json_file(filepath("DR_raw_content.json"))
         self.several_bases_VS_output_noversion = copy.deepcopy(self.several_bases_VS_output)
         del self.several_bases_VS_output_noversion["version"]
         self.several_bases_DR_output_noversion = copy.deepcopy(self.several_bases_DR_output)

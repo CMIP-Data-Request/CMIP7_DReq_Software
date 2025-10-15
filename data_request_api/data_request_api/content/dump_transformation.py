@@ -275,6 +275,7 @@ def add_useful_keys(content):
     logger = get_logger()
     record_to_linked_id_index = defaultdict(lambda: dict())
     list_entries = sorted(list(content))
+    test = defaultdict(set)
     for subelt in list_entries:
         list_record_ids = sorted(list(content[subelt]),
                                  key=lambda record_id: "|".join([content[subelt][record_id].get("name", "undef"),
@@ -287,8 +288,13 @@ def add_useful_keys(content):
             if linked_id.endswith(os.linesep):
                 logger.debug(f"linked_id of element type {subelt} and record id {record_id} endswith '\\n'.")
                 linked_id = linked_id.rstrip(os.linesep)
+            if linked_id in content[subelt]:
+                test[linked_id].add(content[subelt][record_id]["uid"])
+                test[linked_id].add(content[subelt][linked_id]["uid"])
             record_to_linked_id_index[subelt][record_id] = linked_id
             content[subelt][linked_id] = content[subelt].pop(record_id)
+    if len(test) > 0:
+        raise ValueError("Linked id must be unique: issue with %s" % test)
     return content, record_to_linked_id_index
 
 
@@ -537,38 +543,45 @@ def transform_content(content, version, force_variable_name=False, variable_name
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
                             force_retrieve=False, output_dir=None, force_variable_name=False,
                             default_transformed_content_pattern="{kind}_{export_version}_{consolidate}_content.json", **kwargs):
-    # Download specified version of data request content (if not locally cached)
-    versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
-
-    # Check that there is only one version associated
-    if len(versions) > 1:
-        raise ValueError("Could only deal with one version.")
-    elif len(versions) == 0:
-        raise ValueError("No version found.")
+    if version in ["test", ]:
+        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
+        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
+        from data_request_api.tests import filepath
+        DR_content = filepath(DR_content)
+        VS_content = filepath(VS_content)
     else:
-        version = list(versions)[0]
-        content = versions[version]
-        if output_dir is None:
-            output_dir = os.path.dirname(content)
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        consolidate_status = {True: "consolidate", False: "not-consolidate"}[consolidate]
-        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export, consolidate=consolidate_status)
-        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export, consolidate=consolidate_status)
-        DR_content = os.sep.join([output_dir, DR_content])
-        VS_content = os.sep.join([output_dir, VS_content])
-        if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            if os.path.exists(DR_content):
-                os.remove(DR_content)
-            if os.path.exists(VS_content):
-                os.remove(VS_content)
-        if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
-            content = dc.load(version, export=export, consolidate=consolidate)
-            data_request, vocabulary_server = transform_content(content, version, variable_name=kwargs["variable_name"],
-                                                                force_variable_name=force_variable_name)
-            write_json_output_file_content(DR_content, data_request)
-            write_json_output_file_content(VS_content, vocabulary_server)
-        return dict(DR_input=DR_content, VS_input=VS_content)
+        # Download specified version of data request content (if not locally cached)
+        versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
+
+        # Check that there is only one version associated
+        if len(versions) > 1:
+            raise ValueError("Could only deal with one version.")
+        elif len(versions) == 0:
+            raise ValueError("No version found.")
+        else:
+            version = list(versions)[0]
+            content = versions[version]
+            if output_dir is None:
+                output_dir = os.path.dirname(content)
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            consolidate_status = {True: "consolidate", False: "not-consolidate"}[consolidate]
+            DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export, consolidate=consolidate_status)
+            VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export, consolidate=consolidate_status)
+            DR_content = os.sep.join([output_dir, DR_content])
+            VS_content = os.sep.join([output_dir, VS_content])
+            if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+                if os.path.exists(DR_content):
+                    os.remove(DR_content)
+                if os.path.exists(VS_content):
+                    os.remove(VS_content)
+            if not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
+                content = dc.load(version, export=export, consolidate=consolidate)
+                data_request, vocabulary_server = transform_content(content, version, variable_name=kwargs["variable_name"],
+                                                                    force_variable_name=force_variable_name)
+                write_json_output_file_content(DR_content, data_request)
+                write_json_output_file_content(VS_content, vocabulary_server)
+    return dict(DR_input=DR_content, VS_input=VS_content)
 
 
 if __name__ == "__main__":

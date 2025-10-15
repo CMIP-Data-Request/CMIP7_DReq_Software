@@ -704,16 +704,19 @@ def get_variables_metadata(content, dreq_version,
     if 'Structure' in base:
         dreq_tables['structure'] = base['Structure']
 
-    if 'Table Identifiers' in base:
-        dreq_tables['CMOR tables'] = base['Table Identifiers']
-        attr_table = 'table'
-        attr_realm = 'modelling_realm'
-    elif 'CMIP6 Table Identifiers (legacy)' in base:
+    # Specify names of some DR variable attributes depending the DR version
+    # TO DO: is this logic still needed? If so, make it explicitly depend on DR Content version?
+    if 'CMIP6 Table Identifiers (legacy)' in base:
         dreq_tables['CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
         attr_table = 'cmip6_table_legacy'
         attr_realm = 'modelling_realm___primary'
+    elif 'Table Identifiers' in base:
+        dreq_tables['CMOR tables'] = base['Table Identifiers']
+        attr_table = 'table'
+        attr_realm = 'modelling_realm'
     else:
         raise ValueError('Which table contains CMOR table identifiers?')
+    attr_realm_additional = 'modelling_realm___secondary'
 
     if dreq_version in dreq_versions_substitute_cmip6_freq:
         # needed for corrections below
@@ -850,12 +853,16 @@ def get_variables_metadata(content, dreq_version,
         else:
             dimensions = dimensions_linked
 
-        # Get physical parameter record and use its name as out_name.
-        # (Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
-        # for almost all variables in dreq v1.2.1.)
+        # Get physical parameter record and use its name as out_name
         link = var.physical_parameter[0]
         phys_param = dreq_tables['physical parameters'].get_record(link)
-        out_name = phys_param.name
+        if hasattr(phys_param, 'variablerootdd'):
+            # variableRootDD (aka "root name") is available in DR v1.2.2 onward
+            out_name = phys_param.variablerootdd
+        else:
+            # Comparison with CMIP6 CMOR tables shows that out_name is the same as physical parameter name
+            # for almost all variables in dreq v1.2.1
+            out_name = phys_param.name
 
         if cmor_variables:
             # Filter by CMOR variable name
@@ -876,8 +883,16 @@ def get_variables_metadata(content, dreq_version,
         else:
             standard_name_proposed = phys_param.proposed_cf_standard_name
 
+        # Get realm(s)
         link_realm = getattr(var, attr_realm)
         modeling_realm = [dreq_tables['realm'].get_record(link).id for link in link_realm]
+        if hasattr(var, attr_realm_additional):
+            # Add secondary realm(s), if any, to the list
+            link_realm_additional = getattr(var, attr_realm_additional)
+            modeling_realm += [dreq_tables['realm'].get_record(link).id for link in link_realm_additional]
+        # Raise error if any realm is duplicated in the list
+        if len(modeling_realm) != len(set(modeling_realm)):
+            raise ValueError(f'Redundant realm(s) found for DR variable {var_name}: {modeling_realm}')
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):
@@ -890,6 +905,10 @@ def get_variables_metadata(content, dreq_version,
         comment = ''
         if hasattr(var, 'description'):
             comment = var.description
+
+        processing_note = ''
+        if hasattr(var, 'processing_note'):
+            processing_note = var.processing_note
 
         var_info = OrderedDict()
         # Insert fields in order given by CMIP6 cmor tables (https://github.com/PCMDI/cmip6-cmor-tables)
@@ -908,6 +927,7 @@ def get_variables_metadata(content, dreq_version,
 
             'long_name': var.title,
             'comment': comment,
+            'processing_note': processing_note,
 
             'dimensions': dimensions,
 
