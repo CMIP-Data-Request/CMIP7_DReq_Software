@@ -22,30 +22,27 @@ from data_request_api.utilities.logger import get_logger  # noqa
 pooch.get_logger().setLevel("WARNING")
 
 # File names of Airtable exports in JSON format
+# Raw exports
 _json_raw = "dreq_raw_export.json"
+_json_raw_c = "dreq_raw_consolidate.json"
+_json_raw_c_DR = "DR_raw_consolidate_content.json"
+_json_raw_c_VS = "VS_raw_consolidate_content.json"
+_json_raw_nc_DR = "DR_raw_not-consolidate_content.json"
+_json_raw_nc_VS = "VS_raw_not-consolidate_content.json"
+# Release exports
 _json_release = "dreq_release_export.json"
-_json_raw_consolidated = "dreq_raw_consolidated.json"
-_json_release_consolidated = "dreq_release_consolidated.json"
-_json_release_DR = "DR_release_consolidate_content.json"
-_json_release_VS = "VS_release_consolidate_content.json"
-_json_raw_DR = "DR_raw_consolidate_content.json"
-_json_raw_VS = "VS_raw_consolidate_content.json"
-_json_release_nc_DR = "DR_release_no-consolidate_content.json"
-_json_release_nc_VS = "VS_release_no-consolidate_content.json"
-_json_raw_nc_DR = "DR_raw_noconsolidate_content.json"
-_json_raw_nc_VS = "VS_raw_no-consolidate_content.json"
+_json_release_c = "dreq_release_consolidate.json"
+_json_release_c_DR = "DR_release_consolidate_content.json"
+_json_release_c_VS = "VS_release_consolidate_content.json"
+_json_release_nc_DR = "DR_release_not-consolidate_content.json"
+_json_release_nc_VS = "VS_release_not-consolidate_content.json"
 
 
 # Base URL template for fetching Dreq content json files from GitHub
-# _github_org = "WCRP-CMIP"
 _github_org = "CMIP-Data-Request"
-#REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
-REPO_RAW_URL = (
-    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/{target}/{version}/airtable_export/{_json_export}"
-)
-REPO_RAW_URL_DEV = (
-    "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
-)
+# REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
+REPO_RAW_URL = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/refs/{target}/{version}/airtable_export/{_json_export}"
+REPO_RAW_URL_DEV = "https://raw.githubusercontent.com/{_github_org}/CMIP7_DReq_Content/{version}/airtable_export/{_json_export}"
 
 _dev_branch = "main"
 
@@ -142,28 +139,34 @@ def _get_partly_cached(**kwargs):
         If known kwargs have an invalid value.
     """
     local_versions = []
+    assume_deleted = []
+    if "assume_deleted" in kwargs and isinstance(kwargs["assume_deleted"], list):
+        assume_deleted = kwargs["assume_deleted"]
     if os.path.isdir(_dreq_res):
         # List all subdirectories in the dreq_res directory that include both dreq.json files
         #   - the subdirectory name is the tag name
         if "export" in kwargs:
             if kwargs["export"] == "raw":
                 json_export = _json_raw
-                DR_consolidated = _json_raw_DR
-                VS_consolidated = _json_raw_VS
-                DR = _json_raw_DR_nc
-                VS = _json_raw_VS_nc
-                json_export_consolidated = _json_raw_consolidated
+                DR_consolidated = _json_raw_c_DR
+                VS_consolidated = _json_raw_c_VS
+                DR = _json_raw_nc_DR
+                VS = _json_raw_nc_VS
+                json_export_consolidated = _json_raw_c
             elif kwargs["export"] == "release":
                 json_export = _json_release
-                DR_consolidated = _json_release_DR
-                VS_consolidated = _json_release_VS
+                DR_consolidated = _json_release_c_DR
+                VS_consolidated = _json_release_c_VS
                 DR = _json_release_nc_DR
                 VS = _json_release_nc_VS
-                json_export_consolidated = _json_release_consolidated
+                json_export_consolidated = _json_release_c
         local_versions = [
             name
             for name in os.listdir(_dreq_res)
-            if not os.path.isfile(os.path.join(_dreq_res, name, json_export))
+            if (
+                not os.path.isfile(os.path.join(_dreq_res, name, json_export))
+                or os.path.join(_dreq_res, name, json_export) in assume_deleted
+            )
             and (
                 os.path.isfile(os.path.join(_dreq_res, name, DR))
                 or os.path.isfile(os.path.join(_dreq_res, name, VS))
@@ -515,13 +518,24 @@ def retrieve(version="latest_stable", **kwargs):
                 try:
                     if version == "dev":
                         url = REPO_RAW_URL_DEV.format(
-                            version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                            version=_dev_branch,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                        )
                     elif version not in get_versions():
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org, target="heads")
+                            version=version,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                            target="heads",
+                        )
                     else:
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org, target="tags")
+                            version=version,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                            target="tags",
+                        )
                     json_path = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=url,
@@ -544,10 +558,17 @@ def retrieve(version="latest_stable", **kwargs):
                     # Retrieve
                     if version == "dev":
                         url = REPO_RAW_URL_DEV.format(
-                            version=_dev_branch, _json_export=json_export, _github_org=_github_org)
+                            version=_dev_branch,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                        )
                     else:
                         url = REPO_RAW_URL.format(
-                            version=version, _json_export=json_export, _github_org=_github_org, target="heads")
+                            version=version,
+                            _json_export=json_export,
+                            _github_org=_github_org,
+                            target="heads",
+                        )
                     json_path_temp = pooch.retrieve(
                         path=retrieve_to_dir,
                         url=url,
@@ -575,9 +596,7 @@ def retrieve(version="latest_stable", **kwargs):
                 "The version(s) you requested are not cached. Please deactivate offline mode and try again."
             )
         else:
-            raise ValueError(
-                "The version(s) you requested could not be retrieved"
-            )
+            raise ValueError("The version(s) you requested could not be retrieved")
 
     return json_paths
 
@@ -587,29 +606,39 @@ def cleanup(**kwargs):
     """Clean up the dreq_res directory."""
     logger = get_logger()
 
+    # Check if this is a dryrun - if not clear the `assume_deleted` kwarg if set
+    if ("dryrun" in kwargs and not kwargs["dryrun"]) or "dryrun" not in kwargs:
+        if "assume_deleted" in kwargs:
+            kwargs.pop("assume_deleted")
+
     # Get list of imcompletely cached versions
     cleanup_versions = _get_partly_cached(**kwargs)
 
     logger.info(
         f"Cleaning up files for the following incompletely cached versions: {cleanup_versions}"
     )
-    logger.info(cleanup_versions)
 
     # Compile file paths
     if kwargs["export"] == "raw":
         cached_files = [
             os.path.join(_dreq_res, v, version_type)
             for v in cleanup_versions
-            for version_type in [_json_raw_consolidated, _json_raw_DR, _json_raw_VS, _json_raw_DR_nc, _json_raw_VS_nc]
+            for version_type in [
+                _json_raw_c,
+                _json_raw_c_DR,
+                _json_raw_c_VS,
+                _json_raw_nc_DR,
+                _json_raw_nc_VS,
+            ]
         ]
     elif kwargs["export"] == "release":
         cached_files = [
             os.path.join(_dreq_res, v, version_type)
             for v in cleanup_versions
             for version_type in [
-                _json_release_consolidated,
-                _json_release_DR,
-                _json_release_VS,
+                _json_release_c,
+                _json_release_c_DR,
+                _json_release_c_VS,
                 _json_release_nc_DR,
                 _json_release_nc_VS,
             ]
@@ -684,13 +713,9 @@ def delete(version="all", keep_latest=False, **kwargs):
             )
         local_versions = [version] if version in local_versions else []
 
-    # General cleanup of derived files
-    cleanup(**kwargs)
-
     # Deletion
     if local_versions:
-        logger.info("Deleting the following version(s):")
-        logger.info(local_versions)
+        logger.info("Deleting the following version(s): {local_versions}")
     else:
         logger.info("No version(s) found to delete.")
         return
@@ -714,6 +739,9 @@ def delete(version="all", keep_latest=False, **kwargs):
                     logger.info(f"Deleted '{f}'.")
                 except Exception as e:
                     logger.warning(f"Could not delete '{f}': {e}")
+
+    # General cleanup of derived files
+    cleanup(assume_deleted=cached_files, **kwargs)
 
 
 @append_kwargs_from_config
@@ -751,13 +779,9 @@ def load(version="latest_stable", **kwargs):
     consolidate = kwargs.get("consolidate", True)
 
     # determine cache file path
-    version_dir = os.path.join("_dreq_res", version_key)
+    version_dir = os.path.join(_dreq_res, version_key)
     os.makedirs(version_dir, exist_ok=True)
-    cache_filename = (
-        f"{_json_raw_consolidated}.json"
-        if export_type == "raw"
-        else f"{_json_release_consolidated}.json"
-    )
+    cache_filename = f"{_json_raw_c}" if export_type == "raw" else f"{_json_release_c}"
     cache_path = os.path.join(version_dir, cache_filename)
 
     with open(json_path) as f:

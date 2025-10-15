@@ -2,9 +2,8 @@ import os
 import pathlib
 import tempfile
 
-import pytest
-
 import data_request_api.utilities.config as dreqcfg
+import pytest
 from data_request_api.content import dreq_content as dc
 from data_request_api.utilities.logger import change_log_file, change_log_level
 
@@ -20,11 +19,12 @@ change_log_level("info")
 
 def test_parse_version():
     "Test the _parse_version function with different version strings."
-    assert dc._parse_version("v1.0.0") == (1, 0, 0, "", 0)
-    assert dc._parse_version("v1.0alpha2") == (1, 0, 0, "a", 2)
-    assert dc._parse_version("1.0.0a3") == (1, 0, 0, "a", 3)
-    assert dc._parse_version("1.0.0beta") == (1, 0, 0, "b", 0)
-    assert dc._parse_version("something") == (0, 0, 0, "", 0)
+    assert dc._parse_version("v1.0.0") == (1, 0, 0, 0, "", 0)
+    assert dc._parse_version("v1.0alpha2") == (1, 0, 0, 0, "a", 2)
+    assert dc._parse_version("1.0.0a3") == (1, 0, 0, 0, "a", 3)
+    assert dc._parse_version("1.0.0beta") == (1, 0, 0, 0, "b", 0)
+    assert dc._parse_version("something") == (0, 0, 0, 0, "", 0)
+    assert dc._parse_version("2.0.3.4b4") == (2, 0, 3, 4, "b", 4)
     with pytest.raises(TypeError):
         dc._parse_version(None)
 
@@ -35,6 +35,7 @@ def test_get_versions():
     assert "dev" in versions
     assert "v1.0alpha" in versions
     assert "v1.0beta" in versions
+    assert "v1.2.2.2" in versions
 
 
 def test_get_versions_list_branches():
@@ -47,9 +48,9 @@ def test_get_versions_list_branches():
 def test_get_latest_version(monkeypatch):
     "Test the _get_latest_version function."
     monkeypatch.setattr(
-        dc, "get_versions", lambda **kwargs: ["1.0.0", "2.0.2b", "2.0.2a"]
+        dc, "get_versions", lambda **kwargs: ["1.0.1.2", "1.0.1", "2.0.2b", "2.0.2a"]
     )
-    assert dc._get_latest_version() == "1.0.0"
+    assert dc._get_latest_version() == "1.0.1.2"
     assert dc._get_latest_version(stable=False) == "2.0.2b"
 
 
@@ -213,7 +214,9 @@ class TestDreqContent:
         assert set(cached_branches) == set(self.branches)
 
         # With invalid export kwarg
-        with pytest.raises(ValueError, match="Invalid value for config key export: invalid."):
+        with pytest.raises(
+            ValueError, match="Invalid value for config key export: invalid."
+        ):
             dc.get_cached(export="invalid")
 
     def test_delete(self, caplog):
@@ -258,7 +261,9 @@ class TestDreqContent:
         dc.delete("2.0.2b")
 
         # But illegal config kwargs raise ValueError nonetheless
-        with pytest.raises(ValueError, match="Invalid value for config key export: none."):
+        with pytest.raises(
+            ValueError, match="Invalid value for config key export: none."
+        ):
             dc.delete(export="none")
 
     def test_offline_mode(self, monkeypatch):
@@ -266,9 +271,7 @@ class TestDreqContent:
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception(
-                "Network request detected despite active offline mode."
-            )
+            raise Exception("Network request detected despite active offline mode.")
 
         monkeypatch.setattr("requests.get", mock_requests_get)
 

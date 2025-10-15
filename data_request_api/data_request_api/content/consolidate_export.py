@@ -728,7 +728,7 @@ def map_data(data, mapping_table, version, **kwargs):
             "Consolidation: Removing / Adding (un)necessary whitespace to strings."
         )
         _fix_str_nested(mapped_data)
-        if _parse_version(version) == (0, 0, 0, "", 0):
+        if _parse_version(version) == (0, 0, 0, 0, "", 0):
             mapped_data["version"] = version
         else:
             if l_version != version:
