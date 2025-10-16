@@ -36,7 +36,7 @@
         },
         "aerosol.abs550bc.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "atmosphere_absorption_optical_thickness_due_to_black_carbon_ambient_aerosol",
             "units": "1",
             "cell_methods": "area: time: mean",
@@ -62,7 +62,7 @@
         },
         "aerosol.abs550dust.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "atmosphere_absorption_optical_thickness_due_to_dust_ambient_aerosol_particles",
             "units": "1",
             "cell_methods": "area: time: mean",
@@ -88,7 +88,7 @@
         },
         "aerosol.abs550no3.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "atmosphere_absorption_optical_thickness_due_to_nitrate_ambient_aerosol_particles",
             "units": "1",
             "cell_methods": "area: time: mean",
@@ -114,7 +114,7 @@
         },
         "aerosol.abs550oa.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "atmosphere_absorption_optical_thickness_due_to_particulate_organic_matter_ambient_aerosol_particles",
             "units": "1",
             "cell_methods": "area: time: mean",
@@ -140,7 +140,7 @@
         },
         "aerosol.abs550so4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "atmosphere_absorption_optical_thickness_due_to_sulfate_ambient_aerosol_particles",
             "units": "1",
             "cell_methods": "area: time: mean",
@@ -166,7 +166,7 @@
         },
         "aerosol.abs550ss.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "atmosphere_absorption_optical_thickness_due_to_sea_salt_ambient_aerosol_particles",
             "units": "1",
             "cell_methods": "area: time: mean",
@@ -374,7 +374,7 @@
         },
         "aerosol.ccldncl.tavg-u-hxy-ccl.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmos atmosChem",
             "standard_name": "number_concentration_of_convective_cloud_liquid_water_particles_at_convective_liquid_water_cloud_top",
             "units": "m-3",
             "cell_methods": "area: time: mean where convective_cloud (mean over the portion of the cell containing liquid topped cloud, as seen from top of atmosphere)",
@@ -400,7 +400,7 @@
         },
         "aerosol.ccldncl.tavg-u-hxy-ccl.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmos atmosChem",
             "standard_name": "number_concentration_of_convective_cloud_liquid_water_particles_at_convective_liquid_water_cloud_top",
             "units": "m-3",
             "cell_methods": "area: time: mean where convective_cloud (mean over the portion of the cell containing liquid topped cloud, as seen from top of atmosphere)",
@@ -478,7 +478,7 @@
         },
         "aerosol.ccn1.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "number_concentration_of_cloud_condensation_nuclei_assuming_reference_relative_humidity",
             "units": "m-3",
             "cell_methods": "area: time: mean",
@@ -504,7 +504,7 @@
         },
         "aerosol.ccn1.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "number_concentration_of_cloud_condensation_nuclei_assuming_reference_relative_humidity",
             "units": "m-3",
             "cell_methods": "area: time: mean",
@@ -530,7 +530,7 @@
         },
         "aerosol.ccnp02.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "number_concentration_of_cloud_condensation_nuclei_assuming_reference_relative_humidity",
             "units": "m-3",
             "cell_methods": "area: time: mean",
@@ -556,7 +556,7 @@
         },
         "aerosol.ccnp02.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "number_concentration_of_cloud_condensation_nuclei_assuming_reference_relative_humidity",
             "units": "m-3",
             "cell_methods": "area: time: mean",
@@ -816,7 +816,7 @@
         },
         "aerosol.co.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mole_fraction_of_carbon_monoxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -842,7 +842,7 @@
         },
         "aerosol.co.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mole_fraction_of_carbon_monoxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -946,7 +946,7 @@
         },
         "aerosol.conccn.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "number_concentration_of_ambient_aerosol_particles_in_air",
             "units": "m-3",
             "cell_methods": "area: time: mean",
@@ -972,7 +972,7 @@
         },
         "aerosol.conccn.tpt-u-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "number_concentration_of_ambient_aerosol_particles_in_air",
             "units": "m-3",
             "cell_methods": "area: point time: point",
@@ -1076,7 +1076,7 @@
         },
         "aerosol.dryno3.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nitrate_dry_aerosol_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1362,7 +1362,7 @@
         },
         "aerosol.emibbbc.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_elemental_carbon_dry_aerosol_particles_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1388,7 +1388,7 @@
         },
         "aerosol.emibbch4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_methane_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1414,7 +1414,7 @@
         },
         "aerosol.emibbco.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_carbon_monoxide_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1440,7 +1440,7 @@
         },
         "aerosol.emibbdms.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_dimethyl_sulfide_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1466,7 +1466,7 @@
         },
         "aerosol.emibbnh3.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_ammonia_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1492,7 +1492,7 @@
         },
         "aerosol.emibbnox.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nox_expressed_as_nitrogen_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1518,7 +1518,7 @@
         },
         "aerosol.emibboa.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_particulate_organic_matter_dry_aerosol_particles_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1544,7 +1544,7 @@
         },
         "aerosol.emibbso2.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_sulfur_dioxide_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -1570,7 +1570,7 @@
         },
         "aerosol.emibbvoc.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nmvoc_due_to_emission_from_fires",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -2454,7 +2454,7 @@
         },
         "aerosol.mmraerh2o.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_water_in_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2480,7 +2480,7 @@
         },
         "aerosol.mmraerh2o.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_water_in_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2506,7 +2506,7 @@
         },
         "aerosol.mmraerh2o.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_water_in_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -2532,7 +2532,7 @@
         },
         "aerosol.mmrbc.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_elemental_carbon_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2558,7 +2558,7 @@
         },
         "aerosol.mmrbc.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_elemental_carbon_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2584,7 +2584,7 @@
         },
         "aerosol.mmrbc.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_elemental_carbon_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2610,7 +2610,7 @@
         },
         "aerosol.mmrbc.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_elemental_carbon_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -2636,7 +2636,7 @@
         },
         "aerosol.mmrdust.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_dust_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2662,7 +2662,7 @@
         },
         "aerosol.mmrdust.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_dust_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2688,7 +2688,7 @@
         },
         "aerosol.mmrdust.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_dust_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2714,7 +2714,7 @@
         },
         "aerosol.mmrdust.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_dust_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -2740,7 +2740,7 @@
         },
         "aerosol.mmrnh4.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_ammonium_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2766,7 +2766,7 @@
         },
         "aerosol.mmrnh4.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_ammonium_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2792,7 +2792,7 @@
         },
         "aerosol.mmrnh4.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_ammonium_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2818,7 +2818,7 @@
         },
         "aerosol.mmrnh4.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_ammonium_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -2844,7 +2844,7 @@
         },
         "aerosol.mmrno3.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_nitrate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2870,7 +2870,7 @@
         },
         "aerosol.mmrno3.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_nitrate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2896,7 +2896,7 @@
         },
         "aerosol.mmrno3.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_nitrate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2922,7 +2922,7 @@
         },
         "aerosol.mmrno3.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_nitrate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -2948,7 +2948,7 @@
         },
         "aerosol.mmroa.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -2974,7 +2974,7 @@
         },
         "aerosol.mmroa.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3000,7 +3000,7 @@
         },
         "aerosol.mmroa.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3026,7 +3026,7 @@
         },
         "aerosol.mmroa.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -3156,7 +3156,7 @@
         },
         "aerosol.mmrso4.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sulfate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3182,7 +3182,7 @@
         },
         "aerosol.mmrso4.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sulfate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3208,7 +3208,7 @@
         },
         "aerosol.mmrso4.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sulfate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3234,7 +3234,7 @@
         },
         "aerosol.mmrso4.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sulfate_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -3260,7 +3260,7 @@
         },
         "aerosol.mmrsoa.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_secondary_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3286,7 +3286,7 @@
         },
         "aerosol.mmrsoa.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_secondary_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3312,7 +3312,7 @@
         },
         "aerosol.mmrsoa.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_secondary_particulate_organic_matter_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3338,7 +3338,7 @@
         },
         "aerosol.mmrss.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sea_salt_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3364,7 +3364,7 @@
         },
         "aerosol.mmrss.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sea_salt_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3390,7 +3390,7 @@
         },
         "aerosol.mmrss.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sea_salt_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -3416,7 +3416,7 @@
         },
         "aerosol.mmrss.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_sea_salt_dry_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: point time: point",
@@ -4222,7 +4222,7 @@
         },
         "aerosol.reffccwctop.tavg-u-hxy-cl.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "effective_radius_of_cloud_condensed_water_particles_at_cloud_top",
             "units": "m",
             "cell_methods": "area: time: mean where cloud (weighted by area of upper-most cloud layer)",
@@ -4430,7 +4430,7 @@
         },
         "aerosol.sfpm1.tavg-h2m-hxy-u.1hr.GLB": {
             "frequency": "1hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_pm1_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -4456,7 +4456,7 @@
         },
         "aerosol.sfpm1.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_pm1_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -4534,7 +4534,7 @@
         },
         "aerosol.sfpm10.tavg-h2m-hxy-u.1hr.GLB": {
             "frequency": "1hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_pm10_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -4560,7 +4560,7 @@
         },
         "aerosol.sfpm10.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_pm10_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -4612,7 +4612,7 @@
         },
         "aerosol.sfpm25.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mass_fraction_of_pm2p5_ambient_aerosol_particles_in_air",
             "units": "kg kg-1",
             "cell_methods": "area: time: mean",
@@ -4690,7 +4690,7 @@
         },
         "aerosol.so2.tavg-h2m-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mole_fraction_of_sulfur_dioxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -4716,7 +4716,7 @@
         },
         "aerosol.so2.tpt-h2m-hs-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "aerosol",
+            "modeling_realm": "aerosol atmosChem",
             "standard_name": "mole_fraction_of_sulfur_dioxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: point time: point",
@@ -5236,7 +5236,7 @@
         },
         "atmos.areacella.ti-u-hxy-u.fx.GLB": {
             "frequency": "fx",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land",
             "standard_name": "cell_area",
             "units": "m2",
             "cell_methods": "area: sum",
@@ -5262,7 +5262,7 @@
         },
         "atmos.bldep.tavg-u-hxy-u.1hr.GLB": {
             "frequency": "1hr",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol land",
             "standard_name": "atmosphere_boundary_layer_thickness",
             "units": "m",
             "cell_methods": "area: time: mean",
@@ -5288,7 +5288,7 @@
         },
         "atmos.bldep.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol land",
             "standard_name": "atmosphere_boundary_layer_thickness",
             "units": "m",
             "cell_methods": "area: time: mean",
@@ -5366,7 +5366,7 @@
         },
         "atmos.bldep.tpt-u-hxy-u.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol land",
             "standard_name": "atmosphere_boundary_layer_thickness",
             "units": "m",
             "cell_methods": "area: mean time: point",
@@ -7394,7 +7394,7 @@
         },
         "atmos.cltc.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol",
             "standard_name": "convective_cloud_area_fraction",
             "units": "%",
             "cell_methods": "area: time: mean",
@@ -8174,7 +8174,7 @@
         },
         "atmos.co2.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol",
             "standard_name": "mole_fraction_of_carbon_dioxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -8226,7 +8226,7 @@
         },
         "atmos.co2.tavg-p19-hxy-air.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol",
             "standard_name": "mole_fraction_of_carbon_dioxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean where air",
@@ -8252,7 +8252,7 @@
         },
         "atmos.co2.tclm-p19-hxy-air.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol",
             "standard_name": "mole_fraction_of_carbon_dioxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: mean where air time: mean within years time: mean over years",
@@ -8278,7 +8278,7 @@
         },
         "atmos.co2.tclm-u-hm-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos aerosol",
             "standard_name": "mole_fraction_of_carbon_dioxide_in_air",
             "units": "mol mol-1",
             "cell_methods": "height: sum (through atmospheric column) area: sum time: mean within years time: mean over years",
@@ -8642,7 +8642,7 @@
         },
         "atmos.evspsbl.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land",
             "standard_name": "water_evapotranspiration_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: mean where land time: mean",
@@ -8668,7 +8668,7 @@
         },
         "atmos.evspsbl.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land",
             "standard_name": "water_evapotranspiration_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -8694,7 +8694,7 @@
         },
         "atmos.evspsbl.tpt-u-hs-u.subhr.GLB": {
             "frequency": "subhr",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land",
             "standard_name": "water_evapotranspiration_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: point time: point",
@@ -8980,7 +8980,7 @@
         },
         "atmos.hfls.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upward_latent_heat_flux",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -9006,7 +9006,7 @@
         },
         "atmos.hfls.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upward_latent_heat_flux",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -9188,7 +9188,7 @@
         },
         "atmos.hfss.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upward_sensible_heat_flux",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -9214,7 +9214,7 @@
         },
         "atmos.hfss.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upward_sensible_heat_flux",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -12282,7 +12282,7 @@
         },
         "atmos.prra.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "rainfall_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -12308,7 +12308,7 @@
         },
         "atmos.prra.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "rainfall_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -12464,7 +12464,7 @@
         },
         "atmos.prsn.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "snowfall_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -12490,7 +12490,7 @@
         },
         "atmos.prsn.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "snowfall_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -13452,7 +13452,7 @@
         },
         "atmos.reffcclwtop.tavg-u-hxy-ccl.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos atmosChem aerosol",
             "standard_name": "effective_radius_of_convective_cloud_liquid_water_particles_at_convective_liquid_water_cloud_top",
             "units": "m",
             "cell_methods": "area: time: mean where convective_cloud (weighted by area of upper-most convective liquid water cloud layer)",
@@ -13478,7 +13478,7 @@
         },
         "atmos.reffcclwtop.tavg-u-hxy-ccl.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos atmosChem aerosol",
             "standard_name": "effective_radius_of_convective_cloud_liquid_water_particles_at_convective_liquid_water_cloud_top",
             "units": "m",
             "cell_methods": "area: time: mean where convective_cloud (weighted by area of upper-most convective liquid water cloud layer)",
@@ -13920,7 +13920,7 @@
         },
         "atmos.reffsclwtop.tavg-u-hxy-scl.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos atmosChem aerosol",
             "standard_name": "effective_radius_of_stratiform_cloud_liquid_water_particles_at_stratiform_liquid_water_cloud_top",
             "units": "m",
             "cell_methods": "area: time: mean where stratiform_cloud (weighted by area of upper-most stratiform liquid water layer)",
@@ -13946,7 +13946,7 @@
         },
         "atmos.reffsclwtop.tavg-u-hxy-scl.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos atmosChem aerosol",
             "standard_name": "effective_radius_of_stratiform_cloud_liquid_water_particles_at_stratiform_liquid_water_cloud_top",
             "units": "m",
             "cell_methods": "area: time: mean where stratiform_cloud (weighted by area of upper-most stratiform liquid water layer)",
@@ -14128,7 +14128,7 @@
         },
         "atmos.rlds.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_downwelling_longwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -14154,7 +14154,7 @@
         },
         "atmos.rlds.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_downwelling_longwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -14752,7 +14752,7 @@
         },
         "atmos.rlus.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upwelling_longwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -14778,7 +14778,7 @@
         },
         "atmos.rlus.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upwelling_longwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -15584,7 +15584,7 @@
         },
         "atmos.rsds.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land",
             "standard_name": "surface_downwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -15610,7 +15610,7 @@
         },
         "atmos.rsds.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land",
             "standard_name": "surface_downwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -16416,7 +16416,7 @@
         },
         "atmos.rsus.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -16442,7 +16442,7 @@
         },
         "atmos.rsus.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_upwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -17300,7 +17300,7 @@
         },
         "atmos.scldncl.tavg-u-hxy-scl.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos atmosChem aerosol",
             "standard_name": "number_concentration_of_stratiform_cloud_liquid_water_particles_at_stratiform_liquid_water_cloud_top",
             "units": "m-3",
             "cell_methods": "area: time: mean where stratiform_cloud",
@@ -17326,7 +17326,7 @@
         },
         "atmos.scldncl.tavg-u-hxy-scl.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos atmosChem aerosol",
             "standard_name": "number_concentration_of_stratiform_cloud_liquid_water_particles_at_stratiform_liquid_water_cloud_top",
             "units": "m-3",
             "cell_methods": "area: time: mean where stratiform_cloud",
@@ -18184,7 +18184,7 @@
         },
         "atmos.tas.tavg-h2m-hm-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "air_temperature",
             "units": "K",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -18210,7 +18210,7 @@
         },
         "atmos.tas.tavg-h2m-hm-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "air_temperature",
             "units": "K",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -20550,7 +20550,7 @@
         },
         "atmos.ts.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_temperature",
             "units": "K",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -20576,7 +20576,7 @@
         },
         "atmos.ts.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "atmos",
+            "modeling_realm": "atmos land landIce",
             "standard_name": "surface_temperature",
             "units": "K",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -23410,7 +23410,7 @@
         },
         "atmosChem.c2h4.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_ethene_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23436,7 +23436,7 @@
         },
         "atmosChem.c2h5oh.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_ethanol_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23462,7 +23462,7 @@
         },
         "atmosChem.c4h10.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_butane_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23566,7 +23566,7 @@
         },
         "atmosChem.ch3oh.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_methanol_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23592,7 +23592,7 @@
         },
         "atmosChem.ch4.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_methane_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23644,7 +23644,7 @@
         },
         "atmosChem.ch4.tavg-p39-hy-air.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_methane_in_air",
             "units": "mol mol-1",
             "cell_methods": "longitude: time: mean where air",
@@ -23748,7 +23748,7 @@
         },
         "atmosChem.ch4losssoil.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "surface_downward_mass_flux_of_methane_due_to_soil_biological_consumption",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -23774,7 +23774,7 @@
         },
         "atmosChem.ch4ref.ti-al-hxy-u.fx.GLB": {
             "frequency": "fx",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "reference_mole_fraction_of_methane_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: mean",
@@ -23800,7 +23800,7 @@
         },
         "atmosChem.chegph2oo1d.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_hydroxyl_radical_due_to_chemical_production_from_atomic_singlet_oxygen_and_water_vapor",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -23826,7 +23826,7 @@
         },
         "atmosChem.chepnh4.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_ammonium_dry_aerosol_particles_due_to_net_chemical_production",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -23852,7 +23852,7 @@
         },
         "atmosChem.chepno3.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nitrate_dry_aerosol_particles_due_to_net_chemical_production",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -23878,7 +23878,7 @@
         },
         "atmosChem.dms.tavg-al-hxy-u.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_dimethyl_sulfide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23904,7 +23904,7 @@
         },
         "atmosChem.dms.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_dimethyl_sulfide_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -23930,7 +23930,7 @@
         },
         "atmosChem.do3chm.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_ozone_due_to_net_chemical_production",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -23956,7 +23956,7 @@
         },
         "atmosChem.dryh2.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_molecular_hydrogen_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -23982,7 +23982,7 @@
         },
         "atmosChem.dryhno3.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nitric_acid_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24008,7 +24008,7 @@
         },
         "atmosChem.drynh3.tavg-u-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonia_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24034,7 +24034,7 @@
         },
         "atmosChem.drynh3.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonia_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24060,7 +24060,7 @@
         },
         "atmosChem.drynh4.tavg-u-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonium_dry_aerosol_particles_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24086,7 +24086,7 @@
         },
         "atmosChem.drynh4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonium_dry_aerosol_particles_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24112,7 +24112,7 @@
         },
         "atmosChem.drynoy.tavg-u-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_noy_expressed_as_nitrogen_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24138,7 +24138,7 @@
         },
         "atmosChem.drynoy.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_noy_expressed_as_nitrogen_due_to_dry_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24164,7 +24164,7 @@
         },
         "atmosChem.e90inst.tpt-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_artificial_tracer_with_fixed_lifetime_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: mean time: point",
@@ -24190,7 +24190,7 @@
         },
         "atmosChem.emiach4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_methane_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24216,7 +24216,7 @@
         },
         "atmosChem.emiavnox.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_nox_expressed_as_nitrogen",
             "units": "mol m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24242,7 +24242,7 @@
         },
         "atmosChem.emic2h4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_ethene_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24268,7 +24268,7 @@
         },
         "atmosChem.emic2h5oh.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_ethanol_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24294,7 +24294,7 @@
         },
         "atmosChem.emic2h6.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_ethane_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24320,7 +24320,7 @@
         },
         "atmosChem.emic3h6.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_propene_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24346,7 +24346,7 @@
         },
         "atmosChem.emic3h8.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_propane_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24372,7 +24372,7 @@
         },
         "atmosChem.emic4h10.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_butane_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24398,7 +24398,7 @@
         },
         "atmosChem.emich3oh.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_methanol_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24424,7 +24424,7 @@
         },
         "atmosChem.emich4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_methane_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24450,7 +24450,7 @@
         },
         "atmosChem.emih2.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_molecular_hydrogen_due_to_emission",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24476,7 +24476,7 @@
         },
         "atmosChem.emilkch4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "surface_net_upward_mass_flux_of_methane_due_to_emission_from_freshwater_lakes",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -24554,7 +24554,7 @@
         },
         "atmosChem.h2.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_molecular_hydrogen_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -24580,7 +24580,7 @@
         },
         "atmosChem.h2loss.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_molecular_hydrogen_due_to_chemical_destruction",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -24606,7 +24606,7 @@
         },
         "atmosChem.h2prod.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_molecular_hydrogen_due_to_chemical_production",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -24658,7 +24658,7 @@
         },
         "atmosChem.meanage.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "age_of_stratospheric_air",
             "units": "yr",
             "cell_methods": "area: time: mean",
@@ -24684,7 +24684,7 @@
         },
         "atmosChem.meanage.tavg-p39-hy-air.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "age_of_stratospheric_air",
             "units": "yr",
             "cell_methods": "longitude: time: mean where air",
@@ -24970,7 +24970,7 @@
         },
         "atmosChem.o3.tpt-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_ozone_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: mean time: point",
@@ -25022,7 +25022,7 @@
         },
         "atmosChem.o3ref.ti-al-hxy-u.fx.GLB": {
             "frequency": "fx",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "reference_mole_fraction_of_ozone_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: mean",
@@ -25074,7 +25074,7 @@
         },
         "atmosChem.rlutch4ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_longwave_flux_assuming_reference_mole_fraction_of_methane_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25100,7 +25100,7 @@
         },
         "atmosChem.rlutcsch4ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_longwave_flux_assuming_clear_sky_and_reference_mole_fraction_of_methane_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25126,7 +25126,7 @@
         },
         "atmosChem.rlutcso3ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_longwave_flux_assuming_clear_sky_and_reference_mole_fraction_of_ozone_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25152,7 +25152,7 @@
         },
         "atmosChem.rluto3ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_longwave_flux_assuming_reference_mole_fraction_of_ozone_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25178,7 +25178,7 @@
         },
         "atmosChem.rsutch4ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_shortwave_flux_assuming_reference_mole_fraction_of_methane_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25204,7 +25204,7 @@
         },
         "atmosChem.rsutcsch4ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_shortwave_flux_assuming_clear_sky_and_reference_mole_fraction_of_methane_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25230,7 +25230,7 @@
         },
         "atmosChem.rsutcso3ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_shortwave_flux_assuming_clear_sky_and_reference_mole_fraction_of_ozone_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25256,7 +25256,7 @@
         },
         "atmosChem.rsuto3ref.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "toa_outgoing_shortwave_flux_assuming_reference_mole_fraction_of_ozone_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean",
@@ -25282,7 +25282,7 @@
         },
         "atmosChem.stratch4loss.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_methane_due_to_chemical_destruction",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -25308,7 +25308,7 @@
         },
         "atmosChem.tropch4loss.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_methane_due_to_chemical_destruction",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -25334,7 +25334,7 @@
         },
         "atmosChem.tropch4lossoh.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_methane_due_to_chemical_destruction_by_hydroxyl_radical",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -25360,7 +25360,7 @@
         },
         "atmosChem.tropdo3chm.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mole_concentration_of_ozone_due_to_net_chemical_production",
             "units": "mol m-3 s-1",
             "cell_methods": "area: time: mean",
@@ -25386,7 +25386,7 @@
         },
         "atmosChem.tropo3ste.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "mole_fraction_of_ozone_in_air",
             "units": "mol mol-1",
             "cell_methods": "area: time: mean",
@@ -25412,7 +25412,7 @@
         },
         "atmosChem.wethno3.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nitric_acid_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25438,7 +25438,7 @@
         },
         "atmosChem.wetnh3.tavg-u-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonia_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25464,7 +25464,7 @@
         },
         "atmosChem.wetnh3.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonia_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25490,7 +25490,7 @@
         },
         "atmosChem.wetnh4.tavg-u-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonium_dry_aerosol_particles_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25516,7 +25516,7 @@
         },
         "atmosChem.wetnh4.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_ammonium_dry_aerosol_particles_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25542,7 +25542,7 @@
         },
         "atmosChem.wetno3.tavg-al-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "tendency_of_atmosphere_mass_content_of_nitrate_dry_aerosol_particles_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25568,7 +25568,7 @@
         },
         "atmosChem.wetnoy.tavg-u-hxy-u.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_noy_expressed_as_nitrogen_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -25594,7 +25594,7 @@
         },
         "atmosChem.wetnoy.tavg-u-hxy-u.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "atmosChem",
+            "modeling_realm": "atmosChem aerosol",
             "standard_name": "minus_tendency_of_atmosphere_mass_content_of_noy_expressed_as_nitrogen_due_to_wet_deposition",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean",
@@ -31444,7 +31444,7 @@
         },
         "land.rsds.tavg-u-hxy-sn.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "land",
+            "modeling_realm": "land ocean",
             "standard_name": "surface_downwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where snow (mask=snc)",
@@ -31496,7 +31496,7 @@
         },
         "land.rsus.tavg-u-hxy-sn.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "land",
+            "modeling_realm": "land ocean",
             "standard_name": "surface_upwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where snow (mask=snc)",
@@ -32666,7 +32666,7 @@
         },
         "landIce.agesno.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "age_of_surface_snow",
             "units": "day",
             "cell_methods": "area: mean where land time: mean (weighted by snow mass on land)",
@@ -32692,7 +32692,7 @@
         },
         "landIce.hfdsn.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_downward_heat_flux_in_snow",
             "units": "W m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -32718,7 +32718,7 @@
         },
         "landIce.hfdsn.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_downward_heat_flux_in_snow",
             "units": "W m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -33940,7 +33940,7 @@
         },
         "landIce.lithk.tavg-u-hxy-is.yr.ATA": {
             "frequency": "yr",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_thickness",
             "units": "m",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -33966,7 +33966,7 @@
         },
         "landIce.lithk.tavg-u-hxy-is.yr.GRL": {
             "frequency": "yr",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_thickness",
             "units": "m",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -33992,7 +33992,7 @@
         },
         "landIce.lithk.ti-u-hxy-is.fx.ATA": {
             "frequency": "fx",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_thickness",
             "units": "m",
             "cell_methods": "area: mean where ice_sheet",
@@ -34018,7 +34018,7 @@
         },
         "landIce.lithk.ti-u-hxy-is.fx.GRL": {
             "frequency": "fx",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_thickness",
             "units": "m",
             "cell_methods": "area: mean where ice_sheet",
@@ -34044,7 +34044,7 @@
         },
         "landIce.lithk.ti-u-hxy-u.fx.GLB": {
             "frequency": "fx",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_thickness",
             "units": "m",
             "cell_methods": "area: mean",
@@ -34070,7 +34070,7 @@
         },
         "landIce.lwsnl.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "liquid_water_content_of_surface_snow",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -34096,7 +34096,7 @@
         },
         "landIce.lwsnl.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "liquid_water_content_of_surface_snow",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -34174,7 +34174,7 @@
         },
         "landIce.mrfso.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "soil_frozen_water_content",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -34226,7 +34226,7 @@
         },
         "landIce.mrroLi.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_runoff_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -34252,7 +34252,7 @@
         },
         "landIce.mrroLi.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "land_ice_runoff_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -34304,7 +34304,7 @@
         },
         "landIce.pflw.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "liquid_water_content_of_permafrost_layer",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -34330,7 +34330,7 @@
         },
         "landIce.pflw.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "liquid_water_content_of_permafrost_layer",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -34460,7 +34460,7 @@
         },
         "landIce.rsds.tavg-u-hxy-is.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_downwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -34486,7 +34486,7 @@
         },
         "landIce.rsus.tavg-u-hxy-is.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_upwelling_shortwave_flux_in_air",
             "units": "W m-2",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -34902,7 +34902,7 @@
         },
         "landIce.snc.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_area_fraction",
             "units": "%",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -34954,7 +34954,7 @@
         },
         "landIce.snc.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_area_fraction",
             "units": "%",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -35006,7 +35006,7 @@
         },
         "landIce.snc.tavg-u-hxy-is.yr.GRL": {
             "frequency": "yr",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_area_fraction",
             "units": "%",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -35032,7 +35032,7 @@
         },
         "landIce.snc.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_area_fraction",
             "units": "%",
             "cell_methods": "area: mean where land time: mean",
@@ -35058,7 +35058,7 @@
         },
         "landIce.snc.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_area_fraction",
             "units": "%",
             "cell_methods": "area: mean where land time: mean",
@@ -35084,7 +35084,7 @@
         },
         "landIce.snd.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_thickness",
             "units": "m",
             "cell_methods": "area: mean where land time: mean",
@@ -35110,7 +35110,7 @@
         },
         "landIce.snd.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_thickness",
             "units": "m",
             "cell_methods": "area: mean where land time: mean",
@@ -35214,7 +35214,7 @@
         },
         "landIce.snm.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_melt_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -35266,7 +35266,7 @@
         },
         "landIce.snm.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_melt_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where ice_sheet",
@@ -35292,7 +35292,7 @@
         },
         "landIce.snm.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_melt_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: mean where land time: mean",
@@ -35318,7 +35318,7 @@
         },
         "landIce.snm.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_melt_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: mean where land time: mean",
@@ -35422,7 +35422,7 @@
         },
         "landIce.snw.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_amount",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -35448,7 +35448,7 @@
         },
         "landIce.snw.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "surface_snow_amount",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -35474,7 +35474,7 @@
         },
         "landIce.sootsn.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "soot_content_of_surface_snow",
             "units": "kg m-2",
             "cell_methods": "area: mean where land time: mean",
@@ -35838,7 +35838,7 @@
         },
         "landIce.tpf.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "permafrost_layer_thickness",
             "units": "m",
             "cell_methods": "area: mean where land time: mean",
@@ -35864,7 +35864,7 @@
         },
         "landIce.tpf.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "permafrost_layer_thickness",
             "units": "m",
             "cell_methods": "area: mean where land time: mean",
@@ -35916,7 +35916,7 @@
         },
         "landIce.tsn.tavg-u-hxy-is.mon.ATA": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "temperature_in_surface_snow",
             "units": "K",
             "cell_methods": "depth: area: time: mean where ice_sheet (weighted by snow mass on ice_sheet)",
@@ -35968,7 +35968,7 @@
         },
         "landIce.tsn.tavg-u-hxy-is.mon.GRL": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "temperature_in_surface_snow",
             "units": "K",
             "cell_methods": "depth: area: time: mean where ice_sheet (weighted by snow mass on ice_sheet)",
@@ -35994,7 +35994,7 @@
         },
         "landIce.tsn.tavg-u-hxy-lnd.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "temperature_in_surface_snow",
             "units": "K",
             "cell_methods": "depth: area: time: mean where land (weighted by snow mass on land)",
@@ -36020,7 +36020,7 @@
         },
         "landIce.tsn.tavg-u-hxy-lnd.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "landIce",
+            "modeling_realm": "landIce land",
             "standard_name": "temperature_in_surface_snow",
             "units": "K",
             "cell_methods": "depth: area: time: mean where land (weighted by snow mass on land)",
@@ -38308,7 +38308,7 @@
         },
         "ocean.mpw.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_mean_period",
             "units": "s",
             "cell_methods": "area: mean where sea time: mean",
@@ -38334,7 +38334,7 @@
         },
         "ocean.mpw.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_mean_period",
             "units": "s",
             "cell_methods": "area: mean where sea time: point",
@@ -38360,7 +38360,7 @@
         },
         "ocean.mpwswell.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_mean_period",
             "units": "s",
             "cell_methods": "area: mean where sea time: mean",
@@ -38386,7 +38386,7 @@
         },
         "ocean.mpwswell.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_mean_period",
             "units": "s",
             "cell_methods": "area: mean where sea time: point",
@@ -38412,7 +38412,7 @@
         },
         "ocean.mpwwindsea.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_mean_period",
             "units": "s",
             "cell_methods": "area: mean where sea time: mean",
@@ -38438,7 +38438,7 @@
         },
         "ocean.mpwwindsea.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_mean_period",
             "units": "s",
             "cell_methods": "area: mean where sea time: point",
@@ -39582,7 +39582,7 @@
         },
         "ocean.sduo.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_stokes_drift_eastward_velocity",
             "units": "m s-1",
             "cell_methods": "area: mean where sea time: mean",
@@ -39608,7 +39608,7 @@
         },
         "ocean.sduo.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_stokes_drift_eastward_velocity",
             "units": "m s-1",
             "cell_methods": "area: mean where sea time: point",
@@ -39634,7 +39634,7 @@
         },
         "ocean.sdvo.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_stokes_drift_northward_velocity",
             "units": "m s-1",
             "cell_methods": "area: mean where sea time: mean",
@@ -39660,7 +39660,7 @@
         },
         "ocean.sdvo.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_stokes_drift_northward_velocity",
             "units": "m s-1",
             "cell_methods": "area: mean where sea time: point",
@@ -39764,7 +39764,7 @@
         },
         "ocean.sfdsi.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean seaIce",
             "standard_name": "downward_sea_ice_basal_salt_flux",
             "units": "kg m-2 s-1",
             "cell_methods": "area: mean where sea time: mean",
@@ -39946,7 +39946,7 @@
         },
         "ocean.siflfwbot.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean seaIce",
             "standard_name": "water_flux_into_sea_water_due_to_sea_ice_thermodynamics",
             "units": "kg m-2 s-1",
             "cell_methods": "area: mean where sea time: mean",
@@ -40440,7 +40440,7 @@
         },
         "ocean.swh.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: mean",
@@ -40466,7 +40466,7 @@
         },
         "ocean.swh.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: point",
@@ -40492,7 +40492,7 @@
         },
         "ocean.swhmax.tmax-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: maximum",
@@ -40518,7 +40518,7 @@
         },
         "ocean.swhmax.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: point",
@@ -40544,7 +40544,7 @@
         },
         "ocean.swhswell.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: mean",
@@ -40570,7 +40570,7 @@
         },
         "ocean.swhswell.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: point",
@@ -40596,7 +40596,7 @@
         },
         "ocean.swhwindsea.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: mean",
@@ -40622,7 +40622,7 @@
         },
         "ocean.swhwindsea.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_significant_height",
             "units": "m",
             "cell_methods": "area: mean where sea time: point",
@@ -42052,7 +42052,7 @@
         },
         "ocean.vsfsit.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean seaIce",
             "standard_name": "virtual_salt_flux_into_sea_water_due_to_sea_ice_thermodynamics",
             "units": "kg m-2 s-1",
             "cell_methods": "area: mean where sea time: mean",
@@ -42078,7 +42078,7 @@
         },
         "ocean.wdir.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_from_direction",
             "units": "degree",
             "cell_methods": "area: mean where sea time: mean",
@@ -42130,7 +42130,7 @@
         },
         "ocean.wdirswell.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_from_direction",
             "units": "degree",
             "cell_methods": "area: mean where sea time: mean",
@@ -42156,7 +42156,7 @@
         },
         "ocean.wdirswell.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_from_direction",
             "units": "degree",
             "cell_methods": "area: mean where sea time: point",
@@ -42182,7 +42182,7 @@
         },
         "ocean.wdirwindsea.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_from_direction",
             "units": "degree",
             "cell_methods": "area: mean where sea time: mean",
@@ -42208,7 +42208,7 @@
         },
         "ocean.wdirwindsea.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_from_direction",
             "units": "degree",
             "cell_methods": "area: mean where sea time: point",
@@ -42598,7 +42598,7 @@
         },
         "ocean.wpp.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_period_at_variance_spectral_density_maximum",
             "units": "s",
             "cell_methods": "area: mean where sea time: mean",
@@ -42624,7 +42624,7 @@
         },
         "ocean.wpp.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wave_period_at_variance_spectral_density_maximum",
             "units": "s",
             "cell_methods": "area: mean where sea time: point",
@@ -42650,7 +42650,7 @@
         },
         "ocean.wppswell.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_period_at_variance_spectral_density_maximum",
             "units": "s",
             "cell_methods": "area: mean where sea time: mean",
@@ -42676,7 +42676,7 @@
         },
         "ocean.wppswell.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_swell_wave_period_at_variance_spectral_density_maximum",
             "units": "s",
             "cell_methods": "area: mean where sea time: point",
@@ -42702,7 +42702,7 @@
         },
         "ocean.wppwindsea.tavg-u-hxy-sea.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_period_at_variance_spectral_density_maximum",
             "units": "s",
             "cell_methods": "area: mean where sea time: mean",
@@ -42728,7 +42728,7 @@
         },
         "ocean.wppwindsea.tpt-u-hxy-sea.3hr.GLB": {
             "frequency": "3hr",
-            "modeling_realm": "ocean",
+            "modeling_realm": "ocean atmos",
             "standard_name": "sea_surface_wind_wave_period_at_variance_spectral_density_maximum",
             "units": "s",
             "cell_methods": "area: mean where sea time: point",
@@ -47070,7 +47070,7 @@
         },
         "ocnBgchem.sialgc.tavg-u-hxy-si.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocnBgchem",
+            "modeling_realm": "ocnBgchem seaIce",
             "standard_name": "sea_ice_mole_content_of_ice_algae_expressed_as_carbon",
             "units": "mol m-2",
             "cell_methods": "area: mean where sea_ice (mask=siconc) depth: sum where sea_ice time: mean",
@@ -47096,7 +47096,7 @@
         },
         "ocnBgchem.sichl.tavg-u-hxy-si.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocnBgchem",
+            "modeling_realm": "ocnBgchem seaIce",
             "standard_name": "sea_ice_mass_content_of_ice_algae_expressed_as_chlorophyll",
             "units": "kg m-2",
             "cell_methods": "area: mean where sea_ice (mask=siconc) depth: sum where sea_ice time: mean",
@@ -47122,7 +47122,7 @@
         },
         "ocnBgchem.sigpp.tavg-u-hxy-si.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocnBgchem",
+            "modeling_realm": "ocnBgchem seaIce",
             "standard_name": "gross_primary_productivity_of_biomass_expressed_as_carbon_due_to_ice_algae_in_sea_ice",
             "units": "kg m-2 s-1",
             "cell_methods": "area: time: mean where sea_ice (mask=siconc)",
@@ -47148,7 +47148,7 @@
         },
         "ocnBgchem.sino3.tavg-u-hxy-si.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocnBgchem",
+            "modeling_realm": "ocnBgchem seaIce",
             "standard_name": "sea_ice_mole_content_of_nitrate",
             "units": "mol m-2",
             "cell_methods": "area: mean where sea_ice (mask=siconc) depth: sum where sea_ice time: mean",
@@ -47174,7 +47174,7 @@
         },
         "ocnBgchem.sisi.tavg-u-hxy-si.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "ocnBgchem",
+            "modeling_realm": "ocnBgchem seaIce",
             "standard_name": "sea_ice_mole_content_of_silicon",
             "units": "mol m-2",
             "cell_methods": "area: mean where sea_ice (mask=siconc) depth: sum where sea_ice time: mean",
@@ -50632,7 +50632,7 @@
         },
         "seaIce.sithick.tavg-u-hxy-si.day.GLB": {
             "frequency": "day",
-            "modeling_realm": "seaIce",
+            "modeling_realm": "seaIce ocean",
             "standard_name": "sea_ice_thickness",
             "units": "m",
             "cell_methods": "area: time: mean where sea_ice (mask=siconc)",
@@ -50658,7 +50658,7 @@
         },
         "seaIce.sithick.tavg-u-hxy-si.mon.30S-90S": {
             "frequency": "mon",
-            "modeling_realm": "seaIce",
+            "modeling_realm": "seaIce ocean",
             "standard_name": "sea_ice_thickness",
             "units": "m",
             "cell_methods": "area: time: mean where sea_ice (mask=siconc)",
@@ -50684,7 +50684,7 @@
         },
         "seaIce.sithick.tavg-u-hxy-si.mon.GLB": {
             "frequency": "mon",
-            "modeling_realm": "seaIce",
+            "modeling_realm": "seaIce ocean",
             "standard_name": "sea_ice_thickness",
             "units": "m",
             "cell_methods": "area: time: mean where sea_ice (mask=siconc)",
