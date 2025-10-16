@@ -96,7 +96,7 @@ def get_cached(**kwargs):
 
     Raises
     ------
-    Warning
+    ValueError
         If known kwargs have an invalid value.
     """
     local_versions = []
@@ -125,6 +125,9 @@ def _get_partly_cached(**kwargs):
     **kwargs
         export : {'raw', 'release'}, optional
             Export type. Defaults to "release".
+        assume_deleted : list, optional
+            Whether to assume that certain cached versions are not cached (i.e. their release / content export
+            files assumed deleted). Defaults to [].
 
     Returns
     -------
@@ -135,13 +138,14 @@ def _get_partly_cached(**kwargs):
 
     Raises
     ------
-    Warning
+    ValueError
         If known kwargs have an invalid value.
     """
     local_versions = []
     assume_deleted = []
     if "assume_deleted" in kwargs and isinstance(kwargs["assume_deleted"], list):
         assume_deleted = kwargs["assume_deleted"]
+
     if os.path.isdir(_dreq_res):
         # List all subdirectories in the dreq_res directory that include both dreq.json files
         #   - the subdirectory name is the tag name
@@ -165,7 +169,7 @@ def _get_partly_cached(**kwargs):
             for name in os.listdir(_dreq_res)
             if (
                 not os.path.isfile(os.path.join(_dreq_res, name, json_export))
-                or os.path.join(_dreq_res, name, json_export) in assume_deleted
+                or name in assume_deleted
             )
             and (
                 os.path.isfile(os.path.join(_dreq_res, name, DR))
@@ -458,10 +462,10 @@ def retrieve(version="latest_stable", **kwargs):
     ------
     ValueError
         If the specified version is not found.
+    ValueError
+        If the known kwargs have an invalid value.
     Warning
         If the specified version does not have the specified export type.
-    Warning
-        If the known kwargs have an invalid value.
     Warning
         If the specified version could not be downloaded or (if applicable) updated.
     """
@@ -603,7 +607,21 @@ def retrieve(version="latest_stable", **kwargs):
 
 @append_kwargs_from_config
 def cleanup(**kwargs):
-    """Clean up the dreq_res directory."""
+    """
+    Clean up the dreq_res directory.
+
+    Parameters
+    ----------
+    **kwargs :
+        export : {'raw', 'release'}, optional
+            Export type. Defaults to "release".
+        dryrun : bool, optional
+            Whether to only list the files that would be removed instead of actually
+            removing them. Defaults to False.
+        assume_deleted : list, optional
+            Whether to assume that certain cached versions do have their release / raw content files deleted. Defaults to [].
+            This is only useful for dryrun mode and will be overwritten with [] if dryrun mode is not active.
+    """
     logger = get_logger()
 
     # Check if this is a dryrun - if not clear the `assume_deleted` kwarg if set
@@ -614,9 +632,10 @@ def cleanup(**kwargs):
     # Get list of imcompletely cached versions
     cleanup_versions = _get_partly_cached(**kwargs)
 
-    logger.info(
-        f"Cleaning up files for the following incompletely cached versions: {cleanup_versions}"
-    )
+    if cleanup_versions:
+        logger.info(
+            f"Cleaning up files for the following incompletely cached versions: {cleanup_versions}"
+        )
 
     # Compile file paths
     if kwargs["export"] == "raw":
@@ -715,7 +734,7 @@ def delete(version="all", keep_latest=False, **kwargs):
 
     # Deletion
     if local_versions:
-        logger.info("Deleting the following version(s): {local_versions}")
+        logger.info(f"Deleting the following version(s): {local_versions}")
     else:
         logger.info("No version(s) found to delete.")
         return
