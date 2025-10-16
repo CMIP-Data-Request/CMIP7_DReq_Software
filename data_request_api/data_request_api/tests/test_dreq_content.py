@@ -2,9 +2,8 @@ import os
 import pathlib
 import tempfile
 
-import pytest
-
 import data_request_api.utilities.config as dreqcfg
+import pytest
 from data_request_api.content import dreq_content as dc
 from data_request_api.utilities.logger import change_log_file, change_log_level
 
@@ -20,11 +19,12 @@ change_log_level("info")
 
 def test_parse_version():
     "Test the _parse_version function with different version strings."
-    assert dc._parse_version("v1.0.0") == (1, 0, 0, "", 0)
-    assert dc._parse_version("v1.0alpha2") == (1, 0, 0, "a", 2)
-    assert dc._parse_version("1.0.0a3") == (1, 0, 0, "a", 3)
-    assert dc._parse_version("1.0.0beta") == (1, 0, 0, "b", 0)
-    assert dc._parse_version("something") == (0, 0, 0, "", 0)
+    assert dc._parse_version("v1.0.0") == (1, 0, 0, 0, "", 0)
+    assert dc._parse_version("v1.0alpha2") == (1, 0, 0, 0, "a", 2)
+    assert dc._parse_version("1.0.0a3") == (1, 0, 0, 0, "a", 3)
+    assert dc._parse_version("1.0.0beta") == (1, 0, 0, 0, "b", 0)
+    assert dc._parse_version("something") == (0, 0, 0, 0, "", 0)
+    assert dc._parse_version("2.0.3.4b4") == (2, 0, 3, 4, "b", 4)
     with pytest.raises(TypeError):
         dc._parse_version(None)
 
@@ -35,6 +35,7 @@ def test_get_versions():
     assert "dev" in versions
     assert "v1.0alpha" in versions
     assert "v1.0beta" in versions
+    assert "v1.2.2.2" in versions
 
 
 def test_get_versions_list_branches():
@@ -47,9 +48,9 @@ def test_get_versions_list_branches():
 def test_get_latest_version(monkeypatch):
     "Test the _get_latest_version function."
     monkeypatch.setattr(
-        dc, "get_versions", lambda **kwargs: ["1.0.0", "2.0.2b", "2.0.2a"]
+        dc, "get_versions", lambda **kwargs: ["1.0.1.2", "1.0.1", "2.0.2b", "2.0.2a"]
     )
-    assert dc._get_latest_version() == "1.0.0"
+    assert dc._get_latest_version() == "1.0.1.2"
     assert dc._get_latest_version(stable=False) == "2.0.2b"
 
 
@@ -186,15 +187,27 @@ class TestDreqContent:
 
     @pytest.fixture(autouse=True, scope="function")
     def setup(self, tmp_path):
+        self.dreq_res = tmp_path
+        # Cached content
         self.versions = ["v1.0.0", "1.0.1", "2.0.1b", "2.0.1", "2.0.2b"]
         self.branches = ["one", "or", "another"]
-        self.dreq_res = tmp_path
         for v in self.versions:
             (self.dreq_res / v).mkdir()
             (self.dreq_res / v / dc._json_release).write_text("{}")
         for b in self.branches:
             (self.dreq_res / b).mkdir()
             (self.dreq_res / b / dc._json_raw).write_text("{}")
+        # Cached modified content (consolidated/transformed)
+        self.mversions = ["v1.0.0", "3.1", "3.2.2.2b5"]
+        self.mbranches = ["another", "v1.2.2.2rc"]
+        for v in self.mversions:
+            (self.dreq_res / v).mkdir(exist_ok=True)
+            (self.dreq_res / v / dc._json_release_c).write_text("{}")
+        for b in self.mbranches:
+            (self.dreq_res / b).mkdir(exist_ok=True)
+            (self.dreq_res / b / dc._json_release_nc_VS).write_text("{}")
+            (self.dreq_res / b / dc._json_release_nc_DR).write_text("{}")
+            (self.dreq_res / b / dc._json_raw_c).write_text("{}")
 
     def test_get_cached(self):
         "Test the get_cached function."
@@ -213,14 +226,77 @@ class TestDreqContent:
         assert set(cached_branches) == set(self.branches)
 
         # With invalid export kwarg
-        with pytest.raises(ValueError, match="Invalid value for config key export: invalid."):
+        with pytest.raises(
+            ValueError, match="Invalid value for config key export: invalid."
+        ):
             dc.get_cached(export="invalid")
 
-    def test_delete(self, caplog):
-        "Test the delete function."
+    def test_get_partly_cached(self):
+        "Test the get_partly_cached function."
         dc._dreq_res = self.dreq_res
 
+        # Without export kwarg
+        partly_cached = dc._get_partly_cached()
+        assert set(partly_cached) == {"3.1", "3.2.2.2b5", "another", "v1.2.2.2rc"}
+
+        # With export kwarg "release"
+        partly_cached = dc._get_partly_cached(export="release")
+        assert set(partly_cached) == {"3.1", "3.2.2.2b5", "another", "v1.2.2.2rc"}
+
+        # With export kwarg "raw"
+        partly_cached = dc._get_partly_cached(export="raw")
+        assert set(partly_cached) == {"v1.2.2.2rc"}
+
+        # With export kwarg "raw" and assume_deleted kwarg
+        partly_cached = dc._get_partly_cached(export="raw", assume_deleted=["another"])
+        assert set(partly_cached) == {"v1.2.2.2rc", "another"}
+
+        # With invalid export kwarg
+        with pytest.raises(
+            ValueError, match="Invalid value for config key export: invalid."
+        ):
+            dc._get_partly_cached(export="invalid")
+
+    def test_delete_and_cleanup(self, caplog):
+        "Test the delete and cleanup functions."
+        dc._dreq_res = self.dreq_res
+
+        # Cleanup dryrun
+        caplog.clear()
+        dc.cleanup(export="raw", dryrun=True)
+        assert len(caplog.text.splitlines()) == 2
+        assert (
+            "Cleaning up files for the following incompletely cached versions:"
+            in caplog.text
+        )
+        for b in ["v1.2.2.2rc"]:
+            assert (
+                f"Dryrun: would delete '{dc._dreq_res / b / dc._json_raw_c}'."
+                in caplog.text
+            )
+
+        # Cleanup dryrun + assume_deleted
+        caplog.clear()
+        dc.cleanup(export="raw", dryrun=True, assume_deleted=["another"])
+        assert len(caplog.text.splitlines()) == 3
+        assert (
+            "Cleaning up files for the following incompletely cached versions:"
+            in caplog.text
+        )
+        for b in ["v1.2.2.2rc", "another"]:
+            assert (
+                f"Dryrun: would delete '{dc._dreq_res / b / dc._json_raw_c}'."
+                in caplog.text
+            )
+
+        # Cleanup
+        dc.cleanup(export="raw")
+        assert len(dc._get_partly_cached(export="raw")) == 0
+        dc.cleanup(export="release")
+        assert len(dc._get_partly_cached(export="release")) == 0
+
         # Delete non-existent version
+        caplog.clear()
         dc.delete("notpresent")
         assert len(caplog.text.splitlines()) == 1
         assert "No version(s) found to delete." in caplog.text
@@ -228,7 +304,7 @@ class TestDreqContent:
         # Delete only branches / dryrun
         caplog.clear()
         dc.delete("all", export="raw", dryrun=True)
-        assert len(caplog.text.splitlines()) == 5
+        assert len(caplog.text.splitlines()) == 4
         assert "Deleting the following version(s):" in caplog.text
         for b in self.branches:
             assert (
@@ -237,7 +313,14 @@ class TestDreqContent:
             )
 
         # Delete all but latest
+        caplog.clear()
         dc.delete(keep_latest=True)
+        assert len(caplog.text.splitlines()) == 6
+        assert "Deleting the following version(s):" in caplog.text
+        assert (
+            "Cleaning up files for the following incompletely cached versions:"
+            in caplog.text
+        )
         assert set(dc.get_cached()) == {"2.0.1", "2.0.2b"}
         assert set(dc.get_cached(export="raw")) == set(self.branches)
 
@@ -258,7 +341,9 @@ class TestDreqContent:
         dc.delete("2.0.2b")
 
         # But illegal config kwargs raise ValueError nonetheless
-        with pytest.raises(ValueError, match="Invalid value for config key export: none."):
+        with pytest.raises(
+            ValueError, match="Invalid value for config key export: none."
+        ):
             dc.delete(export="none")
 
     def test_offline_mode(self, monkeypatch):
@@ -266,9 +351,7 @@ class TestDreqContent:
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception(
-                "Network request detected despite active offline mode."
-            )
+            raise Exception("Network request detected despite active offline mode.")
 
         monkeypatch.setattr("requests.get", mock_requests_get)
 
