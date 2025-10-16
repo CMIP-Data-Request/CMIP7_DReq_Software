@@ -46,6 +46,7 @@ def main():
         print('Loaded ' + filepath)
         vars = d['Compound Name']
         Header = d['Header']
+        del d
 
     # Loop over all DR variables in the input file
     for var_name, var_info in vars.items():
@@ -79,7 +80,12 @@ def main():
             "branded_variable_name": branded_name,
         })
         # Set CMIP7 compound name according to the recipe adopted for the AFT DR
-        cmip7_compound_name = '{modeling_realm}.{variableRootDD}.{branding_label}.{frequency}.{region}'.format(**var_info)
+        # For purpose of compound name generation, only use the primary modeling realm
+        # (first entry in list of realms, if the list has more than one entry)
+        d = dict(var_info)
+        d['primary_modeling_realm'] = d['modeling_realm'].split()[0]
+        cmip7_compound_name = '{primary_modeling_realm}.{variableRootDD}.{branding_label}.{frequency}.{region}'.format(**d)
+        del d
         var_info.update({
             "cmip7_compound_name": cmip7_compound_name,
         })
