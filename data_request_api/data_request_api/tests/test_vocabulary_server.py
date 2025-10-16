@@ -32,7 +32,7 @@ class TestLinks(unittest.TestCase):
 
 class TestChangeNumber(unittest.TestCase):
     def setUp(self):
-        self.vs_file = filepath("VS_release_content.json")
+        self.vs_file = filepath("VS_release_not-consolidate_content.json")
 
     def test_to_singular(self):
         vs = VocabularyServer.from_input(self.vs_file)
@@ -49,7 +49,7 @@ class TestChangeNumber(unittest.TestCase):
 
 class TestVocabularyServer(unittest.TestCase):
     def setUp(self):
-        self.vs_file = filepath("VS_release_content.json")
+        self.vs_file = filepath("VS_release_not-consolidate_content.json")
         self.vs_content = read_json_input_file_content(self.vs_file)
         self.vs_content_infinite_loop = copy.deepcopy(self.vs_content)
         self.vs_content_infinite_loop["cell_methods"]["a269a4d7-8c9b-11ef-944e-41a8eb05f654"]["variables"] = "link::0facb764-817d-11e6-b80b-5404a60d96b5"
