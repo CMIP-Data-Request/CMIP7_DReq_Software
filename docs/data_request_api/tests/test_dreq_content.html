@@ -110,9 +110,9 @@ el.replaceWith(d);
 <pre><code class="python">def test_get_latest_version(monkeypatch):
     &#34;Test the _get_latest_version function.&#34;
     monkeypatch.setattr(
-        dc, &#34;get_versions&#34;, lambda **kwargs: [&#34;1.0.0&#34;, &#34;2.0.2b&#34;, &#34;2.0.2a&#34;]
+        dc, &#34;get_versions&#34;, lambda **kwargs: [&#34;1.0.1.2&#34;, &#34;1.0.1&#34;, &#34;2.0.2b&#34;, &#34;2.0.2a&#34;]
     )
-    assert dc._get_latest_version() == &#34;1.0.0&#34;
+    assert dc._get_latest_version() == &#34;1.0.1.2&#34;
     assert dc._get_latest_version(stable=False) == &#34;2.0.2b&#34;</code></pre>
 </details>
 <div class="desc"><p>Test the _get_latest_version function.</p></div>
@@ -130,7 +130,8 @@ el.replaceWith(d);
     versions = dc.get_versions()
     assert &#34;dev&#34; in versions
     assert &#34;v1.0alpha&#34; in versions
-    assert &#34;v1.0beta&#34; in versions</code></pre>
+    assert &#34;v1.0beta&#34; in versions
+    assert &#34;v1.2.2.2&#34; in versions</code></pre>
 </details>
 <div class="desc"><p>Test the get_versions function.</p></div>
 </dd>
@@ -228,11 +229,12 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def test_parse_version():
     &#34;Test the _parse_version function with different version strings.&#34;
-    assert dc._parse_version(&#34;v1.0.0&#34;) == (1, 0, 0, &#34;&#34;, 0)
-    assert dc._parse_version(&#34;v1.0alpha2&#34;) == (1, 0, 0, &#34;a&#34;, 2)
-    assert dc._parse_version(&#34;1.0.0a3&#34;) == (1, 0, 0, &#34;a&#34;, 3)
-    assert dc._parse_version(&#34;1.0.0beta&#34;) == (1, 0, 0, &#34;b&#34;, 0)
-    assert dc._parse_version(&#34;something&#34;) == (0, 0, 0, &#34;&#34;, 0)
+    assert dc._parse_version(&#34;v1.0.0&#34;) == (1, 0, 0, 0, &#34;&#34;, 0)
+    assert dc._parse_version(&#34;v1.0alpha2&#34;) == (1, 0, 0, 0, &#34;a&#34;, 2)
+    assert dc._parse_version(&#34;1.0.0a3&#34;) == (1, 0, 0, 0, &#34;a&#34;, 3)
+    assert dc._parse_version(&#34;1.0.0beta&#34;) == (1, 0, 0, 0, &#34;b&#34;, 0)
+    assert dc._parse_version(&#34;something&#34;) == (0, 0, 0, 0, &#34;&#34;, 0)
+    assert dc._parse_version(&#34;2.0.3.4b4&#34;) == (2, 0, 3, 4, &#34;b&#34;, 4)
     with pytest.raises(TypeError):
         dc._parse_version(None)</code></pre>
 </details>
@@ -324,15 +326,27 @@ el.replaceWith(d);
 
     @pytest.fixture(autouse=True, scope=&#34;function&#34;)
     def setup(self, tmp_path):
+        self.dreq_res = tmp_path
+        # Cached content
         self.versions = [&#34;v1.0.0&#34;, &#34;1.0.1&#34;, &#34;2.0.1b&#34;, &#34;2.0.1&#34;, &#34;2.0.2b&#34;]
         self.branches = [&#34;one&#34;, &#34;or&#34;, &#34;another&#34;]
-        self.dreq_res = tmp_path
         for v in self.versions:
             (self.dreq_res / v).mkdir()
             (self.dreq_res / v / dc._json_release).write_text(&#34;{}&#34;)
         for b in self.branches:
             (self.dreq_res / b).mkdir()
             (self.dreq_res / b / dc._json_raw).write_text(&#34;{}&#34;)
+        # Cached modified content (consolidated/transformed)
+        self.mversions = [&#34;v1.0.0&#34;, &#34;3.1&#34;, &#34;3.2.2.2b5&#34;]
+        self.mbranches = [&#34;another&#34;, &#34;v1.2.2.2rc&#34;]
+        for v in self.mversions:
+            (self.dreq_res / v).mkdir(exist_ok=True)
+            (self.dreq_res / v / dc._json_release_c).write_text(&#34;{}&#34;)
+        for b in self.mbranches:
+            (self.dreq_res / b).mkdir(exist_ok=True)
+            (self.dreq_res / b / dc._json_release_nc_VS).write_text(&#34;{}&#34;)
+            (self.dreq_res / b / dc._json_release_nc_DR).write_text(&#34;{}&#34;)
+            (self.dreq_res / b / dc._json_raw_c).write_text(&#34;{}&#34;)
 
     def test_get_cached(self):
         &#34;Test the get_cached function.&#34;
@@ -351,14 +365,77 @@ el.replaceWith(d);
         assert set(cached_branches) == set(self.branches)
 
         # With invalid export kwarg
-        with pytest.raises(ValueError, match=&#34;Invalid value for config key export: invalid.&#34;):
+        with pytest.raises(
+            ValueError, match=&#34;Invalid value for config key export: invalid.&#34;
+        ):
             dc.get_cached(export=&#34;invalid&#34;)
 
-    def test_delete(self, caplog):
-        &#34;Test the delete function.&#34;
+    def test_get_partly_cached(self):
+        &#34;Test the get_partly_cached function.&#34;
         dc._dreq_res = self.dreq_res
 
+        # Without export kwarg
+        partly_cached = dc._get_partly_cached()
+        assert set(partly_cached) == {&#34;3.1&#34;, &#34;3.2.2.2b5&#34;, &#34;another&#34;, &#34;v1.2.2.2rc&#34;}
+
+        # With export kwarg &#34;release&#34;
+        partly_cached = dc._get_partly_cached(export=&#34;release&#34;)
+        assert set(partly_cached) == {&#34;3.1&#34;, &#34;3.2.2.2b5&#34;, &#34;another&#34;, &#34;v1.2.2.2rc&#34;}
+
+        # With export kwarg &#34;raw&#34;
+        partly_cached = dc._get_partly_cached(export=&#34;raw&#34;)
+        assert set(partly_cached) == {&#34;v1.2.2.2rc&#34;}
+
+        # With export kwarg &#34;raw&#34; and assume_deleted kwarg
+        partly_cached = dc._get_partly_cached(export=&#34;raw&#34;, assume_deleted=[&#34;another&#34;])
+        assert set(partly_cached) == {&#34;v1.2.2.2rc&#34;, &#34;another&#34;}
+
+        # With invalid export kwarg
+        with pytest.raises(
+            ValueError, match=&#34;Invalid value for config key export: invalid.&#34;
+        ):
+            dc._get_partly_cached(export=&#34;invalid&#34;)
+
+    def test_delete_and_cleanup(self, caplog):
+        &#34;Test the delete and cleanup functions.&#34;
+        dc._dreq_res = self.dreq_res
+
+        # Cleanup dryrun
+        caplog.clear()
+        dc.cleanup(export=&#34;raw&#34;, dryrun=True)
+        assert len(caplog.text.splitlines()) == 2
+        assert (
+            &#34;Cleaning up files for the following incompletely cached versions:&#34;
+            in caplog.text
+        )
+        for b in [&#34;v1.2.2.2rc&#34;]:
+            assert (
+                f&#34;Dryrun: would delete &#39;{dc._dreq_res / b / dc._json_raw_c}&#39;.&#34;
+                in caplog.text
+            )
+
+        # Cleanup dryrun + assume_deleted
+        caplog.clear()
+        dc.cleanup(export=&#34;raw&#34;, dryrun=True, assume_deleted=[&#34;another&#34;])
+        assert len(caplog.text.splitlines()) == 3
+        assert (
+            &#34;Cleaning up files for the following incompletely cached versions:&#34;
+            in caplog.text
+        )
+        for b in [&#34;v1.2.2.2rc&#34;, &#34;another&#34;]:
+            assert (
+                f&#34;Dryrun: would delete &#39;{dc._dreq_res / b / dc._json_raw_c}&#39;.&#34;
+                in caplog.text
+            )
+
+        # Cleanup
+        dc.cleanup(export=&#34;raw&#34;)
+        assert len(dc._get_partly_cached(export=&#34;raw&#34;)) == 0
+        dc.cleanup(export=&#34;release&#34;)
+        assert len(dc._get_partly_cached(export=&#34;release&#34;)) == 0
+
         # Delete non-existent version
+        caplog.clear()
         dc.delete(&#34;notpresent&#34;)
         assert len(caplog.text.splitlines()) == 1
         assert &#34;No version(s) found to delete.&#34; in caplog.text
@@ -366,7 +443,7 @@ el.replaceWith(d);
         # Delete only branches / dryrun
         caplog.clear()
         dc.delete(&#34;all&#34;, export=&#34;raw&#34;, dryrun=True)
-        assert len(caplog.text.splitlines()) == 5
+        assert len(caplog.text.splitlines()) == 4
         assert &#34;Deleting the following version(s):&#34; in caplog.text
         for b in self.branches:
             assert (
@@ -375,7 +452,14 @@ el.replaceWith(d);
             )
 
         # Delete all but latest
+        caplog.clear()
         dc.delete(keep_latest=True)
+        assert len(caplog.text.splitlines()) == 6
+        assert &#34;Deleting the following version(s):&#34; in caplog.text
+        assert (
+            &#34;Cleaning up files for the following incompletely cached versions:&#34;
+            in caplog.text
+        )
         assert set(dc.get_cached()) == {&#34;2.0.1&#34;, &#34;2.0.2b&#34;}
         assert set(dc.get_cached(export=&#34;raw&#34;)) == set(self.branches)
 
@@ -396,7 +480,9 @@ el.replaceWith(d);
         dc.delete(&#34;2.0.2b&#34;)
 
         # But illegal config kwargs raise ValueError nonetheless
-        with pytest.raises(ValueError, match=&#34;Invalid value for config key export: none.&#34;):
+        with pytest.raises(
+            ValueError, match=&#34;Invalid value for config key export: none.&#34;
+        ):
             dc.delete(export=&#34;none&#34;)
 
     def test_offline_mode(self, monkeypatch):
@@ -404,9 +490,7 @@ el.replaceWith(d);
         dc._dreq_res = self.dreq_res
 
         def mock_requests_get(*args, **kwargs):
-            raise Exception(
-                &#34;Network request detected despite active offline mode.&#34;
-            )
+            raise Exception(&#34;Network request detected despite active offline mode.&#34;)
 
         monkeypatch.setattr(&#34;requests.get&#34;, mock_requests_get)
 
@@ -435,31 +519,78 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">@pytest.fixture(autouse=True, scope=&#34;function&#34;)
 def setup(self, tmp_path):
+    self.dreq_res = tmp_path
+    # Cached content
     self.versions = [&#34;v1.0.0&#34;, &#34;1.0.1&#34;, &#34;2.0.1b&#34;, &#34;2.0.1&#34;, &#34;2.0.2b&#34;]
     self.branches = [&#34;one&#34;, &#34;or&#34;, &#34;another&#34;]
-    self.dreq_res = tmp_path
     for v in self.versions:
         (self.dreq_res / v).mkdir()
         (self.dreq_res / v / dc._json_release).write_text(&#34;{}&#34;)
     for b in self.branches:
         (self.dreq_res / b).mkdir()
-        (self.dreq_res / b / dc._json_raw).write_text(&#34;{}&#34;)</code></pre>
+        (self.dreq_res / b / dc._json_raw).write_text(&#34;{}&#34;)
+    # Cached modified content (consolidated/transformed)
+    self.mversions = [&#34;v1.0.0&#34;, &#34;3.1&#34;, &#34;3.2.2.2b5&#34;]
+    self.mbranches = [&#34;another&#34;, &#34;v1.2.2.2rc&#34;]
+    for v in self.mversions:
+        (self.dreq_res / v).mkdir(exist_ok=True)
+        (self.dreq_res / v / dc._json_release_c).write_text(&#34;{}&#34;)
+    for b in self.mbranches:
+        (self.dreq_res / b).mkdir(exist_ok=True)
+        (self.dreq_res / b / dc._json_release_nc_VS).write_text(&#34;{}&#34;)
+        (self.dreq_res / b / dc._json_release_nc_DR).write_text(&#34;{}&#34;)
+        (self.dreq_res / b / dc._json_raw_c).write_text(&#34;{}&#34;)</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="data_request_api.tests.test_dreq_content.TestDreqContent.test_delete"><code class="name flex">
-<span>def <span class="ident">test_delete</span></span>(<span>self, caplog)</span>
+<dt id="data_request_api.tests.test_dreq_content.TestDreqContent.test_delete_and_cleanup"><code class="name flex">
+<span>def <span class="ident">test_delete_and_cleanup</span></span>(<span>self, caplog)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def test_delete(self, caplog):
-    &#34;Test the delete function.&#34;
+<pre><code class="python">def test_delete_and_cleanup(self, caplog):
+    &#34;Test the delete and cleanup functions.&#34;
     dc._dreq_res = self.dreq_res
 
+    # Cleanup dryrun
+    caplog.clear()
+    dc.cleanup(export=&#34;raw&#34;, dryrun=True)
+    assert len(caplog.text.splitlines()) == 2
+    assert (
+        &#34;Cleaning up files for the following incompletely cached versions:&#34;
+        in caplog.text
+    )
+    for b in [&#34;v1.2.2.2rc&#34;]:
+        assert (
+            f&#34;Dryrun: would delete &#39;{dc._dreq_res / b / dc._json_raw_c}&#39;.&#34;
+            in caplog.text
+        )
+
+    # Cleanup dryrun + assume_deleted
+    caplog.clear()
+    dc.cleanup(export=&#34;raw&#34;, dryrun=True, assume_deleted=[&#34;another&#34;])
+    assert len(caplog.text.splitlines()) == 3
+    assert (
+        &#34;Cleaning up files for the following incompletely cached versions:&#34;
+        in caplog.text
+    )
+    for b in [&#34;v1.2.2.2rc&#34;, &#34;another&#34;]:
+        assert (
+            f&#34;Dryrun: would delete &#39;{dc._dreq_res / b / dc._json_raw_c}&#39;.&#34;
+            in caplog.text
+        )
+
+    # Cleanup
+    dc.cleanup(export=&#34;raw&#34;)
+    assert len(dc._get_partly_cached(export=&#34;raw&#34;)) == 0
+    dc.cleanup(export=&#34;release&#34;)
+    assert len(dc._get_partly_cached(export=&#34;release&#34;)) == 0
+
     # Delete non-existent version
+    caplog.clear()
     dc.delete(&#34;notpresent&#34;)
     assert len(caplog.text.splitlines()) == 1
     assert &#34;No version(s) found to delete.&#34; in caplog.text
@@ -467,7 +598,7 @@ def setup(self, tmp_path):
     # Delete only branches / dryrun
     caplog.clear()
     dc.delete(&#34;all&#34;, export=&#34;raw&#34;, dryrun=True)
-    assert len(caplog.text.splitlines()) == 5
+    assert len(caplog.text.splitlines()) == 4
     assert &#34;Deleting the following version(s):&#34; in caplog.text
     for b in self.branches:
         assert (
@@ -476,7 +607,14 @@ def setup(self, tmp_path):
         )
 
     # Delete all but latest
+    caplog.clear()
     dc.delete(keep_latest=True)
+    assert len(caplog.text.splitlines()) == 6
+    assert &#34;Deleting the following version(s):&#34; in caplog.text
+    assert (
+        &#34;Cleaning up files for the following incompletely cached versions:&#34;
+        in caplog.text
+    )
     assert set(dc.get_cached()) == {&#34;2.0.1&#34;, &#34;2.0.2b&#34;}
     assert set(dc.get_cached(export=&#34;raw&#34;)) == set(self.branches)
 
@@ -497,10 +635,12 @@ def setup(self, tmp_path):
     dc.delete(&#34;2.0.2b&#34;)
 
     # But illegal config kwargs raise ValueError nonetheless
-    with pytest.raises(ValueError, match=&#34;Invalid value for config key export: none.&#34;):
+    with pytest.raises(
+        ValueError, match=&#34;Invalid value for config key export: none.&#34;
+    ):
         dc.delete(export=&#34;none&#34;)</code></pre>
 </details>
-<div class="desc"><p>Test the delete function.</p></div>
+<div class="desc"><p>Test the delete and cleanup functions.</p></div>
 </dd>
 <dt id="data_request_api.tests.test_dreq_content.TestDreqContent.test_get_cached"><code class="name flex">
 <span>def <span class="ident">test_get_cached</span></span>(<span>self)</span>
@@ -527,10 +667,48 @@ def setup(self, tmp_path):
     assert set(cached_branches) == set(self.branches)
 
     # With invalid export kwarg
-    with pytest.raises(ValueError, match=&#34;Invalid value for config key export: invalid.&#34;):
+    with pytest.raises(
+        ValueError, match=&#34;Invalid value for config key export: invalid.&#34;
+    ):
         dc.get_cached(export=&#34;invalid&#34;)</code></pre>
 </details>
 <div class="desc"><p>Test the get_cached function.</p></div>
+</dd>
+<dt id="data_request_api.tests.test_dreq_content.TestDreqContent.test_get_partly_cached"><code class="name flex">
+<span>def <span class="ident">test_get_partly_cached</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_get_partly_cached(self):
+    &#34;Test the get_partly_cached function.&#34;
+    dc._dreq_res = self.dreq_res
+
+    # Without export kwarg
+    partly_cached = dc._get_partly_cached()
+    assert set(partly_cached) == {&#34;3.1&#34;, &#34;3.2.2.2b5&#34;, &#34;another&#34;, &#34;v1.2.2.2rc&#34;}
+
+    # With export kwarg &#34;release&#34;
+    partly_cached = dc._get_partly_cached(export=&#34;release&#34;)
+    assert set(partly_cached) == {&#34;3.1&#34;, &#34;3.2.2.2b5&#34;, &#34;another&#34;, &#34;v1.2.2.2rc&#34;}
+
+    # With export kwarg &#34;raw&#34;
+    partly_cached = dc._get_partly_cached(export=&#34;raw&#34;)
+    assert set(partly_cached) == {&#34;v1.2.2.2rc&#34;}
+
+    # With export kwarg &#34;raw&#34; and assume_deleted kwarg
+    partly_cached = dc._get_partly_cached(export=&#34;raw&#34;, assume_deleted=[&#34;another&#34;])
+    assert set(partly_cached) == {&#34;v1.2.2.2rc&#34;, &#34;another&#34;}
+
+    # With invalid export kwarg
+    with pytest.raises(
+        ValueError, match=&#34;Invalid value for config key export: invalid.&#34;
+    ):
+        dc._get_partly_cached(export=&#34;invalid&#34;)</code></pre>
+</details>
+<div class="desc"><p>Test the get_partly_cached function.</p></div>
 </dd>
 <dt id="data_request_api.tests.test_dreq_content.TestDreqContent.test_offline_mode"><code class="name flex">
 <span>def <span class="ident">test_offline_mode</span></span>(<span>self, monkeypatch)</span>
@@ -545,9 +723,7 @@ def setup(self, tmp_path):
     dc._dreq_res = self.dreq_res
 
     def mock_requests_get(*args, **kwargs):
-        raise Exception(
-            &#34;Network request detected despite active offline mode.&#34;
-        )
+        raise Exception(&#34;Network request detected despite active offline mode.&#34;)
 
     monkeypatch.setattr(&#34;requests.get&#34;, mock_requests_get)
 
@@ -596,8 +772,9 @@ def setup(self, tmp_path):
 <h4><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent" href="#data_request_api.tests.test_dreq_content.TestDreqContent">TestDreqContent</a></code></h4>
 <ul class="">
 <li><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent.setup" href="#data_request_api.tests.test_dreq_content.TestDreqContent.setup">setup</a></code></li>
-<li><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent.test_delete" href="#data_request_api.tests.test_dreq_content.TestDreqContent.test_delete">test_delete</a></code></li>
+<li><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent.test_delete_and_cleanup" href="#data_request_api.tests.test_dreq_content.TestDreqContent.test_delete_and_cleanup">test_delete_and_cleanup</a></code></li>
 <li><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent.test_get_cached" href="#data_request_api.tests.test_dreq_content.TestDreqContent.test_get_cached">test_get_cached</a></code></li>
+<li><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent.test_get_partly_cached" href="#data_request_api.tests.test_dreq_content.TestDreqContent.test_get_partly_cached">test_get_partly_cached</a></code></li>
 <li><code><a title="data_request_api.tests.test_dreq_content.TestDreqContent.test_offline_mode" href="#data_request_api.tests.test_dreq_content.TestDreqContent.test_offline_mode">test_offline_mode</a></code></li>
 </ul>
 </li>

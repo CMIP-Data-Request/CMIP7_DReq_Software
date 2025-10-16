@@ -344,37 +344,6 @@ dreq_tables = {
 }</dd>
 </dl></div>
 </dd>
-<dt id="data_request_api.query.dreq_query.get_dreq_version_tuple"><code class="name flex">
-<span>def <span class="ident">get_dreq_version_tuple</span></span>(<span>version: str)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_dreq_version_tuple(version: str):
-    &#39;&#39;&#39;
-    Parse version string to return tuple giving version major, minor (etc) numbers.
-    Examples:
-        get_dreq_version_tuple(&#39;v1.2&#39;) --&gt; (1,2)
-        get_dreq_version_tuple(&#39;v1.0beta&#39;) --&gt; (1,0)
-    &#39;&#39;&#39;
-    if version == &#39;dev&#39;:
-        # Is a tuple needed/useful for &#39;dev&#39; versions? Set one just in case.
-        return (0,)
-    else:
-        patt = &#39;[0-9.]*[0-9]&#39;
-        ver_num = re.findall(patt, version)
-        if len(ver_num) != 1:
-            raise ValueError(&#39;Ambiguous version string: &#39; + version)
-        ver_num_str = ver_num[0]
-        return tuple(map(int, ver_num_str.split(&#39;.&#39;)))</code></pre>
-</details>
-<div class="desc"><p>Parse version string to return tuple giving version major, minor (etc) numbers.</p>
-<h2 id="examples">Examples</h2>
-<p>get_dreq_version_tuple('v1.2') &ndash;&gt; (1,2)
-get_dreq_version_tuple('v1.0beta') &ndash;&gt; (1,0)</p></div>
-</dd>
 <dt id="data_request_api.query.dreq_query.get_opp_expts"><code class="name flex">
 <span>def <span class="ident">get_opp_expts</span></span>(<span>opp, expt_groups, expts, verbose=False)</span>
 </code></dt>
@@ -1308,7 +1277,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
         if check_c7_name:
             # Consistency check on definition of CMIP7 compound name.
             # For development, not intended as a user option.
-            if get_dreq_version_tuple(dreq_version) &gt;= (1, 2, 2):
+            if _parse_version(dreq_version) &gt;= (1, 2, 2, 0, &#34;&#34;, 0):
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)
@@ -1582,7 +1551,6 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
 <li><code><a title="data_request_api.query.dreq_query.create_dreq_tables_for_request" href="#data_request_api.query.dreq_query.create_dreq_tables_for_request">create_dreq_tables_for_request</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.create_dreq_tables_for_variables" href="#data_request_api.query.dreq_query.create_dreq_tables_for_variables">create_dreq_tables_for_variables</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_dimension_sizes" href="#data_request_api.query.dreq_query.get_dimension_sizes">get_dimension_sizes</a></code></li>
-<li><code><a title="data_request_api.query.dreq_query.get_dreq_version_tuple" href="#data_request_api.query.dreq_query.get_dreq_version_tuple">get_dreq_version_tuple</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_expts" href="#data_request_api.query.dreq_query.get_opp_expts">get_opp_expts</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_ids" href="#data_request_api.query.dreq_query.get_opp_ids">get_opp_ids</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_vars" href="#data_request_api.query.dreq_query.get_opp_vars">get_opp_vars</a></code></li>
