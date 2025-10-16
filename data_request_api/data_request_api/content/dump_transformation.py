@@ -542,13 +542,29 @@ def transform_content(content, version, force_variable_name=False, variable_name
 @append_kwargs_from_config
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
                             force_retrieve=False, output_dir=None, force_variable_name=False,
-                            default_transformed_content_pattern="{kind}_{export_version}_{consolidate}_content.json", **kwargs):
+                            default_transformed_content_pattern="{kind}_{export_version}_{consolidate}_content.json",
+                            **kwargs):
+    if export in ["release", ]:
+        if consolidate:
+            DR_default_content = dc._json_release_c_DR
+            VS_default_content = dc._json_release_c_VS
+        else:
+            DR_default_content = dc._json_release_nc_DR
+            VS_default_content = dc._json_release_nc_VS
+    elif export in ["raw", ]:
+        if consolidate:
+            DR_default_content = dc._json_raw_c_DR
+            VS_default_content = dc._json_raw_c_VS
+        else:
+            DR_default_content = dc._json_raw_nc_DR
+            VS_default_content = dc._json_raw_nc_VS
+    else:
+        raise ValueError(f"Should not have this error, found export {export}.")
+
     if version in ["test", ]:
-        DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export)
-        VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export)
         from data_request_api.tests import filepath
-        DR_content = filepath(DR_content)
-        VS_content = filepath(VS_content)
+        DR_content = filepath(DR_default_content)
+        VS_content = filepath(VS_default_content)
     else:
         # Download specified version of data request content (if not locally cached)
         versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
@@ -565,11 +581,8 @@ def get_transformed_content(version="latest_stable", export="release", consolida
                 output_dir = os.path.dirname(content)
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-            consolidate_status = {True: "consolidate", False: "not-consolidate"}[consolidate]
-            DR_content = default_transformed_content_pattern.format(kind="DR", export_version=export, consolidate=consolidate_status)
-            VS_content = default_transformed_content_pattern.format(kind="VS", export_version=export, consolidate=consolidate_status)
-            DR_content = os.sep.join([output_dir, DR_content])
-            VS_content = os.sep.join([output_dir, VS_content])
+            DR_content = os.sep.join([output_dir, DR_default_content])
+            VS_content = os.sep.join([output_dir, VS_default_content])
             if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
                 if os.path.exists(DR_content):
                     os.remove(DR_content)
