@@ -15,9 +15,6 @@ def append_kwargs_from_config(func):
     @functools.wraps(func)
     def decorator(*args, **kwargs):
         logger = get_logger()
-        logger.debug(
-            f"Function '{func.__qualname__}': Passing **kwargs from config file."
-        )
 
         # Get function args
         sig = inspect.signature(func)
@@ -46,6 +43,12 @@ def append_kwargs_from_config(func):
                 _sanity_check(key, kwargs[key])
             # Append kwarg if not set - this assigns function args if they have the same name
             kwargs.setdefault(key, value)
+
+        logger.debug(
+            f"Function '{func.__qualname__}': Passing merged **kwargs "
+            f"(potential function call overrides applied to config defaults: {kwargs})"
+            f"{' and *args from function call ' + str(args) if args else ''}."
+        )
         return func(*args, **kwargs)
 
     return decorator

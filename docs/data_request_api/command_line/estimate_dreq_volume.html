@@ -387,8 +387,7 @@ years: 1
                     pass
                 else:
                     valid_shapes = [&#39;time-intv&#39;, &#39;time-point&#39;, &#39;monthly-mean-daily-stat&#39;]
-                    version_tuple = dq.get_dreq_version_tuple(use_dreq_version)
-                    if version_tuple[:2] &lt; (1, 2):
+                    if _parse_version(use_dreq_version) &lt; (1, 2, 0, 0, &#34;&#34;, 0):
                         # Prior to v1.2, monthly-mean-daily-stat was called monthly-mean-stat
                         valid_shapes.append(&#39;monthly-mean-stat&#39;)
                     assert temporal_shape in valid_shapes, \

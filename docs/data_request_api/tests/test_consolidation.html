@@ -61,13 +61,30 @@ el.replaceWith(d);
     assert varfield_torename != []
     assert varfield_dropped != []
     # Read 1-base export and select certain tables
-    one_base_input = read_json_file(filepath(&#34;dreq_release_export.json&#34;))[&#34;Data Request v1.2.2&#34;]
-    selected_tables = [&#34;Variables&#34;, &#34;Variable Group&#34;, &#34;Time Subset&#34;, &#34;CF Standard Names&#34;, &#34;Structure&#34;]
-    subset = {table: one_base_input[table] for table in one_base_input if table in selected_tables}
+    one_base_input = read_json_file(filepath(&#34;dreq_release_export.json&#34;))[
+        &#34;Data Request v1.2.2&#34;
+    ]
+    selected_tables = [
+        &#34;Variables&#34;,
+        &#34;Variable Group&#34;,
+        &#34;Time Subset&#34;,
+        &#34;CF Standard Names&#34;,
+        &#34;Structure&#34;,
+    ]
+    subset = {
+        table: one_base_input[table]
+        for table in one_base_input
+        if table in selected_tables
+    }
     # Apply consistency fixes
     subset = _apply_consistency_fixes(subset)
     # Assert consistency fixes are applied, i.e. tables and fields renamed or removed as intended
-    assert set(subset.keys()) == {&#34;Variables&#34;, &#34;Variable Group&#34;, &#34;Time Subset&#34;, &#34;CF Standard Names&#34;}
+    assert set(subset.keys()) == {
+        &#34;Variables&#34;,
+        &#34;Variable Group&#34;,
+        &#34;Time Subset&#34;,
+        &#34;CF Standard Names&#34;,
+    }
     fields = {j[&#34;name&#34;] for i, j in subset[&#34;Variables&#34;][&#34;fields&#34;].items()}
     assert all([i not in fields for i in varfield_dropped])
     assert all([i in fields for i in varfield_renamed])
@@ -75,6 +92,53 @@ el.replaceWith(d);
         assert all([i not in v.keys() for i in varfield_dropped + varfield_torename])</code></pre>
 </details>
 <div class="desc"></div>
+</dd>
+<dt id="data_request_api.tests.test_consolidation.test_incorrect_version_raises_error"><code class="name flex">
+<span>def <span class="ident">test_incorrect_version_raises_error</span></span>(<span>monkeypatch)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_incorrect_version_raises_error(monkeypatch):
+    &#34;Test consolidation for incorrect version.&#34;
+
+    def mock_apply_consistency_fixes(dreqdict):
+        return dreqdict
+
+    monkeypatch.setattr(
+        &#34;data_request_api.content.consolidate_export._apply_consistency_fixes&#34;,
+        mock_apply_consistency_fixes,
+    )
+
+    # If version is fine
+    dreqdict = {&#34;Data Request v1.2&#34;: {}}
+    assert map_data(dreqdict, mapping_table={}, version=&#34;v1.2&#34;) == {
+        &#34;Data Request&#34;: {&#34;version&#34;: &#34;v1.2&#34;}
+    }
+
+    # If version differs
+    dreqdict = {&#34;Data Request v1.1&#34;: {}}
+    with pytest.raises(
+        ValueError,
+        match=r&#34;The Data Request version inferred from the content dictionary \(v1\.1\) is different than the requested version \(v1\.2\)\.&#34;,
+    ):
+        map_data(dreqdict, mapping_table={}, version=&#34;v1.2&#34;)
+
+    # If version is a branch
+    dreqdict = {&#34;Data Request v1.2.2&#34;: {}}
+    assert map_data(dreqdict, mapping_table={}, version=&#34;somebranch&#34;) == {
+        &#34;Data Request&#34;: {&#34;version&#34;: &#34;somebranch&#34;}
+    }
+
+    # If version is an &#34;rc&#34; branch
+    dreqdict = {&#34;Data Request v1.2.3&#34;: {}}
+    assert map_data(dreqdict, mapping_table={}, version=&#34;v1.2.3rc&#34;) == {
+        &#34;Data Request&#34;: {&#34;version&#34;: &#34;v1.2.3rc&#34;}
+    }</code></pre>
+</details>
+<div class="desc"><p>Test consolidation for incorrect version.</p></div>
 </dd>
 <dt id="data_request_api.tests.test_consolidation.test_map_attribute"><code class="name flex">
 <span>def <span class="ident">test_map_attribute</span></span>(<span>)</span>
@@ -90,7 +154,9 @@ el.replaceWith(d);
     # Select a CF Standard Name to map (lagrangian_tendency_of_air_pressure)
     attr = &#34;mole_concentration_of_aragonite_expressed_as_carbon_in_sea_water&#34;
     # Select the list of records to map against
-    records = several_bases_input[&#34;Data Request Physical Parameters (Public)&#34;][&#34;CF Standard Name&#34;][&#34;records&#34;]
+    records = several_bases_input[&#34;Data Request Physical Parameters (Public)&#34;][
+        &#34;CF Standard Name&#34;
+    ][&#34;records&#34;]
     # Assert successful mapping via key &#34;name&#34;
     assert _map_attribute(attr, records, [&#34;name&#34;]) == [&#34;rec0ik3QbkrzxJy0n&#34;]
     # Delete the mapped record and assert no match is found
@@ -119,9 +185,13 @@ def test_map_record_id():
     # Read 3-base export
     several_bases_input = read_json_file(filepath(&#34;dreq_raw_export.json&#34;))
     # Select a variable record to map (day.wap)
-    record = several_bases_input[&#34;Data Request Variables (Public)&#34;][&#34;Variable&#34;][&#34;records&#34;][&#34;recIHH5OexHWtBNgn&#34;]
+    record = several_bases_input[&#34;Data Request Variables (Public)&#34;][&#34;Variable&#34;][
+        &#34;records&#34;
+    ][&#34;recIHH5OexHWtBNgn&#34;]
     # Select the list of records to map against
-    records = several_bases_input[&#34;Data Request Opportunities (Public)&#34;][&#34;Variables&#34;][&#34;records&#34;]
+    records = several_bases_input[&#34;Data Request Opportunities (Public)&#34;][&#34;Variables&#34;][
+        &#34;records&#34;
+    ]
     # Assert successful mapping via keys UID and Compound Name
     assert _map_record_id(record, records, [&#34;Compound Name&#34;]) == [&#34;recIEe4GucNn5Bp1t&#34;]
     assert _map_record_id(record, records, [&#34;UID&#34;]) == [&#34;recIEe4GucNn5Bp1t&#34;]
@@ -131,7 +201,10 @@ def test_map_record_id():
     # Duplicate the record back in and assert two matches are found now
     records[&#34;test1&#34;] = record_rm
     records[&#34;test2&#34;] = record_rm.copy()
-    assert _map_record_id(record, records, [&#34;UID&#34;, &#34;Compound Name&#34;]) == [&#34;test1&#34;, &#34;test2&#34;]
+    assert _map_record_id(record, records, [&#34;UID&#34;, &#34;Compound Name&#34;]) == [
+        &#34;test1&#34;,
+        &#34;test2&#34;,
+    ]
     # Alter the UID of one duplicated entry and assert one match is found
     records[&#34;test2&#34;][&#34;UID&#34;] = &#34;someUID&#34;
     assert _map_record_id(record, records, [&#34;UID&#34;, &#34;Compound Name&#34;]) == [&#34;test1&#34;]</code></pre>
@@ -156,6 +229,7 @@ def test_map_record_id():
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="data_request_api.tests.test_consolidation.test_apply_consistency_fixes" href="#data_request_api.tests.test_consolidation.test_apply_consistency_fixes">test_apply_consistency_fixes</a></code></li>
+<li><code><a title="data_request_api.tests.test_consolidation.test_incorrect_version_raises_error" href="#data_request_api.tests.test_consolidation.test_incorrect_version_raises_error">test_incorrect_version_raises_error</a></code></li>
 <li><code><a title="data_request_api.tests.test_consolidation.test_map_attribute" href="#data_request_api.tests.test_consolidation.test_map_attribute">test_map_attribute</a></code></li>
 <li><code><a title="data_request_api.tests.test_consolidation.test_map_record_id" href="#data_request_api.tests.test_consolidation.test_map_record_id">test_map_record_id</a></code></li>
 </ul>

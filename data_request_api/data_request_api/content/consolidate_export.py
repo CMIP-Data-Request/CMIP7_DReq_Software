@@ -1,6 +1,7 @@
 import re
 from collections import defaultdict
 
+from data_request_api.content.utils import _parse_version
 from data_request_api.utilities.logger import get_logger  # noqa
 
 from .mapping_table import (version_consistency,
@@ -719,11 +720,6 @@ def map_data(data, mapping_table, version, **kwargs):
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
         l_version = next(iter(data.keys())).replace("Data Request", "").strip()
-        if l_version != version and version != "dev":
-            raise RuntimeError(
-                "The Data Request version inferred from the content dictionary"
-                f" ({l_version}) is different than the requested version ({version})."
-            )
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)
@@ -732,7 +728,17 @@ def map_data(data, mapping_table, version, **kwargs):
             "Consolidation: Removing / Adding (un)necessary whitespace to strings."
         )
         _fix_str_nested(mapped_data)
-        mapped_data["version"] = version
+        if _parse_version(version) == (0, 0, 0, 0, "", 0):
+            mapped_data["version"] = version
+        else:
+            if l_version != version:
+                errmsg = (
+                    f"The Data Request version inferred from the content dictionary"
+                    f" ({l_version}) is different than the requested version ({version})."
+                )
+                logger.error(errmsg)
+                raise ValueError(errmsg)
+            mapped_data["version"] = version
         return {"Data Request": mapped_data}
     else:
         errmsg = "The loaded Data Request has an unexpected data structure."

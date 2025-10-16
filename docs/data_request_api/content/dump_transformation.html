@@ -318,7 +318,7 @@ It also removes others specified strings.
 <div class="desc"></div>
 </dd>
 <dt id="data_request_api.content.dump_transformation.get_transformed_content"><code class="name flex">
-<span>def <span class="ident">get_transformed_content</span></span>(<span>version='latest_stable',<br>export='release',<br>consolidate=False,<br>force_retrieve=False,<br>output_dir=None,<br>force_variable_name=False,<br>default_transformed_content_pattern='{kind}_{export_version}_content.json',<br>**kwargs)</span>
+<span>def <span class="ident">get_transformed_content</span></span>(<span>version='latest_stable',<br>export='release',<br>consolidate=False,<br>force_retrieve=False,<br>output_dir=None,<br>force_variable_name=False,<br>default_transformed_content_pattern='{kind}_{export_version}_{consolidate}_content.json',<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -328,13 +328,29 @@ It also removes others specified strings.
 <pre><code class="python">@append_kwargs_from_config
 def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release&#34;, consolidate=False,
                             force_retrieve=False, output_dir=None, force_variable_name=False,
-                            default_transformed_content_pattern=&#34;{kind}_{export_version}_content.json&#34;, **kwargs):
+                            default_transformed_content_pattern=&#34;{kind}_{export_version}_{consolidate}_content.json&#34;,
+                            **kwargs):
+    if export in [&#34;release&#34;, ]:
+        if consolidate:
+            DR_default_content = dc._json_release_c_DR
+            VS_default_content = dc._json_release_c_VS
+        else:
+            DR_default_content = dc._json_release_nc_DR
+            VS_default_content = dc._json_release_nc_VS
+    elif export in [&#34;raw&#34;, ]:
+        if consolidate:
+            DR_default_content = dc._json_raw_c_DR
+            VS_default_content = dc._json_raw_c_VS
+        else:
+            DR_default_content = dc._json_raw_nc_DR
+            VS_default_content = dc._json_raw_nc_VS
+    else:
+        raise ValueError(f&#34;Should not have this error, found export {export}.&#34;)
+
     if version in [&#34;test&#34;, ]:
-        DR_content = default_transformed_content_pattern.format(kind=&#34;DR&#34;, export_version=export)
-        VS_content = default_transformed_content_pattern.format(kind=&#34;VS&#34;, export_version=export)
         from data_request_api.tests import filepath
-        DR_content = filepath(DR_content)
-        VS_content = filepath(VS_content)
+        DR_content = filepath(DR_default_content)
+        VS_content = filepath(VS_default_content)
     else:
         # Download specified version of data request content (if not locally cached)
         versions = dc.retrieve(version, export=export, consolidate=consolidate, **kwargs)
@@ -351,10 +367,8 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
                 output_dir = os.path.dirname(content)
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-            DR_content = default_transformed_content_pattern.format(kind=&#34;DR&#34;, export_version=export)
-            VS_content = default_transformed_content_pattern.format(kind=&#34;VS&#34;, export_version=export)
-            DR_content = os.sep.join([output_dir, DR_content])
-            VS_content = os.sep.join([output_dir, VS_content])
+            DR_content = os.sep.join([output_dir, DR_default_content])
+            VS_content = os.sep.join([output_dir, VS_default_content])
             if force_retrieve or not (all(os.path.exists(filepath) for filepath in [DR_content, VS_content])):
                 if os.path.exists(DR_content):
                     os.remove(DR_content)

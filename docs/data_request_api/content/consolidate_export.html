@@ -462,11 +462,6 @@ el.replaceWith(d);
     # Return the data if it is already one-base
     elif len(data.keys()) == 1:
         l_version = next(iter(data.keys())).replace(&#34;Data Request&#34;, &#34;&#34;).strip()
-        if l_version != version and version != &#34;dev&#34;:
-            raise RuntimeError(
-                &#34;The Data Request version inferred from the content dictionary&#34;
-                f&#34; ({l_version}) is different than the requested version ({version}).&#34;
-            )
         # Consistency fixes
         mapped_data = next(iter(data.values()))
         mapped_data = _apply_consistency_fixes(mapped_data)
@@ -475,7 +470,17 @@ el.replaceWith(d);
             &#34;Consolidation: Removing / Adding (un)necessary whitespace to strings.&#34;
         )
         _fix_str_nested(mapped_data)
-        mapped_data[&#34;version&#34;] = version
+        if _parse_version(version) == (0, 0, 0, 0, &#34;&#34;, 0):
+            mapped_data[&#34;version&#34;] = version
+        else:
+            if l_version != version:
+                errmsg = (
+                    f&#34;The Data Request version inferred from the content dictionary&#34;
+                    f&#34; ({l_version}) is different than the requested version ({version}).&#34;
+                )
+                logger.error(errmsg)
+                raise ValueError(errmsg)
+            mapped_data[&#34;version&#34;] = version
         return {&#34;Data Request&#34;: mapped_data}
     else:
         errmsg = &#34;The loaded Data Request has an unexpected data structure.&#34;

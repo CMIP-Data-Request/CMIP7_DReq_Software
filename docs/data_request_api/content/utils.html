@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>data_request_api.utilities.decorators API documentation</title>
+<title>data_request_api.content.utils API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -33,7 +33,7 @@ el.replaceWith(d);
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>data_request_api.utilities.decorators</code></h1>
+<h1 class="title">Module <code>data_request_api.content.utils</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -42,63 +42,6 @@ el.replaceWith(d);
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="data_request_api.utilities.decorators.append_kwargs_from_config"><code class="name flex">
-<span>def <span class="ident">append_kwargs_from_config</span></span>(<span>func)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def append_kwargs_from_config(func):
-    &#34;&#34;&#34;Decorator to append kwargs from a config file if not explicitly set.&#34;&#34;&#34;
-
-    @functools.wraps(func)
-    def decorator(*args, **kwargs):
-        logger = get_logger()
-
-        # Get function args
-        sig = inspect.signature(func)
-        bound_args = sig.bind_partial(*args, **kwargs)
-        params = sig.parameters
-
-        config = dreqcfg.load_config()
-        for key, value in config.items():
-            if key in params.keys():
-                # Function parameters also configurable in the config file
-                # should not have a default value as the default behaviour
-                # will be defined in the config file
-                if params[key].default is not inspect.Parameter.empty:
-                    warnings.warn(
-                        f&#34;Parameter &#39;{key}&#39; of function &#39;{func.__qualname__}&#39;&#34;
-                        &#34; has a default value, but this default is overridden&#34;
-                        &#34; by the value specified in the configuration file.&#34;
-                    )
-                # Skip overwriting *args with the default config **kwargs
-                #   but perform a sanity check first
-                if key in bound_args.arguments.keys():
-                    _sanity_check(key, bound_args.arguments[key])
-                    continue
-            elif key in kwargs.keys():
-                # Perform a _sanity_check on the key-value pair
-                _sanity_check(key, kwargs[key])
-            # Append kwarg if not set - this assigns function args if they have the same name
-            kwargs.setdefault(key, value)
-
-        logger.debug(
-            f&#34;Function &#39;{func.__qualname__}&#39;: Passing merged **kwargs &#34;
-            f&#34;(potential function call overrides applied to config defaults: {kwargs})&#34;
-            f&#34;{&#39; and *args from function call &#39; + str(args) if args else &#39;&#39;}.&#34;
-        )
-        return func(*args, **kwargs)
-
-    return decorator</code></pre>
-</details>
-<div class="desc"><p>Decorator to append kwargs from a config file if not explicitly set.</p></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -110,12 +53,7 @@ el.replaceWith(d);
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="data_request_api.utilities" href="index.html">data_request_api.utilities</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="data_request_api.utilities.decorators.append_kwargs_from_config" href="#data_request_api.utilities.decorators.append_kwargs_from_config">append_kwargs_from_config</a></code></li>
+<li><code><a title="data_request_api.content" href="index.html">data_request_api.content</a></code></li>
 </ul>
 </li>
 </ul>

@@ -350,7 +350,16 @@ mapping_table = {
     "Opportunity": {
         "source_base": "Data Request Opportunities (Public)",
         "source_table": ["Opportunity"],
-        "internal_mapping": {},
+        "internal_mapping": {
+            "Unique list of variables attached to Opportunity (linked)": {
+                "base_copy_of_table": "Variables",
+                "base": "Data Request Variables (Public)",
+                "table": "Variables",
+                "operation": "",
+                "map_by_key": ["CMIP6 Compound Name", "Compound Name", "Compound name"],
+                "entry_type": "record_id",
+            },
+        },
         "internal_filters": {
             "Status": {
                 "aliases": [],
@@ -375,7 +384,7 @@ mapping_table = {
             "Ocean & sea-ice review comments",
             "Originally Requested Variable Groups",
             "Status",
-            "Unique list of variables attached to Opportunity (linked)",
+            # "Unique list of variables attached to Opportunity (linked)",
         ],
         "internal_consistency": {
             "Ensemble Size": "Minimum ensemble Size",
@@ -386,6 +395,7 @@ mapping_table = {
             "Unique list of experiments (for volume calculation)": (
                 "Unique list of experiments (from Experiment Groups)"
             ),
+            "Unique list of variables attached to Opportunity (linked)": "Unique list of variables attached to Opportunity",
             "Working/Updated Variable Groups": "Variable Groups",
         },
         "field_dtypes": {},
@@ -719,7 +729,7 @@ version_consistency_drop_fields = {
         "Structure Title (from Variables)",
         "V1.1",
     ],
-    "Glossary": ["Opportunity"],
+    "Glossary": ["Opportunity", "Reference"],
     "MIPs": ["MIP feedback"],
     "Modelling Realm": ["UID 2"],
     "Opportunity": ["Keyword"],
