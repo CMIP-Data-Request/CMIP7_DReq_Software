@@ -1,52 +1,17 @@
+# Parameters appearing in CMIP6 cmor tables:
 compare_attributes:
-# parameters appearing in CMIP6 cmor tables:
-- long_name # "ui-label" in VR, "title" in DR Variables table. get_variables_metadata() renamed it for comparability with cmip6 cmor tables.
-- comment  # "description" in VR, and in DR Variables table. get_variables_metadata() renamed it for comparability with cmip6 cmor tables.
 - cell_measures
 - cell_methods
-- dimensions
-- modeling_realm  # model-realm
-- out_name
-#- physical_parameter_name
-- positive
-- standard_name
-- units
-- type  # an attribute in CMOR tables (e.g. "real") - this is not "@type" as used in jsonld
-# parameters used in the VR, including here as sanity check
-- variableRootDD  # variable-root
-- branded_variable_name # should be zero differences by definition, this is here as a sanity check
-
-
-# The following parameters appear in the CMOR table entry for a branded variable in CMIP7_atmos.json (MM's dev tables).
-# CMIP6 tables had all these parameters as well as:
-#   frequency
-#   modeling_realm
-#   type
-#   valid_min/max, ok_min/max_mean_abs
-# realm & type are now in the header of the CMOR table (for MM's dev tables)
-compare_attributes:
-- cell_methods
-- dimensions
-- positive
-- standard_name
-- units
 - comment
-- long_name
-- out_name  # in the VR, will this always be same as root name?
-# - modeling_realm
-# - cell_measures  # should prob remove from VR
-
-# Pare down the above to just the really critical parameters
-compare_attributes:
-- cell_methods
 - dimensions
+- long_name
+- modeling_realm
+- out_name
 - positive
 - standard_name
 - units
 
-
+# A subset of parameters:
 compare_attributes:
-# - cell_measures
-# - modeling_realm
-# - long_name
+- long_name
 - comment

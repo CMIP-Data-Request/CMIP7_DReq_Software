@@ -102,12 +102,8 @@ def main():
     # for the same branded variable name. These are attributes specified by the data request,
     # not in the variable register.
     dreq_attributes = ['frequency', 'region']
-    # dreq_attributes.append('dimensions')
-    # dreq_attributes.append('modeling_realm')
     dreq_attributes.append('cmip7_compound_name')
     dreq_attributes.append('cmip6_compound_name') # it's useful to see the CMIP6-era names in the output summary
-    # dreq_attributes.append('units')
-    # dreq_attributes.append('standard_name')
 
     compare_attributes = [s for s in compare_attributes if s not in dreq_attributes]
 
