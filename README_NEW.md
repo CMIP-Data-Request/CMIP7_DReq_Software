@@ -45,6 +45,7 @@ You can launch and interact with this repository  via [Binder](https://mybinder.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CMIP-Data-Request/CMIP7_DReq_Software/main?filepath=notebooks)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CMIP-Data-Request/CMIP7_DReq_Software/)
+<br>
 :bulb: This enables you, *without installing anything*, to play with the [notebooks](#notebooks), in a live environment that is your own playground.
 
 ## Installation
@@ -159,9 +160,11 @@ Here are some CLI calling examples:
 **1. CMIP7_data_request_api_config**
 
 This command line blabla...
+<br>
 :coffee: ==TODO: complete this CLI quick-guide==
 
 Call example:
+<br>
 `the-command-line`
 <details>
 <summary>Click here to expand.</summary>
@@ -185,6 +188,7 @@ Additionnal filter options are available:
 A json file is generated, listing the variables requested by the CMIP7 DR for the selected criteria.
 
 Call example:
+<br>
 `export_dreq_lists_json --all_opportunities v1.2.2.2 amip_all_Opps_v1.2.2.2.json --experiments amip`
 <details>
 <summary>Click here to expand.</summary>
@@ -234,6 +238,7 @@ options:
 A json file is generated, containing the variables  present in the CMIP7 DR (all or only the ones matching filter options, see below). Each single entry of the json file is the CMIP7 compound name of the variable and all of the attributes associated with this varaible are given as (key,value) pairs.
 
 Call example:
+<br>
 `get_variables_metadata v1.2.2.2 all_variables_metadata_v1.2.2.2.json`
 <details>
 <summary>Click here to expand.</summary>
@@ -308,9 +313,11 @@ options:
 **4. compare_variables**
 
 This command line blabla...
+<br>
 :coffee: ==TODO: complete this CLI quick-guide==
 
 Call example:
+<br>
 `the-command-line`
 <details>
 <summary>Click here to expand.</summary>
@@ -333,9 +340,11 @@ Additionnal filter options are available:
 **5. estimate_dreq_volume**
 
 This command line blabla...
+<br>
 :coffee: ==TODO: complete this CLI quick-guide==
 
 Call example:
+<br>
 `the-command-line`
 <details>
 <summary>Click here to expand.</summary>
