@@ -1,6 +1,5 @@
 # add_timesubsets.py
 # Helper utilities to augment a requested-variables JSON with time-subset tags
-# and optional combined totals. No CLI here.
 
 from __future__ import annotations
 import json
