@@ -1,41 +1,16 @@
 # add_timesubsets.py
-# Export requested variables grouped by priority (all priorities),
-# restricted to Opportunities that have ≥1 Time Subset.
+# Helper utilities to augment a requested-variables JSON with time-subset tags
+# and optional combined totals. No CLI here.
 
 from __future__ import annotations
-import argparse
-import os
 import json
 from collections import OrderedDict
+from typing import Iterable, Union, List, Dict
 
-from data_request_api.content import dreq_content as dc
 from data_request_api.query import dreq_query as dq
-from data_request_api.query.time_subsets import patch_time_subset_periods
-
-CANON_TS = [
-    "hist20", "hist43", "hist72", "histext",
-    "scenario20", "scenario20mid", "scenario30mid"
-]
 
 
-# ---------------------------------------------------------------------
-# Load DR
-# ---------------------------------------------------------------------
-
-def _load_dr(version: str = "latest_stable"):
-    resolved = dc.retrieve(version)
-    ver = next(iter(resolved))
-    content = dc.load(ver)
-    base = dq.create_dreq_tables_for_request(content, ver)
-    content_path = dc._dreq_content_loaded.get("json_path")
-    if not content_path or not os.path.isfile(content_path):
-        raise SystemExit("Could not determine path to data request JSON.")
-    return base, ver, content_path
-
-
-# ---------------------------------------------------------------------
-# Helpers for Time Subsets
-# ---------------------------------------------------------------------
+# ---------- internal helpers ----------
 
 def _find_ts_table_name(base) -> str | None:
     for name in ("Time Subset", "Time Subsets", "time_subsets"):
@@ -45,6 +20,7 @@ def _find_ts_table_name(base) -> str | None:
 
 
 def _opportunity_titles_with_timesubsets(base) -> list[str]:
+    """All opportunity titles that link to at least one time subset."""
     if "Opportunity" not in base:
         raise SystemExit("Missing 'Opportunity' table in DR base.")
     opp_tbl = base["Opportunity"]
@@ -69,14 +45,13 @@ def _opportunity_titles_with_timesubsets(base) -> list[str]:
                 break
         if has_ts:
             titles.append(opp.title.strip())
-
     return list(dict.fromkeys(titles))
 
 
-def _extract_opportunity_time_subsets(base) -> tuple[dict[str, list[str]], dict[str, str]]:
-    """Return:
-        opp_subsets: {Opportunity title: [subset_label,...]}
-        tag_periods: {subset_label: 'YYYY-YYYY'} 
+def _collect_opportunity_ts_labels(base) -> Dict[str, List[str]]:
+    """
+    Return: {Opportunity title: [subset_label, ...]}
+    Uses labels exactly as specified in the DR (no canonicalization).
     """
     if "Opportunity" not in base:
         raise SystemExit("Missing 'Opportunity' table in DR base.")
@@ -98,7 +73,7 @@ def _extract_opportunity_time_subsets(base) -> tuple[dict[str, list[str]], dict[
             ts = ts_tbl.get_record(getattr(link, "record_id", link))
             if not ts:
                 continue
-            # choose best label
+            # choose best human-readable field; keep what DR provides
             label = None
             for k in ("label", "title", "description", "name"):
                 v = getattr(ts, k, None)
@@ -106,35 +81,41 @@ def _extract_opportunity_time_subsets(base) -> tuple[dict[str, list[str]], dict[
                     label = v.strip()
                     break
             label = label or "subset"
-            period = patch_time_subset_periods(label, getattr(ts, "start", None), getattr(ts, "end", None))
-            period = period.replace("–", "-")
             labels.append(label)
 
         if labels:
-            known = [t for t in CANON_TS if t in labels]
-            unknown = sorted([t for t in labels if t not in CANON_TS], key=str.lower)
-            opp_subsets[opp.title.strip()] = known + unknown
+            # keep stable order, deduplicate
+            opp_subsets[opp.title.strip()] = list(dict.fromkeys(labels))
 
-    tag_periods = {
-        "hist72": "1950-2021",
-        "histext": "2022-2026",
-        "scenario20mid": "2040-2059",
-        "scenario30mid": "2040-2069",
-        "scenario20": "2081-2100",
-        "hist20": "2002-2021",
-        "hist43": "1979-2021",
-        "all": "Whole time series"
-    }
-
-    return opp_subsets, tag_periods
+    return opp_subsets
 
 
-def _map_subsets_to_experiments(base, use_opps, opp_subsets: dict[str, list[str]]) -> dict[str, list[str]]:
+def _map_subsets_to_experiments(
+    base,
+    use_opps: Union[str, Iterable[str]],
+    opp_subsets: Dict[str, List[str]],
+) -> Dict[str, List[str]]:
+    """
+    Build union of time-subset labels per experiment across the selected opportunities.
+    Returns: {experiment_name: [distinct_labels]}
+    """
     dreq_opps = base["Opportunity"]
     expt_groups = base["Experiment Group"]
     expts = base["Experiments"]
-    opp_ids = dq.get_opp_ids(use_opps, dreq_opps, verbose=False)
+
+    # resolve 'all' to the title set
+    if use_opps == "all":
+        want_titles = [opp.title.strip() for opp in dreq_opps.records.values()]
+    else:
+        want_titles = [t.strip() for t in use_opps]
+
+    # Only opportunities that actually have time subsets
+    titles_with_ts = set(_opportunity_titles_with_timesubsets(base))
+    want_titles = [t for t in want_titles if t in titles_with_ts]
+
+    opp_ids = dq.get_opp_ids(want_titles, dreq_opps, verbose=False)
     expt_subsets: dict[str, list[str]] = {}
+
     for opp_id in opp_ids:
         opp = dreq_opps.records[opp_id]
         labels = opp_subsets.get(opp.title.strip(), [])
@@ -142,17 +123,13 @@ def _map_subsets_to_experiments(base, use_opps, opp_subsets: dict[str, list[str]
         for expt in opp_expts:
             L = expt_subsets.setdefault(expt, [])
             L.extend(labels)
+
+    # de-duplicate while keeping order
     for expt, L in expt_subsets.items():
-        uniq = list(dict.fromkeys(L))
-        known = [t for t in CANON_TS if t in uniq]
-        other = sorted([t for t in uniq if t not in CANON_TS], key=str.lower)
-        expt_subsets[expt] = known + other
+        expt_subsets[expt] = list(dict.fromkeys(L))
+
     return expt_subsets
 
-
-# ---------------------------------------------------------------------
-# Build Total block
-# ---------------------------------------------------------------------
 
 def _build_total_block(payload, time_tags):
     priorities = ["Core", "High", "Medium", "Low"]
@@ -175,9 +152,7 @@ def _build_total_block(payload, time_tags):
             if p not in req:
                 continue
             for var in req[p]:
-                tags = []
-                if expt in time_tags and p in time_tags[expt]:
-                    tags = time_tags[expt][p].get(var, [])
+                tags = time_tags.get(expt, {}).get(p, {}).get(var, [])
                 total["AllExp"][p][var] = tags
                 if is_hist(expt):
                     total["historical"][p][var] = tags
@@ -190,120 +165,69 @@ def _build_total_block(payload, time_tags):
     return total
 
 
-# ---------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------
-def parse_args():
-    p = argparse.ArgumentParser(
-        description=(
-            "Export requested variables grouped by priority (all priorities), "
-            "restricted to Opportunities with Time Subsets. Adds per-variable time-subset tags, "
-            'and inserts "Subset periods" inside Header right after Description. '
-            "Optionally adds a rolled-up Total block."
-        )
-    )
-    p.add_argument("-o", "--outfile",
-                   help="Output JSON path. Default: requested_<version>_cmip7names.timesubsetted.json")
-    p.add_argument("--add-combined", action="store_true",
-                   help="Add rolled-up Total block (historical/scenario/AllExp).")
-    p.add_argument("--prefer-version", default="latest_stable", 
-                   help="Data Request version to load (default: latest_stable).",)
-    p.add_argument("--quiet", action="store_true", help="Suppress verbose logging.")
-    return p.parse_args()
+# ---------- public API ----------
 
+def augment_file_in_place(
+    *,
+    base,
+    outfile: str,
+    add_combined: bool = False,
+    quiet: bool = True,
+    use_opps: Union[str, Iterable[str]] = "all",
+) -> None:
+    """
+    Read an already-written requested_*.json, attach TimeTags for each experiment/priority/variable
+    using only the union of DR-provided time-subset labels across the selected opportunities.
 
-# ---------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------
+    Rules:
+      - If an experiment has NO labels, tag list is ["all"].
+      - If any tag list contains "all", it is collapsed to exactly ["all"].
+      - No "Subset periods" header and no canonicalization of labels.
 
-def main():
-    args = parse_args()
-    base, ver, content_path = _load_dr(args.prefer_version)
-    opp_titles = _opportunity_titles_with_timesubsets(base)
-    if not opp_titles:
-        raise SystemExit("No Opportunities with Time Subsets found; nothing to export.")
-
-    if not args.quiet:
-        print(f"Found {len(opp_titles)} Opportunities with Time Subsets:")
-        for t in sorted(opp_titles, key=str.lower):
-            print("  -", t)
-
-    # Build requested variables 
-    expt_vars = dq.get_requested_variables(
-        base, ver,
-        use_opps=sorted(opp_titles, key=str.lower),
-        verbose=not args.quiet,
-        check_core_variables=False,
-    )
-
-    outfile = args.outfile or f"requested_{ver}_cmip7names.timesubsetted.json"
-
-    # Write requested file
-    all_levels = dq.get_priority_levels()
-    include_all = all_levels[-1] 
-    dq.write_requested_vars_json(
-    outfile=outfile,
-    expt_vars=expt_vars,
-    dreq_version=ver,
-    priority_cutoff=include_all,
-    content_path=content_path,)
-
-    # Build time subset info
-    opp_subsets, tag_periods = _extract_opportunity_time_subsets(base)
-    expt_subsets = _map_subsets_to_experiments(base, sorted(opp_titles, key=str.lower), opp_subsets)
-
-    # Load the canonical payload back
+    Overwrites the same file.
+    """
+    # Load existing payload
     with open(outfile, "r", encoding="utf-8") as f:
         payload = json.load(f)
 
-    # Build timetags (if 'all' is present, it's the only tag)
+    # Collect DR labels and map to experiments
+    opp_subsets = _collect_opportunity_ts_labels(base)
+    expt_subsets = _map_subsets_to_experiments(base, use_opps, opp_subsets)
+
+    # Build TimeTags per experiment/priority/variable
     priorities = ["Core", "High", "Medium", "Low"]
     time_tags = {}
     for expt, req in payload.get("experiment", {}).items():
-        tags = ["all"] + expt_subsets.get(expt, [])
-        known = [t for t in CANON_TS if t in tags]
-        other = sorted([t for t in tags if t not in CANON_TS and t != "all"], key=str.lower)
-        known = [t for t in CANON_TS if t in tags]
-        other = sorted([t for t in tags if t not in CANON_TS and t != "all"], key=str.lower)
-        if known or other:
-            tags_ordered = ["all"] + known + other
+        labels = expt_subsets.get(expt, [])
+        # Only "all" when there are no labels; otherwise labels only
+        if labels:
+            tags_for_vars = labels[:]  # DR labels as-is
         else:
-            tags_ordered = ["all"]
-
+            tags_for_vars = ["all"]
 
         time_tags[expt] = {}
         for p in priorities:
             if p in req:
-                time_tags[expt][p] = {var: tags_ordered[:] for var in req[p]}
+                time_tags[expt][p] = {var: tags_for_vars[:] for var in req[p]}
 
-    orig_header = payload.get("Header", {})
-    new_header = OrderedDict()
+    # Collapse any tag list that contains "all" to just ["all"]
+    for expt, by_pri in time_tags.items():
+        for p, by_var in by_pri.items():
+            for var, tags in list(by_var.items()):
+                if isinstance(tags, list) and "all" in tags:
+                    by_var[var] = ["all"]
 
-    if "Description" in orig_header:
-        new_header["Description"] = orig_header["Description"]
 
-    new_header["Subset periods"] = tag_periods  # subset periods info inserted after Description
-
-    for k, v in orig_header.items():
-        if k == "Description":
-            continue
-        new_header[k] = v
-
-    # final payload
+    # Header: leave as-is (no "Subset periods" insertion)
     final_payload = payload.copy()
-    final_payload["Header"] = new_header
     final_payload["TimeTags"] = time_tags
 
-    if args.add_combined:
+    if add_combined:
         total_block = _build_total_block(payload, time_tags)
         final_payload["Total"] = total_block
 
     text = json.dumps(final_payload, indent=4, ensure_ascii=True)
-    text = text.replace("–", "-").replace("—", "-")
     with open(outfile, "w", encoding="ascii") as f:
         f.write(text)
-    print("Wrote:", outfile)
 
-
-if __name__ == "__main__":
-    main()
+    print(f"Updated {outfile}")
