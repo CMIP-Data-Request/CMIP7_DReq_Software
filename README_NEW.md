@@ -30,7 +30,7 @@ The main purpose of the CMIP7 DReq API is to extract the requested variables (al
 - *Software engineers* preparing CMIP7 modelling workflows
 - *Data providers* preparing CMIP7 output
 
-**Focus: practical usage:** exploring the CMIP7 DR content - apply various filters - get the results in different formats.
+**General features:** exploring the CMIP7 DR content - apply various filters - get the results in different formats.
 
 ## Release Versions
 
@@ -147,63 +147,119 @@ This will prevent checks for updates and retrievals of new versions of the data 
 ### Command-Line Utilities
 
 A set of CLI utilities are available on pip install:
-1. [`CMIP7_data_request_api_config`]() to interact with config file
+1. [`CMIP7_data_request_api_config`](data_request_api/data_request_api/command_line/config.py) to interact with config file
 2. [`export_dreq_lists_json.py`](data_request_api/data_request_api/command_line/export_dreq_lists_json.py) to get lists of requested variables
 3. [`get_variables_metadata.py`](data_request_api/data_request_api/command_line/get_variables_metadata.py) to access variable names & definitions
 4. [`compare_variables.py`](data_request_api/data_request_api/command_line/compare_variables.py) to track changes in variable definitions and attributes
 5. [`estimate_dreq_volume.py`](data_request_api/data_request_api/command_line/estimate_dreq_volume.py) which is a configurable data volume estimator
 
-:coffee: ==TODO: link for CLI 1 is missing==
-
-Here are some CLI calling examples: 
 
 **1. CMIP7_data_request_api_config**
 
-This command line blabla...
-<br>
-:coffee: ==TODO: complete this CLI quick-guide==
+This is for configuring of the CLI. It has already been presented in [Configuration](#configuration) section, but  user may find here some additional details like the complete list of config parameters. 
 
-Call example:
-<br>
-`the-command-line`
+First time it is called, it genarates a default configuration file on your HOME directory.
+
+`CMIP7_data_request_api_config`
+
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to see the content of the default configuration file generated.</summary>
 
 ```
+cache_dir: <YOUR-HOME-DIR>/.CMIP7_data_request_api_cache
+check_api_version: true
+consolidate: false
+export: release
+log_file: default
+log_level: info
+offline: false
+variable_name: CMIP7 Compound Name
 ```
 </details>
 <br>
 
-Additionnal filter options are available: 
+The configuration file can be edited manually or via the config utility, passing a (key, value) pair for each config parameter, for example:
+
+`CMIP7_data_request_api_config offline true`
+
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to show all the available options.</summary>
 
 ```
+ $ --> CMIP7_data_request_api_config -h
+
+usage: CMIP7_data_request_api_config <arguments>
+
+Config CLI
+
+positional arguments:
+  command
+
+options:
+  -h, --help  show this help message and exit
+
+Arguments:
+  init (or no arguments): Initialize the config file,
+      i.e. create a config file with default values if it does not exist.
+  list: List all keys in the config file.
+  reset: Reset the config file to default values.
+  <key> <value>: Update a specific key in the config file.
+  help: print this help message.
 ```
+</details>
+<br>
+
+<details>
+<summary>Click here to show all the configuration parameters.</summary>
+
+* `cache_dir` is the repository where the config file is stored
+* `check_api_version` ('true' or 'false') checks if a newer version is available with pypi and raises a warning in case the installed version is not the latest one
+* `consolidate` ('true' or 'false') to apply the consolidation on the _raw json-export_ of the DR * content (air tables) 
+* `export` ('raw' or 'release') to use the _raw_ or _release json-export_ of the DR content (air tables) 
+* `log_file` ('default' or prefered file path) to customize (or not) the log file
+* `log_level` ('debug' or 'info') to set the verbosity level in CLI log files
+* `offline` ('true' or 'false') set to 'true' to prevent checks for updates and retrievals of new versions of the data request content
+* `variable_name` ('CMIP7 Compound Name' or 'CMIP6 Compound Name'), the  label used to uniquely identify the variables 
+
 </details>
 <br>
 
 **2. export_dreq_lists_json**
 
-A json file is generated, listing the variables requested by the CMIP7 DR for the selected criteria.
+A json file is generated, listing the variables requested by the CMIP7 DR for the selected criteria. The list of variables is sorted per experiment (if several requested) and per priority (Core, High, Medium and Low). Variables a identified with their _CMIP7 compound names_.
 
 Call example:
 <br>
 `export_dreq_lists_json --all_opportunities v1.2.2.2 amip_all_Opps_v1.2.2.2.json --experiments amip`
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here for a snapview of the output json file.</summary>
 
 ```
+    "experiment": {
+        "amip": {
+            "Core": [
+                "atmos.areacella.ti-u-hxy-u.fx.GLB",
+                "atmos.cl.tavg-al-hxy-u.mon.GLB",
+                "atmos.cli.tavg-al-hxy-u.mon.GLB",
+                "atmos.clivi.tavg-u-hxy-u.mon.GLB",
+                "atmos.clt.tavg-u-hxy-u.day.GLB",
+                "atmos.clt.tavg-u-hxy-u.mon.GLB",
+                "atmos.clw.tavg-al-hxy-u.mon.GLB",
+                "atmos.clwvi.tavg-u-hxy-u.mon.GLB",
+                "atmos.evspsbl.tavg-u-hxy-u.mon.GLB",
+                "atmos.hfls.tavg-u-hxy-u.mon.GLB",
+                "atmos.hfss.tavg-u-hxy-u.mon.GLB",
+                "atmos.hur.tavg-p19-hxy-air.mon.GLB",
 ```
 </details>
 <br>
 
-Additionnal filter options are available: 
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to show all the available options.</summary>
 
 ```
-export_dreq_lists_json -h
+$--> export_dreq_lists_json -h
+
 usage: export_dreq_lists_json [-h] [-a] [-f OPPORTUNITIES_FILE] [-i OPPORTUNITY_IDS] [-e EXPERIMENTS] [-p {core,high,medium,low}] [-m VARIABLES_METADATA]
                               {v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev} output_file
 
@@ -235,13 +291,13 @@ options:
 
 **3. get_variables_metadata**
 
-A json file is generated, containing the variables  present in the CMIP7 DR (all or only the ones matching filter options, see below). Each single entry of the json file is the CMIP7 compound name of the variable and all of the attributes associated with this varaible are given as (key,value) pairs.
+A json file is generated, containing the variables  present in the CMIP7 DR (all or only the ones matching filter options, see below). Each single entry of the json file is the _CMIP7 compound name_ of the variable and all of the attributes associated with this varaible are given as (key,value) pairs.
 
 Call example:
 <br>
 `get_variables_metadata v1.2.2.2 all_variables_metadata_v1.2.2.2.json`
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here for a snapview of the output json file.</summary>
 
 ```
     {
@@ -282,12 +338,12 @@ Call example:
 </details>
 <br>
 
-Additionnal filter options are available:
-`get_variables_metadata -h`
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to show all the available options.</summary>
 
 ```
+$--> get_variables_metadata -h
+
 usage: get_variables_metadata [-h] [-cn COMPOUND_NAMES] [-t CMOR_TABLES] [-v CMOR_VARIABLES]
                               {v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev} outfile
 
@@ -312,54 +368,126 @@ options:
 
 **4. compare_variables**
 
-This command line blabla...
+Usefull for viewing the changes in variable metadata between two CMIP7 DR versions or between CMIP7 and CMIP6. If comparing to CMIP6, the CMIP6 CMOR tables will be loaded and a `cmip6.json` file created with the expected format to enable the comparison. There are 3 output files: one listing the missing variables and two files listing the differences (one sorted per variable, the other sorted per attribute). As above, variables a identified with their _CMIP7 compound names_.
 <br>
-:coffee: ==TODO: complete this CLI quick-guide==
 
 Call example:
 <br>
-`the-command-line`
+`compare_variables all_variables_metadata_v1.2.2.2.json cmip6`
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to see the CLI log.</summary>
 
 ```
+Wrote cmip6.json
+Loaded all_variables_metadata_v1.2.2.2.json
+Loaded cmip6.json
+Total number of variables with differences: 0
+Wrote missing_variables.json
+Wrote diffs_by_variable.json
+Wrote diffs_by_attribute.json
 ```
 </details>
 <br>
 
-Additionnal filter options are available: 
-`cli-script-name -h`
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to see all the available options.</summary>
 
 ```
+$--> compare_variables -h
+
+usage: compare_variables [-h] [-c CONFIG_ATTRIBUTES] compare compare
+
+Compare variables metadata between data request versions
+
+positional arguments:
+  compare               versions of variables to compare: json file or cmor tables
+
+options:
+  -h, --help            show this help message and exit
+  -c, --config_attributes CONFIG_ATTRIBUTES
+                        yaml file specifying metadata attributes to compare (will be created if it doesn't exist)
 ```
 </details>
 <br>
 
 **5. estimate_dreq_volume**
 
-This command line blabla...
+Provides an estimate of the data volumes. It takes as input a yaml file where the model-grid size parameters are to be set. Please note that theses these estimates are provisionnal and must be used with caution. It the output file is a json file where data volumes are given per experiment and grouped by variable priority (Core, High, Medim, Low).
 <br>
-:coffee: ==TODO: complete this CLI quick-guide==
 
-Call example:
-<br>
-`the-command-line`
+To first create the yaml file, just call the utility with a DR version specified:
+`estimate_dreq_volume v1.2.2.2`
+
+A default  config file `size.yaml`is created. 
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to see the content of the default config file.</summary>
+
+```
+# Data sizes config file for estimate_volume.py
+
+# Model-specific dimension sizes (edit as needed)
+dimensions:
+  alevel: 80
+  alevhalf: 80
+  gridlatitude: 100
+  latitude: 180
+  longitude: 360
+  olevel: 80
+  olevhalf: 80
+  rho: 80
+  sdepth: 20
+  soilpools: 5
+  spectband: 10
+
+# Number of bytes per floating point number
+bytes_per_float: 4
+
+# Scaling factor (e.g., adjust to account for netcdf compression)
+scale_file_size: 1
+
+# No. of years to use if showing size of single variables (-vso option)
+years: 1
+```
+</details>
+<br>
+
+After editing `size.yaml` with your model-specific settings, rerun the command.
+<br>
+
+<details>
+<summary>Click here for a snapview of the outut json file.</summary>
 
 ```
 ```
 </details>
 <br>
 
-Additionnal filter options are available: 
-`cli-script-name -h`
 <details>
-<summary>Click here to expand.</summary>
+<summary>Click here to see all the available options.</summary>
 
 ```
+ $ --> estimate_dreq_volume -h
+
+usage: estimate_dreq_volume [-h] [-o OUTFILE] [-c CONFIG_SIZE] [-v VARIABLES] [-e EXPERIMENTS] [-vso] request
+
+Estimate volume of requested model output
+
+positional arguments:
+  request               json file specifying variables requested by experiment (output from export_dreq_lists_json, which specifies the data request version) OR
+                        can be a data request version (e.g. "v1.2")
+
+options:
+  -h, --help            show this help message and exit
+  -o, --outfile OUTFILE
+                        name of output file, default: volume_estimate_{data request version}.json
+  -c, --config-size CONFIG_SIZE
+                        config file (yaml) giving size parameters to use in the volume estimate
+  -v, --variables VARIABLES
+                        include only the specified variables in the estimate, example: -v Amon.tas,Omon.tos
+  -e, --experiments EXPERIMENTS
+                        include only the specified experiments in the estimate, example: -e historical,piControl
+  -vso, --variable-size-only
+                        show ONLY the sizes of individual variables (ignores experiments)
 ```
 </details>
 <br>
@@ -367,17 +495,17 @@ Additionnal filter options are available:
 ### Notebooks
 
 Notebooks are intended as a how-to guidelines for:
-* loading the data request: [`HowTo-01`](notebooks/HowTo-01_Import_and_Load_the_DR.ipynb)
-* discovering the data request: [`HowTo-02`](notebooks/HowTo-02_Discover_What_is_in_DR.ipynb)
-* searching for experiments or variables: [`HowTo-03a`](notebooks/HowTo-03a_Find_Experiments_and_Variables_for_given_Opportunities.ipynb), [`HowTo-03b`](notebooks/HowTo-03b_Find_Experiments_and_Variables_for_given_Opportunities.ipynb)
-* viewing attributes of experiments and variables: [`HowTo-04a`](notebooks/HowTo-04a_View_Attributes_of_Experiments_and_Variables.ipynb), [`HowTo-04b`](notebooks/HowTo-04a_View_Attributes_of_Experiments_and_Variables.ipynb)
-* applying various search filters: [`HowTo-05`](notebooks/HowTo-05_Apply_Various_Search_Critria.ipynb)
+* loading the data request: ["HowTo-01"](notebooks/HowTo-01_Import_and_Load_the_DR.ipynb)
+* discovering the data request: ["HowTo-02"](notebooks/HowTo-02_Discover_What_is_in_DR.ipynb)
+* searching for experiments or variables: ["HowTo-03a"](notebooks/HowTo-03a_Find_Experiments_and_Variables_for_given_Opportunities.ipynb), ["HowTo-03b"](notebooks/HowTo-03b_Find_Experiments_and_Variables_for_given_Opportunities.ipynb)
+* viewing attributes of experiments and variables: ["HowTo-04a"](notebooks/HowTo-04a_View_Attributes_of_Experiments_and_Variables.ipynb), ["HowTo-04b"](notebooks/HowTo-04a_View_Attributes_of_Experiments_and_Variables.ipynb)
+* applying various search filters: ["HowTo-05"](notebooks/HowTo-05_Apply_Various_Search_Critria.ipynb)
 
 ### Python Scripts
 
 Python scripts objective is to illustrate some use-case workflows.
 
-:coffee: ==TODO: add the script list here + call examples==
+:construction: *This section is under construction.* 
 
 ## Documentation
 
