@@ -5,7 +5,9 @@
 [![license](https://img.shields.io/github/license/CMIP-Data-Request/CMIP7_DReq_Software.svg)](https://github.com/CMIP-Data-Request/CMIP7_DReq_Software/blob/main/LICENSE)
 [![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-# CMIP7 Data Request Software (CMIP7 DReq Software) – Quick User Guide
+# CMIP7 Data Request Software
+
+Quick user guide for python software to interact with the [CMIP7 data request](https://wcrp-cmip.org/cmip7/cmip7-data-request/).
 
 ## Table of Contents
 1. [Purpose](#purpose) 
@@ -20,22 +22,22 @@
 
 ## Purpose
 
-**The CMIP7 DReq Software**  is a Python software designed to interact with the [CMIP7 Data Request](https://wcrp-cmip.org/cmip7/cmip7-data-request/) (this latter is also qualified as "Data Request ***Content***" in order to distinguish from the current "Data Request ***Software***", see the schema bellow to see the pathway between the two). It provides an API to *query* and *utilize* the information in the Data Request, including [command-line (CLI) utilities](#command-line-utilities), [example scripts](#python-scripts) and [notebooks](#notebooks) showing how to use the API. 
-The main purpose of the CMIP7 DReq API is to extract the requested variables (along with their attributes) according to filters the user activates (a set of CMIP7 Experiments, and/or Opportunities, and/or Frequencies, etc.). It can either generates the resulting list in various formats (xls, csv, json) or return them as python objets that make the API *plugable* in Modelling Centres' data production workflows. 
+**The CMIP7 DReq Software**  is Python software designed to interact with the [CMIP7 Data Request](https://wcrp-cmip.org/cmip7/cmip7-data-request/), which is referred to herein as the **Data Request Content** in order to distinguish from the **Software**; the schematic below shows the relationship between the two. It provides an API to *query* and *utilize* the information in the Data Request, including [command-line (CLI) utilities](#command-line-utilities), [example scripts](#python-scripts) and [notebooks](#notebooks) showing how to use the API. 
+The main purpose of the CMIP7 DReq API is to extract the requested variables (along with their attributes) according to filters the user activates (a set of CMIP7 Experiments, and/or Opportunities, and/or Frequencies, etc.). It can generate the resulting lists in different formats (csv, json) or return them as python objects that make the API *plugable* in Modelling Centres' data production workflows. 
 
 <img width=750px src=./docs/static/3boxes_schema.png>
 
 **Target audience:**  
-- *Modellers* configuring the climate models running CMIP7 simulations
+- *Modellers* configuring the output variables for climate models running CMIP7 simulations
 - *Software engineers* preparing CMIP7 modelling workflows
-- *Data providers* preparing CMIP7 output
+- *Data providers* preparing CMIP7 netCDF output files for publication on [ESGF](https://esgf.github.io/)
 
 **General features:** exploring the CMIP7 DR content - apply various filters - get the results in different formats.
 
 ## Release Versions
 
-The latest **official release** of the CMIP7 Data Request is `v1.2.2.2` (30 September 2025).
-[Learn more about this release on the CMIP website](https://wcrp-cmip.org/cmip7-data-request-v1-2-2/).
+The latest **official release** of the CMIP7 Data Request Content is [described here](https://wcrp-cmip.org/cmip7-data-request-latest).
+It can be viewed online [in Airtable](https://bit.ly/CMIP7-DReq-latest), or using a github-based [web viewer](https://cmip-data-request.github.io/cmip7-dreq-webview/latest), or using the DReq API as described below.
 
 :warning: **Note:** *The CMIP7 DReq Software versions are not aligned with the CMIP7 Data Request ones. So please, do not infer that v1.2.2 of the CMIP7 DReq Software "works with" or "reflects"  v1.2.2 of the CMIP7 Data Request, it is not the case!*
 
@@ -46,13 +48,14 @@ You can launch and interact with this repository  via [Binder](https://mybinder.
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CMIP-Data-Request/CMIP7_DReq_Software/main?filepath=notebooks)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CMIP-Data-Request/CMIP7_DReq_Software/)
 <br>
-:bulb: This enables you, *without installing anything*, to play with the [notebooks](#notebooks), in a live environment that is your own playground.
+:bulb: This enables you, *without installing anything on your local system*, to play with the [notebooks](#notebooks), in a live environment that is your own playground.
+(Note, in Google Colab it may be necessary to add `! pip install CMIP7-data-request-api` to the beginning of the notebooks, while Binder should take care of that for you.)
 
 ## Installation
 
 ### Install in User mode
 
-Here is decribed the install of the *CMIP7 DReq Software* python package via `pip` for a simple user-mode usage.
+Here is described how to install the *CMIP7 DReq Software* python package via `pip` for use as a python module in scripts/software or to use the command-line utilities. (To modify/develop the software, see below for [developer installation instructions](#install-in-developer-mode).)
 
 In a python *venv* or *conda env* in which you want to install the package, do:
 ```bash
@@ -99,13 +102,15 @@ python -m pip install --upgrade CMIP7_data_request_api
 ```
 :bulb: And finally, if you want to run the [notebooks](#notebooks) in your enviromement (venv or conda), do not forget to install an ipykernel:
 ```bash
+pip install jupyter
+pip install ipykernel
 python -m ipykernel install --user --name my_dreq_kernel
 ```
 where `my_dreq_kernel` is the name of the kernel you want to appear in your `jupyter-notebook` interface.
 
-### Install in Developpement mode
+### Install in Developer mode
 
-To install the *CMIP7 DReq Software*  for development purpose, first clone the source repository:
+To install the *CMIP7 DReq Software*  for development purposes, first clone the source repository:
 ```bash
 git clone git@github.com:CMIP-Data-Request/CMIP7_DReq_Software.git
 cd CMIP7_DReq_Software
@@ -124,7 +129,7 @@ CMIP7_data_request_api_config init
 This will create the `.CMIP7_data_request_api_config` file in your home directory.
 Optionally, the default location of this file can be changed by setting the  `CMIP7_DR_API_CONFIGFILE` environment variable.
 
-:bulb:**Note:** *This initialization of the configuration step is optionnal, because in any case, the file will be automatically created the first time you use the software.*
+:bulb:**Note:** *Initializing the configuration file is optional, because the file will be automatically created the first time you use the software.*
 
 The ***configuration file*** is a YAML file containing `key: value` pairs that
 control the behavior of the software. 
@@ -147,7 +152,7 @@ This will prevent checks for updates and retrievals of new versions of the data 
 ### Command-Line Utilities
 
 A set of CLI utilities are available on pip install:
-1. [`CMIP7_data_request_api_config`](data_request_api/data_request_api/command_line/config.py) to interact with config file
+1. [`CMIP7_data_request_api_config`](data_request_api/data_request_api/command_line/config.py) to interact with config file, as [described above](#configuration)
 2. [`export_dreq_lists_json.py`](data_request_api/data_request_api/command_line/export_dreq_lists_json.py) to get lists of requested variables
 3. [`get_variables_metadata.py`](data_request_api/data_request_api/command_line/get_variables_metadata.py) to access variable names & definitions
 4. [`compare_variables.py`](data_request_api/data_request_api/command_line/compare_variables.py) to track changes in variable definitions and attributes
@@ -156,9 +161,9 @@ A set of CLI utilities are available on pip install:
 
 **1. CMIP7_data_request_api_config**
 
-This is for configuring of the CLI. It has already been presented in [Configuration](#configuration) section, but  user may find here some additional details like the complete list of config parameters. 
+This is for configuring of the CLI, which has already been presented in the [configuration section](#configuration). Here we provide some additional details like the complete list of config parameters. 
 
-First time it is called, it genarates a default configuration file on your HOME directory.
+First time it is called, it generates a default configuration file in your HOME directory.
 
 `CMIP7_data_request_api_config`
 
@@ -226,7 +231,9 @@ Arguments:
 
 **2. export_dreq_lists_json**
 
-A json file is generated, listing the variables requested by the CMIP7 DR for the selected criteria. The list of variables is sorted per experiment (if several requested) and per priority (Core, High, Medium and Low). Variables a identified with their _CMIP7 compound names_.
+A json file is generated, listing the variables requested by the CMIP7 DR for the selected criteria. The list of variables is sorted per experiment (if several requested) and per priority (Core, High, Medium and Low). Variables are identified by default with their _CMIP7 compound names_.
+
+:bulb: By changing the configuration parameter `variable_name`, variables in the output file can instead be identified by their _CMIP6 compound names_, or any other unique identifier present in the variables' metadata (e.g., `uid`).
 
 Call example:
 <br>
@@ -291,7 +298,9 @@ options:
 
 **3. get_variables_metadata**
 
-A json file is generated, containing the variables  present in the CMIP7 DR (all or only the ones matching filter options, see below). Each single entry of the json file is the _CMIP7 compound name_ of the variable and all of the attributes associated with this varaible are given as (key,value) pairs.
+A json file is generated, containing the metadata of variables present in the CMIP7 DR (by default all of them, or alternately only the ones matching optional filter arguments). Each single entry of the json file is the _CMIP7 compound name_ of the variable and all of the attributes associated with this varaible are given as (key,value) pairs.
+
+:bulb: By changing the configuration parameter `variable_name`, variables in the output file can instead be identified by their _CMIP6 compound names_.
 
 Call example:
 <br>
@@ -366,9 +375,11 @@ options:
 </details>
 <br>
 
+:bulb: The [CMIP7 CMOR tables](https://github.com/WCRP-CMIP/cmip7-cmor-tables) have been generated from the variables metadata in the DR. `get_variables_metadata` provides another way to view the variables metadata in the DR.
+
 **4. compare_variables**
 
-Usefull for viewing the changes in variable metadata between two CMIP7 DR versions or between CMIP7 and CMIP6. If comparing to CMIP6, the CMIP6 CMOR tables will be loaded and a `cmip6.json` file created with the expected format to enable the comparison. There are 3 output files: one listing the missing variables and two files listing the differences (one sorted per variable, the other sorted per attribute). As above, variables a identified with their _CMIP7 compound names_.
+Useful for viewing the changes in variable metadata between two CMIP7 DR versions or between CMIP7 and CMIP6. If comparing to CMIP6, the CMIP6 CMOR tables will be loaded and a `cmip6.json` file created with the expected format to enable the comparison. There are 3 output files: one listing the missing variables and two files listing the differences (one sorted per variable, the other sorted per attribute). As above, variables are identified with their _CMIP7 compound names_.
 <br>
 
 Call example:
@@ -412,7 +423,7 @@ options:
 
 **5. estimate_dreq_volume**
 
-Provides an estimate of the data volumes. It takes as input a yaml file where the model-grid size parameters are to be set. Please note that theses these estimates are provisionnal and must be used with caution. It the output file is a json file where data volumes are given per experiment and grouped by variable priority (Core, High, Medim, Low).
+Provides an estimate of the data volumes. It takes as input a yaml file where the model-grid size parameters are to be set. Please note that theses these estimates are provisional and must be used with caution. The output file is a json file where data volumes are given per experiment and grouped by variable priority (Core, High, Medium, Low).
 <br>
 
 To first create the yaml file, just call the utility with a DR version specified:
