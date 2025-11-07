@@ -140,7 +140,11 @@ class DRObjects(object):
         :return: a list of strings that can be assembled to print the content.
         """
         indent = "    " * level
-        return [f"{indent}{to_singular(self.DR_type)}: {self.name} (id: {is_link_id_or_value(self.id)[1]})", ]
+        linked_id = is_link_id_or_value(self.id)[1]
+        if self.name == linked_id:
+            return [f"{indent}{to_singular(self.DR_type)}: {self.name}", ]
+        else:
+            return [f"{indent}{to_singular(self.DR_type)}: {self.name} (id: {linked_id})", ]
 
     def filter_on_request(self, request_value, inner=True):
         """

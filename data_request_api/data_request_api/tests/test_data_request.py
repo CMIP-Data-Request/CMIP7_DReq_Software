@@ -168,12 +168,12 @@ class TestExperimentsGroup(unittest.TestCase):
     def test_print(self):
         obj = ExperimentsGroup.from_input(id="link::historical", dr=self.dr,
                                           experiments=["link::historical", "link::esm-hist"], name="historical")
-        ref_str = "experiment_group: historical (id: historical)"
+        ref_str = "experiment_group: historical"
         ref_str_2 = [
             ref_str,
             "    Experiments included:",
-            "        experiment: historical (id: historical)",
-            "        experiment: esm-hist (id: esm-hist)"
+            "        experiment: historical",
+            "        experiment: esm-hist"
         ]
         self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
         self.assertEqual(obj.print_content(level=1, add_content=False), ["    " + ref_str, ])
@@ -405,7 +405,7 @@ class TestVariablesGroup(unittest.TestCase):
                                         name="baseline_monthly",
                                         variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
                                                    "link::atmos.prc.tavg-u-hxy-u.mon.GLB"])
-        ref_str = "variable_group: baseline_monthly (id: baseline_monthly)"
+        ref_str = "variable_group: baseline_monthly"
         ref_str_2 = [
             ref_str,
             "    Variables included:",
@@ -519,14 +519,14 @@ class TestOpportunity(unittest.TestCase):
                                      experiment_groups=["link::fast-track", ],
                                      data_request_themes=["link::atmosphere", "link::impacts",
                                                           "link::land_landice"])
-        ref_str = "opportunity: Ocean Extremes (id: Ocean Extremes)"
+        ref_str = "opportunity: Ocean Extremes"
         ref_str_2 = [
             ref_str,
             "    Experiments groups included:",
-            "        experiment_group: fast-track (id: fast-track)",
+            "        experiment_group: fast-track",
             "    Variables groups included:",
-            "        variable_group: baseline_monthly (id: baseline_monthly)",
-            "        variable_group: baseline_subdaily (id: baseline_subdaily)",
+            "        variable_group: baseline_monthly",
+            "        variable_group: baseline_subdaily",
             "    Themes included:",
             "        data_request_theme: Atmosphere (id: atmosphere)",
             "        data_request_theme: Impacts & Adaptation (id: impacts)",
