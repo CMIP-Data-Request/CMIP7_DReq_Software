@@ -1161,30 +1161,30 @@
         }
     },
     "data_request_themes": {
-        "527f5c8f-8c97-11ef-944e-41a8eb05f654": {
-            "name": "Impacts & Adaptation",
-            "short_name": "impacts",
-            "uid": "527f5c8f-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c90-8c97-11ef-944e-41a8eb05f654": {
+        "atmosphere": {
             "name": "Atmosphere",
             "short_name": "atmosphere",
             "uid": "527f5c90-8c97-11ef-944e-41a8eb05f654"
         },
-        "527f5c91-8c97-11ef-944e-41a8eb05f654": {
+        "earth_system": {
+            "name": "Earth System",
+            "short_name": "earth_system",
+            "uid": "527f5c93-8c97-11ef-944e-41a8eb05f654"
+        },
+        "impacts": {
+            "name": "Impacts & Adaptation",
+            "short_name": "impacts",
+            "uid": "527f5c8f-8c97-11ef-944e-41a8eb05f654"
+        },
+        "land_landice": {
             "name": "Land & Land-Ice",
             "short_name": "land_landice",
             "uid": "527f5c91-8c97-11ef-944e-41a8eb05f654"
         },
-        "527f5c92-8c97-11ef-944e-41a8eb05f654": {
+        "ocean_seaice": {
             "name": "Ocean & Sea-Ice",
             "short_name": "ocean_seaice",
             "uid": "527f5c92-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c93-8c97-11ef-944e-41a8eb05f654": {
-            "name": "Earth System",
-            "short_name": "earth_system",
-            "uid": "527f5c93-8c97-11ef-944e-41a8eb05f654"
         }
     },
     "docs_for_opportunities": {},
@@ -1708,274 +1708,274 @@
         }
     },
     "experiment_groups": {
-        "80ab723e-a698-11ef-914a-613c0433d878": {
+        "dcpp": {
             "complete_experiment_list": true,
             "experiments": [
-                "link::527f5c53-8c97-11ef-944e-41a8eb05f654"
+                "link::dcppB-forecast-cmip6"
             ],
             "name": "dcpp",
             "title": "All DCPP CMIP7 experiments",
             "uid": "80ab723e-a698-11ef-914a-613c0433d878"
         },
-        "80ab72c9-a698-11ef-914a-613c0433d878": {
+        "deck": {
             "complete_experiment_list": true,
             "experiments": [
-                "link::80ab72b4-a698-11ef-914a-613c0433d878",
-                "link::80ab72b5-a698-11ef-914a-613c0433d878",
-                "link::80ab72b6-a698-11ef-914a-613c0433d878"
-            ],
-            "name": "scenarios_extensions",
-            "title": "Experiment group for the extension scenario experiments",
-            "uid": "80ab72c9-a698-11ef-914a-613c0433d878"
-        },
-        "dafc748d-8c95-11ef-944e-41a8eb05f654": {
-            "complete_experiment_list": true,
-            "experiments": [
-                "link::527f5c3c-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c3d-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c3e-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c3f-8c97-11ef-944e-41a8eb05f654"
+                "link::amip",
+                "link::esm-hist",
+                "link::esm-piControl",
+                "link::historical"
             ],
             "name": "deck",
             "uid": "dafc748d-8c95-11ef-944e-41a8eb05f654"
         },
-        "dafc748e-8c95-11ef-944e-41a8eb05f654": {
+        "fast-track": {
             "complete_experiment_list": true,
             "experiments": [
-                "link::527f5c53-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c54-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c55-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5a-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5b-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5c-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5d-8c97-11ef-944e-41a8eb05f654",
-                "link::80ab724d-a698-11ef-914a-613c0433d878",
-                "link::80ab72c4-a698-11ef-914a-613c0433d878"
+                "link::dcppB-forecast-cmip6",
+                "link::esm-flat10",
+                "link::g7-1p5K-sai",
+                "link::land-hist",
+                "link::piClim-NOX",
+                "link::scen7-hc",
+                "link::scen7-mc",
+                "link::scen7-mlc",
+                "link::scen7-vlloc"
             ],
             "name": "fast-track",
             "title": "Experiments included in the CMIP Assessment Fast Track (not inclusive of DECK experiments)",
             "uid": "dafc748e-8c95-11ef-944e-41a8eb05f654"
         },
-        "dafc748f-8c95-11ef-944e-41a8eb05f654": {
+        "historical": {
             "complete_experiment_list": true,
             "experiments": [
-                "link::527f5c5a-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5b-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5c-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c5d-8c97-11ef-944e-41a8eb05f654"
+                "link::esm-hist",
+                "link::historical"
+            ],
+            "name": "historical",
+            "uid": "dafc7490-8c95-11ef-944e-41a8eb05f654"
+        },
+        "scenarios": {
+            "complete_experiment_list": true,
+            "experiments": [
+                "link::scen7-hc",
+                "link::scen7-mc",
+                "link::scen7-mlc",
+                "link::scen7-vlloc"
             ],
             "name": "scenarios",
             "uid": "dafc748f-8c95-11ef-944e-41a8eb05f654"
         },
-        "dafc7490-8c95-11ef-944e-41a8eb05f654": {
+        "scenarios_extensions": {
             "complete_experiment_list": true,
             "experiments": [
-                "link::527f5c3d-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c3f-8c97-11ef-944e-41a8eb05f654"
+                "link::scen7-hc-ext",
+                "link::scen7-hc-ext-os",
+                "link::scen7-mc-ext"
             ],
-            "name": "historical",
-            "uid": "dafc7490-8c95-11ef-944e-41a8eb05f654"
+            "name": "scenarios_extensions",
+            "title": "Experiment group for the extension scenario experiments",
+            "uid": "80ab72c9-a698-11ef-914a-613c0433d878"
         }
     },
     "experiments": {
-        "527f5c3c-8c97-11ef-944e-41a8eb05f654": {
+        "amip": {
             "name": "amip",
             "size_(years,_minimum)": 42,
             "uid": "527f5c3c-8c97-11ef-944e-41a8eb05f654"
         },
-        "527f5c3d-8c97-11ef-944e-41a8eb05f654": {
-            "name": "esm-hist",
-            "size_(years,_minimum)": 172,
-            "uid": "527f5c3d-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c3e-8c97-11ef-944e-41a8eb05f654": {
-            "name": "esm-piControl",
-            "size_(years,_minimum)": 400,
-            "uid": "527f5c3e-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c3f-8c97-11ef-944e-41a8eb05f654": {
-            "name": "historical",
-            "size_(years,_minimum)": 171,
-            "uid": "527f5c3f-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c53-8c97-11ef-944e-41a8eb05f654": {
+        "dcppB-forecast-cmip6": {
             "name": "dcppB-forecast-cmip6",
             "size_(years,_minimum)": 10,
             "uid": "527f5c53-8c97-11ef-944e-41a8eb05f654"
         },
-        "527f5c54-8c97-11ef-944e-41a8eb05f654": {
-            "name": "g7-1p5K-sai",
-            "size_(years,_minimum)": 50,
-            "uid": "527f5c54-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c55-8c97-11ef-944e-41a8eb05f654": {
-            "name": "land-hist",
-            "size_(years,_minimum)": 172,
-            "uid": "527f5c55-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c5a-8c97-11ef-944e-41a8eb05f654": {
-            "name": "scen7-hc",
-            "size_(years,_minimum)": 75,
-            "uid": "527f5c5a-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c5b-8c97-11ef-944e-41a8eb05f654": {
-            "name": "scen7-mc",
-            "size_(years,_minimum)": 75,
-            "uid": "527f5c5b-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c5c-8c97-11ef-944e-41a8eb05f654": {
-            "name": "scen7-vlloc",
-            "size_(years,_minimum)": 75,
-            "uid": "527f5c5c-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c5d-8c97-11ef-944e-41a8eb05f654": {
-            "name": "scen7-mlc",
-            "size_(years,_minimum)": 75,
-            "uid": "527f5c5d-8c97-11ef-944e-41a8eb05f654"
-        },
-        "80ab724d-a698-11ef-914a-613c0433d878": {
+        "esm-flat10": {
             "name": "esm-flat10",
             "size_(years,_minimum)": 150,
             "uid": "80ab724d-a698-11ef-914a-613c0433d878"
         },
-        "80ab72b4-a698-11ef-914a-613c0433d878": {
+        "esm-hist": {
+            "name": "esm-hist",
+            "size_(years,_minimum)": 172,
+            "uid": "527f5c3d-8c97-11ef-944e-41a8eb05f654"
+        },
+        "esm-piControl": {
+            "name": "esm-piControl",
+            "size_(years,_minimum)": 400,
+            "uid": "527f5c3e-8c97-11ef-944e-41a8eb05f654"
+        },
+        "g7-1p5K-sai": {
+            "name": "g7-1p5K-sai",
+            "size_(years,_minimum)": 50,
+            "uid": "527f5c54-8c97-11ef-944e-41a8eb05f654"
+        },
+        "historical": {
+            "name": "historical",
+            "size_(years,_minimum)": 171,
+            "uid": "527f5c3f-8c97-11ef-944e-41a8eb05f654"
+        },
+        "land-hist": {
+            "name": "land-hist",
+            "size_(years,_minimum)": 172,
+            "uid": "527f5c55-8c97-11ef-944e-41a8eb05f654"
+        },
+        "piClim-NOX": {
+            "name": "piClim-NOX",
+            "size_(years,_minimum)": 30,
+            "uid": "80ab72c4-a698-11ef-914a-613c0433d878"
+        },
+        "scen7-hc": {
+            "name": "scen7-hc",
+            "size_(years,_minimum)": 75,
+            "uid": "527f5c5a-8c97-11ef-944e-41a8eb05f654"
+        },
+        "scen7-hc-ext": {
             "name": "scen7-hc-ext",
             "size_(years,_minimum)": 50,
             "uid": "80ab72b4-a698-11ef-914a-613c0433d878"
         },
-        "80ab72b5-a698-11ef-914a-613c0433d878": {
+        "scen7-hc-ext-os": {
             "name": "scen7-hc-ext-os",
             "size_(years,_minimum)": 50,
             "uid": "80ab72b5-a698-11ef-914a-613c0433d878"
         },
-        "80ab72b6-a698-11ef-914a-613c0433d878": {
+        "scen7-mc": {
+            "name": "scen7-mc",
+            "size_(years,_minimum)": 75,
+            "uid": "527f5c5b-8c97-11ef-944e-41a8eb05f654"
+        },
+        "scen7-mc-ext": {
             "name": "scen7-mc-ext",
             "size_(years,_minimum)": 50,
             "uid": "80ab72b6-a698-11ef-914a-613c0433d878"
         },
-        "80ab72c4-a698-11ef-914a-613c0433d878": {
-            "name": "piClim-NOX",
-            "size_(years,_minimum)": 30,
-            "uid": "80ab72c4-a698-11ef-914a-613c0433d878"
+        "scen7-mlc": {
+            "name": "scen7-mlc",
+            "size_(years,_minimum)": 75,
+            "uid": "527f5c5d-8c97-11ef-944e-41a8eb05f654"
+        },
+        "scen7-vlloc": {
+            "name": "scen7-vlloc",
+            "size_(years,_minimum)": 75,
+            "uid": "527f5c5c-8c97-11ef-944e-41a8eb05f654"
         }
     },
     "glossary": {},
     "mips": {
-        "527f5c64-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "A better understanding of the role of sea ice for the changing climate of our planet is the central aim of the diagnostic Sea-Ice Model Intercomparison Project (SIMIP), having formally started for CMIP6. To reach this aim, SIMIP requests sea-ice-related variables from climate-model simulations that allow for a better understanding and, ultimately, improvement of biases and errors in sea-ice simulations with large-scale climate models. This then allows us to better understand to what degree CMIP model simulations relate to reality, thus improving our confidence in answering sea-ice-related questions based on these simulations. Furthermore, the SIMIP protocol provides a standard for sea-ice model output that will streamline and hence simplify the analysis of the simulated sea-ice evolution in research projects independent of CMIP. To reach its aims, SIMIP provides a structured list of model output that allows for an examination of the evolution of sea ice.",
-            "mip_long_name": "Sea Ice Model Intercomparison Project",
-            "mip_website": "https://climate-cryosphere.org/simip-about/",
-            "name": "SIMIP",
-            "uid": "527f5c64-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c65-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "The Ocean Model Intercomparison Project (OMIP) aims to provide a framework for evaluating, understanding, and improving the ocean, sea-ice, tracer, and biogeochemical components of global climate and Earth system models contributing to the Coupled Model Intercomparison Project Phase 7 (CMIP7). Ocean and sea ice models not part of a coupled system are also welcome to participate. Existing papers define OMIP and detail protocols both for simulating global ocean/sea-ice models with inert chemical and biogeochemical tracers and for analyzing their output.",
-            "mip_long_name": "Ocean Model Intercomparison Project",
-            "mip_website": "https://OceanMIP.github.io",
-            "name": "OMIP",
-            "uid": "527f5c65-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c66-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "As the climate warms, mass loss of the grounded ice sheet and floating ice shelves surrounding Antarctica is accelerating, increasing meltwater input into the Southern Ocean. Meltwater-induced changes in ocean circulation have the potential to influence the ability of the Southern Ocean to uptake heat and carbon, providing an important feedback on climate change. Nonetheless, almost all existing coupled climate models have fixed ice sheets, and lack the physics required to represent the dominant sources of Antarctic melt. These missing ice dynamics represent a key uncertainty that is unaccounted for in current global climate change projections.\n\nThe goal of the Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project (SOFIAMIP) is to quantify the climate system response to Antarctic meltwater input. Notably, changes in ocean dynamics, sea ice loss and ice shelf melt around the Antarctic margins, as well as resulting changes in atmospheric dynamics, precipitation, global warming rate and sea level rise are of direct interest and relevance both to CMIP and resulting climate assessments. Associated responses and feedbacks are model dependent and SOFIAMIP will enable the quantification of such model uncertainty.\n\nThe MIP proposes a series of coupled atmosphere/ocean/sea-ice model experiments, including idealized meltwater experiments, historical experiments with observationally consistent meltwater input, and future scenarios driven by meltwater inputs derived from stand-alone ice sheet models. These experiments are designed to test forcing uncertainties. We welcome contributions based on both CMIP6 and CMIP7 models. By comparing these experiments with the equivalent (standard CMIP) simulations without additional meltwater input, the climate impacts will be quantified.\n",
-            "mip_long_name": "Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project",
-            "mip_website": "https://sofiamip.github.io/",
-            "name": "SOFIAMIP",
-            "uid": "527f5c66-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c6b-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "The Geoengineering Model Intercomparison Project (GeoMIP) is a coordinating framework, started in 2010, that includes a series of standardized climate model experiments aimed at understanding the physical processes and projected impacts of solar geoengineering. Numerous experiments have been conducted, and numerous more have been proposed as \"Testbed'' experiments, spanning a variety of geoengineering techniques aimed at modifying the planetary radiation budget: stratospheric aerosol injection, marine cloud brightening, surface albedo modification, cirrus cloud thinning and sunshade mirrors. To date, more than one hundred studies have been published that used results from GeoMIP simulations, and its results have been recently used both in the IPCC Sixth Assessment Report and in the WMO 2022 Ozone Report. \n\nFor the GeoMIP phase connected with the Coupled Model Intercomparison Project Phase 6 (CMIP6), three experiments have been proposed as Tier 1: G1ext, which aim to balance a 4\u00d7CO2 forcing via solar irradiance reduction, and is identical to previous experiments under older CMIP phases to allow for an evaluation of models' evolution; and G6sulfur and G6solar, which aim to reduce forcing from a ScenarioMIP Tier 1 high forcing scenario to a medium forcing scenario with stratospheric sulfate aerosols or solar reduction. One experiment has also been proposed as Tier 2: G7cirrus, which  aims to reduce forcing by a constant amount (against a baseline of the ScenarioMIP Tier 1 high forcing scenario) via increasing cirrus ice crystal fall speed.\n\nFor the future CMIP phase, based on current results, the community is working towards an updated minimal set of scenarios to be proposed, which try to balance scientific significance with policy relevance in order to produce useful results for future climate assessments. ",
-            "mip_long_name": "Geoengineering Model Intercomparison Project",
-            "mip_website": "http://climate.envsci.rutgers.edu/GeoMIP/",
-            "name": "GeoMIP",
-            "uid": "527f5c6b-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c6c-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "TIPMIP is an international intercomparison project that aims to systematically advance our understanding of nonlinear dynamics in various Earth system components, and assess the associated uncertainties and risks. At present, no MIP exists which focuses specifically on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling this gap, TIPMIP will shed light on critical processes currently underrepresented in other MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are components of the Earth system highly susceptible to reaching a critical threshold \u2013 a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or irreversible changes in response to anthropogenic climate change. Crossing a tipping point can lead the systems to transition to an alternative state, often with reduced resilience to perturbations and recovery. Once triggered, the tipping of one of these elements can have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, understanding the dynamics of tipping elements and associated risks is crucial for developing effective strategies to mitigate and adapt to the impacts of global environmental change.\n\nWhy is this project important?\nOur current scientific knowledge of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) which components of the climate system and biosphere might show tipping behaviour, (ii) if so, at which forcing levels the critical thresholds are located, (iii) which feedback processes they are associated with, and (iv) if and how potential tipping cascades might evolve. These uncertainties have numerous sources, for instance connected to:\n-finding the \u201cright\u201d level of complexity regarding certain processes within and between Earth system components; \n-the representation of all relevant biophysical processes on the required timescales in Earth system models (in part, so far limited due to computational constraints);\n-the implementation of certain processes and feedbacks in the models; and\n-the limitations on observational data availability for long time horizons.\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is the risk of crossing potential tipping points in the cryosphere, biosphere and core circulation systems at different levels of ongoing climate and land-use change?\n-What are the key biophysical processes and feedbacks associated with these risks?\n-What are the characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping elements?\n-How does the forcing rate affect short- and long-term impacts of changes in the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the respective impacts reversible, and if so, on which timescales?\n-How do interactions between elements affect the overall stability of the Earth system?\n\nTypes of experiments \nInitially, we envision three major types of experiments for TIPMIP, all of which will be designed for the assessment of potential key tipping elements including the Greenland Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze the historical and projected response of potential tipping elements to different climate change scenarios;\n-Commitment experiments to assess the long-term consequences of surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe potential hysteresis behaviour;\n-Rate experiments to assess the impact of different forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be complemented by an additional set of \u2018make it happen\u2019-experiments, which apply additional forcings (e.g., land-use change, freshwater input etc.) tailored to the individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, in which the impact of fully collapsed tipping elements can be studied.",
-            "mip_long_name": "Tipping Point Modelling Intercomparison Project",
-            "mip_website": "https://www.tipmip.org",
-            "name": "TIPMIP",
-            "uid": "527f5c6c-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c6d-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "DAMIP is the component of CMIP7 dealing with understanding the individual contributions of various external factors to past and future changes in global and regional climate. The primary goals of DAMIP are to facilitate improved estimation of the contributions of anthropogenic and natural forcing changes to observed global warming as well as to observed global and regional changes in other climate variables; to contribute to the estimation of how historical emissions have altered and are altering contemporary climate risk including for specific extreme events; to improve understanding of inter-model differences in the response to individual forcings; and to facilitate improved observationally-constrained projections of future climate change. DAMIP will support improved attribution of climate change in the next IPCC report.",
-            "mip_long_name": "Detection and Attribution Model Intercomparison Project",
-            "mip_website": "https://wcrp-cmip.org/damip/",
-            "name": "DAMIP",
-            "uid": "527f5c6d-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c6e-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "The goal of the Paleoclimate Modelling Intercomparison Project (PMIP) is to understand the response of the climate system to different climate forcings for documented climatic states very different from the present and historical climates. Through comparison with observations of the environmental impact of these climate changes, or with climate reconstructions based on physical, chemical, or biological records, PMIP also addresses the issue of how well state-of-the-art numerical models simulate climate change out of the range of historical climate change, and with amplitudes of the same order of magnitude as projected future climate changes. PMIP has coordinated 3 CMIP5 experiments (midHolocene, lgm and past1000) and 5 CMIP6 experiments (midHolocene, lgm, past1000, lig127k and midPliocene-eoi400) and will shortly discuss plans for CMIP7.",
-            "mip_long_name": "Paleoclimate Modelling Intercomparison Project",
-            "mip_website": "https://pmip.lsce.ipsl.fr/",
-            "name": "PMIP",
-            "uid": "527f5c6e-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c6f-8c97-11ef-944e-41a8eb05f654": {
-            "mip_long_name": "Flux-Anomaly-Forced Model Intercomparison Project",
-            "mip_website": "http://www.fafmip.org",
-            "name": "FAFMIP",
-            "uid": "527f5c6f-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c70-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "The Decadal Climate Prediction Project (DCPP) is a coordinated multi-model investigation into decadal climate prediction, predictability, and variability that builds on the work of DCPP in CMIP6.  In particular, DCPP addresses a range of scientific issues that are highly relevant to both science and society, including the ability to improve near-term climate predictions, the skill that is potentially available, and the mechanisms responsible for such long time-horizon predictability. In CMIP7, DCPP will build on recent improvements in models, data assimilation, and model initialization to provide an updated reference of decadal climate variability and prediction skill. Furthermore, DCPP will further coordinate testing of model resolution, as well as capitalize on interest on multi-annual predictions to expand the scope of coupled multi-model prediction as part of CMIP7. DCPP will contribute to CMIP7 as well as make key contributions to the World Climate Research Program\u2019s lighthouse activity on Explaining and Predicting Earth System Change (EPESC) and the World Meteorological Organisation lead-centre activity on Annual-to-Decadal Climate Prediction (LC-ADCP).\n\nAs in CMIP6, DCPP will likely consist of three components. Component A encompasses the production of an archive of retrospective forecasts to be used to assess and understand historical decadal prediction skill. In comparison with CMIP6, the highest priority retrospective predictions (or hindcasts) will be a core set (the DCPP-DECK) which focuses on a shorter verification window with fewer start dates, a minimal ensemble size, and multi-year forecast lead times. It is envisioned that such reduced requirements of the DCPP-DECK will encourage more groups to take part in DCPP in CMIP7. The DCPP-DECK will also allow DCPP to diversify into questions it has not currently addressed due to the expense of the experiment, including for example high-resolution initialized predictions and large ensembles of multi-year predictions. Component B organizes the ongoing production and dissemination of real-time multi-model decadal forecasts. Component C will involve more idealized simulations in order to better understand the mechanisms of internal or externally forced decadal climate variability. Modelling groups will be invited to participate in as many of the components of DCPP as interests them, although the DCPP-DECK will be the core requirement for Component A and Component B. \n",
-            "mip_long_name": "Decadal Climate Prediction Project",
-            "mip_website": "https://www.wcrp-climate.org/dcp-overview",
-            "name": "DCPP",
-            "uid": "527f5c70-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c73-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "The Ice Sheet Model Intercomparison for CMIP7 (ISMIP7) has the key objective of improving projections of sea level contributions from the Greenland and Antarctic ice sheets, and our understanding of the cryosphere in a changing climate. These goals map into both \u201cMelting Ice and Global Consequences\u201d and \u201cRegional Sea-level Change\u201d Grand Challenges relevant to CliC and the World Climate Research Program (WCRP). As uncertainties in future sea level arise due to both the climate forcing and the response of the ice sheets, a primary focus for ISMIP6 was to become better integrated in the CMIP6 initiative. ISMIP6 became an endorsed activity of CMIP6 in 2015 allowing ice sheets to be considered as a component of the Earth system for the first time in CMIP. ISMIP6 became a major model inter-comparison effort (with 36 international groups and over 60 participants) making process-based projections for the Sixth Assessment Report of the IPCC. \n\nISMIP6 and ISMIP7 experimental protocols explore the uncertainty in sea level projections due to ice sheet model initialization as well as  ice sheet processes and parameters, climate scenario, and uncertainty in the representation of ice\u2013ocean interactions on centennial timescales. ISMIP7 intends to continue working on two main themes. The first relates to dynamic ice sheets within global coupled climate models, while the second is based on outputs from climate models to force standalone ice sheet models (perhaps coupled to regional ocean and/or atmosphere models). We will thus have different protocols for each type of modeling activity, and these will be related by a common set of scenarios.  Similarly, ISMIP7 will continue to employ a working group structure to allow focus on climate forcing from the oceans and atmosphere, as well as links to the observational community.",
-            "mip_long_name": "Ice Sheet Model Intercomparison Project for CMIP",
-            "mip_website": "https://theghub.org/groups/ismip6/wiki",
-            "name": "ISMIP7",
-            "uid": "527f5c73-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c74-8c97-11ef-944e-41a8eb05f654": {
-            "mip_long_name": "Coupled Model Intercomparison Project",
-            "mip_website": "https://www.wcrp-cmip.org/",
-            "name": "CMIP",
-            "uid": "527f5c74-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c75-8c97-11ef-944e-41a8eb05f654": {
-            "mip_long_name": "Scenario Model Intercomparison Project",
-            "mip_website": "https://wcrp-cmip.org/mips/scenariomip/",
-            "name": "ScenarioMIP",
-            "uid": "527f5c75-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c76-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "Robust projections and predictions of climate variability and change, particularly at regional scales, rely on the driving processes being represented with fidelity in model simulations. The role of enhanced horizontal resolution in improved process representation in all components of the climate system continues to be of great interest. In particular, recent simulations suggest both the possibility of significant changes in large-scale aspects of circulation and response to climate change, as well as improvements in small-scale processes and extremes.\nThe first HighResMIP (HighResMIP v1.0 for CMIP6) was successful in producing a baseline multi-model assessment of global simulations with model grid spacings  of around 50km in the atmosphere and 0.25\u00b0 in the ocean, comparing to models with standard resolutions typically used as part of the Coupled Model Intercomparison Project 6 (CMIP6) DECK experiments. In addition to a large number of peer-reviewed publications using the published HighResMIP datasets, the results were widely cited in the IPCC AR6 WG1 report, and were the basis for a variety of derived datasets including tracked cyclones (both tropical and extratropical), storm surge and others used for impact studies.\nHowever, there were a number of aspects of HighResMIPv1.0 that were less than ideal, through both practical and design choices at that time. These included: long (and relatively expensive) simulation designs, which even so only reached to 2050; specification of little to no tuning between standard and higher resolution model configurations; simplified aerosol specification; small ensemble size; short spin-up for coupled simulations; one future scenario. In addition, with the increasing use of global km-scale models (currently run for relatively short timescales), there is a danger of a gap opening between such models and the CMIP community which still (generally) relies on ~100km model simulations.\nTherefore we propose an updated HighResMIP v2.0 to improve and extend the previous work, to address new science questions as well as some of these shortcomings above, and to further advance our understanding of the role of horizontal resolution on climate simulation. With further increases in high-performance computing (HPC) resources and new models able to take full advantage of such resources, enhanced investigation of the drivers and consequences of variability and change in both large- synoptic-scale weather and climate is made possible.\nThe set of HighResMIP v2.0 experiments is divided into several tiers consisting of atmosphere-only and coupled runs spanning the period 1950\u20132100, together with some additional shorter experiments to enable process understanding and links to other communities. This paper describes the experimental set-up of HighResMIPv2, the analysis plan, and the connection with other CMIP projects. It also aims to link to other international efforts such as the World Climate Research Program (WCRP) lighthouse activities.\n",
-            "mip_long_name": "High Resolution Model Intercomparison Project",
-            "mip_website": "https://www.highresmip.org",
-            "name": "HighResMIP",
-            "uid": "527f5c76-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c77-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "Human land-use activities have resulted in large changes to the Earth's surface, with resulting implications for climate. In the future, land-use activities are likely to expand and intensify further to meet growing demands for food, fiber, and energy. The Land Use Model Intercomparison Project (LUMIP) aims to further advance understanding of the impacts of land-use and land-cover change (LULCC) on climate, specifically addressing the following questions. (1) What are the effects of LULCC on climate and biogeochemical cycling (past\u2013future)? (2) What are the impacts of land management on surface fluxes of carbon, water, and energy, and are there regional land-management strategies with the promise to help mitigate climate change? In addressing these questions, LUMIP will also address a range of more detailed science questions to get at process-level attribution, uncertainty, data requirements, and other related issues in more depth and sophistication than possible in a multi-model context to date. There will be particular focus on the separation and quantification of the effects on climate from LULCC relative to all forcings, separation of biogeochemical from biogeophysical effects of land use, the unique impacts of land-cover change vs. land-management change, modulation of land-use impact on climate by land\u2013atmosphere coupling strength, and the extent to which impacts of enhanced CO2 concentrations on plant photosynthesis are modulated by past and future land use.\n\nLUMIP involves three major sets of science activities: (1) development of an updated and expanded historical and future land-use data set, (2) an experimental protocol for specific LUMIP experiments for CMIP6, and (3) definition of metrics and diagnostic protocols that quantify model performance, and related sensitivities, with respect to LULCC. In this paper, we describe LUMIP activity (2), i.e., the LUMIP simulations that will formally be part of CMIP6. These experiments are explicitly designed to be complementary to simulations requested in the CMIP6 DECK and historical simulations and other CMIP6 MIPs including ScenarioMIP, C4MIP, LS3MIP, and DAMIP. LUMIP includes a two-phase experimental design. Phase one features idealized coupled and land-only model simulations designed to advance process-level understanding of LULCC impacts on climate, as well as to quantify model sensitivity to potential land-cover and land-use change. Phase two experiments focus on quantification of the historic impact of land use and the potential for future land management decisions to aid in mitigation of climate change. This paper documents these simulations in detail, explains their rationale, outlines plans for analysis, and describes a new subgrid land-use tile data request for selected variables (reporting model output data separately for primary and secondary land, crops, pasture, and urban land-use types). It is essential that modeling groups participating in LUMIP adhere to the experimental design as closely as possible and clearly report how the model experiments were executed.",
-            "mip_long_name": "Land-Use Model Intercomparison Project",
-            "mip_website": "https://www.cesm.ucar.edu/projects/cmip6/lumip",
-            "name": "LUMIP",
-            "uid": "527f5c77-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c7d-8c97-11ef-944e-41a8eb05f654": {
-            "mip_abstract": "Coordinated Regional Climate Downscaling Experiment (CORDEX) builds on a foundation of previous downscaling intercomparison projects and aims to advance and coordinate the science and application of regional climate downscaling through global partnerships. The main four CORDEX goals include i) understanding relevant regional/local climate phenomena, ii) improving regional climate downscaling models and techniques, iii) producing coordinated sets of regional high-resolution downscaled projections worldwide and iv) fostering communication and knowledge exchange with users of regional climate information. While CORDEX goals include interaction with users of regional climate information, CORDEX is not a climate service per se. However, the CORDEX community has been actively involved in establishing national and regional climate services over the last 10 years including co-production of regional climate information through dialogue with regional impact communities, stakeholders and authorities. Currently, CORDEX is a key scientific pillar in a new WCRP core project - Regional Information for Society (RIfS). The main CORDEX protocol includes a set of 14 continental-scale domains covering essentially all land areas of the globe. An integral part of CORDEX is the Flagship Pilot Studies (FPS). FPS are intended to be targeted studies aimed at addressing specific scientific challenges (e.g. convection-permitting scales, regional land use changes, regional effects of aerosol, etc.) over the standard CORDEX domains or over selected sub-domains. CORDEX is a diagnostic MIP not contributing by any experiment to CMIP7 but requesting specific CMIP7 output for regional climate downscaling.",
-            "mip_long_name": "Coordinated Regional Climate Downscaling Experiment",
-            "mip_website": "https://cordex.org",
-            "name": "CORDEX",
-            "uid": "527f5c7d-8c97-11ef-944e-41a8eb05f654"
-        },
-        "527f5c7f-8c97-11ef-944e-41a8eb05f654": {
+        "C4MIP": {
             "mip_abstract": "Coordinated experimental design and implementation has become a cornerstone of global climate modelling. Model Intercomparison Projects (MIPs) enable systematic and robust analysis of results across many models, by reducing the influence of ad hoc differences in model set-up or experimental\nBoundary conditions. \n\nThe Coupled Climate\u2013Carbon Cycle Model Intercomparison Project (C4MIP) takes responsibility for design, documentation, and analysis of carbon cycle feedbacks and interactions in climate simulations. These feedbacks are potentially large and play a leading-order contribution in determining the atmospheric composition in response to human emissions of CO2 and in the setting of emissions targets to stabilize climate or avoid dangerous climate change. For nearly two decades, C4MIP has coordinated coupled climate\u2013carbon cycle simulations. While the climate\u2013carbon cycle community contributes to our experimental design, the simulations also fit within the wider CMIP activity, conform to some common standards including documentation and diagnostic requests, and are designed to complement the CMIP core experiments (DECK).\n\nC4MIP evolves, but retains three key strands of scientific motivation:\n(1) pre-industrial and historical simulations (formally part of the common set of CMIP6 experiments) to enable model evaluation\n(2) idealized coupled and partially coupled simulations with 1% per year increases in CO2 to enable diagnosis of feedback strength and its components, quantify TCRE and ZEC and understand processes surrounding reversibility and symmetry to negative emissions\n(3) future scenario simulations to project how the Earth system will respond to anthropogenic activity over the 21st century and beyond. Focus moving towards low (policy relevant) pathways with and without overshoot",
             "mip_long_name": "Coupled Climate Carbon Cycle MIP",
             "mip_website": "https://c4mip.net/home",
             "name": "C4MIP",
             "uid": "527f5c7f-8c97-11ef-944e-41a8eb05f654"
         },
-        "527f5c83-8c97-11ef-944e-41a8eb05f654": {
+        "CMIP": {
+            "mip_long_name": "Coupled Model Intercomparison Project",
+            "mip_website": "https://www.wcrp-cmip.org/",
+            "name": "CMIP",
+            "uid": "527f5c74-8c97-11ef-944e-41a8eb05f654"
+        },
+        "CORDEX": {
+            "mip_abstract": "Coordinated Regional Climate Downscaling Experiment (CORDEX) builds on a foundation of previous downscaling intercomparison projects and aims to advance and coordinate the science and application of regional climate downscaling through global partnerships. The main four CORDEX goals include i) understanding relevant regional/local climate phenomena, ii) improving regional climate downscaling models and techniques, iii) producing coordinated sets of regional high-resolution downscaled projections worldwide and iv) fostering communication and knowledge exchange with users of regional climate information. While CORDEX goals include interaction with users of regional climate information, CORDEX is not a climate service per se. However, the CORDEX community has been actively involved in establishing national and regional climate services over the last 10 years including co-production of regional climate information through dialogue with regional impact communities, stakeholders and authorities. Currently, CORDEX is a key scientific pillar in a new WCRP core project - Regional Information for Society (RIfS). The main CORDEX protocol includes a set of 14 continental-scale domains covering essentially all land areas of the globe. An integral part of CORDEX is the Flagship Pilot Studies (FPS). FPS are intended to be targeted studies aimed at addressing specific scientific challenges (e.g. convection-permitting scales, regional land use changes, regional effects of aerosol, etc.) over the standard CORDEX domains or over selected sub-domains. CORDEX is a diagnostic MIP not contributing by any experiment to CMIP7 but requesting specific CMIP7 output for regional climate downscaling.",
+            "mip_long_name": "Coordinated Regional Climate Downscaling Experiment",
+            "mip_website": "https://cordex.org",
+            "name": "CORDEX",
+            "uid": "527f5c7d-8c97-11ef-944e-41a8eb05f654"
+        },
+        "DAMIP": {
+            "mip_abstract": "DAMIP is the component of CMIP7 dealing with understanding the individual contributions of various external factors to past and future changes in global and regional climate. The primary goals of DAMIP are to facilitate improved estimation of the contributions of anthropogenic and natural forcing changes to observed global warming as well as to observed global and regional changes in other climate variables; to contribute to the estimation of how historical emissions have altered and are altering contemporary climate risk including for specific extreme events; to improve understanding of inter-model differences in the response to individual forcings; and to facilitate improved observationally-constrained projections of future climate change. DAMIP will support improved attribution of climate change in the next IPCC report.",
+            "mip_long_name": "Detection and Attribution Model Intercomparison Project",
+            "mip_website": "https://wcrp-cmip.org/damip/",
+            "name": "DAMIP",
+            "uid": "527f5c6d-8c97-11ef-944e-41a8eb05f654"
+        },
+        "DCPP": {
+            "mip_abstract": "The Decadal Climate Prediction Project (DCPP) is a coordinated multi-model investigation into decadal climate prediction, predictability, and variability that builds on the work of DCPP in CMIP6.  In particular, DCPP addresses a range of scientific issues that are highly relevant to both science and society, including the ability to improve near-term climate predictions, the skill that is potentially available, and the mechanisms responsible for such long time-horizon predictability. In CMIP7, DCPP will build on recent improvements in models, data assimilation, and model initialization to provide an updated reference of decadal climate variability and prediction skill. Furthermore, DCPP will further coordinate testing of model resolution, as well as capitalize on interest on multi-annual predictions to expand the scope of coupled multi-model prediction as part of CMIP7. DCPP will contribute to CMIP7 as well as make key contributions to the World Climate Research Program\u2019s lighthouse activity on Explaining and Predicting Earth System Change (EPESC) and the World Meteorological Organisation lead-centre activity on Annual-to-Decadal Climate Prediction (LC-ADCP).\n\nAs in CMIP6, DCPP will likely consist of three components. Component A encompasses the production of an archive of retrospective forecasts to be used to assess and understand historical decadal prediction skill. In comparison with CMIP6, the highest priority retrospective predictions (or hindcasts) will be a core set (the DCPP-DECK) which focuses on a shorter verification window with fewer start dates, a minimal ensemble size, and multi-year forecast lead times. It is envisioned that such reduced requirements of the DCPP-DECK will encourage more groups to take part in DCPP in CMIP7. The DCPP-DECK will also allow DCPP to diversify into questions it has not currently addressed due to the expense of the experiment, including for example high-resolution initialized predictions and large ensembles of multi-year predictions. Component B organizes the ongoing production and dissemination of real-time multi-model decadal forecasts. Component C will involve more idealized simulations in order to better understand the mechanisms of internal or externally forced decadal climate variability. Modelling groups will be invited to participate in as many of the components of DCPP as interests them, although the DCPP-DECK will be the core requirement for Component A and Component B. \n",
+            "mip_long_name": "Decadal Climate Prediction Project",
+            "mip_website": "https://www.wcrp-climate.org/dcp-overview",
+            "name": "DCPP",
+            "uid": "527f5c70-8c97-11ef-944e-41a8eb05f654"
+        },
+        "FAFMIP": {
+            "mip_long_name": "Flux-Anomaly-Forced Model Intercomparison Project",
+            "mip_website": "http://www.fafmip.org",
+            "name": "FAFMIP",
+            "uid": "527f5c6f-8c97-11ef-944e-41a8eb05f654"
+        },
+        "FireMIP": {
             "mip_abstract": "Fire, as the primary form of terrestrial ecosystem disturbance on a global scale, is an important Earth system process. It is regulated by weather, vegetation characteristics, and human activities, and at the same time, feeds back to them in multiple ways, such as affecting vegetation structure and composition, carbon, water and energy cycles, surface climate, atmospheric composition, and human health and properties. With the increasing occurrence of fires, especially the big ones, understanding fire regime changes and their impacts is more critical than ever. The Fire Model Intercomparison Project (FireMIP), started in 2014, is an international collaborative effort aimed at improving global fire models and advancing our knowledge of how fires affect vegetation and carbon using land ecosystem models. \n\nNow we\u2019re bringing FireMIP into CMIP7. It represents a groundbreaking initiative aimed at advancing our understanding of fire dynamics and their impacts on the Earth system. It endeavors to systematically assess: (1) how well fires are simulated in coupling models, (2) how fire regimes have evolved from the past to the present, and will potentially change in the future under varying climate and socio-economic scenarios, and (3) how these fire changes affect the land, biosphere, atmosphere, and cryosphere (e.g., permafrost). FireMIP in CMIP7 is the first time a multiple coupled model ensemble approach has been used, which facilitates a comprehensive exploration of the simulation uncertainties in fires and fire impacts. \n\nCurrently, most Earth system models (ESMs) incorporate fire modeling. In CMIP6, 19 models submitted outputs of fire variables, and this number is expected to grow in CMIP7. The integration of FireMIP in CMIP7 is now ready, and its implementation promises significant benefits. It will enhance coupled model development and understanding of model bias in the fire and closely-related carbon, water, energy, surface climate, and atmosphere chemistry. It will also provide robust insights into fire dynamics and the fire's role in the Earth system, thereby improving our understanding of global changes. In addition, an assessment of how fire regimes will change in the future could shape global fire management policies and inform climate change mitigation strategies.\n\nFireMIP in CMIP7 requests coupled models to provide simulations of burned areas and fire carbon emissions in both their historical and future simulations (1st Priority). Additionally, we encourage ESMs to conduct no-fire simulations (optional), which will used to quantify fire influences and understand cross-sphere interaction mechanisms. The scientific goals of FireMIP cannot be achieved by adding simulations to existing MIPs. For instance, LMIP will use offline land models and focus on land physics, while C4MIP focuses on only carbon. ",
             "mip_long_name": "Fire Modeling Intercomparison Project",
             "mip_website": "https://www.senckenberg.de/en/institutes/sbik-f/quantitative-biogeography/qb-projects/firemip/",
             "name": "FireMIP",
             "uid": "527f5c83-8c97-11ef-944e-41a8eb05f654"
+        },
+        "GeoMIP": {
+            "mip_abstract": "The Geoengineering Model Intercomparison Project (GeoMIP) is a coordinating framework, started in 2010, that includes a series of standardized climate model experiments aimed at understanding the physical processes and projected impacts of solar geoengineering. Numerous experiments have been conducted, and numerous more have been proposed as \"Testbed'' experiments, spanning a variety of geoengineering techniques aimed at modifying the planetary radiation budget: stratospheric aerosol injection, marine cloud brightening, surface albedo modification, cirrus cloud thinning and sunshade mirrors. To date, more than one hundred studies have been published that used results from GeoMIP simulations, and its results have been recently used both in the IPCC Sixth Assessment Report and in the WMO 2022 Ozone Report. \n\nFor the GeoMIP phase connected with the Coupled Model Intercomparison Project Phase 6 (CMIP6), three experiments have been proposed as Tier 1: G1ext, which aim to balance a 4\u00d7CO2 forcing via solar irradiance reduction, and is identical to previous experiments under older CMIP phases to allow for an evaluation of models' evolution; and G6sulfur and G6solar, which aim to reduce forcing from a ScenarioMIP Tier 1 high forcing scenario to a medium forcing scenario with stratospheric sulfate aerosols or solar reduction. One experiment has also been proposed as Tier 2: G7cirrus, which  aims to reduce forcing by a constant amount (against a baseline of the ScenarioMIP Tier 1 high forcing scenario) via increasing cirrus ice crystal fall speed.\n\nFor the future CMIP phase, based on current results, the community is working towards an updated minimal set of scenarios to be proposed, which try to balance scientific significance with policy relevance in order to produce useful results for future climate assessments. ",
+            "mip_long_name": "Geoengineering Model Intercomparison Project",
+            "mip_website": "http://climate.envsci.rutgers.edu/GeoMIP/",
+            "name": "GeoMIP",
+            "uid": "527f5c6b-8c97-11ef-944e-41a8eb05f654"
+        },
+        "HighResMIP": {
+            "mip_abstract": "Robust projections and predictions of climate variability and change, particularly at regional scales, rely on the driving processes being represented with fidelity in model simulations. The role of enhanced horizontal resolution in improved process representation in all components of the climate system continues to be of great interest. In particular, recent simulations suggest both the possibility of significant changes in large-scale aspects of circulation and response to climate change, as well as improvements in small-scale processes and extremes.\nThe first HighResMIP (HighResMIP v1.0 for CMIP6) was successful in producing a baseline multi-model assessment of global simulations with model grid spacings  of around 50km in the atmosphere and 0.25\u00b0 in the ocean, comparing to models with standard resolutions typically used as part of the Coupled Model Intercomparison Project 6 (CMIP6) DECK experiments. In addition to a large number of peer-reviewed publications using the published HighResMIP datasets, the results were widely cited in the IPCC AR6 WG1 report, and were the basis for a variety of derived datasets including tracked cyclones (both tropical and extratropical), storm surge and others used for impact studies.\nHowever, there were a number of aspects of HighResMIPv1.0 that were less than ideal, through both practical and design choices at that time. These included: long (and relatively expensive) simulation designs, which even so only reached to 2050; specification of little to no tuning between standard and higher resolution model configurations; simplified aerosol specification; small ensemble size; short spin-up for coupled simulations; one future scenario. In addition, with the increasing use of global km-scale models (currently run for relatively short timescales), there is a danger of a gap opening between such models and the CMIP community which still (generally) relies on ~100km model simulations.\nTherefore we propose an updated HighResMIP v2.0 to improve and extend the previous work, to address new science questions as well as some of these shortcomings above, and to further advance our understanding of the role of horizontal resolution on climate simulation. With further increases in high-performance computing (HPC) resources and new models able to take full advantage of such resources, enhanced investigation of the drivers and consequences of variability and change in both large- synoptic-scale weather and climate is made possible.\nThe set of HighResMIP v2.0 experiments is divided into several tiers consisting of atmosphere-only and coupled runs spanning the period 1950\u20132100, together with some additional shorter experiments to enable process understanding and links to other communities. This paper describes the experimental set-up of HighResMIPv2, the analysis plan, and the connection with other CMIP projects. It also aims to link to other international efforts such as the World Climate Research Program (WCRP) lighthouse activities.\n",
+            "mip_long_name": "High Resolution Model Intercomparison Project",
+            "mip_website": "https://www.highresmip.org",
+            "name": "HighResMIP",
+            "uid": "527f5c76-8c97-11ef-944e-41a8eb05f654"
+        },
+        "ISMIP7": {
+            "mip_abstract": "The Ice Sheet Model Intercomparison for CMIP7 (ISMIP7) has the key objective of improving projections of sea level contributions from the Greenland and Antarctic ice sheets, and our understanding of the cryosphere in a changing climate. These goals map into both \u201cMelting Ice and Global Consequences\u201d and \u201cRegional Sea-level Change\u201d Grand Challenges relevant to CliC and the World Climate Research Program (WCRP). As uncertainties in future sea level arise due to both the climate forcing and the response of the ice sheets, a primary focus for ISMIP6 was to become better integrated in the CMIP6 initiative. ISMIP6 became an endorsed activity of CMIP6 in 2015 allowing ice sheets to be considered as a component of the Earth system for the first time in CMIP. ISMIP6 became a major model inter-comparison effort (with 36 international groups and over 60 participants) making process-based projections for the Sixth Assessment Report of the IPCC. \n\nISMIP6 and ISMIP7 experimental protocols explore the uncertainty in sea level projections due to ice sheet model initialization as well as  ice sheet processes and parameters, climate scenario, and uncertainty in the representation of ice\u2013ocean interactions on centennial timescales. ISMIP7 intends to continue working on two main themes. The first relates to dynamic ice sheets within global coupled climate models, while the second is based on outputs from climate models to force standalone ice sheet models (perhaps coupled to regional ocean and/or atmosphere models). We will thus have different protocols for each type of modeling activity, and these will be related by a common set of scenarios.  Similarly, ISMIP7 will continue to employ a working group structure to allow focus on climate forcing from the oceans and atmosphere, as well as links to the observational community.",
+            "mip_long_name": "Ice Sheet Model Intercomparison Project for CMIP",
+            "mip_website": "https://theghub.org/groups/ismip6/wiki",
+            "name": "ISMIP7",
+            "uid": "527f5c73-8c97-11ef-944e-41a8eb05f654"
+        },
+        "LUMIP": {
+            "mip_abstract": "Human land-use activities have resulted in large changes to the Earth's surface, with resulting implications for climate. In the future, land-use activities are likely to expand and intensify further to meet growing demands for food, fiber, and energy. The Land Use Model Intercomparison Project (LUMIP) aims to further advance understanding of the impacts of land-use and land-cover change (LULCC) on climate, specifically addressing the following questions. (1) What are the effects of LULCC on climate and biogeochemical cycling (past\u2013future)? (2) What are the impacts of land management on surface fluxes of carbon, water, and energy, and are there regional land-management strategies with the promise to help mitigate climate change? In addressing these questions, LUMIP will also address a range of more detailed science questions to get at process-level attribution, uncertainty, data requirements, and other related issues in more depth and sophistication than possible in a multi-model context to date. There will be particular focus on the separation and quantification of the effects on climate from LULCC relative to all forcings, separation of biogeochemical from biogeophysical effects of land use, the unique impacts of land-cover change vs. land-management change, modulation of land-use impact on climate by land\u2013atmosphere coupling strength, and the extent to which impacts of enhanced CO2 concentrations on plant photosynthesis are modulated by past and future land use.\n\nLUMIP involves three major sets of science activities: (1) development of an updated and expanded historical and future land-use data set, (2) an experimental protocol for specific LUMIP experiments for CMIP6, and (3) definition of metrics and diagnostic protocols that quantify model performance, and related sensitivities, with respect to LULCC. In this paper, we describe LUMIP activity (2), i.e., the LUMIP simulations that will formally be part of CMIP6. These experiments are explicitly designed to be complementary to simulations requested in the CMIP6 DECK and historical simulations and other CMIP6 MIPs including ScenarioMIP, C4MIP, LS3MIP, and DAMIP. LUMIP includes a two-phase experimental design. Phase one features idealized coupled and land-only model simulations designed to advance process-level understanding of LULCC impacts on climate, as well as to quantify model sensitivity to potential land-cover and land-use change. Phase two experiments focus on quantification of the historic impact of land use and the potential for future land management decisions to aid in mitigation of climate change. This paper documents these simulations in detail, explains their rationale, outlines plans for analysis, and describes a new subgrid land-use tile data request for selected variables (reporting model output data separately for primary and secondary land, crops, pasture, and urban land-use types). It is essential that modeling groups participating in LUMIP adhere to the experimental design as closely as possible and clearly report how the model experiments were executed.",
+            "mip_long_name": "Land-Use Model Intercomparison Project",
+            "mip_website": "https://www.cesm.ucar.edu/projects/cmip6/lumip",
+            "name": "LUMIP",
+            "uid": "527f5c77-8c97-11ef-944e-41a8eb05f654"
+        },
+        "OMIP": {
+            "mip_abstract": "The Ocean Model Intercomparison Project (OMIP) aims to provide a framework for evaluating, understanding, and improving the ocean, sea-ice, tracer, and biogeochemical components of global climate and Earth system models contributing to the Coupled Model Intercomparison Project Phase 7 (CMIP7). Ocean and sea ice models not part of a coupled system are also welcome to participate. Existing papers define OMIP and detail protocols both for simulating global ocean/sea-ice models with inert chemical and biogeochemical tracers and for analyzing their output.",
+            "mip_long_name": "Ocean Model Intercomparison Project",
+            "mip_website": "https://OceanMIP.github.io",
+            "name": "OMIP",
+            "uid": "527f5c65-8c97-11ef-944e-41a8eb05f654"
+        },
+        "PMIP": {
+            "mip_abstract": "The goal of the Paleoclimate Modelling Intercomparison Project (PMIP) is to understand the response of the climate system to different climate forcings for documented climatic states very different from the present and historical climates. Through comparison with observations of the environmental impact of these climate changes, or with climate reconstructions based on physical, chemical, or biological records, PMIP also addresses the issue of how well state-of-the-art numerical models simulate climate change out of the range of historical climate change, and with amplitudes of the same order of magnitude as projected future climate changes. PMIP has coordinated 3 CMIP5 experiments (midHolocene, lgm and past1000) and 5 CMIP6 experiments (midHolocene, lgm, past1000, lig127k and midPliocene-eoi400) and will shortly discuss plans for CMIP7.",
+            "mip_long_name": "Paleoclimate Modelling Intercomparison Project",
+            "mip_website": "https://pmip.lsce.ipsl.fr/",
+            "name": "PMIP",
+            "uid": "527f5c6e-8c97-11ef-944e-41a8eb05f654"
+        },
+        "SIMIP": {
+            "mip_abstract": "A better understanding of the role of sea ice for the changing climate of our planet is the central aim of the diagnostic Sea-Ice Model Intercomparison Project (SIMIP), having formally started for CMIP6. To reach this aim, SIMIP requests sea-ice-related variables from climate-model simulations that allow for a better understanding and, ultimately, improvement of biases and errors in sea-ice simulations with large-scale climate models. This then allows us to better understand to what degree CMIP model simulations relate to reality, thus improving our confidence in answering sea-ice-related questions based on these simulations. Furthermore, the SIMIP protocol provides a standard for sea-ice model output that will streamline and hence simplify the analysis of the simulated sea-ice evolution in research projects independent of CMIP. To reach its aims, SIMIP provides a structured list of model output that allows for an examination of the evolution of sea ice.",
+            "mip_long_name": "Sea Ice Model Intercomparison Project",
+            "mip_website": "https://climate-cryosphere.org/simip-about/",
+            "name": "SIMIP",
+            "uid": "527f5c64-8c97-11ef-944e-41a8eb05f654"
+        },
+        "SOFIAMIP": {
+            "mip_abstract": "As the climate warms, mass loss of the grounded ice sheet and floating ice shelves surrounding Antarctica is accelerating, increasing meltwater input into the Southern Ocean. Meltwater-induced changes in ocean circulation have the potential to influence the ability of the Southern Ocean to uptake heat and carbon, providing an important feedback on climate change. Nonetheless, almost all existing coupled climate models have fixed ice sheets, and lack the physics required to represent the dominant sources of Antarctic melt. These missing ice dynamics represent a key uncertainty that is unaccounted for in current global climate change projections.\n\nThe goal of the Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project (SOFIAMIP) is to quantify the climate system response to Antarctic meltwater input. Notably, changes in ocean dynamics, sea ice loss and ice shelf melt around the Antarctic margins, as well as resulting changes in atmospheric dynamics, precipitation, global warming rate and sea level rise are of direct interest and relevance both to CMIP and resulting climate assessments. Associated responses and feedbacks are model dependent and SOFIAMIP will enable the quantification of such model uncertainty.\n\nThe MIP proposes a series of coupled atmosphere/ocean/sea-ice model experiments, including idealized meltwater experiments, historical experiments with observationally consistent meltwater input, and future scenarios driven by meltwater inputs derived from stand-alone ice sheet models. These experiments are designed to test forcing uncertainties. We welcome contributions based on both CMIP6 and CMIP7 models. By comparing these experiments with the equivalent (standard CMIP) simulations without additional meltwater input, the climate impacts will be quantified.\n",
+            "mip_long_name": "Southern Ocean Freshwater Input from Antarctica Model Intercomparison Project",
+            "mip_website": "https://sofiamip.github.io/",
+            "name": "SOFIAMIP",
+            "uid": "527f5c66-8c97-11ef-944e-41a8eb05f654"
+        },
+        "ScenarioMIP": {
+            "mip_long_name": "Scenario Model Intercomparison Project",
+            "mip_website": "https://wcrp-cmip.org/mips/scenariomip/",
+            "name": "ScenarioMIP",
+            "uid": "527f5c75-8c97-11ef-944e-41a8eb05f654"
+        },
+        "TIPMIP": {
+            "mip_abstract": "TIPMIP is an international intercomparison project that aims to systematically advance our understanding of nonlinear dynamics in various Earth system components, and assess the associated uncertainties and risks. At present, no MIP exists which focuses specifically on identifying and evaluating the risks of tipping dynamics in the Earth system. Filling this gap, TIPMIP will shed light on critical processes currently underrepresented in other MIPs and in Earth system models.\n\nWhat are tipping elements?\nTipping elements are components of the Earth system highly susceptible to reaching a critical threshold \u2013 a tipping point \u2013 beyond which amplifying feedbacks can result in abrupt and/or irreversible changes in response to anthropogenic climate change. Crossing a tipping point can lead the systems to transition to an alternative state, often with reduced resilience to perturbations and recovery. Once triggered, the tipping of one of these elements can have far-reaching impacts on the global climate, ecosystems and humankind. Therefore, understanding the dynamics of tipping elements and associated risks is crucial for developing effective strategies to mitigate and adapt to the impacts of global environmental change.\n\nWhy is this project important?\nOur current scientific knowledge of tipping dynamics in the Earth system involves a broad range of uncertainties on (i) which components of the climate system and biosphere might show tipping behaviour, (ii) if so, at which forcing levels the critical thresholds are located, (iii) which feedback processes they are associated with, and (iv) if and how potential tipping cascades might evolve. These uncertainties have numerous sources, for instance connected to:\n-finding the \u201cright\u201d level of complexity regarding certain processes within and between Earth system components; \n-the representation of all relevant biophysical processes on the required timescales in Earth system models (in part, so far limited due to computational constraints);\n-the implementation of certain processes and feedbacks in the models; and\n-the limitations on observational data availability for long time horizons.\n\nProject aims\nTIPMIP specifically aims to answer the following questions:\n-What is the risk of crossing potential tipping points in the cryosphere, biosphere and core circulation systems at different levels of ongoing climate and land-use change?\n-What are the key biophysical processes and feedbacks associated with these risks?\n-What are the characteristics (spatial and time scales, abrupt or gradual, etc.) of Earth system tipping elements?\n-How does the forcing rate affect short- and long-term impacts of changes in the ice sheets, permafrost, ocean circulation, tropical and boreal forests?\n-Are the respective impacts reversible, and if so, on which timescales?\n-How do interactions between elements affect the overall stability of the Earth system?\n\nTypes of experiments \nInitially, we envision three major types of experiments for TIPMIP, all of which will be designed for the assessment of potential key tipping elements including the Greenland Ice Sheet, Antarctic Ice Sheet, Atlantic Meridional Overturning Circulation (AMOC), tropical forests, boreal forests, and permafrost - in both fully coupled ESM as well as stand-alone model simulations.\n\n-Baseline experiments (ramp-up experiments) to analyze the historical and projected response of potential tipping elements to different climate change scenarios;\n-Commitment experiments to assess the long-term consequences of surpassing different temperature and CO2 levels;\n-Reversibility experiments to probe potential hysteresis behaviour;\n-Rate experiments to assess the impact of different forcing rates on tipping.\n\nThese \u2018see what happens\u2019 experiments will be complemented by an additional set of \u2018make it happen\u2019-experiments, which apply additional forcings (e.g., land-use change, freshwater input etc.) tailored to the individual tipping elements. This allows for \u2018what if it happens\u2019 assessments, in which the impact of fully collapsed tipping elements can be studied.",
+            "mip_long_name": "Tipping Point Modelling Intercomparison Project",
+            "mip_website": "https://www.tipmip.org",
+            "name": "TIPMIP",
+            "uid": "527f5c6c-8c97-11ef-944e-41a8eb05f654"
         }
     },
     "modelling_realm": {
@@ -2016,21 +2016,80 @@
         }
     },
     "opportunities": {
-        "dafc739e-8c95-11ef-944e-41a8eb05f654": {
+        "Accurate assessment of land-atmosphere coupling": {
             "data_request_themes": [
-                "link::527f5c8f-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c90-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c91-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c93-8c97-11ef-944e-41a8eb05f654"
+                "link::atmosphere",
+                "link::land_landice"
+            ],
+            "description": "This set of data will allow for adequate characterization of sub-daily coupling processes between the land and atmosphere.\n\nIncreasing the time resolution of model output describing components of land\u2013atmosphere coupling and processes within the land\u2013atmosphere interface is essential to fully and accurately model, understand, and predict these\u00a0processes and to compare modeled processes with observational datasets. The data request described here will allow us to compare coupled Earth system and climate models with observations from field campaigns and to compare both diurnal and long-term properties of L\u2013A interactions in different models and during model development.\n\nMore details can be found in this paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
+            "expected_impacts": "Local L\u2013A coupling (LoCo) metrics capture relevant L\u2013A processes, highlighting the impact of soil and vegetation states on surface flux partitioning and the impact of surface fluxes on boundary layer (BL) growth and development and the entrainment of air above the BL. \n\nHigher-frequency model output will (i)\u00a0allow for more direct comparison with observational field campaigns on process-relevant timescales, (ii)\u00a0enable demonstration of inter-model spread in L\u2013A coupling processes, and (iii)\u00a0aid in targeted identification of sources of deficiencies and opportunities for improvement of the models.\n\nMore details can be found in this paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
+            "experiment_groups": [
+                "link::historical",
+                "link::scenarios"
+            ],
+            "image": [
+                {
+                    "filename": "iStock-1483105960.jpg",
+                    "height": 467,
+                    "id": "attwtdnd7qqlzrBR9",
+                    "size": 172959,
+                    "thumbnails": {
+                        "full": {
+                            "height": 467,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/TUrik6w2niUjXrmyMzBNcQ/gfvQJs2ONKdZ47nVo_J_PTxPl1n0Rk0Yi3j2z3vs5VJ1oSHtlykb8vtYoBUqcXXmx7GDzUL5XBE3-uqTR9lwJW7nlcbVBd77hbGPcCQ8FiwVqXRzNC1BAopoxKRfrG-AiBnrwQpzqMbQi2U2ctlkEQ/eGF9rptn6Fg4TwB2-bweCkrUuqNZTsWfIrOITnaEV5Y",
+                            "width": 747
+                        },
+                        "large": {
+                            "height": 467,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/0ZRcMSfJh0G0Le7IiDwXSg/qlUWtH_0gtYnWQDwe68B4boEko9cT-DN28isaOsL2zZ-VcXGN9PJH8c0vFB2drX5gBASVqDUfQviG841dEEIcfe2vRGFA9vRmJbDIWZd2Fd8MX9_l5PMXgHPJV1TF4Z9JdYKiD64PjWWEdhdGmzutA/CruR6hN98C0Di0bhvYDmhRExu3xAry9Yqll5CphWCiE",
+                            "width": 747
+                        },
+                        "small": {
+                            "height": 36,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/WXDaE91FVd2kCKN_VOHo1g/EViDvu7hCs9XZi4TZ0UzO66_wPLbI1Dmu3aZZzD7gnEjhsECyHGSebAjIFo0lsd7Sk67t5TrKBa3zjuA4AQVZRxKwNk8cmIwvPpy98RyyBBXObHVR_y7eWG5SecNmPTZeHtwN8gAYwueTuy1vCjjIw/PAB1Xm8-6bWtIdw81yRLt_xvjL1ihXzPKV1vedINIaA",
+                            "width": 58
+                        }
+                    },
+                    "type": "image/jpeg",
+                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/8DzhRV5OQ5cx6keBywUg7g/EDQkCSmJ7x459uQNukRQID-a99hVj-J2zTucLxD5ZeJ41yaGmZWuKEnDyeuMqAJoa_-W-CrQTHAomBD3MvbATsMMb1zue9R6Thah9a1WUosTaWuuq_kJSnUFDmsVTFoytDGKxWO15G0vJYtyTO3Wju_d9Dvl0r5TWjwC_xYBvak/-xn9MWT2j2cEDhS8fEmsBDIVWf4nHXq7t8AMz8fjldc",
+                    "width": 747
+                }
+            ],
+            "justification_of_resources": "A time slice simulation of historical run could help understanding the land-atmosphere coupling in Earth system models and comparing modeled processes with observational datasets. More scientific evidence could be found in a recent GMD paper: https://doi.org/10.5194/gmd-17-1869-2024",
+            "lead_theme": "link::land_landice",
+            "minimum_ensemble_size": 1,
+            "mips": [
+                "link::HighResMIP",
+                "link::LUMIP",
+                "link::DAMIP"
+            ],
+            "name": "Accurate assessment of land-atmosphere coupling",
+            "opportunity_id": "1",
+            "time_subsets": [
+                "link::hist20",
+                "link::scenario20"
+            ],
+            "uid": "dafc73bd-8c95-11ef-944e-41a8eb05f654",
+            "variable_groups": [
+                "link::landatm_coupling_3hA",
+                "link::landatm_coupling_3hr_medium"
+            ]
+        },
+        "Baseline Climate Variables for Earth System Modelling": {
+            "data_request_themes": [
+                "link::atmosphere",
+                "link::earth_system",
+                "link::impacts",
+                "link::land_landice",
+                "link::ocean_seaice"
             ],
             "description": "The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.\n",
             "expected_impacts": "Greater consistency in provision of high-impact data variables.\n",
             "experiment_groups": [
-                "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+                "link::deck",
+                "link::fast-track",
+                "link::historical",
+                "link::scenarios"
             ],
             "image": [
                 {
@@ -2063,37 +2122,37 @@
             "justification_of_resources": "The baseline variables will support a wide range of applications and the production of all the variables on the list should not impose excessive burdens on modelling centers and infrastructure providers.",
             "minimum_ensemble_size": 1,
             "mips": [
-                "link::527f5c6e-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c70-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6c-8c97-11ef-944e-41a8eb05f654"
+                "link::PMIP",
+                "link::DAMIP",
+                "link::DCPP",
+                "link::TIPMIP"
             ],
             "name": "Baseline Climate Variables for Earth System Modelling",
             "opportunity_id": "69",
             "technical_notes": "See Juckes et al. 2024 (preprint): https://egusphere.copernicus.org/preprints/2024/egusphere-2024-2363/egusphere-2024-2363.pdf ",
             "uid": "dafc739e-8c95-11ef-944e-41a8eb05f654",
             "variable_groups": [
-                "link::dafc73da-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc73dc-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc73dd-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc73de-8c95-11ef-944e-41a8eb05f654"
+                "link::baseline_daily",
+                "link::baseline_fixed",
+                "link::baseline_monthly",
+                "link::baseline_subdaily"
             ]
         },
-        "dafc739f-8c95-11ef-944e-41a8eb05f654": {
+        "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models": {
             "data_request_themes": [
-                "link::527f5c8f-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c90-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c93-8c97-11ef-944e-41a8eb05f654"
+                "link::atmosphere",
+                "link::earth_system",
+                "link::impacts",
+                "link::ocean_seaice"
             ],
             "description": "One of the majors impact of the global warming are related to coastal regions, due to coastal floodings, coastal erosions, with more than 40% of the world's population living within 150 kilometers of the coast, with more than 108 million people expose to potential inundation with 1m of (Sea-Level Rise).\nSurface ocean waves has a huge impact in our modern society, from ship routes (Nielsen & Iknomakis, 2021), ports and harbors operations and safety (Nikolaos et. al. 2021), coastal erosion  (Pang et al. 2020), and many others. Also wind driven surface gravity waves affects several marine and atmosphere processes like: marine aerosols formations ( Dziembor, 2018), modulation of the air-sea fluxes (Qi et al. , 2024; Wu et al. 2022),  tropical cyclones maintenance and decay ( Zhang, et al. 2023), ocean mixing layer depths (Kantha & Clayson, 2004), planetary boundary layer profile and stability (Wu,  2022), among others processes. \nEstimating the role of the ocean's surface waves in the sea-level rise is under discussion ( Aucan et al., 2019) .\nSea-ice also might be affected by ocean waves as well (Alberello et al., 2024; Yang et al., 2024), due to ice and waves interactions, such as wave induced fracturing, lateral and bottom melting (Yang et al., 2024), air-sea-ocean fluxes exchange. \nGeneral wave parameters (i.e. Significant Wave Height (SWH), Mean Period (MP), Peak Period (PP), mean direction (MD), peak direction (PD)) among partitioned parameters (same but for windsea and swells) are important to better represent all processes listed above. \nIt is nice to mention that the ocean surface wave community has joint efforts to create the COWCLIP (Coordinated Ocean Wave Climate Project). This project aims to raise the profile of wind-waves as a variable in the global climate system to both foster and support determination of the effects of climate variability and change. on the wave climate and the feedback influence of waves on the coupled earth climate system. \n\n",
             "expected_impacts": "Surface ocean waves variable might have a huge importance at all DECK experiments, DCPP and ScenarioMIP.  \n",
             "experiment_groups": [
-                "link::80ab72c9-a698-11ef-914a-613c0433d878",
-                "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+                "link::deck",
+                "link::fast-track",
+                "link::historical",
+                "link::scenarios",
+                "link::scenarios_extensions"
             ],
             "image": [
                 {
@@ -2124,37 +2183,37 @@
                 }
             ],
             "justification_of_resources": "Several modelling centers already have wave models in to their capabilities, coupled or uncoupled. The effects of surface  wind waves are  important  in modulating mean climate but also extreme events over the oceans.",
-            "lead_theme": "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
+            "lead_theme": "link::ocean_seaice",
             "minimum_ensemble_size": 1,
             "mips": [
-                "link::527f5c70-8c97-11ef-944e-41a8eb05f654"
+                "link::DCPP"
             ],
             "name": "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
             "opportunity_id": "68",
             "uid": "dafc739f-8c95-11ef-944e-41a8eb05f654",
             "variable_groups": [
-                "link::80ab73e4-a698-11ef-914a-613c0433d878",
-                "link::dafc73da-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc73dc-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc73dd-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc73de-8c95-11ef-944e-41a8eb05f654"
+                "link::baseline_daily",
+                "link::baseline_fixed",
+                "link::baseline_monthly",
+                "link::baseline_subdaily",
+                "link::sfc_waves"
             ]
         },
-        "dafc73a5-8c95-11ef-944e-41a8eb05f654": {
+        "Ocean Extremes": {
             "data_request_themes": [
-                "link::527f5c8f-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c93-8c97-11ef-944e-41a8eb05f654"
+                "link::earth_system",
+                "link::impacts",
+                "link::ocean_seaice"
             ],
             "description": "The \u201cOcean Extremes\u201d project aims to investigate and address the impacts of extreme ocean conditions such as marine heatwaves, hypoxic zones, extreme salinities, sea level extremes and storm surges, ocean acidification, and compound events. As climate change accelerates, these extreme conditions are becoming more frequent and severe, posing significant risks to marine ecosystems and coastal communities. This opportunity will collect the high-frequency multidisciplinary approach to analyze these phenomena, their causes, and their effects, ultimately contributing to better management strategies and mitigation efforts. \u00a0Extreme sea levels are primarily caused by storm surges often in combination with astronomical tides, waves and/or river overflow, which requires climate-scale forcing data at the appropriate spatial and temporal scales to be combined with other resources offline. This opportunity is particularly relevant to revealing differences between eddy-permitting and coarse-resolution models.\n\nLong-term assessment of ocean extremes important for identifying vulnerable regions, designing coastal protection to appropriate levels, and assessing infrastructure and ecosystem viability. It also enables various adaptation measures to be considered and tested via sensitivity testing. In the coming decades, ocean extremes and associated floods are likely to remain a leading cause of natural disasters due to the combined effects of the increasing frequency and intensity of extremes combined with increased coastal development associated with greater exposure.\n",
             "expected_impacts": "This project will look at intense, short-lived events in the upper ocean and euphotic zones.\u00a0 These phenomena have direct impacts on ecosystems and coastal communities, and AR6 assessed that they are changing in frequency.\u00a0 These will inform studies of vulnerability, protection measures, ecosystem persistence and geographic shifts.\n",
             "experiment_groups": [
-                "link::80ab723e-a698-11ef-914a-613c0433d878",
-                "link::80ab72c9-a698-11ef-914a-613c0433d878",
-                "link::dafc748d-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc748e-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
+                "link::dcpp",
+                "link::deck",
+                "link::fast-track",
+                "link::historical",
+                "link::scenarios",
+                "link::scenarios_extensions"
             ],
             "image": [
                 {
@@ -2185,82 +2244,23 @@
                 }
             ],
             "justification_of_resources": "Very few levels of near surface high-frequency variables, combined with monthly climatological ocean variables, are critical for assessment of high-resolution models and ocean extremes understanding and projections. These are the same values chosen in literature studies of extremes (e.g., Gruber, N., Boyd, P.W., Fr\u00f6licher, T.L. and Vogt, M., 2021. Biogeochemical extremes and compound events in the ocean. Nature, 600(7889), pp.395-407) and storm surges (Bernier, N.B., Hemer, M., Mori, N., Appendini, C.M., Breivik, O., de Camargo, R., Casas-Prat, M., Duong, T.M., Haigh, I.D., Howard, T. and Hernaman, V., 2024. Storm surges and extreme sea levels: Review, establishment of model intercomparison and coordination of surge climate projection efforts (SurgeMIP). Weather and Climate Extremes, 45, p.100689).\n\nThese variables are critical to: coastal hazard assessment; understanding vulnerable regions, communities, infrastructure and ecosystems; better understand and test adaptation measures, both man-made (e.g., coastal protection structures) and natural (e.g., oyster reefs, mangroves).",
-            "lead_theme": "link::527f5c92-8c97-11ef-944e-41a8eb05f654",
+            "lead_theme": "link::ocean_seaice",
             "minimum_ensemble_size": 1,
             "mips": [
-                "link::527f5c70-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6e-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654"
+                "link::DCPP",
+                "link::PMIP",
+                "link::DAMIP"
             ],
             "name": "Ocean Extremes",
             "opportunity_id": "49",
             "uid": "dafc73a5-8c95-11ef-944e-41a8eb05f654",
             "variable_groups": [
-                "link::80ab73e2-a698-11ef-914a-613c0433d878",
-                "link::dafc7435-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc7436-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc743a-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc7464-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc747f-8c95-11ef-944e-41a8eb05f654"
-            ]
-        },
-        "dafc73bd-8c95-11ef-944e-41a8eb05f654": {
-            "data_request_themes": [
-                "link::527f5c90-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c91-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "description": "This set of data will allow for adequate characterization of sub-daily coupling processes between the land and atmosphere.\n\nIncreasing the time resolution of model output describing components of land\u2013atmosphere coupling and processes within the land\u2013atmosphere interface is essential to fully and accurately model, understand, and predict these\u00a0processes and to compare modeled processes with observational datasets. The data request described here will allow us to compare coupled Earth system and climate models with observations from field campaigns and to compare both diurnal and long-term properties of L\u2013A interactions in different models and during model development.\n\nMore details can be found in this paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
-            "expected_impacts": "Local L\u2013A coupling (LoCo) metrics capture relevant L\u2013A processes, highlighting the impact of soil and vegetation states on surface flux partitioning and the impact of surface fluxes on boundary layer (BL) growth and development and the entrainment of air above the BL. \n\nHigher-frequency model output will (i)\u00a0allow for more direct comparison with observational field campaigns on process-relevant timescales, (ii)\u00a0enable demonstration of inter-model spread in L\u2013A coupling processes, and (iii)\u00a0aid in targeted identification of sources of deficiencies and opportunities for improvement of the models.\n\nMore details can be found in this paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
-            "experiment_groups": [
-                "link::dafc748f-8c95-11ef-944e-41a8eb05f654",
-                "link::dafc7490-8c95-11ef-944e-41a8eb05f654"
-            ],
-            "image": [
-                {
-                    "filename": "iStock-1483105960.jpg",
-                    "height": 467,
-                    "id": "attwtdnd7qqlzrBR9",
-                    "size": 172959,
-                    "thumbnails": {
-                        "full": {
-                            "height": 467,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/TUrik6w2niUjXrmyMzBNcQ/gfvQJs2ONKdZ47nVo_J_PTxPl1n0Rk0Yi3j2z3vs5VJ1oSHtlykb8vtYoBUqcXXmx7GDzUL5XBE3-uqTR9lwJW7nlcbVBd77hbGPcCQ8FiwVqXRzNC1BAopoxKRfrG-AiBnrwQpzqMbQi2U2ctlkEQ/eGF9rptn6Fg4TwB2-bweCkrUuqNZTsWfIrOITnaEV5Y",
-                            "width": 747
-                        },
-                        "large": {
-                            "height": 467,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/0ZRcMSfJh0G0Le7IiDwXSg/qlUWtH_0gtYnWQDwe68B4boEko9cT-DN28isaOsL2zZ-VcXGN9PJH8c0vFB2drX5gBASVqDUfQviG841dEEIcfe2vRGFA9vRmJbDIWZd2Fd8MX9_l5PMXgHPJV1TF4Z9JdYKiD64PjWWEdhdGmzutA/CruR6hN98C0Di0bhvYDmhRExu3xAry9Yqll5CphWCiE",
-                            "width": 747
-                        },
-                        "small": {
-                            "height": 36,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/WXDaE91FVd2kCKN_VOHo1g/EViDvu7hCs9XZi4TZ0UzO66_wPLbI1Dmu3aZZzD7gnEjhsECyHGSebAjIFo0lsd7Sk67t5TrKBa3zjuA4AQVZRxKwNk8cmIwvPpy98RyyBBXObHVR_y7eWG5SecNmPTZeHtwN8gAYwueTuy1vCjjIw/PAB1Xm8-6bWtIdw81yRLt_xvjL1ihXzPKV1vedINIaA",
-                            "width": 58
-                        }
-                    },
-                    "type": "image/jpeg",
-                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/8DzhRV5OQ5cx6keBywUg7g/EDQkCSmJ7x459uQNukRQID-a99hVj-J2zTucLxD5ZeJ41yaGmZWuKEnDyeuMqAJoa_-W-CrQTHAomBD3MvbATsMMb1zue9R6Thah9a1WUosTaWuuq_kJSnUFDmsVTFoytDGKxWO15G0vJYtyTO3Wju_d9Dvl0r5TWjwC_xYBvak/-xn9MWT2j2cEDhS8fEmsBDIVWf4nHXq7t8AMz8fjldc",
-                    "width": 747
-                }
-            ],
-            "justification_of_resources": "A time slice simulation of historical run could help understanding the land-atmosphere coupling in Earth system models and comparing modeled processes with observational datasets. More scientific evidence could be found in a recent GMD paper: https://doi.org/10.5194/gmd-17-1869-2024",
-            "lead_theme": "link::527f5c91-8c97-11ef-944e-41a8eb05f654",
-            "minimum_ensemble_size": 1,
-            "mips": [
-                "link::527f5c76-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c77-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "name": "Accurate assessment of land-atmosphere coupling",
-            "opportunity_id": "1",
-            "time_subsets": [
-                "link::527f5cac-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5cbd-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "uid": "dafc73bd-8c95-11ef-944e-41a8eb05f654",
-            "variable_groups": [
-                "link::80ab723b-a698-11ef-914a-613c0433d878",
-                "link::dafc7428-8c95-11ef-944e-41a8eb05f654"
+                "link::mixed_layer_extremes",
+                "link::ocean_KE_vorticity_extremes",
+                "link::ocean_acidification_oxygen_extremes",
+                "link::ocean_temperature_extremes",
+                "link::sea_level_extremes",
+                "link::surgemip_variables"
             ]
         }
     },
@@ -3032,23 +3032,23 @@
         }
     },
     "priority_level": {
-        "527f5c94-8c97-11ef-944e-41a8eb05f654": {
+        "Core": {
+            "name": "Core",
+            "notes": "Top priority, reserved for variables selected for inclusion in the Baseline Climate Variables. These variables should be produced for all experiments.",
+            "uid": "527f5c97-8c97-11ef-944e-41a8eb05f654",
+            "value": 1
+        },
+        "High": {
             "name": "High",
             "notes": "The variables support the core objectives of the opportunity.  These are required to make the opportunity viable.",
             "uid": "527f5c94-8c97-11ef-944e-41a8eb05f654",
             "value": 2
         },
-        "527f5c95-8c97-11ef-944e-41a8eb05f654": {
+        "Medium": {
             "name": "Medium",
             "notes": "These variables deliver extra information that can then enable people to go further and push the scientific boundaries further.",
             "uid": "527f5c95-8c97-11ef-944e-41a8eb05f654",
             "value": 3
-        },
-        "527f5c97-8c97-11ef-944e-41a8eb05f654": {
-            "name": "Core",
-            "notes": "Top priority, reserved for variables selected for inclusion in the Baseline Climate Variables. These variables should be produced for all experiments.",
-            "uid": "527f5c97-8c97-11ef-944e-41a8eb05f654",
-            "value": 1
         }
     },
     "spatial_shape": {
@@ -3167,7 +3167,7 @@
         }
     },
     "time_subsets": {
-        "527f5cac-8c97-11ef-944e-41a8eb05f654": {
+        "hist20": {
             "end": 2021,
             "name": "hist20",
             "nyears": 20,
@@ -3176,7 +3176,7 @@
             "type": "simpleRange",
             "uid": "527f5cac-8c97-11ef-944e-41a8eb05f654"
         },
-        "527f5cbd-8c97-11ef-944e-41a8eb05f654": {
+        "scenario20": {
             "description": "Last 20 years of Scenario experiments",
             "end": 2100,
             "name": "scenario20",
@@ -3188,74 +3188,14 @@
         }
     },
     "variable_groups": {
-        "80ab723b-a698-11ef-914a-613c0433d878": {
-            "justification": "This variable group allows for adequate characterization of sub-daily coupling processes between the land and the atmosphere, based on Findell et al. (2024), doi: 10.5194/gmd-17-1869-2024",
+        "baseline_daily": {
             "mips": [
-                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c76-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c77-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "name": "landatm_coupling_3hr_medium",
-            "priority_level": [
-                "link::527f5c95-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "title": "Land-Atmosphere Coupling at 3 h time means or at an instantaneous point 3 hPt (medium priority)",
-            "uid": "80ab723b-a698-11ef-914a-613c0433d878",
-            "variables": [
-                "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB",
-                "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
-                "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
-                "link::land.tran.tavg-u-hxy-u.3hr.GLB"
-            ]
-        },
-        "80ab73e2-a698-11ef-914a-613c0433d878": {
-            "justification": "Upper ocean dynamics are well-mixed vertically over the mixed layer.  This means that the heat capacity and inertia of this layer are what responds to surface forcing, approximately.  The depth of this layer is therefore critical for understanding the impacts of air-sea fluxes.",
-            "name": "mixed_layer_extremes",
-            "notes": "It is important to use 10m as the reference for temperature and density to calculate the mixed layer as a difference from that level.  http://dx.doi.org/10.5194/gmd-16-3849-2023",
-            "priority_level": [
-                "link::527f5c94-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "title": "mixed_layer_extremes",
-            "uid": "80ab73e2-a698-11ef-914a-613c0433d878",
-            "variables": [
-                "link::ocean.mlotst.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.mlotstmax.tmax-u-hxy-sea.mon.GLB",
-                "link::ocean.mlotstmin.tmin-u-hxy-sea.mon.GLB"
-            ]
-        },
-        "80ab73e4-a698-11ef-914a-613c0433d878": {
-            "justification": "Inclusion of the wave model's outputs",
-            "name": "sfc_waves",
-            "priority_level": [
-                "link::527f5c94-8c97-11ef-944e-41a8eb05f654"
-            ],
-            "title": "Ocean surface wave diagnostics",
-            "uid": "80ab73e4-a698-11ef-914a-613c0433d878",
-            "variables": [
-                "link::ocean.mpw.tavg-u-hxy-sea.3hr.GLB",
-                "link::ocean.mpw.tavg-u-hxy-sea.6hr.GLB",
-                "link::ocean.mpw.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.swh.tavg-u-hxy-sea.3hr.GLB",
-                "link::ocean.swh.tavg-u-hxy-sea.6hr.GLB",
-                "link::ocean.swh.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.swh.tmax-u-hxy-sea.6hr.GLB",
-                "link::ocean.swh.tmax-u-hxy-sea.mon.GLB",
-                "link::ocean.wpp.tavg-u-hxy-sea.3hr.GLB",
-                "link::ocean.wpp.tavg-u-hxy-sea.6hr.GLB",
-                "link::ocean.wpp.tavg-u-hxy-sea.mon.GLB"
-            ]
-        },
-        "dafc73da-8c95-11ef-944e-41a8eb05f654": {
-            "mips": [
-                "link::527f5c83-8c97-11ef-944e-41a8eb05f654"
+                "link::FireMIP"
             ],
             "name": "baseline_daily",
             "notes": "As outlined in Baseline Climate Variables paper: https://doi.org/10.5194/egusphere-2024-2363 \n\nPlease note, the number of variables in this group is slightly lower (5 fewer variables) than outlined in the paper. This is due to the harmonisation of pressure levels that occured during the consultation process leading the following five variables to be the same in the 'day' and 'Eday' CMIP6-era tables. Therefore the Eday variants have been removed. \n1. day/Eday.hus\n2. day/Eday.ua\n3. day/Eday.va\n4. day/Eday.zg\n5. day/Eday.ta",
             "priority_level": [
-                "link::527f5c97-8c97-11ef-944e-41a8eb05f654"
+                "link::Core"
             ],
             "title": "ESM Baseline Climate Variables",
             "uid": "dafc73da-8c95-11ef-944e-41a8eb05f654",
@@ -3275,11 +3215,11 @@
                 "link::seaIce.siconc.tavg-u-hxy-u.day.GLB"
             ]
         },
-        "dafc73dc-8c95-11ef-944e-41a8eb05f654": {
+        "baseline_fixed": {
             "name": "baseline_fixed",
             "notes": "As outlined in Baseline Climate Variables paper: https://doi.org/10.5194/egusphere-2024-2363 ",
             "priority_level": [
-                "link::527f5c97-8c97-11ef-944e-41a8eb05f654"
+                "link::Core"
             ],
             "title": "ESM Baseline Climate Variables",
             "uid": "dafc73dc-8c95-11ef-944e-41a8eb05f654",
@@ -3294,14 +3234,14 @@
                 "link::ocean.masscello.ti-ol-hxy-sea.fx.GLB"
             ]
         },
-        "dafc73dd-8c95-11ef-944e-41a8eb05f654": {
+        "baseline_monthly": {
             "mips": [
-                "link::527f5c83-8c97-11ef-944e-41a8eb05f654"
+                "link::FireMIP"
             ],
             "name": "baseline_monthly",
             "notes": "As outlined in Baseline Climate Variables paper: https://doi.org/10.5194/egusphere-2024-2363 ",
             "priority_level": [
-                "link::527f5c97-8c97-11ef-944e-41a8eb05f654"
+                "link::Core"
             ],
             "title": "ESM Baseline Climate Variables",
             "uid": "dafc73dd-8c95-11ef-944e-41a8eb05f654",
@@ -3334,11 +3274,11 @@
                 "link::seaIce.siv.tavg-u-hxy-si.mon.GLB"
             ]
         },
-        "dafc73de-8c95-11ef-944e-41a8eb05f654": {
+        "baseline_subdaily": {
             "name": "baseline_subdaily",
             "notes": "As outlined in Baseline Climate Variables paper: https://doi.org/10.5194/egusphere-2024-2363 ",
             "priority_level": [
-                "link::527f5c97-8c97-11ef-944e-41a8eb05f654"
+                "link::Core"
             ],
             "title": "ESM Baseline Climate Variables",
             "uid": "dafc73de-8c95-11ef-944e-41a8eb05f654",
@@ -3351,17 +3291,17 @@
                 "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB"
             ]
         },
-        "dafc7428-8c95-11ef-944e-41a8eb05f654": {
+        "landatm_coupling_3hA": {
             "justification": "This variable group allows for adequate characterization of sub-daily coupling processes between the land and the atmosphere, based on Findell et al. (2024), doi: 10.5194/gmd-17-1869-2024",
             "mips": [
-                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c76-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c77-8c97-11ef-944e-41a8eb05f654"
+                "link::CMIP",
+                "link::HighResMIP",
+                "link::LUMIP",
+                "link::ScenarioMIP"
             ],
             "name": "landatm_coupling_3hA",
             "priority_level": [
-                "link::527f5c94-8c97-11ef-944e-41a8eb05f654"
+                "link::High"
             ],
             "title": "Land-Atmosphere Coupling at 3 h time means or at an instantaneous point 3 hPt",
             "uid": "dafc7428-8c95-11ef-944e-41a8eb05f654",
@@ -3378,43 +3318,78 @@
                 "link::land.tslsi.tpt-u-hxy-u.3hr.GLB"
             ]
         },
-        "dafc7435-8c95-11ef-944e-41a8eb05f654": {
-            "justification": "These variables are needed to assess the changes in marine heatwaves.",
+        "landatm_coupling_3hr_medium": {
+            "justification": "This variable group allows for adequate characterization of sub-daily coupling processes between the land and the atmosphere, based on Findell et al. (2024), doi: 10.5194/gmd-17-1869-2024",
             "mips": [
-                "link::527f5c64-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6b-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6d-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c73-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c7d-8c97-11ef-944e-41a8eb05f654"
+                "link::CMIP",
+                "link::HighResMIP",
+                "link::LUMIP",
+                "link::ScenarioMIP"
             ],
-            "name": "ocean_temperature_extremes",
-            "notes": "Should only be 0day.thetao [and potentially bigthetao] at 20bar pressure.  No other levels (except surface in 3hr.tos)",
+            "name": "landatm_coupling_3hr_medium",
             "priority_level": [
-                "link::527f5c94-8c97-11ef-944e-41a8eb05f654"
+                "link::Medium"
             ],
-            "title": "Ocean surface temperature metrics collected on a daily frequency.",
-            "uid": "dafc7435-8c95-11ef-944e-41a8eb05f654",
+            "title": "Land-Atmosphere Coupling at 3 h time means or at an instantaneous point 3 hPt (medium priority)",
+            "uid": "80ab723b-a698-11ef-914a-613c0433d878",
             "variables": [
-                "link::ocean.bigthetao.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB",
-                "link::ocean.tossq.tavg-u-hxy-sea.day.GLB"
+                "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
+                "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB",
+                "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
+                "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
+                "link::land.tran.tavg-u-hxy-u.3hr.GLB"
             ]
         },
-        "dafc7436-8c95-11ef-944e-41a8eb05f654": {
+        "mixed_layer_extremes": {
+            "justification": "Upper ocean dynamics are well-mixed vertically over the mixed layer.  This means that the heat capacity and inertia of this layer are what responds to surface forcing, approximately.  The depth of this layer is therefore critical for understanding the impacts of air-sea fluxes.",
+            "name": "mixed_layer_extremes",
+            "notes": "It is important to use 10m as the reference for temperature and density to calculate the mixed layer as a difference from that level.  http://dx.doi.org/10.5194/gmd-16-3849-2023",
+            "priority_level": [
+                "link::High"
+            ],
+            "title": "mixed_layer_extremes",
+            "uid": "80ab73e2-a698-11ef-914a-613c0433d878",
+            "variables": [
+                "link::ocean.mlotst.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.mlotstmax.tmax-u-hxy-sea.mon.GLB",
+                "link::ocean.mlotstmin.tmin-u-hxy-sea.mon.GLB"
+            ]
+        },
+        "ocean_KE_vorticity_extremes": {
+            "justification": "This variable is key for understanding compound extreme events and the distinctions between eddy-permitting and coarse models.",
+            "mips": [
+                "link::CMIP",
+                "link::FAFMIP",
+                "link::HighResMIP",
+                "link::OMIP",
+                "link::SIMIP",
+                "link::ScenarioMIP",
+                "link::TIPMIP"
+            ],
+            "name": "ocean_KE_vorticity_extremes",
+            "priority_level": [
+                "link::Medium"
+            ],
+            "title": "Ocean Kinetic Energy and Vorticity Extremes",
+            "uid": "dafc743a-8c95-11ef-944e-41a8eb05f654",
+            "variables": [
+                "link::ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
+                "link::ocean.uos.tavg-u-hxy-sea.day.GLB",
+                "link::ocean.vos.tavg-u-hxy-sea.day.GLB"
+            ]
+        },
+        "ocean_acidification_oxygen_extremes": {
             "justification": "This is important for comparing high resolution and coarse models including biogeochemistry as well as for impacts of compound events.",
             "mips": [
-                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6f-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c70-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c7f-8c97-11ef-944e-41a8eb05f654"
+                "link::C4MIP",
+                "link::DCPP",
+                "link::FAFMIP",
+                "link::OMIP"
             ],
             "name": "ocean_acidification_oxygen_extremes",
             "priority_level": [
-                "link::527f5c95-8c97-11ef-944e-41a8eb05f654"
+                "link::Medium"
             ],
             "title": "Ocean pH and oxygen extremes",
             "uid": "dafc7436-8c95-11ef-944e-41a8eb05f654",
@@ -3434,46 +3409,49 @@
                 "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"
             ]
         },
-        "dafc743a-8c95-11ef-944e-41a8eb05f654": {
-            "justification": "This variable is key for understanding compound extreme events and the distinctions between eddy-permitting and coarse models.",
+        "ocean_temperature_extremes": {
+            "justification": "These variables are needed to assess the changes in marine heatwaves.",
             "mips": [
-                "link::527f5c64-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6c-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6f-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c76-8c97-11ef-944e-41a8eb05f654"
+                "link::CMIP",
+                "link::CORDEX",
+                "link::DAMIP",
+                "link::GeoMIP",
+                "link::ISMIP7",
+                "link::OMIP",
+                "link::SIMIP",
+                "link::ScenarioMIP"
             ],
-            "name": "ocean_KE_vorticity_extremes",
+            "name": "ocean_temperature_extremes",
+            "notes": "Should only be 0day.thetao [and potentially bigthetao] at 20bar pressure.  No other levels (except surface in 3hr.tos)",
             "priority_level": [
-                "link::527f5c95-8c97-11ef-944e-41a8eb05f654"
+                "link::High"
             ],
-            "title": "Ocean Kinetic Energy and Vorticity Extremes",
-            "uid": "dafc743a-8c95-11ef-944e-41a8eb05f654",
+            "title": "Ocean surface temperature metrics collected on a daily frequency.",
+            "uid": "dafc7435-8c95-11ef-944e-41a8eb05f654",
             "variables": [
-                "link::ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
-                "link::ocean.uos.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.vos.tavg-u-hxy-sea.day.GLB"
+                "link::ocean.bigthetao.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
+                "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB",
+                "link::ocean.tossq.tavg-u-hxy-sea.day.GLB"
             ]
         },
-        "dafc7464-8c95-11ef-944e-41a8eb05f654": {
+        "sea_level_extremes": {
             "justification": "This product is important for impacts, ice sheet forcing, and coastal impacts.  It is critically different between eddy-permitting and coarse-resolution models, which should be part of the sea level assessment (AR6 Fig. 9.12).",
             "mips": [
-                "link::527f5c64-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c65-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c66-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6b-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6c-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c6f-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c73-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c76-8c97-11ef-944e-41a8eb05f654"
+                "link::CMIP",
+                "link::FAFMIP",
+                "link::GeoMIP",
+                "link::HighResMIP",
+                "link::ISMIP7",
+                "link::OMIP",
+                "link::SIMIP",
+                "link::SOFIAMIP",
+                "link::ScenarioMIP",
+                "link::TIPMIP"
             ],
             "name": "sea_level_extremes",
             "priority_level": [
-                "link::527f5c94-8c97-11ef-944e-41a8eb05f654"
+                "link::High"
             ],
             "title": "High-frequency surface variability",
             "uid": "dafc7464-8c95-11ef-944e-41a8eb05f654",
@@ -3483,16 +3461,38 @@
                 "link::ocean.zostoga.tavg-u-hm-sea.day.GLB"
             ]
         },
-        "dafc747f-8c95-11ef-944e-41a8eb05f654": {
+        "sfc_waves": {
+            "justification": "Inclusion of the wave model's outputs",
+            "name": "sfc_waves",
+            "priority_level": [
+                "link::High"
+            ],
+            "title": "Ocean surface wave diagnostics",
+            "uid": "80ab73e4-a698-11ef-914a-613c0433d878",
+            "variables": [
+                "link::ocean.mpw.tavg-u-hxy-sea.3hr.GLB",
+                "link::ocean.mpw.tavg-u-hxy-sea.6hr.GLB",
+                "link::ocean.mpw.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.swh.tavg-u-hxy-sea.3hr.GLB",
+                "link::ocean.swh.tavg-u-hxy-sea.6hr.GLB",
+                "link::ocean.swh.tavg-u-hxy-sea.mon.GLB",
+                "link::ocean.swh.tmax-u-hxy-sea.6hr.GLB",
+                "link::ocean.swh.tmax-u-hxy-sea.mon.GLB",
+                "link::ocean.wpp.tavg-u-hxy-sea.3hr.GLB",
+                "link::ocean.wpp.tavg-u-hxy-sea.6hr.GLB",
+                "link::ocean.wpp.tavg-u-hxy-sea.mon.GLB"
+            ]
+        },
+        "surgemip_variables": {
             "justification": "Coastal flood damage is primarily the result of extreme sea levels and climate change is expected to drive an increase in these extremes. Extreme sea levels are primarily caused by storm surges often in combination with astronomical tides, waves and/or river overflow. Proper estimation of changes in storm surges is essential to estimate projected changes in extreme sea levels. The SurgeMIP (surge model intercomparison) community has been established to tackle challenges associated with predicting and projecting extreme sea levels which require reliable numerical prediction systems. Critical to this is having relevant climate-scale forcing data at the appropriate spatial and temporal scales. \n\nHourly uas and vas winds (10 m Winds)\nHourly psl \n3-hourly ice concentration\n3-hourly ice velocity\n3-hourly surface ocean currents\nMonthly ocean temperature profile (all levels in top 500m, 1000m, 2000m, bottom)\nMonthly ocean salinity profile (all levels in top 500m, 1000m, 2000m, bottom)\n",
             "mips": [
-                "link::527f5c74-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c75-8c97-11ef-944e-41a8eb05f654",
-                "link::527f5c76-8c97-11ef-944e-41a8eb05f654"
+                "link::CMIP",
+                "link::HighResMIP",
+                "link::ScenarioMIP"
             ],
             "name": "surgemip_variables",
             "priority_level": [
-                "link::527f5c94-8c97-11ef-944e-41a8eb05f654"
+                "link::High"
             ],
             "title": "SurgeMIP variables",
             "uid": "dafc747f-8c95-11ef-944e-41a8eb05f654",

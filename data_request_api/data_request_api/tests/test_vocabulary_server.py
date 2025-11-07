@@ -142,11 +142,11 @@ class TestVocabularyServer(unittest.TestCase):
             "mip_long_name": "Tipping Point Modelling Intercomparison Project",
             "mip_website": "https://www.tipmip.org",
             "name": "TIPMIP",
-            "id": "527f5c6c-8c97-11ef-944e-41a8eb05f654",
+            "id": "TIPMIP",
             "uid": "527f5c6c-8c97-11ef-944e-41a8eb05f654"
         }
         self.assertDictEqual(elt, target_dict)
-        obj = vs.get_element(element_type="mips", element_id="link::527f5c6c-8c97-11ef-944e-41a8eb05f654")
+        obj = vs.get_element(element_type="mips", element_id="link::TIPMIP")
         self.assertDictEqual(elt, target_dict)
 
         with self.assertRaises(ValueError):
@@ -161,8 +161,8 @@ class TestVocabularyServer(unittest.TestCase):
         with self.assertRaises(ValueError):
             obj = vs.get_element(element_type="mips", element_id="undef", id_type="name")
 
-        obj = vs.get_element(element_type="mips", element_id="link::527f5c6c-8c97-11ef-944e-41a8eb05f654", element_key="mip_long_name")
+        obj = vs.get_element(element_type="mips", element_id="link::TIPMIP", element_key="mip_long_name")
         self.assertEqual(obj, "Tipping Point Modelling Intercomparison Project")
 
         with self.assertRaises(ValueError):
-            obj = vs.get_element(element_type="mips", element_id="link::527f5c6c-8c97-11ef-944e-41a8eb05f654", element_key="long_name")
+            obj = vs.get_element(element_type="mips", element_id="link::TIPMIP", element_key="long_name")

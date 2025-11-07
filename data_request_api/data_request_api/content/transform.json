@@ -154,6 +154,30 @@
         },
         "variables": {
           "linked_id": "cmip7_compound_name"
+        },
+        "experiments": {
+          "linked_id": "name"
+        },
+        "experiment_groups": {
+          "linked_id": "name"
+        },
+        "opportunities": {
+          "linked_id": "name"
+        },
+        "data_request_themes": {
+          "linked_id": "short_name"
+        },
+        "mips": {
+          "linked_id": "name"
+        },
+        "time_subsets": {
+          "linked_id": "name"
+        },
+        "variable_groups": {
+          "linked_id": "name"
+        },
+        "priority_level": {
+          "linked_id": "name"
         }
       },
       "keys_to_copy": {}
