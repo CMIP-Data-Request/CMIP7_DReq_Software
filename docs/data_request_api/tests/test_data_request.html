@@ -58,8 +58,8 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class TestDRObjects(unittest.TestCase):
     def setUp(self):
-        self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_content.json&#34;),
-                                                    DR_input=filepath(&#34;DR_release_content.json&#34;))
+        self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;),
+                                                    DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;))
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -186,8 +186,8 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_content.json&#34;),
-                                                DR_input=filepath(&#34;DR_release_content.json&#34;))</code></pre>
+    self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;),
+                                                DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;))</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -366,14 +366,14 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestDataRequest(unittest.TestCase):
     def setUp(self):
-        self.vs_file = filepath(&#34;VS_release_content.json&#34;)
+        self.vs_file = filepath(&#34;VS_release_not-consolidate_content.json&#34;)
         self.vs_dict = read_json_input_file_content(self.vs_file)
         self.vs = VocabularyServer.from_input(self.vs_file)
-        self.input_database_file = filepath(&#34;DR_release_content.json&#34;)
+        self.input_database_file = filepath(&#34;DR_release_not-consolidate_content.json&#34;)
         self.input_database = read_json_input_file_content(self.input_database_file)
         self.complete_input_file = filepath(&#34;dreq_release_export.json&#34;)
         self.complete_input = read_json_input_file_content(self.complete_input_file)
-        self.DR_dump = filepath(&#34;DR_release_content_dump.txt&#34;)
+        self.DR_dump = filepath(&#34;DR_release_not-consolidate_content_dump.txt&#34;)
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -641,14 +641,14 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.vs_file = filepath(&#34;VS_release_content.json&#34;)
+    self.vs_file = filepath(&#34;VS_release_not-consolidate_content.json&#34;)
     self.vs_dict = read_json_input_file_content(self.vs_file)
     self.vs = VocabularyServer.from_input(self.vs_file)
-    self.input_database_file = filepath(&#34;DR_release_content.json&#34;)
+    self.input_database_file = filepath(&#34;DR_release_not-consolidate_content.json&#34;)
     self.input_database = read_json_input_file_content(self.input_database_file)
     self.complete_input_file = filepath(&#34;dreq_release_export.json&#34;)
     self.complete_input = read_json_input_file_content(self.complete_input_file)
-    self.DR_dump = filepath(&#34;DR_release_content_dump.txt&#34;)</code></pre>
+    self.DR_dump = filepath(&#34;DR_release_not-consolidate_content_dump.txt&#34;)</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -1078,9 +1078,9 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestDataRequestFilter(unittest.TestCase):
     def setUp(self):
-        self.vs_file = filepath(&#34;VS_release_content.json&#34;)
+        self.vs_file = filepath(&#34;VS_release_not-consolidate_content.json&#34;)
         self.vs = VocabularyServer.from_input(self.vs_file)
-        self.input_database_file = filepath(&#34;DR_release_content.json&#34;)
+        self.input_database_file = filepath(&#34;DR_release_not-consolidate_content.json&#34;)
         self.input_database = read_json_input_file_content(self.input_database_file)
         self.dr = DataRequest(input_database=self.input_database, VS=self.vs)
         self.exp_export = filepath(&#34;experiments_export.txt&#34;)
@@ -1587,9 +1587,9 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.vs_file = filepath(&#34;VS_release_content.json&#34;)
+    self.vs_file = filepath(&#34;VS_release_not-consolidate_content.json&#34;)
     self.vs = VocabularyServer.from_input(self.vs_file)
-    self.input_database_file = filepath(&#34;DR_release_content.json&#34;)
+    self.input_database_file = filepath(&#34;DR_release_not-consolidate_content.json&#34;)
     self.input_database = read_json_input_file_content(self.input_database_file)
     self.dr = DataRequest(input_database=self.input_database, VS=self.vs)
     self.exp_export = filepath(&#34;experiments_export.txt&#34;)
@@ -2308,8 +2308,8 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestExperimentsGroup(unittest.TestCase):
     def setUp(self):
-        self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_content.json&#34;),
-                                                    DR_input=filepath(&#34;DR_release_content.json&#34;))
+        self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;),
+                                                    DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;))
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -2450,8 +2450,8 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_content.json&#34;),
-                                                DR_input=filepath(&#34;DR_release_content.json&#34;))</code></pre>
+    self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;),
+                                                DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;))</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -2634,8 +2634,8 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestOpportunity(unittest.TestCase):
     def setUp(self):
-        self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_content.json&#34;),
-                                                    VS_input=filepath(&#34;VS_release_content.json&#34;))
+        self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;),
+                                                    VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;))
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -2870,8 +2870,8 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_content.json&#34;),
-                                                VS_input=filepath(&#34;VS_release_content.json&#34;))</code></pre>
+    self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;),
+                                                VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;))</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -3148,8 +3148,8 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestVariables(unittest.TestCase):
     def setUp(self):
-        self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_content.json&#34;),
-                                                    DR_input=filepath(&#34;DR_release_content.json&#34;))
+        self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;),
+                                                    DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;))
 
     def test_print(self):
         obj = self.dr.find_element(&#34;variable&#34;, &#34;ocean.wo.tavg-ol-hxy-sea.mon.GLB&#34;)
@@ -3251,8 +3251,8 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_content.json&#34;),
-                                                DR_input=filepath(&#34;DR_release_content.json&#34;))</code></pre>
+    self.dr = DataRequest.from_separated_inputs(VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;),
+                                                DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;))</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>
@@ -3346,8 +3346,8 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">class TestVariablesGroup(unittest.TestCase):
     def setUp(self):
-        self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_content.json&#34;),
-                                                    VS_input=filepath(&#34;VS_release_content.json&#34;))
+        self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;),
+                                                    VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;))
 
     def test_init(self):
         with self.assertRaises(TypeError):
@@ -3555,8 +3555,8 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def setUp(self):
-    self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_content.json&#34;),
-                                                VS_input=filepath(&#34;VS_release_content.json&#34;))</code></pre>
+    self.dr = DataRequest.from_separated_inputs(DR_input=filepath(&#34;DR_release_not-consolidate_content.json&#34;),
+                                                VS_input=filepath(&#34;VS_release_not-consolidate_content.json&#34;))</code></pre>
 </details>
 <div class="desc"><p>Hook method for setting up the test fixture before exercising it.</p></div>
 </dd>

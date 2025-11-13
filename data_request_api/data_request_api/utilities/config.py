@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-from importlib.metadata import version, PackageNotFoundError
 import os
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+
 import requests
 import yaml
 
@@ -21,7 +22,7 @@ DEFAULT_CONFIG = {
     "log_file": "default",
     "cache_dir": str(Path.home() / f".{PACKAGE_NAME}_cache"),
     "check_api_version": True,
-    "variable_name": "CMIP7 Compound Name"
+    "variable_name": "CMIP7 Compound Name",
 }
 
 # Valid types and values for each key
@@ -45,7 +46,7 @@ DEFAULT_CONFIG_HELP = {
     "log_file": "Log file to use",
     "cache_dir": "Cache directory to use",
     "check_api_version": "Check pypi for the latest API version?",
-    "variable_name": "Unique identifier to use for requested variables"
+    "variable_name": "Unique identifier to use for requested variables",
 }
 
 DEFAULT_CONFIG_VALID_VALUES = {
@@ -64,7 +65,9 @@ def _sanity_check(key, value):
             f"Invalid config key: {key}. Valid keys: {sorted(list(DEFAULT_CONFIG.keys()))}"
         )
     if not isinstance(value, DEFAULT_CONFIG_TYPES[key]):
-        raise TypeError(f"Invalid type for config key {key}: {type(value)}")
+        raise TypeError(
+            f"Invalid type for config key {key}: {type(value)}. Expected type {DEFAULT_CONFIG_TYPES[key]}"
+        )
     if (
         key in DEFAULT_CONFIG_VALID_VALUES
         and value not in DEFAULT_CONFIG_VALID_VALUES[key]
@@ -102,18 +105,14 @@ def load_config() -> dict:
                 yaml.dump(DEFAULT_CONFIG, f)
             CONFIG = DEFAULT_CONFIG.copy()
         elif not isinstance(CONFIG, dict):
-            raise TypeError(
-                f"Config file ('{CONFIG_FILE}') must contain a dictionary"
-            )
+            raise TypeError(f"Config file ('{CONFIG_FILE}') must contain a dictionary")
 
         # Sanity test for allowed types and values
         for key, value in CONFIG.items():
             _sanity_check(key, value)
 
         # Ensure all required keys are present and update config file if necessary
-        missing_keys = {
-            k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG
-        }
+        missing_keys = {k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG}
         for key, value in missing_keys.items():
             update_config(key, value)
 
@@ -176,7 +175,7 @@ def check_api_version():
     try:
         response = requests.get(f"https://pypi.org/pypi/{PACKAGE_NAME}/json", timeout=5)
         response.raise_for_status()
-        latest_version = response.json()['info']['version']
+        latest_version = response.json()["info"]["version"]
     except requests.RequestException as e:
         print(f"Error checking PyPI: {e}")
         return
@@ -190,7 +189,7 @@ def check_api_version():
         msg += f"  pip install --upgrade {PACKAGE_NAME}\n"
         msg += "To turn off this warning:\n"
         msg += "  CMIP7_data_request_api_config check_api_version false"
-        msg = '\n' + msg + '\n'
+        msg = "\n" + msg + "\n"
 
         # Add color to the warning message
         color_code = "\033[91m"

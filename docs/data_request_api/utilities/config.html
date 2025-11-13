@@ -70,7 +70,7 @@ el.replaceWith(d);
     try:
         response = requests.get(f&#34;https://pypi.org/pypi/{PACKAGE_NAME}/json&#34;, timeout=5)
         response.raise_for_status()
-        latest_version = response.json()[&#39;info&#39;][&#39;version&#39;]
+        latest_version = response.json()[&#34;info&#34;][&#34;version&#34;]
     except requests.RequestException as e:
         print(f&#34;Error checking PyPI: {e}&#34;)
         return
@@ -84,7 +84,7 @@ el.replaceWith(d);
         msg += f&#34;  pip install --upgrade {PACKAGE_NAME}\n&#34;
         msg += &#34;To turn off this warning:\n&#34;
         msg += &#34;  CMIP7_data_request_api_config check_api_version false&#34;
-        msg = &#39;\n&#39; + msg + &#39;\n&#39;
+        msg = &#34;\n&#34; + msg + &#34;\n&#34;
 
         # Add color to the warning message
         color_code = &#34;\033[91m&#34;
@@ -136,18 +136,14 @@ installed_version = '1.2.2.dev8+g6aa6222.d20250515' ==&gt; don't warn user</p></
                 yaml.dump(DEFAULT_CONFIG, f)
             CONFIG = DEFAULT_CONFIG.copy()
         elif not isinstance(CONFIG, dict):
-            raise TypeError(
-                f&#34;Config file (&#39;{CONFIG_FILE}&#39;) must contain a dictionary&#34;
-            )
+            raise TypeError(f&#34;Config file (&#39;{CONFIG_FILE}&#39;) must contain a dictionary&#34;)
 
         # Sanity test for allowed types and values
         for key, value in CONFIG.items():
             _sanity_check(key, value)
 
         # Ensure all required keys are present and update config file if necessary
-        missing_keys = {
-            k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG
-        }
+        missing_keys = {k: v for k, v in DEFAULT_CONFIG.items() if k not in CONFIG}
         for key, value in missing_keys.items():
             update_config(key, value)
 

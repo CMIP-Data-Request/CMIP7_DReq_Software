@@ -1,0 +1,17 @@
+# Parameters appearing in CMIP6 cmor tables:
+compare_attributes:
+- cell_measures
+- cell_methods
+- comment
+- dimensions
+- long_name
+- modeling_realm
+- out_name
+- positive
+- standard_name
+- units
+
+# A subset of parameters:
+compare_attributes:
+- long_name
+- comment
