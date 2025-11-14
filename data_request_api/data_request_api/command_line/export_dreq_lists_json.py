@@ -12,10 +12,13 @@ from collections import OrderedDict
 import data_request_api
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
-from .add_timesubsets import augment_file_in_place
 
 
 def parse_args():
+    """
+    Parse command-line arguments
+    """
+
     parser = argparse.ArgumentParser(
         description='Get lists of requested variables by experiment, and write them to a json file.'
     )
@@ -25,8 +28,11 @@ def parse_args():
     parser.add_argument('output_file', help='file to write JSON output to')
 
     sep = ','
+
     def parse_input_list(input_str: str, sep=sep) -> list:
+        '''Create list of input args separated by separator "sep" (str)'''
         input_args = input_str.split(sep)
+        # Guard against leading, trailing, or repeated instances of the separator
         input_args = [s for s in input_args if s not in ['']]
         return input_args
 
@@ -47,17 +53,21 @@ def parse_args():
     parser.add_argument('-m', '--variables_metadata', type=str,
                         help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
 
-    parser.add_argument("-c", "--add_combined", action="store_true",
+    parser.add_argument("-c", "--add_combined", action="store_true", default=False,
                         help="Include combined request from all opportunities and for all experiments "
                              "(incl. combinations control / historical / scenario).")
-    parser.add_argument("-t", "--time_subsets", action="store_true",
+    parser.add_argument("-t", "--time_subsets", action="store_true", default=False,
                         help="Include time_subsets that variables are requested for.")
 
     return parser.parse_args()
 
 
 def main():
+    """
+    main routine
+    """
     args = parse_args()
+
     use_dreq_version = args.dreq_version
 
     # Download specified version of data request content (if not locally cached)
@@ -101,6 +111,7 @@ def main():
             opportunity_dict = opportunity_dict['Opportunity']
 
             # validate opportunities
+            # (mismatches can occur if an opportunities file created with an earlier data request version is loaded)
             valid_opps = [opp.title for opp in dreq_opps.records.values()]
             invalid_opps = [title for title in opportunity_dict if title not in valid_opps]
             if invalid_opps:
@@ -140,8 +151,10 @@ def main():
         sys.exit(1)
 
     # Get the requested variables for each opportunity and aggregate them into variable lists by experiment
+    # (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
     expt_vars = dq.get_requested_variables(base, use_dreq_version,
                                            use_opps=use_opps, priority_cutoff=args.priority_cutoff,
+                                           time_subsets=args.time_subsets, combined_request=args.add_combined,
                                            verbose=False)
 
     # filter output by requested experiments
@@ -150,7 +163,7 @@ def main():
 
         # validate the requested experiment names
         Expts = base['Experiments']
-        valid_experiments = [expt.experiment for expt in Expts.records.values()]  # all valid names in DR
+        valid_experiments = [expt.experiment for expt in Expts.records.values()]  # all valid experiment names in data request
         invalid_experiments = [entry for entry in args.experiments if entry not in valid_experiments]
         if invalid_experiments:
             raise ValueError('\nInvalid experiments: ' + ', '.join(sorted(invalid_experiments, key=str.lower)) +
@@ -171,17 +184,6 @@ def main():
         content_path = dc._dreq_content_loaded['json_path']
         outfile = args.output_file
         dq.write_requested_vars_json(outfile, expt_vars, use_dreq_version, args.priority_cutoff, content_path)
-
-        # If flags are set, augment the just-written file IN PLACE (reads and overwrites internally)
-        if args.time_subsets or args.add_combined:
-            augment_file_in_place(
-                base=base,
-                outfile=outfile,
-                add_time_tags=args.time_subsets,   # -t
-                add_combined=args.add_combined,    # -c
-                quiet=True,
-                use_opps=use_opps,                 # pass through chosen opportunities
-            )
 
     else:
         print(f'\nFor data request version {use_dreq_version}, no requested variables were found')

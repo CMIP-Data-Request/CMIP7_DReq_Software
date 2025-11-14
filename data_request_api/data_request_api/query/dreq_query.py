@@ -474,6 +474,47 @@ def get_opp_vars(opp, priority_levels, var_groups, dreq_vars, dreq_priorities=No
     return opp_vars
 
 
+def get_opp_time_subsets(opp, ts, verbose = False):
+    """
+    For one opportunity, get its requested time subsets.
+
+    Parameters
+    ----------
+    opp : DreqRecord
+        One record from the Opportunity table
+    ts : DreqTable
+        Time Subsets table
+
+    Returns
+    -------
+    List
+        List of time subsets requested by the given opportunity
+    """
+    subsets = dict()
+    ts_ids = list()
+
+    if hasattr(opp, "time_subsets"):
+        ts_ids = opp.time_subsets
+    elif hasattr(opp, "time_subset"):
+        ts_ids = opp.time_subset
+
+    for ts_id in ts_ids:
+        subsets[ts.get_record(ts_id).label] = ts.get_record(ts_id)
+
+    if not subsets or "all" in subsets:
+        subsets ={"all": "Whole time series"}
+
+    if verbose:
+        print(f'  Time Subsets ({len(subsets)}):')
+        for subset, record in subsets.items():
+            if subset == "all":
+               print(f'    {subset} ({record})')
+            else:
+               print(f'    {subset} ({record.title}, {record.nyears} simulation years)')
+
+    return subsets
+
+
 def _get_base_dreq_tables(content, dreq_version, purpose='request'):
     if isinstance(content, dict):
         if all([isinstance(table, DreqTable) for table in content.values()]):
@@ -494,6 +535,7 @@ def _get_base_dreq_tables(content, dreq_version, purpose='request'):
 
 def get_requested_variables(content, dreq_version,
                             use_opps='all', priority_cutoff='Low',
+                            combined_request = False, time_subsets = False,
                             verbose=True, check_core_variables=True):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
@@ -518,16 +560,33 @@ def get_requested_variables(content, dreq_version,
     check_core_variables : bool
         True ==> check that all experiments contain a non-empty list of Core variables,
         and that it's the same list for all experiments.
+    combined_request : bool
+        True ==> combine requests from all experiments into a single request,
+        and add it as experiment 'all_experiments'
+    time_subsets : bool
+        True ==> attach requested time subsets to each requested variable
 
     Returns
     -------
     Dict keyed by experiment name, giving prioritized variables for each experiment.
+    If time_subsets is True, then also returns the time subsets for each experiment attached to each variable.
     Example:
     {   'Header' : ... (Header contains info about where this request comes from)
         'experiment' : {
             'historical' :
                 'High' : ['Amon.tas', 'day.tas', ...],
                 'Medium' : ...
+            }
+            ...
+        }
+    }
+    Example if time_subsets is True:
+    {   'Header' : ... (Header contains info about where this request comes from)
+        'experiment' : {
+            'historical' :
+                'High' : {'Amon.tas': ['hist72'], 'day.tas': ['hist72', 'histext'], ...},
+                'Medium' : {'Amon.tas': ['all'], ...},
+                'Low' : ...
             }
             ...
         }
@@ -540,7 +599,8 @@ def get_requested_variables(content, dreq_version,
         'expt groups': base['Experiment Group'],
         'expts': base['Experiments'],
         'var groups': base['Variable Group'],
-        'vars': base['Variables']
+        'vars': base['Variables'],
+        'ts': base['Time Subset'],
     }
     opp_ids = get_opp_ids(use_opps, dreq_tables['opps'], verbose=verbose)
 
@@ -564,6 +624,10 @@ def get_requested_variables(content, dreq_version,
 
     # Loop over Opportunities to get prioritized lists of variables
     request = {}  # dict to hold aggregated request
+    if combined_request:  # Optionally add combined request entries
+            request['all_experiments'] = ExptRequest('all_experiments')
+            request['historical_experiments'] = ExptRequest('historical_experiments')
+            request['scenario_experiments'] = ExptRequest('scenario_experiments')
     for opp_id in opp_ids:
         opp = dreq_tables['opps'].records[opp_id]  # one record from the Opportunity table
 
@@ -582,6 +646,10 @@ def get_requested_variables(content, dreq_version,
                                 dreq_tables['priority level'],
                                 verbose=verbose)
 
+        opp_time_subsets = get_opp_time_subsets(opp,
+                                dreq_tables['ts'],
+                                verbose=verbose)
+
         # Aggregate this Opportunity's request into the master list of requests
         for expt_name in opp_expts:
             if expt_name not in request:
@@ -590,7 +658,22 @@ def get_requested_variables(content, dreq_version,
 
             # Add this Opportunity's variables request to the ExptRequest object
             for priority_level, var_names in opp_vars.items():
-                request[expt_name].add_vars(var_names, priority_level)
+                if time_subsets:
+                    request[expt_name].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                    if combined_request:
+                        request['all_experiments'].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                        if 'hist' in expt_name.lower():
+                            request['historical_experiments'].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                        elif any(scen_part in expt_name.lower() for scen_part in ['ssp', 'scen']):
+                            request['scenario_experiments'].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                else:
+                    request[expt_name].add_vars(var_names, priority_level)
+                    if combined_request:
+                        request['all_experiments'].add_vars(var_names, priority_level)
+                        if 'hist' in expt_name.lower():
+                            request['historical_experiments'].add_vars(var_names, priority_level)
+                        elif any(scen_part in expt_name.lower() for scen_part in ['ssp', 'scen']):
+                            request['scenario_experiments'].add_vars(var_names, priority_level)
 
     opp_titles = sorted([dreq_tables['opps'].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {
