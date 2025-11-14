@@ -1270,7 +1270,7 @@ def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff,
     })
     for req in expt_vars['experiment'].values():
         for p in priority_levels[m:]:
-            assert req[p] == []
+            assert req[p] == [] or req[p] == {}
             req.pop(p)  # remove empty lists of unsupported priorities from the output
 
     # List included experiments
