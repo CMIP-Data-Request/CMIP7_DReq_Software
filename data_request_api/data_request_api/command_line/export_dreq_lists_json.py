@@ -58,6 +58,9 @@ def parse_args():
                              "(incl. combinations control / historical / scenario).")
     parser.add_argument("-t", "--time_subsets", action="store_true", default=False,
                         help="Include time_subsets that variables are requested for.")
+    parser.add_argument("-d", "--disable_core_vars_check", action="store_true", default=False,
+                        help="Don't require that core variables are included in the request.")
+
 
     return parser.parse_args()
 
@@ -155,7 +158,7 @@ def main():
     expt_vars = dq.get_requested_variables(base, use_dreq_version,
                                            use_opps=use_opps, priority_cutoff=args.priority_cutoff,
                                            time_subsets=args.time_subsets, combined_request=args.add_combined,
-                                           verbose=False)
+                                           verbose=False, check_core_variables=not args.disable_core_vars_check)
 
     # filter output by requested experiments
     if args.experiments:
