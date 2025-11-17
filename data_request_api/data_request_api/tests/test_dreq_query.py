@@ -1,21 +1,11 @@
 import os
-import pathlib
 import tempfile
-
-import pytest
-import yaml
-
-# Set up temporary cache & temporary config file with default config
-cache_dir = tempfile.TemporaryDirectory()
-cfg_file = cache_dir.name + "/CMIP7_data_request_api_config"
-os.environ["CMIP7_DR_API_CONFIGFILE"] = str(cfg_file)
-cfg = {"cache_dir": str(cache_dir.name)}
-with open(cfg_file, "w") as yaml_file:
-    yaml.dump(cfg, yaml_file)
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 import data_request_api.utilities.config as dreqcfg
+import pytest
+import yaml
 from data_request_api.utilities.logger import change_log_file, change_log_level
 
 # Configure logger for testing
@@ -23,12 +13,38 @@ change_log_file(default=True)
 change_log_level("info")
 
 
-def test_get_requested_variables_time_subsets():
+@pytest.fixture(scope="function")
+def temp_config_file(tmp_path_factory):
+    temp_dir = tmp_path_factory.mktemp("data")
+    config_file = temp_dir / ".CMIP7_data_request_api_config"
+    cfg = {"cache_dir": str(temp_dir)}
+    with open(config_file, "w") as f:
+        yaml.dump(cfg, f)
+    try:
+        yield config_file
+    finally:
+        config_file.unlink(missing_ok=True)
+        dreqcfg.CONFIG = {}
+
+
+@pytest.fixture(scope="function")
+def monkeypatch(monkeypatch):
+    return monkeypatch
+
+
+def test_get_requested_variables_time_subsets(temp_config_file, monkeypatch):
+    dreqcfg.CONFIG = {}
+    monkeypatch.setattr(
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
+    )
+    dc._dreq_res = os.path.dirname(temp_config_file)
+    dc.versions = {"tags": [], "branches": []}
+    dc._versions_retrieved_last = {"tags": 0, "branches": 0}
     use_dreq_version = "v1.2.2.2"
     data = dc.load(use_dreq_version)
-    assert dc.dreqcfg.CONFIG == {
+    assert dreqcfg.CONFIG == {
         **dreqcfg.DEFAULT_CONFIG,
-        "cache_dir": str(cache_dir.name),
+        "cache_dir": str(os.path.dirname(temp_config_file)),
     }
     base = dq.create_dreq_tables_for_request(data, use_dreq_version)
 
@@ -46,10 +62,10 @@ def test_get_requested_variables_time_subsets():
 
     # Run get_requested_variables
     no_ts = dq.get_requested_variables(
-        base, "v1.2.2.2", use_opps=use_opps, time_subsets=False, verbose=False
+        base, use_dreq_version, use_opps=use_opps, time_subsets=False, verbose=False
     )
     inc_ts = dq.get_requested_variables(
-        base, "v1.2.2.2", use_opps=use_opps, time_subsets=True, verbose=False
+        base, use_dreq_version, use_opps=use_opps, time_subsets=True, verbose=False
     )
 
     # Check that time subsets are included and that the same variables are included
@@ -63,19 +79,26 @@ def test_get_requested_variables_time_subsets():
             assert list(req[prio].keys()) == no_ts["experiment"][exp][prio]
 
 
-def test_get_requested_variables_combined_request():
+def test_get_requested_variables_combined_request(temp_config_file, monkeypatch):
+    dreqcfg.CONFIG = {}
+    monkeypatch.setattr(
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
+    )
+    dc._dreq_res = os.path.dirname(temp_config_file)
+    dc.versions = {"tags": [], "branches": []}
+    dc._versions_retrieved_last = {"tags": 0, "branches": 0}
     use_dreq_version = "v1.2.2.2"
     data = dc.load(use_dreq_version)
-    assert dc.dreqcfg.CONFIG == {
+    assert dreqcfg.CONFIG == {
         **dreqcfg.DEFAULT_CONFIG,
-        "cache_dir": str(cache_dir.name),
+        "cache_dir": str(os.path.dirname(temp_config_file)),
     }
     base = dq.create_dreq_tables_for_request(data, use_dreq_version)
 
     # Run get_requested_variables
     no_cr = dq.get_requested_variables(
         base,
-        "v1.2.2.2",
+        use_dreq_version,
         use_opps="all",
         time_subsets=False,
         combined_request=False,
@@ -83,7 +106,7 @@ def test_get_requested_variables_combined_request():
     )
     inc_cr = dq.get_requested_variables(
         base,
-        "v1.2.2.2",
+        use_dreq_version,
         use_opps="all",
         time_subsets=False,
         combined_request=True,
@@ -119,19 +142,28 @@ def test_get_requested_variables_combined_request():
         )
 
 
-def test_get_requested_variables_time_subsets_combined_request():
+def test_get_requested_variables_time_subsets_combined_request(
+    temp_config_file, monkeypatch
+):
+    dreqcfg.CONFIG = {}
+    monkeypatch.setattr(
+        "data_request_api.utilities.config.CONFIG_FILE", temp_config_file
+    )
+    dc._dreq_res = os.path.dirname(temp_config_file)
+    dc.versions = {"tags": [], "branches": []}
+    dc._versions_retrieved_last = {"tags": 0, "branches": 0}
     use_dreq_version = "v1.2.2.2"
     data = dc.load(use_dreq_version)
-    assert dc.dreqcfg.CONFIG == {
+    assert dreqcfg.CONFIG == {
         **dreqcfg.DEFAULT_CONFIG,
-        "cache_dir": str(cache_dir.name),
+        "cache_dir": str(os.path.dirname(temp_config_file)),
     }
     base = dq.create_dreq_tables_for_request(data, use_dreq_version)
 
     # Run get_requested_variables
     tscr = dq.get_requested_variables(
         base,
-        "v1.2.2.2",
+        use_dreq_version,
         use_opps="all",
         time_subsets=True,
         combined_request=True,
