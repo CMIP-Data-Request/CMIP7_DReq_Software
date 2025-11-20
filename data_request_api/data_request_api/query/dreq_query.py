@@ -777,7 +777,7 @@ def get_variables_metadata(content, dreq_version,
         if hasattr(var, 'cell_methods'):
             assert len(var.cell_methods) == 1
             link = var.cell_methods[0]
-            cm = dreq_tables['Cell Methods'].get_record(link)
+            cm = dreq_tables['cell methods'].get_record(link)
             cell_methods = cm.cell_methods
             if hasattr(cm, 'brand_id'):
                 area_label_dd = cm.brand_id
@@ -805,7 +805,7 @@ def get_variables_metadata(content, dreq_version,
         # Get the 'Spatial Shape' record, which contains info about dimensions
         assert len(var.spatial_shape) == 1
         link = var.spatial_shape[0]
-        spatial_shape = dreq_tables['Spatial Shape'].get_record(link)
+        spatial_shape = dreq_tables['spatial shape'].get_record(link)
         if hasattr(spatial_shape, 'dimensions'):
             for link in spatial_shape.dimensions:
                 dimension = dreq_tables['coordinates and dimensions'].get_record(link)
@@ -821,7 +821,7 @@ def get_variables_metadata(content, dreq_version,
                     dims_list.append(dimension.name)
         # Add temporal dimensions
         link = var.temporal_shape[0]
-        temporal_shape = dreq_tables['Temporal Shape'].get_record(link)
+        temporal_shape = dreq_tables['temporal shape'].get_record(link)
         # dims_list.append(temporal_shape.name)
         # An example of temporal_shape.name is 'time-point', but the equivalent dimensions list
         # entry for this is 'time1'.
@@ -854,7 +854,7 @@ def get_variables_metadata(content, dreq_version,
 
         # Get physical parameter record and use its name as out_name
         link = var.physical_parameter[0]
-        phys_param = dreq_tables['Physical Parameters'].get_record(link)
+        phys_param = dreq_tables['physical parameters'].get_record(link)
         if hasattr(phys_param, 'variablerootdd'):
             # variableRootDD (aka "root name") is available in DR v1.2.2 onward
             out_name = phys_param.variablerootdd
@@ -895,7 +895,7 @@ def get_variables_metadata(content, dreq_version,
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):
-            cell_measures = [dreq_tables['Cell Measures'].get_record(link).name for link in var.cell_measures]
+            cell_measures = [dreq_tables['cell measures'].get_record(link).name for link in var.cell_measures]
 
         positive = ''
         if hasattr(var, 'positive_direction'):
@@ -1057,12 +1057,12 @@ def get_dimension_sizes(dreq_tables):
     ----------
     dreq_tables: dict
         Dict values are DreqTable objects for the required tables, e.g.:
-        dreq_tables = {
-            'coordinates and dimensions': base['Coordinates and Dimensions'],
-            'spatial shape': base['Spatial Shape'],
-        }
     '''
-    dim_names = [dimension.name for dimension in dreq_tables['Coordinates and Dimensions'].records.values()]
+    dreq_tables.update({
+        'coordinates and dimensions': base['Coordinates and Dimensions'],
+        'spatial shape': base['Spatial Shape'],
+    })
+    dim_names = [dimension.name for dimension in dreq_tables['coordinates and dimensions'].records.values()]
     assert len(set(dim_names)) == len(dim_names)
     dim_names.sort(key=str.lower)
     # Initialize dict having names of all dimensions in the data request (to ensure we don't miss any).
@@ -1071,7 +1071,7 @@ def get_dimension_sizes(dreq_tables):
     dim_sizes = OrderedDict({dim: set() for dim in dim_names})
 
     # Determine dimension sizes based on their records in the Coordinates & Dimensions table.
-    for dimension in dreq_tables['Coordinates and Dimensions'].records.values():
+    for dimension in dreq_tables['coordinates and dimensions'].records.values():
         dim = dimension.name
         if hasattr(dimension, 'grid_class'):
             # Get size based on what type of grid this dimension is labelled as.
@@ -1108,11 +1108,11 @@ def get_dimension_sizes(dreq_tables):
     # Determine dimension sizes where possible by looking in the Spatial Shape table records.
     # This is an extra consistency check on the results from dimensions, but it doesn't seem to change
     # the results (as tested on dreq v1.2 content).
-    for spatial_shape in dreq_tables['Spatial Shape'].records.values():
+    for spatial_shape in dreq_tables['spatial shape'].records.values():
         if hasattr(spatial_shape, 'dimensions'):
             # Follow links from Spatial Shape to dimensions, if they exist
             for link in spatial_shape.dimensions:
-                dimension = dreq_tables['Coordinates and Dimensions'].get_record(link)
+                dimension = dreq_tables['coordinates and dimensions'].get_record(link)
                 dim = dimension.name
                 if hasattr(dimension, 'axis_flag') and dimension.axis_flag == 'Z':
                     dim_sizes[dim].add(spatial_shape.number_of_levels)
