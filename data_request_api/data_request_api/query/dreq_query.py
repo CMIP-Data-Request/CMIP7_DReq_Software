@@ -1058,10 +1058,10 @@ def get_dimension_sizes(dreq_tables):
     dreq_tables: dict
         Dict values are DreqTable objects for the required tables, e.g.:
     '''
-    dreq_tables.update({
-        'coordinates and dimensions': dreq_tables['Coordinates and Dimensions'],
-        'spatial shape': dreq_tables['Spatial Shape'],
-    })
+    if 'Coordinates and Dimensions' in dreq_tables:
+        dreq_tables['coordinates and dimensions'] = dreq_tables['Coordinates and Dimensions']
+    if 'Spatial Shape' in dreq_tables:
+        dreq_tables['spatial shape'] = dreq_tables['Spatial Shape']
     dim_names = [dimension.name for dimension in dreq_tables['coordinates and dimensions'].records.values()]
     assert len(set(dim_names)) == len(dim_names)
     dim_names.sort(key=str.lower)
