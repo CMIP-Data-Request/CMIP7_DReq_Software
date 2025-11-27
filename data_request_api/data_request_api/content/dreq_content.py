@@ -280,7 +280,7 @@ def _send_html_request(page_url, target="tags"):
     results = []
     addon = ""
     if target == "branches":
-        addon = "/active"
+        addon = "/all"
     current_url = page_url + target + addon
     current_urls = list()
     while current_url:
