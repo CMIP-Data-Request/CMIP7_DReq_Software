@@ -1981,7 +1981,7 @@
         }
     },
     "opportunities": {
-        "Accurate assessment of land-atmosphere coupling": {
+        "1": {
             "description": "This set of data will allow for adequate characterization of sub-daily coupling processes between the land and atmosphere.\n\nIncreasing the time resolution of model output describing components of land\u2013atmosphere coupling and processes within the land\u2013atmosphere interface is essential to fully and accurately model, understand, and predict these\u00a0processes and to compare modeled processes with observational datasets. The data request described here will allow us to compare coupled Earth system and climate models with observations from field campaigns and to compare both diurnal and long-term properties of L\u2013A interactions in different models and during model development.\n\nMore details can be found in this paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
             "expected_impacts": "Local L\u2013A coupling (LoCo) metrics capture relevant L\u2013A processes, highlighting the impact of soil and vegetation states on surface flux partitioning and the impact of surface fluxes on boundary layer (BL) growth and development and the entrainment of air above the BL. \n\nHigher-frequency model output will (i)\u00a0allow for more direct comparison with observational field campaigns on process-relevant timescales, (ii)\u00a0enable demonstration of inter-model spread in L\u2013A coupling processes, and (iii)\u00a0aid in targeted identification of sources of deficiencies and opportunities for improvement of the models.\n\nMore details can be found in this paper: <https://doi.org/10.5194/gmd-17-1869-2024>\n",
             "image": [
@@ -2019,45 +2019,45 @@
             "opportunity_id": "1",
             "uid": "dafc73bd-8c95-11ef-944e-41a8eb05f654"
         },
-        "Baseline Climate Variables for Earth System Modelling": {
-            "description": "The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.\n",
-            "expected_impacts": "Greater consistency in provision of high-impact data variables.\n",
+        "49": {
+            "description": "The \u201cOcean Extremes\u201d project aims to investigate and address the impacts of extreme ocean conditions such as marine heatwaves, hypoxic zones, extreme salinities, sea level extremes and storm surges, ocean acidification, and compound events. As climate change accelerates, these extreme conditions are becoming more frequent and severe, posing significant risks to marine ecosystems and coastal communities. This opportunity will collect the high-frequency multidisciplinary approach to analyze these phenomena, their causes, and their effects, ultimately contributing to better management strategies and mitigation efforts. \u00a0Extreme sea levels are primarily caused by storm surges often in combination with astronomical tides, waves and/or river overflow, which requires climate-scale forcing data at the appropriate spatial and temporal scales to be combined with other resources offline. This opportunity is particularly relevant to revealing differences between eddy-permitting and coarse-resolution models.\n\nLong-term assessment of ocean extremes important for identifying vulnerable regions, designing coastal protection to appropriate levels, and assessing infrastructure and ecosystem viability. It also enables various adaptation measures to be considered and tested via sensitivity testing. In the coming decades, ocean extremes and associated floods are likely to remain a leading cause of natural disasters due to the combined effects of the increasing frequency and intensity of extremes combined with increased coastal development associated with greater exposure.\n",
+            "expected_impacts": "This project will look at intense, short-lived events in the upper ocean and euphotic zones.\u00a0 These phenomena have direct impacts on ecosystems and coastal communities, and AR6 assessed that they are changing in frequency.\u00a0 These will inform studies of vulnerability, protection measures, ecosystem persistence and geographic shifts.\n",
             "image": [
                 {
-                    "filename": "variables-navy.jpg",
-                    "height": 344,
-                    "id": "attGmOCRTMrf1rJHF",
-                    "size": 47001,
+                    "filename": "iStock-629833048.jpg",
+                    "height": 339,
+                    "id": "attXBYNwigwp3WlH9",
+                    "size": 125910,
                     "thumbnails": {
                         "full": {
-                            "height": 344,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/QB5zIuNS8g_jmJYD01sSWg/jqeeO9K4H3EpbQeat15-NFyIwdarZefrCNM5vWNRKrGJjoi_qfpQ3QsZTyFOxJ2KkKHJ4ucqJEeztmHSNyXXc6ZX7NocJ9VWWyXJHXybBxn7WGNOCwFczsUuAiIgj9vwjtJmbHIZA0I5769JPEUFMg/ShFv289kRCN-L09-nvsofX2JKyjzB_aBEaCdarrIZMM",
-                            "width": 612
+                            "height": 339,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/cio7uOJ-WMSAw_FNsVbZqA/Qoh3Wyrd5vciI06LA7VGcqBcnVkghinWI5A6WmLLg9r8UzknOIQYaBakxNLgP2hxw9-YzfFngafUG9BA8OTUf1t0BUkNQ3DV690NZFH2Xzcp3Olgn9P8m0MYpz76VE2ckb5PszojlhApw2NHKWG9ng/FmvyAIMTls4NZ0shCifY4vUJQq7p1p-svVe4-EjyZms",
+                            "width": 509
                         },
                         "large": {
-                            "height": 344,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/o2jUMUtFcEVG9bg9qvUyhw/dnYLxMnRHfLCA8inJvLwQHfHfH06LakUjszpQNivH6ZHLLqjOWhoqSImc7uOveNZmvRsC7jkgP1rmzKuAm0PCPwLHRetXPHaURok0C-9_tNKGFv-5JYLcBKfjOaNxK3XpOYsJZ6aLRwGyXeJNtAMLQ/Dc1rQNvPmShmbFeS_qLAeQpoxi7bZWL1BXlscUjLGpc",
-                            "width": 612
+                            "height": 339,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/5mjrs6Sb3kTYT1UYDUkNuw/7N0Tttht-ezQPHm3aXeKBJGGF_2bQUcDTn2yHtVB8NKrl-ehlvjCGo0D47bHjkNHz78sfU8GR3eVQK1w5tiRfsrJpOM41Zfm0RM5ao68MvwcenfMVRCHffpYDlTtpz2_De5sANX7lOzLH9lC-Us49g/y_6JZ9k_7mtjDHzm2Ki4Ap6_nXNeJpbGwoXoTPOdptg",
+                            "width": 509
                         },
                         "small": {
                             "height": 36,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/ltm8vWi5PVYcqGAdhwBgTQ/wi9Wd0c9qpZr1J8wxJuufmuVGY_B6pUSvnVc8HGfLbLsrSxl3SErUDe9bejhEk-rTIq_NVSk_1L8a_p0Os7dtF415HsUVIvuXkrBoq_1M4dWsgpaZN0Y7JMfoYih8lhRmf7QDQY4x_prt6oLrEmN2Q/snozn57U0kPL7RBYfd6QVq2h--opqUOYhrCKy8VGJ8Y",
-                            "width": 64
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/v-r3y4HyS8VcED1UrO99hQ/q8phkVUYlkbRloT1JT8fKou1pW-IKW0OdA0Y2A77Ql8Cs0MQ25DBv2S1369eLCZrczjghBxNm28pGoTOpKJWqMPT-UTNf_vCklcLTsHBakXzEz2lgJzUb8mKoUI618Mw2kI-6wnCx0Zqct7cHJyFEg/ybDxotJilh5x_rz_l0ZLcQkxI8uEMgWIP1xHIchD8EU",
+                            "width": 54
                         }
                     },
                     "type": "image/jpeg",
-                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/P0-Di_A9SNd6rVaEX41bWw/6TrK8t4WY5Kd_7Vj8xo0ZJi-els7-7COjjKdokqTnBmxdg8MKVpyQ2SSyBtGaQySb5RlQ2xnbkIcFZOtgbPKMkgNk7iswqbki_eMIHsnS6ikahVhc-huuam7cARn8pr_BpUnRB4X38YS2xXGWiEFF6HdlbWjv6R5R8P9j9lNTJk/tUl7e_gDzyB9-FSInFCMOzYsvJ1pEZ1gbOII2pig5Mw",
-                    "width": 612
+                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/J-jJztP-N0ez6UXxvtwSvg/IlDlKQRlhgCfq7xnHwRacg1xzB8k62XncYIfYSmr3K5MzLXcKi6t2HVTYrWx0D_acGPo22uJQwaPgy_yZPH8MRixaKrlFJ8-XPUEscYQCEpBWIF2YrRuBLBO8VEC2DJ3ktXz8y9xOeGoh-CuJb0I8InQTrISaM_T1c8YGg6-S2A/bLNZmjeSF_Mbodsv0tuysBOu35ezydd0BJJwrAyYvy4",
+                    "width": 509
                 }
             ],
-            "justification_of_resources": "The baseline variables will support a wide range of applications and the production of all the variables on the list should not impose excessive burdens on modelling centers and infrastructure providers.",
+            "justification_of_resources": "Very few levels of near surface high-frequency variables, combined with monthly climatological ocean variables, are critical for assessment of high-resolution models and ocean extremes understanding and projections. These are the same values chosen in literature studies of extremes (e.g., Gruber, N., Boyd, P.W., Fr\u00f6licher, T.L. and Vogt, M., 2021. Biogeochemical extremes and compound events in the ocean. Nature, 600(7889), pp.395-407) and storm surges (Bernier, N.B., Hemer, M., Mori, N., Appendini, C.M., Breivik, O., de Camargo, R., Casas-Prat, M., Duong, T.M., Haigh, I.D., Howard, T. and Hernaman, V., 2024. Storm surges and extreme sea levels: Review, establishment of model intercomparison and coordination of surge climate projection efforts (SurgeMIP). Weather and Climate Extremes, 45, p.100689).\n\nThese variables are critical to: coastal hazard assessment; understanding vulnerable regions, communities, infrastructure and ecosystems; better understand and test adaptation measures, both man-made (e.g., coastal protection structures) and natural (e.g., oyster reefs, mangroves).",
+            "lead_theme": "link::ocean_seaice",
             "minimum_ensemble_size": 1,
-            "name": "Baseline Climate Variables for Earth System Modelling",
-            "opportunity_id": "69",
-            "technical_notes": "See Juckes et al. 2024 (preprint): https://egusphere.copernicus.org/preprints/2024/egusphere-2024-2363/egusphere-2024-2363.pdf ",
-            "uid": "dafc739e-8c95-11ef-944e-41a8eb05f654"
+            "name": "Ocean Extremes",
+            "opportunity_id": "49",
+            "uid": "dafc73a5-8c95-11ef-944e-41a8eb05f654"
         },
-        "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models": {
+        "68": {
             "description": "One of the majors impact of the global warming are related to coastal regions, due to coastal floodings, coastal erosions, with more than 40% of the world's population living within 150 kilometers of the coast, with more than 108 million people expose to potential inundation with 1m of (Sea-Level Rise).\nSurface ocean waves has a huge impact in our modern society, from ship routes (Nielsen & Iknomakis, 2021), ports and harbors operations and safety (Nikolaos et. al. 2021), coastal erosion  (Pang et al. 2020), and many others. Also wind driven surface gravity waves affects several marine and atmosphere processes like: marine aerosols formations ( Dziembor, 2018), modulation of the air-sea fluxes (Qi et al. , 2024; Wu et al. 2022),  tropical cyclones maintenance and decay ( Zhang, et al. 2023), ocean mixing layer depths (Kantha & Clayson, 2004), planetary boundary layer profile and stability (Wu,  2022), among others processes. \nEstimating the role of the ocean's surface waves in the sea-level rise is under discussion ( Aucan et al., 2019) .\nSea-ice also might be affected by ocean waves as well (Alberello et al., 2024; Yang et al., 2024), due to ice and waves interactions, such as wave induced fracturing, lateral and bottom melting (Yang et al., 2024), air-sea-ocean fluxes exchange. \nGeneral wave parameters (i.e. Significant Wave Height (SWH), Mean Period (MP), Peak Period (PP), mean direction (MD), peak direction (PD)) among partitioned parameters (same but for windsea and swells) are important to better represent all processes listed above. \nIt is nice to mention that the ocean surface wave community has joint efforts to create the COWCLIP (Coordinated Ocean Wave Climate Project). This project aims to raise the profile of wind-waves as a variable in the global climate system to both foster and support determination of the effects of climate variability and change. on the wave climate and the feedback influence of waves on the coupled earth climate system. \n\n",
             "expected_impacts": "Surface ocean waves variable might have a huge importance at all DECK experiments, DCPP and ScenarioMIP.  \n",
             "image": [
@@ -2095,43 +2095,43 @@
             "opportunity_id": "68",
             "uid": "dafc739f-8c95-11ef-944e-41a8eb05f654"
         },
-        "Ocean Extremes": {
-            "description": "The \u201cOcean Extremes\u201d project aims to investigate and address the impacts of extreme ocean conditions such as marine heatwaves, hypoxic zones, extreme salinities, sea level extremes and storm surges, ocean acidification, and compound events. As climate change accelerates, these extreme conditions are becoming more frequent and severe, posing significant risks to marine ecosystems and coastal communities. This opportunity will collect the high-frequency multidisciplinary approach to analyze these phenomena, their causes, and their effects, ultimately contributing to better management strategies and mitigation efforts. \u00a0Extreme sea levels are primarily caused by storm surges often in combination with astronomical tides, waves and/or river overflow, which requires climate-scale forcing data at the appropriate spatial and temporal scales to be combined with other resources offline. This opportunity is particularly relevant to revealing differences between eddy-permitting and coarse-resolution models.\n\nLong-term assessment of ocean extremes important for identifying vulnerable regions, designing coastal protection to appropriate levels, and assessing infrastructure and ecosystem viability. It also enables various adaptation measures to be considered and tested via sensitivity testing. In the coming decades, ocean extremes and associated floods are likely to remain a leading cause of natural disasters due to the combined effects of the increasing frequency and intensity of extremes combined with increased coastal development associated with greater exposure.\n",
-            "expected_impacts": "This project will look at intense, short-lived events in the upper ocean and euphotic zones.\u00a0 These phenomena have direct impacts on ecosystems and coastal communities, and AR6 assessed that they are changing in frequency.\u00a0 These will inform studies of vulnerability, protection measures, ecosystem persistence and geographic shifts.\n",
+        "69": {
+            "description": "The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.\n",
+            "expected_impacts": "Greater consistency in provision of high-impact data variables.\n",
             "image": [
                 {
-                    "filename": "iStock-629833048.jpg",
-                    "height": 339,
-                    "id": "attXBYNwigwp3WlH9",
-                    "size": 125910,
+                    "filename": "variables-navy.jpg",
+                    "height": 344,
+                    "id": "attGmOCRTMrf1rJHF",
+                    "size": 47001,
                     "thumbnails": {
                         "full": {
-                            "height": 339,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/cio7uOJ-WMSAw_FNsVbZqA/Qoh3Wyrd5vciI06LA7VGcqBcnVkghinWI5A6WmLLg9r8UzknOIQYaBakxNLgP2hxw9-YzfFngafUG9BA8OTUf1t0BUkNQ3DV690NZFH2Xzcp3Olgn9P8m0MYpz76VE2ckb5PszojlhApw2NHKWG9ng/FmvyAIMTls4NZ0shCifY4vUJQq7p1p-svVe4-EjyZms",
-                            "width": 509
+                            "height": 344,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/QB5zIuNS8g_jmJYD01sSWg/jqeeO9K4H3EpbQeat15-NFyIwdarZefrCNM5vWNRKrGJjoi_qfpQ3QsZTyFOxJ2KkKHJ4ucqJEeztmHSNyXXc6ZX7NocJ9VWWyXJHXybBxn7WGNOCwFczsUuAiIgj9vwjtJmbHIZA0I5769JPEUFMg/ShFv289kRCN-L09-nvsofX2JKyjzB_aBEaCdarrIZMM",
+                            "width": 612
                         },
                         "large": {
-                            "height": 339,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/5mjrs6Sb3kTYT1UYDUkNuw/7N0Tttht-ezQPHm3aXeKBJGGF_2bQUcDTn2yHtVB8NKrl-ehlvjCGo0D47bHjkNHz78sfU8GR3eVQK1w5tiRfsrJpOM41Zfm0RM5ao68MvwcenfMVRCHffpYDlTtpz2_De5sANX7lOzLH9lC-Us49g/y_6JZ9k_7mtjDHzm2Ki4Ap6_nXNeJpbGwoXoTPOdptg",
-                            "width": 509
+                            "height": 344,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/o2jUMUtFcEVG9bg9qvUyhw/dnYLxMnRHfLCA8inJvLwQHfHfH06LakUjszpQNivH6ZHLLqjOWhoqSImc7uOveNZmvRsC7jkgP1rmzKuAm0PCPwLHRetXPHaURok0C-9_tNKGFv-5JYLcBKfjOaNxK3XpOYsJZ6aLRwGyXeJNtAMLQ/Dc1rQNvPmShmbFeS_qLAeQpoxi7bZWL1BXlscUjLGpc",
+                            "width": 612
                         },
                         "small": {
                             "height": 36,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/v-r3y4HyS8VcED1UrO99hQ/q8phkVUYlkbRloT1JT8fKou1pW-IKW0OdA0Y2A77Ql8Cs0MQ25DBv2S1369eLCZrczjghBxNm28pGoTOpKJWqMPT-UTNf_vCklcLTsHBakXzEz2lgJzUb8mKoUI618Mw2kI-6wnCx0Zqct7cHJyFEg/ybDxotJilh5x_rz_l0ZLcQkxI8uEMgWIP1xHIchD8EU",
-                            "width": 54
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/ltm8vWi5PVYcqGAdhwBgTQ/wi9Wd0c9qpZr1J8wxJuufmuVGY_B6pUSvnVc8HGfLbLsrSxl3SErUDe9bejhEk-rTIq_NVSk_1L8a_p0Os7dtF415HsUVIvuXkrBoq_1M4dWsgpaZN0Y7JMfoYih8lhRmf7QDQY4x_prt6oLrEmN2Q/snozn57U0kPL7RBYfd6QVq2h--opqUOYhrCKy8VGJ8Y",
+                            "width": 64
                         }
                     },
                     "type": "image/jpeg",
-                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/J-jJztP-N0ez6UXxvtwSvg/IlDlKQRlhgCfq7xnHwRacg1xzB8k62XncYIfYSmr3K5MzLXcKi6t2HVTYrWx0D_acGPo22uJQwaPgy_yZPH8MRixaKrlFJ8-XPUEscYQCEpBWIF2YrRuBLBO8VEC2DJ3ktXz8y9xOeGoh-CuJb0I8InQTrISaM_T1c8YGg6-S2A/bLNZmjeSF_Mbodsv0tuysBOu35ezydd0BJJwrAyYvy4",
-                    "width": 509
+                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/P0-Di_A9SNd6rVaEX41bWw/6TrK8t4WY5Kd_7Vj8xo0ZJi-els7-7COjjKdokqTnBmxdg8MKVpyQ2SSyBtGaQySb5RlQ2xnbkIcFZOtgbPKMkgNk7iswqbki_eMIHsnS6ikahVhc-huuam7cARn8pr_BpUnRB4X38YS2xXGWiEFF6HdlbWjv6R5R8P9j9lNTJk/tUl7e_gDzyB9-FSInFCMOzYsvJ1pEZ1gbOII2pig5Mw",
+                    "width": 612
                 }
             ],
-            "justification_of_resources": "Very few levels of near surface high-frequency variables, combined with monthly climatological ocean variables, are critical for assessment of high-resolution models and ocean extremes understanding and projections. These are the same values chosen in literature studies of extremes (e.g., Gruber, N., Boyd, P.W., Fr\u00f6licher, T.L. and Vogt, M., 2021. Biogeochemical extremes and compound events in the ocean. Nature, 600(7889), pp.395-407) and storm surges (Bernier, N.B., Hemer, M., Mori, N., Appendini, C.M., Breivik, O., de Camargo, R., Casas-Prat, M., Duong, T.M., Haigh, I.D., Howard, T. and Hernaman, V., 2024. Storm surges and extreme sea levels: Review, establishment of model intercomparison and coordination of surge climate projection efforts (SurgeMIP). Weather and Climate Extremes, 45, p.100689).\n\nThese variables are critical to: coastal hazard assessment; understanding vulnerable regions, communities, infrastructure and ecosystems; better understand and test adaptation measures, both man-made (e.g., coastal protection structures) and natural (e.g., oyster reefs, mangroves).",
-            "lead_theme": "link::ocean_seaice",
+            "justification_of_resources": "The baseline variables will support a wide range of applications and the production of all the variables on the list should not impose excessive burdens on modelling centers and infrastructure providers.",
             "minimum_ensemble_size": 1,
-            "name": "Ocean Extremes",
-            "opportunity_id": "49",
-            "uid": "dafc73a5-8c95-11ef-944e-41a8eb05f654"
+            "name": "Baseline Climate Variables for Earth System Modelling",
+            "opportunity_id": "69",
+            "technical_notes": "See Juckes et al. 2024 (preprint): https://egusphere.copernicus.org/preprints/2024/egusphere-2024-2363/egusphere-2024-2363.pdf ",
+            "uid": "dafc739e-8c95-11ef-944e-41a8eb05f654"
         }
     },
     "physical_parameters": {

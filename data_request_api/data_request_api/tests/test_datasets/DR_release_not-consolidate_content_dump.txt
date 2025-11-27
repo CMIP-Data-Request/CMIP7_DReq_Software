@@ -180,7 +180,7 @@ Data Request content:
                 variable: siu at frequency day (id: seaIce.siu.tavg-u-hxy-si.day.GLB, title: X-Component of Sea-Ice Velocity)
                 variable: siv at frequency day (id: seaIce.siv.tavg-u-hxy-si.day.GLB, title: Y-Component of Sea-Ice Velocity)
     Opportunities:
-        opportunity: Accurate assessment of land-atmosphere coupling
+        opportunity: Accurate assessment of land-atmosphere coupling (id: 1)
             Experiments groups included:
                 experiment_group: historical
                 experiment_group: scenarios
@@ -193,26 +193,28 @@ Data Request content:
             Time subsets included:
                 time_subset: hist20
                 time_subset: scenario20
-        opportunity: Baseline Climate Variables for Earth System Modelling
+        opportunity: Ocean Extremes (id: 49)
             Experiments groups included:
+                experiment_group: dcpp
                 experiment_group: deck
                 experiment_group: fast-track
                 experiment_group: historical
                 experiment_group: scenarios
+                experiment_group: scenarios_extensions
             Variables groups included:
-                variable_group: baseline_daily
-                variable_group: baseline_fixed
-                variable_group: baseline_monthly
-                variable_group: baseline_subdaily
+                variable_group: mixed_layer_extremes
+                variable_group: ocean_KE_vorticity_extremes
+                variable_group: ocean_acidification_oxygen_extremes
+                variable_group: ocean_temperature_extremes
+                variable_group: sea_level_extremes
+                variable_group: surgemip_variables
             Themes included:
-                data_request_theme: Atmosphere (id: atmosphere)
                 data_request_theme: Earth System (id: earth_system)
                 data_request_theme: Impacts & Adaptation (id: impacts)
-                data_request_theme: Land & Land-Ice (id: land_landice)
                 data_request_theme: Ocean & Sea-Ice (id: ocean_seaice)
             Time subsets included:
                 time_subset: all
-        opportunity: Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models
+        opportunity: Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models (id: 68)
             Experiments groups included:
                 experiment_group: deck
                 experiment_group: fast-track
@@ -232,24 +234,22 @@ Data Request content:
                 data_request_theme: Ocean & Sea-Ice (id: ocean_seaice)
             Time subsets included:
                 time_subset: all
-        opportunity: Ocean Extremes
+        opportunity: Baseline Climate Variables for Earth System Modelling (id: 69)
             Experiments groups included:
-                experiment_group: dcpp
                 experiment_group: deck
                 experiment_group: fast-track
                 experiment_group: historical
                 experiment_group: scenarios
-                experiment_group: scenarios_extensions
             Variables groups included:
-                variable_group: mixed_layer_extremes
-                variable_group: ocean_KE_vorticity_extremes
-                variable_group: ocean_acidification_oxygen_extremes
-                variable_group: ocean_temperature_extremes
-                variable_group: sea_level_extremes
-                variable_group: surgemip_variables
+                variable_group: baseline_daily
+                variable_group: baseline_fixed
+                variable_group: baseline_monthly
+                variable_group: baseline_subdaily
             Themes included:
+                data_request_theme: Atmosphere (id: atmosphere)
                 data_request_theme: Earth System (id: earth_system)
                 data_request_theme: Impacts & Adaptation (id: impacts)
+                data_request_theme: Land & Land-Ice (id: land_landice)
                 data_request_theme: Ocean & Sea-Ice (id: ocean_seaice)
             Time subsets included:
                 time_subset: all

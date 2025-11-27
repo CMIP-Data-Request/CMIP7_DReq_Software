@@ -790,10 +790,7 @@ class TestDataRequest(unittest.TestCase):
         opportunities = obj.get_opportunities()
         self.assertEqual(len(opportunities), 4)
         self.assertListEqual(opportunities, [obj.find_element("opportunities", id)
-                                             for id in ["Accurate assessment of land-atmosphere coupling",
-                                                        "Baseline Climate Variables for Earth System Modelling",
-                                                        "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                                                        "Ocean Extremes"]])
+                                             for id in ["1", "49", "68", "69"]])
 
     def test_get_opportunity(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
@@ -1034,9 +1031,7 @@ class TestDataRequestFilter(unittest.TestCase):
         theme_name = "Atmosphere"
         theme_target = self.dr.find_element("data_request_themes", theme_id)
         opportunities = [self.dr.get_opportunity(id)
-                         for id in ["link::Accurate assessment of land-atmosphere coupling",
-                                    "link::Baseline Climate Variables for Earth System Modelling",
-                                    "link::Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models"]]
+                         for id in ["link::1", "link::68", "link::69"]]
         self.assertListEqual(self.dr.find_opportunities_per_theme(theme_id), opportunities)
         self.assertListEqual(self.dr.find_opportunities_per_theme(theme_name), opportunities)
         self.assertListEqual(self.dr.find_opportunities_per_theme(theme_target), opportunities)
@@ -1164,9 +1159,7 @@ class TestDataRequestFilter(unittest.TestCase):
         var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_target = self.dr.find_element("variables", var_id)
         op = [self.dr.find_element("opportunities", id)
-              for id in ["link::Baseline Climate Variables for Earth System Modelling",
-                         "link::Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                         "link::Ocean Extremes", ]]
+              for id in ["link::49", "link::68", "link::69", ]]
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_id), op)
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_name), op)
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_target), op)
@@ -1200,7 +1193,7 @@ class TestDataRequestFilter(unittest.TestCase):
         exp_name = "scen7-hc-ext"
         exp_target = self.dr.find_element("experiments", exp_id)
         op = [self.dr.find_element("opportunities", id)
-              for id in ["link::Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models", "link::Ocean Extremes"]]
+              for id in ["link::49", "link::68"]]
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_id), op)
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_name), op)
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_target), op)
@@ -1220,10 +1213,7 @@ class TestDataRequestFilter(unittest.TestCase):
         exp_id = "link::dcppB-forecast-cmip6"
         list_all = list()
         list_any = [self.dr.find_element("opportunities", id)
-                    for id in ["Accurate assessment of land-atmosphere coupling",
-                               "Baseline Climate Variables for Earth System Modelling",
-                               "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                               "Ocean Extremes"]
+                    for id in ["1", "49", "68", "69"]
                     ]
         self.assertListEqual(self.dr.find_opportunities(operation="all", variable_group=vargrp_id,
                                                         experiments=[exp_id, ]), list_all)

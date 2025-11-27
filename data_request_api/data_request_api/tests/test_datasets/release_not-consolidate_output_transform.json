@@ -2016,7 +2016,7 @@
         }
     },
     "opportunities": {
-        "Accurate assessment of land-atmosphere coupling": {
+        "1": {
             "data_request_themes": [
                 "link::atmosphere",
                 "link::land_landice"
@@ -2075,131 +2075,7 @@
                 "link::landatm_coupling_3hr_medium"
             ]
         },
-        "Baseline Climate Variables for Earth System Modelling": {
-            "data_request_themes": [
-                "link::atmosphere",
-                "link::earth_system",
-                "link::impacts",
-                "link::land_landice",
-                "link::ocean_seaice"
-            ],
-            "description": "The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.\n",
-            "expected_impacts": "Greater consistency in provision of high-impact data variables.\n",
-            "experiment_groups": [
-                "link::deck",
-                "link::fast-track",
-                "link::historical",
-                "link::scenarios"
-            ],
-            "image": [
-                {
-                    "filename": "variables-navy.jpg",
-                    "height": 344,
-                    "id": "attGmOCRTMrf1rJHF",
-                    "size": 47001,
-                    "thumbnails": {
-                        "full": {
-                            "height": 344,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/QB5zIuNS8g_jmJYD01sSWg/jqeeO9K4H3EpbQeat15-NFyIwdarZefrCNM5vWNRKrGJjoi_qfpQ3QsZTyFOxJ2KkKHJ4ucqJEeztmHSNyXXc6ZX7NocJ9VWWyXJHXybBxn7WGNOCwFczsUuAiIgj9vwjtJmbHIZA0I5769JPEUFMg/ShFv289kRCN-L09-nvsofX2JKyjzB_aBEaCdarrIZMM",
-                            "width": 612
-                        },
-                        "large": {
-                            "height": 344,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/o2jUMUtFcEVG9bg9qvUyhw/dnYLxMnRHfLCA8inJvLwQHfHfH06LakUjszpQNivH6ZHLLqjOWhoqSImc7uOveNZmvRsC7jkgP1rmzKuAm0PCPwLHRetXPHaURok0C-9_tNKGFv-5JYLcBKfjOaNxK3XpOYsJZ6aLRwGyXeJNtAMLQ/Dc1rQNvPmShmbFeS_qLAeQpoxi7bZWL1BXlscUjLGpc",
-                            "width": 612
-                        },
-                        "small": {
-                            "height": 36,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/ltm8vWi5PVYcqGAdhwBgTQ/wi9Wd0c9qpZr1J8wxJuufmuVGY_B6pUSvnVc8HGfLbLsrSxl3SErUDe9bejhEk-rTIq_NVSk_1L8a_p0Os7dtF415HsUVIvuXkrBoq_1M4dWsgpaZN0Y7JMfoYih8lhRmf7QDQY4x_prt6oLrEmN2Q/snozn57U0kPL7RBYfd6QVq2h--opqUOYhrCKy8VGJ8Y",
-                            "width": 64
-                        }
-                    },
-                    "type": "image/jpeg",
-                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/P0-Di_A9SNd6rVaEX41bWw/6TrK8t4WY5Kd_7Vj8xo0ZJi-els7-7COjjKdokqTnBmxdg8MKVpyQ2SSyBtGaQySb5RlQ2xnbkIcFZOtgbPKMkgNk7iswqbki_eMIHsnS6ikahVhc-huuam7cARn8pr_BpUnRB4X38YS2xXGWiEFF6HdlbWjv6R5R8P9j9lNTJk/tUl7e_gDzyB9-FSInFCMOzYsvJ1pEZ1gbOII2pig5Mw",
-                    "width": 612
-                }
-            ],
-            "justification_of_resources": "The baseline variables will support a wide range of applications and the production of all the variables on the list should not impose excessive burdens on modelling centers and infrastructure providers.",
-            "minimum_ensemble_size": 1,
-            "mips": [
-                "link::PMIP",
-                "link::DAMIP",
-                "link::DCPP",
-                "link::TIPMIP"
-            ],
-            "name": "Baseline Climate Variables for Earth System Modelling",
-            "opportunity_id": "69",
-            "technical_notes": "See Juckes et al. 2024 (preprint): https://egusphere.copernicus.org/preprints/2024/egusphere-2024-2363/egusphere-2024-2363.pdf ",
-            "uid": "dafc739e-8c95-11ef-944e-41a8eb05f654",
-            "variable_groups": [
-                "link::baseline_daily",
-                "link::baseline_fixed",
-                "link::baseline_monthly",
-                "link::baseline_subdaily"
-            ]
-        },
-        "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models": {
-            "data_request_themes": [
-                "link::atmosphere",
-                "link::earth_system",
-                "link::impacts",
-                "link::ocean_seaice"
-            ],
-            "description": "One of the majors impact of the global warming are related to coastal regions, due to coastal floodings, coastal erosions, with more than 40% of the world's population living within 150 kilometers of the coast, with more than 108 million people expose to potential inundation with 1m of (Sea-Level Rise).\nSurface ocean waves has a huge impact in our modern society, from ship routes (Nielsen & Iknomakis, 2021), ports and harbors operations and safety (Nikolaos et. al. 2021), coastal erosion  (Pang et al. 2020), and many others. Also wind driven surface gravity waves affects several marine and atmosphere processes like: marine aerosols formations ( Dziembor, 2018), modulation of the air-sea fluxes (Qi et al. , 2024; Wu et al. 2022),  tropical cyclones maintenance and decay ( Zhang, et al. 2023), ocean mixing layer depths (Kantha & Clayson, 2004), planetary boundary layer profile and stability (Wu,  2022), among others processes. \nEstimating the role of the ocean's surface waves in the sea-level rise is under discussion ( Aucan et al., 2019) .\nSea-ice also might be affected by ocean waves as well (Alberello et al., 2024; Yang et al., 2024), due to ice and waves interactions, such as wave induced fracturing, lateral and bottom melting (Yang et al., 2024), air-sea-ocean fluxes exchange. \nGeneral wave parameters (i.e. Significant Wave Height (SWH), Mean Period (MP), Peak Period (PP), mean direction (MD), peak direction (PD)) among partitioned parameters (same but for windsea and swells) are important to better represent all processes listed above. \nIt is nice to mention that the ocean surface wave community has joint efforts to create the COWCLIP (Coordinated Ocean Wave Climate Project). This project aims to raise the profile of wind-waves as a variable in the global climate system to both foster and support determination of the effects of climate variability and change. on the wave climate and the feedback influence of waves on the coupled earth climate system. \n\n",
-            "expected_impacts": "Surface ocean waves variable might have a huge importance at all DECK experiments, DCPP and ScenarioMIP.  \n",
-            "experiment_groups": [
-                "link::deck",
-                "link::fast-track",
-                "link::historical",
-                "link::scenarios",
-                "link::scenarios_extensions"
-            ],
-            "image": [
-                {
-                    "filename": "iStock-1300107681.jpg",
-                    "height": 836,
-                    "id": "attzFJgB6xkW2lCb1",
-                    "size": 1507581,
-                    "thumbnails": {
-                        "full": {
-                            "height": 836,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/zKg9yZXXdFoianJ0qA4n2Q/TbmjEk8AF15DNarME8jkZc8f1mUq955taEdayYJ1Xnr_t-xwlekeQ5SvAefHufucatF_xdcupG1XWlrBSdxnJ5wLwm8_DEVDXFIByxV8fsgFstJ0kmaE47dwPKLLtBZT1QguYK3svXRTVg4AIzcbaw/eeMELbfmTGXXfV5XVMFdiZVlBfY9Jib3C8dnceiGPw4",
-                            "width": 1255
-                        },
-                        "large": {
-                            "height": 512,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/YQlWRlI61SFKGUK3DElgQg/A1rbVbpKxk05LQfcBjp69wbVgEuzccglMeGdYW8kgY-2bQZennksS6a-O4HaiymPAehJfEX6YNUI-NqrKVIFWnaLBPKFdIRnA9_S1aj7c_-MXJiCihEBcqJfvCLX__CybvwWxIlR3ty9SF3GXr6B3w/mSUN37ecHMUzNm0LcjEIBGFz2w_M92tyR6dVdjm-3RI",
-                            "width": 769
-                        },
-                        "small": {
-                            "height": 36,
-                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/xpGQCmKw7az3NCr8zi28CA/OptANILrYpBOlggjCxGO6z_-6oYt6nTsZB56s_HgmeVjt7JrGKd2I_uRj-cltLsS7p7qoziIoqGTmtUIi6UQMG0mLt6CfoIXc8DN4vf8u7H8UBMQeWHuyqGOnJxXEmMEcgsnC0AephfjnVzzDHZmyQ/_G1Xk4YDmNXa7zUEANe1CLytHtHNmEiyYBW3qkaiILY",
-                            "width": 54
-                        }
-                    },
-                    "type": "image/jpeg",
-                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/uHNR0Ia-UddoSswxLTiUxg/WCAq7YoYVuBziIipw7HHb0A5vHqaHwnxgFIgPG8irAJHoQbnnorIVcP55ovySEZGs-MTOsxmjHaIwDTixfjAgihwHF3PdECopVyqpGmAawzjieVMXMNZwmnexpDJVxCGh5p238v9_1-or1Rw1xmdWQSWisDkYgdCheJggoYhDCA/5YYY14FglrSxBKOiez7LOs3d9bs2bF7ote7IhwdkqFc",
-                    "width": 1255
-                }
-            ],
-            "justification_of_resources": "Several modelling centers already have wave models in to their capabilities, coupled or uncoupled. The effects of surface  wind waves are  important  in modulating mean climate but also extreme events over the oceans.",
-            "lead_theme": "link::ocean_seaice",
-            "minimum_ensemble_size": 1,
-            "mips": [
-                "link::DCPP"
-            ],
-            "name": "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-            "opportunity_id": "68",
-            "uid": "dafc739f-8c95-11ef-944e-41a8eb05f654",
-            "variable_groups": [
-                "link::baseline_daily",
-                "link::baseline_fixed",
-                "link::baseline_monthly",
-                "link::baseline_subdaily",
-                "link::sfc_waves"
-            ]
-        },
-        "Ocean Extremes": {
+        "49": {
             "data_request_themes": [
                 "link::earth_system",
                 "link::impacts",
@@ -2261,6 +2137,130 @@
                 "link::ocean_temperature_extremes",
                 "link::sea_level_extremes",
                 "link::surgemip_variables"
+            ]
+        },
+        "68": {
+            "data_request_themes": [
+                "link::atmosphere",
+                "link::earth_system",
+                "link::impacts",
+                "link::ocean_seaice"
+            ],
+            "description": "One of the majors impact of the global warming are related to coastal regions, due to coastal floodings, coastal erosions, with more than 40% of the world's population living within 150 kilometers of the coast, with more than 108 million people expose to potential inundation with 1m of (Sea-Level Rise).\nSurface ocean waves has a huge impact in our modern society, from ship routes (Nielsen & Iknomakis, 2021), ports and harbors operations and safety (Nikolaos et. al. 2021), coastal erosion  (Pang et al. 2020), and many others. Also wind driven surface gravity waves affects several marine and atmosphere processes like: marine aerosols formations ( Dziembor, 2018), modulation of the air-sea fluxes (Qi et al. , 2024; Wu et al. 2022),  tropical cyclones maintenance and decay ( Zhang, et al. 2023), ocean mixing layer depths (Kantha & Clayson, 2004), planetary boundary layer profile and stability (Wu,  2022), among others processes. \nEstimating the role of the ocean's surface waves in the sea-level rise is under discussion ( Aucan et al., 2019) .\nSea-ice also might be affected by ocean waves as well (Alberello et al., 2024; Yang et al., 2024), due to ice and waves interactions, such as wave induced fracturing, lateral and bottom melting (Yang et al., 2024), air-sea-ocean fluxes exchange. \nGeneral wave parameters (i.e. Significant Wave Height (SWH), Mean Period (MP), Peak Period (PP), mean direction (MD), peak direction (PD)) among partitioned parameters (same but for windsea and swells) are important to better represent all processes listed above. \nIt is nice to mention that the ocean surface wave community has joint efforts to create the COWCLIP (Coordinated Ocean Wave Climate Project). This project aims to raise the profile of wind-waves as a variable in the global climate system to both foster and support determination of the effects of climate variability and change. on the wave climate and the feedback influence of waves on the coupled earth climate system. \n\n",
+            "expected_impacts": "Surface ocean waves variable might have a huge importance at all DECK experiments, DCPP and ScenarioMIP.  \n",
+            "experiment_groups": [
+                "link::deck",
+                "link::fast-track",
+                "link::historical",
+                "link::scenarios",
+                "link::scenarios_extensions"
+            ],
+            "image": [
+                {
+                    "filename": "iStock-1300107681.jpg",
+                    "height": 836,
+                    "id": "attzFJgB6xkW2lCb1",
+                    "size": 1507581,
+                    "thumbnails": {
+                        "full": {
+                            "height": 836,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/zKg9yZXXdFoianJ0qA4n2Q/TbmjEk8AF15DNarME8jkZc8f1mUq955taEdayYJ1Xnr_t-xwlekeQ5SvAefHufucatF_xdcupG1XWlrBSdxnJ5wLwm8_DEVDXFIByxV8fsgFstJ0kmaE47dwPKLLtBZT1QguYK3svXRTVg4AIzcbaw/eeMELbfmTGXXfV5XVMFdiZVlBfY9Jib3C8dnceiGPw4",
+                            "width": 1255
+                        },
+                        "large": {
+                            "height": 512,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/YQlWRlI61SFKGUK3DElgQg/A1rbVbpKxk05LQfcBjp69wbVgEuzccglMeGdYW8kgY-2bQZennksS6a-O4HaiymPAehJfEX6YNUI-NqrKVIFWnaLBPKFdIRnA9_S1aj7c_-MXJiCihEBcqJfvCLX__CybvwWxIlR3ty9SF3GXr6B3w/mSUN37ecHMUzNm0LcjEIBGFz2w_M92tyR6dVdjm-3RI",
+                            "width": 769
+                        },
+                        "small": {
+                            "height": 36,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/xpGQCmKw7az3NCr8zi28CA/OptANILrYpBOlggjCxGO6z_-6oYt6nTsZB56s_HgmeVjt7JrGKd2I_uRj-cltLsS7p7qoziIoqGTmtUIi6UQMG0mLt6CfoIXc8DN4vf8u7H8UBMQeWHuyqGOnJxXEmMEcgsnC0AephfjnVzzDHZmyQ/_G1Xk4YDmNXa7zUEANe1CLytHtHNmEiyYBW3qkaiILY",
+                            "width": 54
+                        }
+                    },
+                    "type": "image/jpeg",
+                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/uHNR0Ia-UddoSswxLTiUxg/WCAq7YoYVuBziIipw7HHb0A5vHqaHwnxgFIgPG8irAJHoQbnnorIVcP55ovySEZGs-MTOsxmjHaIwDTixfjAgihwHF3PdECopVyqpGmAawzjieVMXMNZwmnexpDJVxCGh5p238v9_1-or1Rw1xmdWQSWisDkYgdCheJggoYhDCA/5YYY14FglrSxBKOiez7LOs3d9bs2bF7ote7IhwdkqFc",
+                    "width": 1255
+                }
+            ],
+            "justification_of_resources": "Several modelling centers already have wave models in to their capabilities, coupled or uncoupled. The effects of surface  wind waves are  important  in modulating mean climate but also extreme events over the oceans.",
+            "lead_theme": "link::ocean_seaice",
+            "minimum_ensemble_size": 1,
+            "mips": [
+                "link::DCPP"
+            ],
+            "name": "Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
+            "opportunity_id": "68",
+            "uid": "dafc739f-8c95-11ef-944e-41a8eb05f654",
+            "variable_groups": [
+                "link::baseline_daily",
+                "link::baseline_fixed",
+                "link::baseline_monthly",
+                "link::baseline_subdaily",
+                "link::sfc_waves"
+            ]
+        },
+        "69": {
+            "data_request_themes": [
+                "link::atmosphere",
+                "link::earth_system",
+                "link::impacts",
+                "link::land_landice",
+                "link::ocean_seaice"
+            ],
+            "description": "The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.\n",
+            "expected_impacts": "Greater consistency in provision of high-impact data variables.\n",
+            "experiment_groups": [
+                "link::deck",
+                "link::fast-track",
+                "link::historical",
+                "link::scenarios"
+            ],
+            "image": [
+                {
+                    "filename": "variables-navy.jpg",
+                    "height": 344,
+                    "id": "attGmOCRTMrf1rJHF",
+                    "size": 47001,
+                    "thumbnails": {
+                        "full": {
+                            "height": 344,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/QB5zIuNS8g_jmJYD01sSWg/jqeeO9K4H3EpbQeat15-NFyIwdarZefrCNM5vWNRKrGJjoi_qfpQ3QsZTyFOxJ2KkKHJ4ucqJEeztmHSNyXXc6ZX7NocJ9VWWyXJHXybBxn7WGNOCwFczsUuAiIgj9vwjtJmbHIZA0I5769JPEUFMg/ShFv289kRCN-L09-nvsofX2JKyjzB_aBEaCdarrIZMM",
+                            "width": 612
+                        },
+                        "large": {
+                            "height": 344,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/o2jUMUtFcEVG9bg9qvUyhw/dnYLxMnRHfLCA8inJvLwQHfHfH06LakUjszpQNivH6ZHLLqjOWhoqSImc7uOveNZmvRsC7jkgP1rmzKuAm0PCPwLHRetXPHaURok0C-9_tNKGFv-5JYLcBKfjOaNxK3XpOYsJZ6aLRwGyXeJNtAMLQ/Dc1rQNvPmShmbFeS_qLAeQpoxi7bZWL1BXlscUjLGpc",
+                            "width": 612
+                        },
+                        "small": {
+                            "height": 36,
+                            "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/ltm8vWi5PVYcqGAdhwBgTQ/wi9Wd0c9qpZr1J8wxJuufmuVGY_B6pUSvnVc8HGfLbLsrSxl3SErUDe9bejhEk-rTIq_NVSk_1L8a_p0Os7dtF415HsUVIvuXkrBoq_1M4dWsgpaZN0Y7JMfoYih8lhRmf7QDQY4x_prt6oLrEmN2Q/snozn57U0kPL7RBYfd6QVq2h--opqUOYhrCKy8VGJ8Y",
+                            "width": 64
+                        }
+                    },
+                    "type": "image/jpeg",
+                    "url": "https://v5.airtableusercontent.com/v3/u/43/43/1753444800000/P0-Di_A9SNd6rVaEX41bWw/6TrK8t4WY5Kd_7Vj8xo0ZJi-els7-7COjjKdokqTnBmxdg8MKVpyQ2SSyBtGaQySb5RlQ2xnbkIcFZOtgbPKMkgNk7iswqbki_eMIHsnS6ikahVhc-huuam7cARn8pr_BpUnRB4X38YS2xXGWiEFF6HdlbWjv6R5R8P9j9lNTJk/tUl7e_gDzyB9-FSInFCMOzYsvJ1pEZ1gbOII2pig5Mw",
+                    "width": 612
+                }
+            ],
+            "justification_of_resources": "The baseline variables will support a wide range of applications and the production of all the variables on the list should not impose excessive burdens on modelling centers and infrastructure providers.",
+            "minimum_ensemble_size": 1,
+            "mips": [
+                "link::PMIP",
+                "link::DAMIP",
+                "link::DCPP",
+                "link::TIPMIP"
+            ],
+            "name": "Baseline Climate Variables for Earth System Modelling",
+            "opportunity_id": "69",
+            "technical_notes": "See Juckes et al. 2024 (preprint): https://egusphere.copernicus.org/preprints/2024/egusphere-2024-2363/egusphere-2024-2363.pdf ",
+            "uid": "dafc739e-8c95-11ef-944e-41a8eb05f654",
+            "variable_groups": [
+                "link::baseline_daily",
+                "link::baseline_fixed",
+                "link::baseline_monthly",
+                "link::baseline_subdaily"
             ]
         }
     },
