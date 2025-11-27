@@ -53,6 +53,15 @@ def parse_args():
     parser.add_argument('-m', '--variables_metadata', type=str,
                         help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
 
+    parser.add_argument("-c", "--add_combined", action="store_true", default=False,
+                        help="Include combined request from all opportunities and for all experiments "
+                             "(incl. combinations control / historical / scenario).")
+    parser.add_argument("-t", "--time_subsets", action="store_true", default=False,
+                        help="Include time_subsets that variables are requested for.")
+    parser.add_argument("-d", "--disable_core_vars_check", action="store_true", default=False,
+                        help="Don't require that core variables are included in the request.")
+
+
     return parser.parse_args()
 
 
@@ -148,7 +157,8 @@ def main():
     # (i.e., for every experiment, a list of the variables that should be produced to support all of the specified opportunities)
     expt_vars = dq.get_requested_variables(base, use_dreq_version,
                                            use_opps=use_opps, priority_cutoff=args.priority_cutoff,
-                                           verbose=False)
+                                           time_subsets=args.time_subsets, combined_request=args.add_combined,
+                                           verbose=False, check_core_variables=not args.disable_core_vars_check)
 
     # filter output by requested experiments
     if args.experiments:
