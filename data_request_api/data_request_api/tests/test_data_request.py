@@ -1045,7 +1045,7 @@ class TestDataRequestFilter(unittest.TestCase):
         theme_name = "Land & Land-Ice"
         theme_target = self.dr.find_element("data_request_themes", theme_id)
         exp = [self.dr.find_element("experiments", id)
-               for id in ["link::amip", "link::dcppB-forecast-cmip6","link::esm-flat10", "link::esm-hist",
+               for id in ["link::amip", "link::dcppB-forecast-cmip6", "link::esm-flat10", "link::esm-hist",
                           "link::esm-piControl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
                           "link::piClim-NOX", "link::scen7-hc", "link::scen7-mc", "link::scen7-mlc",
                           "link::scen7-vlloc"]]
@@ -1181,7 +1181,7 @@ class TestDataRequestFilter(unittest.TestCase):
         var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
         var_target = self.dr.find_element("variables", var_id)
         mips = [self.dr.find_element("mips", id)
-                for id in ["link::CMIP", "link::DAMIP", "link::DCPP", "link::FAFMIP","link::FireMIP", "link::GeoMIP",
+                for id in ["link::CMIP", "link::DAMIP", "link::DCPP", "link::FAFMIP", "link::FireMIP", "link::GeoMIP",
                            "link::HighResMIP", "link::ISMIP7", "link::OMIP", "link::PMIP", "link::SIMIP",
                            "link::SOFIAMIP", "link::ScenarioMIP", "link::TIPMIP"]]
         self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
@@ -1203,7 +1203,7 @@ class TestDataRequestFilter(unittest.TestCase):
         exp_name = "scen7-hc-ext"
         exp_target = self.dr.find_element("experiments", exp_id)
         themes = [self.dr.find_element("data_request_themes", id)
-                  for id in ["link::atmosphere", "link::earth_system", "link::impacts",  "link::ocean_seaice"]]
+                  for id in ["link::atmosphere", "link::earth_system", "link::impacts", "link::ocean_seaice"]]
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_id), themes)
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_name), themes)
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_target), themes)

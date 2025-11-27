@@ -89,7 +89,7 @@ el.replaceWith(d);
 
         obj = DRObjects.from_input(dr=self.dr, id=&#34;link::my_id&#34;, DR_type=&#34;priority_level&#34;)
 
-        obj = DRObjects.from_input(dr=self.dr, id=&#34;link::527f5c94-8c97-11ef-944e-41a8eb05f654&#34;, DR_type=&#34;priority_level&#34;)
+        obj = DRObjects.from_input(dr=self.dr, id=&#34;link::High&#34;, DR_type=&#34;priority_level&#34;)
 
     def test_check(self):
         obj = DRObjects(&#34;my_id&#34;, self.dr)
@@ -266,7 +266,7 @@ not have a method with the specified name.</p></div>
 
     obj = DRObjects.from_input(dr=self.dr, id=&#34;link::my_id&#34;, DR_type=&#34;priority_level&#34;)
 
-    obj = DRObjects.from_input(dr=self.dr, id=&#34;link::527f5c94-8c97-11ef-944e-41a8eb05f654&#34;, DR_type=&#34;priority_level&#34;)</code></pre>
+    obj = DRObjects.from_input(dr=self.dr, id=&#34;link::High&#34;, DR_type=&#34;priority_level&#34;)</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -501,15 +501,14 @@ not have a method with the specified name.</p></div>
         self.assertEqual(len(exp_groups), 6)
         self.assertListEqual(exp_groups,
                              [obj.find_element(&#34;experiment_groups&#34;, id)
-                              for id in [&#34;80ab723e-a698-11ef-914a-613c0433d878&#34;, &#34;80ab72c9-a698-11ef-914a-613c0433d878&#34;,
-                                         &#34;dafc748d-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;dafc748f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7490-8c95-11ef-944e-41a8eb05f654&#34;]])
+                              for id in [&#34;dcpp&#34;, &#34;deck&#34;, &#34;fast-track&#34;, &#34;historical&#34;,
+                                         &#34;scenarios&#34;, &#34;scenarios_extensions&#34;]])
 
     def test_get_experiment_group(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        exp_grp = obj.get_experiment_group(&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;)
+        exp_grp = obj.get_experiment_group(&#34;link::fast-track&#34;)
         self.assertEqual(exp_grp,
-                         obj.find_element(&#34;experiment_groups&#34;, &#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;))
+                         obj.find_element(&#34;experiment_groups&#34;, &#34;link::fast-track&#34;))
         with self.assertRaises(ValueError):
             exp_grp = obj.get_experiment_group(&#34;test&#34;)
 
@@ -518,14 +517,13 @@ not have a method with the specified name.</p></div>
         opportunities = obj.get_opportunities()
         self.assertEqual(len(opportunities), 4)
         self.assertListEqual(opportunities, [obj.find_element(&#34;opportunities&#34;, id)
-                                             for id in [&#34;dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                                                        &#34;dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;]])
+                                             for id in [&#34;1&#34;, &#34;49&#34;, &#34;68&#34;, &#34;69&#34;]])
 
     def test_get_opportunity(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        opportunity = obj.get_opportunity(&#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;)
+        opportunity = obj.get_opportunity(&#34;link::Accurate assessment of land-atmosphere coupling&#34;)
         self.assertEqual(opportunity,
-                         obj.find_element(&#34;opportunities&#34;, &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;))
+                         obj.find_element(&#34;opportunities&#34;, &#34;link::Accurate assessment of land-atmosphere coupling&#34;))
         with self.assertRaises(ValueError):
             op = obj.get_opportunity(&#34;test&#34;)
 
@@ -535,19 +533,17 @@ not have a method with the specified name.</p></div>
         self.assertEqual(len(var_groups), 13)
         self.assertListEqual(var_groups,
                              [obj.find_element(&#34;variable_groups&#34;, id)
-                              for id in [&#34;80ab723b-a698-11ef-914a-613c0433d878&#34;, &#34;80ab73e2-a698-11ef-914a-613c0433d878&#34;,
-                                         &#34;80ab73e4-a698-11ef-914a-613c0433d878&#34;, &#34;dafc73da-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;dafc73dc-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;dafc73de-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7428-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7436-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;dafc743a-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7464-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;dafc747f-8c95-11ef-944e-41a8eb05f654&#34;]])
+                              for id in [&#34;baseline_daily&#34;, &#34;baseline_fixed&#34;, &#34;baseline_monthly&#34;, &#34;baseline_subdaily&#34;,
+                                         &#34;landatm_coupling_3hA&#34;, &#34;landatm_coupling_3hr_medium&#34;, &#34;mixed_layer_extremes&#34;,
+                                         &#34;ocean_KE_vorticity_extremes&#34;, &#34;ocean_acidification_oxygen_extremes&#34;,
+                                         &#34;ocean_temperature_extremes&#34;, &#34;sea_level_extremes&#34;, &#34;sfc_waves&#34;,
+                                         &#34;surgemip_variables&#34;]])
 
     def test_get_variable_group(self):
         obj = DataRequest(input_database=self.input_database, VS=self.vs)
-        var_grp = obj.get_variable_group(&#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;)
+        var_grp = obj.get_variable_group(&#34;link::baseline_monthly&#34;)
         self.assertEqual(var_grp,
-                         obj.find_element(&#34;variable_groups&#34;, &#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;))
+                         obj.find_element(&#34;variable_groups&#34;, &#34;link::baseline_monthly&#34;))
         with self.assertRaises(ValueError):
             var_grp = obj.get_variable_group(&#34;test&#34;)
 
@@ -780,9 +776,9 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">def test_get_experiment_group(self):
     obj = DataRequest(input_database=self.input_database, VS=self.vs)
-    exp_grp = obj.get_experiment_group(&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;)
+    exp_grp = obj.get_experiment_group(&#34;link::fast-track&#34;)
     self.assertEqual(exp_grp,
-                     obj.find_element(&#34;experiment_groups&#34;, &#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;))
+                     obj.find_element(&#34;experiment_groups&#34;, &#34;link::fast-track&#34;))
     with self.assertRaises(ValueError):
         exp_grp = obj.get_experiment_group(&#34;test&#34;)</code></pre>
 </details>
@@ -802,9 +798,8 @@ not have a method with the specified name.</p></div>
     self.assertEqual(len(exp_groups), 6)
     self.assertListEqual(exp_groups,
                          [obj.find_element(&#34;experiment_groups&#34;, id)
-                          for id in [&#34;80ab723e-a698-11ef-914a-613c0433d878&#34;, &#34;80ab72c9-a698-11ef-914a-613c0433d878&#34;,
-                                     &#34;dafc748d-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;dafc748f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7490-8c95-11ef-944e-41a8eb05f654&#34;]])</code></pre>
+                          for id in [&#34;dcpp&#34;, &#34;deck&#34;, &#34;fast-track&#34;, &#34;historical&#34;,
+                                     &#34;scenarios&#34;, &#34;scenarios_extensions&#34;]])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -875,8 +870,7 @@ not have a method with the specified name.</p></div>
     opportunities = obj.get_opportunities()
     self.assertEqual(len(opportunities), 4)
     self.assertListEqual(opportunities, [obj.find_element(&#34;opportunities&#34;, id)
-                                         for id in [&#34;dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                                                    &#34;dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;]])</code></pre>
+                                         for id in [&#34;1&#34;, &#34;49&#34;, &#34;68&#34;, &#34;69&#34;]])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -890,9 +884,9 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">def test_get_opportunity(self):
     obj = DataRequest(input_database=self.input_database, VS=self.vs)
-    opportunity = obj.get_opportunity(&#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;)
+    opportunity = obj.get_opportunity(&#34;link::Accurate assessment of land-atmosphere coupling&#34;)
     self.assertEqual(opportunity,
-                     obj.find_element(&#34;opportunities&#34;, &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;))
+                     obj.find_element(&#34;opportunities&#34;, &#34;link::Accurate assessment of land-atmosphere coupling&#34;))
     with self.assertRaises(ValueError):
         op = obj.get_opportunity(&#34;test&#34;)</code></pre>
 </details>
@@ -925,9 +919,9 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">def test_get_variable_group(self):
     obj = DataRequest(input_database=self.input_database, VS=self.vs)
-    var_grp = obj.get_variable_group(&#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;)
+    var_grp = obj.get_variable_group(&#34;link::baseline_monthly&#34;)
     self.assertEqual(var_grp,
-                     obj.find_element(&#34;variable_groups&#34;, &#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;))
+                     obj.find_element(&#34;variable_groups&#34;, &#34;link::baseline_monthly&#34;))
     with self.assertRaises(ValueError):
         var_grp = obj.get_variable_group(&#34;test&#34;)</code></pre>
 </details>
@@ -947,13 +941,11 @@ not have a method with the specified name.</p></div>
     self.assertEqual(len(var_groups), 13)
     self.assertListEqual(var_groups,
                          [obj.find_element(&#34;variable_groups&#34;, id)
-                          for id in [&#34;80ab723b-a698-11ef-914a-613c0433d878&#34;, &#34;80ab73e2-a698-11ef-914a-613c0433d878&#34;,
-                                     &#34;80ab73e4-a698-11ef-914a-613c0433d878&#34;, &#34;dafc73da-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;dafc73dc-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;dafc73de-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7428-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7436-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;dafc743a-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc7464-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;dafc747f-8c95-11ef-944e-41a8eb05f654&#34;]])</code></pre>
+                          for id in [&#34;baseline_daily&#34;, &#34;baseline_fixed&#34;, &#34;baseline_monthly&#34;, &#34;baseline_subdaily&#34;,
+                                     &#34;landatm_coupling_3hA&#34;, &#34;landatm_coupling_3hr_medium&#34;, &#34;mixed_layer_extremes&#34;,
+                                     &#34;ocean_KE_vorticity_extremes&#34;, &#34;ocean_acidification_oxygen_extremes&#34;,
+                                     &#34;ocean_temperature_extremes&#34;, &#34;sea_level_extremes&#34;, &#34;sfc_waves&#34;,
+                                     &#34;surgemip_variables&#34;]])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -1148,75 +1140,73 @@ not have a method with the specified name.</p></div>
         self.assertListEqual(self.dr.filter_elements_per_request(&#34;experiment_groups&#34;,
                                                                  requests=dict(variable=&#34;ocean.wo.tavg-ol-hxy-sea.mon.GLB&#34;)),
                              [self.dr.find_element(&#34;experiment_group&#34;, id)
-                              for id in [&#34;link::80ab72c9-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc748d-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc748f-8c95-11ef-944e-41a8eb05f654&#34;,
-                                         &#34;link::dafc7490-8c95-11ef-944e-41a8eb05f654&#34;]])
+                              for id in [&#34;link::deck&#34;, &#34;link::fast-track&#34;, &#34;link::historical&#34;, &#34;link::scenarios&#34;,
+                                         &#34;link::scenarios_extensions&#34;]])
         list_var_grp = [self.dr.find_element(&#34;variable_groups&#34;, id)
-                        for id in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::80ab73e4-a698-11ef-914a-613c0433d878&#34;,
-                                   &#34;link::dafc73da-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73dc-8c95-11ef-944e-41a8eb05f654&#34;,
-                                   &#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73de-8c95-11ef-944e-41a8eb05f654&#34;,
-                                   &#34;link::dafc7435-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;,
-                                   &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;,
-                                   &#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;]]
+                        for id in [&#34;link::baseline_daily&#34;, &#34;link::baseline_fixed&#34;, &#34;link::baseline_monthly&#34;,
+                                   &#34;link::baseline_subdaily&#34;, &#34;link::mixed_layer_extremes&#34;,
+                                   &#34;link::ocean_KE_vorticity_extremes&#34;, &#34;link::ocean_acidification_oxygen_extremes&#34;,
+                                   &#34;link::ocean_temperature_extremes&#34;, &#34;link::sea_level_extremes&#34;, &#34;link::sfc_waves&#34;,
+                                   &#34;link::surgemip_variables&#34;]]
         self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                                 requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;)),
+                                                                 requests=dict(experiment=&#34;scen7-hc-ext&#34;)),
                              list_var_grp)
         found_vargrp_all = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                               requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                               requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                                not_requests=dict(
-                                                                   opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                                   opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                    variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                                not_request_operation=&#34;all&#34;)
         self.assertEqual(len(found_vargrp_all), len(list_var_grp))
         self.assertListEqual(found_vargrp_all, list_var_grp)
         found_vargrp_any = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                               requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                               requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                                not_requests=dict(
-                                                                   opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                                   opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                    variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                                not_request_operation=&#34;any&#34;)
         list_vargrp_any = [self.dr.find_element(&#34;variable_group&#34;, elt)
-                           for elt in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;,
-                                       &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;]]
+                           for elt in [&#34;link::mixed_layer_extremes&#34;, &#34;link::ocean_KE_vorticity_extremes&#34;,
+                                       &#34;link::ocean_acidification_oxygen_extremes&#34;, &#34;link::sea_level_extremes&#34;]]
         self.assertEqual(len(found_vargrp_any), len(list_vargrp_any))
         self.assertListEqual(found_vargrp_any, list_vargrp_any)
         found_vargrp_anyofall = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                                    requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                                    requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                                     not_requests=dict(
-                                                                        opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                                        opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                         variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                                     not_request_operation=&#34;any_of_all&#34;)
         list_vargrp_anyofall = [self.dr.find_element(&#34;variable_group&#34;, elt)
-                                for elt in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7435-8c95-11ef-944e-41a8eb05f654&#34;,
-                                            &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;,
-                                            &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;]]
+                                for elt in [&#34;link::mixed_layer_extremes&#34;, &#34;link::ocean_KE_vorticity_extremes&#34;,
+                                            &#34;link::ocean_acidification_oxygen_extremes&#34;, &#34;link::ocean_temperature_extremes&#34;,
+                                            &#34;link::sea_level_extremes&#34;]]
         self.assertEqual(len(found_vargrp_anyofall), len(list_vargrp_anyofall))
         self.assertListEqual(found_vargrp_anyofall, list_vargrp_anyofall)
         found_vargrp_allofany = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                                    requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                                    requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                                     not_requests=dict(
-                                                                        opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                                        opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                         variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                                     not_request_operation=&#34;all_of_any&#34;)
         self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
         self.assertListEqual(found_vargrp_allofany, list_var_grp)
         self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                                 requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
-                                                                 not_requests=dict(opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;)),
+                                                                 requests=dict(experiment=&#34;scen7-hc-ext&#34;),
+                                                                 not_requests=dict(opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;)),
                              [self.dr.find_element(&#34;variable_group&#34;, elt)
-                              for elt in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7435-8c95-11ef-944e-41a8eb05f654&#34;,
-                                          &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;,
-                                          &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;]])
+                              for elt in [&#34;link::mixed_layer_extremes&#34;, &#34;link::ocean_KE_vorticity_extremes&#34;,
+                                          &#34;link::ocean_acidification_oxygen_extremes&#34;, &#34;link::ocean_temperature_extremes&#34;,
+                                          &#34;link::sea_level_extremes&#34;, &#34;link::surgemip_variables&#34;]])
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
-                                                                 requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;)),
+                                                                 requests=dict(experiment=&#34;scen7-hc-ext&#34;)),
                              list_var_grp)
-        self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group(&#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;),
-                                                                 requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;)),
-                             [self.dr.find_element(&#34;variable_group&#34;, &#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;), ])
+        self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group(&#34;ocean_temperature_extremes&#34;),
+                                                                 requests=dict(experiment=&#34;scen7-hc-ext&#34;)),
+                             [self.dr.find_element(&#34;variable_group&#34;, &#34;ocean_temperature_extremes&#34;), ])
 
     def test_find_variables_per_priority(self):
         priority = &#34;Medium&#34;
-        priority_obj = self.dr.find_element(&#34;priority_level&#34;, &#34;link::527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
+        priority_obj = self.dr.find_element(&#34;priority_level&#34;, &#34;link::Medium&#34;)
         target_var_list = [self.dr.find_element(&#34;variables&#34;, id)
                            for id in [&#34;link::atmos.rlds.tavg-u-hxy-u.3hr.GLB&#34;, &#34;link::atmos.rlus.tavg-u-hxy-u.3hr.GLB&#34;,
                                       &#34;link::atmos.ta.tpt-p6-hxy-air.3hr.GLB&#34;, &#34;link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB&#34;,
@@ -1237,12 +1227,11 @@ not have a method with the specified name.</p></div>
         self.assertListEqual(var_list, target_var_list)
 
     def test_find_opportunities_per_theme(self):
-        theme_id = &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;
+        theme_id = &#34;link::atmosphere&#34;
         theme_name = &#34;Atmosphere&#34;
         theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
         opportunities = [self.dr.get_opportunity(id)
-                         for id in [&#34;link::dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                                    &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;]]
+                         for id in [&#34;link::1&#34;, &#34;link::68&#34;, &#34;link::69&#34;]]
         self.assertListEqual(self.dr.find_opportunities_per_theme(theme_id), opportunities)
         self.assertListEqual(self.dr.find_opportunities_per_theme(theme_name), opportunities)
         self.assertListEqual(self.dr.find_opportunities_per_theme(theme_target), opportunities)
@@ -1252,23 +1241,20 @@ not have a method with the specified name.</p></div>
             self.dr.find_opportunities_per_theme(&#34;link::toto&#34;)
 
     def test_find_experiments_per_theme(self):
-        theme_id = &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;
+        theme_id = &#34;link::land_landice&#34;
         theme_name = &#34;Land &amp; Land-Ice&#34;
         theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
         exp = [self.dr.find_element(&#34;experiments&#34;, id)
-               for id in [&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c3e-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c54-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c55-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5a-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c5b-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5c-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c5d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::80ab724d-a698-11ef-914a-613c0433d878&#34;,
-                          &#34;link::80ab72c4-a698-11ef-914a-613c0433d878&#34;]]
+               for id in [&#34;link::amip&#34;, &#34;link::dcppB-forecast-cmip6&#34;,&#34;link::esm-flat10&#34;, &#34;link::esm-hist&#34;,
+                          &#34;link::esm-piControl&#34;, &#34;link::g7-1p5K-sai&#34;, &#34;link::historical&#34;, &#34;link::land-hist&#34;,
+                          &#34;link::piClim-NOX&#34;, &#34;link::scen7-hc&#34;, &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;,
+                          &#34;link::scen7-vlloc&#34;]]
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_id), exp)
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_name), exp)
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_target), exp)
 
     def test_find_variables_per_theme(self):
-        theme_id = &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;
+        theme_id = &#34;link::land_landice&#34;
         theme_name = &#34;Land &amp; Land-Ice&#34;
         theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
         var = [self.dr.find_element(&#34;variables&#34;, id)
@@ -1310,43 +1296,39 @@ not have a method with the specified name.</p></div>
         self.assertListEqual(self.dr.find_variables_per_theme(theme_target), var)
 
     def test_find_mips_per_theme(self):
-        theme_id = &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;
+        theme_id = &#34;link::atmosphere&#34;
         theme_name = &#34;Atmosphere&#34;
         theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
         mips = [self.dr.find_element(&#34;mips&#34;, id)
-                for id in [&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6d-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c6e-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c70-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c74-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c75-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c76-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c77-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c83-8c97-11ef-944e-41a8eb05f654&#34;]]
+                for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FireMIP&#34;, &#34;link::HighResMIP&#34;,
+                           &#34;link::LUMIP&#34;, &#34;link::PMIP&#34;, &#34;link::ScenarioMIP&#34;, &#34;link::TIPMIP&#34;]]
         self.assertListEqual(self.dr.find_mips_per_theme(theme_id), mips)
         self.assertListEqual(self.dr.find_mips_per_theme(theme_name), mips)
         self.assertListEqual(self.dr.find_mips_per_theme(theme_target), mips)
 
     def test_themes_per_opportunity(self):
-        op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+        op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
         op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
         op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
         themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-                  for id in [&#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;]]
+                  for id in [&#34;link::atmosphere&#34;, &#34;link::land_landice&#34;]]
         self.assertListEqual(self.dr.find_themes_per_opportunity(op_id), themes)
         self.assertListEqual(self.dr.find_themes_per_opportunity(op_name), themes)
         self.assertListEqual(self.dr.find_themes_per_opportunity(op_target), themes)
 
     def test_experiments_per_opportunity(self):
-        op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+        op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
         op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
         op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
         exp = [self.dr.find_element(&#34;experiments&#34;, id)
-               for id in [&#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c5a-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5b-8c97-11ef-944e-41a8eb05f654&#34;,
-                          &#34;link::527f5c5c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5d-8c97-11ef-944e-41a8eb05f654&#34;]]
+               for id in [&#34;link::esm-hist&#34;, &#34;link::historical&#34;, &#34;link::scen7-hc&#34;, &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;,
+                          &#34;link::scen7-vlloc&#34;]]
         self.assertListEqual(self.dr.find_experiments_per_opportunity(op_id), exp)
         self.assertListEqual(self.dr.find_experiments_per_opportunity(op_name), exp)
         self.assertListEqual(self.dr.find_experiments_per_opportunity(op_target), exp)
 
     def test_variables_per_opportunity(self):
-        op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+        op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
         op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
         op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
         var = [self.dr.find_element(&#34;variables&#34;, id)
@@ -1363,13 +1345,11 @@ not have a method with the specified name.</p></div>
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_target), var)
 
     def test_mips_per_opportunity(self):
-        op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+        op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
         op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
         op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
         mips = [self.dr.find_element(&#34;mips&#34;, id)
-                for id in [&#34;link::527f5c6d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c74-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c75-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c76-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c77-8c97-11ef-944e-41a8eb05f654&#34;]]
+                for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::HighResMIP&#34;, &#34;link::LUMIP&#34;, &#34;link::ScenarioMIP&#34;]]
         self.assertListEqual(self.dr.find_mips_per_opportunity(op_id), mips)
         self.assertListEqual(self.dr.find_mips_per_opportunity(op_name), mips)
         self.assertListEqual(self.dr.find_mips_per_opportunity(op_target), mips)
@@ -1379,8 +1359,7 @@ not have a method with the specified name.</p></div>
         var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
         var_target = self.dr.find_element(&#34;variables&#34;, var_id)
         op = [self.dr.find_element(&#34;opportunities&#34;, id)
-              for id in [&#34;link::dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                         &#34;link::dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, ]]
+              for id in [&#34;link::49&#34;, &#34;link::68&#34;, &#34;link::69&#34;, ]]
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_id), op)
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_name), op)
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_target), op)
@@ -1390,9 +1369,8 @@ not have a method with the specified name.</p></div>
         var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
         var_target = self.dr.find_element(&#34;variables&#34;, var_id)
         themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-                  for id in [&#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;,
-                             &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;,
-                             &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;]
+                  for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;, &#34;link::land_landice&#34;,
+                             &#34;link::ocean_seaice&#34;]
                   ]
         self.assertListEqual(self.dr.find_themes_per_variable(var_id), themes)
         self.assertListEqual(self.dr.find_themes_per_variable(var_name), themes)
@@ -1403,45 +1381,39 @@ not have a method with the specified name.</p></div>
         var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
         var_target = self.dr.find_element(&#34;variables&#34;, var_id)
         mips = [self.dr.find_element(&#34;mips&#34;, id)
-                for id in [&#34;link::527f5c64-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c65-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c66-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6b-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6d-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c6e-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6f-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c70-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c73-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c74-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c75-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c76-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c83-8c97-11ef-944e-41a8eb05f654&#34;]]
+                for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FAFMIP&#34;,&#34;link::FireMIP&#34;, &#34;link::GeoMIP&#34;,
+                           &#34;link::HighResMIP&#34;, &#34;link::ISMIP7&#34;, &#34;link::OMIP&#34;, &#34;link::PMIP&#34;, &#34;link::SIMIP&#34;,
+                           &#34;link::SOFIAMIP&#34;, &#34;link::ScenarioMIP&#34;, &#34;link::TIPMIP&#34;]]
         self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
         self.assertListEqual(self.dr.find_mips_per_variable(var_name), mips)
         self.assertListEqual(self.dr.find_mips_per_variable(var_target), mips)
 
     def test_opportunities_per_experiment(self):
-        exp_id = &#34;link::80ab72b4-a698-11ef-914a-613c0433d878&#34;
+        exp_id = &#34;link::scen7-hc-ext&#34;
         exp_name = &#34;scen7-hc-ext&#34;
         exp_target = self.dr.find_element(&#34;experiments&#34;, exp_id)
         op = [self.dr.find_element(&#34;opportunities&#34;, id)
-              for id in [&#34;link::dafc739f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;]]
+              for id in [&#34;link::49&#34;, &#34;link::68&#34;]]
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_id), op)
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_name), op)
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_target), op)
 
     def test_themes_per_experiment(self):
-        exp_id = &#34;link::80ab72b4-a698-11ef-914a-613c0433d878&#34;
+        exp_id = &#34;link::scen7-hc-ext&#34;
         exp_name = &#34;scen7-hc-ext&#34;
         exp_target = self.dr.find_element(&#34;experiments&#34;, exp_id)
         themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-                  for id in [&#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;,
-                             &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;]]
+                  for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;,  &#34;link::ocean_seaice&#34;]]
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_id), themes)
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_name), themes)
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_target), themes)
 
     def test_find_opportunities(self):
-        vargrp_id = &#34;link::80ab723b-a698-11ef-914a-613c0433d878&#34;
-        exp_id = &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;
+        vargrp_id = &#34;link::landatm_coupling_3hr_medium&#34;
+        exp_id = &#34;link::dcppB-forecast-cmip6&#34;
         list_all = list()
         list_any = [self.dr.find_element(&#34;opportunities&#34;, id)
-                    for id in [&#34;dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                               &#34;dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;]
+                    for id in [&#34;1&#34;, &#34;49&#34;, &#34;68&#34;, &#34;69&#34;]
                     ]
         self.assertListEqual(self.dr.find_opportunities(operation=&#34;all&#34;, variable_group=vargrp_id,
                                                         experiments=[exp_id, ]), list_all)
@@ -1449,14 +1421,12 @@ not have a method with the specified name.</p></div>
                                                         experiments=[exp_id, ]), list_any)
 
     def test_find_experiments(self):
-        op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
-        expgrp_id = [&#34;link::80ab723e-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7490-8c95-11ef-944e-41a8eb05f654&#34;]
+        op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
+        expgrp_id = [&#34;link::dcpp&#34;, &#34;link::historical&#34;]
         list_all = list()
         list_any = [self.dr.find_element(&#34;experiments&#34;, id)
-                    for id in [&#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5a-8c97-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::527f5c5b-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5c-8c97-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::527f5c5d-8c97-11ef-944e-41a8eb05f654&#34;]]
+                    for id in [&#34;link::dcppB-forecast-cmip6&#34;, &#34;link::esm-hist&#34;, &#34;link::historical&#34;, &#34;link::scen7-hc&#34;,
+                               &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;, &#34;link::scen7-vlloc&#34;]]
         self.assertListEqual(self.dr.find_experiments(operation=&#34;all&#34;, opportunities=op_id,
                                                       experiment_groups=expgrp_id), list_all)
         self.assertListEqual(self.dr.find_experiments(operation=&#34;any&#34;, opportunities=op_id,
@@ -1685,13 +1655,12 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_experiments_per_opportunity(self):
-    op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+    op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
     op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
     op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
     exp = [self.dr.find_element(&#34;experiments&#34;, id)
-           for id in [&#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c5a-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5b-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c5c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5d-8c97-11ef-944e-41a8eb05f654&#34;]]
+           for id in [&#34;link::esm-hist&#34;, &#34;link::historical&#34;, &#34;link::scen7-hc&#34;, &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;,
+                      &#34;link::scen7-vlloc&#34;]]
     self.assertListEqual(self.dr.find_experiments_per_opportunity(op_id), exp)
     self.assertListEqual(self.dr.find_experiments_per_opportunity(op_name), exp)
     self.assertListEqual(self.dr.find_experiments_per_opportunity(op_target), exp)</code></pre>
@@ -1764,71 +1733,69 @@ not have a method with the specified name.</p></div>
     self.assertListEqual(self.dr.filter_elements_per_request(&#34;experiment_groups&#34;,
                                                              requests=dict(variable=&#34;ocean.wo.tavg-ol-hxy-sea.mon.GLB&#34;)),
                          [self.dr.find_element(&#34;experiment_group&#34;, id)
-                          for id in [&#34;link::80ab72c9-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc748d-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc748f-8c95-11ef-944e-41a8eb05f654&#34;,
-                                     &#34;link::dafc7490-8c95-11ef-944e-41a8eb05f654&#34;]])
+                          for id in [&#34;link::deck&#34;, &#34;link::fast-track&#34;, &#34;link::historical&#34;, &#34;link::scenarios&#34;,
+                                     &#34;link::scenarios_extensions&#34;]])
     list_var_grp = [self.dr.find_element(&#34;variable_groups&#34;, id)
-                    for id in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::80ab73e4-a698-11ef-914a-613c0433d878&#34;,
-                               &#34;link::dafc73da-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73dc-8c95-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73de-8c95-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::dafc7435-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;,
-                               &#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;]]
+                    for id in [&#34;link::baseline_daily&#34;, &#34;link::baseline_fixed&#34;, &#34;link::baseline_monthly&#34;,
+                               &#34;link::baseline_subdaily&#34;, &#34;link::mixed_layer_extremes&#34;,
+                               &#34;link::ocean_KE_vorticity_extremes&#34;, &#34;link::ocean_acidification_oxygen_extremes&#34;,
+                               &#34;link::ocean_temperature_extremes&#34;, &#34;link::sea_level_extremes&#34;, &#34;link::sfc_waves&#34;,
+                               &#34;link::surgemip_variables&#34;]]
     self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                             requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;)),
+                                                             requests=dict(experiment=&#34;scen7-hc-ext&#34;)),
                          list_var_grp)
     found_vargrp_all = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                           requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                           requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                            not_requests=dict(
-                                                               opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                               opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                            not_request_operation=&#34;all&#34;)
     self.assertEqual(len(found_vargrp_all), len(list_var_grp))
     self.assertListEqual(found_vargrp_all, list_var_grp)
     found_vargrp_any = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                           requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                           requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                            not_requests=dict(
-                                                               opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                               opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                            not_request_operation=&#34;any&#34;)
     list_vargrp_any = [self.dr.find_element(&#34;variable_group&#34;, elt)
-                       for elt in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;,
-                                   &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;]]
+                       for elt in [&#34;link::mixed_layer_extremes&#34;, &#34;link::ocean_KE_vorticity_extremes&#34;,
+                                   &#34;link::ocean_acidification_oxygen_extremes&#34;, &#34;link::sea_level_extremes&#34;]]
     self.assertEqual(len(found_vargrp_any), len(list_vargrp_any))
     self.assertListEqual(found_vargrp_any, list_vargrp_any)
     found_vargrp_anyofall = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                                requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                                requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                                 not_requests=dict(
-                                                                    opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                                    opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                     variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                                 not_request_operation=&#34;any_of_all&#34;)
     list_vargrp_anyofall = [self.dr.find_element(&#34;variable_group&#34;, elt)
-                            for elt in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7435-8c95-11ef-944e-41a8eb05f654&#34;,
-                                        &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;,
-                                        &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;]]
+                            for elt in [&#34;link::mixed_layer_extremes&#34;, &#34;link::ocean_KE_vorticity_extremes&#34;,
+                                        &#34;link::ocean_acidification_oxygen_extremes&#34;, &#34;link::ocean_temperature_extremes&#34;,
+                                        &#34;link::sea_level_extremes&#34;]]
     self.assertEqual(len(found_vargrp_anyofall), len(list_vargrp_anyofall))
     self.assertListEqual(found_vargrp_anyofall, list_vargrp_anyofall)
     found_vargrp_allofany = self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                                requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
+                                                                requests=dict(experiment=&#34;scen7-hc-ext&#34;),
                                                                 not_requests=dict(
-                                                                    opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
+                                                                    opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;,
                                                                     variable=[&#34;ocean.tos.tpt-u-hxy-sea.3hr.GLB&#34;, &#34;seaIce.sithick.tavg-u-hxy-si.day.GLB&#34;]),
                                                                 not_request_operation=&#34;all_of_any&#34;)
     self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
     self.assertListEqual(found_vargrp_allofany, list_var_grp)
     self.assertListEqual(self.dr.filter_elements_per_request(&#34;variable_groups&#34;,
-                                                             requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;),
-                                                             not_requests=dict(opportunity=&#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;)),
+                                                             requests=dict(experiment=&#34;scen7-hc-ext&#34;),
+                                                             not_requests=dict(opportunity=&#34;Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models&#34;)),
                          [self.dr.find_element(&#34;variable_group&#34;, elt)
-                          for elt in [&#34;link::80ab73e2-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7435-8c95-11ef-944e-41a8eb05f654&#34;,
-                                      &#34;link::dafc7436-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc743a-8c95-11ef-944e-41a8eb05f654&#34;,
-                                      &#34;link::dafc7464-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;]])
+                          for elt in [&#34;link::mixed_layer_extremes&#34;, &#34;link::ocean_KE_vorticity_extremes&#34;,
+                                      &#34;link::ocean_acidification_oxygen_extremes&#34;, &#34;link::ocean_temperature_extremes&#34;,
+                                      &#34;link::sea_level_extremes&#34;, &#34;link::surgemip_variables&#34;]])
     self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
-                                                             requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;)),
+                                                             requests=dict(experiment=&#34;scen7-hc-ext&#34;)),
                          list_var_grp)
-    self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group(&#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;),
-                                                             requests=dict(experiment=&#34;80ab72b4-a698-11ef-914a-613c0433d878&#34;)),
-                         [self.dr.find_element(&#34;variable_group&#34;, &#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;), ])</code></pre>
+    self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group(&#34;ocean_temperature_extremes&#34;),
+                                                             requests=dict(experiment=&#34;scen7-hc-ext&#34;)),
+                         [self.dr.find_element(&#34;variable_group&#34;, &#34;ocean_temperature_extremes&#34;), ])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -1841,14 +1808,12 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_find_experiments(self):
-    op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
-    expgrp_id = [&#34;link::80ab723e-a698-11ef-914a-613c0433d878&#34;, &#34;link::dafc7490-8c95-11ef-944e-41a8eb05f654&#34;]
+    op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
+    expgrp_id = [&#34;link::dcpp&#34;, &#34;link::historical&#34;]
     list_all = list()
     list_any = [self.dr.find_element(&#34;experiments&#34;, id)
-                for id in [&#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5a-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c5b-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5c-8c97-11ef-944e-41a8eb05f654&#34;,
-                           &#34;link::527f5c5d-8c97-11ef-944e-41a8eb05f654&#34;]]
+                for id in [&#34;link::dcppB-forecast-cmip6&#34;, &#34;link::esm-hist&#34;, &#34;link::historical&#34;, &#34;link::scen7-hc&#34;,
+                           &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;, &#34;link::scen7-vlloc&#34;]]
     self.assertListEqual(self.dr.find_experiments(operation=&#34;all&#34;, opportunities=op_id,
                                                   experiment_groups=expgrp_id), list_all)
     self.assertListEqual(self.dr.find_experiments(operation=&#34;any&#34;, opportunities=op_id,
@@ -1865,17 +1830,14 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_find_experiments_per_theme(self):
-    theme_id = &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;
+    theme_id = &#34;link::land_landice&#34;
     theme_name = &#34;Land &amp; Land-Ice&#34;
     theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
     exp = [self.dr.find_element(&#34;experiments&#34;, id)
-           for id in [&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c3e-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c54-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c55-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5a-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c5b-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c5c-8c97-11ef-944e-41a8eb05f654&#34;,
-                      &#34;link::527f5c5d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::80ab724d-a698-11ef-914a-613c0433d878&#34;,
-                      &#34;link::80ab72c4-a698-11ef-914a-613c0433d878&#34;]]
+           for id in [&#34;link::amip&#34;, &#34;link::dcppB-forecast-cmip6&#34;,&#34;link::esm-flat10&#34;, &#34;link::esm-hist&#34;,
+                      &#34;link::esm-piControl&#34;, &#34;link::g7-1p5K-sai&#34;, &#34;link::historical&#34;, &#34;link::land-hist&#34;,
+                      &#34;link::piClim-NOX&#34;, &#34;link::scen7-hc&#34;, &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;,
+                      &#34;link::scen7-vlloc&#34;]]
     self.assertListEqual(self.dr.find_experiments_per_theme(theme_id), exp)
     self.assertListEqual(self.dr.find_experiments_per_theme(theme_name), exp)
     self.assertListEqual(self.dr.find_experiments_per_theme(theme_target), exp)</code></pre>
@@ -1891,15 +1853,12 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_find_mips_per_theme(self):
-    theme_id = &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;
+    theme_id = &#34;link::atmosphere&#34;
     theme_name = &#34;Atmosphere&#34;
     theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
     mips = [self.dr.find_element(&#34;mips&#34;, id)
-            for id in [&#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6d-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c6e-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c70-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c74-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c75-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c76-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c77-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c83-8c97-11ef-944e-41a8eb05f654&#34;]]
+            for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FireMIP&#34;, &#34;link::HighResMIP&#34;,
+                       &#34;link::LUMIP&#34;, &#34;link::PMIP&#34;, &#34;link::ScenarioMIP&#34;, &#34;link::TIPMIP&#34;]]
     self.assertListEqual(self.dr.find_mips_per_theme(theme_id), mips)
     self.assertListEqual(self.dr.find_mips_per_theme(theme_name), mips)
     self.assertListEqual(self.dr.find_mips_per_theme(theme_target), mips)</code></pre>
@@ -1915,12 +1874,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_find_opportunities(self):
-    vargrp_id = &#34;link::80ab723b-a698-11ef-914a-613c0433d878&#34;
-    exp_id = &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;
+    vargrp_id = &#34;link::landatm_coupling_3hr_medium&#34;
+    exp_id = &#34;link::dcppB-forecast-cmip6&#34;
     list_all = list()
     list_any = [self.dr.find_element(&#34;opportunities&#34;, id)
-                for id in [&#34;dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                           &#34;dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, &#34;dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;]
+                for id in [&#34;1&#34;, &#34;49&#34;, &#34;68&#34;, &#34;69&#34;]
                 ]
     self.assertListEqual(self.dr.find_opportunities(operation=&#34;all&#34;, variable_group=vargrp_id,
                                                     experiments=[exp_id, ]), list_all)
@@ -1938,12 +1896,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_find_opportunities_per_theme(self):
-    theme_id = &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;
+    theme_id = &#34;link::atmosphere&#34;
     theme_name = &#34;Atmosphere&#34;
     theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
     opportunities = [self.dr.get_opportunity(id)
-                     for id in [&#34;link::dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                                &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;]]
+                     for id in [&#34;link::1&#34;, &#34;link::68&#34;, &#34;link::69&#34;]]
     self.assertListEqual(self.dr.find_opportunities_per_theme(theme_id), opportunities)
     self.assertListEqual(self.dr.find_opportunities_per_theme(theme_name), opportunities)
     self.assertListEqual(self.dr.find_opportunities_per_theme(theme_target), opportunities)
@@ -2041,7 +1998,7 @@ not have a method with the specified name.</p></div>
 </summary>
 <pre><code class="python">def test_find_variables_per_priority(self):
     priority = &#34;Medium&#34;
-    priority_obj = self.dr.find_element(&#34;priority_level&#34;, &#34;link::527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
+    priority_obj = self.dr.find_element(&#34;priority_level&#34;, &#34;link::Medium&#34;)
     target_var_list = [self.dr.find_element(&#34;variables&#34;, id)
                        for id in [&#34;link::atmos.rlds.tavg-u-hxy-u.3hr.GLB&#34;, &#34;link::atmos.rlus.tavg-u-hxy-u.3hr.GLB&#34;,
                                   &#34;link::atmos.ta.tpt-p6-hxy-air.3hr.GLB&#34;, &#34;link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB&#34;,
@@ -2072,7 +2029,7 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_find_variables_per_theme(self):
-    theme_id = &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;
+    theme_id = &#34;link::land_landice&#34;
     theme_name = &#34;Land &amp; Land-Ice&#34;
     theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
     var = [self.dr.find_element(&#34;variables&#34;, id)
@@ -2124,13 +2081,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_mips_per_opportunity(self):
-    op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+    op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
     op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
     op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
     mips = [self.dr.find_element(&#34;mips&#34;, id)
-            for id in [&#34;link::527f5c6d-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c74-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c75-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c76-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c77-8c97-11ef-944e-41a8eb05f654&#34;]]
+            for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::HighResMIP&#34;, &#34;link::LUMIP&#34;, &#34;link::ScenarioMIP&#34;]]
     self.assertListEqual(self.dr.find_mips_per_opportunity(op_id), mips)
     self.assertListEqual(self.dr.find_mips_per_opportunity(op_name), mips)
     self.assertListEqual(self.dr.find_mips_per_opportunity(op_target), mips)</code></pre>
@@ -2150,13 +2105,9 @@ not have a method with the specified name.</p></div>
     var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
     var_target = self.dr.find_element(&#34;variables&#34;, var_id)
     mips = [self.dr.find_element(&#34;mips&#34;, id)
-            for id in [&#34;link::527f5c64-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c65-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c66-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6b-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6d-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c6e-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c6f-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c70-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c73-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c74-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c75-8c97-11ef-944e-41a8eb05f654&#34;,
-                       &#34;link::527f5c76-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c83-8c97-11ef-944e-41a8eb05f654&#34;]]
+            for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FAFMIP&#34;,&#34;link::FireMIP&#34;, &#34;link::GeoMIP&#34;,
+                       &#34;link::HighResMIP&#34;, &#34;link::ISMIP7&#34;, &#34;link::OMIP&#34;, &#34;link::PMIP&#34;, &#34;link::SIMIP&#34;,
+                       &#34;link::SOFIAMIP&#34;, &#34;link::ScenarioMIP&#34;, &#34;link::TIPMIP&#34;]]
     self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
     self.assertListEqual(self.dr.find_mips_per_variable(var_name), mips)
     self.assertListEqual(self.dr.find_mips_per_variable(var_target), mips)</code></pre>
@@ -2172,11 +2123,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_opportunities_per_experiment(self):
-    exp_id = &#34;link::80ab72b4-a698-11ef-914a-613c0433d878&#34;
+    exp_id = &#34;link::scen7-hc-ext&#34;
     exp_name = &#34;scen7-hc-ext&#34;
     exp_target = self.dr.find_element(&#34;experiments&#34;, exp_id)
     op = [self.dr.find_element(&#34;opportunities&#34;, id)
-          for id in [&#34;link::dafc739f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;]]
+          for id in [&#34;link::49&#34;, &#34;link::68&#34;]]
     self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_id), op)
     self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_name), op)
     self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_target), op)</code></pre>
@@ -2196,8 +2147,7 @@ not have a method with the specified name.</p></div>
     var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
     var_target = self.dr.find_element(&#34;variables&#34;, var_id)
     op = [self.dr.find_element(&#34;opportunities&#34;, id)
-          for id in [&#34;link::dafc739e-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc739f-8c95-11ef-944e-41a8eb05f654&#34;,
-                     &#34;link::dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, ]]
+          for id in [&#34;link::49&#34;, &#34;link::68&#34;, &#34;link::69&#34;, ]]
     self.assertListEqual(self.dr.find_opportunities_per_variable(var_id), op)
     self.assertListEqual(self.dr.find_opportunities_per_variable(var_name), op)
     self.assertListEqual(self.dr.find_opportunities_per_variable(var_target), op)</code></pre>
@@ -2213,12 +2163,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_themes_per_experiment(self):
-    exp_id = &#34;link::80ab72b4-a698-11ef-914a-613c0433d878&#34;
+    exp_id = &#34;link::scen7-hc-ext&#34;
     exp_name = &#34;scen7-hc-ext&#34;
     exp_target = self.dr.find_element(&#34;experiments&#34;, exp_id)
     themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-              for id in [&#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;,
-                         &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;]]
+              for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;,  &#34;link::ocean_seaice&#34;]]
     self.assertListEqual(self.dr.find_themes_per_experiment(exp_id), themes)
     self.assertListEqual(self.dr.find_themes_per_experiment(exp_name), themes)
     self.assertListEqual(self.dr.find_themes_per_experiment(exp_target), themes)</code></pre>
@@ -2234,11 +2183,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_themes_per_opportunity(self):
-    op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+    op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
     op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
     op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
     themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-              for id in [&#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;]]
+              for id in [&#34;link::atmosphere&#34;, &#34;link::land_landice&#34;]]
     self.assertListEqual(self.dr.find_themes_per_opportunity(op_id), themes)
     self.assertListEqual(self.dr.find_themes_per_opportunity(op_name), themes)
     self.assertListEqual(self.dr.find_themes_per_opportunity(op_target), themes)</code></pre>
@@ -2258,9 +2207,8 @@ not have a method with the specified name.</p></div>
     var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
     var_target = self.dr.find_element(&#34;variables&#34;, var_id)
     themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-              for id in [&#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;,
-                         &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;,
-                         &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;]
+              for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;, &#34;link::land_landice&#34;,
+                         &#34;link::ocean_seaice&#34;]
               ]
     self.assertListEqual(self.dr.find_themes_per_variable(var_id), themes)
     self.assertListEqual(self.dr.find_themes_per_variable(var_name), themes)
@@ -2277,7 +2225,7 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_variables_per_opportunity(self):
-    op_id = &#34;link::dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;
+    op_id = &#34;link::Accurate assessment of land-atmosphere coupling&#34;
     op_name = &#34;Accurate assessment of land-atmosphere coupling&#34;
     op_target = self.dr.find_element(&#34;opportunities&#34;, op_id)
     var = [self.dr.find_element(&#34;variables&#34;, id)
@@ -2342,13 +2290,13 @@ not have a method with the specified name.</p></div>
             obj = ExperimentsGroup.from_input(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::test&#34;, ])
 
         obj = ExperimentsGroup.from_input(id=&#34;link::my_id&#34;, dr=self.dr,
-                                          experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+                                          experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
 
     def test_check(self):
         obj = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr)
         obj.check()
 
-        obj = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+        obj = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
         obj.check()
 
     def test_methods(self):
@@ -2357,22 +2305,22 @@ not have a method with the specified name.</p></div>
         self.assertEqual(obj.get_experiments(), list())
 
         obj = ExperimentsGroup.from_input(id=&#34;link::80ab7324-a698-11ef-914a-613c0433d878&#34;, dr=self.dr,
-                                          experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+                                          experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
         self.assertEqual(obj.count(), 2)
         self.assertListEqual(obj.get_experiments(),
-                             [self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;),
-                              self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;)])
+                             [self.dr.find_element(&#34;experiments&#34;, &#34;link::amip&#34;),
+                              self.dr.find_element(&#34;experiments&#34;, &#34;link::esm-hist&#34;)])
         self.assertEqual(obj.get_experiments()[0].DR_type, &#34;experiments&#34;)
 
     def test_print(self):
-        obj = ExperimentsGroup.from_input(id=&#34;link::dafc7490-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr,
-                                          experiments=[&#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;], name=&#34;historical&#34;)
-        ref_str = &#34;experiment_group: historical (id: dafc7490-8c95-11ef-944e-41a8eb05f654)&#34;
+        obj = ExperimentsGroup.from_input(id=&#34;link::historical&#34;, dr=self.dr,
+                                          experiments=[&#34;link::historical&#34;, &#34;link::esm-hist&#34;], name=&#34;historical&#34;)
+        ref_str = &#34;experiment_group: historical&#34;
         ref_str_2 = [
             ref_str,
             &#34;    Experiments included:&#34;,
-            &#34;        experiment: historical (id: 527f5c3f-8c97-11ef-944e-41a8eb05f654)&#34;,
-            &#34;        experiment: esm-hist (id: 527f5c3d-8c97-11ef-944e-41a8eb05f654)&#34;
+            &#34;        experiment: historical&#34;,
+            &#34;        experiment: esm-hist&#34;
         ]
         self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
         self.assertEqual(obj.print_content(level=1, add_content=False), [&#34;    &#34; + ref_str, ])
@@ -2388,18 +2336,18 @@ not have a method with the specified name.</p></div>
         obj3 = ExperimentsGroup(id=&#34;link::my_id_2&#34;, dr=self.dr)
         self.assertNotEqual(obj, obj3)
 
-        obj4 = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+        obj4 = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
         self.assertNotEqual(obj, obj4)
 
         obj5 = DRObjects(id=&#34;link::my_id&#34;, dr=self.dr)
         self.assertNotEqual(obj, obj5)
 
     def test_filter_on_request(self):
-        exp_grp1 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::80ab723e-a698-11ef-914a-613c0433d878&#34;)
+        exp_grp1 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::dcpp&#34;)
         exp_grp2 = copy.deepcopy(exp_grp1)
-        exp_grp3 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::dafc748d-8c95-11ef-944e-41a8eb05f654&#34;)
-        exp_1 = self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;)
-        exp_2 = self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;)
+        exp_grp3 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::deck&#34;)
+        exp_1 = self.dr.find_element(&#34;experiments&#34;, &#34;link::dcppB-forecast-cmip6&#34;)
+        exp_2 = self.dr.find_element(&#34;experiments&#34;, &#34;link::esm-hist&#34;)
         obj = DRObjects(id=&#34;link::my_id&#34;, dr=self.dr)
         self.assertEqual(exp_grp1.filter_on_request(exp_grp2), (True, True))
         self.assertEqual(exp_grp1.filter_on_request(exp_grp3), (True, False))
@@ -2467,7 +2415,7 @@ not have a method with the specified name.</p></div>
     obj = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr)
     obj.check()
 
-    obj = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+    obj = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
     obj.check()</code></pre>
 </details>
 <div class="desc"></div>
@@ -2488,7 +2436,7 @@ not have a method with the specified name.</p></div>
     obj3 = ExperimentsGroup(id=&#34;link::my_id_2&#34;, dr=self.dr)
     self.assertNotEqual(obj, obj3)
 
-    obj4 = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+    obj4 = ExperimentsGroup(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
     self.assertNotEqual(obj, obj4)
 
     obj5 = DRObjects(id=&#34;link::my_id&#34;, dr=self.dr)
@@ -2505,11 +2453,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_filter_on_request(self):
-    exp_grp1 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::80ab723e-a698-11ef-914a-613c0433d878&#34;)
+    exp_grp1 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::dcpp&#34;)
     exp_grp2 = copy.deepcopy(exp_grp1)
-    exp_grp3 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::dafc748d-8c95-11ef-944e-41a8eb05f654&#34;)
-    exp_1 = self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c53-8c97-11ef-944e-41a8eb05f654&#34;)
-    exp_2 = self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;)
+    exp_grp3 = self.dr.find_element(&#34;experiment_groups&#34;, &#34;link::deck&#34;)
+    exp_1 = self.dr.find_element(&#34;experiments&#34;, &#34;link::dcppB-forecast-cmip6&#34;)
+    exp_2 = self.dr.find_element(&#34;experiments&#34;, &#34;link::esm-hist&#34;)
     obj = DRObjects(id=&#34;link::my_id&#34;, dr=self.dr)
     self.assertEqual(exp_grp1.filter_on_request(exp_grp2), (True, True))
     self.assertEqual(exp_grp1.filter_on_request(exp_grp3), (True, False))
@@ -2543,7 +2491,7 @@ not have a method with the specified name.</p></div>
         obj = ExperimentsGroup.from_input(id=&#34;link::my_id&#34;, dr=self.dr, experiments=[&#34;link::test&#34;, ])
 
     obj = ExperimentsGroup.from_input(id=&#34;link::my_id&#34;, dr=self.dr,
-                                      experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])</code></pre>
+                                      experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -2586,11 +2534,11 @@ not have a method with the specified name.</p></div>
     self.assertEqual(obj.get_experiments(), list())
 
     obj = ExperimentsGroup.from_input(id=&#34;link::80ab7324-a698-11ef-914a-613c0433d878&#34;, dr=self.dr,
-                                      experiments=[&#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;])
+                                      experiments=[&#34;link::amip&#34;, &#34;link::esm-hist&#34;])
     self.assertEqual(obj.count(), 2)
     self.assertListEqual(obj.get_experiments(),
-                         [self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c3c-8c97-11ef-944e-41a8eb05f654&#34;),
-                          self.dr.find_element(&#34;experiments&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;)])
+                         [self.dr.find_element(&#34;experiments&#34;, &#34;link::amip&#34;),
+                          self.dr.find_element(&#34;experiments&#34;, &#34;link::esm-hist&#34;)])
     self.assertEqual(obj.get_experiments()[0].DR_type, &#34;experiments&#34;)</code></pre>
 </details>
 <div class="desc"></div>
@@ -2604,14 +2552,14 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_print(self):
-    obj = ExperimentsGroup.from_input(id=&#34;link::dafc7490-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr,
-                                      experiments=[&#34;link::527f5c3f-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;], name=&#34;historical&#34;)
-    ref_str = &#34;experiment_group: historical (id: dafc7490-8c95-11ef-944e-41a8eb05f654)&#34;
+    obj = ExperimentsGroup.from_input(id=&#34;link::historical&#34;, dr=self.dr,
+                                      experiments=[&#34;link::historical&#34;, &#34;link::esm-hist&#34;], name=&#34;historical&#34;)
+    ref_str = &#34;experiment_group: historical&#34;
     ref_str_2 = [
         ref_str,
         &#34;    Experiments included:&#34;,
-        &#34;        experiment: historical (id: 527f5c3f-8c97-11ef-944e-41a8eb05f654)&#34;,
-        &#34;        experiment: esm-hist (id: 527f5c3d-8c97-11ef-944e-41a8eb05f654)&#34;
+        &#34;        experiment: historical&#34;,
+        &#34;        experiment: esm-hist&#34;
     ]
     self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
     self.assertEqual(obj.print_content(level=1, add_content=False), [&#34;    &#34; + ref_str, ])
@@ -2671,10 +2619,10 @@ not have a method with the specified name.</p></div>
             obj = Opportunity.from_input(id=&#34;my_id&#34;, dr=self.dr, variable_groups=[&#34;test&#34;, ])
 
         obj = Opportunity.from_input(id=&#34;my_id&#34;, dr=self.dr,
-                                     variable_groups=[&#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7428-8c95-11ef-944e-41a8eb05f654&#34;],
-                                     experiment_groups=[&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ],
-                                     data_request_themes=[&#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;,
-                                                          &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;])
+                                     variable_groups=[&#34;link::surgemip_variables&#34;, &#34;link::landatm_coupling_3hA&#34;],
+                                     experiment_groups=[&#34;link::fast-track&#34;, ],
+                                     data_request_themes=[&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;,
+                                                          &#34;link::impacts&#34;])
 
     def test_check(self):
         obj = Opportunity(id=&#34;my_id&#34;, dr=self.dr)
@@ -2690,38 +2638,38 @@ not have a method with the specified name.</p></div>
         self.assertEqual(obj.get_themes(), list())
 
         obj = Opportunity.from_input(id=&#34;link::default_425&#34;, dr=self.dr,
-                                     variable_groups=[&#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7428-8c95-11ef-944e-41a8eb05f654&#34;],
-                                     experiment_groups=[&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ],
-                                     data_request_themes=[&#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;,
-                                                          &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;])
-        self.assertListEqual(obj.get_experiment_groups(), [self.dr.find_element(&#34;experiment_groups&#34;, &#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;)])
+                                     variable_groups=[&#34;link::surgemip_variables&#34;, &#34;link::landatm_coupling_3hA&#34;],
+                                     experiment_groups=[&#34;link::fast-track&#34;, ],
+                                     data_request_themes=[&#34;link::earth_system&#34;, &#34;link::impacts&#34;,
+                                                          &#34;link::ocean_seaice&#34;])
+        self.assertListEqual(obj.get_experiment_groups(), [self.dr.find_element(&#34;experiment_groups&#34;, &#34;fast-track&#34;)])
         self.assertListEqual(obj.get_variable_groups(),
-                             [self.dr.find_element(&#34;variable_groups&#34;, &#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;),
-                              self.dr.find_element(&#34;variable_groups&#34;, &#34;link::dafc7428-8c95-11ef-944e-41a8eb05f654&#34;)])
+                             [self.dr.find_element(&#34;variable_groups&#34;, &#34;link::surgemip_variables&#34;),
+                              self.dr.find_element(&#34;variable_groups&#34;, &#34;link::landatm_coupling_3hA&#34;)])
         self.assertListEqual(obj.get_themes(),
-                             [self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;),
-                              self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;),
-                              self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;)
+                             [self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::earth_system&#34;),
+                              self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::impacts&#34;),
+                              self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::ocean_seaice&#34;)
                               ])
 
     def test_print(self):
-        obj = Opportunity.from_input(id=&#34;link::dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr, name=&#34;Ocean Extremes&#34;,
-                                     variable_groups=[&#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73de-8c95-11ef-944e-41a8eb05f654&#34;],
-                                     experiment_groups=[&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ],
-                                     data_request_themes=[&#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;,
-                                                          &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;])
-        ref_str = &#34;opportunity: Ocean Extremes (id: dafc73a5-8c95-11ef-944e-41a8eb05f654)&#34;
+        obj = Opportunity.from_input(id=&#34;link::Ocean Extremes&#34;, dr=self.dr, name=&#34;Ocean Extremes&#34;,
+                                     variable_groups=[&#34;link::baseline_monthly&#34;, &#34;link::baseline_subdaily&#34;],
+                                     experiment_groups=[&#34;link::fast-track&#34;, ],
+                                     data_request_themes=[&#34;link::atmosphere&#34;, &#34;link::impacts&#34;,
+                                                          &#34;link::land_landice&#34;])
+        ref_str = &#34;opportunity: Ocean Extremes&#34;
         ref_str_2 = [
             ref_str,
             &#34;    Experiments groups included:&#34;,
-            &#34;        experiment_group: fast-track (id: dafc748e-8c95-11ef-944e-41a8eb05f654)&#34;,
+            &#34;        experiment_group: fast-track&#34;,
             &#34;    Variables groups included:&#34;,
-            &#34;        variable_group: baseline_monthly (id: dafc73dd-8c95-11ef-944e-41a8eb05f654)&#34;,
-            &#34;        variable_group: baseline_subdaily (id: dafc73de-8c95-11ef-944e-41a8eb05f654)&#34;,
+            &#34;        variable_group: baseline_monthly&#34;,
+            &#34;        variable_group: baseline_subdaily&#34;,
             &#34;    Themes included:&#34;,
-            &#34;        data_request_theme: Atmosphere (id: 527f5c90-8c97-11ef-944e-41a8eb05f654)&#34;,
-            &#34;        data_request_theme: Impacts &amp; Adaptation (id: 527f5c8f-8c97-11ef-944e-41a8eb05f654)&#34;,
-            &#34;        data_request_theme: Land &amp; Land-Ice (id: 527f5c91-8c97-11ef-944e-41a8eb05f654)&#34;,
+            &#34;        data_request_theme: Atmosphere (id: atmosphere)&#34;,
+            &#34;        data_request_theme: Impacts &amp; Adaptation (id: impacts)&#34;,
+            &#34;        data_request_theme: Land &amp; Land-Ice (id: land_landice)&#34;,
             &#34;    Time subsets included:&#34;
         ]
         self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
@@ -2738,7 +2686,7 @@ not have a method with the specified name.</p></div>
         obj3 = Opportunity(id=&#34;my_id_2&#34;, dr=self.dr)
         self.assertNotEqual(obj, obj3)
 
-        obj4 = Opportunity(id=&#34;my_id&#34;, dr=self.dr, experiments_groups=[&#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ])
+        obj4 = Opportunity(id=&#34;my_id&#34;, dr=self.dr, experiments_groups=[&#34;fast-track&#34;, ])
         self.assertNotEqual(obj, obj4)
 
         obj5 = Opportunity(id=&#34;my_id&#34;, dr=self.dr, variables_groups=[&#34;default_733&#34;, &#34;default_734&#34;])
@@ -2751,26 +2699,26 @@ not have a method with the specified name.</p></div>
         self.assertNotEqual(obj, obj7)
 
     def test_filter_on_request(self):
-        op_1 = self.dr.find_element(&#34;opportunities&#34;, &#34;dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;)
+        op_1 = self.dr.find_element(&#34;opportunities&#34;, &#34;Accurate assessment of land-atmosphere coupling&#34;)
         op_2 = copy.deepcopy(op_1)
-        op_3 = self.dr.find_element(&#34;opportunities&#34;, &#34;dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;)
-        theme_1 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;527f5c90-8c97-11ef-944e-41a8eb05f654&#34;)
-        theme_2 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;527f5c92-8c97-11ef-944e-41a8eb05f654&#34;)
-        var_grp_1 = self.dr.find_element(&#34;variable_group&#34;, &#34;dafc747f-8c95-11ef-944e-41a8eb05f654&#34;)
-        var_grp_2 = self.dr.find_element(&#34;variable_group&#34;, &#34;dafc7428-8c95-11ef-944e-41a8eb05f654&#34;)
-        exp_grp_1 = self.dr.find_element(&#34;experiment_group&#34;, &#34;dafc7490-8c95-11ef-944e-41a8eb05f654&#34;)
-        exp_grp_2 = self.dr.find_element(&#34;experiment_group&#34;, &#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;)
-        exp_1 = self.dr.find_element(&#34;experiment&#34;, &#34;527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;)
-        exp_2 = self.dr.find_element(&#34;experiment&#34;, &#34;80ab72c4-a698-11ef-914a-613c0433d878&#34;)
-        time_1 = self.dr.find_element(&#34;time_subset&#34;, &#34;link::527f5cac-8c97-11ef-944e-41a8eb05f654&#34;)
+        op_3 = self.dr.find_element(&#34;opportunities&#34;, &#34;Ocean Extremes&#34;)
+        theme_1 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;atmosphere&#34;)
+        theme_2 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;ocean_seaice&#34;)
+        var_grp_1 = self.dr.find_element(&#34;variable_group&#34;, &#34;surgemip_variables&#34;)
+        var_grp_2 = self.dr.find_element(&#34;variable_group&#34;, &#34;landatm_coupling_3hA&#34;)
+        exp_grp_1 = self.dr.find_element(&#34;experiment_group&#34;, &#34;historical&#34;)
+        exp_grp_2 = self.dr.find_element(&#34;experiment_group&#34;, &#34;fast-track&#34;)
+        exp_1 = self.dr.find_element(&#34;experiment&#34;, &#34;esm-hist&#34;)
+        exp_2 = self.dr.find_element(&#34;experiment&#34;, &#34;piClim-NOX&#34;)
+        time_1 = self.dr.find_element(&#34;time_subset&#34;, &#34;link::hist20&#34;)
         var_2 = self.dr.find_element(&#34;variable&#34;, &#34;atmos.tas.tavg-h2m-hxy-u.day.GLB&#34;)
         var_1 = self.dr.find_element(&#34;variable&#34;, &#34;ocean.vos.tavg-u-hxy-sea.day.GLB&#34;)
-        mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c77-8c97-11ef-944e-41a8eb05f654&#34;)
-        mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;)
-        prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
-        prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-        max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-        max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
+        mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;LUMIP&#34;)
+        mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;TIPMIP&#34;)
+        prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;High&#34;)
+        prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;Medium&#34;)
+        max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;Medium&#34;)
+        max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;High&#34;)
         table_1 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5d03-8c97-11ef-944e-41a8eb05f654&#34;)
         table_2 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5ce9-8c97-11ef-944e-41a8eb05f654&#34;)
         tshp_1 = self.dr.find_element(&#34;temporal_shape&#34;, &#34;cf34c974-80be-11e6-97ee-ac72891c3257&#34;)
@@ -2908,7 +2856,7 @@ not have a method with the specified name.</p></div>
     obj3 = Opportunity(id=&#34;my_id_2&#34;, dr=self.dr)
     self.assertNotEqual(obj, obj3)
 
-    obj4 = Opportunity(id=&#34;my_id&#34;, dr=self.dr, experiments_groups=[&#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ])
+    obj4 = Opportunity(id=&#34;my_id&#34;, dr=self.dr, experiments_groups=[&#34;fast-track&#34;, ])
     self.assertNotEqual(obj, obj4)
 
     obj5 = Opportunity(id=&#34;my_id&#34;, dr=self.dr, variables_groups=[&#34;default_733&#34;, &#34;default_734&#34;])
@@ -2931,26 +2879,26 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_filter_on_request(self):
-    op_1 = self.dr.find_element(&#34;opportunities&#34;, &#34;dafc73bd-8c95-11ef-944e-41a8eb05f654&#34;)
+    op_1 = self.dr.find_element(&#34;opportunities&#34;, &#34;Accurate assessment of land-atmosphere coupling&#34;)
     op_2 = copy.deepcopy(op_1)
-    op_3 = self.dr.find_element(&#34;opportunities&#34;, &#34;dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;)
-    theme_1 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;527f5c90-8c97-11ef-944e-41a8eb05f654&#34;)
-    theme_2 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;527f5c92-8c97-11ef-944e-41a8eb05f654&#34;)
-    var_grp_1 = self.dr.find_element(&#34;variable_group&#34;, &#34;dafc747f-8c95-11ef-944e-41a8eb05f654&#34;)
-    var_grp_2 = self.dr.find_element(&#34;variable_group&#34;, &#34;dafc7428-8c95-11ef-944e-41a8eb05f654&#34;)
-    exp_grp_1 = self.dr.find_element(&#34;experiment_group&#34;, &#34;dafc7490-8c95-11ef-944e-41a8eb05f654&#34;)
-    exp_grp_2 = self.dr.find_element(&#34;experiment_group&#34;, &#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;)
-    exp_1 = self.dr.find_element(&#34;experiment&#34;, &#34;527f5c3d-8c97-11ef-944e-41a8eb05f654&#34;)
-    exp_2 = self.dr.find_element(&#34;experiment&#34;, &#34;80ab72c4-a698-11ef-914a-613c0433d878&#34;)
-    time_1 = self.dr.find_element(&#34;time_subset&#34;, &#34;link::527f5cac-8c97-11ef-944e-41a8eb05f654&#34;)
+    op_3 = self.dr.find_element(&#34;opportunities&#34;, &#34;Ocean Extremes&#34;)
+    theme_1 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;atmosphere&#34;)
+    theme_2 = self.dr.find_element(&#34;data_request_theme&#34;, &#34;ocean_seaice&#34;)
+    var_grp_1 = self.dr.find_element(&#34;variable_group&#34;, &#34;surgemip_variables&#34;)
+    var_grp_2 = self.dr.find_element(&#34;variable_group&#34;, &#34;landatm_coupling_3hA&#34;)
+    exp_grp_1 = self.dr.find_element(&#34;experiment_group&#34;, &#34;historical&#34;)
+    exp_grp_2 = self.dr.find_element(&#34;experiment_group&#34;, &#34;fast-track&#34;)
+    exp_1 = self.dr.find_element(&#34;experiment&#34;, &#34;esm-hist&#34;)
+    exp_2 = self.dr.find_element(&#34;experiment&#34;, &#34;piClim-NOX&#34;)
+    time_1 = self.dr.find_element(&#34;time_subset&#34;, &#34;link::hist20&#34;)
     var_2 = self.dr.find_element(&#34;variable&#34;, &#34;atmos.tas.tavg-h2m-hxy-u.day.GLB&#34;)
     var_1 = self.dr.find_element(&#34;variable&#34;, &#34;ocean.vos.tavg-u-hxy-sea.day.GLB&#34;)
-    mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c77-8c97-11ef-944e-41a8eb05f654&#34;)
-    mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;)
-    prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
-    prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-    max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-    max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
+    mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;LUMIP&#34;)
+    mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;TIPMIP&#34;)
+    prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;High&#34;)
+    prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;Medium&#34;)
+    max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;Medium&#34;)
+    max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;High&#34;)
     table_1 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5d03-8c97-11ef-944e-41a8eb05f654&#34;)
     table_2 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5ce9-8c97-11ef-944e-41a8eb05f654&#34;)
     tshp_1 = self.dr.find_element(&#34;temporal_shape&#34;, &#34;cf34c974-80be-11e6-97ee-ac72891c3257&#34;)
@@ -3035,10 +2983,10 @@ not have a method with the specified name.</p></div>
         obj = Opportunity.from_input(id=&#34;my_id&#34;, dr=self.dr, variable_groups=[&#34;test&#34;, ])
 
     obj = Opportunity.from_input(id=&#34;my_id&#34;, dr=self.dr,
-                                 variable_groups=[&#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7428-8c95-11ef-944e-41a8eb05f654&#34;],
-                                 experiment_groups=[&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ],
-                                 data_request_themes=[&#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;,
-                                                      &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;])</code></pre>
+                                 variable_groups=[&#34;link::surgemip_variables&#34;, &#34;link::landatm_coupling_3hA&#34;],
+                                 experiment_groups=[&#34;link::fast-track&#34;, ],
+                                 data_request_themes=[&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;,
+                                                      &#34;link::impacts&#34;])</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -3083,18 +3031,18 @@ not have a method with the specified name.</p></div>
     self.assertEqual(obj.get_themes(), list())
 
     obj = Opportunity.from_input(id=&#34;link::default_425&#34;, dr=self.dr,
-                                 variable_groups=[&#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc7428-8c95-11ef-944e-41a8eb05f654&#34;],
-                                 experiment_groups=[&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ],
-                                 data_request_themes=[&#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;,
-                                                      &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;])
-    self.assertListEqual(obj.get_experiment_groups(), [self.dr.find_element(&#34;experiment_groups&#34;, &#34;dafc748e-8c95-11ef-944e-41a8eb05f654&#34;)])
+                                 variable_groups=[&#34;link::surgemip_variables&#34;, &#34;link::landatm_coupling_3hA&#34;],
+                                 experiment_groups=[&#34;link::fast-track&#34;, ],
+                                 data_request_themes=[&#34;link::earth_system&#34;, &#34;link::impacts&#34;,
+                                                      &#34;link::ocean_seaice&#34;])
+    self.assertListEqual(obj.get_experiment_groups(), [self.dr.find_element(&#34;experiment_groups&#34;, &#34;fast-track&#34;)])
     self.assertListEqual(obj.get_variable_groups(),
-                         [self.dr.find_element(&#34;variable_groups&#34;, &#34;link::dafc747f-8c95-11ef-944e-41a8eb05f654&#34;),
-                          self.dr.find_element(&#34;variable_groups&#34;, &#34;link::dafc7428-8c95-11ef-944e-41a8eb05f654&#34;)])
+                         [self.dr.find_element(&#34;variable_groups&#34;, &#34;link::surgemip_variables&#34;),
+                          self.dr.find_element(&#34;variable_groups&#34;, &#34;link::landatm_coupling_3hA&#34;)])
     self.assertListEqual(obj.get_themes(),
-                         [self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::527f5c93-8c97-11ef-944e-41a8eb05f654&#34;),
-                          self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;),
-                          self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::527f5c92-8c97-11ef-944e-41a8eb05f654&#34;)
+                         [self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::earth_system&#34;),
+                          self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::impacts&#34;),
+                          self.dr.find_element(&#34;data_request_themes&#34;, &#34;link::ocean_seaice&#34;)
                           ])</code></pre>
 </details>
 <div class="desc"></div>
@@ -3108,23 +3056,23 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_print(self):
-    obj = Opportunity.from_input(id=&#34;link::dafc73a5-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr, name=&#34;Ocean Extremes&#34;,
-                                 variable_groups=[&#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;, &#34;link::dafc73de-8c95-11ef-944e-41a8eb05f654&#34;],
-                                 experiment_groups=[&#34;link::dafc748e-8c95-11ef-944e-41a8eb05f654&#34;, ],
-                                 data_request_themes=[&#34;link::527f5c90-8c97-11ef-944e-41a8eb05f654&#34;, &#34;link::527f5c8f-8c97-11ef-944e-41a8eb05f654&#34;,
-                                                      &#34;link::527f5c91-8c97-11ef-944e-41a8eb05f654&#34;])
-    ref_str = &#34;opportunity: Ocean Extremes (id: dafc73a5-8c95-11ef-944e-41a8eb05f654)&#34;
+    obj = Opportunity.from_input(id=&#34;link::Ocean Extremes&#34;, dr=self.dr, name=&#34;Ocean Extremes&#34;,
+                                 variable_groups=[&#34;link::baseline_monthly&#34;, &#34;link::baseline_subdaily&#34;],
+                                 experiment_groups=[&#34;link::fast-track&#34;, ],
+                                 data_request_themes=[&#34;link::atmosphere&#34;, &#34;link::impacts&#34;,
+                                                      &#34;link::land_landice&#34;])
+    ref_str = &#34;opportunity: Ocean Extremes&#34;
     ref_str_2 = [
         ref_str,
         &#34;    Experiments groups included:&#34;,
-        &#34;        experiment_group: fast-track (id: dafc748e-8c95-11ef-944e-41a8eb05f654)&#34;,
+        &#34;        experiment_group: fast-track&#34;,
         &#34;    Variables groups included:&#34;,
-        &#34;        variable_group: baseline_monthly (id: dafc73dd-8c95-11ef-944e-41a8eb05f654)&#34;,
-        &#34;        variable_group: baseline_subdaily (id: dafc73de-8c95-11ef-944e-41a8eb05f654)&#34;,
+        &#34;        variable_group: baseline_monthly&#34;,
+        &#34;        variable_group: baseline_subdaily&#34;,
         &#34;    Themes included:&#34;,
-        &#34;        data_request_theme: Atmosphere (id: 527f5c90-8c97-11ef-944e-41a8eb05f654)&#34;,
-        &#34;        data_request_theme: Impacts &amp; Adaptation (id: 527f5c8f-8c97-11ef-944e-41a8eb05f654)&#34;,
-        &#34;        data_request_theme: Land &amp; Land-Ice (id: 527f5c91-8c97-11ef-944e-41a8eb05f654)&#34;,
+        &#34;        data_request_theme: Atmosphere (id: atmosphere)&#34;,
+        &#34;        data_request_theme: Impacts &amp; Adaptation (id: impacts)&#34;,
+        &#34;        data_request_theme: Land &amp; Land-Ice (id: land_landice)&#34;,
         &#34;    Time subsets included:&#34;
     ]
     self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
@@ -3403,28 +3351,28 @@ not have a method with the specified name.</p></div>
         obj = VariablesGroup.from_input(id=&#34;link::dafc7484-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr,
                                         variables=[&#34;link::atmos.pr.tavg-u-hxy-u.mon.GLB&#34;,
                                                    &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;],
-                                        mips=[&#34;link::527f5c7f-8c97-11ef-944e-41a8eb05f654&#34;, ], priority_level=&#34;High&#34;)
+                                        mips=[&#34;link::C4MIP&#34;, ], priority_level=&#34;High&#34;)
         self.assertEqual(obj.count(), 2)
         self.assertListEqual(obj.get_variables(),
                              [self.dr.find_element(&#34;variables&#34;, &#34;link::atmos.pr.tavg-u-hxy-u.mon.GLB&#34;),
                               self.dr.find_element(&#34;variables&#34;, &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;)])
-        self.assertEqual(obj.get_mips(), [self.dr.find_element(&#34;mips&#34;, &#34;link::527f5c7f-8c97-11ef-944e-41a8eb05f654&#34;)])
+        self.assertEqual(obj.get_mips(), [self.dr.find_element(&#34;mips&#34;, &#34;link::C4MIP&#34;)])
         self.assertDictEqual(obj.get_priority_level().attributes,
                              {&#39;name&#39;: &#34;High&#34;, &#34;notes&#34;: &#34;The variables support the core objectives of the opportunity.  These are required to make the opportunity viable.&#34;, &#34;value&#34;: 2,
-                              &#39;id&#39;: &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;, &#39;uid&#39;: &#39;527f5c94-8c97-11ef-944e-41a8eb05f654&#39;})
+                              &#39;id&#39;: &#34;High&#34;, &#39;uid&#39;: &#39;527f5c94-8c97-11ef-944e-41a8eb05f654&#39;})
 
     def test_filter_on_request(self):
-        var_grp1 = self.dr.find_element(&#34;variable_groups&#34;, &#34;dafc743a-8c95-11ef-944e-41a8eb05f654&#34;)
+        var_grp1 = self.dr.find_element(&#34;variable_groups&#34;, &#34;ocean_KE_vorticity_extremes&#34;)
         var_grp2 = copy.deepcopy(var_grp1)
-        var_grp3 = self.dr.find_element(&#34;variable_groups&#34;, &#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;)
+        var_grp3 = self.dr.find_element(&#34;variable_groups&#34;, &#34;ocean_temperature_extremes&#34;)
         var_2 = self.dr.find_element(&#34;variable&#34;, &#34;ocean.tossq.tavg-u-hxy-sea.day.GLB&#34;)
         var_1 = self.dr.find_element(&#34;variable&#34;, &#34;ocean.vos.tavg-u-hxy-sea.day.GLB&#34;)
-        mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c7d-8c97-11ef-944e-41a8eb05f654&#34;)
-        mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;)
-        prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
-        prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-        max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-        max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
+        mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;CORDEX&#34;)
+        mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;TIPMIP&#34;)
+        prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;High&#34;)
+        prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;Medium&#34;)
+        max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;Medium&#34;)
+        max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;High&#34;)
         table_1 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5d03-8c97-11ef-944e-41a8eb05f654&#34;)
         table_2 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5d06-8c97-11ef-944e-41a8eb05f654&#34;)
         tshp_1 = self.dr.find_element(&#34;temporal_shape&#34;, &#34;cf34c974-80be-11e6-97ee-ac72891c3257&#34;)
@@ -3473,11 +3421,11 @@ not have a method with the specified name.</p></div>
         self.assertEqual(var_grp1.filter_on_request(obj), (False, False))
 
     def test_print(self):
-        obj = VariablesGroup.from_input(id=&#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr, priority_level=&#34;Medium&#34;,
+        obj = VariablesGroup.from_input(id=&#34;link::baseline_monthly&#34;, dr=self.dr, priority_level=&#34;Medium&#34;,
                                         name=&#34;baseline_monthly&#34;,
                                         variables=[&#34;link::atmos.pr.tavg-u-hxy-u.mon.GLB&#34;,
                                                    &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;])
-        ref_str = &#34;variable_group: baseline_monthly (id: dafc73dd-8c95-11ef-944e-41a8eb05f654)&#34;
+        ref_str = &#34;variable_group: baseline_monthly&#34;
         ref_str_2 = [
             ref_str,
             &#34;    Variables included:&#34;,
@@ -3503,7 +3451,7 @@ not have a method with the specified name.</p></div>
                                                                        &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;])
         self.assertNotEqual(obj, obj4)
 
-        obj5 = VariablesGroup(id=&#34;link::my_id&#34;, dr=self.dr, mips=[&#34;link::527f5c7f-8c97-11ef-944e-41a8eb05f654&#34;, ])
+        obj5 = VariablesGroup(id=&#34;link::my_id&#34;, dr=self.dr, mips=[&#34;link::C4MIP&#34;, ])
         self.assertNotEqual(obj, obj5)
 
         obj6 = VariablesGroup(id=&#34;link::my_id&#34;, dr=self.dr, priority=&#34;Medium&#34;)
@@ -3599,7 +3547,7 @@ not have a method with the specified name.</p></div>
                                                                    &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;])
     self.assertNotEqual(obj, obj4)
 
-    obj5 = VariablesGroup(id=&#34;link::my_id&#34;, dr=self.dr, mips=[&#34;link::527f5c7f-8c97-11ef-944e-41a8eb05f654&#34;, ])
+    obj5 = VariablesGroup(id=&#34;link::my_id&#34;, dr=self.dr, mips=[&#34;link::C4MIP&#34;, ])
     self.assertNotEqual(obj, obj5)
 
     obj6 = VariablesGroup(id=&#34;link::my_id&#34;, dr=self.dr, priority=&#34;Medium&#34;)
@@ -3619,17 +3567,17 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_filter_on_request(self):
-    var_grp1 = self.dr.find_element(&#34;variable_groups&#34;, &#34;dafc743a-8c95-11ef-944e-41a8eb05f654&#34;)
+    var_grp1 = self.dr.find_element(&#34;variable_groups&#34;, &#34;ocean_KE_vorticity_extremes&#34;)
     var_grp2 = copy.deepcopy(var_grp1)
-    var_grp3 = self.dr.find_element(&#34;variable_groups&#34;, &#34;dafc7435-8c95-11ef-944e-41a8eb05f654&#34;)
+    var_grp3 = self.dr.find_element(&#34;variable_groups&#34;, &#34;ocean_temperature_extremes&#34;)
     var_2 = self.dr.find_element(&#34;variable&#34;, &#34;ocean.tossq.tavg-u-hxy-sea.day.GLB&#34;)
     var_1 = self.dr.find_element(&#34;variable&#34;, &#34;ocean.vos.tavg-u-hxy-sea.day.GLB&#34;)
-    mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c7d-8c97-11ef-944e-41a8eb05f654&#34;)
-    mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;527f5c6c-8c97-11ef-944e-41a8eb05f654&#34;)
-    prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
-    prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-    max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c95-8c97-11ef-944e-41a8eb05f654&#34;)
-    max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;)
+    mip_2 = self.dr.find_element(&#34;mips&#34;, &#34;CORDEX&#34;)
+    mip_1 = self.dr.find_element(&#34;mips&#34;, &#34;TIPMIP&#34;)
+    prio_2 = self.dr.find_element(&#34;priority_level&#34;, &#34;High&#34;)
+    prio_1 = self.dr.find_element(&#34;priority_level&#34;, &#34;Medium&#34;)
+    max_prio_1 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;Medium&#34;)
+    max_prio_2 = self.dr.find_element(&#34;max_priority_level&#34;, &#34;High&#34;)
     table_1 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5d03-8c97-11ef-944e-41a8eb05f654&#34;)
     table_2 = self.dr.find_element(&#34;table_identifier&#34;, &#34;527f5d06-8c97-11ef-944e-41a8eb05f654&#34;)
     tshp_1 = self.dr.find_element(&#34;temporal_shape&#34;, &#34;cf34c974-80be-11e6-97ee-ac72891c3257&#34;)
@@ -3752,15 +3700,15 @@ not have a method with the specified name.</p></div>
     obj = VariablesGroup.from_input(id=&#34;link::dafc7484-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr,
                                     variables=[&#34;link::atmos.pr.tavg-u-hxy-u.mon.GLB&#34;,
                                                &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;],
-                                    mips=[&#34;link::527f5c7f-8c97-11ef-944e-41a8eb05f654&#34;, ], priority_level=&#34;High&#34;)
+                                    mips=[&#34;link::C4MIP&#34;, ], priority_level=&#34;High&#34;)
     self.assertEqual(obj.count(), 2)
     self.assertListEqual(obj.get_variables(),
                          [self.dr.find_element(&#34;variables&#34;, &#34;link::atmos.pr.tavg-u-hxy-u.mon.GLB&#34;),
                           self.dr.find_element(&#34;variables&#34;, &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;)])
-    self.assertEqual(obj.get_mips(), [self.dr.find_element(&#34;mips&#34;, &#34;link::527f5c7f-8c97-11ef-944e-41a8eb05f654&#34;)])
+    self.assertEqual(obj.get_mips(), [self.dr.find_element(&#34;mips&#34;, &#34;link::C4MIP&#34;)])
     self.assertDictEqual(obj.get_priority_level().attributes,
                          {&#39;name&#39;: &#34;High&#34;, &#34;notes&#34;: &#34;The variables support the core objectives of the opportunity.  These are required to make the opportunity viable.&#34;, &#34;value&#34;: 2,
-                          &#39;id&#39;: &#34;527f5c94-8c97-11ef-944e-41a8eb05f654&#34;, &#39;uid&#39;: &#39;527f5c94-8c97-11ef-944e-41a8eb05f654&#39;})</code></pre>
+                          &#39;id&#39;: &#34;High&#34;, &#39;uid&#39;: &#39;527f5c94-8c97-11ef-944e-41a8eb05f654&#39;})</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -3773,11 +3721,11 @@ not have a method with the specified name.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def test_print(self):
-    obj = VariablesGroup.from_input(id=&#34;link::dafc73dd-8c95-11ef-944e-41a8eb05f654&#34;, dr=self.dr, priority_level=&#34;Medium&#34;,
+    obj = VariablesGroup.from_input(id=&#34;link::baseline_monthly&#34;, dr=self.dr, priority_level=&#34;Medium&#34;,
                                     name=&#34;baseline_monthly&#34;,
                                     variables=[&#34;link::atmos.pr.tavg-u-hxy-u.mon.GLB&#34;,
                                                &#34;link::atmos.prc.tavg-u-hxy-u.mon.GLB&#34;])
-    ref_str = &#34;variable_group: baseline_monthly (id: dafc73dd-8c95-11ef-944e-41a8eb05f654)&#34;
+    ref_str = &#34;variable_group: baseline_monthly&#34;
     ref_str_2 = [
         ref_str,
         &#34;    Variables included:&#34;,

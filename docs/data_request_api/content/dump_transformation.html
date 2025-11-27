@@ -538,15 +538,15 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
         &#34;opportunities&#34;: [(&#34;experiment_groups&#34;, list, list()),
                           (&#34;variable_groups&#34;, list, list()),
                           (&#34;data_request_themes&#34;, list, list()),
-                          (&#34;time_subsets&#34;, list, [&#34;link::80ac3156-a698-11ef-914a-613c0433d878&#34;, ]),
+                          (&#34;time_subsets&#34;, list, [&#34;link::all&#34;, ]),
                           (&#34;mips&#34;, list, list())],
         &#34;variable_groups&#34;: [(&#34;variables&#34;, list, list()),
                             (&#34;mips&#34;, list, list()),
                             (&#34;priority_level&#34;, (str, type(None)), None)],
         &#34;experiment_groups&#34;: [(&#34;experiments&#34;, list, list()), ]
     }
-    if &#34;80ac3156-a698-11ef-914a-613c0433d878&#34; not in content[&#34;time_subsets&#34;]:
-        content[&#34;time_subsets&#34;][&#34;80ac3156-a698-11ef-914a-613c0433d878&#34;] = dict(start=None, end=None, title=&#34;Whole time serie&#34;, name=&#34;all&#34;, type=&#34;void&#34;)
+    if &#34;all&#34; not in content[&#34;time_subsets&#34;]:
+        content[&#34;time_subsets&#34;][&#34;all&#34;] = dict(start=None, end=None, title=&#34;Whole time serie&#34;, name=&#34;all&#34;, type=&#34;void&#34;, uid=&#34;80ac3156-a698-11ef-914a-613c0433d878&#34;)
     if isinstance(content, dict):
         logger.debug(&#34;Build DR and VS&#34;)
         for subelt in sorted(list(content)):
