@@ -154,6 +154,30 @@
         },
         "variables": {
           "linked_id": "cmip7_compound_name"
+        },
+        "experiments": {
+          "linked_id": "name"
+        },
+        "experiment_groups": {
+          "linked_id": "name"
+        },
+        "opportunities": {
+          "linked_id": "opportunity_id"
+        },
+        "data_request_themes": {
+          "linked_id": "short_name"
+        },
+        "mips": {
+          "linked_id": "name"
+        },
+        "time_subsets": {
+          "linked_id": "name"
+        },
+        "variable_groups": {
+          "linked_id": "name"
+        },
+        "priority_level": {
+          "linked_id": "name"
         }
       },
       "keys_to_copy": {}
@@ -180,6 +204,11 @@
       "keys_to_copy": {
         "variables": {
           "cmip6_compound_name": "name"
+        }
+      },
+      "keys_to_initialize": {
+        "variables": {
+          "linked_id": "uid"
         }
       }
     },

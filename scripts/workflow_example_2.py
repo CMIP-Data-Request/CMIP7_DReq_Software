@@ -129,6 +129,12 @@ def get_information_from_data_request(version, output_dir, **kwargs):
                       output_file=os.sep.join([output_dir, "exp_per_op_filtered.csv"]))
     logger.info("Create table of variables per spatial shapes")
     DR.export_summary("variables", "spatial_shape", os.sep.join([output_dir, "var_per_spsh.csv"]))
+    DR.export_summary("variables", "variable_group", os.sep.join([output_dir, "var_per_vargrp.csv"]))
+    DR.export_summary("experiments", "experiment_group", os.sep.join([output_dir, "exp_per_expgrp.csv"]))
+    DR.export_summary("experiment_group", "opportunities", os.sep.join([output_dir, "expgrp_per_op.csv"]))
+    DR.export_summary("variable_group", "opportunities", os.sep.join([output_dir, "vargrp_per_op.csv"]))
+    DR.export_summary("variable_group", "priority_level", os.sep.join([output_dir, "vargrp_per_prio.csv"]))
+    DR.export_summary("opportunities", "time_subsets", os.sep.join([output_dir, "op_per_timsub.csv"]))
     logger.info("Export opportunities info")
     DR.export_data("opportunities", os.sep.join([output_dir, "op.csv"]),
                    export_columns_request=["name", "lead_theme", "description"])
