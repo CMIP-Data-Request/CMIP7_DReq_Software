@@ -162,7 +162,7 @@
           "linked_id": "name"
         },
         "opportunities": {
-          "linked_id": "name"
+          "linked_id": "opportunity_id"
         },
         "data_request_themes": {
           "linked_id": "short_name"
@@ -204,6 +204,11 @@
       "keys_to_copy": {
         "variables": {
           "cmip6_compound_name": "name"
+        }
+      },
+      "keys_to_initialize": {
+        "variables": {
+          "linked_id": "uid"
         }
       }
     },
