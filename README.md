@@ -36,8 +36,37 @@ The main purpose of the CMIP7 DReq API is to extract the requested variables (al
 
 ## Release Versions
 
-The latest **official release** of the CMIP7 Data Request Content is [described here](https://wcrp-cmip.org/cmip7-data-request-latest).
-It can be viewed online [in Airtable](https://bit.ly/CMIP7-DReq-latest), or using a github-based [web viewer](https://cmip-data-request.github.io/cmip7-dreq-webview/latest), or using the DReq API as described below.
+The latest **official release** of the CMIP7 Data Request Content is described on the  
+[CMIP7 Data Request website](https://wcrp-cmip.org/cmip7-data-request-latest).
+
+### Ways to browse the Data Request Content
+
+You can view the Data Request content in multiple ways:
+
+#### **1. Airtable View**
+Online spreadsheet-style view of the Data Request Content:  
+https://bit.ly/CMIP7-DReq-latest
+
+#### **2. CMIP7 Data Request Webview**
+A static, interactive HTML interface for browsing and searching CMIP7 Data Request records, including changes introduced in new releases, hosted via GitHub Pages.
+
+- **Main entry point (access to all Data Request content versions and Webview tools):**  
+  https://CMIP-Data-Request.github.io/cmip7-dreq-webview/index.html 
+
+- **Permanent link to latest Data Request content:**  
+  https://CMIP-Data-Request.github.io/cmip7-dreq-webview/latest/index.html  
+
+The Webview provides:
+- variable search across multiple attributes  
+- browsing of data request changes between releases
+- browsing of variable definition changes between releases  
+- browsing Data Request content across different releases, with all records cross-linked 
+
+These are the easiest ways to *inspect* the Data Request without installing or using the software.
+
+#### **3. Programmatic Access (this repository)**
+Using the CMIP7 Data Request API you can load, filter, query, and export the Data Request programmatically in Python.
+This is also possible without installing the software on your local machine, see [Try It Without Installation](#try-it-without-installation).
 
 :warning: **Note:** *The CMIP7 DReq Software versions are not aligned with the CMIP7 Data Request ones. So please, do not infer that v1.2.2 of the CMIP7 DReq Software "works with" or "reflects"  v1.2.2 of the CMIP7 Data Request, it is not the case!*
 
