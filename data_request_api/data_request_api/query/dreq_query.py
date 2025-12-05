@@ -1260,6 +1260,9 @@ def write_requested_vars_json(outfile, expt_vars, dreq_version, priority_cutoff,
         'Description': 'This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.',
         'Opportunities supported': sorted(expt_vars['Header']['Opportunities'], key=str.lower)
     })
+    # Add Note about combined request, if included
+    if "all_experiments" in expt_vars["experiment"]:
+        header["Note"]="Added combined request for all experiments as entry 'all_experiments'. Added combined request for all historical and scenario experiments as entries 'historical_experiments' and 'scenario_experiments', respectively."
 
     # List supported priority levels
     priority_levels = get_priority_levels()
