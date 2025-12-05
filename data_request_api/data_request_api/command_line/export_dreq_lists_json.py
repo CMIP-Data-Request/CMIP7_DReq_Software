@@ -52,10 +52,9 @@ def parse_args():
                         help="discard variables that are requested at lower priority than this cutoff priority")
     parser.add_argument('-m', '--variables_metadata', type=str,
                         help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
-
     parser.add_argument("-c", "--add_combined", action="store_true", default=False,
-                        help="Include combined request from all opportunities and for all experiments "
-                             "(incl. combinations control / historical / scenario).")
+                        help="Include combined request from all selected opportunities and for all experiments. "
+                             "Will create the new entry 'all_experiments' for the combined request.")
     parser.add_argument("-t", "--time_subsets", action="store_true", default=False,
                         help="Include time_subsets that variables are requested for.")
     parser.add_argument("-d", "--disable_core_vars_check", action="store_true", default=False,
