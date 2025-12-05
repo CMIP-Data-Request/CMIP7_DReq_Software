@@ -71,7 +71,9 @@ class TestExportDreqListsJson:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
 
-    def test_export_dreq_lists_json_with_opportunities_file(self, temp_config_file, consolidate):
+    def test_export_dreq_lists_json_with_opportunities_file(
+        self, temp_config_file, consolidate
+    ):
         # Test that the script creates an opportunities file template
         opportunities_file = temp_config_file.parent / "opportunities.json"
         opportunities_file.unlink(missing_ok=True)
@@ -91,7 +93,10 @@ class TestExportDreqListsJson:
             text=True,
         )
         assert result.returncode == 0
-        assert os.path.exists(opportunities_file) and os.path.getsize(opportunities_file) > 0
+        assert (
+            os.path.exists(opportunities_file)
+            and os.path.getsize(opportunities_file) > 0
+        )
         assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
 
         # Test that it now applies the opportunities settings from opportunities_file
@@ -111,7 +116,9 @@ class TestExportDreqListsJson:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
 
-    def test_export_dreq_lists_json_with_invalid_opportunities_file(self, temp_config_file, consolidate):
+    def test_export_dreq_lists_json_with_invalid_opportunities_file(
+        self, temp_config_file, consolidate
+    ):
         # Test that the script raises an error with an invalid opportunities file
         opportunities_file = temp_config_file.parent / "invalid_opportunities.json"
         opportunities_file.unlink(missing_ok=True)
@@ -135,8 +142,110 @@ class TestExportDreqListsJson:
         assert result.returncode != 0
         assert not os.path.exists(ofile) or os.path.getsize(ofile) == 0
 
-    def test_export_dreq_lists_json_entry_point(self, temp_config_file, consolidate):
+    def test_export_dreq_lists_json_with_time_subsets(
+        self, temp_config_file, consolidate
+    ):
+        # Test that resulting json file includes time subsets
         ofile = temp_config_file.parent / "test4.json"
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "data_request_api.command_line.export_dreq_lists_json",
+                "-i",
+                "1,19,20,22,71,69",
+                "-t",
+                "v1.2.2.2",
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
+        # Read json file and assert content
+        with open(ofile) as fh:
+            data = json.load(fh)
+        assert "experiment" in data and "Header" in data
+        for exp, req in data["experiment"].items():
+            assert all(req["Core"][i] == ["all"] for i in req["Core"].keys())
+
+    def test_export_dreq_lists_json_with_time_subsets_and_combined_request(
+        self, temp_config_file, consolidate
+    ):
+        # Test that resulting json file includes time subsets and combined requests
+        ofile = temp_config_file.parent / "test5.json"
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "data_request_api.command_line.export_dreq_lists_json",
+                "-i",
+                "1,19,20,22,71,69",
+                "-tc",
+                "v1.2.2.2",
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
+        # Read json file and assert content
+        with open(ofile) as fh:
+            data = json.load(fh)
+        assert all(
+            i in data["experiment"].keys()
+            for i in [
+                "historical_experiments",
+                "scenario_experiments",
+                "all_experiments",
+            ]
+        )
+        for exp, req in data["experiment"].items():
+            assert all(
+                isinstance(req[j], dict) for j in ["Core", "High", "Medium", "Low"]
+            )
+
+    def test_export_dreq_lists_json_with_combined_request(
+        self, temp_config_file, consolidate
+    ):
+        # Test that the resulting json file includes combined requests
+        ofile = temp_config_file.parent / "test6.json"
+        ofile.unlink(missing_ok=True)
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "data_request_api.command_line.export_dreq_lists_json",
+                "-a",
+                "-c",
+                "v1.2.2.2",
+                ofile,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0
+        assert os.path.exists(ofile) or os.path.getsize(ofile) > 0
+        # Read json file and assert content
+        with open(ofile) as fh:
+            data = json.load(fh)
+        assert all(
+            [
+                i in data["experiment"].keys()
+                for i in [
+                    "historical_experiments",
+                    "scenario_experiments",
+                    "all_experiments",
+                ]
+            ]
+        )
+
+    def test_export_dreq_lists_json_entry_point(self, temp_config_file, consolidate):
+        ofile = temp_config_file.parent / "test7.json"
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
             [
@@ -189,7 +298,9 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
 
-    def test_get_variables_metadata_with_compound_names(self, temp_config_file, consolidate):
+    def test_get_variables_metadata_with_compound_names(
+        self, temp_config_file, consolidate
+    ):
         ofile = temp_config_file.parent / "test2.json"
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -201,7 +312,7 @@ class TestGetVariablesMetadata:
                 ofile,
                 "-cn",
                 # "Amon.tas,Omon.sos",
-                "atmos.tas.tavg-h2m-hxy-u.mon.GLB,ocean.sos.tavg-u-hxy-sea.mon.GLB"
+                "atmos.tas.tavg-h2m-hxy-u.mon.GLB,ocean.sos.tavg-u-hxy-sea.mon.GLB",
             ],
             capture_output=True,
             text=True,
@@ -209,7 +320,9 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
 
-    def test_get_variables_metadata_with_cmor_tables(self, temp_config_file, consolidate):
+    def test_get_variables_metadata_with_cmor_tables(
+        self, temp_config_file, consolidate
+    ):
         ofile = temp_config_file.parent / "test3.json"
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -228,7 +341,9 @@ class TestGetVariablesMetadata:
         assert result.returncode == 0
         assert os.path.exists(ofile) and os.path.getsize(ofile) > 0
 
-    def test_get_variables_metadata_with_cmor_variables(self, temp_config_file, consolidate):
+    def test_get_variables_metadata_with_cmor_variables(
+        self, temp_config_file, consolidate
+    ):
         ofile = temp_config_file.parent / "test4.json"
         ofile.unlink(missing_ok=True)
         result = subprocess.run(
@@ -390,7 +505,13 @@ class TestCompareVariables:
         ofile_missing.unlink(missing_ok=True)
         # Actual comparison
         result = subprocess.run(
-            [sys.executable, "-m", "data_request_api.command_line.compare_variables", ofileB, "cmip6"],
+            [
+                sys.executable,
+                "-m",
+                "data_request_api.command_line.compare_variables",
+                ofileB,
+                "cmip6",
+            ],
             capture_output=True,
             text=True,
         )
