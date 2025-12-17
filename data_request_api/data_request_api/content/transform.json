@@ -131,9 +131,9 @@
         }
       },
       "keys_to_sort": {
-        "opportunities": ["variable_groups", "data_request_themes", "experiment_groups", "time_.*"],
+        "opportunities": ["variable_groups", "data_request_themes", "experiment_groups", "time_.*", "mips"],
         "experiment_groups": ["experiments"],
-        "variable_groups": ["variables", "mips"],
+        "variable_groups": ["variables", "mips", "time_.*"],
         "cmip7_frequency": ["cmip6_frequency"]
       },
       "keys_to_format": {
@@ -141,7 +141,7 @@
           "opportunities": ["lead_theme"],
           "physical_parameters": ["cf_standard_name"],
           "cmip6_tables_identifiers": ["cmip7_frequency"],
-          "variables": ["cell_methods", ".*frequency", "esm-bcv", "physical_parameter",
+          "variables": ["cell_methods", ".*frequency", "physical_parameter",
             "spatial_shape", ".*table.*", "temporal_shape"]
         },
         "string_to_list": {

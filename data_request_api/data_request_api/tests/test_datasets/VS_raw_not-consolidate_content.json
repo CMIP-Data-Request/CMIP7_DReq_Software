@@ -3936,7 +3936,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "Cell areas for any grid used to report atmospheric variables and any other variable using that grid (e.g., soil moisture content). These cell areas should be defined to enable exact calculation of global integrals (e.g., of vertical fluxes of energy at the surface and top of the atmosphere).\n",
             "dimensions": "longitude, latitude",
-            "esm-bcv": "link::80ab730d-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab730d-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos",
                 "link::land"
@@ -4066,7 +4068,9 @@
             ],
             "description": "The relative humidity with respect to liquid water for T> 0 C, and with respect to ice for T<0 C.\n",
             "dimensions": "longitude, latitude, time, height2m",
-            "esm-bcv": "link::80ab7362-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7362-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4100,7 +4104,9 @@
             ],
             "description": "This is sampled synoptically.\n",
             "dimensions": "longitude, latitude, time1, height2m",
-            "esm-bcv": "link::80ab7303-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7303-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4132,7 +4138,9 @@
             "conditional": true,
             "description": "Total precipitation flux\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7346-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7346-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4163,7 +4171,9 @@
             "cmip7_frequency": "link::63215c11-8ca5-11ef-944e-41a8eb05f654",
             "description": "at surface; includes both liquid and solid phases.  This is the 3-hour mean precipitation flux.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7325-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7325-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4194,7 +4204,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "at surface; includes both liquid and solid phases from all types of clouds (both large-scale and convective)\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7343-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7343-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4225,7 +4237,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "at surface; includes both liquid and solid phases from all types of clouds (both large-scale and convective)\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab732c-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab732c-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4256,7 +4270,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "at surface; includes both liquid and solid phases.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab732d-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab732d-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4287,7 +4303,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "surface pressure (not mean sea-level pressure), 2-D field to calculate the 3-D pressure field from hybrid coordinates\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7341-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7341-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4348,7 +4366,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "Sea Level Pressure\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7344-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7344-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4474,7 +4494,9 @@
             ],
             "description": "near-surface (usually, 10 meters) wind speed.\n",
             "dimensions": "longitude, latitude, time, height10m",
-            "esm-bcv": "link::80ab735d-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab735d-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4511,7 +4533,9 @@
             ],
             "description": "This is the mean of the speed, not the speed computed from the mean u and v components of wind\n",
             "dimensions": "longitude, latitude, time, height10m",
-            "esm-bcv": "link::80ab735a-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab735a-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4542,7 +4566,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "Percentage of horizontal area occupied by land.\n",
             "dimensions": "longitude, latitude",
-            "esm-bcv": "link::80ab7308-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7308-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4573,7 +4599,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "Air Temperature\n",
             "dimensions": "longitude, latitude, plev19, time",
-            "esm-bcv": "link::80ab7321-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7321-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::atmos"
@@ -4605,7 +4633,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Air Temperature\n",
             "dimensions": "longitude, latitude, plev19, time",
-            "esm-bcv": "link::80ab7316-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7316-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::atmos"
@@ -4641,7 +4671,9 @@
             "cmip7_frequency": "link::63215c12-8ca5-11ef-944e-41a8eb05f654",
             "description": "Air Temperature\n",
             "dimensions": "longitude, latitude, plev3, time1",
-            "esm-bcv": "link::80ab72fe-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab72fe-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::atmos"
@@ -4705,7 +4737,9 @@
             ],
             "description": "near-surface (usually, 2 meter) air temperature\n",
             "dimensions": "longitude, latitude, time, height2m",
-            "esm-bcv": "link::80ab7368-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7368-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4744,7 +4778,9 @@
             ],
             "description": "near-surface (usually, 2 meter) air temperature\n",
             "dimensions": "longitude, latitude, time, height2m",
-            "esm-bcv": "link::80ab7365-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7365-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4781,7 +4817,9 @@
             ],
             "description": "maximum near-surface (usually, 2 meter) air temperature (add cell\\_method attribute \"time: max\")\n",
             "dimensions": "longitude, latitude, time, height2m",
-            "esm-bcv": "link::80ab7312-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7312-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4818,7 +4856,9 @@
             ],
             "description": "monthly mean of the daily-maximum near-surface air temperature.\n",
             "dimensions": "longitude, latitude, time4, height2m",
-            "esm-bcv": "link::80ab7360-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7360-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::atmos"
@@ -4857,7 +4897,9 @@
             ],
             "description": "minimum near-surface (usually, 2 meter) air temperature (add cell\\_method attribute \"time: min\")\n",
             "dimensions": "longitude, latitude, time, height2m",
-            "esm-bcv": "link::80ab7313-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7313-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4894,7 +4936,9 @@
             ],
             "description": "monthly mean of the daily-minimum near-surface air temperature.\n",
             "dimensions": "longitude, latitude, time4, height2m",
-            "esm-bcv": "link::80ab7361-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7361-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::atmos"
@@ -4933,7 +4977,9 @@
             ],
             "description": "This is sampled synoptically.\n",
             "dimensions": "longitude, latitude, time1, height2m",
-            "esm-bcv": "link::80ab7304-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7304-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -4964,7 +5010,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Surface temperature (skin for open ocean)\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7340-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7340-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::atmos"
             ],
@@ -5088,7 +5136,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Geopotential is the sum of the specific gravitational potential energy relative to the geoid and the specific centripetal potential energy. Geopotential height is the geopotential divided by the standard acceleration due to gravity. It is numerically similar to the altitude (or geometric height) and not to the quantity with standard name height, which is relative to the surface.\n",
             "dimensions": "longitude, latitude, plev19, time",
-            "esm-bcv": "link::80ab731a-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab731a-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::atmos"
@@ -5149,7 +5199,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "A ratio obtained by dividing the total upper leaf surface area of vegetation by the (horizontal) surface area of the land on which it grows.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7348-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7348-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::land"
             ],
@@ -5180,7 +5232,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "the mass per unit area  (summed over all soil layers) of water in all phases.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab734c-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab734c-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::land"
             ],
@@ -5245,7 +5299,9 @@
             ],
             "description": "the mass of water in all phases in a thin surface soil layer.\n",
             "dimensions": "longitude, latitude, time, sdepth10cm",
-            "esm-bcv": "link::80ab7369-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7369-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::land"
@@ -5311,7 +5367,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "height above the geoid; as defined here, \"the geoid\" is a surface of constant geopotential that, if the ocean were at rest, would coincide with mean sea level. Under this definition, the geoid changes as the mean volume of the ocean changes (e.g., due to glacial melt, or global warming of the ocean).  Reported here is the height above the present-day geoid (0.0 over ocean).\n",
             "dimensions": "longitude, latitude",
-            "esm-bcv": "link::80ab7305-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7305-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::land"
             ],
@@ -5342,7 +5400,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "report the maximum soil depth reachable by plant roots (if defined in model), i.e., the maximum soil depth from which they can extract moisture; report as \"missing\" where the land fraction is 0.\n",
             "dimensions": "longitude, latitude",
-            "esm-bcv": "link::80ab7306-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7306-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::land"
@@ -5374,7 +5434,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "Thickness of Soil Layers\n",
             "dimensions": "longitude, latitude, sdepth",
-            "esm-bcv": "link::80ab737a-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab737a-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::land"
             ],
@@ -5494,7 +5556,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Fraction of each grid cell that is occupied by snow that rests on land portion of cell.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab737d-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab737d-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::landIce",
                 "link::land"
@@ -5523,7 +5587,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "Cell areas for any grid used to report ocean variables and variables which are requested as used on the model ocean grid (e.g. hfsso, which is a downward heat flux from the atmosphere interpolated onto the ocean grid). These cell areas should be defined to enable exact calculation of global integrals (e.g., of vertical fluxes of energy at the surface and top of the atmosphere).\n",
             "dimensions": "longitude, latitude",
-            "esm-bcv": "link::80ab730e-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab730e-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -5554,7 +5620,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Diagnostic should be contributed only for models using conservative temperature as prognostic field.\n",
             "dimensions": "longitude, latitude, olevel, time",
-            "esm-bcv": "link::80ab736f-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab736f-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -5621,7 +5689,9 @@
             "cmip7_frequency": "link::63215c15-8ca5-11ef-944e-41a8eb05f654",
             "description": "Ocean bathymetry. Reported here is the sea floor depth for present day relative to z=0 geoid. Reported as missing for land grid cells.\n",
             "dimensions": "longitude, latitude",
-            "esm-bcv": "link::80ab730b-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab730b-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -5653,7 +5723,9 @@
             "conditional": true,
             "description": "Tracer grid-cell mass per unit area used for computing tracer budgets. For Boussinesq models with static ocean grid cell thickness, masscello = rhozero\\*thickcello, where thickcello is static cell thickness and rhozero is constant Boussinesq reference density. More generally, masscello is time dependent and reported as part of Omon.\n",
             "dimensions": "longitude, latitude, olevel",
-            "esm-bcv": "link::80ab7310-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7310-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::ocean"
@@ -5925,7 +5997,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation. The units of salinity are dimensionless and the units attribute should normally be given as 1e-3 or 0.001 i.e. parts per thousand. \n",
             "dimensions": "longitude, latitude, olevel, time",
-            "esm-bcv": "link::80ab7370-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7370-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::ocean"
@@ -5960,7 +6034,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation. The units of salinity are dimensionless and the units attribute should normally be given as 1e-3 or 0.001 i.e. parts per thousand. \n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab734f-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab734f-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::ocean"
@@ -5992,7 +6068,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Sea water salinity is the salt content of sea water, often on the Practical Salinity Scale of 1978. However, the unqualified term 'salinity' is generic and does not necessarily imply any particular method of calculation. The units of salinity are dimensionless and the units attribute should normally be given as 1e-3 or 0.001 i.e. parts per thousand. \n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7353-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7353-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::ocean"
@@ -6189,7 +6267,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Diagnostic should be contributed even for models using conservative temperature as prognostic field.\n",
             "dimensions": "longitude, latitude, olevel, time",
-            "esm-bcv": "link::80ab7371-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7371-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -6286,7 +6366,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "This may differ from \"surface temperature\" in regions of sea ice or floating ice shelves. For models using conservative temperature as the prognostic field, they should report the top ocean layer as surface potential temperature, which is the same as surface in situ temperature.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7350-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7350-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -6317,7 +6399,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "This may differ from \"surface temperature\" in regions of sea ice or floating ice shelves. For models using conservative temperature as the prognostic field, they should report the top ocean layer as surface potential temperature, which is the same as surface in situ temperature.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7354-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7354-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -6478,7 +6562,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Prognostic z-ward velocity component resolved by the model.\n",
             "dimensions": "longitude, latitude, olevel, time",
-            "esm-bcv": "link::80ab7377-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7377-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::ocean"
@@ -6612,7 +6698,9 @@
             "conditional": true,
             "description": "This is the dynamic sea level, so should have zero global area mean. zos is the effective sea level as if sea ice (and snow) at a grid cell were converted to liquid seawater (Campin et al., 2008). For OMIP, do _not _record inverse barometer responses from sea-ice (and snow) loading in zos. See (Griffies et al, 2016, https://doi.org/10.5194/gmd-9-3231-2016).\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7383-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7383-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -6641,7 +6729,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "This is the dynamic sea level, so should have zero global area mean. It should not include inverse barometer depressions from sea ice.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7355-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7355-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -6724,7 +6814,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "There is no CMIP6 request for zosga nor zossga.\n",
             "dimensions": "time",
-            "esm-bcv": "link::80ab737f-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab737f-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::ocean"
             ],
@@ -7043,7 +7135,9 @@
             "cmip7_frequency": "link::63215c13-8ca5-11ef-944e-41a8eb05f654",
             "description": "Areal fraction of a given grid cell that is covered by sea ice on the ocean grid, independent of the thickness of that ice.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7378-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7378-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::seaIce"
@@ -7075,7 +7169,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Areal fraction of a given grid cell that is covered by sea ice on the ocean grid, independent of the thickness of that ice.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7379-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7379-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::seaIce"
@@ -7107,7 +7203,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Total mass of sea ice divided by grid-cell area.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab7356-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab7356-a698-11ef-914a-613c0433d878"
+            ],
             "modelling_realm": [
                 "link::seaIce"
             ],
@@ -7170,7 +7268,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Actual (floe) thickness of sea ice averaged over the ice-covered part of a given grid cell, NOT volume divided by grid area.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab734e-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab734e-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::seaIce",
@@ -7234,7 +7334,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "X-component of sea-ice velocity on native model grid.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab737b-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab737b-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::seaIce"
@@ -7297,7 +7399,9 @@
             "cmip7_frequency": "link::63215c16-8ca5-11ef-944e-41a8eb05f654",
             "description": "Y-component of sea-ice velocity on native model grid.\n",
             "dimensions": "longitude, latitude, time",
-            "esm-bcv": "link::80ab737c-a698-11ef-914a-613c0433d878",
+            "esm-bcv": [
+                "link::80ab737c-a698-11ef-914a-613c0433d878"
+            ],
             "flag_-_variable_change_since_cmip6": true,
             "modelling_realm": [
                 "link::seaIce"
