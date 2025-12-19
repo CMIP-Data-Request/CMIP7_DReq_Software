@@ -135,6 +135,23 @@ def _apply_hard_fixes(data):
     return data
 
 
+def _apply_hard_fixes_one_base(data, version):
+    """
+    Applies hard-coded fixes to the one base data request dictionary, such as merging or deletion of records.
+    """
+    if version == "v1.1":
+        logger = get_logger()
+        logger.debug(
+            f"Consistency across versions / releases - applying hard fixes for version '{version}'"
+        )
+        # v1.1 release: MIPs - merge recwXayS94wpn2bbL into rec3hKWuBm4Cbmsp9
+        for k, v in data["MIPs"]["records"]["recwXayS94wpn2bbL"].items():
+            if k != "MIP Short Name":
+                data["MIPs"]["records"]["rec3hKWuBm4Cbmsp9"][k] = v
+        data["MIPs"]["records"].pop("recwXayS94wpn2bbL")
+    return data
+
+
 def _filter_references(val, key, table, rid, dtype=None):
     """
     Filters lists of or strings with comma-separated references to other records.
@@ -739,6 +756,7 @@ def map_data(data, mapping_table, version, **kwargs):
                 logger.error(errmsg)
                 raise ValueError(errmsg)
             mapped_data["version"] = version
+        mapped_data = _apply_hard_fixes_one_base(mapped_data, version)
         return {"Data Request": mapped_data}
     else:
         errmsg = "The loaded Data Request has an unexpected data structure."
