@@ -277,7 +277,7 @@ class ExptRequest:
             assert hasattr(self, p), 'ExptRequest object missing priority level: ' + p
         self.consistency_check()
 
-    def add_vars(self, var_names, priority_level, time_subsets = None):
+    def add_vars(self, var_names, priority_level, time_subsets=None):
         '''
         Add variables to output from the experiment, at the specified priority level.
         Removes overlaps between priority levels (e.g., if adding a variable at high
@@ -390,7 +390,7 @@ class ExptRequest:
 
         # set case - for when time subsets are not included
         try:
-        # Using a check to avoid accidentally updating a dict
+            # Using a check to avoid accidentally updating a dict
             if hasattr(current_vars, "add") and not hasattr(current_vars, "keys"):
                 current_vars.update(var_names)
                 return

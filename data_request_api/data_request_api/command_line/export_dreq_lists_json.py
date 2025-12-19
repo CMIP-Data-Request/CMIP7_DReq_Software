@@ -60,7 +60,6 @@ def parse_args():
     parser.add_argument("-d", "--disable_core_vars_check", action="store_true", default=False,
                         help="Don't require that core variables are included in the request.")
 
-
     return parser.parse_args()
 
 

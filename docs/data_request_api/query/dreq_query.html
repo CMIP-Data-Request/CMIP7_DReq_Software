@@ -484,6 +484,68 @@ list of str : return ids for with the listed opportunity titles</dd>
 <dd>table object representing the opportunities table</dd>
 </dl></div>
 </dd>
+<dt id="data_request_api.query.dreq_query.get_opp_time_subsets"><code class="name flex">
+<span>def <span class="ident">get_opp_time_subsets</span></span>(<span>opp, ts, verbose=False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_opp_time_subsets(opp, ts, verbose = False):
+    &#34;&#34;&#34;
+    For one opportunity, get its requested time subsets.
+
+    Parameters
+    ----------
+    opp : DreqRecord
+        One record from the Opportunity table
+    ts : DreqTable
+        Time Subsets table
+
+    Returns
+    -------
+    List
+        List of time subsets requested by the given opportunity
+    &#34;&#34;&#34;
+    subsets = dict()
+    ts_ids = list()
+
+    if hasattr(opp, &#34;time_subsets&#34;):
+        ts_ids = opp.time_subsets
+    elif hasattr(opp, &#34;time_subset&#34;):
+        ts_ids = opp.time_subset
+
+    for ts_id in ts_ids:
+        subsets[ts.get_record(ts_id).label] = ts.get_record(ts_id)
+
+    if not subsets or &#34;all&#34; in subsets:
+        subsets ={&#34;all&#34;: &#34;Whole time series&#34;}
+
+    if verbose:
+        print(f&#39;  Time Subsets ({len(subsets)}):&#39;)
+        for subset, record in subsets.items():
+            if subset == &#34;all&#34;:
+               print(f&#39;    {subset} ({record})&#39;)
+            else:
+               print(f&#39;    {subset} ({record.title}, {record.nyears} simulation years)&#39;)
+
+    return subsets</code></pre>
+</details>
+<div class="desc"><p>For one opportunity, get its requested time subsets.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>opp</code></strong> :&ensp;<code>DreqRecord</code></dt>
+<dd>One record from the Opportunity table</dd>
+<dt><strong><code>ts</code></strong> :&ensp;<code>DreqTable</code></dt>
+<dd>Time Subsets table</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List</code></dt>
+<dd>List of time subsets requested by the given opportunity</dd>
+</dl></div>
+</dd>
 <dt id="data_request_api.query.dreq_query.get_opp_vars"><code class="name flex">
 <span>def <span class="ident">get_opp_vars</span></span>(<span>opp, priority_levels, var_groups, dreq_vars, dreq_priorities=None, verbose=False)</span>
 </code></dt>
@@ -587,7 +649,7 @@ Input parameters are not modified.</p>
 List is ordered from highest to lowest priority.</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.get_requested_variables"><code class="name flex">
-<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>dreq_version,<br>use_opps='all',<br>priority_cutoff='Low',<br>verbose=True,<br>check_core_variables=True)</span>
+<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>dreq_version,<br>use_opps='all',<br>priority_cutoff='Low',<br>combined_request=False,<br>time_subsets=False,<br>verbose=True,<br>check_core_variables=True)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -596,6 +658,7 @@ List is ordered from highest to lowest priority.</p></div>
 </summary>
 <pre><code class="python">def get_requested_variables(content, dreq_version,
                             use_opps=&#39;all&#39;, priority_cutoff=&#39;Low&#39;,
+                            combined_request = False, time_subsets = False,
                             verbose=True, check_core_variables=True):
     &#39;&#39;&#39;
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
@@ -620,16 +683,33 @@ List is ordered from highest to lowest priority.</p></div>
     check_core_variables : bool
         True ==&gt; check that all experiments contain a non-empty list of Core variables,
         and that it&#39;s the same list for all experiments.
+    combined_request : bool
+        True ==&gt; combine requests from all experiments into a single request,
+        and add it as experiment &#39;all_experiments&#39;
+    time_subsets : bool
+        True ==&gt; attach requested time subsets to each requested variable
 
     Returns
     -------
     Dict keyed by experiment name, giving prioritized variables for each experiment.
+    If time_subsets is True, then also returns the time subsets for each experiment attached to each variable.
     Example:
     {   &#39;Header&#39; : ... (Header contains info about where this request comes from)
         &#39;experiment&#39; : {
             &#39;historical&#39; :
                 &#39;High&#39; : [&#39;Amon.tas&#39;, &#39;day.tas&#39;, ...],
                 &#39;Medium&#39; : ...
+            }
+            ...
+        }
+    }
+    Example if time_subsets is True:
+    {   &#39;Header&#39; : ... (Header contains info about where this request comes from)
+        &#39;experiment&#39; : {
+            &#39;historical&#39; :
+                &#39;High&#39; : {&#39;Amon.tas&#39;: [&#39;hist72&#39;], &#39;day.tas&#39;: [&#39;hist72&#39;, &#39;histext&#39;], ...},
+                &#39;Medium&#39; : {&#39;Amon.tas&#39;: [&#39;all&#39;], ...},
+                &#39;Low&#39; : ...
             }
             ...
         }
@@ -642,7 +722,8 @@ List is ordered from highest to lowest priority.</p></div>
         &#39;expt groups&#39;: base[&#39;Experiment Group&#39;],
         &#39;expts&#39;: base[&#39;Experiments&#39;],
         &#39;var groups&#39;: base[&#39;Variable Group&#39;],
-        &#39;vars&#39;: base[&#39;Variables&#39;]
+        &#39;vars&#39;: base[&#39;Variables&#39;],
+        &#39;ts&#39;: base[&#39;Time Subset&#39;],
     }
     opp_ids = get_opp_ids(use_opps, dreq_tables[&#39;opps&#39;], verbose=verbose)
 
@@ -666,6 +747,10 @@ List is ordered from highest to lowest priority.</p></div>
 
     # Loop over Opportunities to get prioritized lists of variables
     request = {}  # dict to hold aggregated request
+    if combined_request:  # Optionally add combined request entries
+            request[&#39;all_experiments&#39;] = ExptRequest(&#39;all_experiments&#39;)
+            request[&#39;historical_experiments&#39;] = ExptRequest(&#39;historical_experiments&#39;)
+            request[&#39;scenario_experiments&#39;] = ExptRequest(&#39;scenario_experiments&#39;)
     for opp_id in opp_ids:
         opp = dreq_tables[&#39;opps&#39;].records[opp_id]  # one record from the Opportunity table
 
@@ -684,6 +769,10 @@ List is ordered from highest to lowest priority.</p></div>
                                 dreq_tables[&#39;priority level&#39;],
                                 verbose=verbose)
 
+        opp_time_subsets = get_opp_time_subsets(opp,
+                                dreq_tables[&#39;ts&#39;],
+                                verbose=verbose)
+
         # Aggregate this Opportunity&#39;s request into the master list of requests
         for expt_name in opp_expts:
             if expt_name not in request:
@@ -692,7 +781,22 @@ List is ordered from highest to lowest priority.</p></div>
 
             # Add this Opportunity&#39;s variables request to the ExptRequest object
             for priority_level, var_names in opp_vars.items():
-                request[expt_name].add_vars(var_names, priority_level)
+                if time_subsets:
+                    request[expt_name].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                    if combined_request:
+                        request[&#39;all_experiments&#39;].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                        if &#39;hist&#39; in expt_name.lower():
+                            request[&#39;historical_experiments&#39;].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                        elif any(scen_part in expt_name.lower() for scen_part in [&#39;ssp&#39;, &#39;scen&#39;]):
+                            request[&#39;scenario_experiments&#39;].add_vars(var_names, priority_level, time_subsets=opp_time_subsets)
+                else:
+                    request[expt_name].add_vars(var_names, priority_level)
+                    if combined_request:
+                        request[&#39;all_experiments&#39;].add_vars(var_names, priority_level)
+                        if &#39;hist&#39; in expt_name.lower():
+                            request[&#39;historical_experiments&#39;].add_vars(var_names, priority_level)
+                        elif any(scen_part in expt_name.lower() for scen_part in [&#39;ssp&#39;, &#39;scen&#39;]):
+                            request[&#39;scenario_experiments&#39;].add_vars(var_names, priority_level)
 
     opp_titles = sorted([dreq_tables[&#39;opps&#39;].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {
@@ -746,19 +850,38 @@ E.g., priority_cutoff='Low' means all priority levels are returned.</dd>
 <dt><strong><code>check_core_variables</code></strong> :&ensp;<code>bool</code></dt>
 <dd>True ==&gt; check that all experiments contain a non-empty list of Core variables,
 and that it's the same list for all experiments.</dd>
+<dt><strong><code>combined_request</code></strong> :&ensp;<code>bool</code></dt>
+<dd>True ==&gt; combine requests from all experiments into a single request,
+and add it as experiment 'all_experiments'</dd>
+<dt><strong><code>time_subsets</code></strong> :&ensp;<code>bool</code></dt>
+<dd>True ==&gt; attach requested time subsets to each requested variable</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt>Dict keyed by experiment name, giving prioritized variables for each experiment.</dt>
+<dt>If time_subsets is True, then also returns the time subsets for each experiment attached to each variable.</dt>
 <dt><code>Example:</code></dt>
+<dd>&nbsp;</dd>
+<dt>{
+'Header' : &hellip; (Header contains info about where this request comes from)</dt>
+<dt>'experiment' : {</dt>
+<dt>'historical' :</dt>
+<dt>'High' : ['Amon.tas', 'day.tas', &hellip;],</dt>
+<dt>'Medium' : &hellip;</dt>
+<dt>}</dt>
+<dt>&hellip;</dt>
+<dt>}</dt>
+<dt>}</dt>
+<dt><code>Example if time_subsets is True:</code></dt>
 <dd>&nbsp;</dd>
 </dl>
 <p>{
 'Header' : &hellip; (Header contains info about where this request comes from)
 'experiment' : {
 'historical' :
-'High' : ['Amon.tas', 'day.tas', &hellip;],
-'Medium' : &hellip;
+'High' : {'Amon.tas': ['hist72'], 'day.tas': ['hist72', 'histext'], &hellip;},
+'Medium' : {'Amon.tas': ['all'], &hellip;},
+'Low' : &hellip;
 }
 &hellip;
 }
@@ -1409,6 +1532,9 @@ This is a user configuration setting.</p></div>
         &#39;Description&#39;: &#39;This file gives the names of output variables that are requested from CMIP experiments by the supported Opportunities. The variables requested from each experiment are listed under each experiment name, grouped according to the priority level at which they are requested. For each experiment, the prioritized list of variables was determined by compiling together all requests made by the supported Opportunities for output from that experiment.&#39;,
         &#39;Opportunities supported&#39;: sorted(expt_vars[&#39;Header&#39;][&#39;Opportunities&#39;], key=str.lower)
     })
+    # Add Note about combined request, if included
+    if &#34;all_experiments&#34; in expt_vars[&#34;experiment&#34;]:
+        header[&#34;Note&#34;]=&#34;Added combined request for all experiments as entry &#39;all_experiments&#39;. Added combined request for all historical and scenario experiments as entries &#39;historical_experiments&#39; and &#39;scenario_experiments&#39;, respectively.&#34;
 
     # List supported priority levels
     priority_levels = get_priority_levels()
@@ -1419,7 +1545,7 @@ This is a user configuration setting.</p></div>
     })
     for req in expt_vars[&#39;experiment&#39;].values():
         for p in priority_levels[m:]:
-            assert req[p] == []
+            assert req[p] == [] or req[p] == {}
             req.pop(p)  # remove empty lists of unsupported priorities from the output
 
     # List included experiments
@@ -1553,6 +1679,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
 <li><code><a title="data_request_api.query.dreq_query.get_dimension_sizes" href="#data_request_api.query.dreq_query.get_dimension_sizes">get_dimension_sizes</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_expts" href="#data_request_api.query.dreq_query.get_opp_expts">get_opp_expts</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_ids" href="#data_request_api.query.dreq_query.get_opp_ids">get_opp_ids</a></code></li>
+<li><code><a title="data_request_api.query.dreq_query.get_opp_time_subsets" href="#data_request_api.query.dreq_query.get_opp_time_subsets">get_opp_time_subsets</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_opp_vars" href="#data_request_api.query.dreq_query.get_opp_vars">get_opp_vars</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_priority_levels" href="#data_request_api.query.dreq_query.get_priority_levels">get_priority_levels</a></code></li>
 <li><code><a title="data_request_api.query.dreq_query.get_requested_variables" href="#data_request_api.query.dreq_query.get_requested_variables">get_requested_variables</a></code></li>
