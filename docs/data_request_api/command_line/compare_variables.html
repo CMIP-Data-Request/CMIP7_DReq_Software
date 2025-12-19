@@ -45,6 +45,26 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="data_request_api.command_line.compare_variables.generate_alternate_region_case_variable_name"><code class="name flex">
+<span>def <span class="ident">generate_alternate_region_case_variable_name</span></span>(<span>var_name)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_alternate_region_case_variable_name(var_name):
+    var_name_list = var_name.split(&#39;.&#39;)
+    region = var_name_list[-1]
+    if region.isupper():
+        var_name_list[-1] = region.lower()
+    elif region.islower():
+        var_name_list[-1] = region.upper()
+    alt_var_name = &#39;.&#39;.join(var_name_list)
+    return alt_var_name</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
 <dt id="data_request_api.command_line.compare_variables.main"><code class="name flex">
 <span>def <span class="ident">main</span></span>(<span>)</span>
 </code></dt>
@@ -170,18 +190,40 @@ el.replaceWith(d);
     missing_vars = defaultdict(set)
     diffs_by_name = OrderedDict()
     attr_diffs = set()
+    region_change_map = OrderedDict()
     for var_name in all_var_names:
         missing = False
+        region_case_change = False
+        # allow for changes in case of region
+        alt_var_name = generate_alternate_region_case_variable_name(var_name)
         for version in compare_versions:
-            if var_name not in dreq_vars[version]:
+            if var_name not in dreq_vars[version] and alt_var_name not in dreq_vars[version]:
                 missing_vars[version].add(var_name)
                 missing = True
         if missing:
             # Variable is not available in both versions
             continue
         ver0, ver1 = compare_versions
-        var_info0 = dreq_vars[ver0][var_name]
-        var_info1 = dreq_vars[ver1][var_name]
+        
+        try:
+            var_info0 = dreq_vars[ver0][var_name]
+        except KeyError:
+            var_info0 = dreq_vars[ver0][alt_var_name]
+            # first dreq version has the case change
+            region_case_change = 1
+        try:
+            var_info1 = dreq_vars[ver1][var_name]
+        except KeyError:
+            var_info1 = dreq_vars[ver1][alt_var_name]
+            # second dreq version has the case change
+            region_case_change = 2
+        
+        # build dictionary catching region changes
+        if region_case_change == 1:
+            region_change_map[alt_var_name] = var_name
+        elif region_case_change == 2:
+            region_change_map[var_name] = alt_var_name
+        
         var_diff = OrderedDict()
         for attr in compare_attributes:
             if attr not in var_info0:
@@ -194,7 +236,7 @@ el.replaceWith(d);
                     ver1: var_info1[attr],
                 })
                 attr_diffs.add(attr)
-        if len(var_diff) &gt; 0:
+        if len(var_diff) &gt; 0 and var_name not in region_change_map:
             diffs_by_name[var_name] = var_diff
 
     # Create another dict with the same info, but organized by attribute name instead of variable name
@@ -243,6 +285,12 @@ el.replaceWith(d);
         }),
         &#39;Missing&#39;: missing,
     })
+    if region_change_map:
+        print(&#39;Including region changes in missing_variables file&#39;)
+        print(&#39;Note that JSON files will be organised based on compound names &#39; 
+              &#39;from the second JSON file provided on the command line&#39;)
+        out[f&#39;region case changes between {ver0} and {ver1}&#39;] = region_change_map
+
     outfile = outfile_missing
     with open(outfile, &#39;w&#39;) as f:
         json.dump(out, f, indent=4)
@@ -325,6 +373,7 @@ el.replaceWith(d);
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="data_request_api.command_line.compare_variables.generate_alternate_region_case_variable_name" href="#data_request_api.command_line.compare_variables.generate_alternate_region_case_variable_name">generate_alternate_region_case_variable_name</a></code></li>
 <li><code><a title="data_request_api.command_line.compare_variables.main" href="#data_request_api.command_line.compare_variables.main">main</a></code></li>
 <li><code><a title="data_request_api.command_line.compare_variables.parse_args" href="#data_request_api.command_line.compare_variables.parse_args">parse_args</a></code></li>
 </ul>

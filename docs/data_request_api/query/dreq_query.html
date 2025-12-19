@@ -492,7 +492,7 @@ list of str : return ids for with the listed opportunity titles</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_opp_time_subsets(opp, ts, verbose = False):
+<pre><code class="python">def get_opp_time_subsets(opp, ts, verbose=False):
     &#34;&#34;&#34;
     For one opportunity, get its requested time subsets.
 
@@ -520,15 +520,15 @@ list of str : return ids for with the listed opportunity titles</dd>
         subsets[ts.get_record(ts_id).label] = ts.get_record(ts_id)
 
     if not subsets or &#34;all&#34; in subsets:
-        subsets ={&#34;all&#34;: &#34;Whole time series&#34;}
+        subsets = {&#34;all&#34;: &#34;Whole time series&#34;}
 
     if verbose:
         print(f&#39;  Time Subsets ({len(subsets)}):&#39;)
         for subset, record in subsets.items():
             if subset == &#34;all&#34;:
-               print(f&#39;    {subset} ({record})&#39;)
+                print(f&#39;    {subset} ({record})&#39;)
             else:
-               print(f&#39;    {subset} ({record.title}, {record.nyears} simulation years)&#39;)
+                print(f&#39;    {subset} ({record.title}, {record.nyears} simulation years)&#39;)
 
     return subsets</code></pre>
 </details>
@@ -658,7 +658,7 @@ List is ordered from highest to lowest priority.</p></div>
 </summary>
 <pre><code class="python">def get_requested_variables(content, dreq_version,
                             use_opps=&#39;all&#39;, priority_cutoff=&#39;Low&#39;,
-                            combined_request = False, time_subsets = False,
+                            combined_request=False, time_subsets=False,
                             verbose=True, check_core_variables=True):
     &#39;&#39;&#39;
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
@@ -748,9 +748,9 @@ List is ordered from highest to lowest priority.</p></div>
     # Loop over Opportunities to get prioritized lists of variables
     request = {}  # dict to hold aggregated request
     if combined_request:  # Optionally add combined request entries
-            request[&#39;all_experiments&#39;] = ExptRequest(&#39;all_experiments&#39;)
-            request[&#39;historical_experiments&#39;] = ExptRequest(&#39;historical_experiments&#39;)
-            request[&#39;scenario_experiments&#39;] = ExptRequest(&#39;scenario_experiments&#39;)
+        request[&#39;all_experiments&#39;] = ExptRequest(&#39;all_experiments&#39;)
+        request[&#39;historical_experiments&#39;] = ExptRequest(&#39;historical_experiments&#39;)
+        request[&#39;scenario_experiments&#39;] = ExptRequest(&#39;scenario_experiments&#39;)
     for opp_id in opp_ids:
         opp = dreq_tables[&#39;opps&#39;].records[opp_id]  # one record from the Opportunity table
 
@@ -770,8 +770,8 @@ List is ordered from highest to lowest priority.</p></div>
                                 verbose=verbose)
 
         opp_time_subsets = get_opp_time_subsets(opp,
-                                dreq_tables[&#39;ts&#39;],
-                                verbose=verbose)
+                                                dreq_tables[&#39;ts&#39;],
+                                                verbose=verbose)
 
         # Aggregate this Opportunity&#39;s request into the master list of requests
         for expt_name in opp_expts:
@@ -1534,7 +1534,7 @@ This is a user configuration setting.</p></div>
     })
     # Add Note about combined request, if included
     if &#34;all_experiments&#34; in expt_vars[&#34;experiment&#34;]:
-        header[&#34;Note&#34;]=&#34;Added combined request for all experiments as entry &#39;all_experiments&#39;. Added combined request for all historical and scenario experiments as entries &#39;historical_experiments&#39; and &#39;scenario_experiments&#39;, respectively.&#34;
+        header[&#34;Note&#34;] = &#34;Added combined request for all experiments as entry &#39;all_experiments&#39;. Added combined request for all historical and scenario experiments as entries &#39;historical_experiments&#39; and &#39;scenario_experiments&#39;, respectively.&#34;
 
     # List supported priority levels
     priority_levels = get_priority_levels()

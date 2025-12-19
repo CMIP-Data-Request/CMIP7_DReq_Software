@@ -486,7 +486,7 @@ class ExptRequest:
             assert hasattr(self, p), &#39;ExptRequest object missing priority level: &#39; + p
         self.consistency_check()
 
-    def add_vars(self, var_names, priority_level, time_subsets = None):
+    def add_vars(self, var_names, priority_level, time_subsets=None):
         &#39;&#39;&#39;
         Add variables to output from the experiment, at the specified priority level.
         Removes overlaps between priority levels (e.g., if adding a variable at high
@@ -599,7 +599,7 @@ class ExptRequest:
 
         # set case - for when time subsets are not included
         try:
-        # Using a check to avoid accidentally updating a dict
+            # Using a check to avoid accidentally updating a dict
             if hasattr(current_vars, &#34;add&#34;) and not hasattr(current_vars, &#34;keys&#34;):
                 current_vars.update(var_names)
                 return
@@ -749,7 +749,7 @@ Variable names are stored in seperate sets for different priority levels.</p></d
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_vars(self, var_names, priority_level, time_subsets = None):
+<pre><code class="python">def add_vars(self, var_names, priority_level, time_subsets=None):
     &#39;&#39;&#39;
     Add variables to output from the experiment, at the specified priority level.
     Removes overlaps between priority levels (e.g., if adding a variable at high
