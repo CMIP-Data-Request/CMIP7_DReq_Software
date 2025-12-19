@@ -263,7 +263,7 @@ class Variable(DRObjects):
             elif request_type in ["modelling_realms", ]:
                 found = request_value in self.modelling_realm
             elif request_type in ["esm-bcvs", ]:
-                found = request_value == self.__getattr__("esm-bcv")
+                found = request_value in self.__getattr__("esm-bcv")
             elif request_type in ["cf_standard_names", ]:
                 found = request_value == self.physical_parameter.cf_standard_name
             elif request_type in ["cell_methods", ]:

@@ -59,9 +59,9 @@
                 "link::scenarios"
             ],
             "mips": [
+                "link::DAMIP",
                 "link::HighResMIP",
-                "link::LUMIP",
-                "link::DAMIP"
+                "link::LUMIP"
             ],
             "time_subsets": [
                 "link::hist20",
@@ -87,9 +87,9 @@
                 "link::scenarios_extensions"
             ],
             "mips": [
+                "link::DAMIP",
                 "link::DCPP",
-                "link::PMIP",
-                "link::DAMIP"
+                "link::PMIP"
             ],
             "time_subsets": [
                 "link::all"
@@ -146,9 +146,9 @@
                 "link::scenarios"
             ],
             "mips": [
-                "link::PMIP",
                 "link::DAMIP",
                 "link::DCPP",
+                "link::PMIP",
                 "link::TIPMIP"
             ],
             "time_subsets": [
