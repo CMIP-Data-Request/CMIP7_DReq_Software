@@ -2971,7 +2971,7 @@ Use to define basic information needed.</p>
             elif request_type in [&#34;modelling_realms&#34;, ]:
                 found = request_value in self.modelling_realm
             elif request_type in [&#34;esm-bcvs&#34;, ]:
-                found = request_value == self.__getattr__(&#34;esm-bcv&#34;)
+                found = request_value in self.__getattr__(&#34;esm-bcv&#34;)
             elif request_type in [&#34;cf_standard_names&#34;, ]:
                 found = request_value == self.physical_parameter.cf_standard_name
             elif request_type in [&#34;cell_methods&#34;, ]:
