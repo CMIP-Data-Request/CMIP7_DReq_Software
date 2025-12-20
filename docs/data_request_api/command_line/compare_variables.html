@@ -204,7 +204,7 @@ el.replaceWith(d);
             # Variable is not available in both versions
             continue
         ver0, ver1 = compare_versions
-        
+
         try:
             var_info0 = dreq_vars[ver0][var_name]
         except KeyError:
@@ -217,13 +217,13 @@ el.replaceWith(d);
             var_info1 = dreq_vars[ver1][alt_var_name]
             # second dreq version has the case change
             region_case_change = 2
-        
+
         # build dictionary catching region changes
         if region_case_change == 1:
             region_change_map[alt_var_name] = var_name
         elif region_case_change == 2:
             region_change_map[var_name] = alt_var_name
-        
+
         var_diff = OrderedDict()
         for attr in compare_attributes:
             if attr not in var_info0:
@@ -287,7 +287,7 @@ el.replaceWith(d);
     })
     if region_change_map:
         print(&#39;Including region changes in missing_variables file&#39;)
-        print(&#39;Note that JSON files will be organised based on compound names &#39; 
+        print(&#39;Note that JSON files will be organised based on compound names &#39;
               &#39;from the second JSON file provided on the command line&#39;)
         out[f&#39;region case changes between {ver0} and {ver1}&#39;] = region_change_map
 
