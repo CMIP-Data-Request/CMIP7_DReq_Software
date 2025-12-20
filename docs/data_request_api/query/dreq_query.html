@@ -1343,6 +1343,10 @@ Its "priority_level" attribute specifies the priority as either string or link t
             &#39;physical_parameter_name&#39;: phys_param.name,
         })
 
+        for attr in [&#39;flag_values&#39;, &#39;flag_meanings&#39;]:
+            if hasattr(var, attr):
+                var_info[attr] = getattr(var, attr)
+
         # Get info on branded variable name, if available
         if hasattr(var, &#39;branded_variable_name&#39;):
             branded_variable_name = var.branded_variable_name
