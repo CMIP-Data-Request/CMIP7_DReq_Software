@@ -68,7 +68,7 @@ These are the easiest ways to *inspect* the Data Request without installing or u
 Using the CMIP7 Data Request API you can load, filter, query, and export the Data Request programmatically in Python.
 This is also possible without installing the software on your local machine, see [Try It Without Installation](#try-it-without-installation).
 
-:warning: **Note:** *The CMIP7 DReq Software versions are not aligned with the CMIP7 Data Request ones. So please, do not infer that v1.2.2 of the CMIP7 DReq Software "works with" or "reflects"  v1.2.2 of the CMIP7 Data Request, it is not the case!*
+:warning: **Note:** *The CMIP7 DReq Software versions are not aligned with the CMIP7 Data Request ones. So please, do not infer that e.g. v1.2.2 of the CMIP7 DReq Software "works with" or "reflects"  v1.2.2 of the CMIP7 Data Request, it is not the case!*
 
 ## Try It Without Installation
 
@@ -119,7 +119,7 @@ python -m pip install CMIP7-data-request-api
 ```
 :white_check_mark: If installation is ***successful*** you should be able to run the command:
 ```bash
-export_dreq_lists_json --all_opportunities v1.2.2 amip.json --experiments amip
+export_dreq_lists_json --all_opportunities v1.2.2.3 amip.json --experiments amip
 ```
 :x: If something went wrong, the package can be ***uninstalled*** using:
 ```bash
@@ -266,7 +266,7 @@ A json file is generated, listing the variables requested by the CMIP7 DR for th
 
 Call example:
 <br>
-`export_dreq_lists_json --all_opportunities v1.2.2.2 amip_all_Opps_v1.2.2.2.json --experiments amip`
+`export_dreq_lists_json --all_opportunities v1.2.2.3 amip_all_Opps_v1.2.2.3.json --experiments amip`
 <details>
 <summary>Click here for a snapview of the output json file.</summary>
 
@@ -274,18 +274,18 @@ Call example:
     "experiment": {
         "amip": {
             "Core": [
-                "atmos.areacella.ti-u-hxy-u.fx.GLB",
-                "atmos.cl.tavg-al-hxy-u.mon.GLB",
-                "atmos.cli.tavg-al-hxy-u.mon.GLB",
-                "atmos.clivi.tavg-u-hxy-u.mon.GLB",
-                "atmos.clt.tavg-u-hxy-u.day.GLB",
-                "atmos.clt.tavg-u-hxy-u.mon.GLB",
-                "atmos.clw.tavg-al-hxy-u.mon.GLB",
-                "atmos.clwvi.tavg-u-hxy-u.mon.GLB",
-                "atmos.evspsbl.tavg-u-hxy-u.mon.GLB",
-                "atmos.hfls.tavg-u-hxy-u.mon.GLB",
-                "atmos.hfss.tavg-u-hxy-u.mon.GLB",
-                "atmos.hur.tavg-p19-hxy-air.mon.GLB",
+                "atmos.areacella.ti-u-hxy-u.fx.glb",
+                "atmos.cl.tavg-al-hxy-u.mon.glb",
+                "atmos.cli.tavg-al-hxy-u.mon.glb",
+                "atmos.clivi.tavg-u-hxy-u.mon.glb",
+                "atmos.clt.tavg-u-hxy-u.day.glb",
+                "atmos.clt.tavg-u-hxy-u.mon.glb",
+                "atmos.clw.tavg-al-hxy-u.mon.glb",
+                "atmos.clwvi.tavg-u-hxy-u.mon.glb",
+                "atmos.evspsbl.tavg-u-hxy-u.mon.glb",
+                "atmos.hfls.tavg-u-hxy-u.mon.glb",
+                "atmos.hfss.tavg-u-hxy-u.mon.glb",
+                "atmos.hur.tavg-p19-hxy-air.mon.glb",
 ```
 </details>
 <br>
@@ -297,12 +297,12 @@ Call example:
 $--> export_dreq_lists_json -h
 
 usage: export_dreq_lists_json [-h] [-a] [-f OPPORTUNITIES_FILE] [-i OPPORTUNITY_IDS] [-e EXPERIMENTS] [-p {core,high,medium,low}] [-m VARIABLES_METADATA]
-                              {v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev} output_file
+                              {v1.2.2.3,v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev} output_file
 
 Get lists of requested variables by experiment, and write them to a json file.
 
 positional arguments:
-  {v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev}
+  {v1.2.2.3,v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev}
                         data request version
   output_file           file to write JSON output to
 
@@ -333,45 +333,47 @@ A json file is generated, containing the metadata of variables present in the CM
 
 Call example:
 <br>
-`get_variables_metadata v1.2.2.2 all_variables_metadata_v1.2.2.2.json`
+`get_variables_metadata v1.2.2.3 all_variables_metadata_v1.2.2.3.json`
 <details>
 <summary>Click here for a snapview of the output json file.</summary>
 
-```
-    {
-    "Header": {
-        "Description": "Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.",
-        "no. of variables": 1974,
-        "dreq content version": "v1.2.2.2",
-        "dreq content file": "dreq_release_export.json",
-        "dreq content sha256 hash": "d396e3f8ef2ef1c3a184612cf50476cdda26101c734afd92f2fdfb373aceac6a",
-    "Compound Name": {
-        "aerosol.abs550aer.tavg-u-hxy-u.mon.GLB": {
-            "frequency": "mon",
-            "modeling_realm": "aerosol",
-            "standard_name": "atmosphere_absorption_optical_thickness_due_to_ambient_aerosol_particles",
-            "units": "1",
-            "cell_methods": "area: time: mean",
-            "cell_measures": "area: areacella",
-            "long_name": "Ambient Aerosol Absorption Optical Thickness at 550nm",
-            "comment": "Optical thickness of atmospheric aerosols at wavelength 550 nanometers.",
-            "processing_note": "",
-            "dimensions": "longitude latitude time lambda550nm",
-            "out_name": "abs550aer",
-            "type": "real",
-            "positive": "",
-            "spatial_shape": "XY-na",
-            "temporal_shape": "time-intv",
-            "cmip6_table": "AERmon",
-            "physical_parameter_name": "abs550aer",
-            "variableRootDD": "abs550aer",
-            "branding_label": "tavg-u-hxy-u",
-            "branded_variable_name": "abs550aer_tavg-u-hxy-u",
-            "region": "GLB",
-            "cmip6_compound_name": "AERmon.abs550aer",
-            "cmip7_compound_name": "aerosol.abs550aer.tavg-u-hxy-u.mon.GLB",
-            "uid": "19bebf2a-81b1-11e6-92de-ac72891c3257"
-        },
+```json
+{
+  "Header": {
+    "Description": "Metadata attributes that characterize CMOR variables. Each variable is uniquely idenfied by a compound name comprised of a CMIP6-era table name and a short variable name.",
+    "no. of variables": 1974,
+    "dreq content version": "v1.2.2.3",
+    "dreq content file": "dreq_release_export.json",
+    "dreq content sha256 hash": "61741fa99e2f8ca1744688e9d84f2adafd2e5204a80f92c0a5b903778fdcb732",
+    "dreq api version": "1.4"
+  },
+  "Compound Name": {
+    "aerosol.abs550aer.tavg-u-hxy-u.mon.glb": {
+      "frequency": "mon",
+      "modeling_realm": "aerosol",
+      "standard_name": "atmosphere_absorption_optical_thickness_due_to_ambient_aerosol_particles",
+      "units": "1",
+      "cell_methods": "area: time: mean",
+      "cell_measures": "area: areacella",
+      "long_name": "Ambient Aerosol Absorption Optical Thickness at 550nm",
+      "comment": "Optical thickness of atmospheric aerosols at wavelength 550 nanometers.",
+      "processing_note": "",
+      "dimensions": "longitude latitude time lambda550nm",
+      "out_name": "abs550aer",
+      "type": "real",
+      "positive": "",
+      "spatial_shape": "XY-na",
+      "temporal_shape": "time-intv",
+      "cmip6_table": "AERmon",
+      "physical_parameter_name": "abs550aer",
+      "variableRootDD": "abs550aer",
+      "branding_label": "tavg-u-hxy-u",
+      "branded_variable_name": "abs550aer_tavg-u-hxy-u",
+      "region": "glb",
+      "cmip6_compound_name": "AERmon.abs550aer",
+      "cmip7_compound_name": "aerosol.abs550aer.tavg-u-hxy-u.mon.glb",
+      "uid": "19bebf2a-81b1-11e6-92de-ac72891c3257"
+    },
 ```
 </details>
 <br>
@@ -383,12 +385,12 @@ Call example:
 $--> get_variables_metadata -h
 
 usage: get_variables_metadata [-h] [-cn COMPOUND_NAMES] [-t CMOR_TABLES] [-v CMOR_VARIABLES]
-                              {v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev} outfile
+                              {v1.2.2.3,v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev} outfile
 
 Get metadata of CMOR variables (e.g., cell_methods, dimensions, ...) and write it to a json file.
 
 positional arguments:
-  {v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev}
+  {v1.2.2.3,v1.2.2.2,v1.2.2.1,v1.2.2,v1.2.1,v1.2,v1.1,v1.0,v1.0beta,v1.0alpha,dev}
                         data request version
   outfile               output file containing metadata of requested variables, can be ".json" or ".csv" file
 
@@ -413,13 +415,13 @@ Useful for viewing the changes in variable metadata between two CMIP7 DR version
 
 Call example:
 <br>
-`compare_variables all_variables_metadata_v1.2.2.2.json cmip6`
+`compare_variables all_variables_metadata_v1.2.2.3.json cmip6`
 <details>
 <summary>Click here to see the CLI log.</summary>
 
 ```
 Wrote cmip6.json
-Loaded all_variables_metadata_v1.2.2.2.json
+Loaded all_variables_metadata_v1.2.2.3.json
 Loaded cmip6.json
 Total number of variables with differences: 0
 Wrote missing_variables.json
@@ -456,7 +458,7 @@ Provides an estimate of the data volumes. It takes as input a yaml file where th
 <br>
 
 To first create the yaml file, just call the utility with a DR version specified:
-`estimate_dreq_volume v1.2.2.2`
+`estimate_dreq_volume v1.2.2.3`
 
 A default  config file `size.yaml`is created. 
 <details>
