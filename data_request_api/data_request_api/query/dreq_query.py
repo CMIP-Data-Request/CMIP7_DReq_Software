@@ -1030,6 +1030,10 @@ def get_variables_metadata(content, dreq_version,
             'physical_parameter_name': phys_param.name,
         })
 
+        for attr in ['flag_values', 'flag_meanings']:
+            if hasattr(var, attr):
+                var_info[attr] = getattr(var, attr)
+
         # Get info on branded variable name, if available
         if hasattr(var, 'branded_variable_name'):
             branded_variable_name = var.branded_variable_name
