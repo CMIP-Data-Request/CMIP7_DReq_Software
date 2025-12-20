@@ -481,6 +481,7 @@ el.replaceWith(d);
                 logger.error(errmsg)
                 raise ValueError(errmsg)
             mapped_data[&#34;version&#34;] = version
+        mapped_data = _apply_hard_fixes_one_base(mapped_data, version)
         return {&#34;Data Request&#34;: mapped_data}
     else:
         errmsg = &#34;The loaded Data Request has an unexpected data structure.&#34;

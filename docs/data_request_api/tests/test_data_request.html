@@ -1245,7 +1245,7 @@ not have a method with the specified name.</p></div>
         theme_name = &#34;Land &amp; Land-Ice&#34;
         theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
         exp = [self.dr.find_element(&#34;experiments&#34;, id)
-               for id in [&#34;link::amip&#34;, &#34;link::dcppB-forecast-cmip6&#34;,&#34;link::esm-flat10&#34;, &#34;link::esm-hist&#34;,
+               for id in [&#34;link::amip&#34;, &#34;link::dcppB-forecast-cmip6&#34;, &#34;link::esm-flat10&#34;, &#34;link::esm-hist&#34;,
                           &#34;link::esm-piControl&#34;, &#34;link::g7-1p5K-sai&#34;, &#34;link::historical&#34;, &#34;link::land-hist&#34;,
                           &#34;link::piClim-NOX&#34;, &#34;link::scen7-hc&#34;, &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;,
                           &#34;link::scen7-vlloc&#34;]]
@@ -1381,7 +1381,7 @@ not have a method with the specified name.</p></div>
         var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
         var_target = self.dr.find_element(&#34;variables&#34;, var_id)
         mips = [self.dr.find_element(&#34;mips&#34;, id)
-                for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FAFMIP&#34;,&#34;link::FireMIP&#34;, &#34;link::GeoMIP&#34;,
+                for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FAFMIP&#34;, &#34;link::FireMIP&#34;, &#34;link::GeoMIP&#34;,
                            &#34;link::HighResMIP&#34;, &#34;link::ISMIP7&#34;, &#34;link::OMIP&#34;, &#34;link::PMIP&#34;, &#34;link::SIMIP&#34;,
                            &#34;link::SOFIAMIP&#34;, &#34;link::ScenarioMIP&#34;, &#34;link::TIPMIP&#34;]]
         self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
@@ -1403,7 +1403,7 @@ not have a method with the specified name.</p></div>
         exp_name = &#34;scen7-hc-ext&#34;
         exp_target = self.dr.find_element(&#34;experiments&#34;, exp_id)
         themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-                  for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;,  &#34;link::ocean_seaice&#34;]]
+                  for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;, &#34;link::ocean_seaice&#34;]]
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_id), themes)
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_name), themes)
         self.assertListEqual(self.dr.find_themes_per_experiment(exp_target), themes)
@@ -1834,7 +1834,7 @@ not have a method with the specified name.</p></div>
     theme_name = &#34;Land &amp; Land-Ice&#34;
     theme_target = self.dr.find_element(&#34;data_request_themes&#34;, theme_id)
     exp = [self.dr.find_element(&#34;experiments&#34;, id)
-           for id in [&#34;link::amip&#34;, &#34;link::dcppB-forecast-cmip6&#34;,&#34;link::esm-flat10&#34;, &#34;link::esm-hist&#34;,
+           for id in [&#34;link::amip&#34;, &#34;link::dcppB-forecast-cmip6&#34;, &#34;link::esm-flat10&#34;, &#34;link::esm-hist&#34;,
                       &#34;link::esm-piControl&#34;, &#34;link::g7-1p5K-sai&#34;, &#34;link::historical&#34;, &#34;link::land-hist&#34;,
                       &#34;link::piClim-NOX&#34;, &#34;link::scen7-hc&#34;, &#34;link::scen7-mc&#34;, &#34;link::scen7-mlc&#34;,
                       &#34;link::scen7-vlloc&#34;]]
@@ -2105,7 +2105,7 @@ not have a method with the specified name.</p></div>
     var_name = &#34;ocean.zos.tavg-u-hxy-sea.day.GLB&#34;
     var_target = self.dr.find_element(&#34;variables&#34;, var_id)
     mips = [self.dr.find_element(&#34;mips&#34;, id)
-            for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FAFMIP&#34;,&#34;link::FireMIP&#34;, &#34;link::GeoMIP&#34;,
+            for id in [&#34;link::CMIP&#34;, &#34;link::DAMIP&#34;, &#34;link::DCPP&#34;, &#34;link::FAFMIP&#34;, &#34;link::FireMIP&#34;, &#34;link::GeoMIP&#34;,
                        &#34;link::HighResMIP&#34;, &#34;link::ISMIP7&#34;, &#34;link::OMIP&#34;, &#34;link::PMIP&#34;, &#34;link::SIMIP&#34;,
                        &#34;link::SOFIAMIP&#34;, &#34;link::ScenarioMIP&#34;, &#34;link::TIPMIP&#34;]]
     self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
@@ -2167,7 +2167,7 @@ not have a method with the specified name.</p></div>
     exp_name = &#34;scen7-hc-ext&#34;
     exp_target = self.dr.find_element(&#34;experiments&#34;, exp_id)
     themes = [self.dr.find_element(&#34;data_request_themes&#34;, id)
-              for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;,  &#34;link::ocean_seaice&#34;]]
+              for id in [&#34;link::atmosphere&#34;, &#34;link::earth_system&#34;, &#34;link::impacts&#34;, &#34;link::ocean_seaice&#34;]]
     self.assertListEqual(self.dr.find_themes_per_experiment(exp_id), themes)
     self.assertListEqual(self.dr.find_themes_per_experiment(exp_name), themes)
     self.assertListEqual(self.dr.find_themes_per_experiment(exp_target), themes)</code></pre>

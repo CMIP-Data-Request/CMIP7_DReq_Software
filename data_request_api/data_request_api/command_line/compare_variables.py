@@ -138,18 +138,40 @@ def main():
     missing_vars = defaultdict(set)
     diffs_by_name = OrderedDict()
     attr_diffs = set()
+    region_change_map = OrderedDict()
     for var_name in all_var_names:
         missing = False
+        region_case_change = False
+        # allow for changes in case of region
+        alt_var_name = generate_alternate_region_case_variable_name(var_name)
         for version in compare_versions:
-            if var_name not in dreq_vars[version]:
+            if var_name not in dreq_vars[version] and alt_var_name not in dreq_vars[version]:
                 missing_vars[version].add(var_name)
                 missing = True
         if missing:
             # Variable is not available in both versions
             continue
         ver0, ver1 = compare_versions
-        var_info0 = dreq_vars[ver0][var_name]
-        var_info1 = dreq_vars[ver1][var_name]
+
+        try:
+            var_info0 = dreq_vars[ver0][var_name]
+        except KeyError:
+            var_info0 = dreq_vars[ver0][alt_var_name]
+            # first dreq version has the case change
+            region_case_change = 1
+        try:
+            var_info1 = dreq_vars[ver1][var_name]
+        except KeyError:
+            var_info1 = dreq_vars[ver1][alt_var_name]
+            # second dreq version has the case change
+            region_case_change = 2
+
+        # build dictionary catching region changes
+        if region_case_change == 1:
+            region_change_map[alt_var_name] = var_name
+        elif region_case_change == 2:
+            region_change_map[var_name] = alt_var_name
+
         var_diff = OrderedDict()
         for attr in compare_attributes:
             if attr not in var_info0:
@@ -162,7 +184,7 @@ def main():
                     ver1: var_info1[attr],
                 })
                 attr_diffs.add(attr)
-        if len(var_diff) > 0:
+        if len(var_diff) > 0 and var_name not in region_change_map:
             diffs_by_name[var_name] = var_diff
 
     # Create another dict with the same info, but organized by attribute name instead of variable name
@@ -211,6 +233,12 @@ def main():
         }),
         'Missing': missing,
     })
+    if region_change_map:
+        print('Including region changes in missing_variables file')
+        print('Note that JSON files will be organised based on compound names '
+              'from the second JSON file provided on the command line')
+        out[f'region case changes between {ver0} and {ver1}'] = region_change_map
+
     outfile = outfile_missing
     with open(outfile, 'w') as f:
         json.dump(out, f, indent=4)
@@ -252,6 +280,17 @@ def main():
     with open(outfile, 'w') as f:
         json.dump(out, f, indent=4)
         print('Wrote ' + outfile)
+
+
+def generate_alternate_region_case_variable_name(var_name):
+    var_name_list = var_name.split('.')
+    region = var_name_list[-1]
+    if region.isupper():
+        var_name_list[-1] = region.lower()
+    elif region.islower():
+        var_name_list[-1] = region.upper()
+    alt_var_name = '.'.join(var_name_list)
+    return alt_var_name
 
 
 if __name__ == '__main__':

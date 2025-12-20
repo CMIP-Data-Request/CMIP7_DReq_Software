@@ -14,6 +14,7 @@ rules (e.g. change space to underscore). Original names of Airtable fields
 are stored as well, allowing unambiguous comparison with Airtable content.
 '''
 
+from typing import Set, Dict, Optional, Union
 from dataclasses import dataclass
 from dataclasses import field as dataclass_field  # "field" is used often for Airtable column names, so need a different name here
 
@@ -265,26 +266,18 @@ class ExptRequest:
     Variable names are stored in seperate sets for different priority levels.
     '''
     experiment: str
-    if PYTHON_VERSION < (3, 9):
-        # Required for python versions before 3.9, see:
-        #   https://stackoverflow.com/questions/75202610/typeerror-type-object-is-not-subscriptable-python
-        # Should remove this if we decide not to support versions before 3.9.
-        core: Set[str] = dataclass_field(default_factory=set)
-        high: Set[str] = dataclass_field(default_factory=set)
-        medium: Set[str] = dataclass_field(default_factory=set)
-        low: Set[str] = dataclass_field(default_factory=set)
-    else:
-        core: set[str] = dataclass_field(default_factory=set)
-        high: set[str] = dataclass_field(default_factory=set)
-        medium: set[str] = dataclass_field(default_factory=set)
-        low: set[str] = dataclass_field(default_factory=set)
+    core: Union[Set[str], Dict[str, str]] = dataclass_field(default_factory=set)
+    high: Union[Set[str], Dict[str, str]] = dataclass_field(default_factory=set)
+    medium: Union[Set[str], Dict[str, str]] = dataclass_field(default_factory=set)
+    low: Union[Set[str], Dict[str, str]] = dataclass_field(default_factory=set)
+    include_time_subsets: Optional[bool] = None
 
     def __post_init__(self):
         for p in PRIORITY_LEVELS:
             assert hasattr(self, p), 'ExptRequest object missing priority level: ' + p
         self.consistency_check()
 
-    def add_vars(self, var_names, priority_level):
+    def add_vars(self, var_names, priority_level, time_subsets=None):
         '''
         Add variables to output from the experiment, at the specified priority level.
         Removes overlaps between priority levels (e.g., if adding a variable at high
@@ -298,41 +291,149 @@ class ExptRequest:
         priority_level : str
             Priority level at which to add them.
             Not case sensitive (will be rendered as lower case).
+        time_subsets : set, optional
+            Set of unique time subset labels to be added. Default is None.
 
         Returns
         -------
         ExptRequest object is updated with the new variables, and any overlaps removed.
         '''
+        # First add_vars operation decides whether include_time_subsets is True or False
+        if self.include_time_subsets is None:
+            if time_subsets is None:
+                self.include_time_subsets = False
+            else:
+                self.include_time_subsets = True
+                self.core = {}
+                self.high = {}
+                self.medium = {}
+                self.low = {}
+        # Always require a time subset if include_time_subsets is True
+        elif self.include_time_subsets is True:
+            if time_subsets is None:
+                raise ValueError('time_subsets must be specified.')
+        # else require no time subset to be passed
+        elif time_subsets is not None:
+            raise ValueError('time_subsets must not be specified.')
+
         priority_level = priority_level.lower()
-        current_vars = getattr(self, priority_level)
-        current_vars.update(var_names)
+        self._update_vars(getattr(self, priority_level), var_names, time_subsets)
         # Remove any overlaps by ensuring a variable only appears at its highest
         # requested priority level.
-        self.high = self.high.difference(self.core)
+        if self.include_time_subsets:
+            self.core, self.high, self.medium, self.low = self._remove_time_subset_overlaps_by_priority()
+        else:
+            self.high = self.high.difference(self.core)
 
-        self.medium = self.medium.difference(self.core)
-        self.medium = self.medium.difference(self.high)  # remove any high priority vars from medium priority group
+            self.medium = self.medium.difference(self.core)
+            self.medium = self.medium.difference(self.high)  # remove any high priority vars from medium priority group
 
-        self.low = self.low.difference(self.core)
-        self.low = self.low.difference(self.high)  # remove any high priority vars from low priority group
-        self.low = self.low.difference(self.medium)  # remove any medium priority vars from low priority group
+            self.low = self.low.difference(self.core)
+            self.low = self.low.difference(self.high)  # remove any high priority vars from low priority group
+            self.low = self.low.difference(self.medium)  # remove any medium priority vars from low priority group
 
         self.consistency_check()
 
     def consistency_check(self):
-        # Confirm that priority sets don't overlap
-        # assert self.high.intersection(self.medium.union(self.low)) == set()
-        # assert self.medium.intersection(self.high.union(self.low)) == set()
-        # assert self.low.intersection(self.high.union(self.medium)) == set()
+        # Confirm that priority : var sets don't overlap
+        #  in case of include_time_subsets:
+        #  confirm that priority : var : sets do not overlap
+        seen = {}  # key -> set of values already seen
+
         for this_p in PRIORITY_LEVELS:
-            other_p = [p for p in PRIORITY_LEVELS if p != this_p]
-            for p in other_p:
-                assert getattr(self, this_p).intersection(getattr(self, p)) == set()
+            try:
+                items = getattr(self, this_p).items()
+            except AttributeError:
+                # Not a dict -> set/list case
+                try:
+                    items = ((v, v) for v in getattr(self, this_p))
+                except TypeError:
+                    raise TypeError(f"Priority {this_p} is not a supported container.")
+
+            for key, values in items:
+                if isinstance(values, str):
+                    val_set = {values}
+                else:
+                    try:
+                        val_set = set(values)  # iterable of values
+                    except TypeError:
+                        # Single non-iterable value
+                        val_set = {values}
+
+                # Check against seen values for this key
+                if key in seen:
+                    overlap = val_set & seen[key]
+                    assert not overlap, (
+                        f"Priority overlap detected for key '{key}' in {this_p}: {overlap}"
+                    )
+                    seen[key].update(val_set)
+                else:
+                    seen[key] = set(val_set)
+
+        # Additional class attributes
+        additional_class_attrs = ['experiment', 'include_time_subsets']
 
         # Also confirm object contains the expected priority levels
-        pl = list(vars(self))
-        pl.remove('experiment')
+        pl = [var for var in list(vars(self)) if var not in additional_class_attrs]
         assert set(pl) == set(PRIORITY_LEVELS)
+
+    def _update_vars(self, current_vars, var_names, time_subsets=None):
+        if time_subsets is None:
+            time_subsets = set()
+
+        # list case - for when time subsets are not included
+        try:
+            current_vars.extend(var_names)
+            return
+        except AttributeError:
+            pass
+
+        # set case - for when time subsets are not included
+        try:
+            # Using a check to avoid accidentally updating a dict
+            if hasattr(current_vars, "add") and not hasattr(current_vars, "keys"):
+                current_vars.update(var_names)
+                return
+        except AttributeError:
+            pass
+
+        # dict case: each var maps to a set of time subsets
+        try:
+            for var in var_names:
+                if var not in current_vars:
+                    # Initialize with a set
+                    current_vars[var] = set()
+                current_vars[var].update(time_subsets)
+                # If requested for "all" (i.e. the entire time series), all other time subsets can be ignored
+                if "all" in current_vars[var]:
+                    current_vars[var] = {"all"}
+        except AttributeError:
+            raise TypeError("current_vars must be a list, a set or a dict with sets as values.")
+
+    def _remove_time_subset_overlaps_by_priority(self):
+        # Enforces uniqueness of var: [timesubset] across multiple priorities.
+        seen_values: Dict[str, Set[str]] = {}  # key -> values already requested with higher priority
+
+        for priority in [self.core, self.high, self.medium, self.low]:
+            for var in list(priority.keys()):
+                ts = priority[var]
+                # Optionally convert to set for comparison
+                ts_set = set(ts) if isinstance(ts, list) else ts
+                # If "all" is requested at a higher priority, then all lower priority requests can be ignored
+                if "all" in seen_values.get(var, set()):
+                    ts_set = set()
+                # Else: Remove any time subsets already requested with higher priority
+                else:
+                    ts_set -= seen_values.get(var, set())
+                if not ts_set:
+                    # No time_subset entries left, can be removed
+                    del priority[var]
+                else:
+                    # Update the group with remaining values
+                    priority[var] = list(ts_set) if isinstance(ts, list) else ts_set
+                    # Track seen values
+                    seen_values.setdefault(var, set()).update(ts_set)
+        return self.core, self.high, self.medium, self.low
 
     def __repr__(self):
         self.consistency_check()
@@ -368,12 +469,34 @@ class ExptRequest:
         '''
         Return dict equivalent of the object, suitable to write to json.
         '''
-        sortby = str.lower
-        return {
-            self.experiment: {
-                'Core': sorted(self.core, key=sortby),
-                'High': sorted(self.high, key=sortby),
-                'Medium': sorted(self.medium, key=sortby),
-                'Low': sorted(self.low, key=sortby),
+        if self.include_time_subsets:
+            return {
+                self.experiment: {
+                    'Core': {
+                        var: sorted(time_subsets)  # sort the values
+                        for var, time_subsets in sorted(self.core.items(), key=lambda item: item[0].lower())
+                    },
+                    'High': {
+                        var: sorted(time_subsets)
+                        for var, time_subsets in sorted(self.high.items(), key=lambda item: item[0].lower())
+                    },
+                    'Medium': {
+                        var: sorted(time_subsets)
+                        for var, time_subsets in sorted(self.medium.items(), key=lambda item: item[0].lower())
+                    },
+                    'Low': {
+                        var: sorted(time_subsets)
+                        for var, time_subsets in sorted(self.low.items(), key=lambda item: item[0].lower())
+                    }
+                }
             }
-        }
+        else:
+            sortby = str.lower
+            return {
+                self.experiment: {
+                    'Core': sorted(self.core, key=sortby),
+                    'High': sorted(self.high, key=sortby),
+                    'Medium': sorted(self.medium, key=sortby),
+                    'Low': sorted(self.low, key=sortby),
+                }
+            }
