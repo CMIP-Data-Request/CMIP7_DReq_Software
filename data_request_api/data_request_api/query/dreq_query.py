@@ -154,8 +154,7 @@ def create_dreq_tables_for_request(content, dreq_version, **kwargs):
     -------
     Dict 'base' whose keys are table names and values are DreqTable objects.
     '''
-    base, content_type = _get_base_dict(content, dreq_version, purpose='request')
-    # base, content_type = _get_base_dict(content, dreq_version)
+    base, content_type = _get_base_dict(content, dreq_version, purpose='request', **kwargs)
 
     # Config defaults
     CONFIG = {'consolidate': True}
@@ -226,7 +225,7 @@ def create_dreq_tables_for_request(content, dreq_version, **kwargs):
     return base
 
 
-def create_dreq_tables_for_variables(content, dreq_version):
+def create_dreq_tables_for_variables(content, dreq_version, **kwargs):
     '''
     For the "data" part of the data request content (Variables, Cell Methods etc),
     render airtable export content as DreqTable objects.
@@ -234,7 +233,7 @@ def create_dreq_tables_for_variables(content, dreq_version):
     For the "request" part of the data request, the corresponding function is create_dreq_tables_for_request().
 
     '''
-    base, content_type = _get_base_dict(content, dreq_version, purpose='variables')
+    base, content_type = _get_base_dict(content, dreq_version, purpose='variables', **kwargs)
 
     # Create objects representing data request tables
     table_id2name = get_table_id2name(base)
@@ -1145,11 +1144,11 @@ def get_dimension_sizes(dreq_tables):
     ----------
     dreq_tables: dict
         Dict values are DreqTable objects for the required tables, e.g.:
-        dreq_tables = {
-            'coordinates and dimensions': base['Coordinates and Dimensions'],
-            'spatial shape': base['Spatial Shape'],
-        }
     '''
+    if 'Coordinates and Dimensions' in dreq_tables:
+        dreq_tables['coordinates and dimensions'] = dreq_tables['Coordinates and Dimensions']
+    if 'Spatial Shape' in dreq_tables:
+        dreq_tables['spatial shape'] = dreq_tables['Spatial Shape']
     dim_names = [dimension.name for dimension in dreq_tables['coordinates and dimensions'].records.values()]
     assert len(set(dim_names)) == len(dim_names)
     dim_names.sort(key=str.lower)
