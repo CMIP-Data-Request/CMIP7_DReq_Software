@@ -26,7 +26,6 @@ def parse_args():
                         help='data request version')
     parser.add_argument('outfile', type=str,
                         help='output file (specify ".json" or ".csv" extension)')
-                        # specify filename with ".json" or ".csv" extension')
 
     sep = ','
 
@@ -45,7 +44,11 @@ def parse_args():
                         \n(uses CMIP7 or CMIP6 based config parameter variable_name, use CMIP7_data_request_api_config to set)')
     parser.add_argument('-v', '--cmor_variables', type=parse_input_list,
                         help=f'include only the specified CMOR variable out_name, example: -v tas{sep}siconc')
-    parser.add_argument('-t', '--cmor_tables', type=parse_input_list,
+    parser.add_argument('-r', '--realms', type=parse_input_list,
+                        help=f'include only the specified realms, examples: \
+                        \n  -r atmos \
+                        \n  -r ocean{sep}ocnBgchem{sep}seaIce')
+    parser.add_argument('-t', '--cmip6_cmor_tables', type=parse_input_list,
                         help=f'include only the specified CMIP6 CMOR tables, example: -t Amon{sep}Omon')
 
     return parser.parse_args()
@@ -74,8 +77,9 @@ def main():
         content,
         use_dreq_version,
         compound_names=args.compound_names,
-        cmor_tables=args.cmor_tables,
+        cmor_tables=args.cmip6_cmor_tables,
         cmor_variables=args.cmor_variables,
+        realms=args.realms,
     )
 
     # Write output file

@@ -709,6 +709,7 @@ def get_requested_variables(content, dreq_version,
 
 def get_variables_metadata(content, dreq_version,
                            compound_names=None, cmor_tables=None, cmor_variables=None,
+                           realms=None,
                            verbose=True):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
@@ -727,11 +728,16 @@ def get_variables_metadata(content, dreq_version,
         Example: ['Amon.tas', 'Omon.sos']
     cmor_tables : list[str]
         Names of CMOR tables to include. If not given, all are included.
+        At present this refers to CMIP6 CMOR tables.
         Example: ['Amon', 'Omon']
     cmor_variables : list[str]
         Names of CMOR variables to include. If not given, all are included.
         Here the out_name is used as the CMOR variable name.
         Example: ['tas', 'siconc']
+    realms: list[str]
+        Include only variables that include one of the specified realms in their
+        list of realms (variables can have more than one realm).
+        Example: ['atmos', 'aerosol']
 
     Returns:
     --------
@@ -969,6 +975,9 @@ def get_variables_metadata(content, dreq_version,
         # Get realm(s)
         link_realm = getattr(var, attr_realm)
         modeling_realm = [dreq_tables['realm'].get_record(link).id for link in link_realm]
+        # modeling_realm should now be the primary realm, so check the returned list contains only one realm
+        if not len(modeling_realm) == 1:
+            raise ValueError(f'There should be one primary realm for {var_name}, found: ' + ', '.join(modeling_realm))
         if hasattr(var, attr_realm_additional):
             # Add secondary realm(s), if any, to the list
             link_realm_additional = getattr(var, attr_realm_additional)
@@ -976,6 +985,10 @@ def get_variables_metadata(content, dreq_version,
         # Raise error if any realm is duplicated in the list
         if len(modeling_realm) != len(set(modeling_realm)):
             raise ValueError(f'Redundant realm(s) found for DR variable {var_name}: {modeling_realm}')
+        if realms:
+            # Exclude variables that don't have any of their realms in list
+            if len(set(modeling_realm).intersection(set(realms))) == 0:
+                continue
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):
