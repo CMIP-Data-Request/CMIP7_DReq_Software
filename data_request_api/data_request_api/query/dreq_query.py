@@ -709,7 +709,7 @@ def get_requested_variables(content, dreq_version,
 
 def get_variables_metadata(content, dreq_version,
                            compound_names=None, cmor_tables=None, cmor_variables=None,
-                           realms=None,
+                           realms=None, attributes=None,
                            verbose=True):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
@@ -738,6 +738,10 @@ def get_variables_metadata(content, dreq_version,
         Include only variables that include one of the specified realms in their
         list of realms (variables can have more than one realm).
         Example: ['atmos', 'aerosol']
+    attributes: list[str]
+        Include only the specified metadata attributes.
+        The attributes are presented in the order specified by the user.
+        Example: ['frequency', 'region', 'modeling_realm']
 
     Returns:
     --------
@@ -823,6 +827,10 @@ def get_variables_metadata(content, dreq_version,
             print('Retaining only these CMOR variables: ' + ', '.join(sorted(cmor_variables, key=str.lower)))
         if compound_names:
             print('Retaining only these compound names: ' + ', '.join(sorted(compound_names, key=str.lower)))
+        if realms:
+            print('Retaining only these realms: ' + ', '.join(sorted(realms, key=str.lower)))
+        if attributes:
+            print('Retaining only these attributes: ' + ', '.join(sorted(attributes, key=str.lower)))
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
@@ -1134,6 +1142,9 @@ def get_variables_metadata(content, dreq_version,
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
+
+        if attributes:
+            var_info = OrderedDict({attr:var_info[attr] for attr in attributes})
 
         assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
         all_var_info[var_name] = var_info
