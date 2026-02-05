@@ -1377,9 +1377,7 @@ def write_variables_metadata(all_var_info, dreq_version, filepath,
         # Write variables metadata to csv
         var_info = next(iter(all_var_info.values()))
         attrs = list(var_info.keys())
-        columns = ['Compound Name']
-        columns.append('standard_name')
-        columns.append('standard_name_proposed')
+        columns = ['Compound Name'] # compound name is always the first column
         columns += [s for s in attrs if s not in columns]
         rows = [columns]  # column header line
         # Add each variable as a row
