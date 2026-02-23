@@ -1,0 +1,20 @@
+title: Baseline Climate Variables for Earth System Modelling
+
+description: The Baseline Climate Variables for Earth System Modelling (ESM-BCVs) for intercomparison and evaluation are defined as a list of 132 variables which have high utility for the evaluation and exploitation of climate simulations. The list reflects the most heavily used elements of the CMIP6 archive. Successive phases of CMIP have achieved strong results in science and substantial influence in international climate policy formulation. This paper responds both to interest in exploiting CMIP data standards in a broader range of climate modelling activities and a need to achieve greater clarity about the significance and intention of variables in the CMIP Data Request. As archives of Earth System Model (ESM) outputs grow in scale and complexity there are emerging problems associated with weak standardisation at the variable collection level. That is, there are good standards covering how specific variables should be archived, but this paper fills a gap in the standardisation of which variables should be archived. The ESM-BCV list is intended as a resource for ESM-MIPs developing requests to enable greater consistency among MIPs, and as a reference for modelling centres to enhance consistency within MIPs. Provisional planning for the CMIP7 Data Request exploits the ESM-BCVs as a core element. The baseline variables list includes 103 variables which have modest or minor data volume footprints and could be generated systematically when simulations are produced and archived for exploitation by the WCRP community. A further 34 variables are classed as high volume and are only suitable for production when the resource implications are justified.
+
+justification_of_resources: The baseline variables will support a wide range of applications and the production of all the variables on the list should not impose excessive burdens on modelling centers and infrastructure providers.
+
+expected_impacts: Greater consistency in provision of high-impact data variables.
+
+variable_groups:
+- baseline_monthly
+- baseline_daily
+- baseline_fixed
+- baseline_subdaily
+
+experiment_groups:
+- deck
+- fast-track
+- scenarios
+- historical
+- all-non-fasttrack
