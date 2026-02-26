@@ -1092,7 +1092,7 @@ class DataRequest(object):
 
         def apply_operation_on_requests_links(dict_request_links, elements, operation, void_list="full"):
             logger = get_logger()
-            if len(rep) == 0:
+            if len(dict_request_links) == 0:
                 if void_list == "full":
                     rep_list = set(elements)
                 elif void_list == "void":
