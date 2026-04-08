@@ -215,8 +215,8 @@ class TestVariables(unittest.TestCase):
                                                     DR_input=filepath("DR_release_not-consolidate_content.json"))
 
     def test_print(self):
-        obj = self.dr.find_element("variable", "ocean.wo.tavg-ol-hxy-sea.mon.GLB")
-        ref_str = 'variable: wo at frequency mon (id: ocean.wo.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Vertical Velocity)'
+        obj = self.dr.find_element("variable", "ocean.wo.tavg-ol-hxy-sea.mon.glb")
+        ref_str = 'variable: wo at frequency mon (id: ocean.wo.tavg-ol-hxy-sea.mon.glb, title: Sea Water Vertical Velocity)'
         ref_str_2 = [
             ref_str,
         ]
@@ -227,9 +227,9 @@ class TestVariables(unittest.TestCase):
         self.assertEqual(str(obj), os.linesep.join(ref_str_2))
 
     def test_filter_on_request(self):
-        var_1 = self.dr.find_element("variable", "ocean.wo.tavg-ol-hxy-sea.mon.GLB")
+        var_1 = self.dr.find_element("variable", "ocean.wo.tavg-ol-hxy-sea.mon.glb")
         var_2 = copy.deepcopy(var_1)
-        var_3 = self.dr.find_element("variable", "atmos.tas.tavg-h2m-hxy-u.day.GLB")
+        var_3 = self.dr.find_element("variable", "atmos.tas.tavg-h2m-hxy-u.day.glb")
         table_1 = self.dr.find_element("table_identifier", "527f5d06-8c97-11ef-944e-41a8eb05f654")
         table_2 = self.dr.find_element("table_identifier", "527f5d03-8c97-11ef-944e-41a8eb05f654")
         tshp_1 = self.dr.find_element("temporal_shape", "cf34c974-80be-11e6-97ee-ac72891c3257")
@@ -309,16 +309,16 @@ class TestVariablesGroup(unittest.TestCase):
             obj = VariablesGroup.from_input(id="link:my_id", dr=self.dr, variables=["link::test", ])
 
         obj = VariablesGroup.from_input(id="link::my_id", dr=self.dr,
-                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                                                   "link::atmos.prc.tavg-u-hxy-u.mon.GLB"])
+                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                                                   "link::atmos.prc.tavg-u-hxy-u.mon.glb"])
 
     def test_check(self):
         obj = VariablesGroup(id="link::my_id", dr=self.dr)
         obj.check()
 
         obj = VariablesGroup(id="link::my_id", dr=self.dr,
-                             variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                                        "link::atmos.prc.tavg-u-hxy-u.mon.GLB"])
+                             variables=["link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                                        "link::atmos.prc.tavg-u-hxy-u.mon.glb"])
         obj.check()
 
     def test_methods(self):
@@ -329,13 +329,13 @@ class TestVariablesGroup(unittest.TestCase):
         self.assertEqual(obj.get_priority_level(), self.dr.find_element("priority_level", "High"))
 
         obj = VariablesGroup.from_input(id="link::dafc7484-8c95-11ef-944e-41a8eb05f654", dr=self.dr,
-                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                                                   "link::atmos.prc.tavg-u-hxy-u.mon.GLB"],
+                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                                                   "link::atmos.prc.tavg-u-hxy-u.mon.glb"],
                                         mips=["link::C4MIP", ], priority_level="High")
         self.assertEqual(obj.count(), 2)
         self.assertListEqual(obj.get_variables(),
-                             [self.dr.find_element("variables", "link::atmos.pr.tavg-u-hxy-u.mon.GLB"),
-                              self.dr.find_element("variables", "link::atmos.prc.tavg-u-hxy-u.mon.GLB")])
+                             [self.dr.find_element("variables", "link::atmos.pr.tavg-u-hxy-u.mon.glb"),
+                              self.dr.find_element("variables", "link::atmos.prc.tavg-u-hxy-u.mon.glb")])
         self.assertEqual(obj.get_mips(), [self.dr.find_element("mips", "link::C4MIP")])
         self.assertDictEqual(obj.get_priority_level().attributes,
                              {'name': "High", "notes": "The variables support the core objectives of the opportunity.  These are required to make the opportunity viable.", "value": 2,
@@ -345,8 +345,8 @@ class TestVariablesGroup(unittest.TestCase):
         var_grp1 = self.dr.find_element("variable_groups", "ocean_KE_vorticity_extremes")
         var_grp2 = copy.deepcopy(var_grp1)
         var_grp3 = self.dr.find_element("variable_groups", "ocean_temperature_extremes")
-        var_2 = self.dr.find_element("variable", "ocean.tossq.tavg-u-hxy-sea.day.GLB")
-        var_1 = self.dr.find_element("variable", "ocean.vos.tavg-u-hxy-sea.day.GLB")
+        var_2 = self.dr.find_element("variable", "ocean.tossq.tavg-u-hxy-sea.day.glb")
+        var_1 = self.dr.find_element("variable", "ocean.vos.tavg-u-hxy-sea.day.glb")
         mip_2 = self.dr.find_element("mips", "CORDEX")
         mip_1 = self.dr.find_element("mips", "TIPMIP")
         prio_2 = self.dr.find_element("priority_level", "High")
@@ -403,14 +403,14 @@ class TestVariablesGroup(unittest.TestCase):
     def test_print(self):
         obj = VariablesGroup.from_input(id="link::baseline_monthly", dr=self.dr, priority_level="Medium",
                                         name="baseline_monthly",
-                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                                                   "link::atmos.prc.tavg-u-hxy-u.mon.GLB"])
+                                        variables=["link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                                                   "link::atmos.prc.tavg-u-hxy-u.mon.glb"])
         ref_str = "variable_group: baseline_monthly"
         ref_str_2 = [
             ref_str,
             "    Variables included:",
-            "        variable: pr at frequency mon (id: atmos.pr.tavg-u-hxy-u.mon.GLB, title: Precipitation)",
-            "        variable: prc at frequency mon (id: atmos.prc.tavg-u-hxy-u.mon.GLB, "
+            "        variable: pr at frequency mon (id: atmos.pr.tavg-u-hxy-u.mon.glb, title: Precipitation)",
+            "        variable: prc at frequency mon (id: atmos.prc.tavg-u-hxy-u.mon.glb, "
             "title: Convective Precipitation)"
         ]
         self.assertEqual(obj.print_content(add_content=False), [ref_str, ])
@@ -427,8 +427,8 @@ class TestVariablesGroup(unittest.TestCase):
         obj3 = VariablesGroup(id="link::my_id_2", dr=self.dr)
         self.assertNotEqual(obj, obj3)
 
-        obj4 = VariablesGroup(id="link::my_id", dr=self.dr, variables=["link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                                                                       "link::atmos.prc.tavg-u-hxy-u.mon.GLB"])
+        obj4 = VariablesGroup(id="link::my_id", dr=self.dr, variables=["link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                                                                       "link::atmos.prc.tavg-u-hxy-u.mon.glb"])
         self.assertNotEqual(obj, obj4)
 
         obj5 = VariablesGroup(id="link::my_id", dr=self.dr, mips=["link::C4MIP", ])
@@ -572,8 +572,8 @@ class TestOpportunity(unittest.TestCase):
         exp_1 = self.dr.find_element("experiment", "esm-hist")
         exp_2 = self.dr.find_element("experiment", "piClim-NOX")
         time_1 = self.dr.find_element("time_subset", "link::hist20")
-        var_2 = self.dr.find_element("variable", "atmos.tas.tavg-h2m-hxy-u.day.GLB")
-        var_1 = self.dr.find_element("variable", "ocean.vos.tavg-u-hxy-sea.day.GLB")
+        var_2 = self.dr.find_element("variable", "atmos.tas.tavg-h2m-hxy-u.day.glb")
+        var_1 = self.dr.find_element("variable", "ocean.vos.tavg-u-hxy-sea.day.glb")
         mip_2 = self.dr.find_element("mips", "LUMIP")
         mip_1 = self.dr.find_element("mips", "TIPMIP")
         prio_2 = self.dr.find_element("priority_level", "High")
@@ -880,8 +880,8 @@ class TestDataRequestFilter(unittest.TestCase):
         self.maxDiff = None
 
     def test_element_per_identifier_from_vs(self):
-        id_var = "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB"
-        name_var = "ocean.wo.tavg-ol-hxy-sea.mon.GLB"
+        id_var = "link::ocean.wo.tavg-ol-hxy-sea.mon.glb"
+        name_var = "ocean.wo.tavg-ol-hxy-sea.mon.glb"
         target_var = self.dr.find_element("variables", id_var)
         self.assertEqual(self.dr.find_element_per_identifier_from_vs(element_type="variables", key="id", value=id_var),
                          target_var)
@@ -906,8 +906,8 @@ class TestDataRequestFilter(unittest.TestCase):
                          None)
 
     def test_element_from_vs(self):
-        id_var = "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB"
-        name_var = "ocean.wo.tavg-ol-hxy-sea.mon.GLB"
+        id_var = "link::ocean.wo.tavg-ol-hxy-sea.mon.glb"
+        name_var = "ocean.wo.tavg-ol-hxy-sea.mon.glb"
         target_var = self.dr.find_element("variables", id_var)
         self.assertEqual(self.dr.find_element_from_vs(element_type="variables", value=id_var), target_var)
         self.assertEqual(self.dr.find_element_from_vs(element_type="variables", value=name_var), target_var)
@@ -938,7 +938,7 @@ class TestDataRequestFilter(unittest.TestCase):
                              self.dr.get_opportunities())
 
         self.assertListEqual(self.dr.filter_elements_per_request("experiment_groups",
-                                                                 requests=dict(variable="ocean.wo.tavg-ol-hxy-sea.mon.GLB")),
+                                                                 requests=dict(variable="ocean.wo.tavg-ol-hxy-sea.mon.glb")),
                              [self.dr.find_element("experiment_group", id)
                               for id in ["link::deck", "link::fast-track", "link::historical", "link::scenarios",
                                          "link::scenarios_extensions"]])
@@ -949,21 +949,21 @@ class TestDataRequestFilter(unittest.TestCase):
                                    "link::ocean_temperature_extremes", "link::sea_level_extremes", "link::sfc_waves",
                                    "link::surgemip_variables"]]
         self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
-                                                                 requests=dict(experiment="scen7-hc-ext")),
+                                                                 requests=dict(experiment="scen7-hl-ext")),
                              list_var_grp)
         found_vargrp_all = self.dr.filter_elements_per_request("variable_groups",
-                                                               requests=dict(experiment="scen7-hc-ext"),
+                                                               requests=dict(experiment="scen7-hl-ext"),
                                                                not_requests=dict(
                                                                    opportunity="Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                                                                   variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
+                                                                   variable=["ocean.tos.tpt-u-hxy-sea.3hr.glb", "seaIce.sithick.tavg-u-hxy-si.day.glb"]),
                                                                not_request_operation="all")
         self.assertEqual(len(found_vargrp_all), len(list_var_grp))
         self.assertListEqual(found_vargrp_all, list_var_grp)
         found_vargrp_any = self.dr.filter_elements_per_request("variable_groups",
-                                                               requests=dict(experiment="scen7-hc-ext"),
+                                                               requests=dict(experiment="scen7-hl-ext"),
                                                                not_requests=dict(
                                                                    opportunity="Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                                                                   variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
+                                                                   variable=["ocean.tos.tpt-u-hxy-sea.3hr.glb", "seaIce.sithick.tavg-u-hxy-si.day.glb"]),
                                                                not_request_operation="any")
         list_vargrp_any = [self.dr.find_element("variable_group", elt)
                            for elt in ["link::mixed_layer_extremes", "link::ocean_KE_vorticity_extremes",
@@ -971,10 +971,10 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertEqual(len(found_vargrp_any), len(list_vargrp_any))
         self.assertListEqual(found_vargrp_any, list_vargrp_any)
         found_vargrp_anyofall = self.dr.filter_elements_per_request("variable_groups",
-                                                                    requests=dict(experiment="scen7-hc-ext"),
+                                                                    requests=dict(experiment="scen7-hl-ext"),
                                                                     not_requests=dict(
                                                                         opportunity="Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                                                                        variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
+                                                                        variable=["ocean.tos.tpt-u-hxy-sea.3hr.glb", "seaIce.sithick.tavg-u-hxy-si.day.glb"]),
                                                                     not_request_operation="any_of_all")
         list_vargrp_anyofall = [self.dr.find_element("variable_group", elt)
                                 for elt in ["link::mixed_layer_extremes", "link::ocean_KE_vorticity_extremes",
@@ -983,42 +983,42 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertEqual(len(found_vargrp_anyofall), len(list_vargrp_anyofall))
         self.assertListEqual(found_vargrp_anyofall, list_vargrp_anyofall)
         found_vargrp_allofany = self.dr.filter_elements_per_request("variable_groups",
-                                                                    requests=dict(experiment="scen7-hc-ext"),
+                                                                    requests=dict(experiment="scen7-hl-ext"),
                                                                     not_requests=dict(
                                                                         opportunity="Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models",
-                                                                        variable=["ocean.tos.tpt-u-hxy-sea.3hr.GLB", "seaIce.sithick.tavg-u-hxy-si.day.GLB"]),
+                                                                        variable=["ocean.tos.tpt-u-hxy-sea.3hr.glb", "seaIce.sithick.tavg-u-hxy-si.day.glb"]),
                                                                     not_request_operation="all_of_any")
         self.assertEqual(len(found_vargrp_allofany), len(list_var_grp))
         self.assertListEqual(found_vargrp_allofany, list_var_grp)
         self.assertListEqual(self.dr.filter_elements_per_request("variable_groups",
-                                                                 requests=dict(experiment="scen7-hc-ext"),
+                                                                 requests=dict(experiment="scen7-hl-ext"),
                                                                  not_requests=dict(opportunity="Effects and Feedbacks of Wind-Driven Ocean Surface Waves Coupled Within Earth System Models")),
                              [self.dr.find_element("variable_group", elt)
                               for elt in ["link::mixed_layer_extremes", "link::ocean_KE_vorticity_extremes",
                                           "link::ocean_acidification_oxygen_extremes", "link::ocean_temperature_extremes",
                                           "link::sea_level_extremes", "link::surgemip_variables"]])
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_groups(),
-                                                                 requests=dict(experiment="scen7-hc-ext")),
+                                                                 requests=dict(experiment="scen7-hl-ext")),
                              list_var_grp)
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group("ocean_temperature_extremes"),
-                                                                 requests=dict(experiment="scen7-hc-ext")),
+                                                                 requests=dict(experiment="scen7-hl-ext")),
                              [self.dr.find_element("variable_group", "ocean_temperature_extremes"), ])
 
     def test_find_variables_per_priority(self):
         priority = "Medium"
         priority_obj = self.dr.find_element("priority_level", "link::Medium")
         target_var_list = [self.dr.find_element("variables", id)
-                           for id in ["link::atmos.rlds.tavg-u-hxy-u.3hr.GLB", "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
-                                      "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB", "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
-                                      "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB", "link::land.tran.tavg-u-hxy-u.3hr.GLB",
-                                      "link::ocean.so.tavg-ol-hxy-sea.day.GLB", "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
-                                      "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB", "link::ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
-                                      "link::ocean.tos.tavg-u-hxy-sea.day.GLB", "link::ocean.uos.tavg-u-hxy-sea.day.GLB",
-                                      "link::ocean.vos.tavg-u-hxy-sea.day.GLB", "link::ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB",
-                                      "link::ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB", "link::ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB",
-                                      "link::ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB", "link::ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB",
-                                      "link::ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB", "link::ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB",
-                                      "link::ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB", "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"]]
+                           for id in ["link::atmos.rlds.tavg-u-hxy-u.3hr.glb", "link::atmos.rlus.tavg-u-hxy-u.3hr.glb",
+                                      "link::atmos.ta.tpt-p6-hxy-air.3hr.glb", "link::land.hfdsl.tavg-u-hxy-lnd.3hr.glb",
+                                      "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.glb", "link::land.tran.tavg-u-hxy-u.3hr.glb",
+                                      "link::ocean.so.tavg-ol-hxy-sea.day.glb", "link::ocean.sos.tavg-u-hxy-sea.day.glb",
+                                      "link::ocean.thetao.tavg-op20bar-hxy-sea.day.glb", "link::ocean.tnkebto.tavg-u-hxy-sea.yr.glb",
+                                      "link::ocean.tos.tavg-u-hxy-sea.day.glb", "link::ocean.uos.tavg-u-hxy-sea.day.glb",
+                                      "link::ocean.vos.tavg-u-hxy-sea.day.glb", "link::ocnBgchem.arag.tavg-ol-hxy-sea.mon.glb",
+                                      "link::ocnBgchem.arag.tavg-ols-hxy-sea.mon.glb", "link::ocnBgchem.calc.tavg-ol-hxy-sea.mon.glb",
+                                      "link::ocnBgchem.calc.tavg-ols-hxy-sea.mon.glb", "link::ocnBgchem.chl.tavg-op20bar-hxy-sea.day.glb",
+                                      "link::ocnBgchem.dissic.tavg-ol-hxy-sea.mon.glb", "link::ocnBgchem.o2.tavg-op20bar-hxy-sea.day.glb",
+                                      "link::ocnBgchem.ph.tavg-op20bar-hxy-sea.day.glb", "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.glb"]]
         var_list = self.dr.find_variables_per_priority(priority=priority)
         self.assertEqual(len(var_list), 22)
         self.assertListEqual(var_list, target_var_list)
@@ -1046,9 +1046,9 @@ class TestDataRequestFilter(unittest.TestCase):
         theme_target = self.dr.find_element("data_request_themes", theme_id)
         exp = [self.dr.find_element("experiments", id)
                for id in ["link::amip", "link::dcppB-forecast-cmip6", "link::esm-flat10", "link::esm-hist",
-                          "link::esm-piControl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
-                          "link::piClim-NOX", "link::scen7-hc", "link::scen7-mc", "link::scen7-mlc",
-                          "link::scen7-vlloc"]]
+                          "link::esm-piControl", "link::esm-scen7-hl", "link::esm-scen7-m", "link::esm-scen7-vl",
+                          "link::g7-1p5K-sai", "link::historical", "link::land-hist", "link::piClim-NOX",
+                          "link::scen7-hl", "link::scen7-m", "link::scen7-vl"]]
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_id), exp)
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_name), exp)
         self.assertListEqual(self.dr.find_experiments_per_theme(theme_target), exp)
@@ -1058,39 +1058,42 @@ class TestDataRequestFilter(unittest.TestCase):
         theme_name = "Land & Land-Ice"
         theme_target = self.dr.find_element("data_request_themes", theme_id)
         var = [self.dr.find_element("variables", id)
-               for id in ["link::atmos.areacell.ti-u-hxy-u.fx.GLB", "link::atmos.bldep.tpt-u-hxy-u.3hr.GLB",
-                          "link::atmos.hfls.tavg-u-hxy-u.3hr.GLB", "link::atmos.hfss.tavg-u-hxy-u.3hr.GLB",
-                          "link::atmos.hurs.tavg-h2m-hxy-u.6hr.GLB", "link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
-                          "link::atmos.pr.tavg-u-hxy-u.1hr.GLB", "link::atmos.pr.tavg-u-hxy-u.3hr.GLB",
-                          "link::atmos.pr.tavg-u-hxy-u.day.GLB", "link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                          "link::atmos.prc.tavg-u-hxy-u.mon.GLB", "link::atmos.ps.tavg-u-hxy-u.day.GLB",
-                          "link::atmos.ps.tpt-u-hxy-u.3hr.GLB", "link::atmos.psl.tavg-u-hxy-u.day.GLB",
-                          "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB", "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
-                          "link::atmos.sfcWind.tavg-h10m-hxy-u.day.GLB", "link::atmos.sfcWind.tavg-h10m-hxy-u.mon.GLB",
-                          "link::atmos.sftlf.ti-u-hxy-u.fx.GLB", "link::atmos.ta.tavg-p19-hxy-air.day.GLB",
-                          "link::atmos.ta.tavg-p19-hxy-air.mon.GLB", "link::atmos.ta.tpt-p3-hxy-air.6hr.GLB",
-                          "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB", "link::atmos.tas.tavg-h2m-hxy-u.day.GLB",
-                          "link::atmos.tas.tavg-h2m-hxy-u.mon.GLB", "link::atmos.tas.tmax-h2m-hxy-u.day.GLB",
-                          "link::atmos.tas.tmax-h2m-hxy-u.mon.GLB", "link::atmos.tas.tmin-h2m-hxy-u.day.GLB",
-                          "link::atmos.tas.tmin-h2m-hxy-u.mon.GLB", "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB",
-                          "link::atmos.ts.tavg-u-hxy-u.mon.GLB", "link::atmos.zg.tavg-p19-hxy-air.day.GLB",
-                          "link::atmos.zg.tavg-p19-hxy-air.mon.GLB", "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
-                          "link::land.lai.tavg-u-hxy-lnd.mon.GLB", "link::land.mrso.tavg-u-hxy-lnd.mon.GLB",
-                          "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB", "land.mrsol.tavg-d10cm-hxy-lnd.mon.GLB",
-                          "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB", "link::land.orog.ti-u-hxy-u.fx.GLB",
-                          "link::land.rootd.ti-u-hxy-lnd.fx.GLB", "link::land.slthick.ti-sl-hxy-lnd.fx.GLB",
-                          "link::land.srfrad.tavg-u-hxy-u.3hr.GLB", "link::land.tran.tavg-u-hxy-u.3hr.GLB",
-                          "link::land.tslsi.tpt-u-hxy-u.3hr.GLB", "link::landIce.snc.tavg-u-hxy-lnd.mon.GLB",
-                          "link::ocean.areacell.ti-u-hxy-u.fx.GLB", "link::ocean.bigthetao.tavg-ol-hxy-sea.mon.GLB",
-                          "link::ocean.deptho.ti-u-hxy-sea.fx.GLB", "link::ocean.masscello.ti-ol-hxy-sea.fx.GLB",
-                          "link::ocean.so.tavg-ol-hxy-sea.mon.GLB", "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
-                          "link::ocean.sos.tavg-u-hxy-sea.mon.GLB", "link::ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
-                          "link::ocean.tos.tavg-u-hxy-sea.day.GLB", "link::ocean.tos.tavg-u-hxy-sea.mon.GLB",
-                          "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB", "link::ocean.zos.tavg-u-hxy-sea.day.GLB",
-                          "link::ocean.zos.tavg-u-hxy-sea.mon.GLB", "link::ocean.zostoga.tavg-u-hm-sea.mon.GLB",
-                          "link::seaIce.siconc.tavg-u-hxy-u.day.GLB", "link::seaIce.siconc.tavg-u-hxy-u.mon.GLB",
-                          "link::seaIce.simass.tavg-u-hxy-sea.mon.GLB", "link::seaIce.sithick.tavg-u-hxy-si.mon.GLB",
-                          "link::seaIce.siu.tavg-u-hxy-si.mon.GLB", "link::seaIce.siv.tavg-u-hxy-si.mon.GLB"]]
+               for id in ["link::atmos.areacella.ti-u-hxy-u.fx.glb", "link::atmos.bldep.tpt-u-hxy-u.3hr.glb",
+                          "link::atmos.hfls.tavg-u-hxy-u.3hr.glb", "link::atmos.hfss.tavg-u-hxy-u.3hr.glb",
+                          "link::atmos.hurs.tavg-h2m-hxy-u.6hr.glb", "link::atmos.huss.tpt-h2m-hxy-u.3hr.glb",
+                          "link::atmos.pr.tavg-u-hxy-u.1hr.glb", "link::atmos.pr.tavg-u-hxy-u.3hr.glb",
+                          "link::atmos.pr.tavg-u-hxy-u.day.glb", "link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                          "link::atmos.prc.tavg-u-hxy-u.mon.glb", "link::atmos.ps.tavg-u-hxy-u.day.glb",
+                          "link::atmos.ps.tpt-u-hxy-u.3hr.glb", "link::atmos.psl.tavg-u-hxy-u.day.glb",
+                          "link::atmos.rlds.tavg-u-hxy-u.3hr.glb", "link::atmos.rlus.tavg-u-hxy-u.3hr.glb",
+                          "link::atmos.sfcWind.tavg-h10m-hxy-u.day.glb", "link::atmos.sfcWind.tavg-h10m-hxy-u.mon.glb",
+                          "link::atmos.sftlf.ti-u-hxy-u.fx.glb", "link::atmos.ta.tavg-p19-hxy-air.day.glb",
+                          "link::atmos.ta.tavg-p19-hxy-air.mon.glb", "link::atmos.ta.tpt-p3-hxy-air.6hr.glb",
+                          "link::atmos.ta.tpt-p6-hxy-air.3hr.glb", "link::atmos.tas.tavg-h2m-hxy-u.day.glb",
+                          "link::atmos.tas.tavg-h2m-hxy-u.mon.glb", "link::atmos.tas.tmax-h2m-hxy-u.day.glb",
+                          "link::atmos.tas.tmaxavg-h2m-hxy-u.mon.glb", "link::atmos.tas.tmin-h2m-hxy-u.day.glb",
+                          "link::atmos.tas.tminavg-h2m-hxy-u.mon.glb", "link::atmos.tas.tpt-h2m-hxy-u.3hr.glb",
+                          "link::atmos.ts.tavg-u-hxy-u.mon.glb", "link::atmos.zg.tavg-p19-hxy-air.day.glb",
+                          "link::atmos.zg.tavg-p19-hxy-air.mon.glb", "link::land.hfdsl.tavg-u-hxy-lnd.3hr.glb",
+                          "link::land.lai.tavg-u-hxy-lnd.mon.glb", "link::land.mrso.tavg-u-hxy-lnd.mon.glb",
+                          "link::land.mrsofc.ti-u-hxy-lnd.fx.glb", "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.glb",
+                          "land.mrsol.tavg-d10cm-hxy-lnd.mon.glb", "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.glb",
+                          "link::land.orog.ti-u-hxy-u.fx.glb", "link::land.rootd.ti-u-hxy-lnd.fx.glb",
+                          "link::land.sftgif.ti-u-hxy-u.fx.glb", "link::land.slthick.ti-sl-hxy-lnd.fx.glb",
+                          "link::land.srfrad.tavg-u-hxy-u.3hr.glb", "link::land.tran.tavg-u-hxy-u.3hr.glb",
+                          "link::land.tslsi.tpt-u-hxy-lsi.3hr.glb", "link::landIce.snc.tavg-u-hxy-lnd.mon.glb",
+                          "link::ocean.areacello.ti-u-hxy-u.fx.glb", "link::ocean.basin.ti-u-hxy-u.fx.glb",
+                          "link::ocean.bigthetao.tavg-ol-hxy-sea.mon.glb", "link::ocean.deptho.ti-u-hxy-sea.fx.glb",
+                          "link::ocean.hfgeou.ti-u-hxy-sea.fx.glb", "link::ocean.masscello.ti-ol-hxy-sea.fx.glb",
+                          "link::ocean.sftof.ti-u-hxy-u.fx.glb", "link::ocean.so.tavg-ol-hxy-sea.mon.glb",
+                          "link::ocean.sos.tavg-u-hxy-sea.day.glb", "link::ocean.sos.tavg-u-hxy-sea.mon.glb",
+                          "link::ocean.thetao.tavg-ol-hxy-sea.mon.glb", "link::ocean.thkcello.ti-ol-hxy-sea.fx.glb",
+                          "link::ocean.tos.tavg-u-hxy-sea.day.glb", "link::ocean.tos.tavg-u-hxy-sea.mon.glb",
+                          "link::ocean.wo.tavg-ol-hxy-sea.mon.glb", "link::ocean.zos.tavg-u-hxy-sea.day.glb",
+                          "link::ocean.zos.tavg-u-hxy-sea.mon.glb", "link::ocean.zostoga.tavg-u-hm-sea.mon.glb",
+                          "link::seaIce.siconc.tavg-u-hxy-u.day.glb", "link::seaIce.siconc.tavg-u-hxy-u.mon.glb",
+                          "link::seaIce.simass.tavg-u-hxy-si.mon.glb", "link::seaIce.sithick.tavg-u-hxy-si.mon.glb",
+                          "link::seaIce.siu.tavg-u-hxy-si.mon.glb", "link::seaIce.siv.tavg-u-hxy-si.mon.glb"]]
         self.assertListEqual(self.dr.find_variables_per_theme(theme_id), var)
         self.assertListEqual(self.dr.find_variables_per_theme(theme_name), var)
         self.assertListEqual(self.dr.find_variables_per_theme(theme_target), var)
@@ -1100,8 +1103,9 @@ class TestDataRequestFilter(unittest.TestCase):
         theme_name = "Atmosphere"
         theme_target = self.dr.find_element("data_request_themes", theme_id)
         mips = [self.dr.find_element("mips", id)
-                for id in ["link::CMIP", "link::DAMIP", "link::DCPP", "link::FireMIP", "link::HighResMIP",
-                           "link::LUMIP", "link::PMIP", "link::ScenarioMIP", "link::TIPMIP"]]
+                for id in ["link::AerChemMIP2", "link::CMIP", "link::DAMIP", "link::DCPP", "link::FireMIP",
+                           "link::GeoMIP", "link::HighResMIP", "link::LUMIP", "link::PMIP", "link::ScenarioMIP",
+                           "link::TIPMIP"]]
         self.assertListEqual(self.dr.find_mips_per_theme(theme_id), mips)
         self.assertListEqual(self.dr.find_mips_per_theme(theme_name), mips)
         self.assertListEqual(self.dr.find_mips_per_theme(theme_target), mips)
@@ -1121,8 +1125,8 @@ class TestDataRequestFilter(unittest.TestCase):
         op_name = "Accurate assessment of land-atmosphere coupling"
         op_target = self.dr.find_element("opportunities", op_id)
         exp = [self.dr.find_element("experiments", id)
-               for id in ["link::esm-hist", "link::historical", "link::scen7-hc", "link::scen7-mc", "link::scen7-mlc",
-                          "link::scen7-vlloc"]]
+               for id in ["link::esm-hist", "link::esm-scen7-hl", "link::esm-scen7-m", "link::esm-scen7-vl",
+                          "link::historical", "link::scen7-hl", "link::scen7-m", "link::scen7-vl"]]
         self.assertListEqual(self.dr.find_experiments_per_opportunity(op_id), exp)
         self.assertListEqual(self.dr.find_experiments_per_opportunity(op_name), exp)
         self.assertListEqual(self.dr.find_experiments_per_opportunity(op_target), exp)
@@ -1132,14 +1136,14 @@ class TestDataRequestFilter(unittest.TestCase):
         op_name = "Accurate assessment of land-atmosphere coupling"
         op_target = self.dr.find_element("opportunities", op_id)
         var = [self.dr.find_element("variables", id)
-               for id in ["link::atmos.bldep.tpt-u-hxy-u.3hr.GLB", "link::atmos.hfls.tavg-u-hxy-u.3hr.GLB",
-                          "link::atmos.hfss.tavg-u-hxy-u.3hr.GLB", "link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
-                          "link::atmos.pr.tavg-u-hxy-u.3hr.GLB", "link::atmos.ps.tpt-u-hxy-u.3hr.GLB",
-                          "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB", "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
-                          "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB", "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB",
-                          "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB", "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
-                          "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB", "link::land.srfrad.tavg-u-hxy-u.3hr.GLB",
-                          "link::land.tran.tavg-u-hxy-u.3hr.GLB", "link::land.tslsi.tpt-u-hxy-u.3hr.GLB"]]
+               for id in ["link::atmos.bldep.tpt-u-hxy-u.3hr.glb", "link::atmos.hfls.tavg-u-hxy-u.3hr.glb",
+                          "link::atmos.hfss.tavg-u-hxy-u.3hr.glb", "link::atmos.huss.tpt-h2m-hxy-u.3hr.glb",
+                          "link::atmos.pr.tavg-u-hxy-u.3hr.glb", "link::atmos.ps.tpt-u-hxy-u.3hr.glb",
+                          "link::atmos.rlds.tavg-u-hxy-u.3hr.glb", "link::atmos.rlus.tavg-u-hxy-u.3hr.glb",
+                          "link::atmos.ta.tpt-p6-hxy-air.3hr.glb", "link::atmos.tas.tpt-h2m-hxy-u.3hr.glb",
+                          "link::land.hfdsl.tavg-u-hxy-lnd.3hr.glb", "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.glb",
+                          "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.glb", "link::land.srfrad.tavg-u-hxy-u.3hr.glb",
+                          "link::land.tran.tavg-u-hxy-u.3hr.glb", "link::land.tslsi.tpt-u-hxy-lsi.3hr.glb"]]
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_id), var)
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_name), var)
         self.assertListEqual(self.dr.find_variables_per_opportunity(op_target), var)
@@ -1155,8 +1159,8 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_mips_per_opportunity(op_target), mips)
 
     def test_opportunities_per_variable(self):
-        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.GLB"
-        var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
+        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.glb"
+        var_name = "ocean.zos.tavg-u-hxy-sea.day.glb"
         var_target = self.dr.find_element("variables", var_id)
         op = [self.dr.find_element("opportunities", id)
               for id in ["link::49", "link::68", "link::69", ]]
@@ -1165,8 +1169,8 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_opportunities_per_variable(var_target), op)
 
     def test_themes_per_variable(self):
-        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.GLB"
-        var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
+        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.glb"
+        var_name = "ocean.zos.tavg-u-hxy-sea.day.glb"
         var_target = self.dr.find_element("variables", var_id)
         themes = [self.dr.find_element("data_request_themes", id)
                   for id in ["link::atmosphere", "link::earth_system", "link::impacts", "link::land_landice",
@@ -1177,11 +1181,11 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_themes_per_variable(var_target), themes)
 
     def test_mips_per_variable(self):
-        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.GLB"
-        var_name = "ocean.zos.tavg-u-hxy-sea.day.GLB"
+        var_id = "link::ocean.zos.tavg-u-hxy-sea.day.glb"
+        var_name = "ocean.zos.tavg-u-hxy-sea.day.glb"
         var_target = self.dr.find_element("variables", var_id)
         mips = [self.dr.find_element("mips", id)
-                for id in ["link::CMIP", "link::DAMIP", "link::DCPP", "link::FAFMIP", "link::FireMIP", "link::GeoMIP",
+                for id in ["link::AerChemMIP2", "link::CMIP", "link::DAMIP", "link::DCPP", "link::FAFMIP", "link::FireMIP", "link::GeoMIP",
                            "link::HighResMIP", "link::ISMIP7", "link::OMIP", "link::PMIP", "link::SIMIP",
                            "link::SOFIAMIP", "link::ScenarioMIP", "link::TIPMIP"]]
         self.assertListEqual(self.dr.find_mips_per_variable(var_id), mips)
@@ -1189,8 +1193,8 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_mips_per_variable(var_target), mips)
 
     def test_opportunities_per_experiment(self):
-        exp_id = "link::scen7-hc-ext"
-        exp_name = "scen7-hc-ext"
+        exp_id = "link::scen7-hl-ext"
+        exp_name = "scen7-hl-ext"
         exp_target = self.dr.find_element("experiments", exp_id)
         op = [self.dr.find_element("opportunities", id)
               for id in ["link::49", "link::68"]]
@@ -1199,8 +1203,8 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.find_opportunities_per_experiment(exp_target), op)
 
     def test_themes_per_experiment(self):
-        exp_id = "link::scen7-hc-ext"
-        exp_name = "scen7-hc-ext"
+        exp_id = "link::scen7-hl-ext"
+        exp_name = "scen7-hl-ext"
         exp_target = self.dr.find_element("experiments", exp_id)
         themes = [self.dr.find_element("data_request_themes", id)
                   for id in ["link::atmosphere", "link::earth_system", "link::impacts", "link::ocean_seaice"]]
@@ -1225,8 +1229,9 @@ class TestDataRequestFilter(unittest.TestCase):
         expgrp_id = ["link::dcpp", "link::historical"]
         list_all = list()
         list_any = [self.dr.find_element("experiments", id)
-                    for id in ["link::dcppB-forecast-cmip6", "link::esm-hist", "link::historical", "link::scen7-hc",
-                               "link::scen7-mc", "link::scen7-mlc", "link::scen7-vlloc"]]
+                    for id in ["link::dcppB-forecast-cmip6", "link::esm-hist", "link::esm-scen7-hl",
+                               "link::esm-scen7-m", "link::esm-scen7-vl", "link::historical", "link::scen7-hl",
+                               "link::scen7-m", "link::scen7-vl"]]
         self.assertListEqual(self.dr.find_experiments(operation="all", opportunities=op_id,
                                                       experiment_groups=expgrp_id), list_all)
         self.assertListEqual(self.dr.find_experiments(operation="any", opportunities=op_id,
@@ -1234,58 +1239,59 @@ class TestDataRequestFilter(unittest.TestCase):
 
     def test_find_variables(self):
         table_id = "527f5ced-8c97-11ef-944e-41a8eb05f654"
-        vars_id = ["atmos.pr.tavg-u-hxy-u.1hr.GLB", "atmos.psl.tpt-u-hxy-u.1hr.GLB",
-                   "atmos.uas.tpt-h10m-hxy-u.1hr.GLB", "atmos.vas.tpt-h10m-hxy-u.1hr.GLB"]
+        vars_id = ["atmos.pr.tavg-u-hxy-u.1hr.glb", "atmos.psl.tpt-u-hxy-u.1hr.glb",
+                   "atmos.uas.tpt-h10m-hxy-u.1hr.glb", "atmos.vas.tpt-h10m-hxy-u.1hr.glb"]
         self.assertListEqual(self.dr.find_variables(operation="all", table_identifier=table_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         tshp_id = "a06034e5-bbca-11ef-9840-9de7167a7ecb"
-        vars_id = ["atmos.tas.tmax-h2m-hxy-u.mon.GLB", "atmos.tas.tmin-h2m-hxy-u.mon.GLB"]
+        vars_id = ["atmos.tas.tmaxavg-h2m-hxy-u.mon.glb", "atmos.tas.tminavg-h2m-hxy-u.mon.glb"]
         self.assertListEqual(self.dr.find_variables(operation="all", temporal_shape=tshp_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         sshp_id = "a6563bca-8883-11e5-b571-ac72891c3257"
-        vars_id = ["land.slthick.ti-sl-hxy-lnd.fx.GLB", ]
+        vars_id = ["land.slthick.ti-sl-hxy-lnd.fx.glb", ]
         self.assertListEqual(self.dr.find_variables(operation="all", spatial_shape=sshp_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         param_id = "00e77372e8b909d9a827a0790e991fd9"
-        vars_id = ["land.orog.ti-u-hxy-u.fx.GLB", ]
+        vars_id = ["land.orog.ti-u-hxy-u.fx.glb", ]
         self.assertListEqual(self.dr.find_variables(operation="all", physical_parameter=param_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         realm_id = "ocnBgchem"
-        vars_id = ["ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB", "ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB",
-                   "ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB", "ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB",
-                   "ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB", "ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB",
-                   "ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB", "ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB",
-                   "ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"]
+        vars_id = ["ocnBgchem.arag.tavg-ol-hxy-sea.mon.glb", "ocnBgchem.arag.tavg-ols-hxy-sea.mon.glb",
+                   "ocnBgchem.calc.tavg-ol-hxy-sea.mon.glb", "ocnBgchem.calc.tavg-ols-hxy-sea.mon.glb",
+                   "ocnBgchem.chl.tavg-op20bar-hxy-sea.day.glb", "ocnBgchem.dissic.tavg-ol-hxy-sea.mon.glb",
+                   "ocnBgchem.o2.tavg-op20bar-hxy-sea.day.glb", "ocnBgchem.ph.tavg-op20bar-hxy-sea.day.glb",
+                   "ocnBgchem.talk.tavg-ol-hxy-sea.mon.glb"]
         self.assertListEqual(self.dr.find_variables(operation="all", modelling_realm=realm_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         bcv_id = "80ab7325-a698-11ef-914a-613c0433d878"
-        vars_id = ["atmos.pr.tavg-u-hxy-u.3hr.GLB", ]
+        vars_id = ["atmos.pr.tavg-u-hxy-u.3hr.glb", ]
         self.assertListEqual(self.dr.find_variables(operation="all", **{"esm-bcv": bcv_id}),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         cf_std_id = "3ba6666e-8ca2-11ef-944e-41a8eb05f654"
-        vars_id = ["atmos.prc.tavg-u-hxy-u.mon.GLB", ]
+        vars_id = ["atmos.prc.tavg-u-hxy-u.mon.glb", ]
         self.assertListEqual(self.dr.find_variables(operation="all", cf_standard_name=cf_std_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         cell_methods_id = "a269a4c3-8c9b-11ef-944e-41a8eb05f654"
-        vars_id = ["land.rootd.ti-u-hxy-lnd.fx.GLB", "land.slthick.ti-sl-hxy-lnd.fx.GLB"]
+        vars_id = ["land.mrsofc.ti-u-hxy-lnd.fx.glb", "land.rootd.ti-u-hxy-lnd.fx.glb",
+                   "land.slthick.ti-sl-hxy-lnd.fx.glb"]
         self.assertListEqual(self.dr.find_variables(operation="all", cell_methods=cell_methods_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
         cell_measure_id = "a269a4fb-8c9b-11ef-944e-41a8eb05f654"
-        vars_id = ["seaIce.siu.tavg-u-hxy-si.day.GLB", "seaIce.siu.tavg-u-hxy-si.mon.GLB",
-                   "seaIce.siv.tavg-u-hxy-si.day.GLB", "seaIce.siv.tavg-u-hxy-si.mon.GLB"]
+        vars_id = ["seaIce.siu.tavg-u-hxy-si.day.glb", "seaIce.siu.tavg-u-hxy-si.mon.glb",
+                   "seaIce.siv.tavg-u-hxy-si.day.glb", "seaIce.siv.tavg-u-hxy-si.mon.glb"]
         self.assertListEqual(self.dr.find_variables(operation="all", cell_measures=cell_measure_id),
                              [self.dr.find_element("variables", var_id) for var_id in vars_id])
 
     def test_find_priority_per_variable(self):
-        var_id = "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB"
+        var_id = "link::ocean.tos.tpt-u-hxy-sea.3hr.glb"
         var = self.dr.find_element("variable", var_id)
         self.assertEqual(self.dr.find_priority_per_variable(var), 2)
 
