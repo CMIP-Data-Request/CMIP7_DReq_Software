@@ -1018,7 +1018,6 @@ class TestDataRequestFilter(unittest.TestCase):
             self.dr.filter_elements_per_request("experiment", not_requests=dict(experiment_group=["fast-track", "deck"]), not_request_operation="any"),
             [self.dr.find_element("experiment", elt) for elt in list_experiments_not_filtered])
 
-
     def test_find_variables_per_priority(self):
         priority = "Medium"
         priority_obj = self.dr.find_element("priority_level", "link::Medium")
