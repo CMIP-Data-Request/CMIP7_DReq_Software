@@ -1003,15 +1003,12 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group("ocean_temperature_extremes"),
                                                                  requests=dict(experiment="scen7-hl-ext")),
                              [self.dr.find_element("variable_group", "ocean_temperature_extremes"), ])
-        list_experiments = ["link::amip", "link::dcppB-forecast-cmip6", "link::esm-flat10", "link::esm-hist",
-                            "link::esm-piControl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
-                            "link::piClim-NOX", "link::scen7-hc", "link::scen7-hc-ext", "link::scen7-hc-ext-os",
-                            "link::scen7-mc", "link::scen7-mc-ext", "link::scen7-mlc", "link::scen7-vlloc"]
         list_experiments_filtered = ["link::amip", "link::dcppB-forecast-cmip6", "link::esm-flat10", "link::esm-hist",
-                                     "link::esm-piControl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
-                                     "link::piClim-NOX", "link::scen7-hc", "link::scen7-mc", "link::scen7-mlc",
-                                     "link::scen7-vlloc"]
-        list_experiments_not_filtered = ["link::scen7-hc-ext", "link::scen7-hc-ext-os", "link::scen7-mc-ext"]
+                                     "link::esm-piControl", "link::esm-scen7-hl", "link::esm-scen7-m",
+                                     "link::esm-scen7-vl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
+                                     "link::piClim-NOX", "link::scen7-hl", "link::scen7-m", "link::scen7-vl"]
+        list_experiments_not_filtered = ["link::esm-scen7-hl-ext", "link::esm-scen7-m-ext", "link::esm-scen7-vl-ext",
+                                         "link::scen7-hl-ext", "link::scen7-m-ext", "link::scen7-vl-ext"]
         self.assertListEqual(self.dr.filter_elements_per_request("experiment", requests=dict(experiment_group=["fast-track", "deck"]), request_operation="any"),
                              [self.dr.find_element("experiment", elt) for elt in list_experiments_filtered])
         self.assertListEqual(
