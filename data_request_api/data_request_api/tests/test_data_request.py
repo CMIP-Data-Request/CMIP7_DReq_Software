@@ -1003,6 +1003,20 @@ class TestDataRequestFilter(unittest.TestCase):
         self.assertListEqual(self.dr.filter_elements_per_request(self.dr.get_variable_group("ocean_temperature_extremes"),
                                                                  requests=dict(experiment="scen7-hl-ext")),
                              [self.dr.find_element("variable_group", "ocean_temperature_extremes"), ])
+        list_experiments = ["link::amip", "link::dcppB-forecast-cmip6", "link::esm-flat10", "link::esm-hist",
+                            "link::esm-piControl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
+                            "link::piClim-NOX", "link::scen7-hc", "link::scen7-hc-ext", "link::scen7-hc-ext-os",
+                            "link::scen7-mc", "link::scen7-mc-ext", "link::scen7-mlc", "link::scen7-vlloc"]
+        list_experiments_filtered = ["link::amip", "link::dcppB-forecast-cmip6", "link::esm-flat10", "link::esm-hist",
+                                     "link::esm-piControl", "link::g7-1p5K-sai", "link::historical", "link::land-hist",
+                                     "link::piClim-NOX", "link::scen7-hc", "link::scen7-mc", "link::scen7-mlc",
+                                     "link::scen7-vlloc"]
+        list_experiments_not_filtered = ["link::scen7-hc-ext", "link::scen7-hc-ext-os", "link::scen7-mc-ext"]
+        self.assertListEqual(self.dr.filter_elements_per_request("experiment", requests=dict(experiment_group=["fast-track", "deck"]), request_operation="any"),
+                             [self.dr.find_element("experiment", elt) for elt in list_experiments_filtered])
+        self.assertListEqual(
+            self.dr.filter_elements_per_request("experiment", not_requests=dict(experiment_group=["fast-track", "deck"]), not_request_operation="any"),
+            [self.dr.find_element("experiment", elt) for elt in list_experiments_not_filtered])
 
     def test_find_variables_per_priority(self):
         priority = "Medium"
