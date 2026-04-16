@@ -1,0 +1,43 @@
+# Minimal template for a data request Opportunity, for use by community MIPs.
+
+Title: Short descriptive title of the Opportunity
+
+MIP: Name of MIP
+
+Description: Statement of the general purpose of this data request.
+
+Expected Impacts: (Optional) Explanation of why this combination of variables and experiments is important.
+
+Justification of Resources: (Optional) Explanation of how the requested variables map onto the impacts, and estimate of the resources required.
+
+Experiment Groups:
+# An Experiment Group specifies a list of experiments for which requested variables should be produced.
+# A community MIP may need only one experiment group, but existing groups can also be listed, or existing
+# experiments included in a new group (but note that runs of AFT experiments may already have been completed
+# by modelling centres.)
+- example_experiment_group # new Experiment Group, defined below
+
+Variable Groups:
+# Each Variable Group defines a set of requested variables and its priority.
+# The list of Variable Groups can include both new and existing groups.
+- baseline_monthly # existing Variable Group
+- example_variable_group # new Variable Group, defined below
+
+New Experiment Groups:
+
+  example_experiment_group:
+    Title: Short descriptive title of the Experiment Group
+    Experiments:
+      - amip # existing experiment
+      - example_new_experiment # new experiment, must be registered in CVs
+
+New Variable Groups:
+  
+  example_variable_group: 
+    Title: Short descriptive title of the Variable Group
+    Priority Level: High # High, Medium, or Low (not case sensitive)
+    Justification: (Optional) Explanation of why these variables are important.
+    Notes: (Optional) Any additional comments about the variable group.
+    Variables: # list of requested variable names
+      - land.gpp.tavg-u-hxy-lnd.mon.glb
+      - atmos.fco2nat.tavg-u-hxy-u.mon.glb
