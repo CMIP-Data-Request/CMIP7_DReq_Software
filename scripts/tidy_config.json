@@ -1,0 +1,507 @@
+{
+  "single": [
+    {
+      "category": "Opportunity",
+      "category_name": "Opportunity ID",
+      "category_kwargs_input": "opportunities",
+      "linked": {
+        "Data Request Themes": [
+          ["Lead theme for Opportunity", false],
+          ["Tagged for Opportunity", false]
+        ],
+        "Docs for Opportunities": [
+          ["Opportunity", true]
+        ],
+        "Experiment Group": [
+          ["Opportunity", true]
+        ],
+        "Experiments": [
+          ["Opportunity", true]
+        ],
+        "MIPs": [
+          ["Lower priority Opportunities", false],
+          ["High priority Opportunities", false]
+        ],
+        "Time Subset": [
+          ["Opportunity", true]
+        ],
+        "Variable Group": [
+          ["Opportunity", true],
+          ["Experiment Groups (from Opportunity)", true]
+        ],
+        "Variables": [
+          ["Opportunity (from CMIP7 Variable Groups)", true],
+          ["Experiment Groups (from Opportunity)", true]
+        ]
+      }
+    },
+    {
+      "category": "Experiment Group",
+      "category_name": "Name",
+      "category_kwargs_input": "experiment_groups",
+      "linked": {
+        "Experiments": [
+          ["Experiment Group", true]
+        ],
+        "Variable Group": [
+          ["Experiment Groups (from Opportunity)", true]
+        ],
+        "Variables": [
+          ["Experiment Groups (from Opportunity)", true]
+        ],
+        "Opportunity": [
+          ["Experiment Groups", true]
+        ]
+      }
+    },
+    {
+      "category": "Experiments",
+      "category_name": "Experiment",
+      "category_kwargs_input": "experiments",
+      "linked": {
+        "MIPs": [
+          ["Experiments", false]
+        ],
+        "Variables": [
+          ["List of Experiments", true]
+        ],
+        "Experiment Group": [
+          ["Experiments", true]
+        ],
+        "Opportunity": [
+          ["Unique list of experiments (from Experiment Groups)", true]
+        ]
+      }
+    },
+    {
+      "category": "Variable Group",
+      "linked": {
+        "Data Request Themes": [
+          ["Variable Group", true]
+        ],
+        "Priority Level": [
+          ["Variable Group", true]
+        ],
+        "MIPs": [
+          ["Variable Groups of interest", false],
+          ["Variable groups owned", false]
+        ]
+      }
+    },
+    {
+      "category": "Variables",
+      "category_name": "CMIP7 Compound Name",
+      "category_kwargs_input": "variables",
+      "linked": {
+        "CMIP6 Frequency (legacy)": [
+          ["Variables", true]
+        ],
+        "CMIP6 Table Identifiers (legacy)": [
+          ["Variables", true]
+        ],
+        "CMIP7 Frequency": [
+          ["Variables", true]
+        ],
+        "Cell Measures": [
+          ["Variables", true]
+        ],
+        "Cell Methods": [
+          ["Variables", true]
+        ],
+        "Coordinates and Dimensions": [
+          ["Variables", false],
+          ["Variables with extra dimensions", false]
+        ],
+        "ESM-BCV 1.4": [
+          ["Variables", true]
+        ],
+        "Experiments": [
+          ["Variables", true]
+        ],
+        "Modelling Realm": [
+          ["Variables - primary realm", false],
+          ["Variables - secondary realm", false]
+        ],
+        "Physical Parameters": [
+          ["Variables", true]
+        ],
+        "Ranking": [
+          ["Variables", true]
+        ],
+        "Spatial Shape": [
+          ["Variables", true]
+        ],
+        "Temporal Shape": [
+          ["Variables", true]
+        ],
+        "Variable Group": [
+          ["Variables", true]
+        ]
+      }
+    },
+    {
+      "category": "Physical Parameters",
+      "linked": {
+        "CF Standard Names": [
+          ["Physical parameters", true]
+        ]
+      }
+    },
+    {
+      "category": "MIPs",
+      "require_one": [
+        "Variable Groups of interest",
+        "Variable groups owned",
+        "Experiments",
+        "Lower priority Opportunities",
+        "High priority Opportunities"
+      ],
+      "linked": {}
+    },
+    {
+      "category": "Data Request Themes",
+      "require_one": [
+        "Lead theme for Opportunity",
+        "Tagged for Opportunity",
+        "Variable Group"
+      ],
+      "linked": {}
+    },
+    {
+      "category": "Modelling Realm",
+      "require_one": [
+        "Variables - primary realm",
+        "Variables - secondary realm"
+      ],
+      "linked": {}
+    },
+    {
+      "category": "Coordinates and Dimensions",
+      "require_one": [
+        "Variables",
+        "Variables with extra dimensions",
+        "Spatial Shape",
+        "Temporal Shape"
+      ],
+      "linked": {}
+    },
+    {
+      "category": "CMIP6 Frequency (legacy)",
+      "linked": {
+        "CMIP7 Frequency": [
+          ["CMIP6 Frequency (legacy)", false]
+        ]
+      }
+    }
+  ],
+  "several": [
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Opportunity",
+      "category_name": "Opportunity ID",
+      "category_kwargs_input": "opportunities",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "Comment": [
+            ["Opportunities", false]
+          ],
+          "Data Request Themes": [
+            ["Opportunities led", false],
+            ["Opportunity", false]
+          ],
+          "Docs for Opportunities": [
+            ["Opportunity", true]
+          ],
+          "Experiment": [
+            ["Opportunity", true]
+          ],
+          "Experiment Group": [
+            ["Opportunities", true],
+            ["Opportunity", true]
+          ],
+          "MIP": [
+            ["High priority opportunities", false],
+            ["Lower priority Opportunities", false]
+          ],
+          "Time Subset": [
+            ["Opportunity", true]
+          ],
+          "Variable Group": [
+            ["Final Opportunity selection", true],
+            ["Originally requested for Opportunity", false]
+          ],
+          "Variables": [
+            ["Final Opportunity selection (from Variable Group)", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Experiment Group",
+      "category_name": "Name",
+      "category_kwargs_input": "experiment_groups",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "Comment": [
+              ["Experiment Groups", false]
+            ],
+          "Experiment": [
+              ["Experiment Group", true]
+            ],
+          "Opportunity": [
+              ["Experiment Groups", true]
+            ],
+          "Variable Group": [
+              ["Experiment Groups (from Final Opportunity selection)", true]
+            ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Experiment",
+      "category_name": "Experiment",
+      "category_kwargs_input": "experiments",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "MIP": [
+            ["Experiments", false]
+          ],
+          "Opportunity": [
+            ["Unique list of experiments (for volume calculation)", true]
+          ],
+          "Experiment Group": [
+            ["Experiments", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Variable",
+      "category_name": "CMIP7 Compound Name",
+      "category_kwargs_input": "variables",
+      "category_linked_name": "CMIP6 Compound Name",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "Variables": [
+            ["Compound Name", true]
+          ]
+        },
+        "Data Request Variables (Public)": {
+          "CMIP6 Frequency (legacy)": [
+            ["Variables", true]
+          ],
+          "CMIP6 Table Identifiers (legacy)": [
+            ["Variables", true]
+          ],
+          "CMIP7 Frequency": [
+            ["Variables", true]
+          ],
+          "Cell Measures": [
+            ["Variables", true]
+          ],
+          "Cell Methods": [
+            ["Variables", true]
+          ],
+          "Comment": [
+            ["Variables (Link)", false]
+          ],
+          "Coordinate or Dimension": [
+            ["Variables", false]
+          ],
+          "ESM-BCV 1.4": [
+            ["Variables", true]
+          ],
+          "Modeling Realm": [
+            ["Variables - primary realm", false],
+            ["Variables - secondary realm", false]
+          ],
+          "Physical Parameter": [
+            ["CMOR Variables", true]
+          ],
+          "Ranking Synced": [
+            ["Variables", true]
+          ],
+          "Spatial Shape": [
+            ["Variables", true]
+          ],
+          "Temporal Shape": [
+            ["Variables", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Variable Group",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "Comment": [
+            ["Variable Groups", false]
+          ],
+          "Data Request Themes": [
+            ["Variable Group", false]
+          ],
+          "MIP": [
+            ["Variable Groups of interest", false],
+            ["Variable groups owned", false]
+          ],
+          "Priority level": [
+            ["Variable Group", true]
+          ],
+          "Variables": [
+            ["Variable Group", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Variables",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "Experiment": [
+            ["Unique list of variables attached to Opportunity (linked) (from Opportunity)", true]
+          ],
+          "Variable Group": [
+            ["Variables", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Data Request Themes",
+      "linked": {
+        "Data Request Opportunities (Public)": {
+          "Comment": [
+            ["Theme", false]
+          ]
+        }
+      },
+      "require_one": ["Opportunities led", "Opportunity", "Variable Group"]
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "Comment",
+      "linked": {},
+      "require_one": [
+        "Opportunities", "Theme", "Variable Groups"
+      ]
+    },
+    {
+      "category_base": "Data Request Opportunities (Public)",
+      "category": "MIP",
+      "linked": {},
+      "require_one": [
+        "Variable Groups of interest", "Variable groups owned", "Experiments", "High priority opportunities", "Lower priority Opportunities"
+      ]
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Modeling Realm",
+      "linked": {},
+      "require_one": [
+        "Variables - primary realm", "Variables - secondary realm"
+      ]
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "CMIP6 Frequency (legacy)",
+      "linked": {
+        "Data Request Variables (Public)": {
+          "CMIP7 Frequency": [
+            ["CMIP6 Frequency", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Spatial Shape",
+      "linked": {
+        "Data Request Variables (Public)": {
+          "Coordinate or Dimension": [
+            ["Spatial shape", false]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Temporal Shape",
+      "linked": {
+        "Data Request Variables (Public)": {
+          "Coordinate or Dimension": [
+            ["Temporal shape", false]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Coordinate or Dimension",
+      "linked": {},
+      "require_one": [
+        "Variables", "Spatial shape", "Temporal shape"
+      ]
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Physical Parameter",
+      "category_linked_name": "Name",
+      "linked": {
+        "Data Request Physical Parameters (Public)": {
+          "Physical Parameter": [
+            ["Name", true]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Physical Parameters (Public)",
+      "category": "Physical Parameter",
+      "category_linked_name": "Name",
+      "linked": {
+        "Data Request Physical Parameters (Public)": {
+          "CF Standard Name": [
+            ["Physical parameters", true]
+          ],
+          "Comment": [
+            ["Physical parameters", false]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Variables (Public)",
+      "category": "Comment",
+      "linked": {},
+      "require_one": [
+        "Variables (Link)", "Spatial Shape", "Temporal Shape"
+      ]
+    },
+    {
+      "category_base": "Data Request Physical Parameters (Public)",
+      "category": "CF Standard Name",
+      "category_linked_name": "Name",
+      "linked": {
+        "Data Request Physical Parameters (Public)": {
+          "Comment": [
+            ["CF Standard Names", false]
+          ]
+        }
+      }
+    },
+    {
+      "category_base": "Data Request Physical Parameters (Public)",
+      "category": "Comment",
+      "linked": {},
+      "require_one": [
+        "CF Standard Names", "Physical parameters"
+      ]
+    }
+  ]
+}

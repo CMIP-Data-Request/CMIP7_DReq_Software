@@ -83,7 +83,7 @@ def test_apply_consistency_fixes():
     assert varfield_dropped != []
     # Read 1-base export and select certain tables
     one_base_input = read_json_file(filepath("dreq_release_export.json"))[
-        "Data Request v1.2.2"
+        "Data Request v1.2.2.3"
     ]
     selected_tables = [
         "Variables",
