@@ -4,7 +4,7 @@ Title: Short descriptive title of the Opportunity
 
 MIP: Name of MIP
 
-Description: Statement of the general purpose of this data request.
+Description: Statement of the general purpose of this Opportunity's data request.
 
 Expected Impacts: (Optional) Explanation of why this combination of variables and experiments is important.
 
@@ -12,16 +12,13 @@ Justification of Resources: (Optional) Explanation of how the requested variable
 
 Experiment Groups:
 # An Experiment Group specifies a list of experiments for which requested variables should be produced.
-# A community MIP may need only one experiment group, but existing groups can also be listed, or existing
-# experiments included in a new group (but note that runs of AFT experiments may already have been completed
-# by modelling centres.)
 - example_experiment_group # new Experiment Group, defined below
+- deck # existing Experiment Group
 
 Variable Groups:
 # Each Variable Group defines a set of requested variables and its priority.
-# The list of Variable Groups can include both new and existing groups.
-- baseline_monthly # existing Variable Group
 - example_variable_group # new Variable Group, defined below
+- baseline_monthly # existing Variable Group
 
 New Experiment Groups:
 

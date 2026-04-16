@@ -6,15 +6,16 @@
     "Opportunity": {
         "title": "Short descriptive title of the Opportunity",
         "mip": "Name of MIP",
-        "description": "Statement of the general purpose of this data request.",
+        "description": "Statement of the general purpose of this Opportunity's data request.",
         "expected_impacts": "(Optional) Explanation of why this combination of variables and experiments is important.",
         "justification_of_resources": "(Optional) Explanation of how the requested variables map onto the impacts, and estimate of the resources required.",
         "experiment_groups": [
-            "example_experiment_group"
+            "example_experiment_group",
+            "deck"
         ],
         "variable_groups": [
-            "baseline_monthly",
-            "example_variable_group"
+            "example_variable_group",
+            "baseline_monthly"
         ]
     },
     "New Experiment Groups": {
