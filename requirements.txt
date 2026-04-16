@@ -2,6 +2,7 @@ bs4
 coverage
 openpyxl
 pooch
+pydantic
 pytest
 pyyaml
 requests
