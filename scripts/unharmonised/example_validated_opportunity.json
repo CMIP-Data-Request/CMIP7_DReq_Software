@@ -1,0 +1,41 @@
+{
+    "Header": {
+        "Provenance": "Validated Opportunity from input file DR_Opportunity_template.yaml",
+        "Data Request version used for validation": "v1.2.2.3"
+    },
+    "Opportunity": {
+        "title": "Short descriptive title of the Opportunity",
+        "mip": "Name of MIP",
+        "description": "Statement of the general purpose of this data request.",
+        "expected_impacts": "(Optional) Explanation of why this combination of variables and experiments is important.",
+        "justification_of_resources": "(Optional) Explanation of how the requested variables map onto the impacts, and estimate of the resources required.",
+        "experiment_groups": [
+            "example_experiment_group"
+        ],
+        "variable_groups": [
+            "baseline_monthly",
+            "example_variable_group"
+        ]
+    },
+    "New Experiment Groups": {
+        "example_experiment_group": {
+            "title": "Short descriptive title of the Experiment Group",
+            "experiments": [
+                "amip",
+                "example_new_experiment"
+            ]
+        }
+    },
+    "New Variable Groups": {
+        "example_variable_group": {
+            "title": "Short descriptive title of the Variable Group",
+            "priority_level": "High",
+            "justification": "(Optional) Explanation of why these variables are important.",
+            "notes": "(Optional) Any additional comments about the variable group.",
+            "variables": [
+                "land.gpp.tavg-u-hxy-lnd.mon.glb",
+                "atmos.fco2nat.tavg-u-hxy-u.mon.glb"
+            ]
+        }
+    }
+}
