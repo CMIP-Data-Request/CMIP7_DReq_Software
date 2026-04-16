@@ -99,6 +99,10 @@ if __name__ == '__main__':
                 + '\n'.join(invalid_variables)
             raise ValueError(msg)
 
+    # Validate experiments against CVs
+    # TODO: get valid CMIP7 experiments using esgvoc
+    # (cannot rely on AFT DR list since community MIPs will define new experiments)
+
     # Validate Opportunity
     opp = {format_attribute_name(k):v for k,v in opp.items()}
     opp = Opportunity(**opp)
