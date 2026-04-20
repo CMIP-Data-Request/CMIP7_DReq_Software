@@ -1,0 +1,122 @@
+// CMIPLD Module Import Graph
+digraph {
+	rankdir=TB
+	compound=true concentrate=true overlap=false splines=true
+	"data_request_api.version"
+	"data_request_api.version" -> typing
+	"data_request_api.data_request_api.__init__.py"
+	"data_request_api.data_request_api.__init__.py" -> version
+	"data_request_api.data_request_api.tests.test_dreq_content"
+	"data_request_api.data_request_api.tests.test_dreq_content" -> "data_request_api.content"
+	"data_request_api.data_request_api.tests.test_dreq_content" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.tests.test_config_cli"
+	"data_request_api.data_request_api.tests.test_config_cli" -> pathlib
+	"data_request_api.data_request_api.tests.test_optimize"
+	"data_request_api.data_request_api.tests.test_optimize" -> __future__
+	"data_request_api.data_request_api.tests.test_optimize" -> "data_request_api.query.data_request"
+	"data_request_api.data_request_api.tests.test_optimize" -> "data_request_api.content.dreq_content"
+	"data_request_api.data_request_api.tests.test_optimize" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.tests.test_optimize" -> "data_request_api.content.dump_transformation"
+	"data_request_api.data_request_api.tests.test_optimize" -> "data_request_api.tests"
+	"data_request_api.data_request_api.tests.test_dump_transformation"
+	"data_request_api.data_request_api.tests.test_dump_transformation" -> __future__
+	"data_request_api.data_request_api.tests.test_dump_transformation" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.tests.test_dump_transformation" -> "data_request_api.content.dump_transformation"
+	"data_request_api.data_request_api.tests.test_dump_transformation" -> "data_request_api.tests"
+	"data_request_api.data_request_api.tests.test_consolidation"
+	"data_request_api.data_request_api.tests.test_consolidation" -> "data_request_api.content"
+	"data_request_api.data_request_api.tests.test_consolidation" -> "data_request_api.content.consolidate_export"
+	"data_request_api.data_request_api.tests.test_consolidation" -> "data_request_api.content.mapping_table"
+	"data_request_api.data_request_api.tests.test_consolidation" -> "data_request_api.tests"
+	"data_request_api.data_request_api.tests.test_consolidation" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.tests.test_consolidation" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.tests.__init__.py"
+	"data_request_api.data_request_api.tests.test_data_request"
+	"data_request_api.data_request_api.tests.test_data_request" -> __future__
+	"data_request_api.data_request_api.tests.test_data_request" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.tests.test_data_request" -> "data_request_api.query.data_request"
+	"data_request_api.data_request_api.tests.test_data_request" -> "data_request_api.query.vocabulary_server"
+	"data_request_api.data_request_api.tests.test_data_request" -> "data_request_api.tests"
+	"data_request_api.data_request_api.tests.test_vocabulary_server"
+	"data_request_api.data_request_api.tests.test_vocabulary_server" -> __future__
+	"data_request_api.data_request_api.tests.test_vocabulary_server" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.tests.test_vocabulary_server" -> "data_request_api.query.vocabulary_server"
+	"data_request_api.data_request_api.tests.test_vocabulary_server" -> "data_request_api.tests"
+	"data_request_api.data_request_api.tests.test_config"
+	"data_request_api.data_request_api.tests.test_config" -> pathlib
+	"data_request_api.data_request_api.tests.test_config" -> "data_request_api.utilities.config"
+	"data_request_api.data_request_api.tests.test_cli"
+	"data_request_api.data_request_api.tests.test_cli" -> pathlib
+	"data_request_api.data_request_api.tests.test_decorator"
+	"data_request_api.data_request_api.tests.test_decorator" -> "data_request_api.utilities.decorators"
+	"data_request_api.data_request_api.tests.test_decorator" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.content.dump_transformation"
+	"data_request_api.data_request_api.content.dump_transformation" -> __future__
+	"data_request_api.data_request_api.content.dump_transformation" -> collections
+	"data_request_api.data_request_api.content.dump_transformation" -> "data_request_api.utilities.decorators"
+	"data_request_api.data_request_api.content.dump_transformation" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.content.dump_transformation" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.content.dump_transformation" -> "data_request_api.content"
+	"data_request_api.data_request_api.content.consolidate_export"
+	"data_request_api.data_request_api.content.consolidate_export" -> collections
+	"data_request_api.data_request_api.content.consolidate_export" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.content.consolidate_export" -> mapping_table
+	"data_request_api.data_request_api.content.__init__.py"
+	"data_request_api.data_request_api.content.mapping_table"
+	"data_request_api.data_request_api.content.dreq_content"
+	"data_request_api.data_request_api.content.dreq_content" -> filecmp
+	"data_request_api.data_request_api.content.dreq_content" -> shutil
+	"data_request_api.data_request_api.content.dreq_content" -> bs4
+	"data_request_api.data_request_api.content.dreq_content" -> "data_request_api.content"
+	"data_request_api.data_request_api.content.dreq_content" -> "data_request_api.content.mapping_table"
+	"data_request_api.data_request_api.content.dreq_content" -> "data_request_api.utilities.decorators"
+	"data_request_api.data_request_api.content.dreq_content" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.utilities.config"
+	"data_request_api.data_request_api.utilities.config" -> "importlib.metadata"
+	"data_request_api.data_request_api.utilities.config" -> pathlib
+	"data_request_api.data_request_api.utilities.tools"
+	"data_request_api.data_request_api.utilities.tools" -> __future__
+	"data_request_api.data_request_api.utilities.tools" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.utilities.__init__.py"
+	"data_request_api.data_request_api.utilities.logger"
+	"data_request_api.data_request_api.utilities.logger" -> __future__
+	"data_request_api.data_request_api.utilities.parser"
+	"data_request_api.data_request_api.utilities.decorators"
+	"data_request_api.data_request_api.utilities.decorators" -> "data_request_api.utilities.config"
+	"data_request_api.data_request_api.utilities.decorators" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.query.vocabulary_server"
+	"data_request_api.data_request_api.query.vocabulary_server" -> __future__
+	"data_request_api.data_request_api.query.vocabulary_server" -> collections
+	"data_request_api.data_request_api.query.vocabulary_server" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.query.vocabulary_server" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.query.data_request"
+	"data_request_api.data_request_api.query.data_request" -> __future__
+	"data_request_api.data_request_api.query.data_request" -> collections
+	"data_request_api.data_request_api.query.data_request" -> itertools
+	"data_request_api.data_request_api.query.data_request" -> "data_request_api.utilities.logger"
+	"data_request_api.data_request_api.query.data_request" -> "data_request_api.content.dump_transformation"
+	"data_request_api.data_request_api.query.data_request" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.query.data_request" -> "data_request_api.query.vocabulary_server"
+	"data_request_api.data_request_api.query.data_request" -> data_request_api
+	"data_request_api.data_request_api.query.__init__.py"
+	"data_request_api.data_request_api.query.dreq_query"
+	"data_request_api.data_request_api.query.dreq_query" -> collections
+	"data_request_api.data_request_api.query.dreq_query" -> "data_request_api.query.dreq_classes"
+	"data_request_api.data_request_api.query.dreq_query" -> "data_request_api.utilities.decorators"
+	"data_request_api.data_request_api.query.dreq_query" -> "data_request_api.utilities.tools"
+	"data_request_api.data_request_api.query.dreq_query" -> data_request_api
+	"data_request_api.data_request_api.query.dreq_classes"
+	"data_request_api.data_request_api.query.dreq_classes" -> dataclasses
+	"data_request_api.data_request_api.query.dreq_classes" -> typing
+	"data_request_api.data_request_api.command_line.get_variables_metadata"
+	"data_request_api.data_request_api.command_line.get_variables_metadata" -> data_request_api
+	"data_request_api.data_request_api.command_line.config"
+	"data_request_api.data_request_api.command_line.config" -> "data_request_api.utilities"
+	"data_request_api.data_request_api.command_line.__init__.py"
+	"data_request_api.data_request_api.command_line.export_dreq_lists_json"
+	"data_request_api.data_request_api.command_line.export_dreq_lists_json" -> collections
+	"data_request_api.data_request_api.command_line.compare_variables"
+	"data_request_api.data_request_api.command_line.compare_variables" -> collections
+	"data_request_api.data_request_api.command_line.estimate_dreq_volume"
+	"data_request_api.data_request_api.command_line.estimate_dreq_volume" -> collections
+}
