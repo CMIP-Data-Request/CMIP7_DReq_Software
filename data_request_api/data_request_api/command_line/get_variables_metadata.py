@@ -17,14 +17,15 @@ def parse_args():
     '''
 
     parser = argparse.ArgumentParser(
-        description='Get metadata of CMOR variables (e.g., cell_methods, dimensions, ...) and write it to a json file.'
+        formatter_class=argparse.RawTextHelpFormatter,
+        description='Write data request variables metadata (cell_methods, dimensions, ...) to json or csv file.'
     )
 
     # Positional (mandatory) input arguments
     parser.add_argument('dreq_version', choices=dc.get_versions(),
                         help='data request version')
     parser.add_argument('outfile', type=str,
-                        help='output file containing metadata of requested variables, can be ".json" or ".csv" file')
+                        help='output file (specify ".json" or ".csv" extension)')
 
     sep = ','
 
@@ -36,12 +37,26 @@ def parse_args():
         return input_args
 
     # Optional input arguments
+    parser.add_argument('-a', '--attributes', type=parse_input_list,
+                        help=f'include only the specified variable metadtaa attributes, examples: \
+                        \n  -a frequency{sep}modeling_realm{sep}region \
+                        \n  -a branded_variable_name{sep}long_name{sep}standard_name \
+                        \n  -a dimensions{sep}cell_methods')
     parser.add_argument('-cn', '--compound_names', type=parse_input_list,
-                        help=f'include only variables with the specified compound names, example: -cn Amon.tas{sep}Omon.sos')
-    parser.add_argument('-t', '--cmor_tables', type=parse_input_list,
-                        help=f'include only the specified CMOR tables, example: -t Amon{sep}Omon')
+                        help=f'include only variables with the specified compound names, examples: \
+                        \n  -cn Amon.tas{sep}Omon.sos \
+                        \n  -cn atmos.tas.tavg-h2m-hxy-u.mon.glb{sep}ocean.sos.tavg-u-hxy-sea.mon.glb \
+                        \nuses CMIP7 or CMIP6 compound name, depending on variable_name config parameter (use CMIP7_data_request_api_config to set)')
     parser.add_argument('-v', '--cmor_variables', type=parse_input_list,
-                        help=f'include only the specified CMOR variable short names, example: -v tas{sep}siconc')
+                        help=f'include only the specified CMOR variable out_name, example: \
+                        \n  -v tas{sep}siconc')
+    parser.add_argument('-r', '--realms', type=parse_input_list,
+                        help=f'include only the specified realms, examples: \
+                        \n  -r atmos \
+                        \n  -r ocean{sep}ocnBgchem{sep}seaIce')
+    parser.add_argument('-t', '--cmip6_cmor_tables', type=parse_input_list,
+                        help=f'include only the specified CMIP6 CMOR tables, example: \
+                        \n  -t Amon{sep}Omon')
 
     return parser.parse_args()
 
@@ -69,8 +84,10 @@ def main():
         content,
         use_dreq_version,
         compound_names=args.compound_names,
-        cmor_tables=args.cmor_tables,
+        cmor_tables=args.cmip6_cmor_tables,
         cmor_variables=args.cmor_variables,
+        realms=args.realms,
+        attributes=args.attributes,
     )
 
     # Write output file
@@ -81,7 +98,6 @@ def main():
         api_version=api_version,
         content_path=dc._dreq_content_loaded['json_path']
     )
-
 
 if __name__ == '__main__':
     main()

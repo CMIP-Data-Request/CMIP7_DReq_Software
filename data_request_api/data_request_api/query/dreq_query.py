@@ -709,6 +709,7 @@ def get_requested_variables(content, dreq_version,
 
 def get_variables_metadata(content, dreq_version,
                            compound_names=None, cmor_tables=None, cmor_variables=None,
+                           realms=None, attributes=None,
                            verbose=True):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
@@ -727,11 +728,20 @@ def get_variables_metadata(content, dreq_version,
         Example: ['Amon.tas', 'Omon.sos']
     cmor_tables : list[str]
         Names of CMOR tables to include. If not given, all are included.
+        At present this refers to CMIP6 CMOR tables.
         Example: ['Amon', 'Omon']
     cmor_variables : list[str]
         Names of CMOR variables to include. If not given, all are included.
         Here the out_name is used as the CMOR variable name.
         Example: ['tas', 'siconc']
+    realms: list[str]
+        Include only variables that include one of the specified realms in their
+        list of realms (variables can have more than one realm).
+        Example: ['atmos', 'aerosol']
+    attributes: list[str]
+        Include only the specified metadata attributes.
+        The attributes are presented in the order specified by the user.
+        Example: ['frequency', 'region', 'modeling_realm']
 
     Returns:
     --------
@@ -817,6 +827,10 @@ def get_variables_metadata(content, dreq_version,
             print('Retaining only these CMOR variables: ' + ', '.join(sorted(cmor_variables, key=str.lower)))
         if compound_names:
             print('Retaining only these compound names: ' + ', '.join(sorted(compound_names, key=str.lower)))
+        if realms:
+            print('Retaining only these realms: ' + ', '.join(sorted(realms, key=str.lower)))
+        if attributes:
+            print('Retaining only these attributes: ' + ', '.join(sorted(attributes, key=str.lower)))
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
@@ -969,6 +983,9 @@ def get_variables_metadata(content, dreq_version,
         # Get realm(s)
         link_realm = getattr(var, attr_realm)
         modeling_realm = [dreq_tables['realm'].get_record(link).id for link in link_realm]
+        # modeling_realm should now be the primary realm, so check the returned list contains only one realm
+        if not len(modeling_realm) == 1:
+            raise ValueError(f'There should be one primary realm for {var_name}, found: ' + ', '.join(modeling_realm))
         if hasattr(var, attr_realm_additional):
             # Add secondary realm(s), if any, to the list
             link_realm_additional = getattr(var, attr_realm_additional)
@@ -976,6 +993,10 @@ def get_variables_metadata(content, dreq_version,
         # Raise error if any realm is duplicated in the list
         if len(modeling_realm) != len(set(modeling_realm)):
             raise ValueError(f'Redundant realm(s) found for DR variable {var_name}: {modeling_realm}')
+        if realms:
+            # Exclude variables that don't have any of their realms in list
+            if len(set(modeling_realm).intersection(set(realms))) == 0:
+                continue
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):
@@ -1121,6 +1142,9 @@ def get_variables_metadata(content, dreq_version,
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
+
+        if attributes:
+            var_info = OrderedDict({attr:var_info[attr] for attr in attributes})
 
         assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
         all_var_info[var_name] = var_info
@@ -1353,9 +1377,7 @@ def write_variables_metadata(all_var_info, dreq_version, filepath,
         # Write variables metadata to csv
         var_info = next(iter(all_var_info.values()))
         attrs = list(var_info.keys())
-        columns = ['Compound Name']
-        columns.append('standard_name')
-        columns.append('standard_name_proposed')
+        columns = ['Compound Name'] # compound name is always the first column
         columns += [s for s in attrs if s not in columns]
         rows = [columns]  # column header line
         # Add each variable as a row
