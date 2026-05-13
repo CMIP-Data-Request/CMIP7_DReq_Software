@@ -63,7 +63,9 @@ if __name__ == '__main__':
     with open(input_file, 'r') as f:
         opp = yaml.safe_load(f)
 
-    # Validate any new variable or experiment groups
+    # Retrieve specs for any new variable or experiment groups so that they can be validated
+    # against existing DR content, below.
+    # The ExperimentGroup & VariableGroup pydantic models perform validation of the input.
     sections = ['New Experiment Groups', 'New Variable Groups']
     for section in sections:
         for name,info in opp[section].items():
@@ -96,7 +98,7 @@ if __name__ == '__main__':
         if vg_name in dreq_var_group_names:
             raise ValueError(f'Variable Group already exists in DR {dreq_version}: {vg_name}')
 
-    # Check variable names in new Variable Groups are valid
+    # Check that the variable names in new Variable Groups are valid
     for vg_name, vg in new_var_groups.items():
         invalid_variables = []
         for var_name in vg.variables:
@@ -118,11 +120,12 @@ if __name__ == '__main__':
     # TODO: get valid CMIP7 experiments using esgvoc
     # (cannot rely on AFT DR list since community MIPs will define new experiments)
 
-    # Validate Opportunity
+    # Use Opportunity pydantic model to validate the input
     opp = {format_attribute_name(k):v for k,v in opp.items()}
     opp = Opportunity(**opp)
 
-    # Check full Variable Group and Experiment Group lists either defined as new or existing in the DR
+    # Check full Variable Group and Experiment Group lists are either (1) defined as new,
+    # or (2) exist already in the DR.
     all_expt_group_names = dreq_expt_group_names.union(new_expt_groups.keys())
     all_var_group_names = dreq_var_group_names.union(new_var_groups.keys())
     for eg_name in opp.experiment_groups:
