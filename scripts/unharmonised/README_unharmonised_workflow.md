@@ -25,5 +25,6 @@ Then validate the new request against existing DR content:
 ```bash
 ./ingest.py new_MIP_data_request.yaml new_MIP_data_request.json v1.2.2.3
 ```
+This should be run in an env where the DR python API is installed ([see here](https://github.com/CMIP-Data-Request/CMIP7_DReq_Software#installation) for installation guidance).
 This performs some sanity checks, including checking that variable and experiment names are valid (i.e., they are defined in existing DR content and CMIP7 CVs).
 If the checks pass, the output file, which here is `new_MIP_data_request.json`, represents in the new request's information in a format that can be used in the DR python API.
