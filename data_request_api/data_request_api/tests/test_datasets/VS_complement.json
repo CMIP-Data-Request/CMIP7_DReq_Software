@@ -1,0 +1,73 @@
+{
+    "cell_measures": {},
+    "cell_methods": {},
+    "cf_standard_names": {},
+    "cmip6_frequency": {},
+    "cmip6_tables_identifiers": {},
+    "cmip7_frequency": {},
+    "coordinates_and_dimensions": {},
+    "docs_for_opportunities": {},
+    "esm-bcv": {},
+    "experiment_groups": {
+        "polmip": {
+            "complete_experiment_list": true,
+            "name": "polmip",
+            "title": "All additional PolMIP experiments to CMIP7 Scenarii",
+            "uid": "80ab723e-a698-11ef-914a-613c0433d878"
+        }
+    },
+    "experiments": {
+        "esm-vl-cf": {
+            "name": "esm-vl-cf",
+            "size_(years,_minimum)": 85,
+            "uid": "XXX1"
+        },
+        "esm-vl-cf-ext": {
+            "name": "esm-vl-cf-ext",
+            "size_(years,_minimum)": 100,
+            "uid": "XXX2"
+        },
+        "vl-cf": {
+            "name": "scen7-vl",
+            "size_(years,_minimum)": 85,
+            "uid": "XXX3"
+        },
+        "vl-cf-ext": {
+            "name": "scen7-vl-ext",
+            "size_(years,_minimum)": 100,
+            "uid": "XXX4"
+        }
+    },
+    "glossary": {},
+    "mips": {
+        "PolMIP": {
+            "mip_abstract": "Policy-Aligned Model Intercomparison Project (PolMIP). PolMIP is designed as a complementary effort to existing MIPs. While ScenarioMIP explores the breadth of future forcing levels under idealized assumptions, PolMIP focuses on the depth of policy-driven pathways, offering higher fidelity for regions where specific mitigation strategies and timelines are defined. By providing a coordinated infrastructure for policy-driven scenario simulations, PolMIP aims to deliver actionable science for national climate assessments, enhance the policy relevance of CMIP, and foster closer collaboration between the climate modeling community and policymakers. Ultimately, PolMIP seeks to ensure that the next generation of climate projections is not only scientifically robust but also deeply rooted in the real-world decisions shaping our collective future.",
+            "mip_long_name": "Policy-Aligned Model Intercomparison Project (PolMIP)",
+            "mip_website": "https://doi.org/10.1038/s41467-025-62983-5 https://doi.org/10.1016/j.eng.2024.11.023 https://doi.org/10.1016/j.accre.2023.11.004 https://dx.doi.org/10.1088/1748-9326/adfbfb https://doi.org/10.5281/zenodo.21487424",
+            "name": "PolMIP",
+            "uid": "XXX5"
+        }
+    },
+    "modelling_realm": {},
+    "opportunities": {
+        "XXX6": {
+            "description": "TODO",
+            "expected_impacts": "TODO",
+            "image": [],
+            "justification_of_resources": "TODO",
+            "lead_theme": "TODO",
+            "minimum_ensemble_size": 1,
+            "name": "TODO",
+            "opportunity_id": "XXX6",
+            "uid": "XXX7"
+        }
+    },
+    "physical_parameters": {},
+    "priority_level": {},
+    "spatial_shape": {},
+    "temporal_shape": {},
+    "time_subsets": {},
+    "variable_groups": {},
+    "variables": {},
+    "version": "polmip"
+}

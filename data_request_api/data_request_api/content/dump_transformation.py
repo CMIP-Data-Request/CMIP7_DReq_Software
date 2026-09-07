@@ -539,6 +539,42 @@ def transform_content(content, version, force_variable_name=False, variable_name
         raise TypeError(f"Deal with dict types, not {type(content).__name__}")
 
 
+def merge_transform_content(content, version):
+    data_request = dict(version=version)
+    vocabulary_server = dict(version=version)
+    issue = 0
+    logger = get_logger()
+    for (DR, VS) in content:
+        logger.info("Deal with version %s" % DR["version"])
+        for key in [key for key in sorted(list(DR)) if key != "version"]:
+            if key not in data_request:
+                data_request[key] = dict()
+            for (elt_id, elt_val) in DR[key].items():
+                if elt_id not in data_request[key]:
+                    data_request[key][elt_id] = copy.deepcopy(elt_val)
+                elif elt_val == data_request[key][elt_id]:
+                    logger.warning("Duplicate element %s %s in DR version %s" % (key, elt_id, DR["version"]))
+                else:
+                    logger.error("Redefining element %s %s in DR version %s" % (key, elt_id, DR["version"]))
+                    issue += 1
+        for key in [key for key in sorted(list(VS)) if key != "version"]:
+            if key not in vocabulary_server:
+                vocabulary_server[key] = dict()
+            for (elt_id, elt_val) in VS[key].items():
+                if elt_id not in vocabulary_server[key]:
+                    vocabulary_server[key][elt_id] = copy.deepcopy(elt_val)
+                elif elt_val == vocabulary_server[key][elt_id]:
+                    logger.warning("Duplicate element %s %s in VS version %s" % (key, elt_id, VS["version"]))
+                else:
+                    logger.error("Redefining element %s %s in VS version %s" % (key, elt_id, VS["version"]))
+                    issue += 1
+    if issue > 0:
+        logger.error("%s issue(s) during versions merging... see log." % issue)
+        raise ValueError("%s issue(s) during versions merging... see log." % issue)
+    else:
+        return data_request, vocabulary_server
+
+
 @append_kwargs_from_config
 def get_transformed_content(version="latest_stable", export="release", consolidate=False,
                             force_retrieve=False, output_dir=None, force_variable_name=False,

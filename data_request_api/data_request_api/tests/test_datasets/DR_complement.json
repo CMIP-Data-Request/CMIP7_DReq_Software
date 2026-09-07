@@ -1,0 +1,38 @@
+{
+    "experiment_groups": {
+        "polmip": {
+            "experiments": [
+                "link::esm-vl-cf",
+                "link::esm-vl-cf-ext",
+                "link::vl-cf",
+                "link::vl-cf-ext"
+            ]
+        }
+    },
+    "opportunities": {
+        "XXX6": {
+            "data_request_themes": [
+                "link::atmosphere",
+                "link::earth_system",
+                "link::land_landice",
+                "link::ocean_seaice"
+            ],
+            "experiment_groups": [
+                "link::polmip"
+            ],
+            "mips": [
+                "link::PolMIP"
+            ],
+            "time_subsets": [],
+            "variable_groups": [
+                "link::baseline_fixed",
+                "link::baseline_daily",
+                "link::baseline_monthly",
+                "link::baseline_subdaily"
+            ]
+        }
+    },
+    "variable_groups": {
+    },
+    "version": "polmip"
+}

@@ -15,7 +15,7 @@ from collections import defaultdict, namedtuple
 from itertools import product, chain
 
 from data_request_api.utilities.logger import get_logger, change_log_file, change_log_level
-from data_request_api.content.dump_transformation import transform_content
+from data_request_api.content.dump_transformation import transform_content, merge_transform_content
 from data_request_api.utilities.tools import read_json_file, write_csv_output_file_content
 from data_request_api.query.vocabulary_server import VocabularyServer, is_link_id_or_value, build_link_from_id, \
     to_singular, ConstantValueObj, to_plural
@@ -577,6 +577,65 @@ class DataRequest(object):
             logger.error("VS_input should be either the name of a json file or a dictionary.")
             raise TypeError("VS_input should be either the name of a json file or a dictionary.")
         return cls(input_database=DR, VS=VS, **kwargs)
+
+    @classmethod
+    def from_several_inputs(cls, *content_inputs, **kwargs):
+        """
+        Create Data Request content from several sources of request and vocabulary.
+        :param list of dict content_inputs: List of dictionary like dict(version="test", DR="path_to_DR", VS="path_to_VS") or dict(version="test", content="path_to_content")
+        :param kwargs: additional elements
+        :return: A DataRequest object containing the whole requests and vocabularies
+        """
+        logger = get_logger()
+        versions = list()
+        content = list()
+        for content_input in content_inputs:
+            if "version" in content_input:
+                versions.append(content_input["version"])
+            else:
+                logger.error("No version provided for %s" % content_input)
+                raise ValueError("No version provided for %s" % content_input)
+            if "DR" in content_input and "VS" in content_input:
+                DR_input = content_input["DR"]
+                if isinstance(DR_input, str) and os.path.isfile(DR_input):
+                    DR = read_json_file(DR_input)
+                elif isinstance(DR_input, dict):
+                    DR = copy.deepcopy(DR_input)
+                else:
+                    logger.error("DR should be either the name of a json file or a dictionary.")
+                    raise TypeError("DR should be either the name of a json file or a dictionary.")
+                VS_input = content_input["VS"]
+                if isinstance(VS_input, str) and os.path.isfile(VS_input):
+                    VS = read_json_file(VS_input)
+                elif isinstance(VS_input, dict):
+                    VS = copy.deepcopy(VS_input)
+                else:
+                    logger.error("VS should be either the name of a json file or a dictionary.")
+                    raise TypeError("VS should be either the name of a json file or a dictionary.")
+            elif "content" in content_input:
+                DR, VS = cls._split_content_from_input_json(content_input["content"], version=version)
+            else:
+                logger.error("Input content should contain either 'DR' and 'VS' entries or 'content' entry. "
+                             "Nothing found for %s" % content_input)
+            content.append((DR, VS))
+        DR, VS = merge_transform_content(content=content, version=versions)
+        VS = VocabularyServer(VS)
+        return cls(input_database=DR, VS=VS, **kwargs)
+
+    def _merge_contents_from_inputs_json(self, input_jsons, versions):
+        """
+        Split the different exports then merge them to have a single database
+        :param list of dict or str input_jsons: List of input jsons files to be merged
+        :param list of str versions: List of versions to be merged
+        :return: dict, dict: two dictionaries containing the DR and the VS
+        """
+        logger = get_logger()
+        version = "_".join(sorted(versions))
+        content = list()
+        for (input_json, input_version) in zip(input_jsons, versions):
+            content.append(self._split_content_from_input_json(input_json, input_version))
+        DR, VS = merge_transform_content(content, version=version)
+        return DR, VS
 
     @staticmethod
     def _split_content_from_input_json(input_json, version):
