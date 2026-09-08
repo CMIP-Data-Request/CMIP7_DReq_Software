@@ -13,172 +13,180 @@ Data Request content:
             Experiments included:
                 experiment: dcppB-forecast-cmip6
                 experiment: esm-flat10
+                experiment: esm-scen7-hl
+                experiment: esm-scen7-m
+                experiment: esm-scen7-vl
                 experiment: g7-1p5K-sai
                 experiment: land-hist
                 experiment: piClim-NOX
-                experiment: scen7-hc
-                experiment: scen7-mc
-                experiment: scen7-mlc
-                experiment: scen7-vlloc
+                experiment: scen7-hl
+                experiment: scen7-m
+                experiment: scen7-vl
         experiment_group: historical
             Experiments included:
                 experiment: esm-hist
                 experiment: historical
         experiment_group: scenarios
             Experiments included:
-                experiment: scen7-hc
-                experiment: scen7-mc
-                experiment: scen7-mlc
-                experiment: scen7-vlloc
+                experiment: esm-scen7-hl
+                experiment: esm-scen7-m
+                experiment: esm-scen7-vl
+                experiment: scen7-hl
+                experiment: scen7-m
+                experiment: scen7-vl
         experiment_group: scenarios_extensions
             Experiments included:
-                experiment: scen7-hc-ext
-                experiment: scen7-hc-ext-os
-                experiment: scen7-mc-ext
+                experiment: esm-scen7-hl-ext
+                experiment: esm-scen7-m-ext
+                experiment: esm-scen7-vl-ext
+                experiment: scen7-hl-ext
+                experiment: scen7-m-ext
+                experiment: scen7-vl-ext
     Variables groups:
         variable_group: baseline_daily
             Variables included:
-                variable: pr at frequency day (id: atmos.pr.tavg-u-hxy-u.day.GLB, title: Precipitation)
-                variable: ps at frequency day (id: atmos.ps.tavg-u-hxy-u.day.GLB, title: Surface Air Pressure)
-                variable: psl at frequency day (id: atmos.psl.tavg-u-hxy-u.day.GLB, title: Sea Level Pressure)
-                variable: sfcWind at frequency day (id: atmos.sfcWind.tavg-h10m-hxy-u.day.GLB, title: Daily-Mean Near-Surface Wind Speed)
-                variable: ta at frequency day (id: atmos.ta.tavg-p19-hxy-air.day.GLB, title: Air Temperature)
-                variable: tas at frequency day (id: atmos.tas.tavg-h2m-hxy-u.day.GLB, title: Near-Surface Air Temperature)
-                variable: tasmax at frequency day (id: atmos.tas.tmax-h2m-hxy-u.day.GLB, title: Daily Maximum Near-Surface Air Temperature)
-                variable: tasmin at frequency day (id: atmos.tas.tmin-h2m-hxy-u.day.GLB, title: Daily Minimum Near-Surface Air Temperature)
-                variable: zg at frequency day (id: atmos.zg.tavg-p19-hxy-air.day.GLB, title: Geopotential Height)
-                variable: sos at frequency day (id: ocean.sos.tavg-u-hxy-sea.day.GLB, title: Sea Surface Salinity)
-                variable: tos at frequency day (id: ocean.tos.tavg-u-hxy-sea.day.GLB, title: Sea Surface Temperature)
-                variable: zos at frequency day (id: ocean.zos.tavg-u-hxy-sea.day.GLB, title: Sea Surface Height above Geoid)
-                variable: siconc at frequency day (id: seaIce.siconc.tavg-u-hxy-u.day.GLB, title: Sea-Ice Area Fraction (Ocean Grid))
+                variable: pr at frequency day (id: atmos.pr.tavg-u-hxy-u.day.glb, title: Precipitation)
+                variable: ps at frequency day (id: atmos.ps.tavg-u-hxy-u.day.glb, title: Surface Air Pressure)
+                variable: psl at frequency day (id: atmos.psl.tavg-u-hxy-u.day.glb, title: Sea Level Pressure)
+                variable: sfcWind at frequency day (id: atmos.sfcWind.tavg-h10m-hxy-u.day.glb, title: Near-Surface Wind Speed)
+                variable: ta at frequency day (id: atmos.ta.tavg-p19-hxy-air.day.glb, title: Air Temperature)
+                variable: tas at frequency day (id: atmos.tas.tavg-h2m-hxy-u.day.glb, title: Near-Surface Air Temperature)
+                variable: tasmax at frequency day (id: atmos.tas.tmax-h2m-hxy-u.day.glb, title: Daily Maximum Near-Surface Air Temperature)
+                variable: tasmin at frequency day (id: atmos.tas.tmin-h2m-hxy-u.day.glb, title: Daily Minimum Near-Surface Air Temperature)
+                variable: zg at frequency day (id: atmos.zg.tavg-p19-hxy-air.day.glb, title: Geopotential Height)
+                variable: sos at frequency day (id: ocean.sos.tavg-u-hxy-sea.day.glb, title: Sea Surface Salinity)
+                variable: tos at frequency day (id: ocean.tos.tavg-u-hxy-sea.day.glb, title: Sea Surface Temperature)
+                variable: zos at frequency day (id: ocean.zos.tavg-u-hxy-sea.day.glb, title: Sea Surface Height Above Geoid)
+                variable: siconc at frequency day (id: seaIce.siconc.tavg-u-hxy-u.day.glb, title: Sea-Ice Area Percentage (Ocean Grid))
         variable_group: baseline_fixed
             Variables included:
-                variable: areacella at frequency fx (id: atmos.areacell.ti-u-hxy-u.fx.GLB, title: Grid-Cell Area for Atmospheric Grid Variables)
-                variable: sftlf at frequency fx (id: atmos.sftlf.ti-u-hxy-u.fx.GLB, title: Percentage of the Grid Cell Occupied by Land (Including Lakes))
-                variable: orog at frequency fx (id: land.orog.ti-u-hxy-u.fx.GLB, title: Surface Altitude)
-                variable: rootd at frequency fx (id: land.rootd.ti-u-hxy-lnd.fx.GLB, title: Maximum Root Depth)
-                variable: slthick at frequency fx (id: land.slthick.ti-sl-hxy-lnd.fx.GLB, title: Thickness of Soil Layers)
-                variable: areacello at frequency fx (id: ocean.areacell.ti-u-hxy-u.fx.GLB, title: Grid-Cell Area for Ocean Variables)
-                variable: deptho at frequency fx (id: ocean.deptho.ti-u-hxy-sea.fx.GLB, title: Sea Floor Depth Below Geoid)
-                variable: masscello at frequency fx (id: ocean.masscello.ti-ol-hxy-sea.fx.GLB, title: Ocean Grid-Cell Mass per Area)
+                variable: areacella at frequency fx (id: atmos.areacella.ti-u-hxy-u.fx.glb, title: Grid-Cell Area for Atmospheric Grid Variables)
+                variable: sftlf at frequency fx (id: atmos.sftlf.ti-u-hxy-u.fx.glb, title: Percentage of the Grid Cell Occupied by Land (Including Lakes))
+                variable: mrsofc at frequency fx (id: land.mrsofc.ti-u-hxy-lnd.fx.glb, title: Capacity of Soil to Store Water (Field Capacity))
+                variable: orog at frequency fx (id: land.orog.ti-u-hxy-u.fx.glb, title: Surface Altitude)
+                variable: rootd at frequency fx (id: land.rootd.ti-u-hxy-lnd.fx.glb, title: Maximum Root Depth)
+                variable: sftgif at frequency fx (id: land.sftgif.ti-u-hxy-u.fx.glb, title: Land Ice Area Percentage)
+                variable: slthick at frequency fx (id: land.slthick.ti-sl-hxy-lnd.fx.glb, title: Thickness of Soil Layers)
+                variable: areacello at frequency fx (id: ocean.areacello.ti-u-hxy-u.fx.glb, title: Grid-Cell Area for Ocean Variables)
+                variable: basin at frequency fx (id: ocean.basin.ti-u-hxy-u.fx.glb, title: Region Selection Index)
+                variable: deptho at frequency fx (id: ocean.deptho.ti-u-hxy-sea.fx.glb, title: Sea Floor Depth Below Geoid)
+                variable: hfgeou at frequency fx (id: ocean.hfgeou.ti-u-hxy-sea.fx.glb, title: Upward Geothermal Heat Flux at Sea Floor)
+                variable: masscello at frequency fx (id: ocean.masscello.ti-ol-hxy-sea.fx.glb, title: Ocean Grid-Cell Mass per Area)
+                variable: sftof at frequency fx (id: ocean.sftof.ti-u-hxy-u.fx.glb, title: Sea Area Percentage)
+                variable: thkcello at frequency fx (id: ocean.thkcello.ti-ol-hxy-sea.fx.glb, title: Ocean Model Cell Thickness)
         variable_group: baseline_monthly
             Variables included:
-                variable: pr at frequency mon (id: atmos.pr.tavg-u-hxy-u.mon.GLB, title: Precipitation)
-                variable: prc at frequency mon (id: atmos.prc.tavg-u-hxy-u.mon.GLB, title: Convective Precipitation)
-                variable: sfcWind at frequency mon (id: atmos.sfcWind.tavg-h10m-hxy-u.mon.GLB, title: Near-Surface Wind Speed)
-                variable: ta at frequency mon (id: atmos.ta.tavg-p19-hxy-air.mon.GLB, title: Air Temperature)
-                variable: tas at frequency mon (id: atmos.tas.tavg-h2m-hxy-u.mon.GLB, title: Near-Surface Air Temperature)
-                variable: tasmax at frequency mon (id: atmos.tas.tmax-h2m-hxy-u.mon.GLB, title: Daily Maximum Near-Surface Air Temperature)
-                variable: tasmin at frequency mon (id: atmos.tas.tmin-h2m-hxy-u.mon.GLB, title: Daily Minimum Near-Surface Air Temperature)
-                variable: ts at frequency mon (id: atmos.ts.tavg-u-hxy-u.mon.GLB, title: Surface Temperature)
-                variable: zg at frequency mon (id: atmos.zg.tavg-p19-hxy-air.mon.GLB, title: Geopotential Height)
-                variable: lai at frequency mon (id: land.lai.tavg-u-hxy-lnd.mon.GLB, title: Leaf Area Index)
-                variable: mrso at frequency mon (id: land.mrso.tavg-u-hxy-lnd.mon.GLB, title: Total Soil Moisture Content)
-                variable: mrsos at frequency mon (id: land.mrsol.tavg-d10cm-hxy-lnd.mon.GLB, title: Moisture in Upper Portion of Soil Column)
-                variable: snc at frequency mon (id: landIce.snc.tavg-u-hxy-lnd.mon.GLB, title: Snow Area Percentage)
-                variable: bigthetao at frequency mon (id: ocean.bigthetao.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Conservative Temperature)
-                variable: so at frequency mon (id: ocean.so.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Salinity)
-                variable: sos at frequency mon (id: ocean.sos.tavg-u-hxy-sea.mon.GLB, title: Sea Surface Salinity)
-                variable: thetao at frequency mon (id: ocean.thetao.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Potential Temperature)
-                variable: tos at frequency mon (id: ocean.tos.tavg-u-hxy-sea.mon.GLB, title: Sea Surface Temperature)
-                variable: wo at frequency mon (id: ocean.wo.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Vertical Velocity)
-                variable: zos at frequency mon (id: ocean.zos.tavg-u-hxy-sea.mon.GLB, title: Sea Surface Height Above Geoid)
-                variable: zostoga at frequency mon (id: ocean.zostoga.tavg-u-hm-sea.mon.GLB, title: Global Average Thermosteric Sea Level Change)
-                variable: siconc at frequency mon (id: seaIce.siconc.tavg-u-hxy-u.mon.GLB, title: Sea-Ice Area Fraction (Ocean Grid))
-                variable: simass at frequency mon (id: seaIce.simass.tavg-u-hxy-sea.mon.GLB, title: Sea-Ice Mass)
-                variable: sithick at frequency mon (id: seaIce.sithick.tavg-u-hxy-si.mon.GLB, title: Sea-Ice Thickness)
-                variable: siu at frequency mon (id: seaIce.siu.tavg-u-hxy-si.mon.GLB, title: X-Component of Sea-Ice Velocity)
-                variable: siv at frequency mon (id: seaIce.siv.tavg-u-hxy-si.mon.GLB, title: Y-Component of Sea-Ice Velocity)
+                variable: pr at frequency mon (id: atmos.pr.tavg-u-hxy-u.mon.glb, title: Precipitation)
+                variable: prc at frequency mon (id: atmos.prc.tavg-u-hxy-u.mon.glb, title: Convective Precipitation)
+                variable: sfcWind at frequency mon (id: atmos.sfcWind.tavg-h10m-hxy-u.mon.glb, title: Near-Surface Wind Speed)
+                variable: ta at frequency mon (id: atmos.ta.tavg-p19-hxy-air.mon.glb, title: Air Temperature)
+                variable: tas at frequency mon (id: atmos.tas.tavg-h2m-hxy-u.mon.glb, title: Near-Surface Air Temperature)
+                variable: tasmax at frequency mon (id: atmos.tas.tmaxavg-h2m-hxy-u.mon.glb, title: Daily Maximum Near-Surface Air Temperature)
+                variable: tasmin at frequency mon (id: atmos.tas.tminavg-h2m-hxy-u.mon.glb, title: Daily Minimum Near-Surface Air Temperature)
+                variable: ts at frequency mon (id: atmos.ts.tavg-u-hxy-u.mon.glb, title: Surface Temperature)
+                variable: zg at frequency mon (id: atmos.zg.tavg-p19-hxy-air.mon.glb, title: Geopotential Height)
+                variable: lai at frequency mon (id: land.lai.tavg-u-hxy-lnd.mon.glb, title: Leaf Area Index)
+                variable: mrso at frequency mon (id: land.mrso.tavg-u-hxy-lnd.mon.glb, title: Total Soil Moisture Content)
+                variable: mrsos at frequency mon (id: land.mrsol.tavg-d10cm-hxy-lnd.mon.glb, title: Moisture in Upper Portion of Soil Column)
+                variable: snc at frequency mon (id: landIce.snc.tavg-u-hxy-lnd.mon.glb, title: Snow Area Percentage)
+                variable: bigthetao at frequency mon (id: ocean.bigthetao.tavg-ol-hxy-sea.mon.glb, title: Sea Water Conservative Temperature)
+                variable: so at frequency mon (id: ocean.so.tavg-ol-hxy-sea.mon.glb, title: Sea Water Salinity)
+                variable: sos at frequency mon (id: ocean.sos.tavg-u-hxy-sea.mon.glb, title: Sea Surface Salinity)
+                variable: thetao at frequency mon (id: ocean.thetao.tavg-ol-hxy-sea.mon.glb, title: Sea Water Potential Temperature)
+                variable: tos at frequency mon (id: ocean.tos.tavg-u-hxy-sea.mon.glb, title: Sea Surface Temperature)
+                variable: wo at frequency mon (id: ocean.wo.tavg-ol-hxy-sea.mon.glb, title: Sea Water Vertical Velocity)
+                variable: zos at frequency mon (id: ocean.zos.tavg-u-hxy-sea.mon.glb, title: Sea Surface Height Above Geoid)
+                variable: zostoga at frequency mon (id: ocean.zostoga.tavg-u-hm-sea.mon.glb, title: Global Average Thermosteric Sea Level Change)
+                variable: siconc at frequency mon (id: seaIce.siconc.tavg-u-hxy-u.mon.glb, title: Sea-Ice Area Percentage (Ocean Grid))
+                variable: simass at frequency mon (id: seaIce.simass.tavg-u-hxy-si.mon.glb, title: Sea-Ice Mass)
+                variable: sithick at frequency mon (id: seaIce.sithick.tavg-u-hxy-si.mon.glb, title: Sea-Ice Thickness)
+                variable: siu at frequency mon (id: seaIce.siu.tavg-u-hxy-si.mon.glb, title: X-Component of Sea-Ice Velocity)
+                variable: siv at frequency mon (id: seaIce.siv.tavg-u-hxy-si.mon.glb, title: Y-Component of Sea-Ice Velocity)
         variable_group: baseline_subdaily
             Variables included:
-                variable: hurs at frequency 6hr (id: atmos.hurs.tavg-h2m-hxy-u.6hr.GLB, title: Near-Surface Relative Humidity)
-                variable: huss at frequency 3hr (id: atmos.huss.tpt-h2m-hxy-u.3hr.GLB, title: Near-Surface Specific Humidity)
-                variable: pr at frequency 1hr (id: atmos.pr.tavg-u-hxy-u.1hr.GLB, title: Precipitation)
-                variable: pr at frequency 3hr (id: atmos.pr.tavg-u-hxy-u.3hr.GLB, title: Precipitation)
-                variable: ta at frequency 6hr (id: atmos.ta.tpt-p3-hxy-air.6hr.GLB, title: Air Temperature)
-                variable: tas at frequency 3hr (id: atmos.tas.tpt-h2m-hxy-u.3hr.GLB, title: Near-Surface Air Temperature)
+                variable: hurs at frequency 6hr (id: atmos.hurs.tavg-h2m-hxy-u.6hr.glb, title: Near-Surface Relative Humidity)
+                variable: huss at frequency 3hr (id: atmos.huss.tpt-h2m-hxy-u.3hr.glb, title: Near-Surface Specific Humidity)
+                variable: pr at frequency 1hr (id: atmos.pr.tavg-u-hxy-u.1hr.glb, title: Precipitation)
+                variable: pr at frequency 3hr (id: atmos.pr.tavg-u-hxy-u.3hr.glb, title: Precipitation)
+                variable: ta at frequency 6hr (id: atmos.ta.tpt-p3-hxy-air.6hr.glb, title: Air Temperature)
+                variable: tas at frequency 3hr (id: atmos.tas.tpt-h2m-hxy-u.3hr.glb, title: Near-Surface Air Temperature)
         variable_group: landatm_coupling_3hA
             Variables included:
-                variable: bldep at frequency 3hr (id: atmos.bldep.tpt-u-hxy-u.3hr.GLB, title: Boundary Layer Depth)
-                variable: hfls at frequency 3hr (id: atmos.hfls.tavg-u-hxy-u.3hr.GLB, title: Surface Upward Latent Heat Flux)
-                variable: hfss at frequency 3hr (id: atmos.hfss.tavg-u-hxy-u.3hr.GLB, title: Surface Upward Sensible Heat Flux)
-                variable: huss at frequency 3hr (id: atmos.huss.tpt-h2m-hxy-u.3hr.GLB, title: Near-Surface Specific Humidity)
-                variable: pr at frequency 3hr (id: atmos.pr.tavg-u-hxy-u.3hr.GLB, title: Precipitation)
-                variable: ps at frequency 3hr (id: atmos.ps.tpt-u-hxy-u.3hr.GLB, title: Surface Air Pressure)
-                variable: tas at frequency 3hr (id: atmos.tas.tpt-h2m-hxy-u.3hr.GLB, title: Near-Surface Air Temperature)
-                variable: mrsos at frequency 3hr (id: land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB, title: Moisture in Upper Portion of Soil Column)
-                variable: srfrad at frequency 3hr (id: land.srfrad.tavg-u-hxy-u.3hr.GLB, title: Net radiative flux at surface)
-                variable: tslsi at frequency 3hr (id: land.tslsi.tpt-u-hxy-u.3hr.GLB, title: Surface Temperature Where Land or Sea Ice)
+                variable: bldep at frequency 3hr (id: atmos.bldep.tpt-u-hxy-u.3hr.glb, title: Boundary Layer Depth)
+                variable: hfls at frequency 3hr (id: atmos.hfls.tavg-u-hxy-u.3hr.glb, title: Surface Upward Latent Heat Flux)
+                variable: hfss at frequency 3hr (id: atmos.hfss.tavg-u-hxy-u.3hr.glb, title: Surface Upward Sensible Heat Flux)
+                variable: huss at frequency 3hr (id: atmos.huss.tpt-h2m-hxy-u.3hr.glb, title: Near-Surface Specific Humidity)
+                variable: pr at frequency 3hr (id: atmos.pr.tavg-u-hxy-u.3hr.glb, title: Precipitation)
+                variable: ps at frequency 3hr (id: atmos.ps.tpt-u-hxy-u.3hr.glb, title: Surface Air Pressure)
+                variable: tas at frequency 3hr (id: atmos.tas.tpt-h2m-hxy-u.3hr.glb, title: Near-Surface Air Temperature)
+                variable: mrsos at frequency 3hr (id: land.mrsol.tpt-d10cm-hxy-lnd.3hr.glb, title: Moisture in Upper Portion of Soil Column)
+                variable: srfrad at frequency 3hr (id: land.srfrad.tavg-u-hxy-u.3hr.glb, title: Net radiative flux at surface)
+                variable: tslsi at frequency 3hr (id: land.tslsi.tpt-u-hxy-lsi.3hr.glb, title: Surface Temperature Where Land or Sea Ice)
         variable_group: landatm_coupling_3hr_medium
             Variables included:
-                variable: rlds at frequency 3hr (id: atmos.rlds.tavg-u-hxy-u.3hr.GLB, title: Surface Downwelling Longwave Radiation)
-                variable: rlus at frequency 3hr (id: atmos.rlus.tavg-u-hxy-u.3hr.GLB, title: Surface Upwelling Longwave Radiation)
-                variable: ta6 at frequency 3hr (id: atmos.ta.tpt-p6-hxy-air.3hr.GLB, title: Air temperature)
-                variable: hfdsl at frequency 3hr (id: land.hfdsl.tavg-u-hxy-lnd.3hr.GLB, title: Ground heat flux at 3hr)
-                variable: mrso100 at frequency 3hr (id: land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB, title: Soil moisture in the top 1 m of the soil column)
-                variable: tran at frequency 3hr (id: land.tran.tavg-u-hxy-u.3hr.GLB, title: Transpiration)
+                variable: rlds at frequency 3hr (id: atmos.rlds.tavg-u-hxy-u.3hr.glb, title: Surface Downwelling Longwave Radiation)
+                variable: rlus at frequency 3hr (id: atmos.rlus.tavg-u-hxy-u.3hr.glb, title: Surface Upwelling Longwave Radiation)
+                variable: ta6 at frequency 3hr (id: atmos.ta.tpt-p6-hxy-air.3hr.glb, title: Air temperature)
+                variable: hfdsl at frequency 3hr (id: land.hfdsl.tavg-u-hxy-lnd.3hr.glb, title: Ground heat flux at 3hr)
+                variable: mrso100 at frequency 3hr (id: land.mrsol.tavg-d100cm-hxy-lnd.3hr.glb, title: Soil moisture in the top 1 m of the soil column)
+                variable: tran at frequency 3hr (id: land.tran.tavg-u-hxy-u.3hr.glb, title: Transpiration)
         variable_group: mixed_layer_extremes
             Variables included:
-                variable: mlotst at frequency day (id: ocean.mlotst.tavg-u-hxy-sea.day.GLB, title: Ocean Mixed Layer Thickness Defined by Sigma T)
-                variable: mlotstmax at frequency mon (id: ocean.mlotstmax.tmax-u-hxy-sea.mon.GLB, title: Maximum Ocean Mixed Layer Thickness Defined by Sigma T)
-                variable: mlotstmin at frequency mon (id: ocean.mlotstmin.tmin-u-hxy-sea.mon.GLB, title: Minimum Ocean Mixed Layer Thickness Defined by Sigma T)
+                variable: mlotst at frequency day (id: ocean.mlotst.tavg-u-hxy-sea.day.glb, title: Ocean Mixed Layer Thickness Defined by Delta Sigma T of 0.03 kg m-3 referenced to the model level closest to 10 m depth)
+                variable: mlotstmax at frequency mon (id: ocean.mlotst.tmax-u-hxy-sea.mon.glb, title: Maximum Ocean Mixed Layer Thickness Defined by Delta Sigma T of 0.03 kg m-3 referenced to the model level closest to 10 m depth)
+                variable: mlotstmin at frequency mon (id: ocean.mlotst.tmin-u-hxy-sea.mon.glb, title: Minimum Ocean Mixed Layer Thickness Defined by Delta Sigma T of 0.03 kg m-3 referenced to the model level closest to 10 m depth)
         variable_group: ocean_KE_vorticity_extremes
             Variables included:
-                variable: tnkebto at frequency yr (id: ocean.tnkebto.tavg-u-hxy-sea.yr.GLB, title: Tendency of Ocean Eddy Kinetic Energy Content Due to Parameterized Eddy Advection)
-                variable: uos at frequency day (id: ocean.uos.tavg-u-hxy-sea.day.GLB, title: Daily Surface Sea Water X Velocity)
-                variable: vos at frequency day (id: ocean.vos.tavg-u-hxy-sea.day.GLB, title: Daily Surface Sea Water Y Velocity)
+                variable: tnkebto at frequency yr (id: ocean.tnkebto.tavg-u-hxy-sea.yr.glb, title: Tendency of Ocean Eddy Kinetic Energy Content Due to Parameterized Eddy Advection)
+                variable: uos at frequency day (id: ocean.uos.tavg-u-hxy-sea.day.glb, title: Daily Surface Sea Water X Velocity)
+                variable: vos at frequency day (id: ocean.vos.tavg-u-hxy-sea.day.glb, title: Daily Surface Sea Water Y Velocity)
         variable_group: ocean_acidification_oxygen_extremes
             Variables included:
-                variable: so at frequency day (id: ocean.so.tavg-ol-hxy-sea.day.GLB, title: Sea water salinity)
-                variable: sos at frequency day (id: ocean.sos.tavg-u-hxy-sea.day.GLB, title: Sea Surface Salinity)
-                variable: thetao at frequency day (id: ocean.thetao.tavg-op20bar-hxy-sea.day.GLB, title: Sea Water Potential Temperature at 200 meters)
-                variable: tos at frequency day (id: ocean.tos.tavg-u-hxy-sea.day.GLB, title: Sea Surface Temperature)
-                variable: aragos at frequency mon (id: ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB, title: Surface Aragonite Concentration)
-                variable: arag at frequency mon (id: ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB, title: Aragonite Concentration)
-                variable: calcos at frequency mon (id: ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB, title: Surface Calcite Concentration)
-                variable: calc at frequency mon (id: ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB, title: Calcite Concentration)
-                variable: chl at frequency day (id: ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB, title: Mass Concentration of Total Phytoplankton Expressed as Chlorophyll in Sea Water at 200 meters)
-                variable: dissic at frequency mon (id: ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB, title: Dissolved Inorganic Carbon Concentration)
-                variable: o2 at frequency day (id: ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB, title: Dissolved Oxygen Concentration at 200 meters)
-                variable: ph at frequency day (id: ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB, title: pH)
-                variable: talk at frequency mon (id: ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB, title: Total Alkalinity)
+                variable: so at frequency day (id: ocean.so.tavg-ol-hxy-sea.day.glb, title: Sea Water Salinity)
+                variable: sos at frequency day (id: ocean.sos.tavg-u-hxy-sea.day.glb, title: Sea Surface Salinity)
+                variable: thetao at frequency day (id: ocean.thetao.tavg-op20bar-hxy-sea.day.glb, title: Sea Water Potential Temperature at 200 meters)
+                variable: tos at frequency day (id: ocean.tos.tavg-u-hxy-sea.day.glb, title: Sea Surface Temperature)
+                variable: arag at frequency mon (id: ocnBgchem.arag.tavg-ol-hxy-sea.mon.glb, title: Aragonite Concentration)
+                variable: aragos at frequency mon (id: ocnBgchem.arag.tavg-ols-hxy-sea.mon.glb, title: Surface Aragonite Concentration)
+                variable: calc at frequency mon (id: ocnBgchem.calc.tavg-ol-hxy-sea.mon.glb, title: Calcite Concentration)
+                variable: calcos at frequency mon (id: ocnBgchem.calc.tavg-ols-hxy-sea.mon.glb, title: Surface Calcite Concentration)
+                variable: chl at frequency day (id: ocnBgchem.chl.tavg-op20bar-hxy-sea.day.glb, title: Mass Concentration of Total Phytoplankton Expressed as Chlorophyll in Sea Water at 200 meters)
+                variable: dissic at frequency mon (id: ocnBgchem.dissic.tavg-ol-hxy-sea.mon.glb, title: Dissolved Inorganic Carbon Concentration)
+                variable: o2 at frequency day (id: ocnBgchem.o2.tavg-op20bar-hxy-sea.day.glb, title: Dissolved Oxygen Concentration at 200 meters)
+                variable: ph at frequency day (id: ocnBgchem.ph.tavg-op20bar-hxy-sea.day.glb, title: pH)
+                variable: talk at frequency mon (id: ocnBgchem.talk.tavg-ol-hxy-sea.mon.glb, title: Total Alkalinity)
         variable_group: ocean_temperature_extremes
             Variables included:
-                variable: bigthetao at frequency day (id: ocean.bigthetao.tavg-op20bar-hxy-sea.day.GLB, title: Sea Water Conservative Temperature at 200 meters)
-                variable: thetao at frequency day (id: ocean.thetao.tavg-op20bar-hxy-sea.day.GLB, title: Sea Water Potential Temperature at 200 meters)
-                variable: tos at frequency 3hr (id: ocean.tos.tpt-u-hxy-sea.3hr.GLB, title: Sea Surface Temperature)
-                variable: tossq at frequency day (id: ocean.tossq.tavg-u-hxy-sea.day.GLB, title: Square of Sea Surface Temperature)
+                variable: bigthetao at frequency day (id: ocean.bigthetao.tavg-op20bar-hxy-sea.day.glb, title: Sea Water Conservative Temperature at 200 meters)
+                variable: thetao at frequency day (id: ocean.thetao.tavg-op20bar-hxy-sea.day.glb, title: Sea Water Potential Temperature at 200 meters)
+                variable: tos at frequency 3hr (id: ocean.tos.tpt-u-hxy-sea.3hr.glb, title: Sea Surface Temperature)
+                variable: tossq at frequency day (id: ocean.tossq.tavg-u-hxy-sea.day.glb, title: Square of Sea Surface Temperature)
         variable_group: sea_level_extremes
             Variables included:
-                variable: zos at frequency day (id: ocean.zos.tavg-u-hxy-sea.day.GLB, title: Sea Surface Height above Geoid)
-                variable: zossq at frequency mon (id: ocean.zossq.tavg-u-hxy-sea.mon.GLB, title: Square of Sea Surface Height Above Geoid)
-                variable: zostoga at frequency day (id: ocean.zostoga.tavg-u-hm-sea.day.GLB, title: global_average_thermosteric_sea_level_change)
+                variable: zos at frequency day (id: ocean.zos.tavg-u-hxy-sea.day.glb, title: Sea Surface Height Above Geoid)
+                variable: zossq at frequency mon (id: ocean.zossq.tavg-u-hxy-sea.mon.glb, title: Square of Sea Surface Height Above Geoid)
+                variable: zostoga at frequency day (id: ocean.zostoga.tavg-u-hm-sea.day.glb, title: Global Average Thermosteric Sea Level Change)
         variable_group: sfc_waves
             Variables included:
-                variable: mpw at frequency 3hr (id: ocean.mpw.tavg-u-hxy-sea.3hr.GLB, title: Total Wave Mean Period)
-                variable: mpw at frequency 6hr (id: ocean.mpw.tavg-u-hxy-sea.6hr.GLB, title: Total Wave Mean Period)
-                variable: mpw at frequency mon (id: ocean.mpw.tavg-u-hxy-sea.mon.GLB, title: Total Wave Mean Period)
-                variable: swh at frequency 3hr (id: ocean.swh.tavg-u-hxy-sea.3hr.GLB, title: Total Significant Wave Height)
-                variable: swh at frequency 6hr (id: ocean.swh.tavg-u-hxy-sea.6hr.GLB, title: Total Significant Wave Height)
-                variable: swh at frequency mon (id: ocean.swh.tavg-u-hxy-sea.mon.GLB, title: Total Significant Wave Height)
-                variable: swhmax at frequency 6hr (id: ocean.swh.tmax-u-hxy-sea.6hr.GLB, title: Maximum Significant Wave Height)
-                variable: swhmax at frequency mon (id: ocean.swh.tmax-u-hxy-sea.mon.GLB, title: Maximum Significant Wave Height)
-                variable: wpp at frequency 3hr (id: ocean.wpp.tavg-u-hxy-sea.3hr.GLB, title:  Total Wave Peak Period)
-                variable: wpp at frequency 6hr (id: ocean.wpp.tavg-u-hxy-sea.6hr.GLB, title:  Total Wave Peak Period)
-                variable: wpp at frequency mon (id: ocean.wpp.tavg-u-hxy-sea.mon.GLB, title: Total Wave Peak Period)
+                variable: mpw at frequency mon (id: ocean.mpw.tavg-u-hxy-sea.mon.glb, title: Total Wave Mean Period)
+                variable: mpw at frequency 3hr (id: ocean.mpw.tpt-u-hxy-sea.3hr.glb, title: Total Wave Mean Period)
+                variable: swh at frequency mon (id: ocean.swh.tavg-u-hxy-sea.mon.glb, title: Total Significant Wave Height)
+                variable: swh at frequency 3hr (id: ocean.swh.tpt-u-hxy-sea.3hr.glb, title: Total Significant Wave Height)
+                variable: wpp at frequency mon (id: ocean.wpp.tavg-u-hxy-sea.mon.glb, title: Total Wave Peak Period)
+                variable: wpp at frequency 3hr (id: ocean.wpp.tpt-u-hxy-sea.3hr.glb, title: Total Wave Peak Period)
         variable_group: surgemip_variables
             Variables included:
-                variable: psl at frequency 1hr (id: atmos.psl.tpt-u-hxy-u.1hr.GLB, title: Sea Level Pressure)
-                variable: uas at frequency 1hr (id: atmos.uas.tpt-h10m-hxy-u.1hr.GLB, title: Surface wind speed Eastward Components)
-                variable: vas at frequency 1hr (id: atmos.vas.tpt-h10m-hxy-u.1hr.GLB, title: Surface wind speed Northward Component)
-                variable: so at frequency mon (id: ocean.so.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Salinity)
-                variable: sos at frequency mon (id: ocean.sos.tavg-u-hxy-sea.mon.GLB, title: Sea Surface Salinity)
-                variable: thetao at frequency mon (id: ocean.thetao.tavg-ol-hxy-sea.mon.GLB, title: Sea Water Potential Temperature)
-                variable: tos at frequency mon (id: ocean.tos.tavg-u-hxy-sea.mon.GLB, title: Sea Surface Temperature)
-                variable: tos at frequency 3hr (id: ocean.tos.tpt-u-hxy-sea.3hr.GLB, title: Sea Surface Temperature)
-                variable: sithick at frequency day (id: seaIce.sithick.tavg-u-hxy-si.day.GLB, title: Sea-Ice Thickness)
-                variable: siu at frequency day (id: seaIce.siu.tavg-u-hxy-si.day.GLB, title: X-Component of Sea-Ice Velocity)
-                variable: siv at frequency day (id: seaIce.siv.tavg-u-hxy-si.day.GLB, title: Y-Component of Sea-Ice Velocity)
+                variable: psl at frequency 1hr (id: atmos.psl.tpt-u-hxy-u.1hr.glb, title: Sea Level Pressure)
+                variable: uas at frequency 1hr (id: atmos.uas.tpt-h10m-hxy-u.1hr.glb, title: Eastward Near-Surface Wind)
+                variable: vas at frequency 1hr (id: atmos.vas.tpt-h10m-hxy-u.1hr.glb, title: Northward Near-Surface Wind)
+                variable: so at frequency mon (id: ocean.so.tavg-ol-hxy-sea.mon.glb, title: Sea Water Salinity)
+                variable: sos at frequency mon (id: ocean.sos.tavg-u-hxy-sea.mon.glb, title: Sea Surface Salinity)
+                variable: thetao at frequency mon (id: ocean.thetao.tavg-ol-hxy-sea.mon.glb, title: Sea Water Potential Temperature)
+                variable: tos at frequency mon (id: ocean.tos.tavg-u-hxy-sea.mon.glb, title: Sea Surface Temperature)
+                variable: tos at frequency 3hr (id: ocean.tos.tpt-u-hxy-sea.3hr.glb, title: Sea Surface Temperature)
+                variable: sithick at frequency day (id: seaIce.sithick.tavg-u-hxy-si.day.glb, title: Sea-Ice Thickness)
+                variable: siu at frequency day (id: seaIce.siu.tavg-u-hxy-si.day.glb, title: X-Component of Sea-Ice Velocity)
+                variable: siv at frequency day (id: seaIce.siv.tavg-u-hxy-si.day.glb, title: Y-Component of Sea-Ice Velocity)
     Opportunities:
         opportunity: Accurate assessment of land-atmosphere coupling (id: 1)
             Experiments groups included:
