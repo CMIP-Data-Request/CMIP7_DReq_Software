@@ -13,10 +13,10 @@ Justification of Resources: (Optional) Explanation of how the requested variable
 
 Experiment Groups:
 # An Experiment Group specifies a list of experiments for which requested variables should be produced.
-- example_experiment_group # new Experiment Group, defined below
+- example_experiment_group # new Experiment Group, defined in Experiment_Group/example_experiment_group.yaml
 - deck # existing Experiment Group
 
 Variable Groups:
 # Each Variable Group defines a set of requested variables and its priority.
-- example_variable_group # new Variable Group, defined below
+- example_variable_group # new Variable Group, defined in Variable_Group/example_variable_group.yaml
 - baseline_monthly # existing Variable Group
