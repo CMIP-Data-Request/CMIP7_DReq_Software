@@ -5,6 +5,7 @@ Ingest a yaml file that specifies a data request Opportunity
 
 import argparse
 import json
+import os
 import yaml
 
 from collections import OrderedDict
@@ -63,28 +64,7 @@ if __name__ == '__main__':
     with open(input_file, 'r') as f:
         opp = yaml.safe_load(f)
 
-    # Retrieve specs for any new variable or experiment groups so that they can be validated
-    # against existing DR content, below.
-    # The ExperimentGroup & VariableGroup pydantic models perform validation of the input.
-    sections = ['New Experiment Groups', 'New Variable Groups']
-    for section in sections:
-        for name,info in opp[section].items():
-            opp[section][name] = {format_attribute_name(k):v for k,v in info.items()}
-        match section:
-            case 'New Experiment Groups':
-                new_expt_groups = {name: ExperimentGroup(**info) for name,info in opp[section].items()}
-            case 'New Variable Groups':
-                new_var_groups = {name: VariableGroup(**info) for name,info in opp[section].items()}
-            case _:
-                raise ValueError('Invalid section: ' + section)
-        opp.pop(section)
-
-    # Check priority levels in new Variable Groups are valid
-    for vg_name, vg in new_var_groups.items():
-        if vg.priority_level.lower() not in PRIORITY_LEVELS:
-            raise ValueError(f'Unknown Priority Level for Variable Group {vg_name}: {vg.priority_level}')
-
-    # Get DR content to use in further validating the input
+    # Get DR content used to validate the input
     dreq_content = dc.load(dreq_version)
     base = dq._get_base_dreq_tables(dreq_content, dreq_version, purpose='request')
     dreq_var_info = dq.get_variables_metadata(base, dreq_version)
@@ -93,10 +73,42 @@ if __name__ == '__main__':
     dreq_expt_group_names = set(rec.name for rec in base['Experiment Group'].records.values())
     dreq_var_group_names = set(rec.name for rec in base['Variable Group'].records.values())
 
-    # Check new Variable Group names don't conflict with any already in the DR
-    for vg_name in new_var_groups:
-        if vg_name in dreq_var_group_names:
-            raise ValueError(f'Variable Group already exists in DR {dreq_version}: {vg_name}')
+    # Use Opportunity pydantic model to validate the input
+    opp = {format_attribute_name(k):v for k,v in opp.items()}
+    opp = Opportunity(**opp)
+
+    # Check full Variable Group and Experiment Group lists either
+    #   1. already exist in the DR, or
+    #   2. are defined as new by a template in the appropriate folder.
+    new_eg_names = [eg_name for eg_name in opp.experiment_groups if eg_name not in dreq_expt_group_names]
+    new_vg_names  = [vg_name for vg_name in opp.variable_groups   if vg_name not in dreq_var_group_names]
+
+    # Get info on any new experiment groups from yaml files in the Experiment_Group folder
+    new_expt_groups = {}
+    for eg_name in new_eg_names:
+        eg_input_file = os.path.join('Experiment_Group', f'{eg_name}.yaml')
+        with open(eg_input_file, 'r') as f:
+            info = yaml.safe_load(f)
+        info = {format_attribute_name(k):v for k,v in info.items()}
+        assert eg_name not in new_expt_groups, f'duplicate new experiment group: {eg_name}'
+        new_expt_groups[eg_name] = ExperimentGroup(**info)
+    del new_eg_names
+
+    # Get info on any new variable groups from yaml files in the Variable_Group folder
+    new_var_groups = {}
+    for vg_name in new_vg_names:
+        vg_input_file = os.path.join('Variable_Group', f'{vg_name}.yaml')
+        with open(vg_input_file, 'r') as f:
+            info = yaml.safe_load(f)
+        info = {format_attribute_name(k):v for k,v in info.items()}
+        assert vg_name not in new_var_groups, f'duplicate new variable group: {vg_name}'
+        new_var_groups[vg_name] = VariableGroup(**info)
+    del new_vg_names
+
+    # Check priority levels in new Variable Groups are valid
+    for vg_name, vg in new_var_groups.items():
+        if vg.priority_level.lower() not in PRIORITY_LEVELS:
+            raise ValueError(f'Unknown Priority Level for Variable Group {vg_name}: {vg.priority_level}')
 
     # Check that the variable names in new Variable Groups are valid
     for vg_name, vg in new_var_groups.items():
@@ -120,21 +132,6 @@ if __name__ == '__main__':
     # TODO: get valid CMIP7 experiments using esgvoc
     # (cannot rely on AFT DR list since community MIPs will define new experiments)
 
-    # Use Opportunity pydantic model to validate the input
-    opp = {format_attribute_name(k):v for k,v in opp.items()}
-    opp = Opportunity(**opp)
-
-    # Check full Variable Group and Experiment Group lists are either (1) defined as new,
-    # or (2) exist already in the DR.
-    all_expt_group_names = dreq_expt_group_names.union(new_expt_groups.keys())
-    all_var_group_names = dreq_var_group_names.union(new_var_groups.keys())
-    for eg_name in opp.experiment_groups:
-        if eg_name not in all_expt_group_names:
-            raise ValueError(f'Experiment Group {eg_name} has not been newly defined and does not already exist in DR {dreq_version}')
-    for vg_name in opp.variable_groups:
-        if vg_name not in all_var_group_names:
-            raise ValueError(f'Variable Group {vg_name} has not been newly defined and does not already exist in DR {dreq_version}')
-
     # Write output file
     out = OrderedDict({
         'Header': OrderedDict({
@@ -142,8 +139,8 @@ if __name__ == '__main__':
             'Data Request version used for validation': dreq_version,
         }),
         'Opportunity' : OrderedDict(opp),
-        'New Experiment Groups': OrderedDict({name: OrderedDict(info) for name,info in new_expt_groups.items()}),
-        'New Variable Groups': OrderedDict({name: OrderedDict(info) for name,info in new_var_groups.items()})
+        'Experiment Group': OrderedDict({name: OrderedDict(info) for name,info in new_expt_groups.items()}),
+        'Variable Group': OrderedDict({name: OrderedDict(info) for name,info in new_var_groups.items()})
     })
     with open(output_file, 'w') as f:
         json.dump(out, f, indent=4)

@@ -1,8 +1,7 @@
-example_variable_group: 
-  Title: Short descriptive title of the Variable Group
-  Priority Level: High # High, Medium, or Low (not case sensitive)
-  Justification: (Optional) Explanation of why these variables are important.
-  Notes: (Optional) Any additional comments about the variable group.
-  Variables: # list of requested variable names
-    - land.gpp.tavg-u-hxy-lnd.mon.glb
-    - atmos.fco2nat.tavg-u-hxy-u.mon.glb
+Title: Short descriptive title of the Variable Group
+Priority Level: High # High, Medium, or Low (not case sensitive)
+Justification: (Optional) Explanation of why these variables are important.
+Notes: (Optional) Any additional comments about the variable group.
+Variables: # list of requested variable names
+  - land.gpp.tavg-u-hxy-lnd.mon.glb
+  - atmos.fco2nat.tavg-u-hxy-u.mon.glb
