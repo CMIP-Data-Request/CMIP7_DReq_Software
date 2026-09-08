@@ -1,4 +1,5 @@
 # Minimal template for a data request Opportunity, for use by community MIPs.
+# If not using an optional field, delete it or comment it out.
 
 Title: Short descriptive title of the Opportunity
 
@@ -19,22 +20,3 @@ Variable Groups:
 # Each Variable Group defines a set of requested variables and its priority.
 - example_variable_group # new Variable Group, defined below
 - baseline_monthly # existing Variable Group
-
-New Experiment Groups:
-
-  example_experiment_group:
-    Title: Short descriptive title of the Experiment Group
-    Experiments:
-      - amip # existing experiment
-      - example_new_experiment # new experiment, must be registered in CVs
-
-New Variable Groups:
-  
-  example_variable_group: 
-    Title: Short descriptive title of the Variable Group
-    Priority Level: High # High, Medium, or Low (not case sensitive)
-    Justification: (Optional) Explanation of why these variables are important.
-    Notes: (Optional) Any additional comments about the variable group.
-    Variables: # list of requested variable names
-      - land.gpp.tavg-u-hxy-lnd.mon.glb
-      - atmos.fco2nat.tavg-u-hxy-u.mon.glb
