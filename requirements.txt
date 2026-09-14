@@ -1,5 +1,6 @@
 bs4
 coverage
+esgvoc
 openpyxl
 pooch
 pytest

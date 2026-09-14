@@ -17,13 +17,15 @@
             "experiments": [
                 "link::dcppB-forecast-cmip6",
                 "link::esm-flat10",
+                "link::esm-scen7-hl",
+                "link::esm-scen7-m",
+                "link::esm-scen7-vl",
                 "link::g7-1p5K-sai",
                 "link::land-hist",
                 "link::piClim-NOX",
-                "link::scen7-hc",
-                "link::scen7-mc",
-                "link::scen7-mlc",
-                "link::scen7-vlloc"
+                "link::scen7-hl",
+                "link::scen7-m",
+                "link::scen7-vl"
             ]
         },
         "historical": {
@@ -34,17 +36,22 @@
         },
         "scenarios": {
             "experiments": [
-                "link::scen7-hc",
-                "link::scen7-mc",
-                "link::scen7-mlc",
-                "link::scen7-vlloc"
+                "link::esm-scen7-hl",
+                "link::esm-scen7-m",
+                "link::esm-scen7-vl",
+                "link::scen7-hl",
+                "link::scen7-m",
+                "link::scen7-vl"
             ]
         },
         "scenarios_extensions": {
             "experiments": [
-                "link::scen7-hc-ext",
-                "link::scen7-hc-ext-os",
-                "link::scen7-mc-ext"
+                "link::esm-scen7-hl-ext",
+                "link::esm-scen7-m-ext",
+                "link::esm-scen7-vl-ext",
+                "link::scen7-hl-ext",
+                "link::scen7-m-ext",
+                "link::scen7-vl-ext"
             ]
         }
     },
@@ -146,8 +153,10 @@
                 "link::scenarios"
             ],
             "mips": [
+                "link::AerChemMIP2",
                 "link::DAMIP",
                 "link::DCPP",
+                "link::GeoMIP",
                 "link::PMIP",
                 "link::TIPMIP"
             ],
@@ -169,33 +178,39 @@
             ],
             "priority_level": "link::Core",
             "variables": [
-                "link::atmos.pr.tavg-u-hxy-u.day.GLB",
-                "link::atmos.ps.tavg-u-hxy-u.day.GLB",
-                "link::atmos.psl.tavg-u-hxy-u.day.GLB",
-                "link::atmos.sfcWind.tavg-h10m-hxy-u.day.GLB",
-                "link::atmos.ta.tavg-p19-hxy-air.day.GLB",
-                "link::atmos.tas.tavg-h2m-hxy-u.day.GLB",
-                "link::atmos.tas.tmax-h2m-hxy-u.day.GLB",
-                "link::atmos.tas.tmin-h2m-hxy-u.day.GLB",
-                "link::atmos.zg.tavg-p19-hxy-air.day.GLB",
-                "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.tos.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.zos.tavg-u-hxy-sea.day.GLB",
-                "link::seaIce.siconc.tavg-u-hxy-u.day.GLB"
+                "link::atmos.pr.tavg-u-hxy-u.day.glb",
+                "link::atmos.ps.tavg-u-hxy-u.day.glb",
+                "link::atmos.psl.tavg-u-hxy-u.day.glb",
+                "link::atmos.sfcWind.tavg-h10m-hxy-u.day.glb",
+                "link::atmos.ta.tavg-p19-hxy-air.day.glb",
+                "link::atmos.tas.tavg-h2m-hxy-u.day.glb",
+                "link::atmos.tas.tmax-h2m-hxy-u.day.glb",
+                "link::atmos.tas.tmin-h2m-hxy-u.day.glb",
+                "link::atmos.zg.tavg-p19-hxy-air.day.glb",
+                "link::ocean.sos.tavg-u-hxy-sea.day.glb",
+                "link::ocean.tos.tavg-u-hxy-sea.day.glb",
+                "link::ocean.zos.tavg-u-hxy-sea.day.glb",
+                "link::seaIce.siconc.tavg-u-hxy-u.day.glb"
             ]
         },
         "baseline_fixed": {
             "mips": [],
             "priority_level": "link::Core",
             "variables": [
-                "link::atmos.areacell.ti-u-hxy-u.fx.GLB",
-                "link::atmos.sftlf.ti-u-hxy-u.fx.GLB",
-                "link::land.orog.ti-u-hxy-u.fx.GLB",
-                "link::land.rootd.ti-u-hxy-lnd.fx.GLB",
-                "link::land.slthick.ti-sl-hxy-lnd.fx.GLB",
-                "link::ocean.areacell.ti-u-hxy-u.fx.GLB",
-                "link::ocean.deptho.ti-u-hxy-sea.fx.GLB",
-                "link::ocean.masscello.ti-ol-hxy-sea.fx.GLB"
+                "link::atmos.areacella.ti-u-hxy-u.fx.glb",
+                "link::atmos.sftlf.ti-u-hxy-u.fx.glb",
+                "link::land.mrsofc.ti-u-hxy-lnd.fx.glb",
+                "link::land.orog.ti-u-hxy-u.fx.glb",
+                "link::land.rootd.ti-u-hxy-lnd.fx.glb",
+                "link::land.sftgif.ti-u-hxy-u.fx.glb",
+                "link::land.slthick.ti-sl-hxy-lnd.fx.glb",
+                "link::ocean.areacello.ti-u-hxy-u.fx.glb",
+                "link::ocean.basin.ti-u-hxy-u.fx.glb",
+                "link::ocean.deptho.ti-u-hxy-sea.fx.glb",
+                "link::ocean.hfgeou.ti-u-hxy-sea.fx.glb",
+                "link::ocean.masscello.ti-ol-hxy-sea.fx.glb",
+                "link::ocean.sftof.ti-u-hxy-u.fx.glb",
+                "link::ocean.thkcello.ti-ol-hxy-sea.fx.glb"
             ]
         },
         "baseline_monthly": {
@@ -204,44 +219,44 @@
             ],
             "priority_level": "link::Core",
             "variables": [
-                "link::atmos.pr.tavg-u-hxy-u.mon.GLB",
-                "link::atmos.prc.tavg-u-hxy-u.mon.GLB",
-                "link::atmos.sfcWind.tavg-h10m-hxy-u.mon.GLB",
-                "link::atmos.ta.tavg-p19-hxy-air.mon.GLB",
-                "link::atmos.tas.tavg-h2m-hxy-u.mon.GLB",
-                "link::atmos.tas.tmax-h2m-hxy-u.mon.GLB",
-                "link::atmos.tas.tmin-h2m-hxy-u.mon.GLB",
-                "link::atmos.ts.tavg-u-hxy-u.mon.GLB",
-                "link::atmos.zg.tavg-p19-hxy-air.mon.GLB",
-                "link::land.lai.tavg-u-hxy-lnd.mon.GLB",
-                "link::land.mrso.tavg-u-hxy-lnd.mon.GLB",
-                "link::land.mrsol.tavg-d10cm-hxy-lnd.mon.GLB",
-                "link::landIce.snc.tavg-u-hxy-lnd.mon.GLB",
-                "link::ocean.bigthetao.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocean.so.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocean.sos.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocean.tos.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.wo.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocean.zos.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.zostoga.tavg-u-hm-sea.mon.GLB",
-                "link::seaIce.siconc.tavg-u-hxy-u.mon.GLB",
-                "link::seaIce.simass.tavg-u-hxy-sea.mon.GLB",
-                "link::seaIce.sithick.tavg-u-hxy-si.mon.GLB",
-                "link::seaIce.siu.tavg-u-hxy-si.mon.GLB",
-                "link::seaIce.siv.tavg-u-hxy-si.mon.GLB"
+                "link::atmos.pr.tavg-u-hxy-u.mon.glb",
+                "link::atmos.prc.tavg-u-hxy-u.mon.glb",
+                "link::atmos.sfcWind.tavg-h10m-hxy-u.mon.glb",
+                "link::atmos.ta.tavg-p19-hxy-air.mon.glb",
+                "link::atmos.tas.tavg-h2m-hxy-u.mon.glb",
+                "link::atmos.tas.tmaxavg-h2m-hxy-u.mon.glb",
+                "link::atmos.tas.tminavg-h2m-hxy-u.mon.glb",
+                "link::atmos.ts.tavg-u-hxy-u.mon.glb",
+                "link::atmos.zg.tavg-p19-hxy-air.mon.glb",
+                "link::land.lai.tavg-u-hxy-lnd.mon.glb",
+                "link::land.mrso.tavg-u-hxy-lnd.mon.glb",
+                "link::land.mrsol.tavg-d10cm-hxy-lnd.mon.glb",
+                "link::landIce.snc.tavg-u-hxy-lnd.mon.glb",
+                "link::ocean.bigthetao.tavg-ol-hxy-sea.mon.glb",
+                "link::ocean.so.tavg-ol-hxy-sea.mon.glb",
+                "link::ocean.sos.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.thetao.tavg-ol-hxy-sea.mon.glb",
+                "link::ocean.tos.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.wo.tavg-ol-hxy-sea.mon.glb",
+                "link::ocean.zos.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.zostoga.tavg-u-hm-sea.mon.glb",
+                "link::seaIce.siconc.tavg-u-hxy-u.mon.glb",
+                "link::seaIce.simass.tavg-u-hxy-si.mon.glb",
+                "link::seaIce.sithick.tavg-u-hxy-si.mon.glb",
+                "link::seaIce.siu.tavg-u-hxy-si.mon.glb",
+                "link::seaIce.siv.tavg-u-hxy-si.mon.glb"
             ]
         },
         "baseline_subdaily": {
             "mips": [],
             "priority_level": "link::Core",
             "variables": [
-                "link::atmos.hurs.tavg-h2m-hxy-u.6hr.GLB",
-                "link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
-                "link::atmos.pr.tavg-u-hxy-u.1hr.GLB",
-                "link::atmos.pr.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.ta.tpt-p3-hxy-air.6hr.GLB",
-                "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB"
+                "link::atmos.hurs.tavg-h2m-hxy-u.6hr.glb",
+                "link::atmos.huss.tpt-h2m-hxy-u.3hr.glb",
+                "link::atmos.pr.tavg-u-hxy-u.1hr.glb",
+                "link::atmos.pr.tavg-u-hxy-u.3hr.glb",
+                "link::atmos.ta.tpt-p3-hxy-air.6hr.glb",
+                "link::atmos.tas.tpt-h2m-hxy-u.3hr.glb"
             ]
         },
         "landatm_coupling_3hA": {
@@ -253,16 +268,16 @@
             ],
             "priority_level": "link::High",
             "variables": [
-                "link::atmos.bldep.tpt-u-hxy-u.3hr.GLB",
-                "link::atmos.hfls.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.hfss.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.huss.tpt-h2m-hxy-u.3hr.GLB",
-                "link::atmos.pr.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.ps.tpt-u-hxy-u.3hr.GLB",
-                "link::atmos.tas.tpt-h2m-hxy-u.3hr.GLB",
-                "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.GLB",
-                "link::land.srfrad.tavg-u-hxy-u.3hr.GLB",
-                "link::land.tslsi.tpt-u-hxy-u.3hr.GLB"
+                "link::atmos.bldep.tpt-u-hxy-u.3hr.glb",
+                "link::atmos.hfls.tavg-u-hxy-u.3hr.glb",
+                "link::atmos.hfss.tavg-u-hxy-u.3hr.glb",
+                "link::atmos.huss.tpt-h2m-hxy-u.3hr.glb",
+                "link::atmos.pr.tavg-u-hxy-u.3hr.glb",
+                "link::atmos.ps.tpt-u-hxy-u.3hr.glb",
+                "link::atmos.tas.tpt-h2m-hxy-u.3hr.glb",
+                "link::land.mrsol.tpt-d10cm-hxy-lnd.3hr.glb",
+                "link::land.srfrad.tavg-u-hxy-u.3hr.glb",
+                "link::land.tslsi.tpt-u-hxy-lsi.3hr.glb"
             ]
         },
         "landatm_coupling_3hr_medium": {
@@ -274,21 +289,21 @@
             ],
             "priority_level": "link::Medium",
             "variables": [
-                "link::atmos.rlds.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.rlus.tavg-u-hxy-u.3hr.GLB",
-                "link::atmos.ta.tpt-p6-hxy-air.3hr.GLB",
-                "link::land.hfdsl.tavg-u-hxy-lnd.3hr.GLB",
-                "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.GLB",
-                "link::land.tran.tavg-u-hxy-u.3hr.GLB"
+                "link::atmos.rlds.tavg-u-hxy-u.3hr.glb",
+                "link::atmos.rlus.tavg-u-hxy-u.3hr.glb",
+                "link::atmos.ta.tpt-p6-hxy-air.3hr.glb",
+                "link::land.hfdsl.tavg-u-hxy-lnd.3hr.glb",
+                "link::land.mrsol.tavg-d100cm-hxy-lnd.3hr.glb",
+                "link::land.tran.tavg-u-hxy-u.3hr.glb"
             ]
         },
         "mixed_layer_extremes": {
             "mips": [],
             "priority_level": "link::High",
             "variables": [
-                "link::ocean.mlotst.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.mlotstmax.tmax-u-hxy-sea.mon.GLB",
-                "link::ocean.mlotstmin.tmin-u-hxy-sea.mon.GLB"
+                "link::ocean.mlotst.tavg-u-hxy-sea.day.glb",
+                "link::ocean.mlotst.tmax-u-hxy-sea.mon.glb",
+                "link::ocean.mlotst.tmin-u-hxy-sea.mon.glb"
             ]
         },
         "ocean_KE_vorticity_extremes": {
@@ -303,9 +318,9 @@
             ],
             "priority_level": "link::Medium",
             "variables": [
-                "link::ocean.tnkebto.tavg-u-hxy-sea.yr.GLB",
-                "link::ocean.uos.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.vos.tavg-u-hxy-sea.day.GLB"
+                "link::ocean.tnkebto.tavg-u-hxy-sea.yr.glb",
+                "link::ocean.uos.tavg-u-hxy-sea.day.glb",
+                "link::ocean.vos.tavg-u-hxy-sea.day.glb"
             ]
         },
         "ocean_acidification_oxygen_extremes": {
@@ -317,19 +332,19 @@
             ],
             "priority_level": "link::Medium",
             "variables": [
-                "link::ocean.so.tavg-ol-hxy-sea.day.GLB",
-                "link::ocean.sos.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocean.tos.tavg-u-hxy-sea.day.GLB",
-                "link::ocnBgchem.arag.tavg-d0m-hxy-sea.mon.GLB",
-                "link::ocnBgchem.arag.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocnBgchem.calc.tavg-d0m-hxy-sea.mon.GLB",
-                "link::ocnBgchem.calc.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocnBgchem.chl.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocnBgchem.dissic.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocnBgchem.o2.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocnBgchem.ph.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.GLB"
+                "link::ocean.so.tavg-ol-hxy-sea.day.glb",
+                "link::ocean.sos.tavg-u-hxy-sea.day.glb",
+                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.glb",
+                "link::ocean.tos.tavg-u-hxy-sea.day.glb",
+                "link::ocnBgchem.arag.tavg-ol-hxy-sea.mon.glb",
+                "link::ocnBgchem.arag.tavg-ols-hxy-sea.mon.glb",
+                "link::ocnBgchem.calc.tavg-ol-hxy-sea.mon.glb",
+                "link::ocnBgchem.calc.tavg-ols-hxy-sea.mon.glb",
+                "link::ocnBgchem.chl.tavg-op20bar-hxy-sea.day.glb",
+                "link::ocnBgchem.dissic.tavg-ol-hxy-sea.mon.glb",
+                "link::ocnBgchem.o2.tavg-op20bar-hxy-sea.day.glb",
+                "link::ocnBgchem.ph.tavg-op20bar-hxy-sea.day.glb",
+                "link::ocnBgchem.talk.tavg-ol-hxy-sea.mon.glb"
             ]
         },
         "ocean_temperature_extremes": {
@@ -345,10 +360,10 @@
             ],
             "priority_level": "link::High",
             "variables": [
-                "link::ocean.bigthetao.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.GLB",
-                "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB",
-                "link::ocean.tossq.tavg-u-hxy-sea.day.GLB"
+                "link::ocean.bigthetao.tavg-op20bar-hxy-sea.day.glb",
+                "link::ocean.thetao.tavg-op20bar-hxy-sea.day.glb",
+                "link::ocean.tos.tpt-u-hxy-sea.3hr.glb",
+                "link::ocean.tossq.tavg-u-hxy-sea.day.glb"
             ]
         },
         "sea_level_extremes": {
@@ -366,26 +381,21 @@
             ],
             "priority_level": "link::High",
             "variables": [
-                "link::ocean.zos.tavg-u-hxy-sea.day.GLB",
-                "link::ocean.zossq.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.zostoga.tavg-u-hm-sea.day.GLB"
+                "link::ocean.zos.tavg-u-hxy-sea.day.glb",
+                "link::ocean.zossq.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.zostoga.tavg-u-hm-sea.day.glb"
             ]
         },
         "sfc_waves": {
             "mips": [],
             "priority_level": "link::High",
             "variables": [
-                "link::ocean.mpw.tavg-u-hxy-sea.3hr.GLB",
-                "link::ocean.mpw.tavg-u-hxy-sea.6hr.GLB",
-                "link::ocean.mpw.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.swh.tavg-u-hxy-sea.3hr.GLB",
-                "link::ocean.swh.tavg-u-hxy-sea.6hr.GLB",
-                "link::ocean.swh.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.swh.tmax-u-hxy-sea.6hr.GLB",
-                "link::ocean.swh.tmax-u-hxy-sea.mon.GLB",
-                "link::ocean.wpp.tavg-u-hxy-sea.3hr.GLB",
-                "link::ocean.wpp.tavg-u-hxy-sea.6hr.GLB",
-                "link::ocean.wpp.tavg-u-hxy-sea.mon.GLB"
+                "link::ocean.mpw.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.mpw.tpt-u-hxy-sea.3hr.glb",
+                "link::ocean.swh.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.swh.tpt-u-hxy-sea.3hr.glb",
+                "link::ocean.wpp.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.wpp.tpt-u-hxy-sea.3hr.glb"
             ]
         },
         "surgemip_variables": {
@@ -396,17 +406,17 @@
             ],
             "priority_level": "link::High",
             "variables": [
-                "link::atmos.psl.tpt-u-hxy-u.1hr.GLB",
-                "link::atmos.uas.tpt-h10m-hxy-u.1hr.GLB",
-                "link::atmos.vas.tpt-h10m-hxy-u.1hr.GLB",
-                "link::ocean.so.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocean.sos.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.thetao.tavg-ol-hxy-sea.mon.GLB",
-                "link::ocean.tos.tavg-u-hxy-sea.mon.GLB",
-                "link::ocean.tos.tpt-u-hxy-sea.3hr.GLB",
-                "link::seaIce.sithick.tavg-u-hxy-si.day.GLB",
-                "link::seaIce.siu.tavg-u-hxy-si.day.GLB",
-                "link::seaIce.siv.tavg-u-hxy-si.day.GLB"
+                "link::atmos.psl.tpt-u-hxy-u.1hr.glb",
+                "link::atmos.uas.tpt-h10m-hxy-u.1hr.glb",
+                "link::atmos.vas.tpt-h10m-hxy-u.1hr.glb",
+                "link::ocean.so.tavg-ol-hxy-sea.mon.glb",
+                "link::ocean.sos.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.thetao.tavg-ol-hxy-sea.mon.glb",
+                "link::ocean.tos.tavg-u-hxy-sea.mon.glb",
+                "link::ocean.tos.tpt-u-hxy-sea.3hr.glb",
+                "link::seaIce.sithick.tavg-u-hxy-si.day.glb",
+                "link::seaIce.siu.tavg-u-hxy-si.day.glb",
+                "link::seaIce.siv.tavg-u-hxy-si.day.glb"
             ]
         }
     },
