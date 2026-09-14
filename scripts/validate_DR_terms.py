@@ -31,10 +31,11 @@ Invoke either with DR version string or path to a DR release content export json
 
     # Required arguments
     parser.add_argument('dr_content', type=str,
-                        help='directory containing CCCma tables json files')    
+                        help='DR version identifier (example: "v1.2.2.5") '
+                        'or json file of DR content (example: dreq_release_export.json)')
     
     # Optional arguements
-    parser.add_argument('--output-dr-vars', action='store_true', default=False,
+    parser.add_argument('-odr', '--output-dr-vars', action='store_true', default=False,
                         help='output json file with metadata of DR variables that is used in the comparison')
 
     return parser.parse_args()
@@ -77,7 +78,6 @@ if __name__ == '__main__':
         'realm': 'modeling_realm',
         'branded_variable': 'branded_variable_name',
         'variable': 'variableRootDD',
-        'branding_suffix': 'branding_label',
     }
 
     if args.output_dr_vars:

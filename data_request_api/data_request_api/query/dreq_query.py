@@ -709,6 +709,7 @@ def get_requested_variables(content, dreq_version,
 
 def get_variables_metadata(content, dreq_version,
                            compound_names=None, cmor_tables=None, cmor_variables=None,
+                           realms=None, attributes=None,
                            verbose=True):
     '''
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
@@ -727,11 +728,20 @@ def get_variables_metadata(content, dreq_version,
         Example: ['Amon.tas', 'Omon.sos']
     cmor_tables : list[str]
         Names of CMOR tables to include. If not given, all are included.
+        At present this refers to CMIP6 CMOR tables.
         Example: ['Amon', 'Omon']
     cmor_variables : list[str]
         Names of CMOR variables to include. If not given, all are included.
         Here the out_name is used as the CMOR variable name.
         Example: ['tas', 'siconc']
+    realms: list[str]
+        Include only variables that include one of the specified realms in their
+        list of realms (variables can have more than one realm).
+        Example: ['atmos', 'aerosol']
+    attributes: list[str]
+        Include only the specified metadata attributes.
+        The attributes are presented in the order specified by the user.
+        Example: ['frequency', 'region', 'modeling_realm']
 
     Returns:
     --------
@@ -788,13 +798,21 @@ def get_variables_metadata(content, dreq_version,
         dreq_tables['structure'] = base['Structure']
 
     # Specify names of some DR variable attributes depending the DR version
-    # TO DO: is this logic still needed? If so, make it explicitly depend on DR Content version?
     if 'CMIP6 Table Identifiers (legacy)' in base:
-        dreq_tables['CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
+        # dreq_tables['CMIP6 CMOR tables'] identifies the table in the DR Airtable that lists CMIP6 CMOR tables.
+        dreq_tables['CMIP6 CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
+        # attr_table identifies the CMIP6 CMOR table to which the variable belonged.
+        # If the variable did not exist in CMIP6, this is the CMIP6 table name that was assigned to it during CMIP7 DR development.
+        # Set it here to correspond to the "CMIP6 Table (legacy)" column in the Variables table of DR Airtable.
         attr_table = 'cmip6_table_legacy'
+        # attr_realm identifies the primary realm of the variable (first realm in its list of realms, if there is more than one).
+        # Set it here to correspond to the "Modelling Realm - Primary" column in the Variables table of DR Airtable.
         attr_realm = 'modelling_realm___primary'
     elif 'Table Identifiers' in base:
-        dreq_tables['CMOR tables'] = base['Table Identifiers']
+        # This section is for DR versions prior to v1.2 (released Mar 2025).
+        # See comments above for explanation of what these things are for.
+        assert dreq_version < 'v1.2', f'For DR version {dreq_version}, should not be here'
+        dreq_tables['CMIP6 CMOR tables'] = base['Table Identifiers']
         attr_table = 'table'
         attr_realm = 'modelling_realm'
     else:
@@ -817,6 +835,10 @@ def get_variables_metadata(content, dreq_version,
             print('Retaining only these CMOR variables: ' + ', '.join(sorted(cmor_variables, key=str.lower)))
         if compound_names:
             print('Retaining only these compound names: ' + ', '.join(sorted(compound_names, key=str.lower)))
+        if realms:
+            print('Retaining only these realms: ' + ', '.join(sorted(realms, key=str.lower)))
+        if attributes:
+            print('Retaining only these attributes: ' + ', '.join(sorted(attributes, key=str.lower)))
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
@@ -834,7 +856,7 @@ def get_variables_metadata(content, dreq_version,
         link_table = getattr(var, attr_table)
         if len(link_table) != 1:
             raise Exception(f'variable {var_name} should have one table link, found: ' + str(link_table))
-        table_id = dreq_tables['CMOR tables'].get_record(link_table[0]).name
+        table_id = dreq_tables['CMIP6 CMOR tables'].get_record(link_table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
             if table_id not in cmor_tables:
@@ -969,6 +991,9 @@ def get_variables_metadata(content, dreq_version,
         # Get realm(s)
         link_realm = getattr(var, attr_realm)
         modeling_realm = [dreq_tables['realm'].get_record(link).id for link in link_realm]
+        # modeling_realm should now be the primary realm, so check the returned list contains only one realm
+        if not len(modeling_realm) == 1:
+            raise ValueError(f'There should be one primary realm for {var_name}, found: ' + ', '.join(modeling_realm))
         if hasattr(var, attr_realm_additional):
             # Add secondary realm(s), if any, to the list
             link_realm_additional = getattr(var, attr_realm_additional)
@@ -976,6 +1001,10 @@ def get_variables_metadata(content, dreq_version,
         # Raise error if any realm is duplicated in the list
         if len(modeling_realm) != len(set(modeling_realm)):
             raise ValueError(f'Redundant realm(s) found for DR variable {var_name}: {modeling_realm}')
+        if realms:
+            # Exclude variables that don't have any of their realms in list
+            if len(set(modeling_realm).intersection(set(realms))) == 0:
+                continue
 
         cell_measures = ''
         if hasattr(var, 'cell_measures'):
@@ -1038,7 +1067,7 @@ def get_variables_metadata(content, dreq_version,
         if hasattr(var, 'branded_variable_name'):
             branded_variable_name = var.branded_variable_name
 
-            variableRootDD, branding_label = None, None
+            variableRootDD, branding_suffix = None, None
 
             # Get variableRootDD, the short variable name used in the branded name
             if hasattr(phys_param, 'variablerootdd'):
@@ -1047,33 +1076,33 @@ def get_variables_metadata(content, dreq_version,
 
             # Get the branding label by parsing the branded variable name
             if branded_variable_name.count('_') == 1:
-                s, branding_label = branded_variable_name.split('_')
+                s, branding_suffix = branded_variable_name.split('_')
                 if not variableRootDD:
                     # Set variableRootDD if it wasn't already defined
                     variableRootDD = s
 
-            # Handle undefined cases, to ensure variableRootDD and branding_label are not left undefined
+            # Handle undefined cases, to ensure variableRootDD and branding_suffix are not left undefined
             # (any such cases are anticipated to vanish in post-v1.2.2 dreq versions)
             if not variableRootDD:
                 variableRootDD = 'None'
-            if not branding_label:
+            if not branding_suffix:
                 assert var.branded_variable_name_status not in ['Accepted']
                 if branded_variable_name.startswith('unknown'):
-                    branding_label = branded_variable_name
+                    branding_suffix = branded_variable_name
                 else:
-                    branding_label = 'None'
+                    branding_suffix = 'None'
 
             check_branded_name = False
             if check_branded_name:
                 # Consistency check on definition of branded name.
                 # For development, not intended as a user option.
-                if branded_variable_name != f'{variableRootDD}_{branding_label}':
+                if branded_variable_name != f'{variableRootDD}_{branding_suffix}':
                     warnings.warn(f'Inconsistency between branded variable name {branded_variable_name} '
-                                  + f'and its components: {variableRootDD}, {branding_label}')
+                                  + f'and its components: {variableRootDD}, {branding_suffix}')
 
             var_info.update({
                 'variableRootDD': variableRootDD,
-                'branding_label': branding_label,
+                'branding_suffix': branding_suffix,
                 'branded_variable_name': branded_variable_name,
             })
 
@@ -1095,7 +1124,7 @@ def get_variables_metadata(content, dreq_version,
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)
-                cn.append(branding_label)
+                cn.append(branding_suffix)
                 cn.append(frequency)
                 cn.append(var_info['region'])
                 sep = '.'
@@ -1121,6 +1150,9 @@ def get_variables_metadata(content, dreq_version,
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
+
+        if attributes:
+            var_info = OrderedDict({attr:var_info[attr] for attr in attributes})
 
         assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
         all_var_info[var_name] = var_info
@@ -1353,9 +1385,7 @@ def write_variables_metadata(all_var_info, dreq_version, filepath,
         # Write variables metadata to csv
         var_info = next(iter(all_var_info.values()))
         attrs = list(var_info.keys())
-        columns = ['Compound Name']
-        columns.append('standard_name')
-        columns.append('standard_name_proposed')
+        columns = ['Compound Name'] # compound name is always the first column
         columns += [s for s in attrs if s not in columns]
         rows = [columns]  # column header line
         # Add each variable as a row
