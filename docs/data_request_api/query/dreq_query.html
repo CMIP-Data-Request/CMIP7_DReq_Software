@@ -1013,7 +1013,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
 </dl></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.get_variables_metadata"><code class="name flex">
-<span>def <span class="ident">get_variables_metadata</span></span>(<span>content,<br>dreq_version,<br>compound_names=None,<br>cmor_tables=None,<br>cmor_variables=None,<br>verbose=True)</span>
+<span>def <span class="ident">get_variables_metadata</span></span>(<span>content,<br>dreq_version,<br>compound_names=None,<br>cmor_tables=None,<br>cmor_variables=None,<br>realms=None,<br>attributes=None,<br>verbose=True)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1022,6 +1022,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
 </summary>
 <pre><code class="python">def get_variables_metadata(content, dreq_version,
                            compound_names=None, cmor_tables=None, cmor_variables=None,
+                           realms=None, attributes=None,
                            verbose=True):
     &#39;&#39;&#39;
     Get metadata for CMOR variables (dimensions, cell_methods, out_name, ...).
@@ -1040,11 +1041,20 @@ Its "priority_level" attribute specifies the priority as either string or link t
         Example: [&#39;Amon.tas&#39;, &#39;Omon.sos&#39;]
     cmor_tables : list[str]
         Names of CMOR tables to include. If not given, all are included.
+        At present this refers to CMIP6 CMOR tables.
         Example: [&#39;Amon&#39;, &#39;Omon&#39;]
     cmor_variables : list[str]
         Names of CMOR variables to include. If not given, all are included.
         Here the out_name is used as the CMOR variable name.
         Example: [&#39;tas&#39;, &#39;siconc&#39;]
+    realms: list[str]
+        Include only variables that include one of the specified realms in their
+        list of realms (variables can have more than one realm).
+        Example: [&#39;atmos&#39;, &#39;aerosol&#39;]
+    attributes: list[str]
+        Include only the specified metadata attributes.
+        The attributes are presented in the order specified by the user.
+        Example: [&#39;frequency&#39;, &#39;region&#39;, &#39;modeling_realm&#39;]
 
     Returns:
     --------
@@ -1101,13 +1111,21 @@ Its "priority_level" attribute specifies the priority as either string or link t
         dreq_tables[&#39;structure&#39;] = base[&#39;Structure&#39;]
 
     # Specify names of some DR variable attributes depending the DR version
-    # TO DO: is this logic still needed? If so, make it explicitly depend on DR Content version?
     if &#39;CMIP6 Table Identifiers (legacy)&#39; in base:
-        dreq_tables[&#39;CMOR tables&#39;] = base[&#39;CMIP6 Table Identifiers (legacy)&#39;]
+        # dreq_tables[&#39;CMIP6 CMOR tables&#39;] identifies the table in the DR Airtable that lists CMIP6 CMOR tables.
+        dreq_tables[&#39;CMIP6 CMOR tables&#39;] = base[&#39;CMIP6 Table Identifiers (legacy)&#39;]
+        # attr_table identifies the CMIP6 CMOR table to which the variable belonged.
+        # If the variable did not exist in CMIP6, this is the CMIP6 table name that was assigned to it during CMIP7 DR development.
+        # Set it here to correspond to the &#34;CMIP6 Table (legacy)&#34; column in the Variables table of DR Airtable.
         attr_table = &#39;cmip6_table_legacy&#39;
+        # attr_realm identifies the primary realm of the variable (first realm in its list of realms, if there is more than one).
+        # Set it here to correspond to the &#34;Modelling Realm - Primary&#34; column in the Variables table of DR Airtable.
         attr_realm = &#39;modelling_realm___primary&#39;
     elif &#39;Table Identifiers&#39; in base:
-        dreq_tables[&#39;CMOR tables&#39;] = base[&#39;Table Identifiers&#39;]
+        # This section is for DR versions prior to v1.2 (released Mar 2025).
+        # See comments above for explanation of what these things are for.
+        assert dreq_version &lt; &#39;v1.2&#39;, f&#39;For DR version {dreq_version}, should not be here&#39;
+        dreq_tables[&#39;CMIP6 CMOR tables&#39;] = base[&#39;Table Identifiers&#39;]
         attr_table = &#39;table&#39;
         attr_realm = &#39;modelling_realm&#39;
     else:
@@ -1130,6 +1148,10 @@ Its "priority_level" attribute specifies the priority as either string or link t
             print(&#39;Retaining only these CMOR variables: &#39; + &#39;, &#39;.join(sorted(cmor_variables, key=str.lower)))
         if compound_names:
             print(&#39;Retaining only these compound names: &#39; + &#39;, &#39;.join(sorted(compound_names, key=str.lower)))
+        if realms:
+            print(&#39;Retaining only these realms: &#39; + &#39;, &#39;.join(sorted(realms, key=str.lower)))
+        if attributes:
+            print(&#39;Retaining only these attributes: &#39; + &#39;, &#39;.join(sorted(attributes, key=str.lower)))
 
     substitute = {
         # replacement character(s) : [characters to replace with the replacement character]
@@ -1147,7 +1169,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
         link_table = getattr(var, attr_table)
         if len(link_table) != 1:
             raise Exception(f&#39;variable {var_name} should have one table link, found: &#39; + str(link_table))
-        table_id = dreq_tables[&#39;CMOR tables&#39;].get_record(link_table[0]).name
+        table_id = dreq_tables[&#39;CMIP6 CMOR tables&#39;].get_record(link_table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
             if table_id not in cmor_tables:
@@ -1282,6 +1304,9 @@ Its "priority_level" attribute specifies the priority as either string or link t
         # Get realm(s)
         link_realm = getattr(var, attr_realm)
         modeling_realm = [dreq_tables[&#39;realm&#39;].get_record(link).id for link in link_realm]
+        # modeling_realm should now be the primary realm, so check the returned list contains only one realm
+        if not len(modeling_realm) == 1:
+            raise ValueError(f&#39;There should be one primary realm for {var_name}, found: &#39; + &#39;, &#39;.join(modeling_realm))
         if hasattr(var, attr_realm_additional):
             # Add secondary realm(s), if any, to the list
             link_realm_additional = getattr(var, attr_realm_additional)
@@ -1289,6 +1314,10 @@ Its "priority_level" attribute specifies the priority as either string or link t
         # Raise error if any realm is duplicated in the list
         if len(modeling_realm) != len(set(modeling_realm)):
             raise ValueError(f&#39;Redundant realm(s) found for DR variable {var_name}: {modeling_realm}&#39;)
+        if realms:
+            # Exclude variables that don&#39;t have any of their realms in list
+            if len(set(modeling_realm).intersection(set(realms))) == 0:
+                continue
 
         cell_measures = &#39;&#39;
         if hasattr(var, &#39;cell_measures&#39;):
@@ -1351,7 +1380,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
         if hasattr(var, &#39;branded_variable_name&#39;):
             branded_variable_name = var.branded_variable_name
 
-            variableRootDD, branding_label = None, None
+            variableRootDD, branding_suffix = None, None
 
             # Get variableRootDD, the short variable name used in the branded name
             if hasattr(phys_param, &#39;variablerootdd&#39;):
@@ -1360,33 +1389,33 @@ Its "priority_level" attribute specifies the priority as either string or link t
 
             # Get the branding label by parsing the branded variable name
             if branded_variable_name.count(&#39;_&#39;) == 1:
-                s, branding_label = branded_variable_name.split(&#39;_&#39;)
+                s, branding_suffix = branded_variable_name.split(&#39;_&#39;)
                 if not variableRootDD:
                     # Set variableRootDD if it wasn&#39;t already defined
                     variableRootDD = s
 
-            # Handle undefined cases, to ensure variableRootDD and branding_label are not left undefined
+            # Handle undefined cases, to ensure variableRootDD and branding_suffix are not left undefined
             # (any such cases are anticipated to vanish in post-v1.2.2 dreq versions)
             if not variableRootDD:
                 variableRootDD = &#39;None&#39;
-            if not branding_label:
+            if not branding_suffix:
                 assert var.branded_variable_name_status not in [&#39;Accepted&#39;]
                 if branded_variable_name.startswith(&#39;unknown&#39;):
-                    branding_label = branded_variable_name
+                    branding_suffix = branded_variable_name
                 else:
-                    branding_label = &#39;None&#39;
+                    branding_suffix = &#39;None&#39;
 
             check_branded_name = False
             if check_branded_name:
                 # Consistency check on definition of branded name.
                 # For development, not intended as a user option.
-                if branded_variable_name != f&#39;{variableRootDD}_{branding_label}&#39;:
+                if branded_variable_name != f&#39;{variableRootDD}_{branding_suffix}&#39;:
                     warnings.warn(f&#39;Inconsistency between branded variable name {branded_variable_name} &#39;
-                                  + f&#39;and its components: {variableRootDD}, {branding_label}&#39;)
+                                  + f&#39;and its components: {variableRootDD}, {branding_suffix}&#39;)
 
             var_info.update({
                 &#39;variableRootDD&#39;: variableRootDD,
-                &#39;branding_label&#39;: branding_label,
+                &#39;branding_suffix&#39;: branding_suffix,
                 &#39;branded_variable_name&#39;: branded_variable_name,
             })
 
@@ -1408,7 +1437,7 @@ Its "priority_level" attribute specifies the priority as either string or link t
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)
-                cn.append(branding_label)
+                cn.append(branding_suffix)
                 cn.append(frequency)
                 cn.append(var_info[&#39;region&#39;])
                 sep = &#39;.&#39;
@@ -1434,6 +1463,9 @@ Its "priority_level" attribute specifies the priority as either string or link t
                     if s in v:
                         v = v.replace(s, replacement)
             var_info[k] = v
+
+        if attributes:
+            var_info = OrderedDict({attr:var_info[attr] for attr in attributes})
 
         assert var_name not in all_var_info, &#39;non-unique variable name: &#39; + var_name
         all_var_info[var_name] = var_info
@@ -1463,11 +1495,20 @@ Compound names of variables to include. If not given, all are included.
 Example: ['Amon.tas', 'Omon.sos']
 cmor_tables : list[str]
 Names of CMOR tables to include. If not given, all are included.
+At present this refers to CMIP6 CMOR tables.
 Example: ['Amon', 'Omon']
 cmor_variables : list[str]
 Names of CMOR variables to include. If not given, all are included.
 Here the out_name is used as the CMOR variable name.
-Example: ['tas', 'siconc']</p>
+Example: ['tas', 'siconc']
+realms: list[str]
+Include only variables that include one of the specified realms in their
+list of realms (variables can have more than one realm).
+Example: ['atmos', 'aerosol']
+attributes: list[str]
+Include only the specified metadata attributes.
+The attributes are presented in the order specified by the user.
+Example: ['frequency', 'region', 'modeling_realm']</p>
 <h2 id="returns">Returns:</h2>
 <p>all_var_info : dict
 Dictionary indexed by unique variable name, giving metadata for each variable.
@@ -1635,9 +1676,7 @@ expt_vars is the output dict from dq.get_requested_variables().</p></div>
         # Write variables metadata to csv
         var_info = next(iter(all_var_info.values()))
         attrs = list(var_info.keys())
-        columns = [&#39;Compound Name&#39;]
-        columns.append(&#39;standard_name&#39;)
-        columns.append(&#39;standard_name_proposed&#39;)
+        columns = [&#39;Compound Name&#39;] # compound name is always the first column
         columns += [s for s in attrs if s not in columns]
         rows = [columns]  # column header line
         # Add each variable as a row

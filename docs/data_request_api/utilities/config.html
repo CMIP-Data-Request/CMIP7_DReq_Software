@@ -150,13 +150,13 @@ installed_version = '1.2.2.dev8+g6aa6222.d20250515' ==&gt; don't warn user</p></
     return CONFIG</code></pre>
 </details>
 <div class="desc"><p>Load the configuration file, creating it if necessary.</p>
-<h2 id="returns">Returns</h2>
 <dl>
+<dt>Returns</dt>
+<dt>-----=</dt>
 <dt><code>dict</code></dt>
 <dd>The configuration data.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>FileNotFoundError</code></dt>
 <dd>If the config file does not exist.</dd>
 <dt><code>yaml.YAMLError</code></dt>
@@ -215,16 +215,16 @@ installed_version = '1.2.2.dev8+g6aa6222.d20250515' ==&gt; don't warn user</p></
     print(f&#34;Updated {key} to {value} in &#39;{CONFIG_FILE}&#39;.&#34;)</code></pre>
 </details>
 <div class="desc"><p>Update the configuration with the specified key-value pair.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
 <dd>The configuration key to update.</dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>Any</code></dt>
 <dd>The new value for the configuration key. Boolean-like strings
 ("true", "false") will be converted to actual booleans.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>KeyError</code></dt>
 <dd>If the key is not in the DEFAULT_CONFIG.</dd>
 <dt><code>TypeError</code></dt>

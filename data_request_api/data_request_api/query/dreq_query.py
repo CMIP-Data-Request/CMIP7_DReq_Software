@@ -1152,7 +1152,7 @@ def get_variables_metadata(content, dreq_version,
             var_info[k] = v
 
         if attributes:
-            var_info = OrderedDict({attr:var_info[attr] for attr in attributes})
+            var_info = OrderedDict({attr: var_info[attr] for attr in attributes})
 
         assert var_name not in all_var_info, 'non-unique variable name: ' + var_name
         all_var_info[var_name] = var_info
@@ -1385,7 +1385,7 @@ def write_variables_metadata(all_var_info, dreq_version, filepath,
         # Write variables metadata to csv
         var_info = next(iter(all_var_info.values()))
         attrs = list(var_info.keys())
-        columns = ['Compound Name'] # compound name is always the first column
+        columns = ['Compound Name']  # compound name is always the first column
         columns += [s for s in attrs if s not in columns]
         rows = [columns]  # column header line
         # Add each variable as a row
