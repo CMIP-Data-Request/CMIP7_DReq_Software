@@ -799,13 +799,20 @@ def get_variables_metadata(content, dreq_version,
 
     # Specify names of some DR variable attributes depending the DR version
     if 'CMIP6 Table Identifiers (legacy)' in base:
-        dreq_tables['CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
+        # dreq_tables['CMIP6 CMOR tables'] identifies the table in the DR Airtable that lists CMIP6 CMOR tables.
+        dreq_tables['CMIP6 CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
+        # attr_table identifies the CMIP6 CMOR table to which the variable belonged.
+        # If the variable did not exist in CMIP6, this is the CMIP6 table name that was assigned to it during CMIP7 DR development.
+        # Set it here to correspond to the "CMIP6 Table (legacy)" column in the Variables table of DR Airtable.
         attr_table = 'cmip6_table_legacy'
-        attr_realm = 'modelling_realm___primary' # "Modelling Realm - Primary" column in Variables table of DR Airtable
+        # attr_realm identifies the primary realm of the variable (first realm in its list of realms, if there is more than one).
+        # Set it here to correspond to the "Modelling Realm - Primary" column in the Variables table of DR Airtable.
+        attr_realm = 'modelling_realm___primary'
     elif 'Table Identifiers' in base:
         # This section is for DR versions prior to v1.2 (released Mar 2025).
+        # See comments above for explanation of what these things are for.
         assert dreq_version < 'v1.2', f'For DR version {dreq_version}, should not be here'
-        dreq_tables['CMOR tables'] = base['Table Identifiers']
+        dreq_tables['CMIP6 CMOR tables'] = base['Table Identifiers']
         attr_table = 'table'
         attr_realm = 'modelling_realm'
     else:
@@ -849,7 +856,7 @@ def get_variables_metadata(content, dreq_version,
         link_table = getattr(var, attr_table)
         if len(link_table) != 1:
             raise Exception(f'variable {var_name} should have one table link, found: ' + str(link_table))
-        table_id = dreq_tables['CMOR tables'].get_record(link_table[0]).name
+        table_id = dreq_tables['CMIP6 CMOR tables'].get_record(link_table[0]).name
         if cmor_tables:
             # Filter by CMOR table name
             if table_id not in cmor_tables:
