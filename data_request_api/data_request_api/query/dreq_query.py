@@ -1060,7 +1060,7 @@ def get_variables_metadata(content, dreq_version,
         if hasattr(var, 'branded_variable_name'):
             branded_variable_name = var.branded_variable_name
 
-            variableRootDD, branding_label = None, None
+            variableRootDD, branding_suffix = None, None
 
             # Get variableRootDD, the short variable name used in the branded name
             if hasattr(phys_param, 'variablerootdd'):
@@ -1069,33 +1069,33 @@ def get_variables_metadata(content, dreq_version,
 
             # Get the branding label by parsing the branded variable name
             if branded_variable_name.count('_') == 1:
-                s, branding_label = branded_variable_name.split('_')
+                s, branding_suffix = branded_variable_name.split('_')
                 if not variableRootDD:
                     # Set variableRootDD if it wasn't already defined
                     variableRootDD = s
 
-            # Handle undefined cases, to ensure variableRootDD and branding_label are not left undefined
+            # Handle undefined cases, to ensure variableRootDD and branding_suffix are not left undefined
             # (any such cases are anticipated to vanish in post-v1.2.2 dreq versions)
             if not variableRootDD:
                 variableRootDD = 'None'
-            if not branding_label:
+            if not branding_suffix:
                 assert var.branded_variable_name_status not in ['Accepted']
                 if branded_variable_name.startswith('unknown'):
-                    branding_label = branded_variable_name
+                    branding_suffix = branded_variable_name
                 else:
-                    branding_label = 'None'
+                    branding_suffix = 'None'
 
             check_branded_name = False
             if check_branded_name:
                 # Consistency check on definition of branded name.
                 # For development, not intended as a user option.
-                if branded_variable_name != f'{variableRootDD}_{branding_label}':
+                if branded_variable_name != f'{variableRootDD}_{branding_suffix}':
                     warnings.warn(f'Inconsistency between branded variable name {branded_variable_name} '
-                                  + f'and its components: {variableRootDD}, {branding_label}')
+                                  + f'and its components: {variableRootDD}, {branding_suffix}')
 
             var_info.update({
                 'variableRootDD': variableRootDD,
-                'branding_label': branding_label,
+                'branding_suffix': branding_suffix,
                 'branded_variable_name': branded_variable_name,
             })
 
@@ -1117,7 +1117,7 @@ def get_variables_metadata(content, dreq_version,
                 cn = []
                 cn.append(modeling_realm[0])
                 cn.append(variableRootDD)
-                cn.append(branding_label)
+                cn.append(branding_suffix)
                 cn.append(frequency)
                 cn.append(var_info['region'])
                 sep = '.'

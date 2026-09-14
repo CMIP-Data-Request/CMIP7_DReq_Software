@@ -367,7 +367,7 @@ Call example:
       "cmip6_table": "AERmon",
       "physical_parameter_name": "abs550aer",
       "variableRootDD": "abs550aer",
-      "branding_label": "tavg-u-hxy-u",
+      "branding_suffix": "tavg-u-hxy-u",
       "branded_variable_name": "abs550aer_tavg-u-hxy-u",
       "region": "glb",
       "cmip6_compound_name": "AERmon.abs550aer",
