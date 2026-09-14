@@ -38,7 +38,7 @@ def parse_args():
 
     # Optional input arguments
     parser.add_argument('-a', '--attributes', type=parse_input_list,
-                        help=f'include only the specified variable metadtaa attributes, examples: \
+                        help=f'include only the specified variable metadata attributes, examples: \
                         \n  -a frequency{sep}modeling_realm{sep}region \
                         \n  -a branded_variable_name{sep}long_name{sep}standard_name \
                         \n  -a dimensions{sep}cell_methods')

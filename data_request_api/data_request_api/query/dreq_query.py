@@ -798,12 +798,13 @@ def get_variables_metadata(content, dreq_version,
         dreq_tables['structure'] = base['Structure']
 
     # Specify names of some DR variable attributes depending the DR version
-    # TO DO: is this logic still needed? If so, make it explicitly depend on DR Content version?
     if 'CMIP6 Table Identifiers (legacy)' in base:
         dreq_tables['CMOR tables'] = base['CMIP6 Table Identifiers (legacy)']
         attr_table = 'cmip6_table_legacy'
-        attr_realm = 'modelling_realm___primary'
+        attr_realm = 'modelling_realm___primary' # "Modelling Realm - Primary" column in Variables table of DR Airtable
     elif 'Table Identifiers' in base:
+        # This section is for DR versions prior to v1.2 (released Mar 2025).
+        assert dreq_version < 'v1.2', f'For DR version {dreq_version}, should not be here'
         dreq_tables['CMOR tables'] = base['Table Identifiers']
         attr_table = 'table'
         attr_realm = 'modelling_realm'
