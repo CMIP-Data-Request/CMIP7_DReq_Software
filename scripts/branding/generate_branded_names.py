@@ -66,7 +66,7 @@ def main():
         # Do some basic checks on the result
         if branded_name.count('_') != 1:
             raise ValueError(f'Error in branded name: {branded_name}')
-        root_name, branding_label = branded_name.split('_')
+        root_name, branding_suffix = branded_name.split('_')
         if root_name != var_info['variableRootDD']:
             raise ValueError(f'Error in branded name: {branded_name}')
         if var_info['out_name'] != root_name:
@@ -76,7 +76,7 @@ def main():
 
         # Update the variable's metadata dict
         var_info.update({
-            "branding_label": branding_label,
+            "branding_suffix": branding_suffix,
             "branded_variable_name": branded_name,
         })
         # Set CMIP7 compound name according to the recipe adopted for the AFT DR
@@ -84,7 +84,7 @@ def main():
         # (first entry in list of realms, if the list has more than one entry)
         d = dict(var_info)
         d['primary_modeling_realm'] = d['modeling_realm'].split()[0]
-        cmip7_compound_name = '{primary_modeling_realm}.{variableRootDD}.{branding_label}.{frequency}.{region}'.format(**d)
+        cmip7_compound_name = '{primary_modeling_realm}.{variableRootDD}.{branding_suffix}.{frequency}.{region}'.format(**d)
         del d
         var_info.update({
             "cmip7_compound_name": cmip7_compound_name,

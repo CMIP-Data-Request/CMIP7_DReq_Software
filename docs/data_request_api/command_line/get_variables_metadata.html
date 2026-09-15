@@ -76,8 +76,10 @@ el.replaceWith(d);
         content,
         use_dreq_version,
         compound_names=args.compound_names,
-        cmor_tables=args.cmor_tables,
+        cmor_tables=args.cmip6_cmor_tables,
         cmor_variables=args.cmor_variables,
+        realms=args.realms,
+        attributes=args.attributes,
     )
 
     # Write output file
@@ -105,14 +107,15 @@ el.replaceWith(d);
     &#39;&#39;&#39;
 
     parser = argparse.ArgumentParser(
-        description=&#39;Get metadata of CMOR variables (e.g., cell_methods, dimensions, ...) and write it to a json file.&#39;
+        formatter_class=argparse.RawTextHelpFormatter,
+        description=&#39;Write data request variables metadata (cell_methods, dimensions, ...) to json or csv file.&#39;
     )
 
     # Positional (mandatory) input arguments
     parser.add_argument(&#39;dreq_version&#39;, choices=dc.get_versions(),
                         help=&#39;data request version&#39;)
     parser.add_argument(&#39;outfile&#39;, type=str,
-                        help=&#39;output file containing metadata of requested variables, can be &#34;.json&#34; or &#34;.csv&#34; file&#39;)
+                        help=&#39;output file (specify &#34;.json&#34; or &#34;.csv&#34; extension)&#39;)
 
     sep = &#39;,&#39;
 
@@ -123,13 +126,36 @@ el.replaceWith(d);
         input_args = [s for s in input_args if s not in [&#39;&#39;]]
         return input_args
 
-    # Optional input arguments
+    parser.add_argument(&#39;-a&#39;, &#39;--attributes&#39;, type=parse_input_list,
+                        help=dedent(f&#39;&#39;&#39;\
+                            include only the specified variable metadata attributes, examples:
+                              -a frequency{sep}modeling_realm{sep}region
+                              -a branded_variable_name{sep}long_name{sep}standard_name
+                              -a dimensions{sep}cell_methods
+                            &#39;&#39;&#39;))
     parser.add_argument(&#39;-cn&#39;, &#39;--compound_names&#39;, type=parse_input_list,
-                        help=f&#39;include only variables with the specified compound names, example: -cn Amon.tas{sep}Omon.sos&#39;)
-    parser.add_argument(&#39;-t&#39;, &#39;--cmor_tables&#39;, type=parse_input_list,
-                        help=f&#39;include only the specified CMOR tables, example: -t Amon{sep}Omon&#39;)
+                        help=dedent(f&#39;&#39;&#39;\
+                            include only variables with the specified compound names, examples:
+                              -cn Amon.tas{sep}Omon.sos
+                              -cn atmos.tas.tavg-h2m-hxy-u.mon.glb{sep}ocean.sos.tavg-u-hxy-sea.mon.glb
+                            uses CMIP7 or CMIP6 compound name, depending on variable_name config parameter (use CMIP7_data_request_api_config to set)
+                            &#39;&#39;&#39;))
     parser.add_argument(&#39;-v&#39;, &#39;--cmor_variables&#39;, type=parse_input_list,
-                        help=f&#39;include only the specified CMOR variable short names, example: -v tas{sep}siconc&#39;)
+                        help=dedent(f&#39;&#39;&#39;\
+                            include only the specified CMOR variable out_name, example:
+                              -v tas{sep}siconc
+                              &#39;&#39;&#39;))
+    parser.add_argument(&#39;-r&#39;, &#39;--realms&#39;, type=parse_input_list,
+                        help=dedent(f&#39;&#39;&#39;\
+                            include only the specified realms, examples:
+                              -r atmos
+                              -r ocean{sep}ocnBgchem{sep}seaIce
+                              &#39;&#39;&#39;))
+    parser.add_argument(&#39;-t&#39;, &#39;--cmip6_cmor_tables&#39;, type=parse_input_list,
+                        help=dedent(f&#39;&#39;&#39;\
+                            include only the specified CMIP6 CMOR tables, example:
+                              -t Amon{sep}Omon
+                        &#39;&#39;&#39;))
 
     return parser.parse_args()</code></pre>
 </details>

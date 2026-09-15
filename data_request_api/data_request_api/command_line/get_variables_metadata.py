@@ -5,6 +5,7 @@ Extract metadata of CMOR variables and write them to a json file.
 
 import argparse
 import os
+from textwrap import dedent
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
@@ -36,27 +37,36 @@ def parse_args():
         input_args = [s for s in input_args if s not in ['']]
         return input_args
 
-    # Optional input arguments
     parser.add_argument('-a', '--attributes', type=parse_input_list,
-                        help=f'include only the specified variable metadata attributes, examples: \
-                        \n  -a frequency{sep}modeling_realm{sep}region \
-                        \n  -a branded_variable_name{sep}long_name{sep}standard_name \
-                        \n  -a dimensions{sep}cell_methods')
+                        help=dedent(f'''\
+                            include only the specified variable metadata attributes, examples:
+                              -a frequency{sep}modeling_realm{sep}region
+                              -a branded_variable_name{sep}long_name{sep}standard_name
+                              -a dimensions{sep}cell_methods
+                            '''))
     parser.add_argument('-cn', '--compound_names', type=parse_input_list,
-                        help=f'include only variables with the specified compound names, examples: \
-                        \n  -cn Amon.tas{sep}Omon.sos \
-                        \n  -cn atmos.tas.tavg-h2m-hxy-u.mon.glb{sep}ocean.sos.tavg-u-hxy-sea.mon.glb \
-                        \nuses CMIP7 or CMIP6 compound name, depending on variable_name config parameter (use CMIP7_data_request_api_config to set)')
+                        help=dedent(f'''\
+                            include only variables with the specified compound names, examples:
+                              -cn Amon.tas{sep}Omon.sos
+                              -cn atmos.tas.tavg-h2m-hxy-u.mon.glb{sep}ocean.sos.tavg-u-hxy-sea.mon.glb
+                            uses CMIP7 or CMIP6 compound name, depending on variable_name config parameter (use CMIP7_data_request_api_config to set)
+                            '''))
     parser.add_argument('-v', '--cmor_variables', type=parse_input_list,
-                        help=f'include only the specified CMOR variable out_name, example: \
-                        \n  -v tas{sep}siconc')
+                        help=dedent(f'''\
+                            include only the specified CMOR variable out_name, example:
+                              -v tas{sep}siconc
+                              '''))
     parser.add_argument('-r', '--realms', type=parse_input_list,
-                        help=f'include only the specified realms, examples: \
-                        \n  -r atmos \
-                        \n  -r ocean{sep}ocnBgchem{sep}seaIce')
+                        help=dedent(f'''\
+                            include only the specified realms, examples:
+                              -r atmos
+                              -r ocean{sep}ocnBgchem{sep}seaIce
+                              '''))
     parser.add_argument('-t', '--cmip6_cmor_tables', type=parse_input_list,
-                        help=f'include only the specified CMIP6 CMOR tables, example: \
-                        \n  -t Amon{sep}Omon')
+                        help=dedent(f'''\
+                            include only the specified CMIP6 CMOR tables, example:
+                              -t Amon{sep}Omon
+                        '''))
 
     return parser.parse_args()
 
