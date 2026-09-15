@@ -110,7 +110,9 @@ if __name__ == '__main__':
 
     # Check priority levels in new Variable Groups are valid
     for vg_name, vg in new_var_groups.items():
-        if vg.priority_level.lower() not in PRIORITY_LEVELS:
+        if vg.priority_level.lower() == 'core':
+            raise ValueError(f'Priority Level "Core" is reserved for Baseline Climate Variables')
+        elif vg.priority_level.lower() not in PRIORITY_LEVELS:
             raise ValueError(f'Unknown Priority Level for Variable Group {vg_name}: {vg.priority_level}')
 
     # Check that the variable names in new Variable Groups are valid
