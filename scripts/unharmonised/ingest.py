@@ -11,6 +11,8 @@ import yaml
 from collections import OrderedDict
 from pydantic import BaseModel
 
+import esgvoc.api as ev
+
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 from data_request_api.query.dreq_classes import (
@@ -59,6 +61,7 @@ if __name__ == '__main__':
     input_file = args.input
     output_file = args.output
     dreq_version = args.dreq_version
+    project = 'cmip7'
 
     # Read setup file for new Opportunity
     with open(input_file, 'r') as f:
@@ -114,7 +117,7 @@ if __name__ == '__main__':
     for vg_name, vg in new_var_groups.items():
         invalid_variables = []
         for var_name in vg.variables:
-            # TODO: should user be forced to say whether using CMIP6 or CMIP7 variable names?
+            # TODO: should user be forced to say whether using CMIP6 or CMIP7 variable names? Assume CMIP7 names?
             # TODO: if new variables are defined (beyond those in AFT DR) then need to add these here as valid names
             if not (var_name in cmip7_compound_names or var_name in cmip6_compound_names):
                 invalid_variables.append(var_name)
@@ -129,8 +132,16 @@ if __name__ == '__main__':
             raise ValueError(f'Experiment Group already exists in DR {dreq_version}: {eg_name}')
 
     # Validate experiments against CVs
-    # TODO: get valid CMIP7 experiments using esgvoc
-    # (cannot rely on AFT DR list since community MIPs will define new experiments)
+    cv_expts = ev.get_all_terms_in_collection(project_id=project, collection_id='experiment')
+    cv_expt_names = set([cv_info.drs_name for cv_info in cv_expts])
+    for eg_name, eg in new_expt_groups.items():
+        eg_expt_names = set(eg.experiments)
+        if not eg_expt_names.issubset(cv_expt_names):
+            invalid_expt_names = eg_expt_names.difference(cv_expt_names)
+            msg = [f'Found {len(invalid_expt_names)} unknown experiments in experiment group "{eg_name}":']
+            msg += sorted([f'  {s}' for s in invalid_expt_names])
+            msg.append(f'Have these experiments been registered in the CVs for project={project}?')
+            raise ValueError('\n'.join(msg))
 
     # Write output file
     out = OrderedDict({
