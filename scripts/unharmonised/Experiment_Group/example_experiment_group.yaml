@@ -1,4 +1,5 @@
 Title: Short descriptive title of the Experiment Group
 Experiments:
-  - amip # existing experiment
-  - example_new_experiment # new experiment, must be registered in CVs
+- amip # existing experiment
+- historical
+# - example_new_experiment # new experiment, must be registered in CVs
