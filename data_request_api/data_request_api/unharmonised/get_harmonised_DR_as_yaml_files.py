@@ -33,7 +33,8 @@ def outdir_setup(dir_name: str) -> Path:
     outdir = Path(dir_name)
     if not outdir.is_dir():
         raise FileNotFoundError(f'Expected directory to exist: {outdir}')
-    outdir = outdir / 'Harmonised'
+    # outdir = outdir / 'Harmonised'
+    outdir = 'reference_Harmonised' / outdir
     outdir.mkdir(parents=True, exist_ok=True)
     return outdir
 
