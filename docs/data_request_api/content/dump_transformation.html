@@ -406,6 +406,51 @@ def get_transformed_content(version=&#34;latest_stable&#34;, export=&#34;release
 </details>
 <div class="desc"></div>
 </dd>
+<dt id="data_request_api.content.dump_transformation.merge_transform_content"><code class="name flex">
+<span>def <span class="ident">merge_transform_content</span></span>(<span>content, version)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def merge_transform_content(content, version):
+    data_request = dict(version=version)
+    vocabulary_server = dict(version=version)
+    issue = 0
+    logger = get_logger()
+    for (DR, VS) in content:
+        logger.info(&#34;Deal with version %s&#34; % DR[&#34;version&#34;])
+        for key in [key for key in sorted(list(DR)) if key != &#34;version&#34;]:
+            if key not in data_request:
+                data_request[key] = dict()
+            for (elt_id, elt_val) in DR[key].items():
+                if elt_id not in data_request[key]:
+                    data_request[key][elt_id] = copy.deepcopy(elt_val)
+                elif elt_val == data_request[key][elt_id]:
+                    logger.warning(&#34;Duplicate element %s %s in DR version %s&#34; % (key, elt_id, DR[&#34;version&#34;]))
+                else:
+                    logger.error(&#34;Redefining element %s %s in DR version %s&#34; % (key, elt_id, DR[&#34;version&#34;]))
+                    issue += 1
+        for key in [key for key in sorted(list(VS)) if key != &#34;version&#34;]:
+            if key not in vocabulary_server:
+                vocabulary_server[key] = dict()
+            for (elt_id, elt_val) in VS[key].items():
+                if elt_id not in vocabulary_server[key]:
+                    vocabulary_server[key][elt_id] = copy.deepcopy(elt_val)
+                elif elt_val == vocabulary_server[key][elt_id]:
+                    logger.warning(&#34;Duplicate element %s %s in VS version %s&#34; % (key, elt_id, VS[&#34;version&#34;]))
+                else:
+                    logger.error(&#34;Redefining element %s %s in VS version %s&#34; % (key, elt_id, VS[&#34;version&#34;]))
+                    issue += 1
+    if issue &gt; 0:
+        logger.error(&#34;%s issue(s) during versions merging... see log.&#34; % issue)
+        raise ValueError(&#34;%s issue(s) during versions merging... see log.&#34; % issue)
+    else:
+        return data_request, vocabulary_server</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
 <dt id="data_request_api.content.dump_transformation.merge_useful_keys"><code class="name flex">
 <span>def <span class="ident">merge_useful_keys</span></span>(<span>content, per_entry_input, **common_inputs)</span>
 </code></dt>
@@ -793,6 +838,7 @@ The key "version" is added to the DR and VS dictionaries.
 <li><code><a title="data_request_api.content.dump_transformation.get_transform_settings" href="#data_request_api.content.dump_transformation.get_transform_settings">get_transform_settings</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.get_transformed_content" href="#data_request_api.content.dump_transformation.get_transformed_content">get_transformed_content</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.initialize_useful_keys" href="#data_request_api.content.dump_transformation.initialize_useful_keys">initialize_useful_keys</a></code></li>
+<li><code><a title="data_request_api.content.dump_transformation.merge_transform_content" href="#data_request_api.content.dump_transformation.merge_transform_content">merge_transform_content</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.merge_useful_keys" href="#data_request_api.content.dump_transformation.merge_useful_keys">merge_useful_keys</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.remove_unused_keys" href="#data_request_api.content.dump_transformation.remove_unused_keys">remove_unused_keys</a></code></li>
 <li><code><a title="data_request_api.content.dump_transformation.rename_useful_keys" href="#data_request_api.content.dump_transformation.rename_useful_keys">rename_useful_keys</a></code></li>

@@ -523,6 +523,65 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
             raise TypeError(&#34;VS_input should be either the name of a json file or a dictionary.&#34;)
         return cls(input_database=DR, VS=VS, **kwargs)
 
+    @classmethod
+    def from_several_inputs(cls, *content_inputs, **kwargs):
+        &#34;&#34;&#34;
+        Create Data Request content from several sources of request and vocabulary.
+        :param list of dict content_inputs: List of dictionary like dict(version=&#34;test&#34;, DR=&#34;path_to_DR&#34;, VS=&#34;path_to_VS&#34;) or dict(version=&#34;test&#34;, content=&#34;path_to_content&#34;)
+        :param kwargs: additional elements
+        :return: A DataRequest object containing the whole requests and vocabularies
+        &#34;&#34;&#34;
+        logger = get_logger()
+        versions = list()
+        content = list()
+        for content_input in content_inputs:
+            if &#34;version&#34; in content_input:
+                versions.append(content_input[&#34;version&#34;])
+            else:
+                logger.error(&#34;No version provided for %s&#34; % content_input)
+                raise ValueError(&#34;No version provided for %s&#34; % content_input)
+            if &#34;DR&#34; in content_input and &#34;VS&#34; in content_input:
+                DR_input = content_input[&#34;DR&#34;]
+                if isinstance(DR_input, str) and os.path.isfile(DR_input):
+                    DR = read_json_file(DR_input)
+                elif isinstance(DR_input, dict):
+                    DR = copy.deepcopy(DR_input)
+                else:
+                    logger.error(&#34;DR should be either the name of a json file or a dictionary.&#34;)
+                    raise TypeError(&#34;DR should be either the name of a json file or a dictionary.&#34;)
+                VS_input = content_input[&#34;VS&#34;]
+                if isinstance(VS_input, str) and os.path.isfile(VS_input):
+                    VS = read_json_file(VS_input)
+                elif isinstance(VS_input, dict):
+                    VS = copy.deepcopy(VS_input)
+                else:
+                    logger.error(&#34;VS should be either the name of a json file or a dictionary.&#34;)
+                    raise TypeError(&#34;VS should be either the name of a json file or a dictionary.&#34;)
+            elif &#34;content&#34; in content_input:
+                DR, VS = cls._split_content_from_input_json(content_input[&#34;content&#34;], version=version)
+            else:
+                logger.error(&#34;Input content should contain either &#39;DR&#39; and &#39;VS&#39; entries or &#39;content&#39; entry. &#34;
+                             &#34;Nothing found for %s&#34; % content_input)
+            content.append((DR, VS))
+        DR, VS = merge_transform_content(content=content, version=versions)
+        VS = VocabularyServer(VS)
+        return cls(input_database=DR, VS=VS, **kwargs)
+
+    def _merge_contents_from_inputs_json(self, input_jsons, versions):
+        &#34;&#34;&#34;
+        Split the different exports then merge them to have a single database
+        :param list of dict or str input_jsons: List of input jsons files to be merged
+        :param list of str versions: List of versions to be merged
+        :return: dict, dict: two dictionaries containing the DR and the VS
+        &#34;&#34;&#34;
+        logger = get_logger()
+        version = &#34;_&#34;.join(sorted(versions))
+        content = list()
+        for (input_json, input_version) in zip(input_jsons, versions):
+            content.append(self._split_content_from_input_json(input_json, input_version))
+        DR, VS = merge_transform_content(content, version=version)
+        return DR, VS
+
     @staticmethod
     def _split_content_from_input_json(input_json, version):
         &#34;&#34;&#34;
@@ -1300,6 +1359,15 @@ transform into DRObject (True) or alternatively to DRObject if link or ConstantV
 :param str or dict VS_input: dictionary or name of the json file containing the vocabulary server
 :param dict kwargs: additional parameters
 :return DataRequest: instance of the DataRequest object</p></div>
+</dd>
+<dt id="data_request_api.query.data_request.DataRequest.from_several_inputs"><code class="name flex">
+<span>def <span class="ident">from_several_inputs</span></span>(<span>*content_inputs, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create Data Request content from several sources of request and vocabulary.
+:param list of dict content_inputs: List of dictionary like dict(version="test", DR="path_to_DR", VS="path_to_VS") or dict(version="test", content="path_to_content")
+:param kwargs: additional elements
+:return: A DataRequest object containing the whole requests and vocabularies</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -3261,6 +3329,7 @@ Use to define basic information needed.</p>
 <li><code><a title="data_request_api.query.data_request.DataRequest.find_variables_per_theme" href="#data_request_api.query.data_request.DataRequest.find_variables_per_theme">find_variables_per_theme</a></code></li>
 <li><code><a title="data_request_api.query.data_request.DataRequest.from_input" href="#data_request_api.query.data_request.DataRequest.from_input">from_input</a></code></li>
 <li><code><a title="data_request_api.query.data_request.DataRequest.from_separated_inputs" href="#data_request_api.query.data_request.DataRequest.from_separated_inputs">from_separated_inputs</a></code></li>
+<li><code><a title="data_request_api.query.data_request.DataRequest.from_several_inputs" href="#data_request_api.query.data_request.DataRequest.from_several_inputs">from_several_inputs</a></code></li>
 <li><code><a title="data_request_api.query.data_request.DataRequest.get_data_request_themes" href="#data_request_api.query.data_request.DataRequest.get_data_request_themes">get_data_request_themes</a></code></li>
 <li><code><a title="data_request_api.query.data_request.DataRequest.get_elements_per_kind" href="#data_request_api.query.data_request.DataRequest.get_elements_per_kind">get_elements_per_kind</a></code></li>
 <li><code><a title="data_request_api.query.data_request.DataRequest.get_experiment_group" href="#data_request_api.query.data_request.DataRequest.get_experiment_group">get_experiment_group</a></code></li>
