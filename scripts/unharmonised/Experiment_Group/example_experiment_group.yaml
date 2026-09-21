@@ -1,3 +1,4 @@
+Name: example_experiment_group
 Title: Short descriptive title of the Experiment Group
 Experiments:
 - amip # existing experiment
