@@ -6,6 +6,8 @@ Quick script to check DR content against CMIP7 CVs and report any inconsistencie
 import argparse
 import json
 
+from textwrap import dedent
+
 # Ensure latest CMIP7 is used by esgvoc:
 #   esgvoc use cmip7@latest
 import esgvoc.api as ev
@@ -17,16 +19,16 @@ from data_request_api import version as api_version
 
 
 def parse_args():
-    descrip = '''
-Check DR content against CMIP7 CVs and report any inconsistencies found.
+    descrip = dedent('''\
+        Check DR content against CMIP7 CVs and report any inconsistencies found.
 
-User should ensure esgvoc is using the latest version of the CMIP7 CVs:
-  esgvoc use cmip7@latest
+        User should ensure esgvoc is using the latest version of the CMIP7 CVs:
+          esgvoc use cmip7@latest
 
-Invoke either with DR version string or path to a DR release content export json file. Examples:
-  python validate_DR_terms.py v1.2.2.4
-  python validate_DR_terms.py CMIP7_DReq_Content/airtable_export/dreq_release_export.json
-'''
+        Invoke either with DR version string or path to a DR release content export json file. Examples:
+          python validate_DR_terms.py v1.2.2.4
+          python validate_DR_terms.py CMIP7_DReq_Content/airtable_export/dreq_release_export.json
+    ''')
     parser = argparse.ArgumentParser(description=descrip, formatter_class=argparse.RawDescriptionHelpFormatter)
 
     # Required arguments
@@ -40,7 +42,7 @@ Invoke either with DR version string or path to a DR release content export json
 
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
 
     args = parse_args()
     if args.dr_content.endswith('.json'):
@@ -94,7 +96,7 @@ if __name__ == '__main__':
         )
 
     # Get CVs info to compare to DR
-    collec = ev.get_all_collections_in_project(project_id="cmip7")
+    # collec = ev.get_all_collections_in_project(project_id="cmip7")
 
     # Specify attributes to check, using attribute names as they appear in CVs
     check_attrs = []
@@ -170,9 +172,9 @@ if __name__ == '__main__':
             print(f'  {s}')
 
         # Check if, among these, there are any case-insensitive matches
-        valid_values = set([s.lower() for s in valid_values])
-        all_dr_values = set([s.lower() for s in invalid])
-        match = all_dr_values.intersection(valid_values)
+        valid_values_lowercase = set([s.lower() for s in valid_values])
+        all_dr_values_lowercase = set([s.lower() for s in invalid])
+        match = all_dr_values_lowercase.intersection(valid_values_lowercase)
         if len(match) > 0:
             print(f'\n{len(match)} case-insensitive matches:')
             for s in sorted(match, key=str.lower):
@@ -182,4 +184,10 @@ if __name__ == '__main__':
     else:
         print(f'All DR values validated for: {attr}')
 
+    not_in_dr = valid_values.difference(all_dr_values)
+    print(f'Experiments in CVs but not in DR ({len(not_in_dr)}):')
+    for s in sorted(not_in_dr, key=str.lower):
+        print(f'  {s}')
 
+if __name__ == '__main__':
+    main()
