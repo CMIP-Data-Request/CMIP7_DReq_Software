@@ -54,8 +54,7 @@ def parse_args():
 
     return parser.parse_args()
 
-
-if __name__ == '__main__':
+def main():
 
     args = parse_args()
     input_file = args.input
@@ -158,3 +157,6 @@ if __name__ == '__main__':
     with open(output_file, 'w') as f:
         json.dump(out, f, indent=4)
         print('Wrote ' + output_file)
+
+if __name__ == '__main__':
+    main()
