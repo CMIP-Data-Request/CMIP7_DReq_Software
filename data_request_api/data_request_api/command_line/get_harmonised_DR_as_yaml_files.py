@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 
 import argparse
-import textwrap
 import yaml
 
+from datetime import datetime, UTC
 from pathlib import Path
-# from textwrap import dedent, wrap
+from textwrap import dedent
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
 from data_request_api.query.dreq_classes import (format_attribute_name)
-
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -26,6 +25,9 @@ def parse_args():
                         help='write yaml files for experiment groups')
     parser.add_argument('-vg', '--variable-group', action='store_true', default=False,
                         help='write yaml files for variable groups')
+
+    parser.add_argument('-a', '--all', action='store_true', default=False,
+                        help='write yaml files for all of the above')
 
     return parser.parse_args()
 
@@ -51,9 +53,22 @@ def format_text(text: str) -> str:
 
     return text
 
+# def write_logfile(outdir: Path, dreq_version: str):
+#     DATE_FORMAT = '%d-%b-%Y %H:%M:%S UTC'
+#     date_run = datetime.now(UTC)
+#     date_run_str = date_run.strftime(DATE_FORMAT)
+#     msg = f'Files in {outdir} created {date_run_str} from Harmonised DR Content version: {dreq_version}'
+#     outfile = outdir / '.provenance.log'
+#     with open(outfile, 'w') as f:
+#         f.write(msg)
+
 def main():
     args = parse_args()
     dreq_version = args.dreq_version
+    if args.all:
+        args.opportunity = True
+        args.experiment_group = True
+        args.variable_group = True
 
     dreq_content = dc.load(dreq_version)
     base = dq._get_base_dreq_tables(dreq_content, dreq_version, purpose='request')
@@ -101,6 +116,7 @@ def main():
                     'MIPs - lower priority': mip_names,
                 })
 
+            info['Harmonised DR version'] = dreq_version
             info_yaml = yaml.safe_dump(info, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
             filename = f'{format_attribute_name(rec.title)}.yaml'
@@ -126,6 +142,8 @@ def main():
                 'Experiments': expt_names,
                 'Number of experiments in group': len(expt_names),
             }
+
+            info['Harmonised DR version'] = dreq_version
             info_yaml = yaml.safe_dump(info, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
             filename = f'{format_attribute_name(rec.name)}.yaml'
@@ -133,6 +151,8 @@ def main():
             with open(outfile, 'w') as f:
                 f.write(info_yaml)
                 print(f'Wrote {outfile}')
+
+            # write_logfile(outdir, dreq_version)
 
     if args.variable_group:
         outdir = outdir_setup('Variable_Group')
@@ -183,6 +203,7 @@ def main():
                     'Of interest to MIPs': mip_names,
                 })
 
+            info['Harmonised DR version'] = dreq_version
             info_yaml = yaml.safe_dump(info, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
             filename = f'{format_attribute_name(rec.name)}.yaml'
