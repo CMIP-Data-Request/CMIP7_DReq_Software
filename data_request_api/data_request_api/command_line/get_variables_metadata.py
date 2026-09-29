@@ -109,6 +109,5 @@ def main():
         content_path=dc._dreq_content_loaded['json_path']
     )
 
-
 if __name__ == '__main__':
     main()
