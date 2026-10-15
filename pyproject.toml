@@ -42,6 +42,7 @@ estimate_dreq_volume = "data_request_api.command_line.estimate_dreq_volume:main"
 compare_variables = "data_request_api.command_line.compare_variables:main"
 get_harmonised_DR_as_yaml_files = "data_request_api.command_line.get_harmonised_DR_as_yaml_files:main"
 validate_DR_opportunity = "data_request_api.command_line.validate_DR_opportunity:main"
+make_variable_group = "data_request_api.command_line.make_variable_group:main"
 
 [tool.setuptools]
 package-dir = {"" = "data_request_api"}  # 🔍 Tell setuptools that packages are under src/
