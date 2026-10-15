@@ -5,10 +5,12 @@ Extract metadata of CMOR variables and write them to a json file.
 
 import argparse
 import os
+import yaml
 from textwrap import dedent
 
 import data_request_api.content.dreq_content as dc
 import data_request_api.query.dreq_query as dq
+from data_request_api.query.dreq_variables import filter_variables_metadata
 from data_request_api import version as api_version
 
 
@@ -37,6 +39,11 @@ def parse_args():
         input_args = [s for s in input_args if s not in ['']]
         return input_args
 
+    parser.add_argument('-f', '--filter', type=str,
+                        help=dedent('''
+                            yaml file specifying attributes and values to keep in the output
+                            (these filters are applied only AFTER any filtering done by the command-line options below)
+                            '''))
     parser.add_argument('-a', '--attributes', type=parse_input_list,
                         help=dedent(f'''\
                             include only the specified variable metadata attributes, examples:
@@ -100,6 +107,12 @@ def main():
         attributes=args.attributes,
     )
 
+    if args.filter:
+        # Filter variables
+        with open(args.filter) as f:
+            filters = yaml.safe_load(f)
+        filter_variables_metadata(all_var_info, filters)
+
     # Write output file
     dq.write_variables_metadata(
         all_var_info,
@@ -108,7 +121,6 @@ def main():
         api_version=api_version,
         content_path=dc._dreq_content_loaded['json_path']
     )
-
 
 if __name__ == '__main__':
     main()
