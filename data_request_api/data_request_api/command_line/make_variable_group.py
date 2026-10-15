@@ -86,6 +86,8 @@ def main():
             # This should not happen, but check just in case
             raise ValueError(f'Mapping from cmip7_compound_name to {var_name_type} is not unique!')
 
+    # TODO: determine if variable names are valid at all (in case mistakes in them)
+
     if var_names.issubset(available_values['cmip7_compound_name']):
         mapping = None
     elif var_names.issubset(available_values['cmip6_compound_name']):
