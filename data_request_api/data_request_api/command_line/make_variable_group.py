@@ -20,11 +20,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Create variable group yaml file from json or csv input")
 
     # Mandatory arguments
-    parser.add_argument('input', 
+    parser.add_argument('input', type=str,
                         help="Variables to include (json or csv)")
-    parser.add_argument('output', 
+    parser.add_argument('output', type=str,
                         help="Variable group filename, example: new_variable_group.yaml")
 
+    # Optional arguments
     parser.add_argument('-v', '--validate', type=str, default='latest',
                         help='DR version against which to validate, examples: "latest", "v1.2.2.5"')   
 

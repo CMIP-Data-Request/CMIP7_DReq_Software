@@ -63,10 +63,12 @@ def parse_args():
         )
 
     # Mandatory arguments
-    parser.add_argument('input', 
-                        help="Opportunity specifications in yaml format. Example: mip_opportunity.yaml")
-    parser.add_argument('dreq_version', choices=dc.get_versions(), 
-                        help="Data Request version used to validate input")
+    parser.add_argument('input_file', type=str,
+                        help='Opportunity specifications in yaml format. Example: mip_opportunity.yaml')
+
+    # Optional arguments
+    parser.add_argument('-dreq', '--dreq-version', type=str, default='latest',
+                        help='Harmonised Data Request version used to validate input. Default: %(default)s')
 
     return parser.parse_args()
 
@@ -75,8 +77,21 @@ def main():
 
     # Parse command-line arguments.
     args = parse_args()
-    input_file = Path(args.input)
+    input_file = Path(args.input_file)
     dreq_version = args.dreq_version
+    if dreq_version.lower() == 'latest':
+        dreq_version = dc._get_latest_version()
+    else:
+        valid_dreq_versions = dc.get_versions()
+        if dreq_version not in valid_dreq_versions:
+            print(dedent(f'''
+            Invalid Harmonised Data Request version: {dreq_version}
+
+            Please specify one of these versions:
+              {", ".join(valid_dreq_versions)}
+            or omit the -dreq argument to use the latest version by default.
+            '''))
+            sys.exit()
 
     project = 'cmip7'
     output_file = Path(f'{input_file.stem}.json')
