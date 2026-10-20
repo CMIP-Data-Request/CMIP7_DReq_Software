@@ -79,6 +79,8 @@ def main():
     args = parse_args()
     input_file = Path(args.input_file)
     dreq_version = args.dreq_version
+
+    # Check validity of the specified DR version.
     if dreq_version.lower() == 'latest':
         dreq_version = dc._get_latest_version()
     else:
@@ -92,6 +94,7 @@ def main():
             or omit the -dreq argument to use the latest version by default.
             '''))
             sys.exit()
+    print(f'Validating new Opportunity against Data Request version {dreq_version}')
 
     project = 'cmip7'
     output_file = Path(f'{input_file.stem}.json')
@@ -99,6 +102,7 @@ def main():
     # Read yaml setup file that defines a new Opportunity in the Unharmonised DR.
     with open(input_file, 'r') as f:
         opp = yaml.safe_load(f)
+        print(f'Loaded {input_file.name}')
 
     # Check that the script has been invoked in the Opportunity folder.
     current_dir = Path.cwd()
@@ -144,36 +148,46 @@ def main():
     new_eg_names = [eg_name for eg_name in opp.experiment_groups if eg_name not in dreq_expt_group_names]
     new_vg_names  = [vg_name for vg_name in opp.variable_groups   if vg_name not in dreq_var_group_names]
 
-    # Get info on any new experiment groups from yaml files in the Experiment_Group folder.
+    # Get info on any new experiment groups (that are referenced by the new Opportunity) from their yaml files
+    # in the Experiment_Group folder.
     new_expt_groups = {}
     for eg_name in new_eg_names:
         eg_input_file = eg_dir / f'{eg_name}.yaml'
         with open(eg_input_file, 'r') as f:
             info = yaml.safe_load(f)
+            print(f'Loaded {eg_input_file.name} from {eg_dir.name}/')
         info = {format_attribute_name(k):v for k,v in info.items()}
         assert eg_name not in new_expt_groups, f'duplicate new experiment group: {eg_name}'
         new_expt_groups[eg_name] = ExperimentGroup(**info)
     del new_eg_names
 
-    # Get info on any new variable groups from yaml files in the Variable_Group folder
+    # Get info on any new variable groups (that are referenced by the new Opportunity) from their yaml files
+    # in the Variable_Group folder.
     new_var_groups = {}
     for vg_name in new_vg_names:
         vg_input_file = vg_dir / f'{vg_name}.yaml'
         with open(vg_input_file, 'r') as f:
             info = yaml.safe_load(f)
+            print(f'Loaded {vg_input_file.name} from {vg_dir.name}/')
         info = {format_attribute_name(k):v for k,v in info.items()}
         assert vg_name not in new_var_groups, f'duplicate new variable group: {vg_name}'
         new_var_groups[vg_name] = VariableGroup(**info)
     del new_vg_names
 
-    # Check priority levels in new Variable Groups are valid
+    # Check that priority levels defined in new Variable Groups are valid.
     for vg_name, vg in new_var_groups.items():
         if vg.priority_level.lower() == 'core':
+            # The "Core" level is reserved for the Harmonised DR core variables, aka the Baseline Climate Variables.
             raise ValueError(f'Priority Level "Core" is reserved for Baseline Climate Variables')
         elif vg.priority_level.lower() not in PRIORITY_LEVELS:
-            raise ValueError(f'Unknown Priority Level for Variable Group {vg_name}: {vg.priority_level}')
+            # This checks that the priority level is High, Medium, or Low
+            available_priority_levels = [p.capitalize() for p in PRIORITY_LEVELS if p.lower != 'core']
+            raise ValueError(dedent(f'''
+            Unknown Priority Level for Variable Group {vg_name}: {vg.priority_level}
+            Please choose one the available levels: {", ".join(available_priority_levels)}
+            '''))
 
-    # Check that the variable names in new Variable Groups are valid
+    # Check that the variable names in new Variable Groups are valid according to the Harmonised Data Request.
     for vg_name, vg in new_var_groups.items():
         invalid_variables = []
         for var_name in vg.variables:
@@ -186,12 +200,11 @@ def main():
                 + '\n'.join(invalid_variables)
             raise ValueError(msg)
 
-    # Check new Experiment Group names don't conflict with any already in the DR
-    for eg_name in new_expt_groups:
-        if eg_name in dreq_expt_group_names:
-            raise ValueError(f'Experiment Group already exists in DR {dreq_version}: {eg_name}')
+    # TODO: add independent validation against CVs using esgvoc.
+    # This should agree with DR-based validation (above) but provides additional verification.
+    # (Verfication against the CVs is required for ESGF publication.)
 
-    # Validate experiments against CVs
+    # Check that experiment names in new Experiment Groups are valid according to the CVs (Controlled Vocabularies).
     cv_expts = ev.get_all_terms_in_collection(project_id=project, collection_id='experiment')
     cv_expt_names = set([cv_info.drs_name for cv_info in cv_expts])
     for eg_name, eg in new_expt_groups.items():
@@ -203,7 +216,7 @@ def main():
             msg.append(f'Have these experiments been registered in the CVs for project={project}?')
             raise ValueError('\n'.join(msg))
 
-    # Write output file
+    # Write the content on the new Opportunity as a json file that can be used by the DR software.
     out = OrderedDict({
         'Header': OrderedDict({
             'Provenance': f'Validated Opportunity from input file {input_file}',
