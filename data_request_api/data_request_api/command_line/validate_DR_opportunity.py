@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 '''
-Ingest a yaml file that specifies a data request Opportunity
+Ingest a yaml file that specifies a data request Opportunity, and validate its contents.
+
+This includes validating any new Experiment and Variable Groups that are referenced by the Opportunity.
 '''
 
 import argparse
 import json
 import os
+import sys
 import yaml
 
 from collections import OrderedDict
+from pathlib import Path
 from pydantic import BaseModel
+from textwrap import dedent
 
 import esgvoc.api as ev
 
@@ -23,50 +28,88 @@ class ExperimentGroup(BaseModel):
     title: str
     experiments: list[str]
 
+
 class VariableGroup(BaseModel):
     title: str
     priority_level: str
-    justification: str = ''
-    notes: str = ''
+    justification: None | str = ''
+    notes: None | str = ''
     variables: list[str]
+
 
 class Opportunity(BaseModel):
     title: str
     mip: str
     description: str
-    expected_impacts: str = ''
-    justification_of_resources: str = ''
+    expected_impacts: None | str = ''
+    justification_of_resources: None | str = ''
     experiment_groups: list[str]
     variable_groups: list[str]
 
 
 def parse_args():
-    ''' Parse command line arguments'''
-    parser = argparse.ArgumentParser(description="Validate data request Opportunity specified by input yaml file")
+    '''
+    Parse command line arguments
+    '''
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawTextHelpFormatter,
+        description=dedent('''
+        Perform technical validation of an Unharmonised Data Request Opportunity.
+        
+        This tool allows MIPs to validate the technical correctness of an Opportunity and its
+        associated Experiment and Variable Groups prior to submitting a pull request for the
+        new Opportunity in the Unharmonised Data Request github repository.
+        ''')
+        )
 
     # Mandatory arguments
     parser.add_argument('input', 
-                        help="Opportunity specifications (yaml file)")
-    parser.add_argument('output', 
-                        help="Validated Opportunity specifications (json file)")
+                        help="Opportunity specifications in yaml format. Example: mip_opportunity.yaml")
     parser.add_argument('dreq_version', choices=dc.get_versions(), 
                         help="Data Request version used to validate input")
 
     return parser.parse_args()
 
+
 def main():
 
+    # Parse command-line arguments.
     args = parse_args()
-    input_file = args.input
-    output_file = args.output
+    input_file = Path(args.input)
     dreq_version = args.dreq_version
-    project = 'cmip7'
 
-    # Read setup file for new Opportunity
+    project = 'cmip7'
+    output_file = Path(f'{input_file.stem}.json')
+
+    # Read yaml setup file that defines a new Opportunity in the Unharmonised DR.
     with open(input_file, 'r') as f:
         opp = yaml.safe_load(f)
 
-    # Get DR content used to validate the input
+    # Check that the script has been invoked in the Opportunity folder.
+    current_dir = Path.cwd()
+    if current_dir.name != 'Opportunity':
+        print(dedent(f'''
+        Please invoke this script from within the Opportunity folder of the Unharmonised repo:
+          CMIP7_DReq_Unharmonised/Opportunity/
+        '''))
+        sys.exit()
+
+    # Check that Experiment Group and Variable Group folders exist.
+    # If the script is invoked in the Opportunity folder, then these should exist.
+    eg_dir = current_dir.parent / 'Experiment_Group'
+    vg_dir = current_dir.parent / 'Variable_Group'
+    if not eg_dir.exists():
+        raise FileNotFoundError(dedent(f'''
+        Could not find the Experiment Groups folder. Expected location:
+          {eg_dir}
+        '''))
+    if not vg_dir.exists():
+        raise FileNotFoundError(dedent(f'''
+        Could not find the Variable Groups folder. Expected location:
+          {vg_dir}
+        '''))
+
+    # Get the Harmonised DR content that will be used to validate the Opportunity.
     dreq_content = dc.load(dreq_version)
     base = dq._get_base_dreq_tables(dreq_content, dreq_version, purpose='request')
     dreq_var_info = dq.get_variables_metadata(base, dreq_version)
@@ -75,20 +118,21 @@ def main():
     dreq_expt_group_names = set(rec.name for rec in base['Experiment Group'].records.values())
     dreq_var_group_names = set(rec.name for rec in base['Variable Group'].records.values())
 
-    # Use Opportunity pydantic model to validate the input
+    # Use the Opportunity pydantic model to validate that the user-specified Opportunity (from yaml file)
+    # has the basic correct fields.
     opp = {format_attribute_name(k):v for k,v in opp.items()}
     opp = Opportunity(**opp)
 
-    # Check full Variable Group and Experiment Group lists either
+    # Check that the Opportunity's lists of Variable Groups and Experiment Groups either:
     #   1. already exist in the DR, or
     #   2. are defined as new by a template in the appropriate folder.
     new_eg_names = [eg_name for eg_name in opp.experiment_groups if eg_name not in dreq_expt_group_names]
     new_vg_names  = [vg_name for vg_name in opp.variable_groups   if vg_name not in dreq_var_group_names]
 
-    # Get info on any new experiment groups from yaml files in the Experiment_Group folder
+    # Get info on any new experiment groups from yaml files in the Experiment_Group folder.
     new_expt_groups = {}
     for eg_name in new_eg_names:
-        eg_input_file = os.path.join('Experiment_Group', f'{eg_name}.yaml')
+        eg_input_file = eg_dir / f'{eg_name}.yaml'
         with open(eg_input_file, 'r') as f:
             info = yaml.safe_load(f)
         info = {format_attribute_name(k):v for k,v in info.items()}
@@ -99,7 +143,7 @@ def main():
     # Get info on any new variable groups from yaml files in the Variable_Group folder
     new_var_groups = {}
     for vg_name in new_vg_names:
-        vg_input_file = os.path.join('Variable_Group', f'{vg_name}.yaml')
+        vg_input_file = vg_dir / f'{vg_name}.yaml'
         with open(vg_input_file, 'r') as f:
             info = yaml.safe_load(f)
         info = {format_attribute_name(k):v for k,v in info.items()}
@@ -156,7 +200,9 @@ def main():
     })
     with open(output_file, 'w') as f:
         json.dump(out, f, indent=4)
-        print('Wrote ' + output_file)
+        print(f'Wrote validated Opportunity as json: {output_file}')
+
 
 if __name__ == '__main__':
     main()
+
