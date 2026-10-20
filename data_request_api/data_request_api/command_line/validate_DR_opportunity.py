@@ -1,0 +1,236 @@
+#!/usr/bin/env python
+'''
+Ingest a yaml file that specifies a data request Opportunity, and validate its contents.
+
+This includes validating any new Experiment and Variable Groups that are referenced by the Opportunity.
+'''
+
+import argparse
+import json
+import os
+import sys
+import yaml
+
+from collections import OrderedDict
+from pathlib import Path
+from pydantic import BaseModel
+from textwrap import dedent
+
+import esgvoc.api as ev
+
+import data_request_api.content.dreq_content as dc
+import data_request_api.query.dreq_query as dq
+from data_request_api.query.dreq_classes import (
+    PRIORITY_LEVELS, format_attribute_name)
+
+
+class ExperimentGroup(BaseModel):
+    title: str
+    experiments: list[str]
+
+
+class VariableGroup(BaseModel):
+    title: str
+    priority_level: str
+    justification: None | str = ''
+    notes: None | str = ''
+    variables: list[str]
+
+
+class Opportunity(BaseModel):
+    title: str
+    mip: str
+    description: str
+    expected_impacts: None | str = ''
+    justification_of_resources: None | str = ''
+    experiment_groups: list[str]
+    variable_groups: list[str]
+
+
+def parse_args():
+    '''
+    Parse command line arguments
+    '''
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawTextHelpFormatter,
+        description=dedent('''
+        Perform technical validation of an Unharmonised Data Request Opportunity.
+        
+        This tool allows MIPs to validate the technical correctness of an Opportunity and its
+        associated Experiment and Variable Groups prior to submitting a pull request for the
+        new Opportunity in the Unharmonised Data Request github repository.
+        ''')
+        )
+
+    # Mandatory arguments
+    parser.add_argument('input_file', type=str,
+                        help='Opportunity specifications in yaml format. Example: mip_opportunity.yaml')
+
+    # Optional arguments
+    parser.add_argument('-dreq', '--dreq-version', type=str, default='latest',
+                        help='Harmonised Data Request version used to validate input. Default: %(default)s')
+
+    return parser.parse_args()
+
+
+def main():
+
+    # Parse command-line arguments.
+    args = parse_args()
+    input_file = Path(args.input_file)
+    dreq_version = args.dreq_version
+
+    # Check validity of the specified DR version.
+    if dreq_version.lower() == 'latest':
+        dreq_version = dc._get_latest_version()
+    else:
+        valid_dreq_versions = dc.get_versions()
+        if dreq_version not in valid_dreq_versions:
+            print(dedent(f'''
+            Invalid Harmonised Data Request version: {dreq_version}
+
+            Please specify one of these versions:
+              {", ".join(valid_dreq_versions)}
+            or omit the -dreq argument to use the latest version by default.
+            '''))
+            sys.exit()
+    print(f'Validating new Opportunity against Data Request version {dreq_version}')
+
+    project = 'cmip7'
+    output_file = Path(f'{input_file.stem}.json')
+
+    # Read yaml setup file that defines a new Opportunity in the Unharmonised DR.
+    with open(input_file, 'r') as f:
+        opp = yaml.safe_load(f)
+        print(f'Loaded {input_file.name}')
+
+    # Check that the script has been invoked in the Opportunity folder.
+    current_dir = Path.cwd()
+    if current_dir.name != 'Opportunity':
+        print(dedent(f'''
+        Please invoke this script from within the Opportunity folder of the Unharmonised repo:
+          CMIP7_DReq_Unharmonised/Opportunity/
+        '''))
+        sys.exit()
+
+    # Check that Experiment Group and Variable Group folders exist.
+    # If the script is invoked in the Opportunity folder, then these should exist.
+    eg_dir = current_dir.parent / 'Experiment_Group'
+    vg_dir = current_dir.parent / 'Variable_Group'
+    if not eg_dir.exists():
+        raise FileNotFoundError(dedent(f'''
+        Could not find the Experiment Groups folder. Expected location:
+          {eg_dir}
+        '''))
+    if not vg_dir.exists():
+        raise FileNotFoundError(dedent(f'''
+        Could not find the Variable Groups folder. Expected location:
+          {vg_dir}
+        '''))
+
+    # Get the Harmonised DR content that will be used to validate the Opportunity.
+    dreq_content = dc.load(dreq_version)
+    base = dq._get_base_dreq_tables(dreq_content, dreq_version, purpose='request')
+    dreq_var_info = dq.get_variables_metadata(base, dreq_version)
+    cmip7_compound_names = set([var_info['cmip7_compound_name'] for var_info in dreq_var_info.values()])
+    cmip6_compound_names = set([var_info['cmip6_compound_name'] for var_info in dreq_var_info.values()])
+    dreq_expt_group_names = set(rec.name for rec in base['Experiment Group'].records.values())
+    dreq_var_group_names = set(rec.name for rec in base['Variable Group'].records.values())
+
+    # Use the Opportunity pydantic model to validate that the user-specified Opportunity (from yaml file)
+    # has the basic correct fields.
+    opp = {format_attribute_name(k):v for k,v in opp.items()}
+    opp = Opportunity(**opp)
+
+    # Check that the Opportunity's lists of Variable Groups and Experiment Groups either:
+    #   1. already exist in the DR, or
+    #   2. are defined as new by a template in the appropriate folder.
+    new_eg_names = [eg_name for eg_name in opp.experiment_groups if eg_name not in dreq_expt_group_names]
+    new_vg_names  = [vg_name for vg_name in opp.variable_groups   if vg_name not in dreq_var_group_names]
+
+    # Get info on any new experiment groups (that are referenced by the new Opportunity) from their yaml files
+    # in the Experiment_Group folder.
+    new_expt_groups = {}
+    for eg_name in new_eg_names:
+        eg_input_file = eg_dir / f'{eg_name}.yaml'
+        with open(eg_input_file, 'r') as f:
+            info = yaml.safe_load(f)
+            print(f'Loaded {eg_input_file.name} from {eg_dir.name}/')
+        info = {format_attribute_name(k):v for k,v in info.items()}
+        assert eg_name not in new_expt_groups, f'duplicate new experiment group: {eg_name}'
+        new_expt_groups[eg_name] = ExperimentGroup(**info)
+    del new_eg_names
+
+    # Get info on any new variable groups (that are referenced by the new Opportunity) from their yaml files
+    # in the Variable_Group folder.
+    new_var_groups = {}
+    for vg_name in new_vg_names:
+        vg_input_file = vg_dir / f'{vg_name}.yaml'
+        with open(vg_input_file, 'r') as f:
+            info = yaml.safe_load(f)
+            print(f'Loaded {vg_input_file.name} from {vg_dir.name}/')
+        info = {format_attribute_name(k):v for k,v in info.items()}
+        assert vg_name not in new_var_groups, f'duplicate new variable group: {vg_name}'
+        new_var_groups[vg_name] = VariableGroup(**info)
+    del new_vg_names
+
+    # Check that priority levels defined in new Variable Groups are valid.
+    for vg_name, vg in new_var_groups.items():
+        if vg.priority_level.lower() == 'core':
+            # The "Core" level is reserved for the Harmonised DR core variables, aka the Baseline Climate Variables.
+            raise ValueError(f'Priority Level "Core" is reserved for Baseline Climate Variables')
+        elif vg.priority_level.lower() not in PRIORITY_LEVELS:
+            # This checks that the priority level is High, Medium, or Low
+            available_priority_levels = [p.capitalize() for p in PRIORITY_LEVELS if p.lower != 'core']
+            raise ValueError(dedent(f'''
+            Unknown Priority Level for Variable Group {vg_name}: {vg.priority_level}
+            Please choose one the available levels: {", ".join(available_priority_levels)}
+            '''))
+
+    # Check that the variable names in new Variable Groups are valid according to the Harmonised Data Request.
+    for vg_name, vg in new_var_groups.items():
+        invalid_variables = []
+        for var_name in vg.variables:
+            # TODO: should user be forced to say whether using CMIP6 or CMIP7 variable names? Assume CMIP7 names?
+            # TODO: if new variables are defined (beyond those in AFT DR) then need to add these here as valid names
+            if not (var_name in cmip7_compound_names or var_name in cmip6_compound_names):
+                invalid_variables.append(var_name)
+        if len(invalid_variables) > 0:
+            msg = f'Found {len(invalid_variables)} invalid variables found in Variable Group {vg_name}:\n' \
+                + '\n'.join(invalid_variables)
+            raise ValueError(msg)
+
+    # TODO: add independent validation against CVs using esgvoc.
+    # This should agree with DR-based validation (above) but provides additional verification.
+    # (Verfication against the CVs is required for ESGF publication.)
+
+    # Check that experiment names in new Experiment Groups are valid according to the CVs (Controlled Vocabularies).
+    cv_expts = ev.get_all_terms_in_collection(project_id=project, collection_id='experiment')
+    cv_expt_names = set([cv_info.drs_name for cv_info in cv_expts])
+    for eg_name, eg in new_expt_groups.items():
+        eg_expt_names = set(eg.experiments)
+        if not eg_expt_names.issubset(cv_expt_names):
+            invalid_expt_names = eg_expt_names.difference(cv_expt_names)
+            msg = [f'Found {len(invalid_expt_names)} unknown experiments in experiment group "{eg_name}":']
+            msg += sorted([f'  {s}' for s in invalid_expt_names])
+            msg.append(f'Have these experiments been registered in the CVs for project={project}?')
+            raise ValueError('\n'.join(msg))
+
+    # Write the content on the new Opportunity as a json file that can be used by the DR software.
+    out = OrderedDict({
+        'Header': OrderedDict({
+            'Provenance': f'Validated Opportunity from input file {input_file}',
+            'Data Request version used for validation': dreq_version,
+        }),
+        'Opportunity' : OrderedDict(opp),
+        'Experiment Group': OrderedDict({name: OrderedDict(info) for name,info in new_expt_groups.items()}),
+        'Variable Group': OrderedDict({name: OrderedDict(info) for name,info in new_var_groups.items()})
+    })
+    with open(output_file, 'w') as f:
+        json.dump(out, f, indent=4)
+        print(f'Wrote validated Opportunity as json: {output_file}')
+
+
+if __name__ == '__main__':
+    main()
+

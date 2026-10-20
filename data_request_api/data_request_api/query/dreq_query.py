@@ -536,7 +536,9 @@ def _get_base_dreq_tables(content, dreq_version, purpose='request'):
 def get_requested_variables(content, dreq_version,
                             use_opps='all', priority_cutoff='Low',
                             combined_request=False, time_subsets=False,
-                            verbose=True, check_core_variables=True):
+                            verbose=True, check_core_variables=True,
+                            content_udr=None
+                            ):
     '''
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -674,6 +676,50 @@ def get_requested_variables(content, dreq_version,
                             request['historical_experiments'].add_vars(var_names, priority_level)
                         elif any(scen_part in expt_name.lower() for scen_part in ['ssp', 'scen']):
                             request['scenario_experiments'].add_vars(var_names, priority_level)
+
+    if content_udr:
+        # Add content from Unharmonised Data Request (UDR)
+        for opp_id, opp in content_udr['Opportunity'].items():
+            # Get variables, organized by priority level
+            opp_vars = {p: set() for p in priority_levels}
+            for vg_name in opp['variable_groups']:
+                if vg_name in content_udr['Variable Group']:
+                    # Variable Group belongs to UDR
+                    vg_info = content_udr['Variable Group'][vg_name]
+                    priority_level = vg_info['priority_level']
+                    opp_vars[priority_level].update(vg_info['variables'])
+                else:
+                    # Variable Group belongs to HDR
+                    var_group = dreq_tables['var groups'].get_attr_record('name', vg_name)
+                    priority_level = get_var_group_priority(var_group, dreq_tables['priority level'])
+                    for link in var_group.variables:
+                        var = dreq_tables['vars'].records[link.record_id]
+                        var_name = get_unique_var_name(var)
+                        # Add this variable to the list of requested variables at the specified priority
+                        opp_vars[priority_level].add(var_name)
+            # Get experiments
+            opp_expts = set()
+            for eg_name in opp['experiment_groups']:
+                if eg_name in content_udr['Experiment Group']:
+                    # Experiment Group belongs to UDR
+                    eg_info = content_udr['Experiment Group'][eg_name]
+                    opp_expts.update(eg_info['experiments'])
+                else:
+                    # Experiment Group belongs to HDR
+                    expt_group = dreq_tables['expt groups'].get_attr_record('name', eg_name)
+                    for link in expt_group.experiments:
+                        expt = dreq_tables['expts'].records[link.record_id]
+                        opp_expts.add(expt.experiment)
+            # Aggregate this Opportunity's request into the master list of requests
+            for expt_name in opp_expts:
+                if expt_name not in request:
+                    # If we haven't encountered this experiment yet, initialize an ExptRequest object for it
+                    request[expt_name] = ExptRequest(expt_name)
+                # Add this Opportunity's variables request to the ExptRequest object
+                for priority_level, var_names in opp_vars.items():
+                    # TODO: integrate into above loop to allow time subsets and combined request
+                    request[expt_name].add_vars(var_names, priority_level)
+
 
     opp_titles = sorted([dreq_tables['opps'].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {
