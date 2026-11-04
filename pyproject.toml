@@ -10,6 +10,8 @@ dependencies = [
     "requests",
     "beautifulsoup4",
     "pyyaml",
+    "pydantic",
+    "esgvoc",
 ]
 dynamic = ["version"]
 authors = [
