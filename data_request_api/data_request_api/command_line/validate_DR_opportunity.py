@@ -7,7 +7,6 @@ This includes validating any new Experiment and Variable Groups that are referen
 
 import argparse
 import json
-import os
 import sys
 import yaml
 
@@ -94,7 +93,7 @@ def main():
             or omit the -dreq argument to use the latest version by default.
             '''))
             sys.exit()
-    print(f'Validating new Opportunity against Data Request version {dreq_version}')
+    print(f'Validating new Opportunity against CMIP7 Harmonised Data Request version {dreq_version}')
 
     project = 'cmip7'
     output_file = Path(f'{input_file.stem}.json')
@@ -147,6 +146,8 @@ def main():
     #   2. are defined as new by a template in the appropriate folder.
     new_eg_names = [eg_name for eg_name in opp.experiment_groups if eg_name not in dreq_expt_group_names]
     new_vg_names  = [vg_name for vg_name in opp.variable_groups   if vg_name not in dreq_var_group_names]
+    # TODO: rename variables in this code more accurately, for better code readability.
+    # The "new" EG,VG group names here might be new, but also could be already-existing Unharmonised groups.
 
     # Get info on any new experiment groups (that are referenced by the new Opportunity) from their yaml files
     # in the Experiment_Group folder.
@@ -191,18 +192,21 @@ def main():
     for vg_name, vg in new_var_groups.items():
         invalid_variables = []
         for var_name in vg.variables:
-            # TODO: should user be forced to say whether using CMIP6 or CMIP7 variable names? Assume CMIP7 names?
             # TODO: if new variables are defined (beyond those in AFT DR) then need to add these here as valid names
-            if not (var_name in cmip7_compound_names or var_name in cmip6_compound_names):
+            # if not (var_name in cmip7_compound_names or var_name in cmip6_compound_names):
+            if var_name not in cmip7_compound_names:
                 invalid_variables.append(var_name)
         if len(invalid_variables) > 0:
-            msg = f'Found {len(invalid_variables)} invalid variables found in Variable Group {vg_name}:\n' \
+            msg = f'Found {len(invalid_variables)} invalid variables in Variable Group {vg_name}:\n' \
                 + '\n'.join(invalid_variables)
+            cmip6_names = set(invalid_variables).intersection(cmip6_compound_names)
+            if len(cmip6_names) > 0:
+                msg += f'\n{len(cmip6_names)} CMIP6 variable names were found, please use CMIP7 variable names.'
             raise ValueError(msg)
 
-    # TODO: add independent validation against CVs using esgvoc.
+    # TODO: add independent validation of variable names against CVs using esgvoc.
     # This should agree with DR-based validation (above) but provides additional verification.
-    # (Verfication against the CVs is required for ESGF publication.)
+    # Verfication against the CVs is ultimately what is required for ESGF publication.
 
     # Check that experiment names in new Experiment Groups are valid according to the CVs (Controlled Vocabularies).
     cv_expts = ev.get_all_terms_in_collection(project_id=project, collection_id='experiment')
@@ -216,6 +220,10 @@ def main():
             msg.append(f'Have these experiments been registered in the CVs for project={project}?')
             raise ValueError('\n'.join(msg))
 
+    # If the script has reached this point, the technical checks have all passed.
+    # The Opportunity and its associated Experiment and Variable Groups should be valid.
+    print(f'\nAll checks passed for Opportunity "{opp.title}"')
+
     # Write the content on the new Opportunity as a json file that can be used by the DR software.
     out = OrderedDict({
         'Header': OrderedDict({
@@ -228,7 +236,7 @@ def main():
     })
     with open(output_file, 'w') as f:
         json.dump(out, f, indent=4)
-        print(f'Wrote validated Opportunity as json: {output_file}')
+        print(f'Wrote Opportunity content in json format: {output_file}')
 
 
 if __name__ == '__main__':
