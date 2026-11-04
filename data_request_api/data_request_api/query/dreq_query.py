@@ -720,7 +720,6 @@ def get_requested_variables(content, dreq_version,
                     # TODO: integrate into above loop to allow time subsets and combined request
                     request[expt_name].add_vars(var_names, priority_level)
 
-
     opp_titles = sorted([dreq_tables['opps'].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {
         'Header': {

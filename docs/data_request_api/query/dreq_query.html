@@ -649,7 +649,7 @@ Input parameters are not modified.</p>
 List is ordered from highest to lowest priority.</p></div>
 </dd>
 <dt id="data_request_api.query.dreq_query.get_requested_variables"><code class="name flex">
-<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>dreq_version,<br>use_opps='all',<br>priority_cutoff='Low',<br>combined_request=False,<br>time_subsets=False,<br>verbose=True,<br>check_core_variables=True)</span>
+<span>def <span class="ident">get_requested_variables</span></span>(<span>content,<br>dreq_version,<br>use_opps='all',<br>priority_cutoff='Low',<br>combined_request=False,<br>time_subsets=False,<br>verbose=True,<br>check_core_variables=True,<br>content_udr=None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -659,7 +659,9 @@ List is ordered from highest to lowest priority.</p></div>
 <pre><code class="python">def get_requested_variables(content, dreq_version,
                             use_opps=&#39;all&#39;, priority_cutoff=&#39;Low&#39;,
                             combined_request=False, time_subsets=False,
-                            verbose=True, check_core_variables=True):
+                            verbose=True, check_core_variables=True,
+                            content_udr=None
+                            ):
     &#39;&#39;&#39;
     Return variables requested for each experiment, as a function of opportunities supported and priority level of variables.
 
@@ -797,6 +799,50 @@ List is ordered from highest to lowest priority.</p></div>
                             request[&#39;historical_experiments&#39;].add_vars(var_names, priority_level)
                         elif any(scen_part in expt_name.lower() for scen_part in [&#39;ssp&#39;, &#39;scen&#39;]):
                             request[&#39;scenario_experiments&#39;].add_vars(var_names, priority_level)
+
+    if content_udr:
+        # Add content from Unharmonised Data Request (UDR)
+        for opp_id, opp in content_udr[&#39;Opportunity&#39;].items():
+            # Get variables, organized by priority level
+            opp_vars = {p: set() for p in priority_levels}
+            for vg_name in opp[&#39;variable_groups&#39;]:
+                if vg_name in content_udr[&#39;Variable Group&#39;]:
+                    # Variable Group belongs to UDR
+                    vg_info = content_udr[&#39;Variable Group&#39;][vg_name]
+                    priority_level = vg_info[&#39;priority_level&#39;]
+                    opp_vars[priority_level].update(vg_info[&#39;variables&#39;])
+                else:
+                    # Variable Group belongs to HDR
+                    var_group = dreq_tables[&#39;var groups&#39;].get_attr_record(&#39;name&#39;, vg_name)
+                    priority_level = get_var_group_priority(var_group, dreq_tables[&#39;priority level&#39;])
+                    for link in var_group.variables:
+                        var = dreq_tables[&#39;vars&#39;].records[link.record_id]
+                        var_name = get_unique_var_name(var)
+                        # Add this variable to the list of requested variables at the specified priority
+                        opp_vars[priority_level].add(var_name)
+            # Get experiments
+            opp_expts = set()
+            for eg_name in opp[&#39;experiment_groups&#39;]:
+                if eg_name in content_udr[&#39;Experiment Group&#39;]:
+                    # Experiment Group belongs to UDR
+                    eg_info = content_udr[&#39;Experiment Group&#39;][eg_name]
+                    opp_expts.update(eg_info[&#39;experiments&#39;])
+                else:
+                    # Experiment Group belongs to HDR
+                    expt_group = dreq_tables[&#39;expt groups&#39;].get_attr_record(&#39;name&#39;, eg_name)
+                    for link in expt_group.experiments:
+                        expt = dreq_tables[&#39;expts&#39;].records[link.record_id]
+                        opp_expts.add(expt.experiment)
+            # Aggregate this Opportunity&#39;s request into the master list of requests
+            for expt_name in opp_expts:
+                if expt_name not in request:
+                    # If we haven&#39;t encountered this experiment yet, initialize an ExptRequest object for it
+                    request[expt_name] = ExptRequest(expt_name)
+                # Add this Opportunity&#39;s variables request to the ExptRequest object
+                for priority_level, var_names in opp_vars.items():
+                    # TODO: integrate into above loop to allow time subsets and combined request
+                    request[expt_name].add_vars(var_names, priority_level)
+
 
     opp_titles = sorted([dreq_tables[&#39;opps&#39;].get_record(opp_id).title for opp_id in opp_ids])
     requested_vars = {

@@ -82,6 +82,12 @@ el.replaceWith(d);
         attributes=args.attributes,
     )
 
+    if args.filter:
+        # Filter variables
+        with open(args.filter) as f:
+            filters = yaml.safe_load(f)
+        filter_variables_metadata(all_var_info, filters)
+
     # Write output file
     dq.write_variables_metadata(
         all_var_info,
@@ -126,6 +132,11 @@ el.replaceWith(d);
         input_args = [s for s in input_args if s not in [&#39;&#39;]]
         return input_args
 
+    parser.add_argument(&#39;-f&#39;, &#39;--filter&#39;, type=str,
+                        help=dedent(&#39;&#39;&#39;
+                            yaml file specifying attributes and values to keep in the output
+                            (these filters are applied only AFTER any filtering done by the command-line options below)
+                            &#39;&#39;&#39;))
     parser.add_argument(&#39;-a&#39;, &#39;--attributes&#39;, type=parse_input_list,
                         help=dedent(f&#39;&#39;&#39;\
                             include only the specified variable metadata attributes, examples:

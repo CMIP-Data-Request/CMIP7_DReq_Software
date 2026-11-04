@@ -27,7 +27,7 @@ def parse_args():
 
     # Optional arguments
     parser.add_argument('-v', '--validate', type=str, default='latest',
-                        help='DR version against which to validate, examples: "latest", "v1.2.2.5"')   
+                        help='DR version against which to validate, examples: "latest", "v1.2.2.5"')
 
     return parser.parse_args()
 
@@ -35,7 +35,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    filepath = Path( args.input )
+    filepath = Path(args.input)
     var_name_key = 'Compound Name'
     if filepath.suffix == '.json':
         with open(filepath, 'r') as f:
@@ -46,7 +46,7 @@ def main():
             vars = {}
             columns = next(reader)
             for row in reader:
-                var_info = {col:val for col,val in zip(columns, row)}
+                var_info = {col: val for col, val in zip(columns, row)}
                 var_name = var_info[var_name_key]
                 del var_info[var_name_key]
                 vars[var_name] = var_info
@@ -120,4 +120,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

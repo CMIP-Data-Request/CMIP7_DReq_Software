@@ -54,12 +54,12 @@ def parse_args():
         formatter_class=argparse.RawTextHelpFormatter,
         description=dedent('''
         Perform technical validation of an Unharmonised Data Request Opportunity.
-        
+
         This tool allows MIPs to validate the technical correctness of an Opportunity and its
         associated Experiment and Variable Groups prior to submitting a pull request for the
         new Opportunity in the Unharmonised Data Request github repository.
         ''')
-        )
+    )
 
     # Mandatory arguments
     parser.add_argument('input_file', type=str,
@@ -138,14 +138,14 @@ def main():
 
     # Use the Opportunity pydantic model to validate that the user-specified Opportunity (from yaml file)
     # has the basic correct fields.
-    opp = {format_attribute_name(k):v for k,v in opp.items()}
+    opp = {format_attribute_name(k): v for k, v in opp.items()}
     opp = Opportunity(**opp)
 
     # Check that the Opportunity's lists of Variable Groups and Experiment Groups either:
     #   1. already exist in the DR, or
     #   2. are defined as new by a template in the appropriate folder.
     new_eg_names = [eg_name for eg_name in opp.experiment_groups if eg_name not in dreq_expt_group_names]
-    new_vg_names  = [vg_name for vg_name in opp.variable_groups   if vg_name not in dreq_var_group_names]
+    new_vg_names = [vg_name for vg_name in opp.variable_groups if vg_name not in dreq_var_group_names]
     # TODO: rename variables in this code more accurately, for better code readability.
     # The "new" EG,VG group names here might be new, but also could be already-existing Unharmonised groups.
 
@@ -157,7 +157,7 @@ def main():
         with open(eg_input_file, 'r') as f:
             info = yaml.safe_load(f)
             print(f'Loaded {eg_input_file.name} from {eg_dir.name}/')
-        info = {format_attribute_name(k):v for k,v in info.items()}
+        info = {format_attribute_name(k): v for k, v in info.items()}
         assert eg_name not in new_expt_groups, f'duplicate new experiment group: {eg_name}'
         new_expt_groups[eg_name] = ExperimentGroup(**info)
     del new_eg_names
@@ -170,7 +170,7 @@ def main():
         with open(vg_input_file, 'r') as f:
             info = yaml.safe_load(f)
             print(f'Loaded {vg_input_file.name} from {vg_dir.name}/')
-        info = {format_attribute_name(k):v for k,v in info.items()}
+        info = {format_attribute_name(k): v for k, v in info.items()}
         assert vg_name not in new_var_groups, f'duplicate new variable group: {vg_name}'
         new_var_groups[vg_name] = VariableGroup(**info)
     del new_vg_names
@@ -230,9 +230,9 @@ def main():
             'Provenance': f'Validated Opportunity from input file {input_file}',
             'Data Request version used for validation': dreq_version,
         }),
-        'Opportunity' : OrderedDict(opp),
-        'Experiment Group': OrderedDict({name: OrderedDict(info) for name,info in new_expt_groups.items()}),
-        'Variable Group': OrderedDict({name: OrderedDict(info) for name,info in new_var_groups.items()})
+        'Opportunity': OrderedDict(opp),
+        'Experiment Group': OrderedDict({name: OrderedDict(info) for name, info in new_expt_groups.items()}),
+        'Variable Group': OrderedDict({name: OrderedDict(info) for name, info in new_var_groups.items()})
     })
     with open(output_file, 'w') as f:
         json.dump(out, f, indent=4)
@@ -241,4 +241,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

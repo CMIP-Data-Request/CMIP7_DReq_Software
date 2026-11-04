@@ -119,7 +119,7 @@ def filter_variables_metadata(vars: dict[str, dict[str, str]], filters: dict[str
                     del var_info[attr]
         # Set attribute order based on input list order
         for var_name, var_info in vars.items():
-            vars[var_name] = OrderedDict({attr:var_info[attr] for attr in keep_attrs})
+            vars[var_name] = OrderedDict({attr: var_info[attr] for attr in keep_attrs})
         # List of attributes is no longer needed
         del filters[KEEP_ATTRIBUTES_KEY]
 
@@ -133,4 +133,3 @@ def filter_variables_metadata(vars: dict[str, dict[str, str]], filters: dict[str
             exclude_vars.append(var_name)
     for var_name in exclude_vars:
         del vars[var_name]
-    
