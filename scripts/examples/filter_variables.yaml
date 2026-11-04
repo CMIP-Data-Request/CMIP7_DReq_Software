@@ -1,0 +1,30 @@
+
+# Variable attributes to keep in the output file.
+# The ordering of this list will be preserved in json or csv output.
+# If not given, all attributes are kept.
+keep_attributes:
+- frequency
+- modeling_realm
+- region
+- branded_variable_name
+- long_name
+- standard_name
+- dimensions
+- cell_methods
+- variableRootDD
+
+# Filter by attribute values. Filters are applied as:
+#   OR condition across different values of the same attribute
+#   AND condition across different attributes
+# Example:
+#   frequency: [day, 3hr]
+#   variableRootDD: [uas, vas]
+# retains uas and vas at both daily and 3hr frequencies.
+
+frequency:
+- day
+- 3hr
+
+variableRootDD:
+- uas
+- vas
